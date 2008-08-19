@@ -47,7 +47,7 @@ int cs_Batch;
 int main (int argc,char *argv [])
 {
     //debug parameters
-    ///b  D:\map\Hammerhead\CommonCode\CsMap\11\dicts\source\ D:\map\Hammerhead\CommonCode\CsMap\11\dicts\compiled
+    ///b  sourceDir compiledDir
 	extern char cs_Dir [];
 	extern char *cs_DirP;
 	extern char cs_Csname [];
