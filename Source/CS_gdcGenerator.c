@@ -66,7 +66,7 @@ static char csLocalDirectory [MAXPATH];
 
 
 int EXP_LVL9 CSgdcNadDra (Const char *fname,Const struct stat *stat_ptr,int parm);
-int EXP_LVL9 CSgdcHarnDra (Const char *fname,Const struct stat *stat_ptr,int parm);
+int EXP_LVL9 CSgdcHarnDra (Const char *fname,Const struct _stat32 *stat_ptr,int parm);
 
 int EXP_LVL7 CSgdcGenerate (Const char *directory)
 {
@@ -147,13 +147,13 @@ int EXP_LVL7 CSgdcGenerate (Const char *directory)
 			goto error;
 		}
 	}
-#elif _RUN_TIME == _rt_MSVC32 || _RUN_TIME == _rt_MSDOTNET
+#elif _RUN_TIME == _rt_MSVC32 || _RUN_TIME == _rt_MSDOTNET || _RUN_TIME == _rt_MSWIN64
 	/* NT is, conceptually, very similar to MS-DOS. The
 	   function names and calling sequqences are slightly
 	   different. */
 	{
 		int done;
-		long fnd_hdl;
+		intptr_t fnd_hdl;
 		
 		struct _finddata_t fnd_cb;
 		struct stat stat_buf; 
@@ -277,16 +277,16 @@ int EXP_LVL7 CSgdcGenerate (Const char *directory)
 			goto error;
 		}
 	}
-#elif _RUN_TIME == _rt_MSVC32 || _RUN_TIME == _rt_MSDOTNET
+#elif _RUN_TIME == _rt_MSVC32 || _RUN_TIME == _rt_MSDOTNET || _RUN_TIME == _rt_MSWIN64
 	/* NT is, conceptually, very similar to MS-DOS. The
 	   function names and calling sequqences are slightly
 	   different. */
 	{
 		int done;
-		long fnd_hdl;
+		intptr_t fnd_hdl;
 		
 		struct _finddata_t fnd_cb;
-		struct stat stat_buf; 
+		struct _stat32 stat_buf; 
 		
 		cp = CS_stcpy (ctemp,csLocalDirectory);
 		if (*(cp - 1) != cs_DirsepC)
@@ -302,7 +302,7 @@ int EXP_LVL7 CSgdcGenerate (Const char *directory)
 			cp = CS_stcpy (lclPath,csLocalDirectory);
 			*cp++ = cs_DirsepC;
 			cp = CS_stcpy (cp,fnd_cb.name);
-			st = stat (lclPath,&stat_buf);
+			st = _stat32 (lclPath,&stat_buf);
 			if (st == 0)
 			{
 				st = CSgdcHarnDra (lclPath,&stat_buf,FTW_F);
@@ -323,7 +323,7 @@ int EXP_LVL7 CSgdcGenerate (Const char *directory)
 		struct find_t fnd_cb;
 		struct stat stat_buf;
 
-		cp CS_stcpy (ctemp,csLocalDirectory);
+		cp = CS_stcpy (ctemp,csLocalDirectory);
 		if (*(cp - 1) != cs_DirsepC)
 		{
 			*cp++ = cs_DirsepC;
@@ -385,7 +385,7 @@ int EXP_LVL9 CSgdcNadDra (Const char *fname,Const struct stat *stat_ptr,int parm
 	extern char cs_DirsepC;
 	extern char cs_ExtsepC;
 
-	int dir_len;
+	size_t dir_len;
 
 	char *cp;
 	csFILE* cntStream;
@@ -540,12 +540,12 @@ int EXP_LVL9 CSgdcNadDra (Const char *fname,Const struct stat *stat_ptr,int parm
 	examines the name passed to it and determines what to do
 	with it.
 */
-int EXP_LVL9 CSgdcHarnDra (Const char *fname,Const struct stat *stat_ptr,int parm)
+int EXP_LVL9 CSgdcHarnDra (Const char *fname,Const struct _stat32 *stat_ptr,int parm)
 {
 	extern char cs_DirsepC;
 	extern char cs_ExtsepC;
 
-	int dir_len;
+	size_t dir_len;
 
 	char *cp;
 
