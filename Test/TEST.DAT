@@ -3211,6 +3211,25 @@ DHDN/BeTA.Gauss3d-2,2661073.960381,6067930.993896,ETRS89.UTM-32N,467726.896146,6
 DHDN/BeTA.Gauss3d-3,3467781.947036,6065176.417740,ETRS89.UTM-32N,467726.896147,6063191.974105,5.0E-04,5.0E-04
 ###############################################################################
 #
+# Geocentric Translation tests, acquired from two external sources indicated
+# below.  There is no real test case in EPSG Note 7.  Probably why all the
+# 3PARAMETER fiasco went undetected for so long.
+#
+# Franson CoordTrans V2.3 -- tolerances equal to precision of Franson display
+#
+Yacare/E.LL,-54.0,-32.0,LL84,54 0 0.948W,32 0 0.267S,3.0E-07,3.0E-07
+LL84,54 0 0.948W,32 0 0.267S,Yacare/E.LL,-54.0,-32.0,3.0E-07,3.0E-07
+GGRS87.LL,22.0,39.0,LL84,22 0 5.993E,39 0 9.425N,3.0E-07,3.0E-07
+LL84,22 0 5.993E,39 0 9.425N,GGRS87.LL,22.0,39.0,3.0E-07,3.0E-07
+Kalianpur1937.LL,76.0,12.0,LL84,75 59 56.761,12 0 5.282N,3.0E-07,3.0E-07
+LL84,75 59 56.761,12 0 5.282N,Kalianpur1937.LL,76.0,12.0,3.0E-07,3.0E-07
+#
+# GeoTrans 2.4.1 -- tolerances equal to precision of GeoTrans display
+#
+SierraLeone1968.LL,-12.5,7.5,LL84,12 30 0.5W,7 30 0.7N,3.0E-05,3.0E-05
+LL84,12 30 0.5W,7 30 0.7N,SierraLeone1968.LL,-12.5,7.5,3.0E-05,3.0E-05
+###############################################################################
+#
 # That's it.  If you have some more cases documented by reputable sources,
 # we'll be glad to add them.
 #

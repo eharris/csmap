@@ -150,9 +150,9 @@ struct cs_DatMap_ cs_DatMap [] =
 		{dtcTypSixParm,          dtcTypNone,             dtcTypNone,          dtcTypNone  },
 		{dtcTypSixParmInv,       dtcTypNone,             dtcTypNone,          dtcTypNone  }
 	},
-	{cs_DTCTYP_3PARM,
-		{dtcTypThreeParm,        dtcTypNone,             dtcTypNone,          dtcTypNone  },
-		{dtcTypThreeParmInv,     dtcTypNone,             dtcTypNone,          dtcTypNone  }
+	{cs_DTCTYP_GEOCTR,
+		{dtcTypGeoCtr,           dtcTypNone,             dtcTypNone,          dtcTypNone  },
+		{dtcTypGeoCtrInv,        dtcTypNone,             dtcTypNone,          dtcTypNone  }
 	},
 	{cs_DTCTYP_4PARM,
 		{dtcTypFourParm,         dtcTypNone,             dtcTypNone,          dtcTypNone  },
@@ -165,6 +165,10 @@ struct cs_DatMap_ cs_DatMap [] =
 	{ cs_DTCTYP_ETRF89,
 		{dtcTypNone,             dtcTypNone,            dtcTypNone,           dtcTypNone  },
 		{dtcTypNone,             dtcTypNone,            dtcTypNone,           dtcTypNone  }
+	},
+	{cs_DTCTYP_3PARM,
+		{dtcTypThreeParm,        dtcTypNone,             dtcTypNone,          dtcTypNone  },
+		{dtcTypThreeParmInv,     dtcTypNone,             dtcTypNone,          dtcTypNone  }
 	},
 	/* The following marks the end of the table. */
 	{cs_DTCTYP_NONE,
@@ -434,6 +438,7 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 
 		case cs_DTCTYP_MOLO:
 		case cs_DTCTYP_3PARM:
+		case cs_DTCTYP_GEOCTR:
 			sameCheck = 1.0E-04;
 			if (fabs (src_dt->delta_X - dst_dt->delta_X) > sameCheck) same = FALSE;
 			if (fabs (src_dt->delta_Y - dst_dt->delta_Y) > sameCheck) same = FALSE;
@@ -869,17 +874,17 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 			}
 			break;
 
-		case dtcTypThreeParm:
-			dtc_ptr->xforms [ii].parms.parm3 = CS_3pInit (src_dt,&cs_Wgs84Dt);
-			if (dtc_ptr->xforms [ii].parms.parm3 == NULL)
+		case dtcTypGeoCtr:
+			dtc_ptr->xforms [ii].parms.geoctr = CS_gcInit (src_dt,&cs_Wgs84Dt);
+			if (dtc_ptr->xforms [ii].parms.geoctr == NULL)
 			{
 				st = -1;
 			}
 			break;
 
-		case dtcTypThreeParmInv:
-			dtc_ptr->xforms [ii].parms.parm3 = CS_3pInit (dst_dt,&cs_Wgs84Dt);
-			if (dtc_ptr->xforms [ii].parms.parm3 == NULL)
+		case dtcTypGeoCtrInv:
+			dtc_ptr->xforms [ii].parms.geoctr = CS_gcInit (dst_dt,&cs_Wgs84Dt);
+			if (dtc_ptr->xforms [ii].parms.geoctr == NULL)
 			{
 				st = -1;
 			}
@@ -912,6 +917,22 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 		case dtcTypFourParmInv:
 			dtc_ptr->xforms [ii].parms.parm4 = CS_4pInit (dst_dt,&cs_Wgs84Dt);
 			if (dtc_ptr->xforms [ii].parms.parm4 == NULL)
+			{
+				st = -1;
+			}
+			break;
+
+		case dtcTypThreeParm:
+			dtc_ptr->xforms [ii].parms.parm3 = CS_3pInit (src_dt,&cs_Wgs84Dt);
+			if (dtc_ptr->xforms [ii].parms.parm3 == NULL)
+			{
+				st = -1;
+			}
+			break;
+
+		case dtcTypThreeParmInv:
+			dtc_ptr->xforms [ii].parms.parm3 = CS_3pInit (dst_dt,&cs_Wgs84Dt);
+			if (dtc_ptr->xforms [ii].parms.parm3 == NULL)
 			{
 				st = -1;
 			}
@@ -1042,12 +1063,12 @@ void CSdtcXformFree (struct cs_DtcXform_ *xfrmPtr)
 			xfrmPtr->parms.bursa = NULL;
 		}
 		break;
-	case dtcTypThreeParm:
-	case dtcTypThreeParmInv:
-		if (xfrmPtr->parms.parm3 != NULL)
+	case dtcTypGeoCtr:
+	case dtcTypGeoCtrInv:
+		if (xfrmPtr->parms.geoctr != NULL)
 		{
-			CS_free (xfrmPtr->parms.parm3);
-			xfrmPtr->parms.parm3 = NULL;
+			CS_free (xfrmPtr->parms.geoctr);
+			xfrmPtr->parms.geoctr = NULL;
 		}
 		break;
 	case dtcTypFourParm:
@@ -1072,6 +1093,14 @@ void CSdtcXformFree (struct cs_DtcXform_ *xfrmPtr)
 		{
 			CS_free (xfrmPtr->parms.parm7);
 			xfrmPtr->parms.parm7 = NULL;
+		}
+		break;
+	case dtcTypThreeParm:
+	case dtcTypThreeParmInv:
+		if (xfrmPtr->parms.parm3 != NULL)
+		{
+			CS_free (xfrmPtr->parms.parm3);
+			xfrmPtr->parms.parm3 = NULL;
 		}
 		break;
 	case dtcTypNone:
@@ -1203,12 +1232,14 @@ void EXP_LVL3 CS_dtcls (struct cs_Dtcprm_ *dtc_ptr)
 		case dtcTypDMAMulRegInv:
 		case dtcTypSevenParm:
 		case dtcTypSevenParmInv:
-		case dtcTypThreeParm:
-		case dtcTypThreeParmInv:
+		case dtcTypGeoCtr:
+		case dtcTypGeoCtrInv:
 		case dtcTypSixParm:
 		case dtcTypSixParmInv:
 		case dtcTypFourParm:
 		case dtcTypFourParmInv:
+		case dtcTypThreeParm:
+		case dtcTypThreeParmInv:
 			CSdtcXformFree (&dtc_ptr->xforms [ii]);
 			break;
 
@@ -1548,12 +1579,12 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 				itrStat = CS_7p2dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm7);
 				break;
 
-			case dtcTypThreeParm:
-				itrStat = CS_3p2dFowrd (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm3);
+			case dtcTypGeoCtr:
+				itrStat = CS_gc2dFowrd (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.geoctr);
 				break;
 
-			case dtcTypThreeParmInv: 
-				itrStat = CS_3p2dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm3);
+			case dtcTypGeoCtrInv: 
+				itrStat = CS_gc2dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.geoctr);
 				break;
 
 			case dtcTypSixParm:
@@ -1570,6 +1601,14 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 
 			case dtcTypFourParmInv: 
 				itrStat = CS_4p2dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm4);
+				break;
+
+			case dtcTypThreeParm:
+				itrStat = CS_3p2dFowrd (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm3);
+				break;
+
+			case dtcTypThreeParmInv: 
+				itrStat = CS_3p2dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm3);
 				break;
 
 			default:
@@ -1656,12 +1695,14 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				case dtcTypBursaWolfInv:
 				case dtcTypSevenParm:
 				case dtcTypSevenParmInv:
-				case dtcTypThreeParm:
-				case dtcTypThreeParmInv: 
+				case dtcTypGeoCtr:
+				case dtcTypGeoCtrInv: 
 				case dtcTypSixParm:
 				case dtcTypSixParmInv:
 				case dtcTypFourParm:
 				case dtcTypFourParmInv: 
+				case dtcTypThreeParm:
+				case dtcTypThreeParmInv: 
 					rptCode = cs_XYZ_ITR;
 					break;
 				case dtcTypDMAMulReg:
@@ -1764,12 +1805,14 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 					case dtcTypBursaWolfInv:
 					case dtcTypSevenParm:
 					case dtcTypSevenParmInv:
-					case dtcTypThreeParm:
-					case dtcTypThreeParmInv: 
+					case dtcTypGeoCtr:
+					case dtcTypGeoCtrInv: 
 					case dtcTypSixParm:
 					case dtcTypSixParmInv:
 					case dtcTypFourParm:
 					case dtcTypFourParmInv: 
+					case dtcTypThreeParm:
+					case dtcTypThreeParmInv: 
 						rptCode = cs_XYZ_ITR;
 						status = -1;
 						break;
@@ -2206,12 +2249,12 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 				itrStat = CS_7p3dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm7);
 				break;
 
-			case dtcTypThreeParm:
-				itrStat = CS_3p3dFowrd (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm3);
+			case dtcTypGeoCtr:
+				itrStat = CS_gc3dFowrd (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.geoctr);
 				break;
 
-			case dtcTypThreeParmInv: 
-				itrStat = CS_3p3dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm3);
+			case dtcTypGeoCtrInv: 
+				itrStat = CS_gc3dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.geoctr);
 				break;
 
 			case dtcTypSixParm:
@@ -2228,6 +2271,14 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 
 			case dtcTypFourParmInv: 
 				itrStat = CS_4p3dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm4);
+				break;
+
+			case dtcTypThreeParm:
+				itrStat = CS_3p3dFowrd (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm3);
+				break;
+
+			case dtcTypThreeParmInv: 
+				itrStat = CS_3p3dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm3);
 				break;
 
 			default:
@@ -2314,12 +2365,14 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				case dtcTypBursaWolfInv:
 				case dtcTypSevenParm:
 				case dtcTypSevenParmInv:
-				case dtcTypThreeParm:
-				case dtcTypThreeParmInv: 
+				case dtcTypGeoCtr:
+				case dtcTypGeoCtrInv: 
 				case dtcTypSixParm:
 				case dtcTypSixParmInv:
 				case dtcTypFourParm:
 				case dtcTypFourParmInv: 
+				case dtcTypThreeParm:
+				case dtcTypThreeParmInv: 
 					rptCode = cs_XYZ_ITR;
 					break;
 				case dtcTypDMAMulReg:
@@ -2419,12 +2472,14 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 					case dtcTypBursaWolfInv:
 					case dtcTypSevenParm:
 					case dtcTypSevenParmInv:
-					case dtcTypThreeParm:
-					case dtcTypThreeParmInv: 
+					case dtcTypGeoCtr:
+					case dtcTypGeoCtrInv: 
 					case dtcTypSixParm:
 					case dtcTypSixParmInv:
 					case dtcTypFourParm:
 					case dtcTypFourParmInv: 
+					case dtcTypThreeParm:
+					case dtcTypThreeParmInv: 
 						rptCode = cs_XYZ_ITR;
 						status = -1;
 						break;

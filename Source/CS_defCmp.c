@@ -301,13 +301,13 @@ int EXP_LVL3 CS_dtDefCmp (Const struct cs_Dtdef_ *original,Const struct cs_Dtdef
 
 	char errMsg [512];
 
-	/* The revised will often get converted to a type cs_DTCTYP_3PARM with zero
+	/* The revised will often get converted to a type cs_DTCTYP_GEOCTR with zero
 	   deltas if it was one of those types that is generally considered to be
 	   equivalent with WGS84. */
 	deltaZeroCount  = (revised->delta_X == 0.0);
 	deltaZeroCount += (revised->delta_Y == 0.0);
 	deltaZeroCount += (revised->delta_Z == 0.0);
-	if (revised->to84_via == cs_DTCTYP_3PARM && deltaZeroCount == 3)
+	if ((revised->to84_via == cs_DTCTYP_GEOCTR || revised->to84_via == cs_DTCTYP_3PARM) && deltaZeroCount == 3)
 	{
 		/* Essentially, these definitions are the null transformation. */
 		if (!(original->to84_via == cs_DTCTYP_WGS84  ||
@@ -316,8 +316,8 @@ int EXP_LVL3 CS_dtDefCmp (Const struct cs_Dtdef_ *original,Const struct cs_Dtdef
 			  original->to84_via == cs_DTCTYP_GDA94  ||
 			  original->to84_via == cs_DTCTYP_NZGD2K ||
 			  original->to84_via == cs_DTCTYP_ETRF89 ||
-			  original->to84_via == cs_DTCTYP_RGF93
-              || (original->to84_via == cs_DTCTYP_3PARM
+			  original->to84_via == cs_DTCTYP_RGF93  ||
+			  ((original->to84_via == cs_DTCTYP_GEOCTR || original->to84_via == cs_DTCTYP_3PARM)
                     && original->delta_X == 0.0
                     && original->delta_Y == 0.0
                     && original->delta_Z == 0.0)

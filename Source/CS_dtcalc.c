@@ -840,86 +840,87 @@ int EXP_LVL9 CS_7p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct 
 }
 
 /******************************************************************************
-	parm3 = CS_3pInit (srcDatum,trgDatum);
+	geoctr = CS_gcInit (srcDatum,trgDatum);
 
-	struct cs_Datum_ *srcDatum;	pointer to the definition of the source datum.
-	struct cs_Datum_ *trgDatuu; pointer to the definition of the target datum.
-	struct cs_Parm3_ *parm3;	returns a pointer to an initialized parameter
-								structure which is the required argument for
-								CS_p3Forwd and CS_p3Invrs.
+	struct cs_Datum_  *srcDatum; pointer to the definition of the source datum.
+	struct cs_Datum_  *trgDatuu; pointer to the definition of the target datum.
+	struct cs_Geoctr_ *geoctr;	 returns a pointer to an initialized parameter
+								 structure which is the required argument for
+								 CS_gcForwd and CS_gcInvrs.
 
 	The function returns null in the event of an error. Memory allocation
 	failure is the principal cause of failure.
 */
-struct cs_Parm3_ * EXP_LVL9 CS_3pInit (Const struct cs_Datum_* srcDatum,
-									   Const struct cs_Datum_* trgDatum)
+struct cs_Geoctr_ * EXP_LVL9 CS_gcInit (Const struct cs_Datum_* srcDatum,
+								        Const struct cs_Datum_* trgDatum)
 {
-	struct cs_Parm3_ *parm3;
+	struct cs_Geoctr_ *geoctr;
 
-	parm3 = (struct cs_Parm3_ *)CS_malc (sizeof (struct cs_Parm3_));
-	if (parm3 == NULL)
+	geoctr = (struct cs_Geoctr_ *)CS_malc (sizeof (struct cs_Geoctr_));
+	if (geoctr == NULL)
 	{
 		CS_erpt (cs_NO_MEM);
 	}
 	else
 	{
-		parm3->srcERad = srcDatum->e_rad;
-		parm3->srcESqr = srcDatum->ecent * trgDatum->ecent;
-		CS_stncp (parm3->srcKeyName,srcDatum->key_nm,sizeof (parm3->srcKeyName));
+		geoctr->srcERad = srcDatum->e_rad;
+		geoctr->srcESqr = srcDatum->ecent * srcDatum->ecent;
+		CS_stncp (geoctr->srcKeyName,srcDatum->key_nm,sizeof (geoctr->srcKeyName));
 
-		parm3->trgERad = trgDatum->e_rad;
-		parm3->trgESqr = trgDatum->ecent * trgDatum->ecent;
-		CS_stncp (parm3->trgKeyName,trgDatum->key_nm,sizeof (parm3->trgKeyName));
+		geoctr->trgERad = trgDatum->e_rad;
+		geoctr->trgESqr = trgDatum->ecent * trgDatum->ecent;
+		CS_stncp (geoctr->trgKeyName,trgDatum->key_nm,sizeof (geoctr->trgKeyName));
 
-		parm3->delta_X = srcDatum->delta_X - trgDatum->delta_X;
-		parm3->delta_Y = srcDatum->delta_Y - trgDatum->delta_Y;
-		parm3->delta_Z = srcDatum->delta_Z - trgDatum->delta_Z;
+		geoctr->delta_X = srcDatum->delta_X - trgDatum->delta_X;
+		geoctr->delta_Y = srcDatum->delta_Y - trgDatum->delta_Y;
+		geoctr->delta_Z = srcDatum->delta_Z - trgDatum->delta_Z;
 	}
-	return parm3;
+	return geoctr;
 }
 
 /**********************************************************************
-	st = CS_3p3dFowrd (trgLl,srcLl,parm3);
+	st = CS_gc3dFowrd (trgLl,srcLl,geoctr);
 
 	double trgLl [3];			the converted results are returned here.
 								Lng/Lat are in degrees, Hgt is usually meters.
 								Hgt is considered to be ellipsoid height, and
 								must be in the units of the equatorial radius
-								in the parm3 structure, usually meters.
+								in the geoctr structure, usually meters.
 	double srcLl [3];			the coordinate to be converted.  Elements have
 								the same characteristics as described above.
-	struct cs_Parm3_ *parm3;	pointer to an initialized structure defining
+	struct cs_Geoctr_ *geoctr;	pointer to an initialized structure defining
 								the datum conversion to be performed.
 	int st;						returns zero to indicate success, -1 on
 								failure.  Only cause for failure is the
 								convergence failure of geocentric inverse.
 
-	This is the standard Three Parameter Transformation.  What the DMA calls
-	Molodensky is actually a different formulation of this transformation.
+	This is the standard Geocentric Translation Transformation.  What the
+	DMA calls Molodensky is actually a different formulation of this
+	transformation.
 */
-int EXP_LVL9 CS_3p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3)
+int EXP_LVL9 CS_gc3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr)
 {
 	int status;
 	double xyz [3];
 
 	/* Convert the geographic coordinates to geocentric XYZ coordinates. */
-	CS_llhToXyz (xyz,srcLl,parm3->srcERad,parm3->srcESqr);
+	CS_llhToXyz (xyz,srcLl,geoctr->srcERad,geoctr->srcESqr);
 
 	/* Adjust these cartesian coordinates via the Bursa/Wolf transformation. */
-	xyz [XX] += parm3->delta_X;
-	xyz [YY] += parm3->delta_Y;
-	xyz [ZZ] += parm3->delta_Z;
+	xyz [XX] += geoctr->delta_X;
+	xyz [YY] += geoctr->delta_Y;
+	xyz [ZZ] += geoctr->delta_Z;
 
 	/* Convert the new X, Y, and Z back to latitude and longitude.
 	   CS_xyzToLlh returns degrees. */
-	status = CS_xyzToLlh (trgLl,xyz,parm3->trgERad,parm3->trgESqr);
+	status = CS_xyzToLlh (trgLl,xyz,geoctr->trgERad,geoctr->trgESqr);
 
 	/* That's that. */
 	return status;
 }
 
 /**********************************************************************
-	st = CS_3p2dFowrd (trgLl,srcLl,parm3);
+	st = CS_gc2dFowrd (trgLl,srcLl,geoctr);
 
 	double trgLl [3];			the converted results are returned here.
 								Lng/Lat are in degrees, Hgt element is
@@ -927,15 +928,15 @@ int EXP_LVL9 CS_3p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct 
 	double srcLl [3];			the coordinate to be converted.  Hgt
 								element is not involved in the calculation,
 								an ellipsoidal height of zero is assumed.
-	struct cs_Parm3_ *parm3;	pointer to an initialized structure defining
+	struct cs_Geoctr_ *geoctr;	pointer to an initialized structure defining
 								the datum conversion to be performed.
 	int st;						returns zero to indicate success, -1 on
 								failure.  Only cause for failure is the
 								convergence failure of geocentric inverse.
 
-	See CS_3p2dFowrd for more information.
+	See CS_gc2dFowrd for more information.
 */
-int EXP_LVL9 CS_3p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3)
+int EXP_LVL9 CS_gc2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr)
 {
 	extern double cs_Zero;			/* 0.0 */
 
@@ -947,7 +948,7 @@ int EXP_LVL9 CS_3p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct 
 	trgLl [HGT] = srcLl [HGT];
 
 	lcl_ll [HGT] = cs_Zero;
-	status = CS_3p3dFowrd (lcl_ll,lcl_ll,parm3);
+	status = CS_gc3dFowrd (lcl_ll,lcl_ll,geoctr);
 	if (status >= 0)
 	{
 		trgLl [LNG] = lcl_ll [LNG];
@@ -957,50 +958,50 @@ int EXP_LVL9 CS_3p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct 
 }
 
 /**********************************************************************
-	st = CS_3p3dInvrs (trgLl,srcLl,parm3);
+	st = CS_gc3dInvrs (trgLl,srcLl,geoctr);
 
 	double trgLl [3];			the converted results are returned here.
 								Lng/Lat are in degrees, Hgt is usually meters.
 								Hgt is considered to be ellipsoid height, and
 								must be in the units of the equatorial radius
-								in the parm3 structure.
+								in the geoctr structure.
 	double srcLl [3];			the coordinate to be converted.  Elements have
 								the same characteristics as described above.
-	struct cs_Parm3_ *parm3;	pointer to an initialized structure defining
+	struct cs_Geoctr_ *geoctr;	pointer to an initialized structure defining
 								the datum conversion to be performed.
 	int st;						returns zero to indicate success, -1 on
 								failure.  Only cause for failure is the
 								convergence failure of geocentric inverse.
 
-	This is the inverse of the Three Parameter Transformation.  See the
+	This is the inverse of the Geocentric Translation Transformation.  See the
 	forward function, above, for more information.  The inverse of this
-	transformation is usually accomplished by inverting the parameters
-	to the initialization function.  Therefore, this function is not
-	used in the normal operation of CS_MAP.
+	transformation is usually accomplished by inverting the parameters to the
+	initialization function.  Therefore, this function is not used in the
+	normal operation of CS_MAP.
 */
-int EXP_LVL9 CS_3p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3)
+int EXP_LVL9 CS_gc3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr)
 {
 	int status;
 	double xyz [3];
 
 	/* Convert the geographic coordinates to geocentric XYZ coordinates. */
-	CS_llhToXyz (xyz,srcLl,parm3->trgERad,parm3->trgESqr);
+	CS_llhToXyz (xyz,srcLl,geoctr->trgERad,geoctr->trgESqr);
 
 	/* Apply the translation parameters. */
-	xyz [XX] -= parm3->delta_X;
-	xyz [YY] -= parm3->delta_Y;
-	xyz [ZZ] -= parm3->delta_Z;
+	xyz [XX] -= geoctr->delta_X;
+	xyz [YY] -= geoctr->delta_Y;
+	xyz [ZZ] -= geoctr->delta_Z;
 
 	/* Convert the new X, Y, and Z back to latitude and longitude.
 	   CS_xyzToLlh returns degrees. */
-	status = CS_xyzToLlh (trgLl,xyz,parm3->srcERad,parm3->srcESqr);
+	status = CS_xyzToLlh (trgLl,xyz,geoctr->srcERad,geoctr->srcESqr);
 
 	/* That's that. */
 	return status;
 }
 
 /**********************************************************************
-	st = CS_3p2dInvrs (trgLl,srcLl,parm3);
+	st = CS_gc2dInvrs (trgLl,srcLl,geoctr);
 
 	double trgLl [3];			the converted results are returned here.
 								Lng/Lat are in degrees, Hgt is copied from
@@ -1008,18 +1009,18 @@ int EXP_LVL9 CS_3p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct 
 	double srcLl [3];			the coordinate to be converted. Hgt element
 								is not involved in the calculation; an
 								ellipsoid hieght of zero is assumed.
-	struct cs_Parm3_ *parm3;	pointer to an initialized structure defining
+	struct cs_Geoctr_ *geoctr;	pointer to an initialized structure defining
 								the datum conversion to be performed.
 	int st;						returns zero to indicate success, -1 on
 								failure.  Only cause for failure is the
 								convergence failure of geodetic or
 								3 parameter iterative calculations.
 
-	This function is an iterative inverse of CS_3p3dFowrd.  This is
+	This function is an iterative inverse of CS_gc3dFowrd.  This is
 	required to prevent positional creep in coordinates.  See
-	CS_3p3dFowrd and CS_3p3dInvrs for more information.
+	CS_gc3dFowrd and CS_gc3dInvrs for more information.
 */
-int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3)
+int EXP_LVL9 CS_gc2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr)
 {
 	static int maxIteration = 8;
 	static double smallValue  = 1.0E-09;		/* equates to =~ .1 millimeters */
@@ -1045,7 +1046,7 @@ int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct 
 	trgLl [LAT] = guess [LAT] = srcLl [LAT];
 	trgLl [HGT] = srcLl [HGT];
 
-	/* To improve performancce, we could use CS_3p3dInvrs here to
+	/* To improve performancce, we could use CS_gc3dInvrs here to
 	   get our guess.  That function will probably reduce the
 	   number of iterations require below substantially. */
 
@@ -1056,7 +1057,7 @@ int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct 
 		lngOk = latOk = TRUE;
 
 		/* Compute the WGS-84 lat/long for our current guess. */
-		rtnVal = CS_3p2dFowrd (newLl,guess,parm3);
+		rtnVal = CS_gc2dFowrd (newLl,guess,geoctr);
 		if (rtnVal != 0)
 		{
 			/* Oopps!! We must have been given some pretty strange
@@ -1075,7 +1076,7 @@ int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct 
 			lngOk = FALSE;
 			guess [LNG] += epsilon [LNG];
 		}
-		/* If our guess longitude is off by more than
+		/* If our guess at the latitude is off by more than
 		   small, we adjust our guess by the amount we are off. */
 		if (fabs (epsilon [LAT]) > smallValue)
 		{
@@ -2387,7 +2388,7 @@ struct cs_Parm4_ * EXP_LVL9 CS_4pInit (Const struct cs_Datum_* srcDatum,
 	else
 	{
 		parm4->srcERad = srcDatum->e_rad;
-		parm4->srcESqr = srcDatum->ecent * trgDatum->ecent;
+		parm4->srcESqr = srcDatum->ecent * srcDatum->ecent;
 		CS_stncp (parm4->srcKeyName,srcDatum->key_nm,sizeof (parm4->srcKeyName));
 
 		parm4->trgERad = trgDatum->e_rad;
@@ -2693,4 +2694,282 @@ int EXP_LVL9 CSwgs84ToEtrf89 (double ll_etrf89 [3],Const double ll_wgs84 [3])
 
 	/* This is always successful (currently). */
 	return 0;
+}
+
+/******************************************************************************
+	parm3 = CS_3pInit (srcDatum,trgDatum);
+
+	struct cs_Datum_ *srcDatum;	pointer to the definition of the source datum.
+	struct cs_Datum_ *trgDatuu; pointer to the definition of the target datum.
+	struct cs_Parm3_ *parm3;	returns a pointer to an initialized parameter
+								structure which is the required argument for
+								CS_p3Forwd and CS_p3Invrs.
+
+	The function returns null in the event of an error. Memory allocation
+	failure is the principal cause of failure.
+*/
+struct cs_Parm3_ * EXP_LVL9 CS_3pInit (Const struct cs_Datum_* srcDatum,
+									   Const struct cs_Datum_* trgDatum)
+{
+	struct cs_Parm3_ *parm3;
+
+	parm3 = (struct cs_Parm3_ *)CS_malc (sizeof (struct cs_Parm3_));
+	if (parm3 == NULL)
+	{
+		CS_erpt (cs_NO_MEM);
+	}
+	else
+	{
+		parm3->srcERad = srcDatum->e_rad;
+		parm3->srcESqr = srcDatum->ecent * trgDatum->ecent;
+		CS_stncp (parm3->srcKeyName,srcDatum->key_nm,sizeof (parm3->srcKeyName));
+
+		parm3->trgERad = trgDatum->e_rad;
+		parm3->trgESqr = trgDatum->ecent * trgDatum->ecent;
+		CS_stncp (parm3->trgKeyName,trgDatum->key_nm,sizeof (parm3->trgKeyName));
+
+		parm3->delta_X = srcDatum->delta_X - trgDatum->delta_X;
+		parm3->delta_Y = srcDatum->delta_Y - trgDatum->delta_Y;
+		parm3->delta_Z = srcDatum->delta_Z - trgDatum->delta_Z;
+	}
+	return parm3;
+}
+
+/**********************************************************************
+	st = CS_3p3dFowrd (trgLl,srcLl,parm3);
+
+	double trgLl [3];			the converted results are returned here.
+								Lng/Lat are in degrees, Hgt is usually meters.
+								Hgt is considered to be ellipsoid height, and
+								must be in the units of the equatorial radius
+								in the parm3 structure, usually meters.
+	double srcLl [3];			the coordinate to be converted.  Elements have
+								the same characteristics as described above.
+	struct cs_Parm3_ *parm3;	pointer to an initialized structure defining
+								the datum conversion to be performed.
+	int st;						returns zero to indicate success, -1 on
+								failure.  Only cause for failure is the
+								convergence failure of geocentric inverse.
+
+	This is the standard Three Parameter Transformation.  What the DMA calls
+	Molodensky is actually a different formulation of this transformation.
+*/
+int EXP_LVL9 CS_3p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3)
+{
+	int status;
+	double xyz [3];
+
+	/* Convert the geographic coordinates to geocentric XYZ coordinates. */
+	CS_llhToXyz (xyz,srcLl,parm3->srcERad,parm3->srcESqr);
+
+	/* Adjust these cartesian coordinates via the Bursa/Wolf transformation. */
+	xyz [XX] += parm3->delta_X;
+	xyz [YY] += parm3->delta_Y;
+	xyz [ZZ] += parm3->delta_Z;
+
+	/* Convert the new X, Y, and Z back to latitude and longitude.
+	   CS_xyzToLlh returns degrees. */
+	status = CS_xyzToLlh (trgLl,xyz,parm3->trgERad,parm3->trgESqr);
+
+	/* That's that. */
+	return status;
+}
+
+/**********************************************************************
+	st = CS_3p2dFowrd (trgLl,srcLl,parm3);
+
+	double trgLl [3];			the converted results are returned here.
+								Lng/Lat are in degrees, Hgt element is
+								copied from the srcLl array.
+	double srcLl [3];			the coordinate to be converted.  Hgt
+								element is not involved in the calculation,
+								an ellipsoidal height of zero is assumed.
+	struct cs_Parm3_ *parm3;	pointer to an initialized structure defining
+								the datum conversion to be performed.
+	int st;						returns zero to indicate success, -1 on
+								failure.  Only cause for failure is the
+								convergence failure of geocentric inverse.
+
+	See CS_3p2dFowrd for more information.
+*/
+int EXP_LVL9 CS_3p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3)
+{
+	extern double cs_Zero;			/* 0.0 */
+
+	int status;
+	double lcl_ll [3];
+
+	trgLl [LNG] = lcl_ll [LNG] = srcLl [LNG];
+	trgLl [LAT] = lcl_ll [LAT] = srcLl [LAT];
+	trgLl [HGT] = srcLl [HGT];
+
+	lcl_ll [HGT] = cs_Zero;
+	status = CS_3p3dFowrd (lcl_ll,lcl_ll,parm3);
+	if (status >= 0)
+	{
+		trgLl [LNG] = lcl_ll [LNG];
+		trgLl [LAT] = lcl_ll [LAT];
+	}
+	return status;
+}
+
+/**********************************************************************
+	st = CS_3p3dInvrs (trgLl,srcLl,parm3);
+
+	double trgLl [3];			the converted results are returned here.
+								Lng/Lat are in degrees, Hgt is usually meters.
+								Hgt is considered to be ellipsoid height, and
+								must be in the units of the equatorial radius
+								in the parm3 structure.
+	double srcLl [3];			the coordinate to be converted.  Elements have
+								the same characteristics as described above.
+	struct cs_Parm3_ *parm3;	pointer to an initialized structure defining
+								the datum conversion to be performed.
+	int st;						returns zero to indicate success, -1 on
+								failure.  Only cause for failure is the
+								convergence failure of geocentric inverse.
+
+	This is the inverse of the Three Parameter Transformation.  See the
+	forward function, above, for more information.  The inverse of this
+	transformation is usually accomplished by inverting the parameters
+	to the initialization function.  Therefore, this function is not
+	used in the normal operation of CS_MAP.
+*/
+int EXP_LVL9 CS_3p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3)
+{
+	int status;
+	double xyz [3];
+
+	/* Convert the geographic coordinates to geocentric XYZ coordinates. */
+	CS_llhToXyz (xyz,srcLl,parm3->trgERad,parm3->trgESqr);
+
+	/* Apply the translation parameters. */
+	xyz [XX] -= parm3->delta_X;
+	xyz [YY] -= parm3->delta_Y;
+	xyz [ZZ] -= parm3->delta_Z;
+
+	/* Convert the new X, Y, and Z back to latitude and longitude.
+	   CS_xyzToLlh returns degrees. */
+	status = CS_xyzToLlh (trgLl,xyz,parm3->srcERad,parm3->srcESqr);
+
+	/* That's that. */
+	return status;
+}
+
+/**********************************************************************
+	st = CS_3p2dInvrs (trgLl,srcLl,parm3);
+
+	double trgLl [3];			the converted results are returned here.
+								Lng/Lat are in degrees, Hgt is copied from
+								the srcLl argument.
+	double srcLl [3];			the coordinate to be converted. Hgt element
+								is not involved in the calculation; an
+								ellipsoid hieght of zero is assumed.
+	struct cs_Parm3_ *parm3;	pointer to an initialized structure defining
+								the datum conversion to be performed.
+	int st;						returns zero to indicate success, -1 on
+								failure.  Only cause for failure is the
+								convergence failure of geodetic or
+								3 parameter iterative calculations.
+
+	This function is an iterative inverse of CS_3p3dFowrd.  This is
+	required to prevent positional creep in coordinates.  See
+	CS_3p3dFowrd and CS_3p3dInvrs for more information.
+*/
+int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3)
+{
+	static int maxIteration = 8;
+	static double smallValue  = 1.0E-09;		/* equates to =~ .1 millimeters */
+	static double smallValue2 = 1.0E-06;		/* equates to =~ 100 millimeters */
+
+	int ii;
+	int lngOk;
+	int latOk;
+	int rtnVal;
+
+	double guess [3];
+	double newLl [3];
+	double epsilon [3];
+
+	/* Assume everything goes OK until we know different. */
+	rtnVal = 0;
+
+	/* First, we copy the source lat/longs to the local array.
+	   This is the default result which the user may want in
+	   the event of an error.  Note, we assume such has been
+	   done below, even if there has not been an error. */
+	trgLl [LNG] = guess [LNG] = srcLl [LNG];
+	trgLl [LAT] = guess [LAT] = srcLl [LAT];
+	trgLl [HGT] = srcLl [HGT];
+
+	/* To improve performancce, we could use CS_3p3dInvrs here to
+	   get our guess.  That function will probably reduce the
+	   number of iterations require below substantially. */
+
+	/* Start a loop which will iterate as many as maxIteration times. */
+	for (ii = 0;ii < maxIteration;ii++)
+	{
+		/* Assume we are done until we know different. */
+		lngOk = latOk = TRUE;
+
+		/* Compute the WGS-84 lat/long for our current guess. */
+		rtnVal = CS_3p2dFowrd (newLl,guess,parm3);
+		if (rtnVal != 0)
+		{
+			/* Oopps!! We must have been given some pretty strange
+			   coordinate values. */
+			break;
+		}
+
+		/* See how far we are off. */
+		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
+
+		/* If our guess at the longitude is off by more than
+		   small, we adjust our guess by the amount we are off. */
+		if (fabs (epsilon [LNG]) > smallValue)
+		{
+			lngOk = FALSE;
+			guess [LNG] += epsilon [LNG];
+		}
+		/* If our guess longitude is off by more than
+		   small, we adjust our guess by the amount we are off. */
+		if (fabs (epsilon [LAT]) > smallValue)
+		{
+			latOk = FALSE;
+			guess [LAT] += epsilon [LAT];
+		}
+
+		/* If our current guess produces a newLl that is within
+		   samllValue of srcLl, we are done. */
+		if (lngOk && latOk) break;
+	}
+
+	/* If we didn't resolve in maxIteration tries, we issue a warning
+	   message.  Usually, three or four iterations does the trick. */
+	if (ii >= maxIteration )
+	{
+		CS_erpt (cs_3P_CNVRG);
+
+		/* Issue a warning if we're close, a fatal if we are still way off.
+		   In any case, we return the last computed value.  We could have
+		   gotten very fancy with this stuff, but it would have had serious
+		   affects on the performance.  So we just check epsilon here as
+		   we know we have an error and this doesn't happen very often. */
+		rtnVal = 1;
+		if (fabs (epsilon [LNG]) > smallValue2 ||
+		    fabs (epsilon [LAT]) > smallValue2)
+		{
+			rtnVal = -1;
+		}
+	}
+
+	/* Adjust the trgLl value to the computed value, now that we
+	   know that it should be correct. */
+	if (rtnVal >= 0)
+	{
+		trgLl [LNG] = guess [LNG];
+		trgLl [LAT] = guess [LAT];
+	}
+	return rtnVal;
 }

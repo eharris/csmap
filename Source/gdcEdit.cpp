@@ -405,7 +405,7 @@ int CgdcEdit::CheckFallback (const char *dtKeyName)
 	struct cs_Dtdef_ *dtDef;
 
 	/* It the key name is empty, it's OK.  There is no fallback. */
-    	if (*dtKeyName == '\0' || !CS_stricmp (dtKeyName,",noen>"))
+    	if (*dtKeyName == '\0' || !CS_stricmp (dtKeyName,"<none>"))
 	{
 		return IDOK;
 	}
@@ -418,14 +418,15 @@ int CgdcEdit::CheckFallback (const char *dtKeyName)
 		to84Via = dtDef->to84_via;
 		CS_free (dtDef);
 		dtDef = 0;
-		if (to84Via == cs_DTCTYP_MOLO  ||
-			to84Via == cs_DTCTYP_MREG  ||
-			to84Via == cs_DTCTYP_BURS  ||
-			to84Via == cs_DTCTYP_WGS72 ||
-			to84Via == cs_DTCTYP_7PARM ||
-			to84Via == cs_DTCTYP_3PARM ||
-			to84Via == cs_DTCTYP_4PARM ||
-			to84Via == cs_DTCTYP_6PARM ||
+		if (to84Via == cs_DTCTYP_MOLO   ||
+			to84Via == cs_DTCTYP_MREG   ||
+			to84Via == cs_DTCTYP_BURS   ||
+			to84Via == cs_DTCTYP_WGS72  ||
+			to84Via == cs_DTCTYP_7PARM  ||
+			to84Via == cs_DTCTYP_3PARM  ||
+			to84Via == cs_DTCTYP_GEOCTR ||
+			to84Via == cs_DTCTYP_4PARM  ||
+			to84Via == cs_DTCTYP_6PARM  ||
 			to84Via == cs_DTCTYP_WGS84)
 		{
 			st = IDOK;

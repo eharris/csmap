@@ -32,6 +32,9 @@
 /*lint -esym(534,CS_ips) */						/* ignore return value */
 /*lint -esym(534,CS_nampp) */					/* ignore return value */
 /*lint -esym(534,CSerpt) */						/* ignore return value */
+/*lint -esym(534,err_func) */					/* ignore return value */
+/*lint -esym(534,CS_remove) */					/* ignore return value */
+/*lint -esym(534,CS_trim) */					/* ignore return value */
 /*lint -e522	         */						/* return value of function call through  pointer ignored. */
 
 #include "cs_map.h"
@@ -145,7 +148,7 @@
 
 struct cs_CscmpT_
 {
-	char label [16];
+	char label [16];			/*lint !e754 */
 	int type;
 };
 
@@ -238,7 +241,6 @@ int EXP_LVL9 CScscomp (	Const char *inpt,
 	extern int cs_Sortbs;
 #endif
 	extern struct cs_Prjtab_ cs_Prjtab [];
-	extern double cs_One;
 	extern struct cs_Grptbl_ cs_CsGrptbl [];
 	extern short cs_QuadMin;
 	extern short cs_QuadMax;
@@ -874,7 +876,9 @@ int CScsdefwr (	csFILE *outStrm,
 	extern char csErrnam [];	/* Expected to be dimensioned at MAXPATH */
 	extern struct cs_Prjtab_ cs_Prjtab [];
 
+	int st;
 	int ii;
+	int lclCrypt;
 	int flag;
 	int chk_cnt;
 	int err_cnt;
@@ -893,7 +897,10 @@ int CScsdefwr (	csFILE *outStrm,
 	struct cs_Dtdef_ dt_def;
  	__ALIGNMENT__3		/* For some versions of Sun compiler. */
 	struct cs_Eldef_ el_def;
+
 	
+	list_sz = sizeof (err_list) / sizeof (int);
+	for (ii = 0;ii < list_sz;ii += 1) err_list [ii] = 0;
 	err_cnt = 0;
 	cancel = FALSE;
 	if (0!=CS_stricmp(cs_def->prj_knm, "NERTH"))
@@ -921,10 +928,30 @@ int CScsdefwr (	csFILE *outStrm,
 		dt_def.fill [0] = '\0';
 		dt_def.fill [1] = '\0';
 		flag = CS_bins (dtStrm,(long32_t)sizeof (cs_magic_t),(long32_t)-1,sizeof (dt_def),&dt_def,(CMPFUNC_CAST)CS_dtcmp);
-		if (!flag)
+		if (flag == 1)
 		{
-			sprintf (err_msg,"Invalid datum key name, %s, given on line %d.",
-						cs_def->dat_knm,line_nbr);
+			st = CS_dtrd (dtStrm,&dt_def,&lclCrypt);
+			if (st == 1)
+			{
+				if (!CS_stricmp (dt_def.group,"LeGACY") && CS_stricmp (cs_def->group,"LEGACY"))
+				{
+					if (warn)
+					{
+						sprintf (err_msg,"Non-legacy system named %s references legacy datum named %s.",cs_def->key_nm,dt_def.key_nm);
+						cancel = (*err_func)(err_msg);
+					}
+				}
+			}
+		}
+		else if (flag == 0)
+		{
+			sprintf (err_msg,"Invalid datum key name, %s, given on line %d.",cs_def->dat_knm,line_nbr);
+			cancel = (*err_func)(err_msg);
+			err_cnt += 1;
+		}
+		else
+		{
+			sprintf (err_msg,"Datum dictionary access failure detected when checking system named %s.",cs_def->key_nm);
 			cancel = (*err_func)(err_msg);
 			err_cnt += 1;
 		}
@@ -936,9 +963,30 @@ int CScsdefwr (	csFILE *outStrm,
 		el_def.fill [0] = '\0';
 		el_def.fill [1] = '\0';
 		flag = CS_bins (elStrm,(long32_t)sizeof (cs_magic_t),(long32_t)-1,sizeof (el_def),&el_def,(CMPFUNC_CAST)CS_elcmp);
-		if (!flag)
+		if (flag == 1)
+		{
+			st = CS_elrd (elStrm,&el_def,&lclCrypt);
+			if (st == 1)
+			{
+				if (!CS_stricmp (el_def.group,"LGACY") && CS_stricmp (cs_def->group,"LEGACY"))
+				{
+					if (warn)
+					{
+						sprintf (err_msg,"Non-legacy system named %s references legacy ellipsoid named %s.",cs_def->key_nm,el_def.key_nm);
+						cancel = (*err_func)(err_msg);
+					}
+				}
+			}
+		}
+		else if (!flag)
 		{
 			sprintf (err_msg,"Invalid ellipsoid key name, %s, given on line %d.",cs_def->elp_knm,line_nbr);
+			cancel = (*err_func)(err_msg);
+			err_cnt += 1;
+		}
+		else
+		{
+			sprintf (err_msg,"Ellipsoid dictionary access failure detected when checking system named %s.",cs_def->key_nm);
 			cancel = (*err_func)(err_msg);
 			err_cnt += 1;
 		}
@@ -1019,40 +1067,41 @@ int CScsdefwr (	csFILE *outStrm,
 		err_cnt += 1;
 	}
 
-chk_cnt = 0;
-if (0!=CS_stricmp(cs_def->prj_knm, "NERTH"))
-{
-	/* Now, we can do the ultimate check, sans the datum and
-	   ellipsoid checks which we did above.  We need the above
-	   checks as the dictionaries we are providing may not be
-	   the same as those which the CS-MAP library routines may
-	   think are the current ones. */
-	list_sz = sizeof (err_list) / sizeof (int);
-	chk_cnt = CS_cschk (cs_def,0,err_list,list_sz);
-	if (chk_cnt == 1 && list_sz > 0 && err_list [0] == cs_SYS34_NOSRC)
+	chk_cnt = 0;
+	if (0!=CS_stricmp(cs_def->prj_knm, "NERTH"))
 	{
-		if (warn)
+		/* Now, we can do the ultimate check, sans the datum and
+		   ellipsoid checks which we did above.  We need the above
+		   checks as the dictionaries we are providing may not be
+		   the same as those which the CS-MAP library routines may
+		   think are the current ones. */
+		list_sz = sizeof (err_list) / sizeof (int);
+		chk_cnt = CS_cschk (cs_def,0,err_list,list_sz);
+		if (chk_cnt == 1 && list_sz > 0 && err_list [0] == cs_SYS34_NOSRC)	/*lint !e774 */
 		{
-			CSerpt (err_msg,sizeof (err_msg),err_list [0]);
-			sprintf (err_msg,"Skipping definition of %s.  Reason: %s",cs_def->key_nm,err_msg);
+			if (warn)
+			{
+				CSerpt (err_msg,sizeof (err_msg),err_list [0]);
+				sprintf (err_msg,"Skipping definition of %s.  Reason: %s",cs_def->key_nm,err_msg);
+			}
+			err_cnt += 1;
 		}
-		err_cnt += 1;
-	}
-	else if (chk_cnt != 0)
-	{
-		CS_stncp (csErrnam,cs_def->key_nm,MAXPATH);
-		for (ii = 0;ii < chk_cnt && ii < list_sz;ii++)
+		else if (chk_cnt != 0)
 		{
-			CSerpt (err_msg,sizeof (err_msg),err_list [ii]);
-			cancel = (*err_func)(err_msg);
+			CS_stncp (csErrnam,cs_def->key_nm,MAXPATH);
+			for (ii = 0;ii < chk_cnt && ii < list_sz;ii++)
+			{
+				CSerpt (err_msg,sizeof (err_msg),err_list [ii]);
+				cancel = (*err_func)(err_msg);
+			}
+			err_cnt += chk_cnt;
 		}
-		err_cnt += chk_cnt;
 	}
-}
+
 	if (chk_cnt == 0)
 	{
 		/* If we ever get here, the unit will have already been verified.
-		   However, since CS_cschk is used elsewher in the system, it would
+		   However, since CS_cschk is used elsewhere in the system, it would
 		   be inappropriate for it to set the unit_scl. So we do all of this
 		   again. We issue the message just in case some one changes
 		   CS_cschk and doesn't know that this module was relying on it. */

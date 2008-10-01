@@ -2391,12 +2391,15 @@ struct cs_Dtdef_
 						   cs_DTCTYP_WGS72
 						   cs_DTCTYP_HPGN
 						   cs_DTCTYP_AGD66
-						   cs_DTCTYP_3PARM
+						   cs_DTCTYP_GEOCTR
 						   cs_DTCTYP_6PARM
 						   cs_DTCTYP_4PARM
 						   cs_DTCTYP_AGD84
 						   cs_DTCTYP_NZGD49
 						   cs_DTCTYP_ATS77
+						   .
+						   .
+						   .
 						   */
 	short epsgNbr;		/* EPSG number, if known */
 	short wktFlvr;		/* WKT flavor, if dervied from WKT, else zero */
@@ -5860,6 +5863,7 @@ struct cs_Unittab_
 #define cs_DTCTYP_ED50    22
 #define cs_DTCTYP_DHDN    23
 #define cs_DTCTYP_ETRF89  24
+#define cs_DTCTYP_GEOCTR  25
 
 /*
 	The following structures carry definitions of datums
@@ -5923,7 +5927,7 @@ struct cs_Molo_
 									   otherwise not used. */
 };
 
-struct cs_Parm3_
+struct cs_Geoctr_
 {
 	double srcERad;		/* Equatorial radius of the ellipsoid on
 						   which the source datum is based. */
@@ -6061,6 +6065,27 @@ struct cs_Parm4_
 									   otherwise not used. */
 };
 
+struct cs_Parm3_
+{
+	double srcERad;		/* Equatorial radius of the ellipsoid on
+						   which the source datum is based. */
+	double srcESqr;		/* Eccentricity squared of the elllipsoid
+						   on which the source datum is based. */
+	double trgERad;		/* Equatorial radius of the ellipsoid on
+						   which the target datum is based. */
+	double trgESqr;		/* Eccentricity squared of the elllipsoid
+						   on which the target datum is based. */
+	/* Geocentric translation parameters. */
+	double delta_X;
+	double delta_Y;
+	double delta_Z;
+
+	char srcKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
+									   otherwise not used. */
+	char trgKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
+									   otherwise not used. */
+};
+
 /*
 	A datum transformation may require several different transformations.
 	Each individual transformation is defined by one of the following
@@ -6089,7 +6114,7 @@ enum cs_DtcXformType
 	dtcTypAts77ToCsrs,						/*   13 */
 	dtcTypNad83ToCsrs,						/*   14 */
 	dtcTypSevenParm,						/*   15 */
-	dtcTypThreeParm,						/*   16 */
+	dtcTypGeoCtr,							/*   16 */
 	dtcTypSixParm,							/*   17 */
 	dtcTypFourParm,							/*   18 */
 	dtcTypTokyoToJgd2k,						/*   19 */
@@ -6099,6 +6124,7 @@ enum cs_DtcXformType
 	dtcTypDhdnToEtrf89,						/*   23 */
 	dtcTypEtrf89ToWgs84,					/*   24 */
 	dtcTypNad27ToAts77,						/*   25 */
+	dtcTypThreeParm,						/*   26 */
 
 	/* Inverse of the above */
 	dtcTypStartOfInverses = 1000,			/* 1000 */
@@ -6117,7 +6143,7 @@ enum cs_DtcXformType
 	dtcTypCsrsToAts77,						/* 1013 */
 	dtcTypCsrsToNad83,						/* 1014 */
 	dtcTypSevenParmInv,						/* 1015 */
-	dtcTypThreeParmInv,						/* 1016 */
+	dtcTypGeoCtrInv,						/* 1016 */
 	dtcTypSixParmInv,						/* 1017 */
 	dtcTypFourParmInv,						/* 1018 */
 	dtcTypJgd2kToTokyo,						/* 1019 */
@@ -6127,6 +6153,7 @@ enum cs_DtcXformType
 	dtcTypEtrf89ToDhdn,						/* 1023 */
 	dtcTypWgs84ToEtrf89,					/* 1024 */
 	dtcTypAts77ToNad27,						/* 1025 */
+	dtcTypThreeParmInv,						/* 1026 */
 
 	/* A programming convenience */
 	dtcTypSkip = 9999						/* 9999 */
@@ -6169,10 +6196,11 @@ struct cs_DtcXform_
 		struct cs_Molo_* molo;
 		struct cs_Bursa_* bursa;
 		struct cs_Parm7_* parm7;
-		struct cs_Parm3_* parm3;
+		struct cs_Geoctr_* geoctr;
 		struct cs_Parm6_* parm6;
 		struct cs_Parm4_* parm4;
 		struct cs_DmaMReg_* mreg;
+		struct cs_Parm3_* parm3;
 	} parms;
 	char sourceId [48];
 };
@@ -10023,11 +10051,11 @@ int EXP_LVL7 CS_dmaMr3dFowrd (double trgLl [3],Const double srcLl [3],Const stru
 int EXP_LVL7 CS_dmaMr2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_DmaMReg_ *mreg);
 int EXP_LVL7 CS_dmaMr3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_DmaMReg_ *mreg);
 int EXP_LVL7 CS_dmaMr2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_DmaMReg_ *mreg);
-struct cs_Parm3_ * EXP_LVL9 CS_3pInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
-int EXP_LVL9 CS_3p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
-int EXP_LVL9 CS_3p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
-int EXP_LVL9 CS_3p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
-int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
+struct cs_Geoctr_ * EXP_LVL9 CS_gcInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
+int EXP_LVL9 CS_gc3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr);
+int EXP_LVL9 CS_gc2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr);
+int EXP_LVL9 CS_gc3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr);
+int EXP_LVL9 CS_gc2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr);
 struct cs_Parm6_ * EXP_LVL9 CS_6pInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
 int EXP_LVL9 CS_6p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm6_ *parm6);
 int EXP_LVL9 CS_6p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm6_ *parm6);
@@ -10038,6 +10066,11 @@ int EXP_LVL9 CS_4p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct 
 int EXP_LVL9 CS_4p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm4_ *parm4);
 int EXP_LVL9 CS_4p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm4_ *parm4);
 int EXP_LVL9 CS_4p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm4_ *parm4);
+struct cs_Parm3_ * EXP_LVL9 CS_3pInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
+int EXP_LVL9 CS_3p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
+int EXP_LVL9 CS_3p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
+int EXP_LVL9 CS_3p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
+int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
 
 int EXP_LVL7 CSrgf93Init (void);
 int EXP_LVL7 CSrgf93Chk (void);

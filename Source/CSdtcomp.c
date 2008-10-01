@@ -111,9 +111,10 @@ static struct cs_DtTypeT_ cs_DtTypeT [] =
 	{          "ED50",cs_DTCTYP_ED50},
 	{          "DHDN",cs_DTCTYP_DHDN},
 	{        "ETRF89",cs_DTCTYP_ETRF89},
-	{    "3PARAMETER",cs_DTCTYP_3PARM},
+	{    "GEOCENTRIC",cs_DTCTYP_GEOCTR},
 	{    "6PARAMETER",cs_DTCTYP_6PARM},
 	{    "4PARAMETER",cs_DTCTYP_4PARM},
+	{    "3PARAMETER",cs_DTCTYP_3PARM},
 	{              "",cs_DTCTYP_NONE}
 };
 
@@ -568,6 +569,8 @@ int CSdtdefwr (	csFILE *outStrm,
 {
 	extern double cs_Zero;			/* 0.0 */
 
+	int st;
+	int elCrypt;
 	int err_cnt;
 	int cancel;
 	int flag;
@@ -606,6 +609,7 @@ int CSdtdefwr (	csFILE *outStrm,
 	switch (dtdef->to84_via) {
 
 	case cs_DTCTYP_MOLO:
+	case cs_DTCTYP_GEOCTR:
 	case cs_DTCTYP_3PARM:
 		if (tr_cnt != 3)
 		{
@@ -710,9 +714,28 @@ int CSdtdefwr (	csFILE *outStrm,
 						sizeof (eldef),
 						&eldef,
 						(CMPFUNC_CAST)CS_elcmp);
-		if (flag == 0)
+		if (flag == 1)
+		{
+			st = CS_elrd (elStrm,&eldef,&elCrypt);
+			if (st == 1)
+			{
+				if (!CS_stricmp (eldef.group,"LGACY") && CS_stricmp (dtdef->group,"LEGACY"))
+				{
+					sprintf (err_msg,"Non-legacy datum named %s references legacy ellipsoid named %s.",dtdef->key_nm,dtdef->ell_knm);
+					cancel = (*err_func)(err_msg);
+					err_cnt += 1;
+				}
+			}
+		}
+		else if (flag == 0)
 		{
 			sprintf (err_msg,"Invalid ellipsoid name, %s, on line %d.",dtdef->ell_knm,line_nbr);
+			cancel = (*err_func)(err_msg);
+			err_cnt += 1;
+		}
+		else
+		{
+			sprintf (err_msg,"Ellipsoid dictionary access failure detected when checking datum named %s.",dtdef->key_nm);
 			cancel = (*err_func)(err_msg);
 			err_cnt += 1;
 		}
@@ -722,14 +745,26 @@ int CSdtdefwr (	csFILE *outStrm,
 	if (fabs (dtdef->delta_X) > cs_DelMax ||
 		fabs (dtdef->delta_Y) > cs_DelMax ||
 		fabs (dtdef->delta_Z) > cs_DelMax ||
-		fabs (dtdef->rot_X) > cs_RotMax    ||
-		fabs (dtdef->rot_Y) > cs_RotMax    ||
-		fabs (dtdef->rot_Z) > cs_RotMax    ||
+		fabs (dtdef->rot_X) > cs_RotMax   ||
+		fabs (dtdef->rot_Y) > cs_RotMax   ||
+		fabs (dtdef->rot_Z) > cs_RotMax   ||
 		fabs (dtdef->bwscale) > cs_SclMax)
 	{
-		sprintf (err_msg,"Definition of datum named %s contains some obnoxious parameter values.",dtdef->ell_knm);
+		sprintf (err_msg,"Definition of datum named %s contains some obnoxious parameter values.",dtdef->key_nm);
 		cancel = (*err_func)(err_msg);
 		err_cnt += 1;
+	}
+	
+	/* Verify that if the transformation technique is 3PARAMETER the
+	   group is LEGACY. */
+	if (dtdef->to84_via == cs_DTCTYP_3PARM)
+	{
+		if (CS_stricmp (dtdef->group,"LEGACY"))
+		{
+			sprintf (err_msg,"Definition of datum named %s refers to deprecated 3PARAMETER technique.",dtdef->key_nm);
+			cancel = (*err_func)(err_msg);
+			err_cnt += 1;
+		}
 	}
 
 	if (err_cnt == 0)

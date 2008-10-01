@@ -2181,7 +2181,7 @@ int CS_wktEleToDt (struct cs_Dtdef_ *dtDef,struct cs_Eldef_ *elDef,
 		}
 		else if (deltaCnt != 0)
 		{
-		    dtDef->to84_via = cs_DTCTYP_3PARM;
+		    dtDef->to84_via = cs_DTCTYP_GEOCTR;
 		}
 		else
 		{
