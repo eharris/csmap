@@ -967,12 +967,13 @@ static struct viaTable_
 	{   cs_DTCTYP_ATS77, "ATS77<->NAD83 via Grid Files" },
 	{   cs_DTCTYP_TOKYO, "TOKYO<->JGD2k via Grid Files" },
 	{   cs_DTCTYP_RGF93, "NTF<->RGF93 via Grid File" },
-	{   cs_DTCTYP_3PARM, "Three Parameter Transformation" },
+	{  cs_DTCTYP_GEOCTR, "Geocentric Translation" },
 	{    cs_DTCTYP_BURS, "Bursa/Wolf Transformation" },
 	{  cs_DTCTYP_ETRF89, "Is ETRF89, no shift required." },
 	{   cs_DTCTYP_6PARM, "Six Parameter Transformation" },
 	{   cs_DTCTYP_7PARM, "Seven Parameter Transformation" },
-	{   cs_DTCTYP_4PARM, "Four Parameter Transformation" }
+	{   cs_DTCTYP_4PARM, "Four Parameter Transformation" },
+	{  cs_DTCTYP_GEOCTR, "*Three Parameter Transformation" }
 };
 int EXP_LVL1 CS_viaEnum (int index,char *descr,int size,int *ident)
 {

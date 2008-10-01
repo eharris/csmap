@@ -244,6 +244,7 @@ int EXP_LVL3 CSdt2WktEx (char *datum,size_t datumSize,char *geoTran,size_t geoTr
 		method = "Geocentric_Translation";
 		break;
 	case cs_DTCTYP_3PARM:
+	case cs_DTCTYP_GEOCTR:
 		parmCount = 3;
 		method = "Geocentric_Translation";
 		break;

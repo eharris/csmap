@@ -282,9 +282,17 @@ int CdtEdit::PutDatum ()
 	dtDef.rot_Z = m_RotZ;
 	dtDef.bwscale = m_Scale;
 	CSt_strNCpy (dtDef.ell_knm,(LPCTSTR)m_Ellipsoid,sizeof (dtDef.ell_knm));
+	dtDef.to84_via = cs_DTCTYP_NONE;
 	int idx = m_284Via.GetCurSel ();
-	dtDef.to84_via = (short)m_284Via.GetItemData (idx);
-	dtDef.protect = 0;
+	if (idx != CB_ERR)
+	{
+	    m_284Via.GetLBText (idx,stemp);
+	    if (stemp [0] != _T('*'))
+	    {
+    	    dtDef.to84_via = (short)m_284Via.GetItemData (idx);
+    	    dtDef.protect = 0;
+    	}
+	}
 
 	int st = CS_dtupd (&dtDef,0);
 	if (st < 0)
@@ -504,6 +512,7 @@ void CdtEdit::SetButtons ()
 		deltas = rots = scale = true;
 		break;
 	case cs_DTCTYP_3PARM:
+	case cs_DTCTYP_GEOCTR:
 		deltas = true;
 		break;
 	case cs_DTCTYP_6PARM:

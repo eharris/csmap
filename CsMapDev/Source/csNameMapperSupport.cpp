@@ -779,7 +779,7 @@ TcsKeyNameMapFile::TcsKeyNameMapFile (const wchar_t* mapFilePath,
                                       short fldCnt)
                                         :
                                       TcsCsvFileBase (true,fldCnt,fldCnt),
-                                      CurrentRecord  (1UL),
+                                      CurrentRecord  (0U),
                                       Status         ()
 {
     const wchar_t *wcPtrK;
@@ -890,7 +890,7 @@ unsigned TcsKeyNameMapFile::GetErrorValue (void) const
 }
 void TcsKeyNameMapFile::Rewind (void)
 {
-    CurrentRecord = HasLabels () ? 1UL : 0UL;
+    CurrentRecord = 0UL;
 }
 bool TcsKeyNameMapFile::NextRecord (void)
 {
@@ -912,7 +912,7 @@ bool TcsKeyNameMapFile::SetCurrentRecord (unsigned recordNbr)
 {
     bool ok (true);
     
-    if ((recordNbr < BogusNbr) && (recordNbr + 1) < RecordCount ())
+    if ((recordNbr < BogusNbr) && recordNbr < RecordCount ())
     {
         CurrentRecord = recordNbr;
     }

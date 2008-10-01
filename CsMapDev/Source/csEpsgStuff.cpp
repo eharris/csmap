@@ -3351,7 +3351,7 @@ bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& 
 		{
 			switch (opMthCode) {
 			case 9603:				// Geocentric Translation
-				to84_via = cs_DTCTYP_3PARM;
+				to84_via = cs_DTCTYP_GEOCTR;
 				csPrmCount = 3;
 				break;
 			case 9604:				// Molodensky

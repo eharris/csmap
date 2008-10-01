@@ -747,7 +747,7 @@ int EXP_LVL9 CSctcomp (	Const char *inpt,Const char *outp,int flags,Const char *
 			cp1 = strchr (buff,']');
 			if (cp1 != NULL)
 			{
-				length = (cp1 - cp) - 1;
+				length = (int)(cp1 - cp) - 1;
 				if (length > 1 && length < (int)sizeof (catName))
 				{
 					lineType = typCatName;

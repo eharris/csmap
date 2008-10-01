@@ -1478,7 +1478,7 @@ bool EXP_LVL3 CSgetParamNm (char* paramName,size_t paramSize,EcsNameFlavor nmFla
 			{
 				if (paramCode >= 0 && paramCode <= cs_PRMCOD_MAXIDX)
 				{
-					CS_stncp (paramName,csPrjprm[paramCode].label,sizeof (paramName));
+					CS_stncp (paramName,csPrjprm[paramCode].label,sizeof (paramSize));
 				}
 				else
 				{
