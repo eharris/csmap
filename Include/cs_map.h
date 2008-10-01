@@ -10089,12 +10089,14 @@ unsigned CS_spaceParse (char *lineBuffer,char *ptrs [],unsigned maxPtrs);
 #if _FILE_SYSTEM == _fs_UNIX
 csFILE *CS_fopen (const char *filename,const char *mode);
 #endif
-/* Note: ftw is only used in the CS_gdcGenerator module, which is not really used
-   in the CS-MAP package.  Therefore, this stuff with ftw is no longer necessary.
+/* Note: ftw is only used in the CS_swpal function in the CS_rlsUpdt module.
+     The CS_swpal function is only used in the CStestS.c  function of the CS_Test
+    (console test) module.  Since it is not used in the library portion of the product,
+    It should be moved to be a function in the CStestSupport.c source  module,
+    With a prototype added to the cs_Test.h module.
 
-   CS_gdcGenerator was a module developed for a client which would generate
-   .gdc files which would emulate exactly the previous operation of their
-   product.  After one use on a system it is no longer necessary.
+   Alternatively, the ‘S’ test of the CS_Test module could be removed and
+   all references to CS_ftw could then be removed from the product.
 */
 #if _RUN_TIME == _rt_MOSXUNIX
 #  define FTW_F    0

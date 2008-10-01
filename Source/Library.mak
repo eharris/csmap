@@ -72,7 +72,6 @@ CS_erpt.c \
 CS_error.c \
 CS_fips.c \
 CS_gauss.c \
-CS_gdcGenerator.c \
 CS_general.c \
 CS_geoid96.c \
 CS_geoid99.c \
@@ -206,7 +205,6 @@ CS_erpt.o \
 CS_error.o \
 CS_fips.o \
 CS_gauss.o \
-CS_gdcGenerator.o \
 CS_general.o \
 CS_geoid96.o \
 CS_geoid99.o \
