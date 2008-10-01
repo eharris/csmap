@@ -208,12 +208,18 @@ csFILE *CS_fopen(const char *filename, const char *mode)
 	Apple doesn't support findfirst or ftw.  So, the following function
 	has been written to support use of CS-MAP on the Apple.  It should be
 	noted, that the ftw functionality is no longer a part of the standard
-	library.  As of this writing (11/6/02), there are only two functions
-	in the library which use this functionality: CS_gdcGenerator & CS_rlsUpdt.
+	library.  
+
+    Note: ftw is only used in the CS_swpal function in the CS_rlsUpdt module.
+    The CS_swpal function is only used in the CStestS.c  function of the CS_Test
+    (console test) module.  Since it is not used in the library portion of the product,
+    It should be moved to be a function in the CStestSupport.c source  module,
+    With a prototype added to the cs_Test.h module.
+
+    Alternatively, the ‘S’ test of the CS_Test module could be removed and
+    all references to CS_ftw could then be removed from the product.
 	
-	Neither function is a part of the normal coordinate conversion library,
-	CS_gdcGenerator was written to support the automatic generation of .gdc
-	files and should no longer be needed.  CS_rlsUpdt is used to update
+    CS_rlsUpdt is used to update
 	older dictionary files to a newer format.  Since the dictionary files
 	have not changed in many years, it's use is rather limited also.
 

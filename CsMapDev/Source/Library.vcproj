@@ -94,81 +94,6 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)lib80\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="4"
-			CharacterSet="1"
-			DeleteExtensionsOnClean=" *.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;$(TargetPath)"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="4"
-				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE"
-				StringPooling="true"
-				MinimalRebuild="false"
-				BasicRuntimeChecks="0"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="true"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="cs_map.h"
-				PrecompiledHeaderFile="$(IntDir)\cs_map.pch"
-				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
-				BrowseInformation="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
-				CompileAs="0"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\csmap.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				OutputFile="$(OutDir)/CsMap.bsc"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="$(SolutionDir)lib80\$(ConfigurationName)64"
 			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)64"
@@ -225,6 +150,81 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="$(OutDir)\csmapd.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+				OutputFile="$(OutDir)/CsMap.bsc"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)lib80\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="1"
+			DeleteExtensionsOnClean=" *.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;$(TargetPath)"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="4"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE"
+				StringPooling="true"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="true"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough="cs_map.h"
+				PrecompiledHeaderFile="$(IntDir)\cs_map.pch"
+				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
+				BrowseInformation="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+				CompileAs="0"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\csmap.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -588,10 +588,6 @@
 			</File>
 			<File
 				RelativePath=".\CS_gauss.c"
-				>
-			</File>
-			<File
-				RelativePath=".\CS_gdcGenerator.c"
 				>
 			</File>
 			<File
