@@ -19,12 +19,14 @@ Building the entire product is a series of five steps:
 	4> Build the console test program.
 	5> Execute the console test program.
 
-After installation, and before building, it will be best to obtain a copy of the Canadian National Transformation file (NTV2_0.gsb) and copy it to the Dictionaries/Canada directory.
-This data file cannot be distributed!!!  Chances are very good you already have a copy of this file on your system already.  If not, you can obtain one (no fee)at:
+After installation, and before building, it will be best to obtain a copy of the Canadian National Transformation file (NTV2_0.gsb) and copy it to the Dictionaries/Canada directory.  This data file may not be distributed!!! Geomatics Canada reserves the right to distribute this file and maintain a list of those using it.  Part of an ISO 9000 consideration.  Therefore, since we do not distribute the file as part of this open source distribution, we recommend strongly that you simply obtain a copy, even if for testing purposes only.
+
+Chances are very good you already have a copy of this file on your system already.  If not, you can obtain one (no fee) at:
 
 	http://www.geod.nrcan.gc.ca
 
-In the past, we have distributed the CS-MAP library with the appropriate Canadian tests commented out to prevent a missing NTv2 file from causing problems.  We have found that once commented out, they rarely (if ever) got uncommented out and thus this feature never got tested.  So, we distribute the test file with these test uncommented, and require you to get a copy of this file.  This seems to be the safest way to go on this issue.
+The TEST.DAT data file in the Test directory contains several hundred test points which are directly related to the above mentioned grid shift data file.  To prevent confusion and unecessary technical support, these test are commented out in the distribution.  After obtaining a copy of the above mentioned data file, these test should be uncommented back in, so that the test program will test this feature.
+
 
 OK. Now for building on your system:
 

@@ -1860,7 +1860,7 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_NAD_NAME          "Nad27ToNad83.gdc"
 #define cs_HARN_NAME         "Nad83ToHarn.gdc"
 #define cs_GEOID_NAME        "GeoidHeight.gdc"
-#define cs_VERTCON_NAME      "VertCon.gdc"
+#define cs_VERTCON_NAME      "Vertcon.gdc"
 #define cs_AGD66_NAME        "Agd66ToGda94.gdc"
 #define cs_AGD84_NAME        "Agd84ToGda94.gdc"
 #define cs_NZGD49_NAME       "Nzgd49ToNzgd2K.gdc"
@@ -1870,7 +1870,7 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_JGD2K_NAME        "TokyoToJgd2k.gdc"
 #define cs_ED50_NAME         "Ed50ToEtrf89.gdc"
 #define cs_DHDN_NAME         "DhdnToEtrf89.gdc"
-#define cs_N27A77_NAME       "Nad27ToATs77.gdc"
+#define cs_N27A77_NAME       "Nad27ToAts77.gdc"
 #define cs_RGF93_NAME        "NtfToRgf93.gdc"		
 
 #define cs_OSTN97_NAME       "OSTN97.TXT"
