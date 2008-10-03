@@ -44,11 +44,15 @@
 # a relative folder/directory reference, relative to the folder
 # (directory) in which this file resides.
 #
+# LinuxUNIX users should take extra care to be sure the case of
+# all entries matches exactly the actual case of the file names
+# referenced.
+#
 #    CANADA SPECIFIC NOTES
 # Uncomment (remove leading pound sign character) to activate either
 # of the following Canadian definitions as appropriate.  You must
 # have the data file for either of these options to work.  The data
-# files are not in the public domain.  Copies of these files must
+# files are NOT in the public domain.  Copies of these files must
 # be obtained from Geomatics Canada.
 #
 # Activate one or the other, depending upon which file you have.
@@ -56,7 +60,7 @@
 # for a specific point.
 #
 #.\Canada\grid11.dac  #v1 of Canadian National Transformation
-.\Canada\NTV2_0.GSB  #v2 of Canadian National Transformation
+#.\Canada\NTV2_0.GSB  #v2 of Canadian National Transformation
 #.\Canada\QUE27-83.gsb #Geodetic Service of Canada
 #.\Canada\May76v20.gsb #Ontario, Geodetic Service of Canada
 #
