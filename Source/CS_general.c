@@ -707,3 +707,83 @@ int EXP_LVL1 CS_prchk (short prot_val)
 	cs_time = (short)((CS_time ((cs_Time_ *)0) - 630720000L) / 86400L);
 	return (prot_val < (cs_time - cs_Protect));
 }
+/* 
+	Extracts a double from a text stream, the double is assumed to be
+	surrounded white space.  Leading white space is ignored.
+
+	Return value:
+     0 = normal completion.
+     1 = End of File
+    -1 = some sort of error, typically a double value not delimited by
+         white space.
+*/
+int EXP_LVL5 CSextractDbl (csFILE *aStrm,double* result)
+{
+	int st;
+	int cc;
+	int idx;
+	enum { initial,
+		   extract,
+		   evaluate,
+		   done
+		 } state;
+	char* trmPtr;
+	char ascii [64];
+
+	st = -1;
+	idx = 0;
+	ascii [idx] = '\0';
+	state = initial;
+	while (state != done)
+	{
+		cc = CS_fgetc (aStrm);
+		switch (state) {
+		case initial:
+			if (cc == EOF)
+			{
+				st = 1;
+				state = done;
+			}
+			else if (!isspace (cc))
+			{
+				ascii [idx++] = (char)cc;
+				ascii [idx] = '\0';
+				state = extract;
+			}
+			break;
+
+		case extract:
+			/* Can't get here unless we have at least one character to
+			   evaluate. */
+			if (cc == EOF)
+			{
+				state = evaluate;
+			}
+			else if (!isspace (cc))
+			{
+				ascii [idx++] = (char)cc;
+				ascii [idx] = '\0';
+			}
+			else
+			{
+				state = evaluate;
+			}
+			break;
+
+		case evaluate:
+			*result = strtod (ascii,&trmPtr);
+			st = (*trmPtr == '\0') ? 0 : -1;
+			state = done;
+			break;
+
+		case done:
+			state = done;
+			break;
+
+		default:
+			st = -1;
+			break;
+		}
+	}
+	return st;
+}
