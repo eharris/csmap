@@ -87,7 +87,6 @@ void EXP_LVL7 CSed50Cls (void)
 		if (csEd50ToEtrf89 != NULL)
 		{
 			CSreleaseEd50ToEtrf89 (csEd50ToEtrf89);
-			csEd50ToEtrf89 = NULL;
 		}
 		csEd50ToEtrf89Cnt = 0;
 	}

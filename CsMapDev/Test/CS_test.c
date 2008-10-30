@@ -60,7 +60,7 @@ const char* MsiToAdskMapEL (const char* msiName);
 #		define _CRTDBG_MAP_ALLOC		// This doesn't work.
 #		include <crtdbg.h>
 #		include <malloc.h>
-#		if (_MSC_VER >= 800 && _MSC_VER < 1500)
+#		if (_MSC_VER >= 800 && _MSC_VER < 1600)
 #			define heapwalk _heapwalk
 #		endif
 #	endif

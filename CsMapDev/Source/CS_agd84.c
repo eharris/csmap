@@ -95,9 +95,8 @@ void EXP_LVL7 CSagd84Cls (void)
 		if (csAgd84ToGda94 != NULL)
 		{
 			CSreleaseAgd84ToGda94 (csAgd84ToGda94);
-			csAgd84ToGda94 = NULL;
 		}
-		csAgd84ToGda94Cnt = 0;
+    	csAgd84ToGda94Cnt = 0;
 	}
 	return;
 }

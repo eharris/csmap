@@ -204,7 +204,7 @@ int CStestJ (int verbose,long32_t duration)
 		status = CS_cs2ll (msiCS,msiLlh,xyz);
 		if (status != 0)
 		{
-			printf ("\rCouldn't convert %12.3f :: %12.3f to Lat?lng via %s.\n",xyz [0],xyz [1],msiNamePtr);
+			printf ("\rCouldn't convert %12.3f :: %12.3f to Lat/Lng via %s.\n",xyz [0],xyz [1],msiNamePtr);
 			err_cnt += 1;
 			CS_free (msiCS);
 			CS_free (epsgCS);
@@ -213,7 +213,7 @@ int CStestJ (int verbose,long32_t duration)
 		status = CS_ll2cs (msiCS,msiXyz,msiLlh);
 		if (status != 0)
 		{
-			printf ("\rCouldn't convert %12.6f :: %12.6f to X?Y?Z via %s.\n",llh [0],llh [1],msiNamePtr);
+			printf ("\rCouldn't convert %12.6f :: %12.6f to X/Y/Z via %s.\n",llh [0],llh [1],msiNamePtr);
 			err_cnt += 1;
 			CS_free (msiCS);
 			CS_free (epsgCS);
@@ -247,6 +247,8 @@ int CStestJ (int verbose,long32_t duration)
 		{
 			printf ("\rComparison of pre/post WKT of %s failed.\n",msiNamePtr);
 			err_cnt += 1;
+			CS_free (msiCS);
+			CS_free (epsgCS);
 			continue;
 		}
 		CS_free (msiCS);	msiCS = NULL;
