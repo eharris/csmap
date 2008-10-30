@@ -84,7 +84,7 @@ error:
 	Close the NZGD49 <--> NZGD2K conversion system.  Note, this only does a
 	release, not a full delete.  This is for performance reasons.  During
 	test, you may get a "memory leak message" because of this.  If this is
-	undeirable, then change the 'release' function to the 'delete' function.
+	undesirable, then change the 'release' function to the 'delete' function.
 */
 void EXP_LVL7 CSnzgd49Cls (void)
 {
@@ -94,7 +94,6 @@ void EXP_LVL7 CSnzgd49Cls (void)
 		if (csNzgd49ToNzgd2K != NULL)
 		{
 			CSreleaseNzgd49ToNzgd2K (csNzgd49ToNzgd2K);
-			csNzgd49ToNzgd2K = NULL;
 		}
 		csNzgd49ToNzgd2KCnt = 0;
 	}

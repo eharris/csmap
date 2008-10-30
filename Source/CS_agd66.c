@@ -95,7 +95,6 @@ void EXP_LVL7 CSagd66Cls (void)
 		if (csAgd66ToGda94 != NULL)
 		{
 			CSreleaseAgd66ToGda94 (csAgd66ToGda94);
-			csAgd66ToGda94 = NULL;
 		}
 		csAgd66ToGda94Cnt = 0;
 	}

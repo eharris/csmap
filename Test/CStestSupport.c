@@ -53,6 +53,7 @@ extern struct csVertconUS_* csVertconUS;
 extern struct cs_Osgm91_ *cs_Osgm91Ptr;
 extern struct csTokyoToJgd2k_ *csTokyoToJgd2k;
 extern struct csRgf93ToNtf_* csRgf93ToNtf;
+extern struct csEd50ToEtrf89_* csEd50ToEtrf89;
 extern struct csDhdnToEtrf89_* csDhdnToEtrf89;
 
 extern struct cs_Ostn97_ *cs_Ostn97Ptr;
@@ -87,6 +88,8 @@ void CS_reset ()
 	cs_Ostn97Ptr = NULL;
 	CSdeleteOstn02 (cs_Ostn02Ptr);
 	cs_Ostn02Ptr = NULL;
+	CSdeleteEd50ToEtrf89 (csEd50ToEtrf89);
+	csEd50ToEtrf89 = NULL;
 	CSdeleteDhdnToEtrf89 (csDhdnToEtrf89);
 	csDhdnToEtrf89 = NULL;
     csReleaseNameMapper ();

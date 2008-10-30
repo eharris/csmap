@@ -86,7 +86,6 @@ void EXP_LVL7 CSdhdnCls (void)
 		if (csDhdnToEtrf89 != NULL)
 		{
 			CSreleaseDhdnToEtrf89 (csDhdnToEtrf89);
-			csDhdnToEtrf89 = NULL;
 		}
 		csDhdnToEtrf89Cnt = 0;
 	}

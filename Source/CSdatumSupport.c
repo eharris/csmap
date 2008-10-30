@@ -271,7 +271,7 @@ struct cs_DtcXform_ *CSnewFallback (Const char *dtKeyName,Const char *catalog)
 
 	case cs_DTCTYP_GEOCTR:
 		__This->xfrmType = dtcTypGeoCtr;
-		__This->parms.parm3 = CS_gcInit (dt_ptr,&cs_Wgs84Dt);
+		__This->parms.geoctr = CS_gcInit (dt_ptr,&cs_Wgs84Dt);
 		if (__This->parms.geoctr == NULL) goto error;
 		break;
 
