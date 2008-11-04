@@ -631,8 +631,20 @@ int CSmkBinaryJgd2k (struct csJgd2kGridFile_* __This)
 
 			/* Build a new record in the array. */
 			gridRec.meshCode = meshCode;
-			gridRec.deltaLat = (long32_t)(latTmp * 100000.0);
-			gridRec.deltaLng = (long32_t)(lngTmp * 100000.0);
+			
+			/* NTO 30 Oct 2008, Trac # 13
+			   The following was necessiatated by Linux.  It appears that on the
+			   Linux platform (or some of them, anyway), the rounding of doubles
+			   (especially negative ones) is different than what you will see on
+			   WIN32 platforms. */
+            latTmp *= 100000.0;
+            latTmp += (latTmp >= 0.0) ? 0.1 : -0.1;
+            lngTmp *= 100000.0;
+            lngTmp += (lngTmp >= 0.0) ? 0.1 : -0.1;
+            /* End Linux fix, Trac #13 */
+    
+			gridRec.deltaLat = (long32_t)(latTmp);
+			gridRec.deltaLng = (long32_t)(lngTmp);
 			CS_fwrite (&gridRec,sizeof (gridRec),1,bStrm);
 		}
 		CS_fclose (aStrm);
