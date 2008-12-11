@@ -61,6 +61,7 @@ TrcWktEleTypeMap KrcWktEleTypeMap [] =
 	{     "VERT_DATUM", rcWktVertDatum,     true                 },
 	{        "VERT_CS", rcWktVertCS,        true                 },
 	{    "LOCAL_DATUM", rcWktLocalDatum,    true                 },
+	{      "ELLIPSOID", rcWktSpheroid,      true                 },		// A synonym for SPHEROID.
 	{      "<Unknown>", rcWktUnknown,       false                }
 };
 //newPage//
