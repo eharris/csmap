@@ -63,3 +63,4 @@ int CStestJ (int verbose,long32_t duration);
 int CStestK (int verbose,long32_t duration);
 int CStestL (int verbose,long32_t duration);
 int CStestS (int verbose);
+int CStestT (int verbose,long32_t duration);

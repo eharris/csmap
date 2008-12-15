@@ -771,6 +771,16 @@ int main (int argc,char *argv [])
 			test_st = CStestL (verbose,duration);
 			break;
 
+		case 'R':
+		case 'r':
+
+			/* Not really a test.  Encountering this character in the test sequence
+			   simply resets the environemnt.  That is, releases all memory and
+			   file descriptors, and deletes all pre-parsed binary files. */
+			CS_reset ();
+			test_st = 0;
+			break;
+
 		case 'S':
 		case 's':
 
@@ -787,7 +797,17 @@ int main (int argc,char *argv [])
 			}
 			break;
 
+		case 'T':
+		case 't':
+
+			/* Perform test T.  I.e. temporary code module. */
+			test_st = CStestT (verbose,duration);
+			break;
+
+        /* Not really a test.  Encountering this character in the test sequence
+           simply toggles the verbose flag on or off. */
 		case 'V':
+		case 'v':
 			test_st = 0;
 			verbose = ~verbose;
 			break;
@@ -798,41 +818,6 @@ int main (int argc,char *argv [])
 			printf ("Test case %c not known.\n",*cp);
 			break;
 		}
-
-		/* If __HEAP__ is defined, we check the heap after
-		   each test to make sure it has not been corrupted.
-		   This applies only to certain compilers.  Therefore
-		   this test is performed only if the -D__HEAP__
-		   argument is used when this function is compiled. */
-
-#ifdef __HEAP__XX
-		{
-			int hi_st;
-			ulong32_t mem_used_now;
-			_HEAPINFO hi;
-
-			hi._pentry = NULL;
-			mem_used_now = 0;
-			while (TRUE)
-			{
-				hi_st = heapwalk (&hi);
-				if (hi_st != _HEAPOK) break;
-				if (hi._useflag == _USEDENTRY)
-				{
-					mem_used_now += hi._size;
-				}
-			}
-			if (hi_st != _HEAPEND && hi_st != _HEAPEMPTY)
-			{
-				printf ("Last test has corrupted the heap!!!\n");
-			}
-			if (mem_used_now != mem_used)
-			{
-				printf ("Last test failed to free memory it allocated!!!\n");
-				mem_used = mem_used_now;
-			}
-		}
-#endif
 
 		if (test_st != 0)
 		{
@@ -846,7 +831,9 @@ int main (int argc,char *argv [])
 				printf ("Test %c failed (%d failures detected)!\n",*cp,test_st);
 			}
 		}
-		else if (*cp != 'S' && *cp != 'V')
+		else if (*cp != 'S' && *cp != 's' &&
+		         *cp != 'V' && *cp != 'v' &&
+		         *cp != 'R' && *cp != 'r')
 		{
 			ok_cnt += 1;
 			if (verbose)

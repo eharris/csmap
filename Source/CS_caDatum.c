@@ -84,6 +84,7 @@ double CStestDatumShiftCa2 (struct csDatumShiftCa2_* __This,Const double *coord)
 int CScalcDatumShiftCa2 (struct csDatumShiftCa2_* __This,double* result,Const double* source,struct csLLGridCellCache_ *cachePtr)
 {
 	extern double cs_Sec2Deg;		/* 1/3600 */
+
 	int status;
 	double deltaLL [2];
 
@@ -196,3 +197,97 @@ Const char *CSsourceDatumShiftCa1 (struct csDatumShiftCa1_* __This,Const double*
 	return cp;
 }
 
+int CSinverseDatumShiftCa2 (struct csDatumShiftCa2_* __This,double* trgLl,Const double* srcLl)
+{
+	static int maxIteration = 8;
+	static double smallValue  = 1.0E-09;		/* equates to =~ .1 millimeters */
+	static double smallValue2 = 1.0E-06;		/* equates to =~ 100 millimeters */
+
+	int ii;
+	int lngOk;
+	int latOk;
+	int rtnVal;
+
+	double guess [3];
+	double newLl [3];
+	double epsilon [3];
+
+	/* Assume everything goes OK until we know different. */
+	rtnVal = 0;
+
+	/* First, we copy the source lat/longs to the local array.  This is the
+	   default result which the user may want in the event of a fatal error.
+	   Note, we assume such has been done below, even if there has not been
+	   an error. */
+	trgLl [LNG] = guess [LNG] = srcLl [LNG];
+	trgLl [LAT] = guess [LAT] = srcLl [LAT];
+	trgLl [HGT] = srcLl [HGT];
+
+	/* Start a loop which will iterate as many as maxIteration times. */
+	for (ii = 0;ii < maxIteration;ii++)
+	{
+		/* Assume we are done until we know different. */
+		lngOk = latOk = TRUE;
+
+		/* Compute the target lat/long for our current guess. */
+		rtnVal = CScalcDatumShiftCa2 (__This,newLl,guess,NULL);
+		if (rtnVal != 0)
+		{
+			/* Oopps!! We must have been given some pretty strange
+			   coordinate values. */
+			break;
+		}
+
+		/* See how far we are off. */
+		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
+
+		/* If our guess at the longitude is off by more than
+		   small, we adjust our guess by the amount we are off. */
+		if (fabs (epsilon [LNG]) > smallValue)
+		{
+			lngOk = FALSE;
+			guess [LNG] += epsilon [LNG];
+		}
+		/* If our guess longitude is off by more than
+		   small, we adjust our guess by the amount we are off. */
+		if (fabs (epsilon [LAT]) > smallValue)
+		{
+			latOk = FALSE;
+			guess [LAT] += epsilon [LAT];
+		}
+
+		/* If our current guess produces a newLl that is within
+		   samllValue of srcLl, we are done. */
+		if (lngOk && latOk) break;
+	}
+
+	/* If we didn't resolve in maxIteration tries, we issue a warning
+	   message.  Usually, three or four iterations does the trick. */
+	if (ii >= maxIteration )
+	{
+		CS_erpt (cs_NADCON_ICNT);
+
+		/* Issue a warning if we're close, a fatal if we are still way off.
+		   In any case, we return the last computed value.  We could have
+		   gotten very fancy with this stuff, but it would have had serious
+		   affects on the performance.  So we just check epsilon here as
+		   we know we have an error and this doesn't happen very often. */
+		rtnVal = 1;
+		if (fabs (epsilon [LNG]) > smallValue2 ||
+		    fabs (epsilon [LAT]) > smallValue2)
+		{
+			rtnVal = -1;
+		}
+	}
+
+	/* If we are not returning fatal error status, we return the last
+	   computed value even if we are returning a warning status.  It may be
+	   of value, often is. */
+	if (rtnVal >= 0)
+	{
+		trgLl [LNG] = guess [LNG];
+		trgLl [LAT] = guess [LAT];
+	}
+	return rtnVal;
+}

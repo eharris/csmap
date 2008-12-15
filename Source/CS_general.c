@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include <ctype.h>
 
 /**********************************************************************
 **	flag = CS_altdr (alt_dir);
@@ -786,4 +787,75 @@ int EXP_LVL5 CSextractDbl (csFILE *aStrm,double* result)
 		}
 	}
 	return st;
+}
+
+// The following parses a line of text into space separated tokens.  Note
+// this function is destructive to the "lineBuffer: argument.
+unsigned CS_spaceParse (char *lineBuffer,char *ptrs [],unsigned maxPtrs)
+{
+	unsigned index = 0;
+	char *cp, *cp1;
+
+	if (maxPtrs == 0) return index;
+	CS_removeRedundantWhiteSpace (lineBuffer);
+	if (lineBuffer [0] == '\0') return index;
+	cp = lineBuffer;
+	do
+	{
+		ptrs [index++] = cp;
+		cp1 = strchr (cp,' ');
+		if (cp1 == 0) break;
+		*cp1++ = '\0';
+		cp = cp1;
+	} while (index < maxPtrs);
+	return index;
+}
+
+// The following does itsmagic inplace; how nice.
+void CS_removeRedundantWhiteSpace (char *string)
+{
+	char cc;
+	char* fromPtr;
+
+	/* Skip over any initial whitespace. */
+	fromPtr = string;
+	while ((cc = *fromPtr) != '\0' && isspace (cc))
+	{
+		fromPtr += 1;
+	}
+	if (*fromPtr == '\0')
+	{
+		*string = '\0';
+		return;
+	}
+
+	/* Copy the string into itself, replacing a consecutive white space
+	   characters with a single space character. Note, isspace defines
+	   what white space is. */
+	while ((cc = *fromPtr++) != '\0')
+	{
+		/* Copy the character, regardless of what it is. */
+		*string++ = cc;
+
+		/* If the current character is a space, advance fromPtr to the
+		   next non-white space character */		
+		if (isspace (cc))
+		{
+			while ((cc = *fromPtr) != '\0' && isspace (cc))
+			{
+				fromPtr += 1;
+			}
+		}
+	}
+	
+	/* The above could easily leave a single white-space character on the
+	   end.  The following is safe as we have determined above that the
+	   string has at least one non-whitespace character in it. */
+	cc = *(string - 1);
+	if (isspace (cc))
+	{
+		string -= 1;
+	}
+	*string = '\0';
+	return;
 }

@@ -1871,7 +1871,7 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_ED50_NAME         "Ed50ToEtrf89.gdc"
 #define cs_DHDN_NAME         "DhdnToEtrf89.gdc"
 #define cs_N27A77_NAME       "Nad27ToAts77.gdc"
-#define cs_RGF93_NAME        "NtfToRgf93.gdc"		
+#define cs_RGF93_NAME        "Rgf93ToNtf.gdc"		
 
 #define cs_OSTN97_NAME       "OSTN97.TXT"
 #define cs_OSTN02_NAME       "OSTN02.txt"
@@ -5737,6 +5737,7 @@ enum cs_GdcCatalogType
 {
 	gdcTypeNone = 0,
 	gdcTypeHorizontal,
+	gdcTypeThreeDimensional,
 	gdcTypeVertical,
 	gdcTypeSeparation
 };
@@ -5757,7 +5758,7 @@ enum cs_GdcCatalogs
 	gdcFileNad27ToAts77,					/*  12 */
 	gdcFileGeoidHeight,						/*  13 */
 	gdcFileVertcon,							/*  14 */
-	gdcFileNtfToRgf93,						/*  15 */
+	gdcFileRgf93ToNtf,						/*  15 */
 	gdcFileDisabled = 9999
 };
 
@@ -7189,6 +7190,8 @@ double		EXP_LVL1	CS_cnvrg (Const char *cs_nam,Const double ll [3]);
 int			EXP_LVL1	CS_cnvrt (Const char *src_cs,Const char *dst_cs,double coord [3]);
 int			EXP_LVL1	CS_cnvrt3D (Const char *src_cs,Const char *dst_cs,double coord [3]);
 const char*	EXP_LVL3	CS_countyEnum (int stateFips,int index);
+unsigned short EXP_LVL9 CS_crc16 (unsigned short crc16,unsigned char *cp,int count);
+
 int			EXP_LVL3	CS_cs2ll (Const struct cs_Csprm_ *csprm,double ll [3],Const double xy [3]);
 int			EXP_LVL3	CS_cs3ll (Const struct cs_Csprm_ *csprm,double ll [3],Const double xy [3]);
 int			EXP_LVL3	CS_cschk (Const struct cs_Csdef_ *cs_def,unsigned short chk_flg,int err_list [],int list_sz);
@@ -7407,6 +7410,7 @@ void		EXP_LVL9	CS_quadMM (double min_xy [2],double max_xy [2],double x_off,doubl
 void*		EXP_LVL1	CS_ralc (void *ptr,size_t blk_size);
 void		EXP_LVL1	CS_recvr (void);
 int			EXP_LVL9	CS_remove (Const char *path);
+void        EXP_LVL9    CS_removeRedundantWhiteSpace (char *string);
 int			EXP_LVL9	CS_rename (Const char *prev,Const char *current);
 
 double		EXP_LVL1	CS_scale (Const char *cs_nam,double ll [2]);
@@ -7414,6 +7418,7 @@ double		EXP_LVL1	CS_scalh (Const char *cs_nam,double ll [2]);
 double		EXP_LVL1	CS_scalk (Const char *cs_nam,double ll [2]);
 int			EXP_LVL1	CS_setHelpPath (const char *path);
 int			EXP_LVL9	CS_setvbuf (csFILE *stream,char *buffer,int mode,size_t size );
+unsigned    EXP_LVL9    CS_spaceParse (char *lineBuffer,char *ptrs [],unsigned maxPtrs);
 int			EXP_LVL1	CS_spZoneNbrMap (char *zoneNbr,int is83);
 
 const char*	EXP_LVL3	CS_stateEnum (int index);
@@ -8466,6 +8471,34 @@ struct csEd50ToEtrf89Entry_
 };
 
 /******************************************************************************
+	RGF93 to NTF Datum Shift Object
+	This object enables multiple grid shift files to convert from RGF93 to
+	NTF.  Two file formats are supported:
+	1> the original French grid data file gr3df97a.txt, and the
+	2> Canadian National Transformation (NTv2) format.
+	
+	The original text file covers the entire nation of France, and the NTv2
+	files are used for local municipal grids.
+*/
+enum csRgf93ToNtfType { dtRgf93ToNtfNone, dtRgf93ToNtfTxt, dtRgf93ToNtfC2 };
+struct csRgf93ToNtf_
+{
+	struct cs_DtcXform_ *fallback;
+	struct csLLGridCellCache_ *cachePtr;
+	struct csRgf93ToNtfEntry_ *listHead;
+};
+struct csRgf93ToNtfEntry_
+{
+	struct csRgf93ToNtfEntry_ *next;
+	enum csRgf93ToNtfType type;
+	union
+	{
+		struct csRgf93ToNtfTxt_ *txtDatumPtr;
+		struct csDatumShiftCa2_ *c2DatumPtr;
+	} pointers;
+};
+
+/******************************************************************************
 	DHDN to ETRF89 Datum Shift Object
 	This object enables multiple grid shift files to convert from DHDN to
 	ETRF89.  As of this writing, there is only one file available.  This
@@ -9502,7 +9535,7 @@ struct csTokyoToJgd2kEntry_
 	Note, this is the opposite of most other datum shifts.  Most techniques
 	convert from the old to the new.  This one converts from the new to the
 	old.  Of course, an inverse is initiated. */
-struct csRgf93ToNtf_
+struct csRgf93ToNtfTxt_
 {
 	struct csGridCoverage_ coverage;	/* Carries the converage of the
 										   internal grid cells. */
@@ -9738,6 +9771,7 @@ void CSdeleteDatumShiftCa2 (struct csDatumShiftCa2_* __This);
 void CSreleaseDatumShiftCa2 (struct csDatumShiftCa2_* __This);
 double CStestDatumShiftCa2 (struct csDatumShiftCa2_* __This,Const double* coord);
 int CScalcDatumShiftCa2 (struct csDatumShiftCa2_* __This,double ll83 [2],Const double ll27 [2],struct csLLGridCellCache_ *cachePtr);
+int CSinverseDatumShiftCa2 (struct csDatumShiftCa2_* __This,double* trgLl,Const double* srcLl);
 Const char *CSsourceDatumShiftCa2 (struct csDatumShiftCa2_* __This,Const double ll27 [2]);
 
 struct csDatumCatalog_* CSnewDatumCatalog (Const char* pathName);
@@ -9892,6 +9926,22 @@ void CSreleaseEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This);
 double CStestEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,Const double ll50 [3]);
 int CScalcEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,double ll89 [3],Const double ll50 [3],struct csLLGridCellCache_ *cachePtr);
 Const char *CSsourceEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,Const double *ll50);
+
+struct csRgf93ToNtf_* CSnewRgf93ToNtf (Const char *catalog);
+void CSdeleteRgf93ToNtf (struct csRgf93ToNtf_* __This);
+struct csRgf93ToNtfEntry_* CSselectRgf93ToNtf (struct csRgf93ToNtf_* __This,enum csRgf93ToNtfType srchType,Const double ll [3]);
+void CSfirstRgf93ToNtf (struct csRgf93ToNtf_* __This,struct csRgf93ToNtfEntry_* dtEntryPtr);
+int CScalcRgf93ToNtf (struct csRgf93ToNtf_* __This,double ll89 [3],Const double ll50 [3]);
+int CSinverseRgf93ToNtf (struct csRgf93ToNtf_* __This,double ll50 [3],Const double ll89 [3]);
+void CSreleaseRgf93ToNtf (struct csRgf93ToNtf_* __This);
+Const char *CSsourceRgf93ToNtf (struct csRgf93ToNtf_* __This,Const double ll_50 [2]);
+struct csRgf93ToNtfEntry_* CSnewRgf93ToNtfEntry (struct csDatumCatalogEntry_* catPtr);
+void CSdeleteRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This);
+void CSreleaseRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This);
+double CStestRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This,Const double ll50 [3]);
+int CScalcRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This,double ll89 [3],Const double ll50 [3],struct csLLGridCellCache_ *cachePtr);
+Const char *CSsourceRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This,Const double *ll50);
+int CScheckRgf93ToNtfTxt (struct csRgf93ToNtfTxt_ *__This);
 
 struct csDhdnToEtrf89_* CSnewDhdnToEtrf89 (Const char *catalog);
 void CSdeleteDhdnToEtrf89 (struct csDhdnToEtrf89_* __This);
@@ -10078,13 +10128,13 @@ void EXP_LVL7 CSrgf93Cls (void);
 int EXP_LVL7 CSrgf93ToNtf (double ll_ntf [3],Const double ll_rgf93 [3]);
 int EXP_LVL7 CSntfToRgf93 (double ll_rgf93 [3],Const double ll_ntf [3]);
 
-struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath);
-void CSdeleteRgf93ToNtf (struct csRgf93ToNtf_ *__This);
-int CScalcRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_ntf [3],Const double ll_rgf93 [3]);
-int CSinverseRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_ntf [3],Const double ll_rgf93 [3]);
-
-void CS_removeRedundantWhiteSpace (char *string);
-unsigned CS_spaceParse (char *lineBuffer,char *ptrs [],unsigned maxPtrs);
+struct csRgf93ToNtfTxt_ *CSnewRgf93ToNtfTxt (Const char *filePath,long32_t bufferSize,ulong32_t flags,double density);
+void CSreleaseRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This);
+void CSdeleteRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This);
+double CStestRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This,Const double llRgf93 [3]);
+int CScalcRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This,double ll_ntf [3],Const double ll_rgf93 [3]);
+int CSinverseRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This,double ll_ntf [3],Const double ll_rgf93 [3]);
+Const char *CSsourceRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This);
 
 #if _FILE_SYSTEM == _fs_UNIX
 csFILE *CS_fopen (const char *filename,const char *mode);

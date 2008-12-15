@@ -490,6 +490,8 @@ double CStestEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,Const double
 */
 int CScalcEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,double* ll89,Const double *ll50,struct csLLGridCellCache_ *cachePtr)
 {
+	extern char cs_DirsepC;
+	extern char cs_ExtsepC;
 	extern char csErrnam [];
 
 	int status;
@@ -526,4 +528,34 @@ Const char *CSsourceEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,Const
 		break;
 	}
 	return cp;
+}
+/******************************************************************************
+   Verify that the internal memory arrays have not been corrupted by unrelated
+   code.
+*/
+int CScheckRgf93ToNtfTxt (struct csRgf93ToNtfTxt_ *__This)
+{
+	extern char csErrnam [];
+
+	unsigned short crcX;
+	unsigned short crcY;
+	unsigned short crcZ;
+	int status;
+	size_t malcSize;
+
+	status = 0;
+	if (__This != NULL)
+	{
+		malcSize = (size_t)(__This->lngCount * __This->latCount) * sizeof (long32_t);
+		crcX = CS_crc16 (0X0101,(unsigned char *)__This->deltaX,(int)malcSize);
+		crcY = CS_crc16 (0X0202,(unsigned char *)__This->deltaY,(int)malcSize);
+		crcZ = CS_crc16 (0X0404,(unsigned char *)__This->deltaZ,(int)malcSize);
+		if (crcX != __This->crcX || crcY != __This->crcY || crcZ != __This->crcZ)
+		{
+			CS_stncp (csErrnam,"CS_rgf93ToNtf.c:1",MAXPATH);
+			CS_erpt (cs_ISER);
+			status = -1;
+		}
+	}
+	return status;
 }

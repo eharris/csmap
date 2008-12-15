@@ -56,14 +56,15 @@ struct _gTable
 __ALIGNMENT__14				/* Required by some Sun compilers. */
 struct _gTable gTable [] =
 {
-	{       "UTM27-13",     "Transverse Mercator", { 400000.0, 5000000.0},   5.000},
-	{           "CO-C", "Lambert Conformal Conic", { 1500000.0, 250000.0},   5.000},
-	{           "AK-1", "Hotine Oblique Mercator", { 2615716.0,1156768.0},   5.000},
-	{           "US48",      "Alber's Equal Area", { 1000000.0,2000000.0},   5.000},
-	{           "TRUK",    "Lambert Equi-Distant", {   75000.0,  60000.0},   5.000},
-	{     "ArPoly-27F",      "American Polyconic", {  100000.0, 100000.0},   5.000},
-	{     "CaspianSea",                "Mercator", {  100500.0,  95000.0},   5.000},
-	{               "",                        "", {       0.0,      0.0},   0.000}
+	{             "UTM27-13",      "Transverse Mercator", { 400000.0, 5000000.0},   5.000},
+	{                 "CO-C",  "Lambert Conformal Conic", { 1500000.0, 250000.0},   5.000},
+	{                 "AK-1",  "Hotine Oblique Mercator", { 2615716.0,1156768.0},   5.000},
+	{                 "US48",       "Alber's Equal Area", { 1000000.0,2000000.0},   5.000},
+	{                 "TRUK",     "Lambert Equi-Distant", {   75000.0,  60000.0},   5.000},
+	{           "ArPoly-27F",       "American Polyconic", {  100000.0, 100000.0},   5.000},
+	{           "CaspianSea",                 "Mercator", {  100500.0,  95000.0},   5.000},
+	{"NTF.Lambert-1-ClrkIGN", "Lambert Tangential Conic", { 1029705.0, 272723.0},   5.000},
+	{                     "",                         "", {       0.0,      0.0},   0.000}
 };
 
 int CStestG (int verbose,long32_t duration)

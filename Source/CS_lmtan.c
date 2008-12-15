@@ -558,7 +558,7 @@ int EXP_LVL9 CSlmtanI (Const struct cs_Lmtan_ *lmtan,double ll [2],Const double 
 		    	rtn_val = cs_CNVRT_RNG;
 		    	break;
 		}
-	} while (fabs (new_lat - last_lat) > cs_AnglTest);
+	} while (fabs (new_lat - last_lat) > 1.0E-11);
 
 	ll [LNG] = (del_lng + lmtan->org_lng) * cs_Radian;
 	ll [LAT] = new_lat * cs_Radian;
@@ -590,7 +590,7 @@ int EXP_LVL9 CSlmtanI (Const struct cs_Lmtan_ *lmtan,double ll [2],Const double 
 **	arctangent of the partial derivative of Y with respect to
 **	latitude (read delta Y when the latitude changes a skosh)
 **	divied by the partial derivative of X with repsect to
-**	latitude (i.e. delta X).  See Synder/Bugayevskiy, page 16.
+**	latitude (i.e. delta X).  See Snyder/Bugayevskiy, page 16.
 **********************************************************************/
 
 double EXP_LVL9 CSlmtanC (Const struct cs_Lmtan_ *lmtan,Const double ll [2])

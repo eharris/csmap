@@ -2053,7 +2053,7 @@ int EXP_LVL7 CS_dmaMr3dFowrd (double trgLl [3],Const double srcLl [3],Const stru
 			break;
 		case dtcTypNone:
 		default:
-			/* If there is no fallabck, return a hard error. */
+			/* If there is no fallback, return a hard error. */
 			CS_erpt (cs_MREG_RANGEF);		/* Fatal message */
 			status = -1;
 			break;

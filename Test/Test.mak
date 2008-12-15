@@ -32,7 +32,8 @@ CStestJ.c \
 CStestK.c \
 CStestL.c \
 CStestS.c \
-CStestSupport.c
+CStestSupport.c \
+CStestT.c
 
 TEST_OBJ = \
 CS_test.o \
@@ -58,7 +59,8 @@ CStestJ.o \
 CStestK.o \
 CStestL.o \
 CStestS.o \
-CStestSupport.o
+CStestSupport.o \
+CStestT.o
 
 CS_Test : $(TEST_OBJ)
 	gcc -v -oCS_Test $(TEST_OBJ) ../Source/CsMap.a -lm -lc -lgcc -lstdc++

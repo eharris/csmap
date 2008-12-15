@@ -34,7 +34,8 @@ CStestJ.c \
 CStestK.c \
 CStestL.c \
 CStestS.c \
-CStestSupport.c
+CStestSupport.c \
+CStestT.c
 
 CS_Test.exe: CS_Test.c
 	cl /MT /O2 /I..\include $(TEST_SRC) ..\Source\CS_rlsUpdt.c /link ..\Source\csmap.lib

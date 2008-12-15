@@ -453,6 +453,10 @@
 				RelativePath=".\CStestSupport.c"
 				>
 			</File>
+			<File
+				RelativePath=".\CStestT.c"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

@@ -100,6 +100,8 @@ void CS_reset ()
 	CS_remove (cs_Dir);
 	CS_stcpy (cs_DirP,"OSTN97._nt");
 	CS_remove (cs_Dir);
+	CS_stcpy (cs_DirP,"OSGM91._gm");
+	CS_remove (cs_Dir);
 }
 
 double CStestRN (double low, double high)

@@ -45,6 +45,7 @@ CS_SRC = \
 	CS_dtNad27ToNad83.c \
 	CS_dtNad83ToHarn.c \
 	CS_dtNzdg49ToNzgd2K.c \
+	CS_dtRgf93ToNtf.c \
 	CS_dtTokyoToJgd2k.c \
 	CS_ed50.c \
 	CS_edcnc.c \
@@ -188,6 +189,7 @@ CS_OBJ = \
 	CS_dtNad27ToNad83.obj \
 	CS_dtNad83ToHarn.obj \
 	CS_dtNzdg49ToNzgd2K.obj \
+	CS_dtRgf93ToNtf.obj \
 	CS_dtTokyoToJgd2k.obj \
 	CS_ed50.obj \
 	CS_edcnc.obj \
