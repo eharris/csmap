@@ -25,17 +25,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*lint -e661 */  /* possible out of bounds pointer (lint often produces bogus messages of this type) */
+/*lint -esym(715,flags)                          parameter not referenced */
 
 #include "cs_map.h"
 #include <ctype.h>
 
-/*lint -esym(644,sw,ne,__This->deltaLng,__This->deltaLat) */
-/*lint -esym(732,sw,ne,__This->lngCount,__This->latCount) */
-/*lint -esym(732,sw,ne,lngIsx,latIdx,swIdx, nwIdx, neIdx, seIdx) */
-
-int CScalcNtfToRfg93Deltas (struct csRgf93ToNtf_ *__This,Const double ll_rgf93 [3],double *deltaX,double *deltaY,double *deltaZ);
-unsigned short EXP_LVL9 CS_crc16 (unsigned short crc16,unsigned char *cp,int count);
+int CScalcNtfToRfg93Deltas (struct csRgf93ToNtfTxt_ *__This,Const double ll_rgf93 [3],double *deltaX,double *deltaY,double *deltaZ);
 
 struct csRgf93ToNtf_* csRgf93ToNtf = NULL;
 int csRgf93ToNtfCnt = 0;
@@ -44,14 +39,15 @@ int EXP_LVL7 CSrgf93Init (void)
 {
 	extern char cs_Dir [];
 	extern char* cs_DirP;
+	extern char cs_Rgf93Name [];
 
-	char gridFile [MAXPATH];
+	char catalog [MAXPATH];
 
 	if (csRgf93ToNtf == NULL)
 	{
-		CS_stcpy (cs_DirP,"gr3df97a.txt");
-		CS_stncp (gridFile,cs_Dir,sizeof (gridFile));
-		csRgf93ToNtf = CSnewRgf93ToNtf (gridFile);
+		CS_stcpy (cs_DirP,cs_Rgf93Name);
+		CS_stncp (catalog,cs_Dir,sizeof (catalog));
+		csRgf93ToNtf = CSnewRgf93ToNtf (catalog);
 		if (csRgf93ToNtf == NULL) goto error;
 	}
 	csRgf93ToNtfCnt += 1;
@@ -73,8 +69,7 @@ void EXP_LVL7 CSrgf93Cls (void)
 	{
 		if (csRgf93ToNtf != NULL)
 		{
-			CSdeleteRgf93ToNtf (csRgf93ToNtf);
-			csRgf93ToNtf = NULL;
+			CSreleaseRgf93ToNtf (csRgf93ToNtf);
 		}
 		csRgf93ToNtfCnt = 0;
 	}
@@ -82,29 +77,20 @@ void EXP_LVL7 CSrgf93Cls (void)
 }
 int EXP_LVL7 CSrgf93Chk (void)
 {
-	extern char csErrnam [];
-
-	unsigned short crcX;
-	unsigned short crcY;
-	unsigned short crcZ;
 	int status;
-	size_t malcSize;
-	struct csRgf93ToNtf_ *__This;
+	struct csRgf93ToNtfEntry_* dtEntryPtr;
 
 	status = 0;
-	__This = csRgf93ToNtf;
-	if (__This != NULL)
+	if (csRgf93ToNtf != NULL)
 	{
-		/* Before we delete, we check the status of the heap memory arrays. */
-		malcSize = (size_t)(__This->lngCount * __This->latCount) * sizeof (long32_t);
-		crcX = CS_crc16 (0X0101,(unsigned char *)__This->deltaX,(int)malcSize);
-		crcY = CS_crc16 (0X0202,(unsigned char *)__This->deltaY,(int)malcSize);
-		crcZ = CS_crc16 (0X0404,(unsigned char *)__This->deltaZ,(int)malcSize);
-		if (crcX != __This->crcX || crcY != __This->crcY || crcZ != __This->crcZ)
+		dtEntryPtr = csRgf93ToNtf->listHead;
+		while (dtEntryPtr != NULL && status == 0)
 		{
-			CS_stncp (csErrnam,"CS_rgf93ToNtf.c:1",MAXPATH);
-			CS_erpt (cs_ISER);
-			status = -1;
+			if (dtEntryPtr->type == dtRgf93ToNtfTxt)
+			{
+				status = CScheckRgf93ToNtfTxt (dtEntryPtr->pointers.txtDatumPtr);
+			}
+			dtEntryPtr = dtEntryPtr->next;
 		}
 	}
 	return status;
@@ -165,22 +151,48 @@ int EXP_LVL7 CSntfToRgf93 (double ll_rgf93 [3],Const double ll_ntf [3])
 	know what RGF stands for) 1993 datum.
 
 	Essentially, the grid shift file is read into memory when this thing
-	is constructued.  The file is then closed.  The size of the grids is
-	about 200KB, small potatoes by today's standards.
+	is constructed.  The file is then closed.  The size of the grids in
+	RAM is about 200KB, small potatoes by today's standards.
 
 	Note that this is a bit of a deviation from the way this problem has
 	been approached by others.  This grid defines the transformation from
 	RGF93 to NTF.  Most algorithms go the other way.  Therefore, we are
-	doiong the inverse where most algorithms are doing the forward.
+	doing the inverse where most algorithms are doing the forward.
 
-	To conserve RAM, we keep the shift values as millimeters in longs.
-	This reduces, by half, the amount of memory required.
+	To conserve RAM, we keep the shift values as millimeters in 32 bit
+	longs.  This reduces, by half, the amount of memory required.  This
+	does not introduce any inaccuracies, as the source .txt file provides
+	all deltas in meters to three decimal places only.
 */
-struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
+void CSinitializeRgf93ToNtfTxt (struct csRgf93ToNtfTxt_ *__This)
+{
+	extern double cs_Zero;
+
+	CSinitCoverage (&__This->coverage);
+	__This->lngCount = 0L;
+	__This->latCount = 0L;
+	__This->deltaLng = cs_Zero;
+	__This->deltaLat = cs_Zero;
+	__This->rgf93ERad = cs_Zero;
+	__This->rgf93ESq = cs_Zero;
+	__This->ntfERad = cs_Zero;
+	__This->ntfESq = cs_Zero;
+	__This->filePath [0] = '\0';
+	__This->fileName [0] = '\0';
+	__This->deltaX = NULL;
+	__This->deltaX = NULL;
+	__This->deltaX = NULL;
+	__This->crcX = 0U;
+	__This->crcY = 0U;
+	__This->crcZ = 0U;
+	return;
+}
+struct csRgf93ToNtfTxt_ *CSnewRgf93ToNtfTxt (Const char *filePath,long32_t bufferSize,ulong32_t flags,double density)
 {
 	extern char cs_DirsepC;
 	extern char cs_ExtsepC;
 	extern char csErrnam [];
+	extern double cs_Zero;
 
 	int hdrFlag = 0;
 
@@ -193,7 +205,7 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 	char *cpV;
 	csFILE *fstrm;
 	struct cs_Eldef_ *elPtr;
-	struct csRgf93ToNtf_ *__This;
+	struct csRgf93ToNtfTxt_* __This;
 	double lng, lat;
 	double deltaX, deltaY, deltaZ;
 
@@ -206,17 +218,30 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 	fstrm = NULL;
 	__This = NULL;
 	elPtr = NULL;
+	
+	/* Keep lint happy! */
+	sw [0] = sw [1] = ne [0] = ne [1] = cs_Zero;
 
 	/* Allocate the initial chunk of memory for this thing. */
-	__This = CS_malc (sizeof (struct csRgf93ToNtf_));
-	__This->deltaX = NULL;
-	__This->deltaY = NULL;
-	__This->deltaZ = NULL;
+	__This = CS_malc (sizeof (struct csRgf93ToNtfTxt_));
+	if (__This == NULL)
+	{
+		CS_erpt (cs_NO_MEM);
+		goto error;
+	}
+	CSinitializeRgf93ToNtfTxt (__This);
 
 	/* Capture the full path to the file and the file name. */
 	CS_stncp (__This->filePath,filePath,sizeof (__This->filePath));
 	cpV = strrchr (__This->filePath,cs_DirsepC);
-	if (cpV == NULL) cpV = __This->filePath;
+	if (cpV != NULL)
+	{
+		cpV += 1;
+	}
+	else
+	{
+		cpV = __This->filePath;
+	}
 	CS_stncp (__This->fileName,cpV,sizeof (__This->fileName));
 	cpV = strrchr (__This->fileName,cs_ExtsepC);
 	if (cpV != NULL) *cpV = '\0';
@@ -232,6 +257,14 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 		CS_erpt (cs_DTC_FILE);
 		goto error;
 	}
+	
+	/* If a buffersize has been given, we use it. */
+	if (bufferSize > 0L)
+	{
+		setvbuf (fstrm,NULL,_IOFBF,(size_t)bufferSize);
+	}
+
+	/* Parse the file content. */
 	if (CS_fgets (lineBuffer,sizeof (lineBuffer),fstrm) == NULL)
 	{
 		CS_erpt (cs_IOERR);
@@ -250,6 +283,9 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 			if (!CS_stricmp (ptrs [0],"GR3D1") && tknCount == 7)
 			{
 				hdrFlag = 1;
+				/* Convert the parsed tokens in a locale independent manner.
+				   That is, we need to avoid use of functions like strtod
+				   as they are locale dependent. */
 				dblFrmt  = CSatof (&sw[0],ptrs [1],'.',',',':');
 				dblFrmt |= CSatof (&ne[0],ptrs [2],'.',',',':');
 				dblFrmt |= CSatof (&sw[1],ptrs [3],'.',',',':');
@@ -278,7 +314,23 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 		__This->coverage.southWest [LAT] = sw [1];
 		__This->coverage.northEast [LNG] = ne [0];
 		__This->coverage.northEast [LAT] = ne [1];
-		__This->coverage.density = __This->deltaLat;
+		/* Set the density.  Normally it would be the smaller of deltaLng
+		   or deltaLat.  These are usually the smae for this file type.
+		   Alternatively, a density may have been specified by the user
+		   in the Geodetic Data Catalog (.gdc file).  In that case,
+		   we use that value. */
+		if (density > 1.0E-12)			/* like to avoid == on doubles */
+		{
+			__This->coverage.density = density;
+		}
+		else if (__This->deltaLat >= __This->deltaLng)
+		{
+			__This->coverage.density = __This->deltaLat;
+		}
+		else
+		{
+			__This->coverage.density = __This->deltaLng;
+		}
 
 		/* Compute the size of the grid.  We need to add the extra 0.1
 		   to account for round off errors on certain compilers/platforms. */
@@ -305,6 +357,10 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 			CS_erpt (cs_NO_MEM);
 			goto error;
 		}
+
+		/* Initialize the delta arrays to zero.  Perhaps we should use memset
+		   here for performance reasons.  Not much to be gained, however, since
+		   we have to parse through 2MB of text anyway. */
 		for (lngIdx = 0;lngIdx < __This->lngCount;lngIdx += 1)
 		{
 			for (latIdx = 0;latIdx < __This->latCount;latIdx += 1)
@@ -316,14 +372,18 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 			}
 		}
 
-		/* Fill in the ellipsoid numbers.  Pretty hokey, but it will work
-		   for now. */
+		/* Fill in the ellipsoid numbers.  Pretty hokey, but it works.
+		   Unfortuneately, the specific ellipsoids involved are impled by
+		   the data file, but the numbers are not included in the format.
+		   Thus, for now, this grid file format is usful only for the
+		   specific French geography for which it was developed. */
 		elPtr = CS_eldef ("GRS1980");
 		if (elPtr == NULL) goto error;
 		__This->rgf93ERad = elPtr->e_rad;
 		__This->rgf93ESq = elPtr->ecent * elPtr->ecent;
 		CS_free (elPtr);
 		elPtr = NULL;
+
 		elPtr = CS_eldef ("CLRK-IGN");
 		if (elPtr == NULL) goto error;
 		__This->ntfERad = elPtr->e_rad;
@@ -331,15 +391,14 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 		CS_free (elPtr);
 		elPtr = NULL;
 
-		/* Process the rest of the file. Note, that the first
-		   node record should already be in lineBuffer, and it
-		   should already be parsed. */
+		/* Process the rest of the file. */
 		while (CS_fgets (lineBuffer,sizeof (lineBuffer),fstrm) != NULL)
 		{
 			tknCount = CS_spaceParse (lineBuffer,ptrs,20);
 			if (tknCount == 8)
 			{
-				/* Determine the location of the node in the grid. */
+				/* Convert the data to numeric form in a locale independent
+				   manner. */
 				dblFrmt  = CSatof (&lng,ptrs [1],'.',',',':');
 				dblFrmt |= CSatof (&lat,ptrs [2],'.',',',':');
 				dblFrmt |= CSatof (&deltaX,ptrs [3],'.',',',':');
@@ -352,6 +411,7 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 					goto error;
 				}
 
+				/* Determine the location of the node in the grid. */
 				lngIdx = (long32_t)(((lng - sw [0]) / __This->deltaLng) + 1.0E-10);
 				latIdx = (long32_t)(((lat - sw [1]) / __This->deltaLat) + 1.0E-10);
 				if (lngIdx < 0 || lngIdx >= __This->lngCount ||
@@ -362,8 +422,8 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 					goto error;
 				}
 				
-				/* Adjust for possible orund down; required for LInux, perhaps
-				   others as well. */
+				/* Adjust for possible round down; required for Linux (or is it
+				   the gcc runtime library), perhaps others as well. */
 				deltaX += (deltaX < 0.0) ? -0.0002 : 0.0002;
 				deltaY += (deltaY < 0.0) ? -0.0002 : 0.0002;
 				deltaZ += (deltaZ < 0.0) ? -0.0002 : 0.0002;
@@ -378,20 +438,22 @@ struct csRgf93ToNtf_ *CSnewRgf93ToNtf (const char *filePath)
 	}
 	else
 	{
-		/* We don't support the abbreviated file.  There is little reason to do so
-		   as we pre-process the file and, therefore, there is little in the way of
-		   efficiency to be obtained.  The verbose file is only 1.2 megabytes;
-		   trivial by today's standards.  If you are in a real crunch (a pocket
-		   PC for example) generate the binary file on a real computer, and install
-		   both the binary version and an empty text file.  Just make sure the
-		   time stamp on the empty text file is older than the binary file. */
+		/* We don't support the abbreviated file.  The abbreviated file is
+		   simply a binary version of the text file.  Thus, we avoid all byte
+		   swapping issues.  There is little to be gained by using the
+		   abbreviated file. */
 		CS_erpt (cs_INV_FILE);
 		goto error;
 	}
 
 	/* For testing purposes, we generate the check-sum of the three memory
-	   arrays allocated above.  The CSrgf93Chk function verifies that the
-	   memory in these arrays has not changed since they were allocated. */
+	   arrays allocated above.  The CScheckRgf93ToNtf function verifies that the
+	   memory in these arrays has not changed since they were allocated.
+	   
+	   This was implemented in response to a bug report which suggested that the
+	   in memory arrays may have been corrupted by some code elsehwere in the
+	   library.  This check has never produced a failure and this code is a
+	   good candidate for reemoval. */
 	__This->crcX = CS_crc16 (0X0101,(unsigned char *)__This->deltaX,(int)malcSize);
 	__This->crcY = CS_crc16 (0X0202,(unsigned char *)__This->deltaY,(int)malcSize);
 	__This->crcZ = CS_crc16 (0X0404,(unsigned char *)__This->deltaZ,(int)malcSize);
@@ -412,10 +474,19 @@ error:
 		CS_fclose (fstrm);
 		fstrm = NULL;
 	}
-	CSdeleteRgf93ToNtf (__This);
+	CSdeleteRgf93ToNtfTxt (__This);
 	return NULL;
 }
-void CSdeleteRgf93ToNtf (struct csRgf93ToNtf_ *__This)
+void CSreleaseRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This)
+{
+	/* Contrary to other datum shift objects, this object does
+	   not access the shift data file directly.  The content
+	   of the file is maintained in memory and there is no
+	   file descriptor kept open.  Thus, when we release this
+	   object, we actually do nothing. */
+	return;
+}
+void CSdeleteRgf93ToNtfTxt (struct csRgf93ToNtfTxt_ *__This)
 {
 	if (__This != NULL)
 	{
@@ -437,9 +508,17 @@ void CSdeleteRgf93ToNtf (struct csRgf93ToNtf_ *__This)
 		CS_free (__This);
 	}
 }
-// The forward function will convert an RFG93 geographic coordinate to
-// NTF coordinate.  This is the opposite of the normal case.
-int CScalcRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_ntf [3],Const double ll_rgf93 [3])
+double CStestRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This,Const double llRgf93 [3])
+{
+	double density;
+	density = CStestCoverageUS (&__This->coverage,llRgf93);
+	return density;
+}
+/* The forward function will convert an RFG93 geographic coordinate to
+   NTF geographic coordinate.  This is the opposite of the normal case.  The
+   forward conversion on most datum shift algorithms convert from the old to
+   the new.  Not so in this case. */
+int CScalcRgf93ToNtfTxt (struct csRgf93ToNtfTxt_ *__This,double ll_ntf [3],Const double ll_rgf93 [3])
 {
 	int rtnVal, xyzSt;
 
@@ -456,6 +535,15 @@ int CScalcRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_ntf [3],Const doubl
 
 	/* Determine the delta shift values. */
 	rtnVal = CScalcNtfToRfg93Deltas (__This,ll_rgf93,&deltaX,&deltaY,&deltaZ);
+
+	/* TO DO: The CScalcNtfToRfg93Deltas function will return the average
+	   geocentric translation values for France whenever presented a geographic
+	   coordinate outside the coverage of the grid data file.  These values are
+	   hardcoded.  These values should, perhaps, be obtained from the fallback
+	   or some means other than hardcoded.  Since the ellipsoids in use are also
+	   harcoded (as there are no ellipsoid numbers in the data file format) this
+	   is probably not a big deal. */
+
 	/* A status value of +1 says that the given point is not covered by the grid file.
 	   However, in this case, CScalcNtfToRfg93Deltas returns delta X, Y, & Z set
 	   to average values.  Thus, we do the following regardless of the value
@@ -486,10 +574,16 @@ int CScalcRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_ntf [3],Const doubl
    It will not produce the exact inverse, but is very very close, and is a
    lot faster.  Since this is what the French use, we use it as well.
 */
-#if defined (__SKIP__)
-/* Since the following code has beenb tested, we leave it in here.  Easier to
-   delete than it is to create. */
-int CSinverseRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_rgf93 [3],Const double ll_ntf [3])
+#if !defined (__SKIP__)
+/* Since the following code has been tested, we leave it in here.  Easier to
+   delete than it is to create.
+   
+   It is important to note that while this algorithm will produce the exact
+   (i.e. within .1 millimeters) inverse, it does not take the height of the
+   NTF source point into consideration.  Thus, while the horizontal inverse
+   is rather precise, the effect of the height on this calculation has not
+   been evaluated as yet. */
+int CSinverseRgf93ToNtfTxt (struct csRgf93ToNtfTxt_ *__This,double ll_rgf93 [3],Const double ll_ntf [3])
 {
 	static int maxIteration = 20;
 	static double smallValue  = 1.0E-09;		/* equates to =~ .1 millimeters */
@@ -522,7 +616,7 @@ int CSinverseRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_rgf93 [3],Const 
 		lngOk = latOk = TRUE;
 
 		/* Compute the WGS-84 lat/long for our current guess. */
-		rtnVal = CScalcRgf93ToNtf (__This,newLl,guess);
+		rtnVal = CScalcRgf93ToNtfTxt (__This,newLl,guess);
 		if (rtnVal != 0)
 		{
 			/* Oopps!! We must have been given some pretty strange
@@ -582,7 +676,12 @@ int CSinverseRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_rgf93 [3],Const 
 	return rtnVal;
 }
 #else
-int CSinverseRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_rgf93 [3],Const double ll_ntf [3])
+/* The following calculation is the calculation as described in the
+   source document from the IGN.  It produces values which are within
+   1.5 millimeters of the original  coordinate.  So while the above is
+   more accurate (accurate to 0.1 millimeters), this is the algorithm
+   used as it is believed to be the officially sanctioned technique. */
+int CSinverseRgf93ToNtfTxt (struct csRgf93ToNtfTxt_ *__This,double ll_rgf93 [3],Const double ll_ntf [3])
 {
 	int rtnVal = 0;
 
@@ -635,10 +734,19 @@ int CSinverseRgf93ToNtf (struct csRgf93ToNtf_ *__This,double ll_rgf93 [3],Const 
 	return rtnVal;
 }
 #endif
-// Given a RGF93 lat/long in degreess relative to Greenwich, this function
-// extracts the appropaite delta X, Y, and Z from the rid file.  Returns
-// +1 if the provided lat/long are not covered by the grid file.
-int CScalcNtfToRfg93Deltas (struct csRgf93ToNtf_ *__This,Const double ll_rgf93 [3],double *deltaX,double *deltaY,double *deltaZ)
+Const char *CSsourceRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This)
+{
+	Const char *cp;
+
+	cp = __This->fileName;
+	return cp;
+}
+/* Given a RGF93 lat/long in degreess relative to Greenwich, this function
+   extracts the appropaite delta X, Y, and Z from the grid file.  Returns
+   +1 if the provided lat/long are not covered by the grid file, in which
+   case, the average geocentric translation values are returned.  These
+   values are hard coded. */
+int CScalcNtfToRfg93Deltas (struct csRgf93ToNtfTxt_ *__This,Const double ll_rgf93 [3],double *deltaX,double *deltaY,double *deltaZ)
 {
 	short westEdg, northEdg, eastEdg, southEdg;
 
@@ -658,12 +766,14 @@ int CScalcNtfToRfg93Deltas (struct csRgf93ToNtf_ *__This,Const double ll_rgf93 [
 
 	rtnVal = 0;
 
-	/* In the case of a +1 return, we return the standrd values. */
+	/* In the case of a +1 return, we return the standard values. */
 	*deltaX = -168.0;
 	*deltaY =  -60.0;
 	*deltaZ =  320.0;
 
-	/* Check and make sure we have proper coverage. */
+	/* Check and make sure we have proper coverage.  The US qualification on
+	   CStestCoverage function distinguishes this coverage cell from the Canadian
+	   variety where west longitude is positive. */
 	density = CStestCoverageUS (&__This->coverage,ll_rgf93);
 	if (density == 0.0) return 1;
 
@@ -722,73 +832,4 @@ int CScalcNtfToRfg93Deltas (struct csRgf93ToNtf_ *__This,Const double ll_rgf93 [
 
 	/* If we are still here, the return value is zero. */
 	return rtnVal;
-}
-// The following parses a line of text into space separated tokens.  Note
-// this function is destructive to the "lineBuffer: argument.
-unsigned CS_spaceParse (char *lineBuffer,char *ptrs [],unsigned maxPtrs)
-{
-	unsigned index = 0;
-	char *cp, *cp1;
-
-	if (maxPtrs == 0) return index;
-	CS_removeRedundantWhiteSpace (lineBuffer);
-	if (lineBuffer [0] == '\0') return index;
-	cp = lineBuffer;
-	do
-	{
-		ptrs [index++] = cp;
-		cp1 = strchr (cp,' ');
-		if (cp1 == 0) break;
-		*cp1++ = '\0';
-		cp = cp1;
-	} while (index < maxPtrs);
-	return index;
-}
-// The following does itsmagic inplace; how nice.
-void CS_removeRedundantWhiteSpace (char *string)
-{
-	char cc;
-	char* fromPtr;
-
-	/* Skip over any initial whitespace. */
-	fromPtr = string;
-	while ((cc = *fromPtr) != '\0' && isspace (cc))
-	{
-		fromPtr += 1;
-	}
-	if (*fromPtr == '\0')
-	{
-		*string = '\0';
-		return;
-	}
-
-	/* Copy the string into itself, replacing a consecutive white space
-	   characters with a single space character. Note, isspace defines
-	   what white space is. */
-	while ((cc = *fromPtr++) != '\0')
-	{
-		/* Copy the character, regardless of what it is. */
-		*string++ = cc;
-
-		/* If the current character is a space, advance fromPtr to the
-		   next non-white space character */		
-		if (isspace (cc))
-		{
-			while ((cc = *fromPtr) != '\0' && isspace (cc))
-			{
-				fromPtr += 1;
-			}
-		}
-	}
-	
-	/* The above could easily leave a single white-space character on the
-	   end.  The following is safe as we have determined above that the
-	   string has at least one non-whitespace character in it. */
-	cc = *(string - 1);
-	if (isspace (cc))
-	{
-		string -= 1;
-	}
-	*string = '\0';
-	return;
 }

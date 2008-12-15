@@ -57,6 +57,7 @@ CS_dtNad27ToAts77.c \
 CS_dtNad27ToNad83.c \
 CS_dtNad83ToHarn.c \
 CS_dtNzdg49ToNzgd2K.c \
+CS_dtRgf93ToNtf.c \
 CS_dhdn.c \
 CS_ed50.c \
 CS_edcnc.c \
@@ -190,6 +191,7 @@ CS_dtNad27ToAts77.o \
 CS_dtNad27ToNad83.o \
 CS_dtNad83ToHarn.o \
 CS_dtNzdg49ToNzgd2K.o \
+CS_dtRgf93ToNtf.o \
 CS_ed50.o \
 CS_dhdn.o \
 CS_edcnc.o \

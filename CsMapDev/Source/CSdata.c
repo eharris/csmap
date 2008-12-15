@@ -128,9 +128,9 @@ csThread char cs_CsrsName    [cs_FNM_MAXLEN]  = cs_CSRS_NAME;
 csThread char cs_Csrs27Name  [cs_FNM_MAXLEN]  = cs_CSRS27_NAME;
 csThread char cs_Jgd2kName   [cs_FNM_MAXLEN]  = cs_JGD2K_NAME;
 csThread char cs_Ed50Name    [cs_FNM_MAXLEN]  = cs_ED50_NAME;
+csThread char cs_Rgf93Name   [cs_FNM_MAXLEN]  = cs_RGF93_NAME;
 csThread char cs_DhdnName    [cs_FNM_MAXLEN]  = cs_DHDN_NAME;
 csThread char cs_N27A77Name  [cs_FNM_MAXLEN]  = cs_N27A77_NAME;
-csThread char cs_Rgf93Name   [cs_FNM_MAXLEN]  = cs_RGF93_NAME;
 
 /*
 	The following array supports the enumerator for GDC file
@@ -149,22 +149,22 @@ csThread char cs_Rgf93Name   [cs_FNM_MAXLEN]  = cs_RGF93_NAME;
 */
 struct cs_GdcCatalogTable_ cs_GdcCatalogTable [] =
 {
-	{  gdcFileNad27ToNad83, cs_NadName    ,	gdcTypeHorizontal,    0UL, ".las.los.gsb.dac","NADCON files (*.l?s)|*.l?s|Canadian Ntv2 (*.gsb)|*.gsb|Canadian Ntv1 (*.dac)|*.dac||"},
-	{   gdcFileNad83ToHarn, cs_HarnName   ,	gdcTypeHorizontal,    0UL, ".las.los"        ,"NADCON files (*.l?s)|*.l?s||"              },
-	{  gdcFileAgd66ToGda94, cs_Agd66Name  ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
-	{  gdcFileAgd84ToGda94, cs_Agd84Name  ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
-	{gdcFileNzgd49ToNzgd2K, cs_Nzgd49Name ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
-	{   gdcFileAts77ToCsrs, cs_Ats77Name  ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
-	{   gdcFileNad83ToCsrs, cs_CsrsName   ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
-	{  gdcFileTokyoToJgd2k, cs_Jgd2kName  ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"Japanese Grid format (*.par)|*.par||"      },
-	{   gdcFileNad27ToCsrs, cs_Csrs27Name ,	gdcTypeHorizontal,    0UL, ".gsb.gdc"        ,"Canadian Ntv2 format (*.gsb)|*.gsb|Ats77 Geodetic Data Catalog (*.gdc)|*.gdc||"},
-	{  gdcFileEd50ToEtrf89, cs_Ed50Name   ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
-	{  gdcFileDhdnToEtrf89, cs_DhdnName   ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
-	{  gdcFileNad27ToAts77, cs_N27A77Name ,	gdcTypeHorizontal,    0UL, ".gsb"            ,"ATS77 Transform files (*.DAT)|*.DAT"       },
-	{   gdcFileGeoidHeight, cs_GeoidName  ,	gdcTypeSeparation,    0UL, ".geo.bin.byn.txt.grd","Geoid96 (*.geo)|*.geo|Geoid99 (*.bin)|*.bin|Canadian (*.byn)|*.byn|UK OSGM91 (*.txt)|*.txt|EGM96 (*.grd)|*.grd||"},
-	{       gdcFileVertcon, cs_VertconName,	gdcTypeVertical,      0UL, ".94"             ,"Vertcon files (*.94)|*.94||"               },
-	{    gdcFileNtfToRgf93, cs_Rgf93Name  ,	gdcTypeHorizontal,    0UL, ".txt"             ,"French IGN Datum Shift Files (*.txt)|*.txt|All Files (*.*)|*.*||"},
-	{          gdcFileNone, 0             ,	gdcTypeNone,          0UL, ""                ,""                                          }
+	{  gdcFileNad27ToNad83, cs_NadName    ,	gdcTypeHorizontal,       0UL, ".las.los.gsb.dac",    "NADCON files (*.l?s)|*.l?s|Canadian Ntv2 (*.gsb)|*.gsb|Canadian Ntv1 (*.dac)|*.dac||"},
+	{   gdcFileNad83ToHarn, cs_HarnName   ,	gdcTypeHorizontal,       0UL, ".las.los"            ,"NADCON files (*.l?s)|*.l?s||"              },
+	{  gdcFileAgd66ToGda94, cs_Agd66Name  ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
+	{  gdcFileAgd84ToGda94, cs_Agd84Name  ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
+	{gdcFileNzgd49ToNzgd2K, cs_Nzgd49Name ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
+	{   gdcFileAts77ToCsrs, cs_Ats77Name  ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
+	{   gdcFileNad83ToCsrs, cs_CsrsName   ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
+	{  gdcFileTokyoToJgd2k, cs_Jgd2kName  ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"Japanese Grid format (*.par)|*.par||"      },
+	{   gdcFileNad27ToCsrs, cs_Csrs27Name ,	gdcTypeHorizontal,       0UL, ".gsb.gdc"            ,"Canadian Ntv2 format (*.gsb)|*.gsb|Ats77 Geodetic Data Catalog (*.gdc)|*.gdc||"},
+	{  gdcFileEd50ToEtrf89, cs_Ed50Name   ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
+	{  gdcFileDhdnToEtrf89, cs_DhdnName   ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"Canadian Ntv2 format (*.gsb)|*.gsb||"      },
+	{  gdcFileNad27ToAts77, cs_N27A77Name ,	gdcTypeHorizontal,       0UL, ".gsb"                ,"ATS77 Transform files (*.DAT)|*.DAT"       },
+	{   gdcFileGeoidHeight, cs_GeoidName  ,	gdcTypeSeparation,       0UL, ".geo.bin.byn.txt.grd","Geoid96 (*.geo)|*.geo|Geoid99 (*.bin)|*.bin|Canadian (*.byn)|*.byn|UK OSGM91 (*.txt)|*.txt|EGM96 (*.grd)|*.grd||"},
+	{       gdcFileVertcon, cs_VertconName,	gdcTypeVertical,         0UL, ".94"                 ,"Vertcon files (*.94)|*.94||"               },
+	{    gdcFileRgf93ToNtf, cs_Rgf93Name  ,	gdcTypeThreeDimensional, 0UL, ".txt.gsb"            ,"French IGN Datum Shift Files (*.txt)|*.txt|Canadian Ntv2 (*.gsb)|*.gsb|All Files (*.*)|*.*||"},
+	{          gdcFileNone, 0             ,	gdcTypeNone,             0UL, ""                    ,""                                          }
 };
 
 /*

@@ -39,6 +39,7 @@ libCsmap_la_SOURCES = \
   Source/CS_dtNad27ToNad83.c \
   Source/CS_dtNad83ToHarn.c \
   Source/CS_dtNzdg49ToNzgd2K.c \
+  Source/CS_dtRgf93ToNtf.c \
   Source/CS_dtTokyoToJgd2k.c \
   Source/CS_ed50.c \
   Source/CS_edcnc.c \
