@@ -55,6 +55,7 @@
 # ".\Usa\Harn\" prefix used here is a relative folder/directory
 # reference to the directory in which this file resides.
 #
+.\Usa\Harn\arhpgn.l?s
 .\Usa\Harn\alhpgn.l?s
 .\Usa\Harn\azhpgn.l?s
 .\Usa\Harn\cnhpgn.l?s
@@ -79,6 +80,7 @@
 .\Usa\Harn\mohpgn.l?s
 .\Usa\Harn\mshpgn.l?s
 .\Usa\Harn\nbhpgn.l?s
+.\Usa\Harn\nchpgn.l?s
 .\Usa\Harn\ndhpgn.l?s
 .\Usa\Harn\nehpgn.l?s
 .\Usa\Harn\njhpgn.l?s
@@ -87,7 +89,9 @@
 .\Usa\Harn\nyhpgn.l?s
 .\Usa\Harn\ohhpgn.l?s
 .\Usa\Harn\okhpgn.l?s
+.\Usa\Harn\pahpgn.l?s
 .\Usa\Harn\pvhpgn.l?s
+.\Usa\Harn\schpgn.l?s
 .\Usa\Harn\sdhpgn.l?s
 .\Usa\Harn\tnhpgn.l?s
 .\Usa\Harn\uthpgn.l?s
