@@ -15,7 +15,7 @@ InternalId,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMap
 7015,7015,0,0,0,0,0,,EVEREST,Everest1830/37,EVEREST,Everest 1830 (1937 Adjustment),Everest_Adjustment_1937,Everest 1830 (1937 Adjustment) (EPSG ID 7015),,,Everest 1830 (1937 Adjustment),,,,Everest,,,,,0,0,0
 7016,7016,0,0,0,0,0,,Everest1830/67,Everest1830/67,Everest1830/67,Everest 1830 (1967 Definition),Everest_Definition_1967,Everest 1830 (1967 Definition) (EPSG ID 7016),,,Everest 1830 (1967 Definition),,,,,,,,,0,0,0
 7018,7018,0,0,0,0,0,,EVRST-MD,EverestModified/1830,EVRST-MD,Everest 1830 Modified,Everest_1830_Modified,Everest 1830 Modified (EPSG ID 7018),,,Everest 1830 Modified,,,,Everest (Kertau),,,,,0,0,0
-7019,7019,0,0,0,0,0,,GRS1980,GRS80,GRS1980,GRS 1980,GRS_1980,GRS 1980 (EPSG ID 7019),,,GRS 1980,,,,GRS 80,,,,,0,0,0
+7019,7019,0,0,0,0,0,,GRS1980,GRS80,GRS1980,GRS 1980,GRS_1980,GRS 1980 (EPSG ID 7019),,,GRS 1980,,,,GRS 80,GRS 80,,,,0,0,0
 7020,7020,0,0,0,0,0,,HLMRT06,Helmert06,HLMRT06,Helmert 1906,Helmert_1906,Helmert 1906 (EPSG ID 7020),,,Helmert 1906,,,,Helmert 1906,,,,,0,0,0
 7021,7021,0,0,0,0,0,,IndonesianNtl,IndonesianNtl,IndonesianNtl,Indonesian National Spheroid,Indonesian,Indonesian National Spheroid (EPSG ID 7021),,,Indonesian National Spheroid,,,,,,,,,0,0,0
 7022,7022,0,0,0,0,0,,INTNL,International24,INTNL,International 1924,International_1924,International 1924 (EPSG ID 7022),,,International 1924,,,,International 1924,,,,,0,0,0
