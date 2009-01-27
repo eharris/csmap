@@ -9,7 +9,7 @@ InternalId,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMap
 0,0,,,,,,,150Kilometers,,150Kilometers,,150_Kilometers,,,,,,,,,,,,,,,
 0,0,,,,,,,Fathom,,Fathom,,,Fathom,,,,,Fathom,,Fathom,,,,,,,
 0,0,,,,,,,NautM-UK,,NautM-UK,,,Nautical Mile (UK),,,,,,,Nautical Mile (UK),,,,,,,
-0,9001,,,,,,,Meter,,Meter,metre,Meter,Meter,,,metre,Meter,Meter,Meter,Meter,,,,,,,
+0,9001,,,,,,,Meter,,Meter,metre,Meter,Meter,,,metre,Meter,Meter,Meter,Meter,METER,,,,,,
 0,9002,,,,,,,IFoot,,IFoot,foot,Foot,Foot (International),,,3.048 dm,Foot_Intnl,Foot (International),Foot_Intnl,Foot (International),,,,,,,
 0,9003,,,,,,,Foot,,Foot,US survey foot,Foot_US,U.S. Foot,,,3.048 dm,Foot_US|US survey foot,U.S. Foot|US survey foot,Foot_US,U.S. Foot,,,,,,,
 0,9005,,,,,,,ClarkeFoot,,ClarkeFoot,Clarke's foot,Foot_Clarke,Clarke's Foot,,,,foot_clarke|Clarke's foot,Clarke's foot,Foot_Clarke,Clarke's Foot,,,,,,,

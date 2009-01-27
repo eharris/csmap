@@ -40,7 +40,7 @@ InternalId,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMap
 0,0,,,,,,41,LM-MNDOT,,"Lambert Conformal Conic, Minnesota DOT Variation",,,,,,,"Lambert Conformal Conic, Minnesota DOT Variation",,,,,,,,,,
 0,0,,,,,,42,TM-MNDOT,,"Transverse Mercator, Minnesota DOT Variation",,,,,,,"Transverse Mercator, Minnesota DOT Variation",,,,,,,,,,
 0,9808,,,,,,43,SOTM,,South Oriented Transverse Mercator,Transverse Mercator (South Orientated),,,,,Transverse_Mercator_South_Orientated,Transverse_Mercator_South_Oriented,Transverse_Mercator_South_Oriented,CT_TransverseMercator_SouthOriented,,,,,,,,
-0,9824,,,,,,44,UTM,,Universal Transverse Mercator System,Transverse Mercator Zoned Grid System,Transverse_Mercator,Transverse Mercator,,,Transverse_Mercator,Transverse_Mercator,Transverse_Mercator,CT_TransverseMercator,Transverse Mercator,,,,,,,
+0,9824,,,,,,44,UTM,,Universal Transverse Mercator System,Transverse Mercator Zoned Grid System,Transverse_Mercator,Transverse Mercator,,,Transverse_Mercator,Transverse_Mercator,Transverse_Mercator,CT_TransverseMercator,Transverse Mercator,UTM,,,,,,
 0,0,,,,,,45,TM-SNYDER,,Transverse Mercator per J. P. Snyder,,,,,,,Transverse Mercator per J. P. Snyder,,,,,,,,,,
 0,,,,,,,46,GAUSSK,,Gauss Kruger,,Gauss_Kruger,,,,,Gauss_Kruger,Gauss_Kruger,GaussKruger,,,,,,,,
 0,9819,,,,,,47,KROVAK,,Krovak Oblique Conformal Conic,Krovak Oblique Conic Conformal,Krovak,Krovak,,,Krovak_Oblique_Conic_Conformal,Krovak,Krovak,,,,,,,,,
