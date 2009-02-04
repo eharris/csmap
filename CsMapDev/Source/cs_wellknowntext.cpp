@@ -548,7 +548,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		// with something more meaningful if we can.  Only EPSG assigns numeric
 		// codes to ellipsoids, so we use that code.
 		epsgNbr = csMapNameToIdC (csMapEllipsoidKeyName,csMapFlvrEpsg,nmFlavor,elDef->name);
-		if (epsgNbr != 02)
+		if (epsgNbr != 0)
 		{
 			sprintf (wrkBufr,"EPSG::%ld",epsgNbr);
 		    CS_stncp (elDef->key_nm,wrkBufr,cs_KEYNM_DEF);
@@ -766,6 +766,8 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 	}
 	else
 	{
+		csMapDtName [0] = '\0';			// Redundant, but I'll sleep better tobight.
+
 		// There was a complete datum definition in the WKT string.  Rare, but
 		// it happens, depending upon the flavor.  See if the WKT name maps
 		// to an CS-MAP name.  If so, we'll use the CS-MAP name.
@@ -782,7 +784,31 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
             // If datum name was truncated, it is not anymore.
             st&= ~cs_DT2WKT_NMTRUNC;
 		}
-	
+        else
+        {
+			// See if the provided datum name is already a CS-MAP name.
+			// If so, we use it.  We do this after the mapping in the
+			// unlikely event that a flavored name is the same as a
+			// CS-MAP name, yet references a different datum than the
+			// CS-MAP name.
+			if (CS_dtIsValid (dtDef->name))
+			{
+				CS_stncp (csMapDtName,dtDef->name,sizeof (csMapDtName));
+			}
+			else if (CS_dtIsValid (dtDef->key_nm))
+			{
+				CS_stncp (csMapDtName,dtDef->key_nm,sizeof (csMapDtName));
+			}
+			if (csMapDtName [0] != '\0')
+			{
+		        CS_stncp (csDef->dat_knm,csMapDtName,cs_KEYNM_DEF);
+		        CS_stncp (dtDef->key_nm,csMapDtName,cs_KEYNM_DEF);
+
+                // If datum name was truncated, it is not anymore.
+	            st&= ~cs_DT2WKT_NMTRUNC;
+		    }
+        }
+ 
 		// See if we can produce an untruncated name for this datum which is
 		// meaningful.
 		if ((st & cs_DT2WKT_NMTRUNC) != 0)
