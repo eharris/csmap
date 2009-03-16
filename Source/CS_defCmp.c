@@ -48,6 +48,7 @@ int EXP_LVL3 CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef
 	extern double cs_Zero;
 
 	int errCnt = 0;
+	int errCntCnc = 0;
 
 	struct cs_Prjtab_ *pp;
 
@@ -136,12 +137,40 @@ int EXP_LVL3 CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef
 
 		/* Check all of the parameters. */
 		if (errCnt == 0) errMsg[0] = '\0';
+
+		/* We skip checking the first two parameters for the Unity projection as WKT
+		   does not support the longitude range feature. */
 		if (pp->code != cs_PRJCOD_UNITY)
 		{
-			/* We skip checking the first two parameters for the Unity projection as WKT
-			   does not support the longitude range feature. */
-			errCnt += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,revised->prj_prm1,errMsg,sizeof (errMsg));
-			errCnt += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,revised->prj_prm2,errMsg,sizeof (errMsg));
+			/* For conic projections which require two standard parallels, the order of the parallels
+			   does not make any difference to the mathemagics of the projection.  In this case,
+			   if (prm1 != prm1 && prm2 != prm2) we do an additional check of
+			   if (prm1 == prm2 and prm2 == prm1).  It is traditional to supply the northern
+			   parallel first, but the are variations of WKT out there to do not follw this
+			   tradition (and it is only a tradition). */
+			if (pp->code == cs_PRJCOD_LM2SP   ||
+				pp->code == cs_PRJCOD_LMBLG   ||
+				pp->code == cs_PRJCOD_WCCSL   ||
+				pp->code == cs_PRJCOD_MNDOTL  ||
+				pp->code == cs_PRJCOD_ALBER   ||
+				pp->code == cs_PRJCOD_LMBRTAF)
+			{
+				errCntCnc = 0;
+				errCntCnc += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,revised->prj_prm1,errMsg,sizeof (errMsg));
+				errCntCnc += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,revised->prj_prm2,errMsg,sizeof (errMsg));
+				if (errCntCnc == 2)
+				{
+					errCnt += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,revised->prj_prm2,errMsg,sizeof (errMsg));
+					errCnt += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,revised->prj_prm1,errMsg,sizeof (errMsg));
+				}
+			}
+			else
+			{
+				/* Not a conic nor geographic, so we just coompare the two
+				   parameter values. */
+				errCnt += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,revised->prj_prm1,errMsg,sizeof (errMsg));
+				errCnt += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,revised->prj_prm2,errMsg,sizeof (errMsg));
+			}
 		}
 		errCnt += CS_defCmpPrjPrm (pp, 3,lclOrgPtr->prj_prm3 ,revised->prj_prm3,errMsg,sizeof (errMsg));
 		errCnt += CS_defCmpPrjPrm (pp, 4,lclOrgPtr->prj_prm4 ,revised->prj_prm4,errMsg,sizeof (errMsg));
