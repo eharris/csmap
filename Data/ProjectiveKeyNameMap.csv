@@ -2861,7 +2861,7 @@ InternalId,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMap
 100065163,0,65163,0,0,0,0,,,,,,NAD_1983_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
 100102001,0,102001,0,0,0,0,,,NAD83.Canada/Albers,,,Canada_Albers_Equal_Area_Conic,,,,,,,,,,,,,0,0,0
 100102002,0,102002,0,0,0,0,,,NAD83.Canada/Conformal,,,Canada_Lambert_Conformal_Conic,,,,,,,,,,,,,0,0,0
-100102003,0,102003,0,0,0,32775,,,NAD83.US48/Albers,,,USA_Contiguous_Albers_Equal_Area_Conic,,,,,,,,Equal-Area Projection (United States),,,,,0,0,0
+100102003,0,102003,0,0,0,32775,,US48,NAD83.US48/Albers,US48,,USA_Contiguous_Albers_Equal_Area_Conic,,,,,,,,Equal-Area Projection (United States),,,,,0,0,0
 100102004,0,102004,0,0,0,0,,,NAD83.US48/Conformal,,,USA_Contiguous_Lambert_Conformal_Conic,,,,,,,,,,,,,0,0,0
 100102005,0,102005,0,0,0,0,,,NAD83.US48/SmplConic,,,USA_Contiguous_Equidistant_Conic,,,,,,,,,,,,,0,0,0
 100102006,0,102006,0,0,0,0,,,,,,Alaska_Albers_Equal_Area_Conic,,,,,,,,,,,,,0,0,0
