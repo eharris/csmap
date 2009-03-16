@@ -72,6 +72,7 @@ int CSwellKnownTextKrovak (struct cs_Csdef_* cs_def,struct cs_Eldef_ *el_def,con
 																			 double primeMeridian,
 																			 double geogcsUnitsFactor,
 																			 ErcWktFlavor flavor);
+void CSwktConicAdj (struct cs_Csdef_ *csDef);
 
 // The following function is used to compare a WKT ellipsoid definition as
 // provided by the elDef argument, with an MSI dictionary definition indicated
@@ -1720,14 +1721,23 @@ int CSwktToCs (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Eldef_ 
 			}
 		}
 
+		// The following will enforce the CS-MAP convention that for
+		// conic projections with two standard parallels, prm1 is the
+		// northern parallel and prm2 is the southern parallel.  The
+		// projection mathemagics doesn't care, but the coordinate system
+		// compariosn functions do care.
+		CSwktConicAdj (csDef);
+
 		// The above is supposed to work for all projections, all parameters.
 		// When working with WKT, we know better than that.  Here below we
-		// make provisions fot twiddleing as necessary on a projection by
+		// make provisions for twiddleing as necessary on a projection by
 		// projection basis.
 		switch (projCode) {
 		case cs_PRJCOD_TRMER:
 			break;
 		case cs_PRJCOD_LM1SP:
+			// The following verifies that if present, the Northern Standard Parallel
+			// value is the same as the origin latitude.
 			parmValue = csDef->org_lat;
 			parameter = wktElement->ParameterLocate (flavor,cs_PRMCOD_NSTDPLL);
 			if (parameter != 0)
@@ -1897,6 +1907,50 @@ int CSwktToCs (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Eldef_ 
 error:
 	// Delete, free, whatever stuff is necessary; none just yet.
 	return -1;
+}
+void CSwktConicAdj (struct cs_Csdef_ *csDef)
+{
+	unsigned short projCode = cs_PRJCOD_END;
+	struct cs_Prjtab_ *pp;
+	double dblTmp;
+
+	for (pp = cs_Prjtab;*pp->key_nm != '\0';pp++)
+	{
+		if (!CS_stricmp (pp->key_nm,csDef->prj_knm))
+		{
+			projCode = pp->code;
+			break;
+		}
+	}
+	if (projCode == cs_PRJCOD_LM2SP   ||
+		projCode == cs_PRJCOD_LMBLG   ||
+		projCode == cs_PRJCOD_WCCSL   ||
+		projCode == cs_PRJCOD_MNDOTL  ||
+		projCode == cs_PRJCOD_ALBER   ||
+		projCode == cs_PRJCOD_EDCNC   ||
+		projCode == cs_PRJCOD_LMBRTAF)
+	{
+		// This is a conic where the first two parameters are the northern and
+		// southern standard parallels.  The mathematics of the projection
+		// does not care about thje order.  However, the compariosn functions
+		// do.  So, when we read a WKT, we like to make sure the prm1 is indeed
+		// the northern parallel and prm2 is indeed the southern parallel.
+		if (!CS_cmpDbls (csDef->prj_prm1,csDef->prj_prm2))
+		{
+			// The two parallels are not the same, so it is valid
+			// to do the following test.
+			if (csDef->prj_prm1 < csDef->prj_prm2)
+			{
+				// OK, we need to swap to honor the CS-MAP convention that
+				// prj_prm1 is the northern parallel and prm2 is the
+				// southern parallel.
+				dblTmp = csDef->prj_prm1;
+				csDef->prj_prm1 = csDef->prj_prm2;
+				csDef->prj_prm2 = dblTmp;
+			}
+		}
+	}
+	return;
 }
 int CSwktToNerth (struct cs_Csdef_ *csDef,struct cs_Eldef_ *elDef,ErcWktFlavor flavor,const TrcWktElement* wktElement)
 {
