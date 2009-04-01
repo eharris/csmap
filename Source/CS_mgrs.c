@@ -630,8 +630,8 @@ int CScalcMgrsFromLlUtm (struct cs_Mgrs_ *__This,char *result,int size,double la
 		*rsltPtr++ = setPtr [setIdx].easting [idxX];
 		*rsltPtr++ = setPtr [setIdx].northing [idxY];
 	}
-	sprintf (utmXascii,"%05ld",(intUtmX % 100000));
-	sprintf (utmYascii,"%05ld",(intUtmY % 100000));
+	sprintf (utmXascii,"%05d",(int)(intUtmX % 100000));
+	sprintf (utmYascii,"%05d",(int)(intUtmY % 100000));
 	for (ii = 0;ii < prec;ii += 1)
 	{
 		*rsltPtr++ = utmXascii [ii];

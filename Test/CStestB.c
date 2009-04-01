@@ -165,10 +165,10 @@ int CStestB (int verbose,long32_t duration)
 				   and MN won't work either as these systems
 				   are elevated above the ellipsoid.
 
-				   OSTN02, OSTN97, and both Danish systems
-				   include heavy duty non-analytical (i.e.
+				   OSTN02, OSTN97, NBZLND and both Danish
+				   systems include heavy duty non-analytical (i.e.
 				   polynomials and/or grid file) techniques,
-				   thus we have now way of generating a
+				   thus we have no way of generating a
 				   reliable test value.
 				   
 				   NERTH has no concept of grid scale or convergence,
@@ -181,6 +181,7 @@ int CStestB (int verbose,long32_t duration)
 					csprm->prj_code == cs_PRJCOD_MNDOTT ||
 					csprm->prj_code == cs_PRJCOD_OSTN97 ||
 					csprm->prj_code == cs_PRJCOD_OSTN02 ||
+					csprm->prj_code == cs_PRJCOD_NZLND ||
 					csprm->prj_code == cs_PRJCOD_SYS34 ||
 					csprm->prj_code == cs_PRJCOD_SYS34_99 ||
 					csprm->prj_code == cs_PRJCOD_NERTH

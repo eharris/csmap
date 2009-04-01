@@ -28,10 +28,6 @@
 #include <math.h>
 #include <stack>
 
-#ifndef _WIN32
-#define _wcsicmp wcscasecmp
-#endif
-
 enum EcsEpsgTable { epsgTblNone = 0,
 					epsgTblAlias,
 					epsgTblArea,

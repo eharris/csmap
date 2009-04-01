@@ -11,8 +11,9 @@ CPP_FLG = -c -DGCC_3 -D__CPP__ -Wall -O3 -I../Include
 ALL : CS_Comp CS_DictDiff
 
 CS_Comp : CS_COMP.o 
-	gcc -v -oCS_Comp CS_COMP.o ../Source/CsMap.a -lm -lc -lgcc -lstdc++
+	gcc -v -o CS_Comp CS_COMP.o ../Source/CsMap.a -lm -lc -lgcc -lstdc++
 
 CS_DictDiff : CS_DictDiff.o
-	gcc -v -oCS_DictDiff CS_DictDiff.o ../Source/CsMap.a -lm -lc -lgcc -lstdc++
+	gcc -v -o CS_DictDiff CS_DictDiff.o ../Source/CsMap.a -lm -lc -lgcc -lstdc++
+
 

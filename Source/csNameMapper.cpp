@@ -240,7 +240,7 @@ bool TcsNameMap::operator< (const TcsNameMap& rhs) const
 				
 				// We need a case insensitive comparison, so we can't use the
 				// std::wstring::operator< ().
-				int cmpVal = _wcsicmp (Name.c_str (),rhs.Name.c_str ());
+				int cmpVal = CS_wcsicmp (Name.c_str (),rhs.Name.c_str ());
 				lessThan = (cmpVal < 0);
 				if (cmpVal == 0)
 				{
@@ -411,7 +411,7 @@ EcsNameFlavor TcsNameMapper::FlvrNameToNbr (const wchar_t* flvrName)
 	EcsNameFlavor idx = csMapFlvrNone;
 	for (idx = csMapFlvrNone;idx != csMapFlvrUnknown;++idx)
 	{
-		if (!_wcsicmp (flvrName,DefaultFlavorNames [idx]))
+		if (!CS_wcsicmp (flvrName,DefaultFlavorNames [idx]))
 		{
 			break;
 		}
@@ -909,7 +909,7 @@ TcsNameMap* TcsNameMapper::LocateNameMap (EcsMapObjType type,EcsNameFlavor flavo
 	endItr   = DefinitionSet.upper_bound (endSearchObj);
 	for (searchItr = beginItr;searchItr != endItr;searchItr++)
 	{
-		if (!_wcsicmp (searchItr->GetNamePtr (),name))
+		if (!CS_wcsicmp (searchItr->GetNamePtr (),name))
 		{
 //			nmMapPtr = &(*searchItr);
 //	Change required to achieve compilation on Linux, gcc 3.2.2
@@ -936,7 +936,7 @@ const TcsNameMap* TcsNameMapper::LocateNameMap (EcsMapObjType type,EcsNameFlavor
 	endItr   = DefinitionSet.upper_bound (endSearchObj);
 	for (searchItr = beginItr;searchItr != endItr;searchItr++)
 	{
-		if (!_wcsicmp (searchItr->GetNamePtr (),name))
+		if (!CS_wcsicmp (searchItr->GetNamePtr (),name))
 		{
 			nmMapPtr = &(*searchItr);
 			break;

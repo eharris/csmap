@@ -63,7 +63,7 @@ void CSinitGeoid99 (struct csGeoid99GridFile_ *__This)
 /*****************************************************************************
 	Constructor
 */
-struct csGeoid99GridFile_* CSnewGeoid99GridFile (Const char *path,long bufferSize,unsigned long flags,double density)
+struct csGeoid99GridFile_* CSnewGeoid99GridFile (Const char *path,long32_t bufferSize,ulong32_t flags,double density)
 {
 	extern double cs_K360;
 	extern char cs_DirsepC;

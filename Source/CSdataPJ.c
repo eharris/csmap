@@ -464,7 +464,8 @@
 							 cs_PRJFLG_ORGLNG)
 
 #define cs_PRJFLGS_WINKL	(cs_PRJFLG_SPHERE | \
-							 cs_PRJFLG_AZMTH  | cs_PRJFLG_PSEUDO | \
+							 cs_PRJFLG_AZMTH  | \
+							 cs_PRJFLG_FLAT   | cs_PRJFLG_PSEUDO | \
 							 cs_PRJFLG_ORGLAT)
 
 #define cs_PRJFLGS_NRTHSRT	(cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \

@@ -695,7 +695,7 @@ char * EXP_LVL9 CSelKeyNames (void)
 	return (cs_ElKeyNames);
 }
 
-int EXP_LVL1 CS_prjEnum (int index,unsigned long *prj_flags,char *prj_keynm,int keynm_sz,char *prj_descr,int descr_sz)
+int EXP_LVL1 CS_prjEnum (int index,ulong32_t *prj_flags,char *prj_keynm,int keynm_sz,char *prj_descr,int descr_sz)
 {
 	extern int cs_Error;
 	extern struct cs_Prjtab_ cs_Prjtab [];

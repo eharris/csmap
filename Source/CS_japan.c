@@ -609,7 +609,7 @@ int CSmkBinaryJgd2k (struct csJgd2kGridFile_* __This)
 		{
 			/* Parse the information is in a record. */
 			meshCode = CS_strtoul (lineBufr,&cp1,10);
-			if (meshCode == 0 || meshCode == ULONG_MAX) continue;
+			if (meshCode == 0 || meshCode == 0xffffffffUL) continue;
 
 			/* Separate the two data values.  We avoid strtod as it is
 			   locale dependent and the data file is not. */			

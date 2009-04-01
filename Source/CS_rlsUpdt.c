@@ -625,7 +625,7 @@ char * EXP_LVL7 CS_swpfl (Const char org_name [])
 		{
 			CS_bswap (&nad_hdr,hdr_frmt);
 		}
-		sprintf (rec_frmt,"l%ldf",nad_hdr.ele_cnt);
+		sprintf (rec_frmt,"l%df",(int)nad_hdr.ele_cnt);
 		hdr_size = rec_size = ((size_t)nad_hdr.ele_cnt * sizeof (float)) + sizeof (long32_t);
 		res_size = 0;
 		res_frmt [0] = '\0';

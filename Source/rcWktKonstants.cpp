@@ -210,6 +210,12 @@ extern "C" const struct csKeyNmRed_ csCsReduce [] =
 // The following table is used to convert EPSG Operation Codes to CS-MAP
 // projection codes.  The cs_PRJCOD_END value is used to indicate an EPSG
 // operation code which does not map to a supported CS-MAP projection.
+//
+// The folowing produces a warning about the extern in the following
+// definition.  However, you can't declare it with "C" linkage without
+// the extern.  Since this table is only used in one 'C' module, it
+// probably should be moved to that module to make the warning
+// go away.
 extern "C" struct cs_EpsgOpMthMap_ cs_EpsgOpMthMap [] =
 {
 	{ 10101, 10233,  cs_PRJCOD_TRMER},

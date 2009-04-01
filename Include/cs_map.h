@@ -917,11 +917,6 @@
 	typedef unsigned long ulong32_t;
 #endif
 
-/* Temperary fix for Linux builds. */
-#ifndef _WIN32
-#define _wcsicmp  wcscasecmp
-#endif
-
 /******************************************************************************
 *******************************************************************************
 *******************************************************************************
@@ -7458,6 +7453,7 @@ int			EXP_LVL3	CS_utmzon (double lng);
 
 int			EXP_LVL1	CS_viaEnum (int index,char *descr,int size,int *ident);
 
+int			EXP_LVL3	CS_wcsicmp (Const wchar_t *cp1,Const wchar_t *cp2);
 int			EXP_LVL9	CS_wktCsDefFunc (struct cs_Csdef_* csDefPtr,Const char* wktString);
 int			EXP_LVL9	CS_wktDtDefFunc (struct cs_Dtdef_* dtDefPtr,Const char* dtKeyName);
 int			EXP_LVL9	CS_wktElDefFunc (struct cs_Eldef_* elDefPtr,Const char* elKeyName);
