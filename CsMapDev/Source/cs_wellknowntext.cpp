@@ -551,7 +551,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		epsgNbr = csMapNameToIdC (csMapEllipsoidKeyName,csMapFlvrEpsg,nmFlavor,elDef->name);
 		if (epsgNbr != 0)
 		{
-			sprintf (wrkBufr,"EPSG::%ld",epsgNbr);
+			sprintf (wrkBufr,"EPSG::%d",(int)epsgNbr);
 		    CS_stncp (elDef->key_nm,wrkBufr,cs_KEYNM_DEF);
 				
 			// Replace the ellipsoid key name in the dtDef structure with
@@ -817,7 +817,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
             epsgNbr = csMapNameToIdC (csMapDatumKeyName,csMapFlvrEpsg,nmFlavor,dtDef->name); 
 			if (epsgNbr > 0 && static_cast<unsigned long>(epsgNbr) != KcsNmInvNumber)
 			{
-				sprintf (wrkBufr,"EPSG::%u",epsgNbr);
+				sprintf (wrkBufr,"EPSG::%d",(int)epsgNbr);
 				CS_stncp (dtDef->key_nm,wrkBufr,cs_KEYNM_DEF);
 
 				// Replace the datum key name in the csDef structure with
@@ -839,7 +839,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
                 long lResult=sscanf (pszEpsgId,"EPSG ID %ld",&lEpsgNbr);
                 if (lResult!=0 && lResult!=EOF)
                 {
-					sprintf (wrkBufr,"EPSG::%u",lEpsgNbr);
+					sprintf (wrkBufr,"EPSG::%u",(unsigned)lEpsgNbr);
 					CS_stncp (dtDef->key_nm,wrkBufr,cs_KEYNM_DEF);
 
 					// Replace the datum key name in the csDef structure with
@@ -1016,7 +1016,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
         epsgNbr = csMapNameToIdC (csMapProjGeoCSys,csMapFlvrEpsg,nmFlavor,csDef->desc_nm); 
 		if (epsgNbr > 0 && static_cast<unsigned long>(epsgNbr) != KcsNmInvNumber)
 		{
-			sprintf (wrkBufr,"EPSG::%u",epsgNbr);
+			sprintf (wrkBufr,"EPSG::%u",(unsigned)epsgNbr);
 			CS_stncp (csDef->key_nm,wrkBufr,cs_KEYNM_DEF);
 
 	        // If the coordinate system name was truncated, it's not anymore.
@@ -1364,8 +1364,14 @@ int CSwktToCs (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Eldef_ 
 	primeMeridian = geogcs->ChildLocate (rcWktPrimeM);
 	if (primeMeridian != 0)
 	{
-		// Best I can tell, Prime Meridian values are always in degrees.
+		// For ESRI, the prime meridian is always given in degrees.  For
+		// Oracle9, Oracle10, and GeoTools, the prime meridian is
+		// given in system units.  Don't kno about the other flavors.
 		primeMeridianLongitude = primeMeridian->GetFieldDouble (0);
+		if (flavor == wktFlvrOracle || flavor == wktFlvrOracle9 || flavor == wktFlvrGeoTools)
+		{
+			primeMeridianLongitude *= geogcsUnitsFactor;
+		}
 	}
 
 	csDef->scl_red = cs_One;
@@ -1895,7 +1901,7 @@ int CSwktToCs (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Eldef_ 
 		if (cp == 0 || *cp == '\0') cp = "EPSG";
 		epsgCode = authority->GetFieldLong (0);
 		csDef->epsgNbr = static_cast<short>(epsgCode);
-		sprintf (reducedName,"%s:%ld",cp,epsgCode);
+		sprintf (reducedName,"%s:%d",cp,(int)epsgCode);
 		CS_stncp (csDef->key_nm,reducedName,sizeof (csDef->key_nm));
 	}
 
@@ -2069,7 +2075,7 @@ int CSwktToNerth (struct cs_Csdef_ *csDef,struct cs_Eldef_ *elDef,ErcWktFlavor f
 		if (cp == 0 || *cp == '\0') cp = "EPSG";
 		epsgCode = authority->GetFieldLong (0);
 		csDef->epsgNbr = static_cast<short>(epsgCode);
-		sprintf (reducedName,"%s:%ld",cp,epsgCode);
+		sprintf (reducedName,"%s:%d",cp,(int)epsgCode);
 		CS_stncp (csDef->key_nm,reducedName,sizeof (csDef->key_nm));
 	}
 
@@ -2297,7 +2303,7 @@ int CS_wktEleToDt (struct cs_Dtdef_ *dtDef,struct cs_Eldef_ *elDef,
 		if (cp == 0 || *cp == '\0') cp = "EPSG";
 		epsgCode = authority->GetFieldLong (0);
 		dtDef->epsgNbr = static_cast<short>(epsgCode);
-		sprintf (datumName,"%s:%ld",cp,epsgCode);
+		sprintf (datumName,"%s:%d",cp,(int)epsgCode);
 		CS_stncp (dtDef->key_nm,datumName,sizeof (dtDef->key_nm));
 	}
 
@@ -2424,7 +2430,7 @@ int CS_wktEleToEl (struct cs_Eldef_ *elDef,ErcWktFlavor flavor,const TrcWktEleme
 			if (cp == 0 || *cp == '\0') cp = "EPSG";
 			epsgCode = authority->GetFieldLong (0);
 			elDef->epsgNbr = static_cast<short>(epsgCode);
-			sprintf (ellipsoidName,"%s:%ld",cp,epsgCode);
+			sprintf (ellipsoidName,"%s:%d",cp,(int)epsgCode);
 			CS_stncp (elDef->key_nm,ellipsoidName,sizeof (elDef->key_nm));
 		}
 		CS_stncp (elDef->source,"Extracted from WKT string; 'Description' is full WKT name.",sizeof (elDef->source));

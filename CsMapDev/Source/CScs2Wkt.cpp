@@ -618,6 +618,50 @@ int EXP_LVL3 CScs2WktEx (char *csWktBufr,size_t bufrSize,enum ErcWktFlavor flavo
         }
 	}
 
+	/* We will always need the GEOGCS object.  If this is a geographic
+	   coordinate system definition, than that's all we'll need.  If this is
+	   a Projective coordinate system, the unit is the default for internal
+	   coordinates within CS-MAP, namely the degree.  Only if this is a 
+	   Geographic Coordinate system, is the actual unit of the definition
+	   of importance to us here.
+	   
+	   First we prepare a default if any of the stuff following it fails. */
+	csMapSt = csMapNameToNameC (csMapAngularUnitKeyName,cTemp,sizeof (cTemp),
+                                                        nmFlavor,
+												        csMapFlvrAutodesk,
+														"DEGREE");
+	if (csMapSt != csMapOk)
+	{
+		CS_stncp (cTemp,"Degree",sizeof (cTemp));
+	}
+	unitFactor = cs_One;
+
+	/* With the default determined, we proceed to genberate the more
+	   specific, if possible. */
+	if ((prjPtr->flags & cs_PRJFLG_GEOGR) == 0)
+	{
+		// This little bit of redundant nonsense is retained so as to prevent
+		// a regression tester from producing thousands of regression failures.
+		// TODO: A refactoring of all WKT code to remove nonsense like this is
+		// on the proposed schedule; we'll remove it at that time.
+		sprintf (unitWkt,"UNIT[\"%s\",0.017453292519943295]",cTemp);
+	}
+	else
+	{
+		/* This is a geographic coordinate system, extract the unit information
+		   from the definition. */
+		unitFactor = CS_unitlu (cs_UTYP_ANG,cs_def->unit);
+		csMapSt = csMapNameToNameC (csMapAngularUnitKeyName,cTemp,sizeof (cTemp),
+															nmFlavor,
+															csMapFlvrAutodesk,
+															cs_def->unit);
+		if (csMapSt != csMapOk)
+		{
+			CS_stncp (cTemp,cs_def->unit,sizeof (cTemp));
+		}
+		sprintf (unitWkt,"UNIT[\"%s\",%.14f]",cTemp,unitFactor * cs_Degree);
+	}
+
 	/* Manufacture the prime meridian.  Produce the default value first in
 	   case anything goes wrong.  In CS-MAP, all projective parameters are in
 	   degrees referenced to greenwich.  Thus, the only time we need a
@@ -627,90 +671,68 @@ int EXP_LVL3 CScs2WktEx (char *csWktBufr,size_t bufrSize,enum ErcWktFlavor flavo
 	if (((prjPtr->flags & cs_PRJFLG_GEOGR) != 0 || prjPtr->code == cs_PRJCOD_KROVAK) && cs_def->org_lng != 0.0)
 	{
 		int orgLng = (int)cs_def->org_lng;
+		kCp = 0;				// redundant, but it keeps lint happy.
 		switch (orgLng) {
 		case 0:
 			primeMer = 0.0;
-			CS_stncp (pmerWkt,"PRIMEM[\"Greenwich\",0]",sizeof (pmerWkt));
+			kCp = "Greenwich";
 			break;
 		case 2:
 			primeMer = 2.337229166666667;
-			CS_stncp (pmerWkt,"PRIMEM[\"Paris\",2.337229166666667]",sizeof (pmerWkt));
+			kCp = "Paris";
 			break;
 		case 4:
 			primeMer = 4.367975;
-			CS_stncp (pmerWkt,"PRIMEM[\"Brussels\",4.367975]",sizeof (pmerWkt));
+			kCp = "Brussels";
 			break;
 		case 7:
 			primeMer = 7.439583333333333;
-			CS_stncp (pmerWkt,"PRIMEM[\"Bern\",7.439583333333333]",sizeof (pmerWkt));
+			kCp = "Bern";
 			break;
 		case 9:
 			primeMer = 9.13190611111111;
-			CS_stncp (pmerWkt,"PRIMEM[\"Lisbon\",9.13190611111111]",sizeof (pmerWkt));
+			kCp = "Lisbon";
 			break;
 		case 10:
 			primeMer = 10.72291666666667;
-			CS_stncp (pmerWkt,"PRIMEM[\"Oslo\",10.72291666666667]",sizeof (pmerWkt));
+			kCp = "Oslo";
 			break;
 		case 12:
 			primeMer = 12.45233333333333;
-			CS_stncp (pmerWkt,"PRIMEM[\"Rome\",12.45233333333333]",sizeof (pmerWkt));
+			kCp = "Rome";
 			break;
 		case 18:
 			primeMer = 18.05082777777778;
-			CS_stncp (pmerWkt,"PRIMEM[\"Stockholm\",18.05082777777778]",sizeof (pmerWkt));
+			kCp = "Stockholm";
 			break;
 		case 106:
 			primeMer = 106.8077194444444;
-			CS_stncp (pmerWkt,"PRIMEM[\"Jakarta\",106.8077194444444]",sizeof (pmerWkt));
+			kCp = "Jakarta";
 			break;
 		case -3:
 			primeMer = -3.68793888888889;
-			CS_stncp (pmerWkt,"PRIMEM[\"Madrid\",-3.68793888888889]",sizeof (pmerWkt));
+			kCp = "Madrid";
 			break;		
 		case -17:
 			primeMer = -17.666666666666667;
-			CS_stncp (pmerWkt,"PRIMEM[\"Ferro\",-17.66666666666667]",sizeof (pmerWkt));
+			kCp = "Ferro";
 			break;
 		case -74:
 			primeMer = -74.08175;
-			CS_stncp (pmerWkt,"PRIMEM[\"Bogota\",-74.08175]",sizeof (pmerWkt));
+			kCp = "Bogota";
 			break;
 		default:
+			kCp = 0;
 			break;
 		}
-	}
-
-	/* We will always need the GEOGCS object.  If this is a geographic
-	   coordinate system definition, than that's all we'll need.  If this is
-	   a Projective coordinate system, the unit is the default for internal
-	   coordinates within CS-MAP, namely the degree.  Only if this is a 
-	   Geographic Coordinate system, is the actual unit of the definition
-	   of importance to us here. */
-	csMapSt = csMapNameToNameC (csMapAngularUnitKeyName,cTemp,sizeof (cTemp),
-                                                        nmFlavor,
-												        csMapFlvrAutodesk,
-														"DEGREE");
-	if (csMapSt != csMapOk)
-	{
-		CS_stncp (cTemp,"Degree",sizeof (cTemp));
-	}
-	sprintf (unitWkt,"UNIT[\"%s\",0.017453292519943295]",cTemp);
-
-	if ((prjPtr->flags & cs_PRJFLG_GEOGR) != 0)
-	{
-		/* This is a geographic coordinate system, extract the unit information
-		   from the definition. */
-		unitFactor = CS_unitlu (cs_UTYP_ANG,cs_def->unit) * cs_Degree;
-		csMapSt = csMapNameToNameC (csMapAngularUnitKeyName,cTemp,sizeof (cTemp),
-															nmFlavor,
-															csMapFlvrAutodesk,
-															cs_def->unit);
-		if (csMapSt != csMapOk)
+		if (kCp != 0)
 		{
-			CS_stncp (cTemp,cs_def->unit,sizeof (cTemp));
+			if (flavor == wktFlvrOracle || flavor == wktFlvrOracle9 || flavor == wktFlvrGeoTools)
+			{
+				primeMer /= unitFactor;
+			}
+			sprintf (pmerWkt,"PRIMEM[\"%s\",%18.13f]",kCp,primeMer);
 		}
-		sprintf (unitWkt,"UNIT[\"%s\",%.14f]",cTemp,unitFactor);
 	}
 
 	/* If we are mapping names, the GCS name and the Datum name need to be
