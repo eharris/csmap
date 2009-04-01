@@ -1009,14 +1009,14 @@ void CSwriteDatumCatalogEntry (struct csDatumCatalogEntry_* __This,FILE *fstr,Co
 		cp = extra;
 		if (__This->bufferSize != 0)
 		{
-			cp += CS_sprintf (cp,"%ld",__This->bufferSize);
+			cp += CS_sprintf (cp,"%d",(int)__This->bufferSize);
 		}
 		if (__This->flags != 0 || __This->density != 0.0)
 		{
 			*cp++ = ',';
 			if (__This->flags != 0)
 			{
-				cp += CS_sprintf (cp,"%#lx",__This->flags);
+				cp += CS_sprintf (cp,"%#x",(unsigned)__This->flags);
 			}
 			if (__This->density != 0.0)
 			{

@@ -85,7 +85,6 @@ static int kmsPolynomial (double Xin,double Yin,double *xout,double *yout,Const 
 int EXP_LVL9 CSsys34Q (	Const struct cs_Csdef_ *cs_def,unsigned short prj_code,int err_list [],int list_sz)
 {
 	extern double cs_One;			/*    1.0 */
-	extern double cs_Three;			/*    3.0 */
 
 	short ok;
 	int err_cnt;
@@ -162,11 +161,6 @@ void EXP_LVL9 CSsys34S (struct cs_Csprm_ *csprm)
 	extern double cs_One;				/*   1.0 */
 	extern double cs_Nine;				/*   9.0 */
 	extern double cs_K15;				/*  15.0 */
-	extern double cs_EETest;			/* .001 seconds of arc
-										   short of 90 degrees
-										   in radians; used to
-										   test for excessive
-										   eastern longitude. */
 
 	struct cs_Sys34_ *sys34;
 

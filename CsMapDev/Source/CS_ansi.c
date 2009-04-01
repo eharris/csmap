@@ -34,6 +34,9 @@
 /*lint -esym(715,buffer,mode,size,stream) */      /* Unreferenced parameters */
 
 #include "cs_map.h"
+#include <ctype.h>
+#include <wchar.h>
+#include <wctype.h>
 #if !defined(__WINCE__)
 #	include <sys/types.h>
 #	include <sys/stat.h>
@@ -144,7 +147,23 @@ int EXP_LVL3 CS_stricmp (Const char* cp1,Const char *cp2)
 	}
 	return (result);
 }
+int EXP_LVL3 CS_wcsicmp (Const wchar_t* cp1,Const wchar_t *cp2)
+{
+	wint_t wc1, wc2;
+	int result;
 
+	result = 0;
+	while (result == 0)
+	{
+		wc1 = *cp1++;
+		wc2 = *cp2++;
+		if (iswupper (wc1)) wc1 = (wint_t)towlower (wc1); 
+		if (iswupper (wc2)) wc2 = (wint_t)towlower (wc2);
+		result = (int)(wc1 - wc2);
+		if (wc1 == '\0' || wc2 == '\0') break;
+	}
+	return (result);
+}
 int EXP_LVL9 CS_access (Const char *path,int mode)
 {
 	/* While it is required for a most any non-trivial

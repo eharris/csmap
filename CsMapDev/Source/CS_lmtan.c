@@ -447,8 +447,6 @@ int EXP_LVL9 CSlmtanI (Const struct cs_Lmtan_ *lmtan,double ll [2],Const double 
 	extern double cs_Zero;				/* 0.0 */
 	extern double cs_One;				/* 1.0 */
 	extern double cs_Two;				/* 2.0 */
-	extern double cs_AnglTest;			/* 0.001 arc seconds,
-										   in radians. */
 
 	int i_cnt;
 	int rtn_val;

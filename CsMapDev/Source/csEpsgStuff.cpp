@@ -32,10 +32,6 @@
 #include "csCsvFileSupport.hpp"
 #include "csEpsgStuff.h"
 
-#ifndef _WIN32
-#define _wcsicmp wcscasecmp
-#endif
-
 extern "C" double cs_Zero;
 extern "C" double cs_One;
 
@@ -1331,7 +1327,7 @@ EcsEpsgTable GetEpsgTableId (const wchar_t* tableName)
 	
 	for (tblPtr = KcsEpsgTblMap;tblPtr->TableId != epsgTblUnknown;++tblPtr)
 	{
-		if (!_wcsicmp (tableName,tblPtr->TableName))
+		if (!CS_wcsicmp (tableName,tblPtr->TableName))
 		{
 		    tableId = tblPtr->TableId;
 			break;
@@ -1370,7 +1366,7 @@ EcsCsysType GetEpsgCsysType (const wchar_t* csysTypeName)
 	rtnValue = epsgCsysTypUnknown;
 	for (tblPtr = KcsEpsgCsysTypeMap;tblPtr->CsysType != epsgCsysTypUnknown;++tblPtr)
 	{
-		if (!_wcsicmp (csysTypeName,tblPtr->CsysTypeName))
+		if (!CS_wcsicmp (csysTypeName,tblPtr->CsysTypeName))
 		{
 			rtnValue = tblPtr->CsysType;
 			break;
@@ -1387,7 +1383,7 @@ EcsCrsType GetEpsgCrsType (const wchar_t* crsTypeName)
 	rtnValue = epsgCrsTypUnknown;
 	for (tblPtr = KcsEpsgCrsTypeMap;tblPtr->CrsType != epsgCrsTypUnknown;++tblPtr)
 	{
-		if (!_wcsicmp (crsTypeName,tblPtr->CrsTypeName))
+		if (!CS_wcsicmp (crsTypeName,tblPtr->CrsTypeName))
 		{
 			rtnValue = tblPtr->CrsType;
 			break;
@@ -1404,7 +1400,7 @@ EcsOpType GetEpsgOpType (const wchar_t* opTypeName)
 	rtnValue = epsgOpTypUnknown;
 	for (tblPtr = KcsEpsgOpTypeMap;tblPtr->OpType != epsgOpTypUnknown;++tblPtr)
 	{
-		if (!_wcsicmp (opTypeName,tblPtr->OpTypeName))
+		if (!CS_wcsicmp (opTypeName,tblPtr->OpTypeName))
 		{
 			rtnValue = tblPtr->OpType;
 			break;
@@ -1421,7 +1417,7 @@ EcsDtmType GetEpsgDtmType (const wchar_t* dtmTypeName)
 	rtnValue = epsgDtmTypUnknown;
 	for (tblPtr = KcsEpsgDtmTypeMap;tblPtr->DtmType != epsgDtmTypUnknown;++tblPtr)
 	{
-		if (!_wcsicmp (dtmTypeName,tblPtr->DtmTypeName))
+		if (!CS_wcsicmp (dtmTypeName,tblPtr->DtmTypeName))
 		{
 			rtnValue = tblPtr->DtmType;
 			break;
@@ -1438,7 +1434,7 @@ EcsUomType GetEpsgUomType (const wchar_t* uomTypeName)
 	rtnValue = epsgUomTypUnknown;
 	for (tblPtr = KcsEpsgUomTypeMap;tblPtr->UomType != epsgUomTypUnknown;++tblPtr)
 	{
-		if (!_wcsicmp (uomTypeName,tblPtr->UomTypeName))
+		if (!CS_wcsicmp (uomTypeName,tblPtr->UomTypeName))
 		{
 			rtnValue = tblPtr->UomType;
 			break;
@@ -1465,7 +1461,7 @@ EcsOrientation GetOrientation (const wchar_t* orntTypeName)
 		}
 		wcsncpy (cmpBufr,orntTypeName,cmpCount);
 		cmpBufr [cmpCount] = L'\0';
-		if (_wcsicmp (cmpBufr,tblPtr->OrntTypeName) == 0)
+		if (CS_wcsicmp (cmpBufr,tblPtr->OrntTypeName) == 0)
 		{
 			rtnValue = tblPtr->OrntType;
 			break;
@@ -1896,7 +1892,7 @@ bool TcsEpsgTable::EpsgLocateCode (TcsEpsgCode& epsgCode,EcsEpsgField fieldId,co
 			ok = GetField (fldData,recNbr,deprecatedFldNbr);
 			if (ok)
 			{
-				deprecated = (_wcsicmp (fldData.c_str (),LogicalTrue) == 0);
+				deprecated = (CS_wcsicmp (fldData.c_str (),LogicalTrue) == 0);
 				if (deprecated)
 				{
 					continue;
@@ -1908,7 +1904,7 @@ bool TcsEpsgTable::EpsgLocateCode (TcsEpsgCode& epsgCode,EcsEpsgField fieldId,co
 			ok = GetField (fldData,recNbr,locateFldNbr);
 			if (ok)
 			{
-				if (_wcsicmp (fldData.c_str (),fldValue) == 0)
+				if (CS_wcsicmp (fldData.c_str (),fldValue) == 0)
 				{
 					ok = GetField (fldData,recNbr,codeFldNbr);
 					if (ok)
@@ -2016,7 +2012,7 @@ bool TcsEpsgTable::IsDeprecated (void)
 			ok = GetField (fldData,fieldNbr);
 			if (ok)
 			{
-				deprecated = (_wcsicmp (fldData.c_str (),LogicalTrue) == 0);
+				deprecated = (CS_wcsicmp (fldData.c_str (),LogicalTrue) == 0);
 			}
 		}
 	}
@@ -2086,7 +2082,7 @@ bool TcsEpsgTable::GetAsLogical (bool& result,short fieldNbr)
 	bool ok = TcsCsvFileBase::GetField (fldValue,CurrentRecordNbr,fieldNbr,CsvStatus);
 	if (ok)
 	{
-		result = !_wcsicmp (fldValue.c_str(),LogicalTrue);
+		result = !CS_wcsicmp (fldValue.c_str(),LogicalTrue);
 	}
 	return ok;
 }
@@ -3077,7 +3073,7 @@ TcsEpsgCode TcsEpsgDataSetV6::LocateOperation (EcsOpType opType,TcsEpsgCode sour
 				ok = copTblPtr->GetField (fldData,deprecatedFldNbr);
 				if (ok)
 				{
-					if (_wcsicmp (fldData.c_str (),TcsEpsgTable::LogicalTrue) == 0)
+					if (CS_wcsicmp (fldData.c_str (),TcsEpsgTable::LogicalTrue) == 0)
 					{
 						ok = copTblPtr->PositionToNext (epsgFldSourceCrsCode,sourceCode);
 						continue;

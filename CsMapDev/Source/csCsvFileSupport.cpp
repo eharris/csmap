@@ -25,11 +25,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+// The original intent of the designers of this module was to keep this module
+// completely independent of CS-MAP.  However, since ANSI seem to be obstinant
+// about adding wcsicmp to the standard, we need access to the CS_wcsicmp
+// function in CS-MAP.  We could have duplicated the CS_wcsicmp code here, but
+// we chose not to.  Anyway, wcsicmp is the only reason cs_map.h is included
+// here (at least as of this writing: March 2009).
+#include "cs_map.h"
 #include "csCsvFileSupport.hpp"
-
-#ifndef _WIN32
-#define _wcsicmp wcscasecmp
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // csGetCsvRecord -- Extracts a record from a .csv file as a wstring.
@@ -1554,7 +1557,7 @@ bool TcsCsvFileBase::Locate (unsigned& recordNumber,short fieldNbr,const wchar_t
 			}
 			else
 			{
-				match = (_wcsicmp (field.c_str (),srchString) == 0);
+				match = (CS_wcsicmp (field.c_str (),srchString) == 0);
 			}
 			if (match)
 			{
@@ -1610,7 +1613,7 @@ bool TcsCsvFileBase::LocateNext (unsigned& recordNumber,short fieldNbr,const wch
 				}
 				else
 				{
-					match = (_wcsicmp (field.c_str (),srchString) == 0);
+					match = (CS_wcsicmp (field.c_str (),srchString) == 0);
 				}
 				if (match)
 				{

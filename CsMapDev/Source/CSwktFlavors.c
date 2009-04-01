@@ -43,7 +43,7 @@ long32_t CSepsgOpCodeMap (const char *wktName,enum ErcWktFlavor flavor)
 	long epsgOpCode;
 	char* cPtr;
 	char* dummy;
-	struct cs_EpsgOpMthMap_ *tblPtr;
+	const struct cs_EpsgOpMthMap_ *tblPtr;
 	
 	/* Kludge to handle the use of an EPSG Coordinate Operation Code as a
 	   projection specification. */

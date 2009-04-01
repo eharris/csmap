@@ -63,5 +63,6 @@ CStestSupport.o \
 CStestT.o
 
 CS_Test : $(TEST_OBJ)
-	gcc -v -oCS_Test $(TEST_OBJ) ../Source/CsMap.a -lm -lc -lgcc -lstdc++
+	gcc -v -o CS_Test $(TEST_OBJ) ../Source/CsMap.a -lm -lc -lgcc -lstdc++
+
 

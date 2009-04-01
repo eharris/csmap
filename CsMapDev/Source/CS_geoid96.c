@@ -65,7 +65,7 @@ void CSinitGeoid96 (struct csGeoid96GridFile_ *__This)
 /*****************************************************************************
 	Constructor
 */
-struct csGeoid96GridFile_* CSnewGeoid96GridFile (Const char *path,long bufferSize,unsigned long flags,double density)
+struct csGeoid96GridFile_* CSnewGeoid96GridFile (Const char *path,long32_t bufferSize,ulong32_t flags,double density)
 {
 	extern char cs_DirsepC;
 	extern char cs_ExtsepC;

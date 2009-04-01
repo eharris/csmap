@@ -490,8 +490,6 @@ double CStestEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,Const double
 */
 int CScalcEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,double* ll89,Const double *ll50,struct csLLGridCellCache_ *cachePtr)
 {
-	extern char cs_DirsepC;
-	extern char cs_ExtsepC;
 	extern char csErrnam [];
 
 	int status;
