@@ -3273,8 +3273,8 @@ InternalId,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMap
 100102719,0,102719,0,0,0,0,,,,,,NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet,,,,,,,,,,,,,0,0,0
 100102720,0,102720,0,0,0,41094,,ND83-NF,NAD83.ND-N.USFt,ND83-NF,,NAD_1983_StatePlane_North_Dakota_North_FIPS_3301_Feet,,,,,,,,"North Dakota 3301, Northern Zone (1983, US Survey feet)",,,,,0,0,0
 100102721,0,102721,0,0,0,41097,,ND83-SF,NAD83.ND-S.USFt,ND83-SF,,NAD_1983_StatePlane_North_Dakota_South_FIPS_3302_Feet,,,,,,,,"North Dakota 3302, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-100102722,0,102722,0,0,0,41100,,OH83-NF,NAD83.OH-N.USFt,OH83-NF,,NAD_1983_StatePlane_Ohio_North_FIPS_3401_Feet,,,,,,,,"Ohio 3401, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-100102723,0,102723,0,0,0,41103,,OH83-SF,NAD83.OH-S.USFt,OH83-SF,,NAD_1983_StatePlane_Ohio_South_FIPS_3402_Feet,,,,,,,,"Ohio 3402, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+3734,3734,102722,0,0,0,41100,,OH83-NF,NAD83.OH-N.USFt,OH83-NF,NAD83 / Ohio North (ftUS),NAD_1983_StatePlane_Ohio_North_FIPS_3401_Feet,,,,,,,,"Ohio 3401, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+3735,3735,102723,0,0,0,41103,,OH83-SF,NAD83.OH-S.USFt,OH83-SF,NAD83 / Ohio South (ftUS),NAD_1983_StatePlane_Ohio_South_FIPS_3402_Feet,,,,,,,,"Ohio 3402, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 100102724,0,102724,0,0,0,0,,,,,,NAD_1983_StatePlane_Oklahoma_North_FIPS_3501_Feet,,,,,,,,,,,,,0,0,0
 100102725,0,102725,0,0,0,0,,,,,,NAD_1983_StatePlane_Oklahoma_South_FIPS_3502_Feet,,,,,,,,,,,,,0,0,0
 100102726,0,102726,0,0,0,41112,,OR83-NF,NAD83.OR-N.USFt,OR83-NF,,NAD_1983_StatePlane_Oregon_North_FIPS_3601_Feet,,,,,,,,"Oregon 3601, Northern Zone (1983, US Survey feet)",,,,,0,0,0
@@ -3304,10 +3304,10 @@ InternalId,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMap
 100102752,0,102752,0,0,0,0,,,,,,NAD_1983_StatePlane_Wisconsin_North_FIPS_4801_Feet,,,,,,,,,,,,,0,0,0
 100102753,0,102753,0,0,0,0,,,,,,NAD_1983_StatePlane_Wisconsin_Central_FIPS_4802_Feet,,,,,,,,,,,,,0,0,0
 100102754,0,102754,0,0,0,0,,,,,,NAD_1983_StatePlane_Wisconsin_South_FIPS_4803_Feet,,,,,,,,,,,,,0,0,0
-100102755,0,102755,0,0,0,82449,,WY83-EF,NAD83.WY-E.USFt,WY83-EF,,NAD_1983_StatePlane_Wyoming_East_FIPS_4901_Feet,,,,,,,,"Wyoming 4901, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-100102756,0,102756,0,0,0,82452,,WY83-ECF,NAD83.WY-EC.USFt,WY83-ECF,,NAD_1983_StatePlane_Wyoming_East_Central_FIPS_4902_Feet,,,,,,,,"Wyoming 4902, East Central Zone (1983, US Survey feet)",,,,,0,0,0
-100102757,0,102757,0,0,0,82455,,WY83-WCF,NAD83.WY-WC.USFt,WY83-WCF,,NAD_1983_StatePlane_Wyoming_West_Central_FIPS_4903_Feet,,,,,,,,"Wyoming 4903, West Central Zone (1983, US Survey feet)",,,,,0,0,0
-100102758,0,102758,0,0,0,82458,,WY83-WF,NAD83.WY-W.USFt,WY83-WF,,NAD_1983_StatePlane_Wyoming_West_FIPS_4904_Feet,,,,,,,,"Wyoming 4904, Western Zone (1983, US Survey feet)",,,,,0,0,0
+3736,3736,102755,0,0,0,82449,,WY83-EF,NAD83.WY-E.USFt,WY83-EF,NAD83 / Wyoming East (ftUS),NAD_1983_StatePlane_Wyoming_East_FIPS_4901_Feet,,,,,,,,"Wyoming 4901, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+3737,3737,102756,0,0,0,82452,,WY83-ECF,NAD83.WY-EC.USFt,WY83-ECF,NAD83 / Wyoming East Central (ftUS),NAD_1983_StatePlane_Wyoming_East_Central_FIPS_4902_Feet,,,,,,,,"Wyoming 4902, East Central Zone (1983, US Survey feet)",,,,,0,0,0
+3738,3738,102757,0,0,0,82455,,WY83-WCF,NAD83.WY-WC.USFt,WY83-WCF,NAD83 / Wyoming West Central (ftUS),NAD_1983_StatePlane_Wyoming_West_Central_FIPS_4903_Feet,,,,,,,,"Wyoming 4903, West Central Zone (1983, US Survey feet)",,,,,0,0,0
+3739,3739,102758,0,0,0,82458,,WY83-WF,NAD83.WY-W.USFt,WY83-WF,NAD83 / Wyoming West (ftUS),NAD_1983_StatePlane_Wyoming_West_FIPS_4904_Feet,,,,,,,,"Wyoming 4904, Western Zone (1983, US Survey feet)",,,,,0,0,0
 100102761,0,102761,0,0,0,41125,,PR83F,NAD83.PR.USFt,PR83F,,NAD_1983_StatePlane_Puerto_Rico_Virgin_Islands_FIPS_5200_Feet,,,,,,,,"Puerto Rico and Virgin Islands 5200 (1983, US Survey feet)",,,,,0,0,0
 100102763,0,102763,0,0,0,0,,,,,,NAD_1983_StatePlane_Kentucky_FIPS_1600_Feet,,,,,,,,,,,,,0,0,0
 100102766,0,102766,0,0,0,0,,,NAD83.Guam/Polyconic.USFt,,,NAD_1983_StatePlane_Guam_FIPS_5400_Feet,,,,,,,,,,,,,0,0,0
