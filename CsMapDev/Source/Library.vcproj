@@ -21,8 +21,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)lib80\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)..\lib80\$(ConfigurationName)"
+			IntermediateDirectory="$(ProjectDir)..\obj80\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;$(TargetPath)"
@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE"
 				StringPooling="false"
 				MinimalRebuild="false"
@@ -59,7 +59,7 @@
 				PrecompiledHeaderFile="$(IntDir)\cs_map.pch"
 				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
 				BrowseInformation="0"
-				WarningLevel="3"
+				WarningLevel="4"
 				WarnAsError="false"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -172,8 +172,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)lib80\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)..\lib80\$(ConfigurationName)"
+			IntermediateDirectory="$(ProjectDir)..\obj80\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			DeleteExtensionsOnClean=" *.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;$(TargetPath)"
@@ -197,7 +197,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE"
 				StringPooling="true"
 				MinimalRebuild="false"
@@ -903,6 +903,10 @@
 			</File>
 			<File
 				RelativePath=".\csEpsgStuff.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\csEpsgSupport.cpp"
 				>
 			</File>
 			<File

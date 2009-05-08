@@ -51,7 +51,7 @@ enum EcsCsvStatus {    csvOk = 0,          // Unremarkable completion
 										   // escape character
 					   csvAmbigQuote,      // nonspace data after quote, before
 										   // separator.
-					   csvInternal,        // Internal erro rin parser.
+					   csvInternal,        // Internal error in parser.
 					   csvInvRecordId,     // Record key value failed to match
 										   // an existing record.
 					   csvNoRecords,       // No records in the CsvFile object
@@ -71,14 +71,14 @@ enum EcsCsvStatus {    csvOk = 0,          // Unremarkable completion
 				  };
 //newPage//
 // Standalone function support.
-// csGetCsvRecord extracts a csvRecord from a stream, allowing for new lines in a quoted field.
-// csCsvFieldParse parses a csvRecord returning a vector of std::wstrings representing the individual fields.
-// csCsvQuoter quotes a field, if necessary, for output.
-// csCsvQuoteCsvField quotes a field, if necessary, for output. 
+//	csGetCsvRecord: extracts a csvRecord from a stream, allowing for new lines in a quoted field.
+//	csCsvFieldParse: parses a csvRecord returning a vector of std::wstrings representing the individual fields.
+//	csCsvQuoter: quotes a field in place, if necessary, for output.
+//	csQuoteCsvField: returns a quoted a field, only quoted if necessary, for output.
 EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const wchar_t* delimiters = 0);
 EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstring& csvRecord,const wchar_t *delimiters = 0);
-void csCsvQuoter (char* csvField,size_t csvSize,const char* delimiters = 0);
-void csCsvQuoter (std::wstring& csvField,bool forceIt = false,const wchar_t* delimiters = 0);
+bool csCsvQuoter (char* csvField,size_t csvSize,const char* delimiters = 0);
+bool csCsvQuoter (std::wstring& csvField,bool forceIt = false,const wchar_t* delimiters = 0);
 std::wstring csQuoteCsvField (const std::wstring& csvField,bool forceIt = false,const wchar_t* delimiters = 0);
 //newPage//
 //=============================================================================
@@ -173,11 +173,16 @@ private:
 //
 // Create an object of this type to specify the fields which are to be used in
 // a CSV file sort operation.  Then provide the object to the CSV file sort
-// function.
+// function.  Note that the sort field numbers are public members.
 //
 class TcsCsvSortFunctor
 {
 public:
+	enum EcsCsvCmpType { csCmpTypString = 0,
+						 csCmpTypStringI,
+						 csCmpTypInteger,
+						 csCmpTypeReal
+					   };
 	//=============================================================================
 	// Construction  /  Destruction  /  Assignment
 	TcsCsvSortFunctor (short first,short second = -1,short third = -1,short fourth = -1);
@@ -194,6 +199,12 @@ public:
 	short ThirdField;
 	short FourthField;
 	TcsCsvStatus CsvStatus;
+private:
+	enum EcsCmpResult { cmpLessThan    = -1,
+						cmpEqualTo     =  0,
+						cmpGreaterThan =  1
+					  };
+	EcsCmpResult CsvFieldCompare (const std::wstring& fieldOne,const std::wstring& fieldTwo) const;						
 };
 //newPage//
 //=============================================================================
@@ -209,6 +220,7 @@ class TcsCsvFileBase
 protected:
 	static const unsigned InvalidRecordNbr;
 public:
+	static unsigned GetInvalidRecordNbr (void);
 	//=========================================================================
 	// Construction, Destruction, and Assignment
 	TcsCsvFileBase (bool firstIsLabels,short minFldCnt,short maxFldCnt,const wchar_t* delimeters = 0);
@@ -225,7 +237,6 @@ public:
 	bool SetDelimiters (const wchar_t* delimiters = 0);
 	void SetObjectName (const std::wstring& objectName);
 	unsigned RecordCount (void) const;
-	unsigned GetInvalidRecordNbr (void);
 	short FieldCount (unsigned recordNbr) const;
 	short GetFldNbr (const wchar_t* fieldId,TcsCsvStatus& status) const;
 	bool GetFieldId (std::wstring& filedId,short fieldNbr,TcsCsvStatus& status) const;
@@ -254,6 +265,8 @@ public:
 	unsigned LowerBound (const TcsCsvRecord& searchRec,const TcsCsvSortFunctor& functor);
 	bool ReadFromStream (std::wistream& iStrm,bool firstIsLabels,TcsCsvStatus& status);
 	bool WriteToStream (std::wostream& oStrm,bool writeLabels,TcsCsvStatus& status) const;
+	const wchar_t* GetObjectName (void) const;
+	void GetObjectName (std::wstring& objName) const;
 protected:
 	//=========================================================================
 	// Protected Named Member Functions

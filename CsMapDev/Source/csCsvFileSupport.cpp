@@ -25,12 +25,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+//lint -esym(534,TcsCsvFileBase::SetDelimiters)		(ignoring return value)
+//lint -esym(534,TcsCsvRecord::SetMinFldCnt)		(ignoring return value)
+//lint -esym(534,TcsCsvRecord::SetMaxFldCnt)		(ignoring return value)
+
 // The original intent of the designers of this module was to keep this module
 // completely independent of CS-MAP.  However, since ANSI seem to be obstinant
 // about adding wcsicmp to the standard, we need access to the CS_wcsicmp
 // function in CS-MAP.  We could have duplicated the CS_wcsicmp code here, but
 // we chose not to.  Anyway, wcsicmp is the only reason cs_map.h is included
-// here (at least as of this writing: March 2009).
+// here (at least as of this writing: March 2009).  If the include of
+// "cs_map.h" is removed for any reason, you'll need to add and include of
+// <math.h> to get this to complie.
 #include "cs_map.h"
 #include "csCsvFileSupport.hpp"
 
@@ -53,6 +59,7 @@
 // csvInvRecord     -> invalid record format with regard to quoted fields
 // csvInternal      -> internal state machine failure
 //
+//lint -save -esym(788,done,error)  enumeration names not used in switch
 EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const wchar_t* delimiters)
 {
     EcsCsvStatus csvStatus = csvOk;
@@ -201,13 +208,14 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
     }
     return csvStatus;
 }
+//lint -restore
 ///////////////////////////////////////////////////////////////////////////////
 // csCsvFieldParse  --  Parses a CSV record into separate fields.
 //
 // The following does a CSV parse.  Note that:
 //
-// 1> there MUST NOT be a trailing line break in the provided field
-//    argument.  
+// 1> there MUST NOT be a trailing line break in the provided csvRecord
+//    argument.
 // 2> the delimiters argument can provide user specified delimeters:
 //		[0] == separator
 //		[1] == quote
@@ -246,13 +254,15 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 //  csvTooManyFields -> Record appeared to have more than 300 fields.
 //  csvInternal      -> Internal error in parser
 //
-//	10,000 character limit and 300 field limit were arbitrarily chosen simply
-//	to prevent infinte loop/crash when processing a completely bogus file;
-//	that is bogus from a CSV standpoint of view.
+//..10,000 character limit and 300 field limit were arbitrarily chosen simply
+//..to prevent infinte loop/crash when processing a completely bogus file;
+//..that is bogus from a CSV standpoint of view.
 //
 //  The function itself does not throw, but obviously uses std::vector and
 //  std::wstring STL components which may throw under wierd circumstances.
 //
+//lint -save
+//lint -esym(788,csvState::csvDone,csvState::csvError)  // enumeration values not used in switch
 EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstring& csvRecord,const wchar_t *delimiters)
 {
 	EcsCsvStatus status = csvOk;
@@ -334,11 +344,13 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 					// data for the field.
 					state = (escape == quote) ? csvQuoted : csvQuotedEsc;
 				}
-				else if (wc != L' ')
+				else if (!iswspace (wc))
 				{
 					// Not whitespace, and not a quote.  Must be the beginning
 					// of a non-quoted field.  We start a new field by stashing
-					// a pointer to the first character of the real data.
+					// the value of the current field (which may be empty) and
+					// initializing the std::wstring field object with the new
+					// value.
 					if (wc == separator)
 					{
 						// If the first character of the data is the separator,
@@ -348,6 +360,7 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 					}
 					else
 					{
+						// We have an unquoted field to extract.
 						state = csvUnQuoted;
 						field += wc;
 					}
@@ -444,7 +457,7 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 				{
 					state = csvBegTrim;
 				}
-				else if (wc != L' ')
+				else if (!iswspace (wc))
 				{
 					state = csvError;
 					status = csvAmbigQuote;
@@ -471,80 +484,101 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 	}
 	return status;
 }
-///////////////////////////////////////////////////////////////////////////////
+//lint -restore
+////////////////////////////////////////////////////////////////
 // The following will quote an 8 bit character array, if needed; in place,  For
 // example, if the string has a separator character in it, it will be quoted.
 // Also, any existing quote in the string will be doubled up.  The delimiters
 // argument is used as described above for csCsvFieldParse.
 //
+// The function returns true if the field was indeed quoted.
+//
 // Note that:
-// 1> as currently written, this function will convert line breaks to a single
+// 1> This function will not quote any field whose quoted length is longer
+//    than 4095 characters.  This rather generous limitation removes the need
+//    for a memory allocation which, therefore, improves performance and
+//    removes the possibility of a throw due memory allocation failure.
+// 2> as currently written, this function will convert line breaks to a single
 //    space.  This may not be desirable in all cases.
+// 3> if the field is already quoted, it will be quoted again.
 //
 // The function does not throw, nor does it call anything that might throw.
-void csCsvQuoter (char* csvField,size_t csvSize,const char* delimiters)
+//lint -save -esym(534,*::insert,*::replace,*::append)
+bool csCsvQuoter (char* csvField,size_t csvSize,const char* delimiters)
 {
-	bool quoteNeeded = false;
+	bool quoteNeeded (false);
 
 	char cc;
-	char *srcPtr = csvField;
+	char *srcPtr;
 	char *trgPtr;
+	char *lstPtr;
 
     char myBuffer [4096];
-    
+
    	char separator = ',';
 	char quote     = '\"';
 	char escape    = '\"';
 
-	// Process the user supplied delimiters, if any.
-	if (delimiters != 0)
+	// Prevent a crash to the degree reasonable.
+	if (csvField != 0 && *csvField != '\0' && csvSize >= 4)
 	{
-		if (*delimiters != L'\0')
+		// Process the user supplied delimiters, if any.
+		if (delimiters != 0)
 		{
-			separator = *delimiters;
-			if (*(delimiters + 1) != L'\0')
+			if (*delimiters != '\0')
 			{
-				quote = *(delimiters + 1);
-				if (*(delimiters + 2) != L'\0')
+				separator = *delimiters;
+				if (*(delimiters + 1) != '\0')
 				{
-					escape = *(delimiters + 2);
+					quote = *(delimiters + 1);
+					if (*(delimiters + 2) != '\0')
+					{
+						escape = *(delimiters + 2);
+					}
+				}
+			}
+		}
+
+		// See if quoting is necessary.
+		srcPtr = csvField;
+		while ((cc = *srcPtr++) != '\0')
+		{
+			if (cc == separator || cc == quote ||  cc == '\n')
+			{
+				quoteNeeded = true;
+				break;
+			}
+		}
+
+		if (quoteNeeded)
+		{
+			quoteNeeded = false;
+			srcPtr = csvField;
+			trgPtr = myBuffer;
+			lstPtr = myBuffer + sizeof (myBuffer) - 3;
+
+			*trgPtr++ = quote;
+			while (trgPtr < lstPtr && (cc = *srcPtr++) != '\0')
+			{
+				if (cc == '\r') continue;
+				else if (cc == '\n') cc = ' ';
+				else if (cc == quote) *trgPtr++ = escape;
+				*trgPtr++ = cc;
+			}
+			if (trgPtr < lstPtr)
+			{
+				*trgPtr++ = quote;
+				*trgPtr = '\0';
+				if (strlen (myBuffer) < csvSize)
+				{
+					strncpy (csvField,myBuffer,csvSize);
+					csvField [csvSize - 1] = '\0';
+					quoteNeeded = true;
 				}
 			}
 		}
 	}
-
-
-	while ((cc = *srcPtr++) != '\0')
-	{
-		if (cc == separator || cc == quote ||  cc == '\n') quoteNeeded = true;
-	}
-
-	if (quoteNeeded)
-	{
-		srcPtr = csvField;
-		trgPtr = myBuffer;
-		*trgPtr++ = quote;
-		while ((cc = *srcPtr++) != '\0')
-		{
-			if (cc == '\r') continue;
-			if (cc == '\n') cc = ' ';
-			if (cc == quote) *trgPtr++ = escape;
-			*trgPtr++ = cc;
-		}
-		*trgPtr++ = quote;
-		*trgPtr = '\0';
-		if (strlen (myBuffer) >= csvSize)
-		{
-			strncpy (csvField,"**too long**",csvSize);
-			csvField [csvSize - 1] = '\0';
-		}
-		else
-		{
-			strncpy (csvField,myBuffer,csvSize);
-			csvField [csvSize - 1] = '\0';
-		}
-	}
-	return;
+	return quoteNeeded;
 }
 ///////////////////////////////////////////////////////////////////////////////
 // The following will quote the CSV field provided by the csvField argument.
@@ -562,8 +596,9 @@ void csCsvQuoter (char* csvField,size_t csvSize,const char* delimiters)
 // The itself function does not throw, but uses the STL std::wstring object
 // (obviously) which may throw.
 //
-void csCsvQuoter (std::wstring& csvField,bool forceIt,const wchar_t* delimiters)
+bool csCsvQuoter (std::wstring& csvField,bool forceIt,const wchar_t* delimiters)
 {
+	bool weQuotedIt (false);
 	bool quoteNeeded = false;
 	std::wstring::size_type idx; 
 	std::wstring::size_type idxLast; 
@@ -595,14 +630,14 @@ void csCsvQuoter (std::wstring& csvField,bool forceIt,const wchar_t* delimiters)
 	if (idxLast == std::wstring::npos)
 	{
 		// It's all whitespace.
-		return;
+		return weQuotedIt;
 	}
 
 	idx = csvField.find_first_not_of (L" \t\n\f");
 	if (csvField [idx] == quote && csvField [idxLast] == quote)
 	{
 		// It appears that it has already been quoted.
-		return;
+		return weQuotedIt;
 	}
 
 	// Determine if this field needs to be quoted.
@@ -655,17 +690,19 @@ void csCsvQuoter (std::wstring& csvField,bool forceIt,const wchar_t* delimiters)
 		}
 		csvField.append (1,quote);
 		csvField.insert (0,1,quote);
+		weQuotedIt = true;
 	}
-	return;
+	return weQuotedIt;
 }
 std::wstring csQuoteCsvField (const std::wstring& csvField,bool forceIt,const wchar_t* delimiters)
 {
 	std::wstring rtnValue;
 	
 	rtnValue = csvField;
-	csCsvQuoter (rtnValue,forceIt,delimiters);
+	csCsvQuoter (rtnValue,forceIt,delimiters);			//lint !e534  (ignoring return value)
 	return rtnValue;
 }
+//lint -restore
 //newPage//
 //=============================================================================
 // TcsCsvStatus Object -- Encapsulates the functionality of a Comma Separated
@@ -834,9 +871,9 @@ bool TcsCsvRecord::ReplaceField (const std::wstring& newField,short fieldNbr,Tcs
 {
     bool ok = true;
 
-    if (fieldNbr >= 0 && static_cast<unsigned>(fieldNbr) < Fields.size ())
+    if (fieldNbr >= 0 && static_cast<unsigned>(fieldNbr) < Fields.size ())	//lint !e571  (suspicious cast)
     {
-        std::wstring& fldRef = Fields [fieldNbr];
+        std::wstring& fldRef = Fields [static_cast<unsigned>(fieldNbr)];	//lint !e571  (suspicious cast)
         fldRef = newField;
      }
      else
@@ -851,7 +888,7 @@ bool TcsCsvRecord::AppendField (const std::wstring& newField,TcsCsvStatus& statu
 {
     bool ok = true;
     
-    if (Fields.size () < static_cast<unsigned>(MaxFldCnt))
+    if (Fields.size () < static_cast<unsigned>(MaxFldCnt))		//lint !e571   (suspicious cast)
     {
         Fields.push_back (newField);
     }
@@ -866,12 +903,12 @@ bool TcsCsvRecord::InsertField (const std::wstring& newField,short before,TcsCsv
 {
     bool ok = true;
 
-    if (before < 0 || static_cast<unsigned>(before) > Fields.size ())
+    if (before < 0 || static_cast<unsigned>(before) > Fields.size ())		//lint !e571   (suspicious cast)
     {
         ok = false;
         status.SetStatus (csvInvFieldNbr);
     }
-    else if (Fields.size () >= static_cast<unsigned>(MaxFldCnt))
+    else if (Fields.size () >= static_cast<unsigned>(MaxFldCnt))		//lint !e571   (suspicious cast)
     {
         ok = false;
         status.SetStatus (csvTooManyFields);
@@ -887,12 +924,12 @@ bool TcsCsvRecord::RemoveField (short fieldNbr,TcsCsvStatus& status)
 {
     bool ok = true;
 
-    if (fieldNbr < 0 || static_cast<unsigned>(fieldNbr) >= Fields.size ())
+    if (fieldNbr < 0 || static_cast<unsigned>(fieldNbr) >= Fields.size ())		//lint !e571   (suspicious cast)
     {
         ok = false;
         status.SetStatus (csvInvFieldNbr);
     }
-    else if (Fields.size () <= static_cast<unsigned>(MinFldCnt))
+    else if (Fields.size () <= static_cast<unsigned>(MinFldCnt))		//lint !e571   (suspicious cast)
     {
         ok = false;
         status.SetStatus (csvTooManyFields);
@@ -900,7 +937,7 @@ bool TcsCsvRecord::RemoveField (short fieldNbr,TcsCsvStatus& status)
     else
     {
         fldItr itr = Fields.begin () + fieldNbr;
-        Fields.erase (itr);
+        Fields.erase (itr);							//lint !e534  ignoring return value
     }
     return ok;
 }
@@ -908,9 +945,9 @@ bool TcsCsvRecord::GetField (std::wstring& field,short fieldNbr,TcsCsvStatus& st
 {
     bool ok = true;
     
-    if (fieldNbr < 0 || static_cast<unsigned>(fieldNbr) < Fields.size ())
+    if (fieldNbr < 0 || static_cast<unsigned>(fieldNbr) < Fields.size ())		//lint !e571   (suspicious cast)
     {
-        field = Fields [static_cast<unsigned>(fieldNbr)];
+        field = Fields [static_cast<unsigned>(fieldNbr)];		//lint !e571   (suspicious cast)
     }
     else
     {
@@ -951,17 +988,17 @@ bool TcsCsvRecord::ReplaceRecord (const std::wstring& newRecord,TcsCsvStatus& st
     EcsCsvStatus prsStatus;
 
     Fields.clear ();
-    Fields.reserve (static_cast<unsigned>(MinFldCnt));
+    Fields.reserve (static_cast<unsigned>(MinFldCnt));		//lint !e571   (suspicious cast)
     prsStatus = csCsvFieldParse (Fields,newRecord,delimiters);
     if (prsStatus == csvOk)
     {
         size_t fldCnt = Fields.size ();
-        if (fldCnt < static_cast<size_t>(MinFldCnt))
+        if (fldCnt < static_cast<size_t>(MinFldCnt))		//lint !e571   (suspicious cast)
         {
             ok = false;
             status.SetStatus (csvTooFewFields);
         }
-        else if (fldCnt > static_cast<size_t>(MaxFldCnt))
+        else if (fldCnt > static_cast<size_t>(MaxFldCnt))		//lint !e571   (suspicious cast)
         {
             ok = false;
             status.SetStatus (csvTooManyFields);
@@ -1074,7 +1111,7 @@ bool TcsCsvSortFunctor::operator() (const TcsCsvRecord& recordOne,const TcsCsvRe
 {
 	bool ok1;
 	bool ok2;
-	bool lessThan (true);
+	EcsCmpResult cmpResult (cmpGreaterThan);		// initialization to keep lint happy.
 	std::wstring fieldOne;
 	std::wstring fieldTwo;
 
@@ -1082,45 +1119,112 @@ bool TcsCsvSortFunctor::operator() (const TcsCsvRecord& recordOne,const TcsCsvRe
 	ok2 = recordTwo.GetField (fieldTwo,FirstField,CsvStatus);
 	if (ok1 && ok2)
 	{
-		lessThan = (fieldOne < fieldTwo);
-		if (SecondField >= 0 && (fieldOne == fieldTwo))
+		cmpResult = CsvFieldCompare (fieldOne,fieldTwo);
+		if (cmpResult == cmpEqualTo && SecondField >= 0)
 		{
 			ok1 = recordOne.GetField (fieldOne,SecondField,CsvStatus);
 			ok2 = recordTwo.GetField (fieldTwo,SecondField,CsvStatus);
 			if (ok1 && ok2)
 			{
-				lessThan = (fieldOne < fieldTwo);
-				if (ThirdField >= 0 && (fieldOne == fieldTwo))
+				cmpResult = CsvFieldCompare (fieldOne,fieldTwo);
+				if (cmpResult == cmpEqualTo && ThirdField >= 0)
 				{
 					ok1 = recordOne.GetField (fieldOne,ThirdField,CsvStatus);
 					ok2 = recordTwo.GetField (fieldTwo,ThirdField,CsvStatus);
 					if (ok1 && ok2)
 					{
-						lessThan = (fieldOne < fieldTwo);
-						if (FourthField >= 0 && (fieldOne == fieldTwo))
+						cmpResult = CsvFieldCompare (fieldOne,fieldTwo);
+						if (cmpResult == cmpEqualTo && FourthField >= 0)
 						{
 							ok1 = recordOne.GetField (fieldOne,FourthField,CsvStatus);
 							ok2 = recordTwo.GetField (fieldTwo,FourthField,CsvStatus);
-							lessThan = (fieldOne < fieldTwo);
+							if (ok1 && ok2)
+							{
+								cmpResult = CsvFieldCompare (fieldOne,fieldTwo);
+							}
 						}
 					}
 				}
 			}
 		}
 	}
-	if (!(ok1 && ok2))
+	if (ok1 && !ok2)
 	{
-		lessThan = ok2;
+		cmpResult = cmpLessThan;
 	}
-	return lessThan;
+	else if (!ok1 && ok2)
+	{
+		cmpResult = cmpGreaterThan;
+	}
+	else if (!ok1 && !ok2)
+	{
+		cmpResult = cmpEqualTo;
+	}
+	return (cmpResult == cmpLessThan);
+}
+TcsCsvSortFunctor::EcsCmpResult TcsCsvSortFunctor::CsvFieldCompare (const std::wstring& fieldOne,
+																	const std::wstring& fieldTwo) const
+{
+	EcsCmpResult result;
+	wchar_t *wcPtr1;
+	wchar_t *wcPtr2;
+	long longOne, longTwo;
+	double realOne, realTwo;
+
+	// If the fields are numeric in nature, we want to compare the values in
+	// numeric form.  This hurts performance, but aleviates the need for users
+	// too know of and specify the type of the fields.  So, this is a great
+	// convenience, and makes the whole thing a bit more general.
+	longOne = wcstol (fieldOne.c_str (),&wcPtr1,10);
+	longTwo = wcstol (fieldTwo.c_str (),&wcPtr2,10);
+	if (*wcPtr1 == L'\0' && *wcPtr2 == L'\0' &&
+	    longOne != LONG_MAX && longOne != LONG_MIN &&
+	    longTwo != LONG_MAX && longTwo != LONG_MIN)
+	{
+		// It appears that both fields are numeric and of the integer
+		// type.  So the comparision is as follows:
+		if      (longOne < longTwo) result = cmpLessThan;
+		else if (longOne > longTwo) result = cmpGreaterThan;
+		else                        result = cmpEqualTo;
+	}
+	else
+	{
+		// Maybe the fields are doubles.
+		realOne = wcstod (fieldOne.c_str (),&wcPtr1);
+		realTwo = wcstod (fieldTwo.c_str (),&wcPtr2);
+		if (*wcPtr1 == L'\0' && *wcPtr2 == L'\0' &&
+			fabs (realOne) < HUGE_VAL && fabs (realTwo) < HUGE_VAL)
+		{
+			// It appears that both fields are numeric and of the real
+			// type.  So the comparision is as follows:
+			if      (realOne < realTwo) result = cmpLessThan;
+			else if (realOne > realTwo) result = cmpGreaterThan;
+			else                        result = cmpEqualTo;
+		}
+		else
+		{
+			// We consider the fields to be strings.  We default to a
+			// case insensitive string comparison.
+			int iResult = CS_wcsicmp (fieldOne.c_str (),fieldTwo.c_str ());
+			if      (iResult < 0) result = cmpLessThan;
+			else if (iResult > 0) result = cmpGreaterThan;
+			else                  result = cmpEqualTo;
+		}
+	}
+	return result;
 }
 //newPage//
 //=============================================================================
+
 // TcsCsvFileBase Object -- Encapsulates the functionality of a Comma Separated
 //                          Value file.
 //=============================================================================
 // Static Functions, Variables, and Constants
 const unsigned TcsCsvFileBase::InvalidRecordNbr = UINT_MAX;
+unsigned TcsCsvFileBase::GetInvalidRecordNbr (void)
+{
+    return InvalidRecordNbr;
+}
 //=========================================================================
 // Construction, Destruction, and Assignment
 TcsCsvFileBase::TcsCsvFileBase (bool firstIsLabels,short minFldCnt,
@@ -1239,10 +1343,6 @@ unsigned TcsCsvFileBase::RecordCount (void) const
 {
     unsigned recordCount = static_cast<unsigned>(Records.size ());
     return recordCount;
-}
-unsigned TcsCsvFileBase::GetInvalidRecordNbr (void)
-{
-    return InvalidRecordNbr;
 }
 short TcsCsvFileBase::FieldCount (unsigned recordNbr) const
 {
@@ -1520,6 +1620,8 @@ bool TcsCsvFileBase::ReplaceField (const std::wstring& newValue,unsigned recordN
     }
     return ok;
 }
+// Implies that the file has been properly indexed, and srchString is the value
+// to be searched for in the index.
 bool TcsCsvFileBase::Locate (unsigned& recordNumber,const wchar_t* srchString) const
 {
     bool ok (false);
@@ -1582,6 +1684,11 @@ bool TcsCsvFileBase::Locate (unsigned& recordNumber,const wchar_t* fieldId,const
 	}
 	return ok;
 }
+// The record number argument is expected to be the record number of a record
+// returned by locate.  The search starts with the first record immediately
+// after that identified by the recordNumber argument.  The new record number
+// is returned in this same variable, and et to InvalidRecordNumber if a
+// record matching the search criteria is  not found.
 bool TcsCsvFileBase::LocateNext (unsigned& recordNumber,short fieldNbr,const wchar_t* srchString,bool honorCase) const
 {
 	bool ok;
@@ -1626,6 +1733,11 @@ bool TcsCsvFileBase::LocateNext (unsigned& recordNumber,short fieldNbr,const wch
 	}
 	return found;
 }
+// The record number argument is expected to be the record number of a record
+// returned by locate.  The search starts with the first record immediately
+// after that identified by the recordNumber argument.  The new record number
+// is returned in this same variable, and et to InvalidRecordNumber if a
+// record matching the search criteria is  not found.
 bool TcsCsvFileBase::LocateNext (unsigned& recordNumber,const wchar_t* fieldId,const wchar_t* srchString,bool honorCase) const
 {
 	bool ok (false);
@@ -1663,6 +1775,9 @@ bool TcsCsvFileBase::StableSort (const TcsCsvSortFunctor& functor)
 	}
 	return ok;
 }
+// Essentially, a binary search for a record in the table which matches that
+// provided by the searchRec argument.  No check is made concerning the
+// sorted status of the file.
 unsigned TcsCsvFileBase::LowerBound (const TcsCsvRecord& searchRec,const TcsCsvSortFunctor& functor)
 {
 	unsigned recordNbr (InvalidRecordNbr);
@@ -1695,7 +1810,7 @@ bool TcsCsvFileBase::ReadFromStream (std::wistream& iStrm,bool firstIsLabels,Tcs
     {
         csvRecord.SetMinFldCnt (MinFldCnt);
         csvRecord.SetMaxFldCnt (MaxFldCnt);
-        csvRecord.Reserve (static_cast<unsigned>(MaxFldCnt));
+        csvRecord.Reserve (static_cast<unsigned>(MaxFldCnt));		//lint !e571   (suspicious cast)
 
         delimiters [0] = Separator;
         delimiters [1] = Quote;
@@ -1712,7 +1827,7 @@ bool TcsCsvFileBase::ReadFromStream (std::wistream& iStrm,bool firstIsLabels,Tcs
         while (ok && iStrm.good ())
         {
             // See if we are at the end of the file.
-            iStrm.peek ();
+            iStrm.peek ();					//lint !e534    (ignoring return value)
             if (iStrm.eof ()) break;
             
             // OK, there should be more stuff out there.
@@ -1767,6 +1882,14 @@ bool TcsCsvFileBase::WriteToStream (std::wostream& oStrm,bool writeLabels,TcsCsv
         }
     }
     return ok;
+}
+const wchar_t* TcsCsvFileBase::GetObjectName (void) const
+{
+	return ObjectName.c_str ();
+}
+void TcsCsvFileBase::GetObjectName (std::wstring& objName) const
+{
+	objName = ObjectName;
 }
 bool TcsCsvFileBase::BuildIndex (TcsCsvStatus& status)
 {

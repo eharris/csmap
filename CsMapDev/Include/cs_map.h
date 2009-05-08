@@ -5646,6 +5646,7 @@ struct cs_Prjtab_
 														   int list_sz);
 	unsigned short code;
 	ulong32_t flags;
+	ulong32_t epsg;				/* EPSG code, zero if none or not one to one */
 	char descr [64];
 };
 
@@ -5693,6 +5694,9 @@ struct cs_Prjprm_
 	short log_type;			/* Logical type, classifies the type
 							   of the parameter: e.g.
 							   cs_PRMTYP_LONG for longitude. */
+	ulong32_t epsg;			/* The EPSG code number of the equivalent
+							   parameter; zero if there is no
+							   EPSG equivalent. */
 	short prj_code;			/* The projection code for which this
 							   structure was generated. */
 	short parm_nbr;			/* The parameter number for which this

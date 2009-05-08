@@ -25,15 +25,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-//lint -esym(534,TcsCsvFileBase::SetMinFldCnt,TcsCsvFileBase::SetMaxFldCnt)
-//lint -esym(534,wcstombs)
+//lint -esym(534,TcsCsvFileBase::SetMinFldCnt)		(ignoring return value)
+//lint -esym(534,TcsCsvFileBase::SetMaxFldCnt)		(ignoring return value)
+//lint -esym(534,wcstombs)							(ignoring return value)
+//lint -esym(534,wcscat)							(ignoring return value)
+//lint -save -esym(613,crsTblPtr,copTblPtr)			(possible use of null pointer, actually a PC-Lint bug)		
 
 #include "cs_map.h"
 #include "csCsvFileSupport.hpp"
 #include "csEpsgStuff.h"
 
-extern "C" double cs_Zero;
-extern "C" double cs_One;
+extern "C" const double cs_Zero;
+extern "C" const double cs_One;
+extern "C" const double cs_Mone;
+extern "C" const struct cs_Prjtab_ cs_Prjtab [];		// Projection Table
+extern "C" const struct cs_Prjprm_ csPrjprm [];			// Parameter Table
+extern "C" const struct cs_PrjprmMap_ cs_PrjprmMap [];		// Parameter Usage Table
+
 
 //=============================================================================
 // NOTE:  The CodeKeyField is the field ID of the field which carries a
@@ -46,8 +54,8 @@ extern "C" double cs_One;
 //
 // It is the CodeKeyField by which the table is indexed in all cases.  As this
 // is a feature of TcsCsvFileBase, the index is actually in text form, and in
-// the case of the CHange table, in the exact form as it appears in the EPSG
-// database.
+// the case of the Change table, in the exact form as it appears in the EPSG
+// database.  Some future tweaking in this regard is likely.
 //=============================================================================
 
 const TcsEpsgTblMap KcsEpsgTblMap [] =
@@ -56,7 +64,7 @@ const TcsEpsgTblMap KcsEpsgTblMap [] =
 //                          TableID  Cnt  CodeKeyField                  Table CSV File Name                     Sort Field 1                Sort Field 2              Sort Field 3             Sort Field 4  
 	{                  epsgTblAlias,  6,  epsgFldAliasCode,            L"Alias",                                epsgFldAliasCode,           epsgFldNone,              epsgFldNone,             epsgFldNone },
 	{                   epsgTblArea, 17,  epsgFldAreaCode,             L"Area",                                 epsgFldAreaCode,            epsgFldNone,              epsgFldNone,             epsgFldNone },
-	{                 epsgTblChange,  9,  epsgFldChangeId,             L"Change",                               epsgFldChangeId,            epsgFldNone,              epsgFldNone,             epsgFldNone },
+	{                 epsgTblChange,  9,  epsgFldNone,                 L"Change",                               epsgFldChangeId,            epsgFldNone,              epsgFldNone,             epsgFldNone },
 	{               epsgTblAxisName,  9,  epsgFldCoordAxisNameCode,    L"Coordinate Axis Name",                 epsgFldCoordAxisNameCode,   epsgFldNone,              epsgFldNone,             epsgFldNone },
 	{                   epsgTblAxis,  7,  epsgFldCoordAxisCode,        L"Coordinate Axis",                      epsgFldCoordSysCode,        epsgFldOrder,             epsgFldNone,             epsgFldNone },
 	{        epsgTblReferenceSystem, 18,  epsgFldCoordRefSysCode,      L"Coordinate Reference System",          epsgFldCoordRefSysCode,     epsgFldNone,              epsgFldNone,             epsgFldNone },
@@ -65,7 +73,7 @@ const TcsEpsgTblMap KcsEpsgTblMap [] =
 	{         epsgTblParameterUsage,  4,  epsgFldNone,                 L"Coordinate_Operation Parameter Usage", epsgFldCoordOpMethodCode,   epsgFldSortOrder,         epsgFldNone,             epsgFldNone },
 	{         epsgTblParameterValue,  6,  epsgFldNone,                 L"Coordinate_Operation Parameter Value", epsgFldCoordOpCode,         epsgFldCoordOpMethodCode, epsgFldParameterCode,    epsgFldNone },
 	{              epsgTblParameter,  8,  epsgFldParameterCode,        L"Coordinate_Operation Parameter",       epsgFldParameterCode,       epsgFldNone,              epsgFldNone,             epsgFldNone },
-	{          epsgTblOperationPath,  3,  epsgFldConcatOperationCode,  L"Coordinate_Operation Path",            epsgFldConcatOperationCode, epsgFldOpPathStep,        epsgFldNone,             epsgFldNone },
+	{          epsgTblOperationPath,  3,  epsgFldNone,                 L"Coordinate_Operation Path",            epsgFldConcatOperationCode, epsgFldOpPathStep,        epsgFldNone,             epsgFldNone },
  	{    epsgTblCoordinateOperation, 20,  epsgFldCoordOpCode,          L"Coordinate_Operation",                 epsgFldCoordOpCode,         epsgFldNone,              epsgFldNone,             epsgFldNone },
 	{                  epsgTblDatum, 15,  epsgFldDatumCode,            L"Datum",                                epsgFldDatumCode,           epsgFldNone,              epsgFldNone,             epsgFldNone },
 	{            epsgTblDeprecation,  7,  epsgFldDeprecationId,        L"Deprecation",                          epsgFldObjectCode,          epsgFldNone,              epsgFldNone,             epsgFldNone },
@@ -79,6 +87,8 @@ const TcsEpsgTblMap KcsEpsgTblMap [] =
 };
 const TcsEpsgFldMap KcsEpsgFldMap [] =
 {
+//                                                                 Field
+//                       TableID       FieldId                       Nbr    Field Label
 	{               epsgTblAlias,      epsgFldAliasCode,               0,  L"ALIAS CODE"                  },
 	{               epsgTblAlias,      epsgFldObjectType,              1,  L"OBJECT_TABLE_NAME"           },
 	{               epsgTblAlias,      epsgFldObjectCode,              2,  L"OBJECT_CODE"                 },
@@ -360,15 +370,23 @@ const TcsEpsgUomTypeMap KcsEpsgUomTypeMap [] =
 
 const TcsEpsgOrntTypeMap KcsEpsgOrntTypeMap [] =
 {
+	{         epsgOrntEast,     L"South along 90°E"    },
+	{        epsgOrntNorth,     L"South along 180°E"   },
+	{         epsgOrntEast,     L"North along 90°E"    },
+	{        epsgOrntNorth,     L"North along 0°E"     },
 	{         epsgOrntEast,     L"east"                },
 	{         epsgOrntWest,     L"west"                },
 	{        epsgOrntNorth,     L"north"               },
 	{        epsgOrntSouth,     L"south"               },
 	{           epsgOrntUp,     L"up"                  },
 	{         epsgOrntDown,     L"down"                },
-	{      epsgOrntUnknown,     L""                    }
+	{      epsgOrntUnknown,     L"<unknownOrientation>"}
 };
 
+// The following maps EPSG Area codes to CS-MAP group names.
+// A bit hoekey, but it provides reasonably good results.  Table
+// generation dates back to EPSG 6.13; so it probably use an
+// update.
 const struct TcmAreaToMsiGroupMap
 {
 	short epsgAreaFrom;
@@ -1303,7 +1321,9 @@ const struct TcmAreaToMsiGroupMap
 	{     0,     0,  ""          }
 };
 
-
+//=============================================================================
+// Stand alone functions.  Will work without a TcsEpsgdataSetV6 object, but
+// results would not have much use without one.
 const wchar_t* GetEpsgTableName (EcsEpsgTable tblId)
 {
 	const wchar_t* namePtr = 0;
@@ -1469,746 +1489,6 @@ EcsOrientation GetOrientation (const wchar_t* orntTypeName)
 	}
 	return rtnValue;
 }
-
-//newPage//
-//=============================================================================
-// TcsEpsgCode  --  Distinct type for an EPSG code value.
-//
-// For function overloading and parameter safety, its very nice to have a
-// distinct type for the EPSG code value.
-//=============================================================================
-// Static Constants, Variables, and Member Functions
-const unsigned long TcsEpsgCode::InvalidValue = 0UL;
-//=============================================================================
-// Construction, Destruction, & Assignment
-TcsEpsgCode::TcsEpsgCode () : EpsgCode (InvalidValue)
-{
-}
-TcsEpsgCode::TcsEpsgCode (unsigned long epsgCode) : EpsgCode (epsgCode)
-{
-}
-TcsEpsgCode::TcsEpsgCode (const wchar_t* epsgCode)
-{
-	EpsgCode = StrToEpsgCode (epsgCode);
-}
-TcsEpsgCode::TcsEpsgCode (const std::wstring& epsgCode)
-{
-	EpsgCode = StrToEpsgCode (epsgCode.c_str ());
-}
-TcsEpsgCode::TcsEpsgCode (const TcsEpsgCode& source) : EpsgCode (source.EpsgCode)
-{
-}
-TcsEpsgCode::~TcsEpsgCode ()
-{
-}
-TcsEpsgCode& TcsEpsgCode::operator= (const TcsEpsgCode& rhs)
-{
-	EpsgCode = rhs.EpsgCode;
-	return *this;
-}
-TcsEpsgCode& TcsEpsgCode::operator= (unsigned long epsgCode)
-{
-	EpsgCode = epsgCode;
-	return *this;
-}
-//=============================================================================
-// Operator Overrides
-bool TcsEpsgCode::operator< (unsigned long epsgCode) const
-{
-	bool lessThan = (EpsgCode < epsgCode);
-	return lessThan;
-}
-bool TcsEpsgCode::operator< (const std::wstring& epsgCode) const
-{
-	TcsEpsgCode tmpEpsgCode (epsgCode);
-	bool lessThan = (EpsgCode < tmpEpsgCode);
-	return lessThan;
-}
-bool TcsEpsgCode::operator== (unsigned long epsgCode) const
-{
-	bool equal = (EpsgCode == epsgCode);
-	return equal;
-}
-bool TcsEpsgCode::operator== (const std::wstring& epsgCode) const
-{
-	TcsEpsgCode tmpEpsgCode (epsgCode);
-	bool equal = (EpsgCode == tmpEpsgCode);
-	return equal;
-}
-bool TcsEpsgCode::operator> (unsigned long epsgCode) const
-{
-	bool greaterThan = (EpsgCode > epsgCode);
-	return greaterThan;
-}
-bool TcsEpsgCode::operator> (const std::wstring& epsgCode) const
-{
-	TcsEpsgCode tmpEpsgCode (epsgCode);
-	bool greaterThan = (EpsgCode > tmpEpsgCode);
-	return greaterThan;
-}
-TcsEpsgCode TcsEpsgCode::operator++ ()
-{
-	EpsgCode += 1;
-	return EpsgCode;
-}
-TcsEpsgCode TcsEpsgCode::operator++ (int)
-{
-	unsigned long prevValue = EpsgCode;
-	EpsgCode += 1;
-	return prevValue;
-}
-TcsEpsgCode TcsEpsgCode::operator-- ()
-{
-	EpsgCode -= 1;
-	return EpsgCode;
-}
-TcsEpsgCode TcsEpsgCode::operator-- (int)
-{
-	unsigned long prevValue = EpsgCode;
-	EpsgCode -= 1;
-	return prevValue;
-}
-TcsEpsgCode& TcsEpsgCode::operator+= (unsigned long rhs)
-{
-	EpsgCode += rhs;
-	return *this;
-}
-TcsEpsgCode& TcsEpsgCode::operator-= (unsigned long rhs)
-{
-	EpsgCode -= rhs;
-	return *this;
-}
-TcsEpsgCode& TcsEpsgCode::operator+= (int rhs)
-{
-	unsigned long tmpRhs;
-
-	if (rhs < 0)
-	{
-		tmpRhs = static_cast<unsigned long>(-rhs);
-		EpsgCode -= tmpRhs;
-	}
-	else
-	{
-		tmpRhs = static_cast<unsigned long>(rhs);
-		EpsgCode += tmpRhs;
-	}
-	return *this;
-}
-TcsEpsgCode& TcsEpsgCode::operator-= (int rhs)
-{
-	unsigned long tmpRhs;
-
-	if (rhs < 0)
-	{
-		tmpRhs = static_cast<unsigned long>(-rhs);
-		EpsgCode += tmpRhs;
-	}
-	else
-	{
-		tmpRhs = static_cast<unsigned long>(rhs);
-		EpsgCode -= tmpRhs;
-	}
-	return *this;
-}
-TcsEpsgCode TcsEpsgCode::operator+ (unsigned long rhs)
-{
-	unsigned long sum = EpsgCode + rhs;
-	return TcsEpsgCode (sum);
-}
-TcsEpsgCode TcsEpsgCode::operator- (unsigned long rhs)
-{
-	unsigned long difference = EpsgCode - rhs;
-	return TcsEpsgCode (difference);
-}
-//=============================================================================
-// Public Named Member Functions
-std::wstring TcsEpsgCode::AsWstring () const
-{
-	wchar_t* wcPtr;
-	wchar_t wcArray [32];
-
-	if (EpsgCode > 1991000UL)
-	{
-		// Appears to be a change ID.
-		double realValue = (static_cast<double>(EpsgCode) / 1000.0);
-		swprintf (wcArray,wcCount (wcArray),L"%.3d",realValue);
-		wcPtr = wcArray + wcslen (wcArray) - 1;
-		if (*wcPtr == L'0') *--wcPtr = L'\0';
-		if (*wcPtr == L'0') *--wcPtr = L'\0';
-	}
-	else
-	{
-		swprintf (wcArray,wcCount (wcArray),L"%lu",EpsgCode);
-	}
-	return std::wstring (wcArray);
-}
-std::string TcsEpsgCode::AsString () const
-{
-	char* cPtr;
-	char cArray [32];
-
-	if (EpsgCode > 1991000UL)
-	{
-		// Appears to be a change ID.
-		double realValue = (static_cast<double>(EpsgCode) / 1000.0);
-		sprintf (cArray,"%.3f",realValue);
-		cPtr = cArray + strlen (cArray) - 1;
-		if (*cPtr == '0') *--cPtr = '\0';
-		if (*cPtr == '0') *--cPtr = '\0';
-	}
-	else
-	{
-		sprintf (cArray,"%lu",EpsgCode);
-	}
-	return std::string (cArray);
-}
-bool TcsEpsgCode::AsString (wchar_t* result,size_t resultSize) const
-{
-	std::wstring tmpEpsgCode = AsWstring ();
-	wcsncpy (result,tmpEpsgCode.c_str (),resultSize);
-	result [resultSize - 1] = L'\0';
-	return true;
-}
-bool TcsEpsgCode::AsString (char* result,size_t resultSize) const
-{
-	std::string tmpEpsgCode = AsString ();
-	strncpy (result,tmpEpsgCode.c_str (),resultSize);
-	result [resultSize - 1] = '\0';
-	return true;
-}
-//=============================================================================
-// Protected Member Functions
-unsigned long TcsEpsgCode::StrToEpsgCode (const wchar_t* epsgCodeStr) const
-{
-	const wchar_t* wcPtr;
-	TcsEpsgCode epsgCodeNbr (0UL);
-
-	wcPtr = wcschr (epsgCodeStr,L'.');
-	if (wcPtr == 0)
-	{
-		// Appears to be a normal code value.
-		epsgCodeNbr = wcstoul (epsgCodeStr,0,10);
-	}
-	else
-	{
-		// The string appears to be a change ID.
-		double realValue = wcstod (epsgCodeStr,0);
-		realValue *= 1000;
-		epsgCodeNbr = static_cast<unsigned long>(realValue);
-	}
-	return epsgCodeNbr;
-}
-unsigned long TcsEpsgCode::StrToEpsgCode (const char* epsgCodeStr) const
-{
-	const char* cPtr;
-	TcsEpsgCode epsgCodeNbr (0UL);
-
-	cPtr = strchr (epsgCodeStr,'.');
-	if (cPtr == 0)
-	{
-		// Appears to be a normal code value.
-		epsgCodeNbr = strtoul (epsgCodeStr,0,10);
-	}
-	else
-	{
-		// The string appears to be a change ID.
-		double realValue = strtod (epsgCodeStr,0);
-		realValue *= 1000;
-		epsgCodeNbr = static_cast<unsigned long>(realValue);
-	}
-	return epsgCodeNbr;
-}
-//newPage//
-//=============================================================================
-// TcsEpsgTable  --  Customization of TcsCsvTableBase for EPSG Tables
-//=============================================================================
-// Static Constants, Variables, and Member Functions
-const wchar_t TcsEpsgTable::LogicalTrue  [] = L"TRUE";
-const wchar_t TcsEpsgTable::LogicalFalse [] = L"FALSE";
-//=============================================================================
-// Construction, Destruction, & Assignment
-TcsEpsgTable::TcsEpsgTable (const TcsEpsgTblMap& tblMap,const wchar_t* databaseFldr)
-															:
-														TcsCsvFileBase   (true,2,35),
-														Ok               (false),
-														Sorted           (false),
-														Indexed          (false),
-														TableId          (epsgTblNone),
-														CodeKeyField     (epsgFldNone),
-														CurrentCodeValue (0UL),
-														CurrentRecordNbr (InvalidRecordNbr),
-														SortFunctor      (-1),
-														CodeKeyStack     (),
-														CsvStatus        ()
-{
-// Seems gcc 3.2.2 wifstream::open requires an 8 bit character path.  NOT NICE!!!
-char pathBufr [1024];
-	// Set the min and max fild counts.
-	TableId = tblMap.TableId;
-	CodeKeyField = tblMap.CodeKeyFieldId;
-	SetMinFldCnt (tblMap.FieldCount);
-	SetMaxFldCnt (tblMap.FieldCount);
-
-	SortFunctor.FirstField  = GetEpsgFieldNumber (TableId,tblMap.Sort1);
-	SortFunctor.SecondField = GetEpsgFieldNumber (TableId,tblMap.Sort2);
-	SortFunctor.ThirdField  = GetEpsgFieldNumber (TableId,tblMap.Sort3);
-	SortFunctor.FourthField = GetEpsgFieldNumber (TableId,tblMap.Sort4);
-	std::wstring objName (tblMap.TableName);
-	objName += L" Table";
-	SetObjectName (objName);
-	
-	std::wstring filePath (databaseFldr);
-	filePath += L"\\";
-	filePath += tblMap.TableName;
-	filePath += L".csv";
-wcstombs (pathBufr,filePath.c_str (),sizeof (pathBufr));
-std::wifstream iStrm (pathBufr,std::ios_base::in);
-//	std::wifstream iStrm (filePath.c_str (),std::ios_base::in);
-	if (iStrm.is_open ())
-	{
-		Ok = ReadFromStream (iStrm,true,CsvStatus);
-	}
-	if (Ok)
-	{
-		Ok = PrepareCsvFile ();
-	}
-}
-TcsEpsgTable::TcsEpsgTable (const TcsEpsgTable& source) : TcsCsvFileBase   (source),
-														  Ok               (source.Ok),
-														  Sorted           (source.Sorted),
-														  Indexed          (source.Indexed),
-														  TableId          (source.TableId),
-														  CodeKeyField     (source.CodeKeyField),
-														  CurrentCodeValue (source.CurrentCodeValue),
-														  CurrentRecordNbr (source.CurrentRecordNbr),
-														  SortFunctor      (source.SortFunctor),
-														  CodeKeyStack     (source.CodeKeyStack),
-														  CsvStatus        (source.CsvStatus)
-{
-}
-TcsEpsgTable::~TcsEpsgTable (void)
-{
-	// Nothing to do here (yet).
-}
-TcsEpsgTable& TcsEpsgTable::operator= (const TcsEpsgTable& rhs)
-{
-	if (&rhs != this)
-	{
-		TcsCsvFileBase::operator= (rhs);
-		Ok               = rhs.Ok;
-		Sorted           = rhs.Sorted;
-		Indexed          = rhs.Indexed;
-		TableId          = rhs.TableId;
-		CodeKeyField     = rhs.CodeKeyField;
-		CurrentCodeValue = rhs.CurrentCodeValue;
-		CurrentRecordNbr = rhs.CurrentRecordNbr;
-		SortFunctor      = rhs.SortFunctor;
-		CodeKeyStack     = rhs.CodeKeyStack;
-		CsvStatus        = rhs.CsvStatus;
-	}
-	return *this;
-}
-bool TcsEpsgTable::SetCurrentRecord (const TcsEpsgCode& epsgCode)
-{
-	bool ok;
-	short fieldNbr;
-	unsigned recordNumber (InvalidRecordNbr);
-	wchar_t srchString [32];
-
-	ok = epsgCode.IsValid ();
-	if (ok)
-	{
-		ok = (CurrentCodeValue == epsgCode) && (CurrentRecordNbr != InvalidRecordNbr);
-		if (!ok)
-		{
-			CurrentRecordNbr = recordNumber = InvalidRecordNbr;
-
-			epsgCode.AsString (srchString,wcCount (srchString));
- 			fieldNbr = GetEpsgFieldNumber (TableId,CodeKeyField);
-			if (fieldNbr >= 0)
-			{
-				ok = false;
-				if (Indexed)
-				{
-					ok = Locate (recordNumber,srchString);
-				}
-				if (!ok)
-				{
-					ok = Locate (recordNumber,fieldNbr,srchString);
-				}
-				if (ok)
-				{
-					CurrentCodeValue = epsgCode;
-					CurrentRecordNbr = recordNumber;
-				}
-			}
-		}
-	}
-	if (!ok)
-	{
-		CurrentCodeValue = 0UL;
-		CurrentRecordNbr = InvalidRecordNbr;
-	}
-	return ok;
-}
-bool TcsEpsgTable::PushCurrentPosition (void)
-{
-	CodeKeyStack.push (CurrentCodeValue);
-	return true;
-}
-bool TcsEpsgTable::RestorePreviousPosition (void)
-{
-	bool ok (false);
-	TcsEpsgCode currentCodeValue;
-
-	if (!CodeKeyStack.empty ())
-	{
-		currentCodeValue = CodeKeyStack.top ();
-		CodeKeyStack.pop ();
-		if (currentCodeValue.IsValid ())
-		{
-			ok = SetCurrentRecord (currentCodeValue);
-		}
-	}
-	return ok;
-}
-bool TcsEpsgTable::EpsgLocateCode (TcsEpsgCode& epsgCode,EcsEpsgField fieldId,const wchar_t* fldValue)
-{
-	bool ok;
-	bool deprecated;
-	std::wstring fldData;
-
-	short deprecatedFldNbr = GetEpsgFieldNumber (TableId,epsgFldDeprecated);
-	short locateFldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	short codeFldNbr = GetEpsgCodeFieldNbr (TableId);
-
-	epsgCode = 0UL;
-	ok = (locateFldNbr >= 0);
-	unsigned recCnt = RecordCount ();
-	for (unsigned recNbr = 0; ok && recNbr < recCnt;++recNbr)
-	{
-		if (deprecatedFldNbr >= 0)
-		{
-			ok = GetField (fldData,recNbr,deprecatedFldNbr);
-			if (ok)
-			{
-				deprecated = (CS_wcsicmp (fldData.c_str (),LogicalTrue) == 0);
-				if (deprecated)
-				{
-					continue;
-				}
-			}
-		}
-		if (ok)
-		{
-			ok = GetField (fldData,recNbr,locateFldNbr);
-			if (ok)
-			{
-				if (CS_wcsicmp (fldData.c_str (),fldValue) == 0)
-				{
-					ok = GetField (fldData,recNbr,codeFldNbr);
-					if (ok)
-					{
-						epsgCode = TcsEpsgCode (fldData);
-					}
-				}
-			}
-		}
-	}
-	return ok;
-}
-// PositionToFirst functions presume the field ID is not the index field and
-// not the primary sort key.  That is, these 'PositionToFirst' functions do a
-// linear search of the whole table.
-bool TcsEpsgTable::PositionToFirst (EcsEpsgField fieldId,const wchar_t* fldValue,bool honorCase)
-{
-	unsigned recordNumber;
-	std::wstring fldData;
-
-	CurrentRecordNbr = InvalidRecordNbr;
-	CurrentCodeValue = 0U;
-
-	short fieldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	bool ok = (fieldNbr >= 0);
-	if (ok)
-	{
-		ok = Locate (recordNumber,fieldNbr,fldValue,honorCase);
-		if (ok)
-		{
-			CurrentRecordNbr = recordNumber;
-			if (CodeKeyField != epsgFldNone)
-			{
-				short codeKeyFldNbr = GetEpsgCodeFieldNbr (TableId);
-				ok = (codeKeyFldNbr >= 0);
-				{
-					ok = GetField (fldData,codeKeyFldNbr);
-					if (ok)
-					{
-						CurrentCodeValue = TcsEpsgCode (fldData);
-					}
-				}
-			}
-		}
-	}
-	return ok;
-}
-bool TcsEpsgTable::PositionToFirst (EcsEpsgField fieldId,const TcsEpsgCode& epsgCode)
-{
-	std::wstring epsgCodeStr (epsgCode.AsWstring ());
-	bool ok = PositionToFirst (fieldId,epsgCodeStr.c_str (),false);
-	return ok;
-}
-bool TcsEpsgTable::PositionToNext (EcsEpsgField fieldId,const wchar_t* fldValue,bool honorCase)
-{
-	unsigned recordNumber;
-	std::wstring fldData;
-
-	short fieldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	bool ok = (CurrentRecordNbr != InvalidRecordNbr) && (fieldNbr >= 0);
-
-	recordNumber = CurrentRecordNbr;
-	CurrentRecordNbr = InvalidRecordNbr;
-	CurrentCodeValue = 0U;
-	if (ok)
-	{
-		ok = LocateNext (recordNumber,fieldNbr,fldValue,honorCase);
-		if (ok)
-		{
-			CurrentRecordNbr = recordNumber;
-			if (CodeKeyField != epsgFldNone)
-			{
-				short codeKeyFldNbr = GetEpsgCodeFieldNbr (TableId);
-				ok = (codeKeyFldNbr >= 0);
-				if (ok)
-				{
-					ok = GetField (fldData,codeKeyFldNbr);
-					if (ok)
-					{
-						CurrentCodeValue = TcsEpsgCode (fldData);
-					}
-				}
-			}
-		}
-	}
-	return ok;
-}
-bool TcsEpsgTable::PositionToNext (EcsEpsgField fieldId,const TcsEpsgCode& epsgCode)
-{
-	std::wstring epsgCodeStr (epsgCode.AsWstring ());
-	bool ok = PositionToNext (fieldId,epsgCodeStr.c_str (),false);
-	return ok;
-}
-bool TcsEpsgTable::IsDeprecated (void)
-{
-	bool ok;
-	bool deprecated (false);
-	std::wstring fldData;
-
-	if (CurrentRecordNbr != InvalidRecordNbr)
-	{
-		short fieldNbr = GetEpsgFieldNumber (TableId,epsgFldDeprecated);
-		if (fieldNbr >= 0)
-		{
-			ok = GetField (fldData,fieldNbr);
-			if (ok)
-			{
-				deprecated = (CS_wcsicmp (fldData.c_str (),LogicalTrue) == 0);
-			}
-		}
-	}
-	return deprecated;
-}
-bool TcsEpsgTable::GetField (std::wstring& result,short fieldNbr)
-{
-	bool ok (false);
-
-	result.clear ();
-	if (CurrentRecordNbr < RecordCount ())
-	{
-		ok = TcsCsvFileBase::GetField (result,CurrentRecordNbr,fieldNbr,CsvStatus);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsLong (long& result,short fieldNbr)
-{
-	std::wstring fldValue;
-
-	bool ok = TcsCsvFileBase::GetField (fldValue,CurrentRecordNbr,fieldNbr,CsvStatus);
-	if (ok)
-	{
-		result = wcstol (fldValue.c_str (),0,10);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsULong (unsigned long& result,short fieldNbr)
-{
-	std::wstring fldValue;
-
-	bool ok = TcsCsvFileBase::GetField (fldValue,CurrentRecordNbr,fieldNbr,CsvStatus);
-	if (ok)
-	{
-		result = wcstoul (fldValue.c_str (),0,10);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsEpsgCode (TcsEpsgCode& result,short fieldNbr)
-{
-	std::wstring fldValue;
-
-	result = 0UL;	
-	bool ok = TcsCsvFileBase::GetField (fldValue,CurrentRecordNbr,fieldNbr,CsvStatus);
-	if (ok)
-	{
-		result = TcsEpsgCode (fldValue);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsReal (double& result,short fieldNbr)
-{
-	std::wstring fldValue;
-
-	bool ok = TcsCsvFileBase::GetField (fldValue,CurrentRecordNbr,fieldNbr,CsvStatus);
-	if (ok)
-	{
-		result = wcstod (fldValue.c_str (),0);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsLogical (bool& result,short fieldNbr)
-{
-	std::wstring fldValue;
-
-	result = false;
-	bool ok = TcsCsvFileBase::GetField (fldValue,CurrentRecordNbr,fieldNbr,CsvStatus);
-	if (ok)
-	{
-		result = !CS_wcsicmp (fldValue.c_str(),LogicalTrue);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetField (std::wstring& result,EcsEpsgField fieldId)
-{
-	bool ok (false);
-
-	short fieldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		ok = GetField (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsLong (long& result,EcsEpsgField fieldId)
-{
-	bool ok (false);
-
-	short fieldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		ok = GetAsLong (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsULong (unsigned long& result,EcsEpsgField fieldId)
-{
-	bool ok (false);
-
-	short fieldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		ok = GetAsULong (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsEpsgCode (TcsEpsgCode& result,EcsEpsgField fieldId)
-{
-	bool ok (false);
-
-	short fieldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		ok = GetAsEpsgCode (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsReal (double& result,EcsEpsgField fieldId)
-{
-	bool ok (false);
-
-	short fieldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		ok = GetAsReal (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetField (std::wstring result,const TcsEpsgCode& epsgCode,short fieldNbr)
-{
-	bool ok = SetCurrentRecord (epsgCode);
-	if (ok)
-	{
-		ok = GetField (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsLong (long& result,const TcsEpsgCode& epsgCode,short fieldNbr)
-{
-	bool ok = SetCurrentRecord (epsgCode);
-	if (ok)
-	{
-		ok = GetAsLong (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsULong (unsigned long& result,const TcsEpsgCode& epsgCode,short fieldNbr)
-{
-	bool ok = SetCurrentRecord (epsgCode);
-	if (ok)
-	{
-		ok = GetAsULong (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsEpsgCode (TcsEpsgCode& result,const TcsEpsgCode& epsgCode,short fieldNbr)
-{
-	bool ok = SetCurrentRecord (epsgCode);
-	if (ok)
-	{
-		ok = GetAsEpsgCode (result,fieldNbr);
-	}
-	return ok;
-}
-bool TcsEpsgTable::GetAsReal (double& result,const TcsEpsgCode& epsgCode,short fieldNbr)
-{
-	bool ok = SetCurrentRecord (epsgCode);
-	if (ok)
-	{
-		ok = GetAsReal (result,fieldNbr);
-	}
-	return ok;
-}
-const TcsCsvStatus& TcsEpsgTable::GetCsvStatus () const
-{
-    return CsvStatus;
-}
-//=============================================================================
-// Private Support Functions
-bool TcsEpsgTable::PrepareCsvFile ()
-{
-	bool ok (true);
-
-	if (SortFunctor.FirstField >= 0)
-	{
-		Sorted = StableSort (SortFunctor);
-		ok = Sorted;
-	}
-	if (ok && CodeKeyField != epsgFldNone)
-	{
-		short fieldNbr = GetEpsgFieldNumber (TableId,CodeKeyField);
-		ok = SetRecordKeyField (fieldNbr,CsvStatus);
-		Indexed = ok;
-	}
-	return ok;
-}
 //newPage//
 //=============================================================================
 // TcsEpsgDataSetV6  -  An EPSG dataset based on the version 6 model.
@@ -2221,28 +1501,8 @@ bool TcsEpsgTable::PrepareCsvFile ()
 //
 //=============================================================================
 // Static Constants, Variables, and Member Functions
-const TcsEpsgDataSetV6::TcsCsMapDtmCodeMap TcsEpsgDataSetV6::KcsCsMapDtmCodeMap [] =
-{
-	// These entries are of the null datum shift type.
-	{   9603UL,   4283UL,   4326UL,   cs_DTCTYP_GDA94  },
-	{   9603UL,   4167UL,   4326UL,   cs_DTCTYP_NZGD2K },
-	{   9603UL,   4171UL,   4326UL,   cs_DTCTYP_RGF93  },
-	{   9603UL,   4258UL,   4326UL,   cs_DTCTYP_ETRF89 },
-	{   9603UL,   4269UL,   4326UL,   cs_DTCTYP_WGS84  },	// NAD83 to WGS84
-//	{   9603UL,   4148UL,   4326UL,   cs_DTCTYP_WGS84  },	// Hartebeesthoek94 to WGS84
-	{   9603UL,   4612UL,   4326UL,   cs_DTCTYP_WGS84  },	// JGD2000
-
-	// The following entries are of the datum shift file type.
-	{   9613UL,   4267UL,   4326UL,   cs_DTCTYP_NAD27  },	// NADCON: NAD27
-	{   9613UL,   4152UL,   4326UL,   cs_DTCTYP_HPGN   },	// NADCON: HARN
-//	{   9614UL,   4267UL,   4326UL,   cs_DTCTYP_NAD27  },	// NTv1: NAD27
-	{   9615UL,   4267UL,   4326UL,   cs_DTCTYP_NAD27  },	// NTv2: NAD27
-	{   9615UL,   4617UL,   4326UL,   cs_DTCTYP_CSRS   },	// NTv2: CSRS
-//	{   9633UL,   0000UL,   0000UL,   cs_DTCTYP_?????  },	// OSNT
-//	{   9634UL,   0000UL,   0000UL,   cs_DTCTYP_?????  },	// Maritime TRANSFORM:
-	{   9655UL,   4275UL,   4326UL,   cs_DTCTYP_RGF93  },	// French:
-	{      0UL,      0UL,      0UL,   cs_DTCTYP_NONE   },    
-};
+//
+// Converts an EPSG table ID & field ID to a .CSV field number.
 short TcsEpsgDataSetV6::GetFldNbr (EcsEpsgTable tableId,EcsEpsgField fieldId)
 {
 	short rtnValue = -1;
@@ -2258,6 +1518,7 @@ short TcsEpsgDataSetV6::GetFldNbr (EcsEpsgTable tableId,EcsEpsgField fieldId)
 	}
 	return rtnValue;
 }
+// Converts an EPSG table ID & field ID to a .CSV field label.
 short TcsEpsgDataSetV6::GetFldName (std::wstring& fieldName,EcsEpsgTable tableId,EcsEpsgField fieldId)
 {
 	short rtnValue = -1;
@@ -2288,7 +1549,7 @@ TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t*
 	for (tblPtr = KcsEpsgTblMap;tblPtr->TableId != epsgTblUnknown;++tblPtr)
 	{
 		TcsEpsgTable* nextTable = new TcsEpsgTable (*tblPtr,DatabaseFolder.c_str ());
-		EpsgTables.insert (std::make_pair(tblPtr->TableId,nextTable));
+		EpsgTables.insert (std::make_pair(tblPtr->TableId,nextTable));			//lint !e534 (ignoring return value)
 	}
 }
 TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const TcsEpsgDataSetV6& source) : RevisionLevel  (source.RevisionLevel),
@@ -2318,466 +1579,37 @@ TcsEpsgDataSetV6& TcsEpsgDataSetV6::operator= (const TcsEpsgDataSetV6& rhs)
 }
 //=============================================================================
 // Public Named Member Functions
-TcsEpsgTable* TcsEpsgDataSetV6::GetTablePtr (EcsEpsgTable tableId)
+const TcsEpsgTable* TcsEpsgDataSetV6::GetTablePtr (EcsEpsgTable tableId) const
 {
-	TcsEpsgTable* tblPtr = EpsgTables [tableId];
+	const TcsEpsgTable* tblPtr (0);
+	std::map<EcsEpsgTable,TcsEpsgTable*>::const_iterator tblItr;
+
+	// Can't use the [] operator as it inserts if the key is not found, thus
+	// the std::map can't be a constant.  If we don't have a const version
+	// of this function, virtually nothing else can be const.
+
+	tblItr = EpsgTables.find (tableId);
+	if (tblItr != EpsgTables.end ())
+	{
+		tblPtr = tblItr->second;
+	}
 	return tblPtr;
 }
-bool TcsEpsgDataSetV6::GetField (std::wstring result,EcsEpsgTable tableId,EcsEpsgField fieldId)
+TcsEpsgTable* TcsEpsgDataSetV6::GetTablePtr (EcsEpsgTable tableId)
 {
-	bool ok (false);
-	short fieldNbr;
+	TcsEpsgTable* tblPtr (0);
+	std::map<EcsEpsgTable,TcsEpsgTable*>::iterator tblItr;
 
-	result.clear ();
-	fieldNbr = GetFldNbr (tableId,fieldId);
-	if (fieldNbr >= 0)
+	tblItr = EpsgTables.find (tableId);
+	if (tblItr != EpsgTables.end ())
 	{
-		TcsEpsgTable* tblPtr = GetTablePtr (tableId);
-		if (tblPtr != 0)
-		{
-			ok = tblPtr->GetField (result,fieldNbr);
-		}
+		tblPtr = tblItr->second;
 	}
-	return ok;
+	return tblPtr;
 }
-bool TcsEpsgDataSetV6::GetFieldAsLong (long& result,EcsEpsgTable tableId,EcsEpsgField fieldId)
-{
-	bool ok (false);
-	short fieldNbr;
-
-	fieldNbr = GetFldNbr (tableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		TcsEpsgTable* tblPtr = GetTablePtr (tableId);
-		if (tblPtr != 0)
-		{
-			ok = tblPtr->GetAsLong (result,fieldNbr);
-		}
-	}
-	return ok;
-}
-bool TcsEpsgDataSetV6::GetFieldAsULong (unsigned long& result,EcsEpsgTable tableId,EcsEpsgField fieldId)
-{
-	bool ok (false);
-	short fieldNbr;
-
-	fieldNbr = GetFldNbr (tableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		TcsEpsgTable* tblPtr = GetTablePtr (tableId);
-		if (tblPtr != 0)
-		{
-			ok = tblPtr->GetAsULong (result,fieldNbr);
-		}
-	}
-	return ok;
-}
-bool TcsEpsgDataSetV6::GetFieldAsReal (double& result,EcsEpsgTable tableId,EcsEpsgField fieldId)
-{
-	bool ok (false);
-	short fieldNbr;
-
-	fieldNbr = GetFldNbr (tableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		TcsEpsgTable* tblPtr = GetTablePtr (tableId);
-		if (tblPtr != 0)
-		{
-			ok = tblPtr->GetAsReal (result,fieldNbr);
-		}
-	}
-	return ok;
-}
-bool TcsEpsgDataSetV6::GetFieldAsEpsgCode (TcsEpsgCode& result,EcsEpsgTable tableId,EcsEpsgField fieldId)
-{
-	bool ok (false);
-	short fieldNbr;
-
-	fieldNbr = GetFldNbr (tableId,fieldId);
-	if (fieldNbr >= 0)
-	{
-		TcsEpsgTable* tblPtr = GetTablePtr (tableId);
-		if (tblPtr != 0)
-		{
-			ok = tblPtr->GetAsEpsgCode (result,fieldNbr);
-		}
-	}
-	return ok;	
-}
-bool TcsEpsgDataSetV6::GetUomToDegrees (double& toDegrees,TcsEpsgCode uomCode)
-{
-	bool ok (false);
-	short typFldNbr;
-	short bFldNbr;
-	short cFldNbr;
-	double factorB;
-	double factorC;
-	std::wstring unitType;
-
-	TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
-	if (uomTblPtr != 0)
-	{
-		ok = uomTblPtr->SetCurrentRecord (uomCode);
-		if (ok)
-		{
-			typFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldUnitOfMeasType);
-			ok = (typFldNbr >= 0);
-			if (ok)
-			{
-				ok = uomTblPtr->GetField (unitType,typFldNbr);
-				if (ok)
-				{
-					EcsUomType uomType = GetEpsgUomType (unitType.c_str ());
-					ok = (uomType == epsgUomTypAngular);
-				}
-				if (ok)
-				{
-					bFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldFactorB);
-					cFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldFactorC);
-					ok = (bFldNbr >= 0) && (cFldNbr >= 0);
-					if (ok)
-					{
-						ok  = uomTblPtr->GetAsReal (factorB,bFldNbr);
-						ok &= uomTblPtr->GetAsReal (factorC,cFldNbr);   //lint !e514
-						if (ok)
-						{
-							ok = (fabs (factorC) > 1.0E-12);
-						}
-						if (ok)
-						{
-							toDegrees = (factorB / factorC) * 57.29577951308238;
-						}
-					}
-				}
-			}	
-		}
-	}
-	return ok;
-}
-bool TcsEpsgDataSetV6::GetUomToMeters (double& toMeters,TcsEpsgCode uomCode)
-{
-	bool ok (false);
-	short typFldNbr;
-	short bFldNbr;
-	short cFldNbr;
-	double factorB;
-	double factorC;
-	std::wstring unitType;
-
-	TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
-	if (uomTblPtr != 0)
-	{
-		ok = uomTblPtr->SetCurrentRecord (uomCode);
-		if (ok)
-		{
-			typFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldUnitOfMeasType);
-			ok = (typFldNbr >= 0);
-			if (ok)
-			{
-			    ok = uomTblPtr->GetField (unitType,typFldNbr);
-			    if (ok)
-			    {
-				    EcsUomType uomType = GetEpsgUomType (unitType.c_str ());
-				    ok = (uomType == epsgUomTypLinear);
-				    if (ok)
-				    {
-					    bFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldFactorB);
-					    cFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldFactorC);
-					    ok = (bFldNbr >= 0) && (cFldNbr >= 0);
-					    if (ok)
-					    {
-						    ok  = uomTblPtr->GetAsReal (factorB,bFldNbr);
-						    ok &= uomTblPtr->GetAsReal (factorC,cFldNbr);       //lint !e514
-						    if (ok)
-						    {
-							    ok = (fabs (factorC) > 1.0E-12);
-						    }
-						    if (ok)
-						    {
-							    toMeters = (factorB / factorC);
-						    }
-					    }
-				    }
-			    }
-			}
-		}
-	}
-	return ok;
-}
-bool TcsEpsgDataSetV6::GetUomToUnity (double& toUnity,TcsEpsgCode uomCode)
-{
-	bool ok (false);
-	short typFldNbr;
-	short bFldNbr;
-	short cFldNbr;
-	double factorB;
-	double factorC;
-	std::wstring unitType;
-
-	TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
-	if (uomTblPtr != 0)
-	{
-		ok = uomTblPtr->SetCurrentRecord (uomCode);
-		if (ok)
-		{
-			typFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldUnitOfMeasType);
-			ok = (typFldNbr >= 0);
-			if (ok)
-			{
-				ok = uomTblPtr->GetField (unitType,typFldNbr);
-				if (ok)
-				{
-					EcsUomType uomType = GetEpsgUomType (unitType.c_str ());
-					ok = (uomType == epsgUomTypScale);
-				}
-				if (ok)
-				{
-					bFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldFactorB);
-					cFldNbr = GetFldNbr (epsgTblUnitOfMeasure,epsgFldFactorC);
-					ok = (bFldNbr >= 0) && (cFldNbr >= 0);
-					if (ok)
-					{
-						ok  = uomTblPtr->GetAsReal (factorB,bFldNbr);
-						ok &= uomTblPtr->GetAsReal (factorC,cFldNbr);       //lint !e514
-						if (ok)
-						{
-							ok = (fabs (factorC) > 1.0E-14);
-						}
-						if (ok)
-						{
-							toUnity = (factorB / factorC);
-						}
-					}
-				}
-			}
-		}
-	}
-	return ok;
-}
-bool TcsEpsgDataSetV6::GetFieldAsDegrees (double& result,EcsEpsgTable tableId,EcsEpsgField fieldId,TcsEpsgCode uomCode)
-{
-	bool ok (false);
-	double realValue (0.0);
-	wchar_t* wcPtr;
-
-	std::wstring strValue;
-
-	if (uomCode == 9110UL)
-	{
-		if (GetField (strValue,tableId,fieldId))
-		{
-			bool minus;
-			size_t fillCnt;
-			long degrees;
-			long minutes;
-			double seconds;
-
-			wchar_t wcDegrees [16];
-			wchar_t wcMinutes [16];
-			wchar_t wcSeconds [32];
-			wchar_t wrkBufr [64];
-
-			wcsncpy (wrkBufr,strValue.c_str (),64);
-			wrkBufr [63] = L'\0';
-			fillCnt = 63 - wcslen (wrkBufr);
-			wcsncat (wrkBufr,L"00000000000000000",fillCnt);
-			wrkBufr [63] = L'\0';
-			
-			wcPtr = wcschr (wrkBufr,L'.');
-			if (wcPtr != 0)
-			{
-				*wcPtr++ = L'\0';
-				wcsncpy (wcDegrees,wrkBufr,16);
-				wcDegrees [15] = L'\0';
-				degrees = wcstol (wcDegrees,0,10);
-				minus = degrees < 0L;
-				if (minus)
-				{
-					degrees = -degrees;
-				}
-		
-				wcMinutes [0] = *wcPtr++;
-				wcMinutes [1] = *wcPtr++;
-				wcMinutes [2] = L'\0';
-				minutes = wcstol (wcMinutes,0,10);
-
-				wcSeconds [0] = *wcPtr++;
-				wcSeconds [1] = *wcPtr++;
-				wcSeconds [2] = L'.';
-				wcsncpy (wcSeconds,wcPtr,28);
-				wcSeconds [31] = L'\0';
-				seconds = wcstod (wcSeconds,0);
-				
-				result = static_cast<double>(degrees) + static_cast<double>(minutes) / 60.0 + seconds / 3600.0;
-				if (minus)
-				{
-					result = -result;
-				}
-			}
-		}	
-	}
-	if (uomCode == 9111UL)
-	{
-		if (GetField (strValue,tableId,fieldId))
-		{
-			bool minus;
-			size_t fillCnt;
-			long degrees;
-			double minutes;
-
-			wchar_t wcDegrees [16];
-			wchar_t wcMinutes [32];
-			wchar_t wrkBufr [64];
-
-			wcsncpy (wrkBufr,strValue.c_str (),64);
-			wrkBufr [63] = L'\0';
-			fillCnt = 63 - wcslen (wrkBufr);
-			wcsncat (wrkBufr,L"00000000000000000",fillCnt);
-			wrkBufr [63] = L'\0';
-
-			wcPtr = wcschr (wrkBufr,L'.');
-			if (wcPtr != 0)
-			{
-				*wcPtr++ = L'\0';
-				wcsncpy (wcDegrees,wrkBufr,16);
-				wcDegrees [15] = L'\0';
-				degrees = wcstol (wcDegrees,0,10);
-				minus = degrees < 0L;
-				if (minus)
-				{
-					degrees = -degrees;
-				}
-		
-				wcMinutes [0] = *wcPtr++;
-				wcMinutes [1] = *wcPtr++;
-				wcMinutes [2] = L'.';
-				wcsncpy (wcMinutes,wcPtr,28);
-				wcMinutes [31] = L'\0';
-				minutes = wcstod (wcMinutes,0);
-				
-				result = static_cast<double>(degrees) + minutes / 60.0;
-				if (minus)
-				{
-					result = -result;
-				}
-			}
-		}	
-	}
-	else if ((uomCode >= 9101UL && uomCode <= 9106UL) ||
-	         (uomCode >= 9112UL && uomCode <= 9114UL))
-	{
-		ok = GetFieldAsReal (realValue,tableId,fieldId);
-		if (ok)
-		{
-			double uomFactor;
-			ok = GetUomToDegrees (uomFactor,uomCode);
-			if (ok && uomFactor != 0.0)
-			{
-				result = realValue * uomFactor;
-			}
-		}
-	}
-	return ok;
-}
-bool TcsEpsgDataSetV6::GetFieldAsMeters (double& result,EcsEpsgTable tableId,EcsEpsgField fieldId,TcsEpsgCode uomCode)
-{
-	bool ok;
-	double uomFactor;
-	double realValue;
-	
-	ok = GetFieldAsReal (realValue,tableId,fieldId);
-	if (ok)
-	{
-		ok = GetUomToMeters (uomFactor,uomCode);	
-		if (ok && uomFactor != 0.0)
-		{
-			result = realValue * uomFactor;
-		}
-	}
-	return ok;
-}
-#pragma message ("Development in progress, currently incomplete; and untested.")
-//bool TcsEpsgDataSetV6::FieldToReal (double& result,TcsEpsgCode trgUomCode,const wchar_t* fldData,TcsEpsgCode srcUomCode)
-//{
-//	bool ok;
-//	bool okB;
-//	bool okC;
-//
-//	EcsUomType srcType;
-//	EcsUomType trgType;
-//	
-//	double srcFactor;
-//	double trgFactor;
-//	double factorB;
-//	double factorC;
-//
-//	std::wstring fldData;
-//	
-//	const TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
-//	ok = (uomTblPtr != 0);
-//	
-//	if (ok)
-//	{
-//		ok = uomTblPtr->SetCurrentRecord (srcUomCode);
-//	}
-//	if (ok)
-//	{
-//		ok = uomTblPtr->GetField (fldData,epsgFldUnitOfMeasType);
-//		if (ok)
-//		{
-//			srcType = GetEpsgUomType (fldData.c_str ());
-//			okB = uomTblPtr->GetAsReal (factorB,epsgFldFactorB);
-//			okC = uomTblPtr->GetAsReal (factorC,epsgFldFactorC);
-//			if (okB && okC && fabs (factorC) > 1.0E-12)
-//			{
-//				srcFactor = factorB / factorC;
-//			}
-//			else if (okB)
-//			{
-//				srcFactor = factorB;
-//			}
-//			else
-//			{
-//				srcFactor = cs_One;
-//			}
-//			if (srcType == epsgUomTypAngular)
-//			{
-//				srcFactor *= 57.29577951308238;
-//			}
-//		}
-//	}
-//	if (ok)
-//	{
-//		ok = uomTblPtr->SetCurrentRecord (trgUomCode);
-//	}
-//	if (ok)
-//	{
-//		ok = uomTblPtr->GetField (fldData,epsgFldUnitOfMeasType);
-//		if (ok)
-//		{
-//			trgType = GetEpsgUomType (fldData.c_str ());
-//			okB = uomTblPtr->GetAsReal (factorB,epsgFldFactorB);
-//			okC = uomTblPtr->GetAsReal (factorC,epsgFldFactorC);
-//			if (okB && okC && fabs (factorC) > 1.0E-12)
-//			{
-//				trgFactor = factorB / factorC;
-//			}
-//			else if (okB)
-//			{
-//				trgFactor = factorB;
-//			}
-//			else
-//			{
-//				trgFactor = cs_One;
-//			}
-//		}
-//	}
-//	return ok;
-//}
 //=============================================================================
 // High Level API Functions
-//
-unsigned TcsEpsgDataSetV6::GetRecordCount (EcsEpsgTable tableId)
+unsigned TcsEpsgDataSetV6::GetRecordCount (EcsEpsgTable tableId) const
 {
 	unsigned recordCount (0);
 
@@ -2788,11 +1620,11 @@ unsigned TcsEpsgDataSetV6::GetRecordCount (EcsEpsgTable tableId)
 	}
 	return recordCount;
 }
-bool TcsEpsgDataSetV6::GetFieldByIndex (std::wstring& result,EcsEpsgTable tableId,EcsEpsgField fieldId,unsigned recNbr)
+bool TcsEpsgDataSetV6::GetFieldByIndex (std::wstring& result,EcsEpsgTable tableId,EcsEpsgField fieldId,unsigned recNbr) const
 {
 	bool ok (false);
 	short fldNbr;
-	TcsEpsgTable* epsgTblPtr;
+	const TcsEpsgTable* epsgTblPtr;
 
 	epsgTblPtr = GetTablePtr (tableId);
 	if (epsgTblPtr != 0)
@@ -2801,16 +1633,18 @@ bool TcsEpsgDataSetV6::GetFieldByIndex (std::wstring& result,EcsEpsgTable tableI
 		if (fldNbr >= 0)
 		{
 			TcsCsvStatus csvStatus (epsgTblPtr->GetCsvStatus ());
-			ok = static_cast<TcsCsvFileBase*>(epsgTblPtr)->GetField (result,recNbr,fldNbr,csvStatus);
+			// I can't figure out why a cast pointer needs to be used here, but
+			// it won't compile anyother way (under Microsoft VC++ 9.0 anyway).
+			ok = static_cast<const TcsCsvFileBase*>(epsgTblPtr)->GetField (result,recNbr,fldNbr,csvStatus);
 		}
 	}
 	return ok;
 }
-bool TcsEpsgDataSetV6::GetCodeByIndex (TcsEpsgCode& epsgCode,EcsEpsgTable tableId,EcsEpsgField fieldId,unsigned recNbr)
+bool TcsEpsgDataSetV6::GetCodeByIndex (TcsEpsgCode& epsgCode,EcsEpsgTable tableId,EcsEpsgField fieldId,unsigned recNbr) const
 {
 	bool ok (false);
 	short fldNbr;
-	TcsEpsgTable* epsgTblPtr;
+	const TcsEpsgTable* epsgTblPtr;
 	std::wstring fieldData;
 
 	epsgTblPtr = GetTablePtr (tableId);
@@ -2820,41 +1654,53 @@ bool TcsEpsgDataSetV6::GetCodeByIndex (TcsEpsgCode& epsgCode,EcsEpsgTable tableI
 		if (fldNbr >= 0)
 		{
 			TcsCsvStatus csvStatus (epsgTblPtr->GetCsvStatus ());
-			ok = static_cast<TcsCsvFileBase*>(epsgTblPtr)->GetField (fieldData,recNbr,fldNbr,csvStatus);
+			ok = static_cast<const TcsCsvFileBase*>(epsgTblPtr)->GetField (fieldData,recNbr,fldNbr,csvStatus);
 			if (ok)
 			{
-				epsgCode = wcstoul (fieldData.c_str (),0,10);
+				epsgCode = TcsEpsgCode (fieldData.c_str ());
+				ok = epsgCode.IsValid ();
 			}
 		}
 	}
 	return ok;
 }
-bool TcsEpsgDataSetV6::GetFieldByCode (std::wstring& result,EcsEpsgTable tableId,EcsEpsgField fieldId,TcsEpsgCode epsgCode)
+bool TcsEpsgDataSetV6::GetFieldByCode (std::wstring& result,EcsEpsgTable tableId,EcsEpsgField fieldId,const TcsEpsgCode& epsgCode) const
 {
 	bool ok (false);
-	short fldNbr;
-	TcsEpsgTable* epsgTblPtr;
+	const TcsEpsgTable* epsgTblPtr;
 
 	epsgTblPtr = GetTablePtr (tableId);
 	if (epsgTblPtr != 0)
 	{
-		fldNbr = GetFldNbr (tableId,fieldId);
-		if (fldNbr >= 0)
-		{
-			ok = epsgTblPtr->SetCurrentRecord (epsgCode);
-			if (ok)
-			{
-				ok = epsgTblPtr->GetField (result,fldNbr);
-			}
-		}
+		ok = epsgTblPtr->GetField (result,epsgCode,fieldId);
 	}
 	return ok;
 }
-bool TcsEpsgDataSetV6::CompareCsMapUnits (const struct cs_Unittab_* csMapUnitTbl,bool useNameMap)
+bool TcsEpsgDataSetV6::GetFieldByCode (TcsEpsgCode& result,EcsEpsgTable tableId,EcsEpsgField fieldId,const TcsEpsgCode& epsgCode) const
 {
-	return true;
+	bool ok (false);
+	const TcsEpsgTable* epsgTblPtr;
+
+	epsgTblPtr = GetTablePtr (tableId);
+	if (epsgTblPtr != 0)
+	{
+		ok = epsgTblPtr->GetAsEpsgCode (result,epsgCode,fieldId);
+	}
+	return ok;
 }
-bool TcsEpsgDataSetV6::GetCsMapEllipsoid (struct cs_Eldef_& ellipsoid,TcsEpsgCode epsgCode)
+bool TcsEpsgDataSetV6::IsDeprecated (EcsEpsgTable tableId,const TcsEpsgCode& epsgCode) const
+{
+	bool deprecated (false);
+	const TcsEpsgTable* epsgTblPtr;
+
+	epsgTblPtr = GetTablePtr (tableId);
+	if (epsgTblPtr != 0)
+	{
+		deprecated = epsgTblPtr->IsDeprecated (epsgCode);
+	}
+	return deprecated;
+}
+bool TcsEpsgDataSetV6::GetCsMapEllipsoid (struct cs_Eldef_& ellipsoid,const TcsEpsgCode& epsgCode) const
 {
 	bool ok (false);
 
@@ -2866,47 +1712,65 @@ bool TcsEpsgDataSetV6::GetCsMapEllipsoid (struct cs_Eldef_& ellipsoid,TcsEpsgCod
 	double flattening (0.0);
 	double rFlattening (0.0);
 	double eSq (0.0);
+	std::wstring fldData;
 	std::wstring elpName;
 
-	TcsEpsgTable* epsgTblPtr = GetTablePtr (epsgTblEllipsoid);
-	if (epsgTblPtr != 0)
+	const TcsEpsgTable* epsgTblPtr = GetTablePtr (epsgTblEllipsoid);
+	ok = (epsgTblPtr != 0);
+	if (ok)
 	{
-		ok = epsgTblPtr->SetCurrentRecord (epsgCode);
+		ok = epsgTblPtr->GetField (elpName,epsgCode,epsgFldEllipsoidName);
+	}
+	if (ok)
+	{
+		ok  = epsgTblPtr->GetAsEpsgCode (uomCode,epsgCode,epsgFldUomCode);
 		if (ok)
 		{
-			ok = epsgTblPtr->GetField (elpName,epsgFldEllipsoidName);
-		}
-		if (ok)
-		{
-			ok  = epsgTblPtr->GetAsEpsgCode (uomCode,epsgFldUomCode);
+			ok = epsgTblPtr->GetField (fldData,epsgCode,epsgFldSemiMajorAxis);
 			if (ok)
 			{
-				ok  = GetFieldAsMeters (eRad,epsgTblEllipsoid,epsgFldSemiMajorAxis,uomCode);
-				ok &= GetFieldAsMeters (pRad,epsgTblEllipsoid,epsgFldSemiMinorAxis,uomCode);    //lint !e514
-				ok &= epsgTblPtr->GetAsReal (rFlattening,epsgFldInvFlattening);                 //lint !e514
-				if (ok)
-				{
-					ok = (eRad != 0.0) && (pRad != 0.0 || rFlattening != 0.0);
-				}
-				if (ok)
-				{
-					if (rFlattening != 0.0)
-					{
-						flattening = 1.0 / rFlattening;
-						pRad = eRad * (1.0 - flattening);
-					}
-					else
-					{
-						flattening = 1.0 - (pRad / eRad);
-						rFlattening = 1.0 / flattening;
-					}
-					eSq = (2.0 * flattening) - (flattening * flattening);
-					ecent = sqrt (eSq);
-				}
+				ok = FieldToReal (eRad,9001UL,fldData.c_str (),uomCode);
 			}
 		}
 		if (ok)
 		{
+			ok = epsgTblPtr->GetField (fldData,epsgCode,epsgFldSemiMinorAxis);
+			if (ok)
+			{
+				ok = FieldToReal (pRad,9001UL,fldData.c_str (),uomCode);
+			}
+		}
+		if (ok)
+		{
+			ok = epsgTblPtr->GetField (fldData,epsgCode,epsgFldInvFlattening);
+			if (ok)
+			{
+				ok = FieldToReal (rFlattening,9000UL,fldData.c_str (),9000UL);
+			}
+		}
+		if (ok)
+		{
+			ok = (eRad != 0.0) && (pRad != 0.0 || rFlattening != 0.0);
+		}
+		if (ok)
+		{
+			if (rFlattening != 0.0)
+			{
+				flattening = 1.0 / rFlattening;
+				pRad = eRad * (1.0 - flattening);
+			}
+			else
+			{
+				flattening = 1.0 - (pRad / eRad);
+				rFlattening = 1.0 / flattening;
+			}
+			eSq = (2.0 * flattening) - (flattening * flattening);
+			ecent = sqrt (eSq);
+		}
+		if (ok)
+		{
+			char revisionLevel [64];
+			wcstombs (revisionLevel,RevisionLevel.c_str (),sizeof (revisionLevel));
 			sprintf (ellipsoid.key_nm,"EPSG::%lu",static_cast<unsigned long>(epsgCode));
 			ellipsoid.group [0] = '\0';
 			ellipsoid.fill [0] = '\0';
@@ -2916,7 +1780,7 @@ bool TcsEpsgDataSetV6::GetCsMapEllipsoid (struct cs_Eldef_& ellipsoid,TcsEpsgCod
 			ellipsoid.flat = flattening;
 			ellipsoid.ecent = ecent;
 			wcstombs (ellipsoid.name,elpName.c_str (),sizeof (ellipsoid.name));
-			sprintf (ellipsoid.source,"Converted from EPSG %S by CS-MAP",RevisionLevel.c_str ());
+			sprintf (ellipsoid.source,"Converted from EPSG %s by CS-MAP",revisionLevel);
 			ellipsoid.protect = 0;
 			ellipsoid.epsgNbr = static_cast<short>(epsgCode);
 			ellipsoid.wktFlvr = wktFlvrEpsg;
@@ -2929,285 +1793,315 @@ bool TcsEpsgDataSetV6::GetCsMapEllipsoid (struct cs_Eldef_& ellipsoid,TcsEpsgCod
 	}
 	return ok;
 }
-TcsEpsgCode TcsEpsgDataSetV6::LocateGeographicBase (EcsCrsType crsType,TcsEpsgCode datumCode)
+// Find the first CRS table record of the given type whose datum field carries
+// indicated datum code.  Specifically used to find the first CRS of a
+// geographic type based on the specified datum.
+bool TcsEpsgDataSetV6::LocateGeographicBase (TcsEpsgCode& geographicBase,EcsCrsType crsType,
+																		 const TcsEpsgCode& datumCode) const
 {
 	bool ok (false);
 	bool deprecated (false);
+	unsigned recordNumber;
+	unsigned invalidRecordNbr;
 	TcsEpsgCode geogCode (0UL);
 	std::wstring fldData;
 
-	TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
-	TcsCsvStatus lclStatus (crsTblPtr->GetCsvStatus ());
+	invalidRecordNbr = TcsCsvFileBase::GetInvalidRecordNbr ();
+	recordNumber = invalidRecordNbr;				// to keep lint happy.
 
-	short deprecatedFldNbr = GetEpsgFieldNumber (epsgTblReferenceSystem,epsgFldDeprecated);
-	short crsKindFldNbr = GetEpsgFieldNumber (epsgTblReferenceSystem,epsgFldCoordRefSysKind);
-	short datumFldNbr = GetEpsgFieldNumber (epsgTblReferenceSystem,epsgFldDatumCode);
-	short codeKeyFldNbr = GetEpsgCodeFieldNbr (epsgTblReferenceSystem);
-
-	ok = (crsTblPtr != 0) && (crsKindFldNbr >= 0) && (datumFldNbr >= 0) && (codeKeyFldNbr >= 0);
+	const TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
+	ok = (crsTblPtr != 0);
 	if (ok)
 	{
-		ok = crsTblPtr->PositionToFirst (epsgFldDatumCode,datumCode);
+		// EpsgLocateFirst function does a linear search of the entire table.
+		recordNumber = crsTblPtr->EpsgLocateFirst (epsgFldDatumCode,datumCode);
+		ok  = (recordNumber != invalidRecordNbr);
 	}
 	while (ok)
 	{
-		if (deprecatedFldNbr >= 0)
+		deprecated = crsTblPtr->IsDeprecated (recordNumber);
+		if (!deprecated)
 		{
-			ok = crsTblPtr->GetAsLogical (deprecated,deprecatedFldNbr);
-			if (ok && deprecated)
-			{
-				ok = crsTblPtr->PositionToNext (epsgFldDatumCode,datumCode);
-				continue;
-			}
-		}
-		ok = crsTblPtr->GetField (fldData,crsKindFldNbr);
-		if (ok)
-		{
-			EcsCrsType crsKind = GetEpsgCrsType (fldData.c_str ());
-			if (crsKind == crsType)
-			{
-				ok = crsTblPtr->GetField (fldData,codeKeyFldNbr);
-				if (ok)
-				{
-					geogCode = TcsEpsgCode (fldData);
-					break;
-				}
-			}
-		}
-		ok = crsTblPtr->PositionToNext (epsgFldDatumCode,datumCode);
-	}
-	return geogCode;
-}
-bool TcsEpsgDataSetV6::LocateOperationVariants (unsigned& variantCount,unsigned variants[],
-																	   unsigned variantsSize,
-																	   EcsOpType opType,
-																	   TcsEpsgCode sourceCode,
-																	   TcsEpsgCode targetCode)
-{
-	bool ok (false);
-	bool deprecated (false);
-
-	short codeKeyFldNbr (-1);
-	short deprecatedFldNbr (-1);
-	TcsEpsgCode operationCode (0UL);
-	TcsEpsgCode recSrcCode;
-	TcsEpsgCode recTrgCode;
-	unsigned long recVarCode;
-	std::wstring fldData;
-
-	deprecatedFldNbr = GetEpsgFieldNumber (epsgTblCoordinateOperation,epsgFldDeprecated);
-	codeKeyFldNbr = GetEpsgCodeFieldNbr (epsgTblCoordinateOperation);
-	TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
-
-	variantCount = 0;
-	for (unsigned idx = 0;idx < variantsSize;++idx)
-	{
-		variants [idx] = 0;
-	}
-	ok = (copTblPtr != 0) && (codeKeyFldNbr >= 0);
-	if (ok)
-	{
-		ok = copTblPtr->PositionToFirst (epsgFldSourceCrsCode,sourceCode);
-		bool loopOk (true);
-		while (loopOk)
-		{
-			if (deprecatedFldNbr >= 0)
-			{
-				ok = copTblPtr->GetAsLogical (deprecated,deprecatedFldNbr);
-				if (ok && deprecated)
-				{
-					loopOk = copTblPtr->PositionToNext (epsgFldSourceCrsCode,sourceCode);
-					continue;
-				}
-			}
-			ok  = copTblPtr->GetAsEpsgCode (recSrcCode,epsgFldSourceCrsCode);
-			ok &= copTblPtr->GetAsEpsgCode (recTrgCode,epsgFldTargetCrsCode);
-			ok &= copTblPtr->GetAsULong (recVarCode,epsgFldCoordOpVariant);
-			ok &= copTblPtr->GetField (fldData,epsgFldCoordOpType);
-			EcsOpType recOpType = GetEpsgOpType (fldData.c_str ());
-			if (ok && (recOpType == opType) && (recSrcCode == sourceCode) &&
-											   (recTrgCode == targetCode))
-			{
-				if (variantCount < variantsSize)
-				{
-					variants [variantCount] = recVarCode;
-				}
-				variantCount++;
-			}
+			ok = crsTblPtr->GetField (fldData,recordNumber,epsgFldCoordRefSysKind);
 			if (ok)
 			{
-				loopOk = copTblPtr->PositionToNext (epsgFldSourceCrsCode,sourceCode);
-			}
-			else
-			{
-				loopOk = false;
+				EcsCrsType crsKind = GetEpsgCrsType (fldData.c_str ());
+				if (crsKind == crsType)
+				{
+					ok = crsTblPtr->GetAsEpsgCode (geogCode,recordNumber,epsgFldCoordRefSysCode);
+					if (ok)
+					{
+						break;
+					}
+				}
 			}
 		}
+		recordNumber = crsTblPtr->EpsgLocateNext (recordNumber,epsgFldDatumCode,datumCode);
+		ok = (recordNumber != invalidRecordNbr);
 	}
+	geographicBase = geogCode;
 	return ok;
 }
-TcsEpsgCode TcsEpsgDataSetV6::LocateOperation (EcsOpType opType,TcsEpsgCode sourceCode,TcsEpsgCode targetCode,long variant)
+// In the case where this function is traditionally used, i.e. transformations
+// as opposed to conversions, there can be several different operations for a
+// given source and target CRS.  These are distinguished by a variant number.
+// All transformations have a variant number, and they begin with one.  If you
+// don't know the variation you want, you can always use the default value of
+// the variant parameter which is 1.  Refer to the TcsOpVariants objects for
+// a better way to deal with this situation.
+TcsEpsgCode TcsEpsgDataSetV6::LocateOperation (EcsOpType opType,const TcsEpsgCode& sourceCode,
+																const TcsEpsgCode& targetCode,
+																long variant) const
 {
 	bool ok;
+	bool deprecated;
 
-	short codeKeyFldNbr (-1);
-	short deprecatedFldNbr (-1);
+	unsigned recordNbr;
+	unsigned invalidRecordNbr;
+
 	TcsEpsgCode operationCode (0UL);
 	TcsEpsgCode recSrcCode;
 	TcsEpsgCode recTrgCode;
 	long recVarCode;
 	std::wstring fldData;
 
-	deprecatedFldNbr = GetEpsgFieldNumber (epsgTblCoordinateOperation,epsgFldDeprecated);
-	codeKeyFldNbr = GetEpsgCodeFieldNbr (epsgTblCoordinateOperation);
-	TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
+	invalidRecordNbr = TcsCsvFileBase::GetInvalidRecordNbr ();
 
-	ok = (copTblPtr != 0) && (codeKeyFldNbr >= 0);
+	const TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
+	ok = (copTblPtr != 0);
+
 	if (ok)
 	{
-		ok = copTblPtr->PositionToFirst (epsgFldSourceCrsCode,sourceCode);
+		recordNbr = copTblPtr->EpsgLocateFirst (epsgFldSourceCrsCode,sourceCode);
+		ok = (recordNbr != invalidRecordNbr);
 		while (ok)
 		{
-			if (deprecatedFldNbr >= 0)
+			deprecated = copTblPtr->IsDeprecated (recordNbr);
+			if (deprecated)
 			{
-				ok = copTblPtr->GetField (fldData,deprecatedFldNbr);
-				if (ok)
-				{
-					if (CS_wcsicmp (fldData.c_str (),TcsEpsgTable::LogicalTrue) == 0)
-					{
-						ok = copTblPtr->PositionToNext (epsgFldSourceCrsCode,sourceCode);
-						continue;
-					}
-				}
+				recordNbr = copTblPtr->EpsgLocateNext (recordNbr,epsgFldSourceCrsCode,sourceCode);
+				ok = (recordNbr != invalidRecordNbr);
+				continue;
 			}
-			ok  = copTblPtr->GetAsEpsgCode (recSrcCode,epsgFldSourceCrsCode);
-			ok &= copTblPtr->GetAsEpsgCode (recTrgCode,epsgFldTargetCrsCode);
-			ok &= copTblPtr->GetAsLong (recVarCode,epsgFldCoordOpVariant);
-			ok &= copTblPtr->GetField (fldData,epsgFldCoordOpType);
+
+			ok  = copTblPtr->GetAsEpsgCode (recSrcCode,recordNbr,epsgFldSourceCrsCode);
+			ok &= copTblPtr->GetAsEpsgCode (recTrgCode,recordNbr,epsgFldTargetCrsCode);
+			ok &= copTblPtr->GetAsLong (recVarCode,recordNbr,epsgFldCoordOpVariant);
+			ok &= copTblPtr->GetField (fldData,recordNbr,epsgFldCoordOpType);
 			EcsOpType recOpType = GetEpsgOpType (fldData.c_str ());
 			if (ok && (recOpType == opType) && (recSrcCode == sourceCode) &&
 											   (recTrgCode == targetCode) &&
-											   (recVarCode == variant))
+											   (variant == 0 || recVarCode == variant))
 			{
-				ok = (codeKeyFldNbr >= 0);
-				if (ok)
-				{
-					ok = copTblPtr->GetAsEpsgCode (operationCode,codeKeyFldNbr);
-					break;
-				}
+				ok = copTblPtr->GetAsEpsgCode (operationCode,recordNbr,epsgFldCoordOpCode);
+				break;
 			}
-			ok = copTblPtr->PositionToNext (epsgFldSourceCrsCode,sourceCode);
+			recordNbr = copTblPtr->EpsgLocateNext (recordNbr,epsgFldSourceCrsCode,sourceCode);
+			ok = (recordNbr != invalidRecordNbr);
 		}
 	}
 	return ok ? operationCode : TcsEpsgCode(0UL);
 }
-#pragma message ("Development in progress, currently incomplete; and untested.")
-// The following returns an EPSG UOM code value for success, 0UL for failure.
-TcsEpsgCode TcsEpsgDataSetV6::GetParameterValue (double& parameterValue,TcsEpsgCode opCode,
-																		TcsEpsgCode opMethCode,
-																		TcsEpsgCode prmCode)
+// The following is used to locate the specific record in the ParameterValue
+// table.  There is no unique record key, so the value returned is a
+// record number.  This is done to reduce duplicated code, as this is not
+// a trivial operation.
+unsigned TcsEpsgDataSetV6::LocateParameterValue (const TcsEpsgCode& opCode,const TcsEpsgCode& opMethCode,
+																		   const TcsEpsgCode& prmCode) const
 {
 	bool ok;
+	
+	unsigned recordNumber;
+	unsigned invalidRecordNbr;
+	unsigned rtnValue;
 	
 	TcsEpsgCode recOprCode;
 	TcsEpsgCode recMthCode;
 	TcsEpsgCode recPrmCode;
-	TcsEpsgCode recUomCode (0UL);
-	double prmValue;
 
-	TcsEpsgTable* prmTblPtr = GetTablePtr (epsgTblParameterValue);
-	
+	invalidRecordNbr = TcsCsvFileBase::GetInvalidRecordNbr ();
+	rtnValue = invalidRecordNbr;
+
+	const TcsEpsgTable* prmTblPtr = GetTablePtr (epsgTblParameterValue);
 	ok = (prmTblPtr != 0);
+
 	if (ok)
 	{
-		ok = prmTblPtr->PositionToFirst (epsgFldCoordOpCode,opCode);
-		while (ok)
+		recordNumber = prmTblPtr->EpsgLocateFirst (epsgFldCoordOpCode,opCode);
+		ok = (recordNumber != invalidRecordNbr);
+		for (unsigned idx = recordNumber;ok;idx += 1)
 		{
-			ok  = prmTblPtr->GetAsEpsgCode (recOprCode,epsgFldCoordOpCode);
-			ok &= prmTblPtr->GetAsEpsgCode (recMthCode,epsgFldCoordOpMethodCode);
+			// I think this is superfluous.  I believe an operation code uniquely
+			// identifies a set of parameters; and the operation method code
+			// is redundant.  However, the database is structured this way, so we
+			// stick to it so that a future revision to the database doesn't
+			// break this code.
+			ok  = prmTblPtr->GetAsEpsgCode (recOprCode,idx,epsgFldCoordOpCode);
+			ok &= prmTblPtr->GetAsEpsgCode (recMthCode,idx,epsgFldCoordOpMethodCode);
 			if (ok)
 			{
-				ok = (recOprCode == opCode) && (recMthCode == opMethCode);
-				if (!ok)
-				{
-					break;
-				}
+				ok = (recOprCode == opCode);
 			}
-			ok &= prmTblPtr->GetAsEpsgCode (recPrmCode,epsgFldParameterCode);
+			if (!ok)
+			{
+				// We've looked at all records associated with this
+				// operation code, and didn't find the item of interest.
+				// We've failed, and we're done.
+				// NOTE: we are assuming here that the table is properly
+				// sorted.
+				break;
+			}
+
+			// Verify that the current record pertains to the specific operation
+			// method that we have been given.
+			if (recMthCode != opMethCode)
+			{
+				// Nope!  Continue on to the next record.
+				continue;
+			}
+
+			// See if this is the specific parameter we have been asked to
+			// extract.
+			ok = prmTblPtr->GetAsEpsgCode (recPrmCode,idx,epsgFldParameterCode);
 			if (ok && recPrmCode == prmCode)
 			{
-				ok = prmTblPtr->GetAsReal (prmValue,epsgFldParameterValue);
-				if (ok)
-				{
-					ok = prmTblPtr->GetAsEpsgCode (recUomCode,epsgFldUomCode);
-				}
-				if (ok)
-				{
-					parameterValue = prmValue;
-					break;
-				}
-			}
-			if (ok)
-			{
-				ok = prmTblPtr->PositionToNext (epsgFldCoordOpCode,opCode);
+				// Yup!  Continue on to the next record.  Save the record number
+				// and break the current loop.
+				rtnValue = idx;
+				break;
 			}
 		}
 	}
-	return ok ? recUomCode : TcsEpsgCode(0UL);
+	return rtnValue;
 }
-bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& ellipsoid,TcsEpsgCode epsgDtmCode,
-																						  long instance)
+bool TcsEpsgDataSetV6::GetParameterFileName (std::wstring& parameterFileName,const TcsEpsgCode& opCode,
+									 										 const TcsEpsgCode& opMethCode,
+																			 const TcsEpsgCode& prmCode) const
 {
-	static const unsigned maxVariants = 128;
+	bool ok;
 
+	unsigned recordNumber;
+	unsigned invalidRecordNbr;
+
+	TcsEpsgCode recOprCode;
+	TcsEpsgCode recMthCode;
+	TcsEpsgCode recPrmCode;
+	TcsEpsgCode recUomCode (0UL);
+
+	invalidRecordNbr = TcsCsvFileBase::GetInvalidRecordNbr ();
+	recordNumber = invalidRecordNbr;
+
+	const TcsEpsgTable* prmTblPtr = GetTablePtr (epsgTblParameterValue);
+	ok = (prmTblPtr != 0);
+
+	if (ok)
+	{
+		recordNumber = LocateParameterValue (opCode,opMethCode,prmCode);
+		ok = (recordNumber != invalidRecordNbr);
+	}
+	if (ok)
+	{
+		// Extract the file name field value and return it.
+		ok = prmTblPtr->GetField (parameterFileName,recordNumber,epsgFldParamValueFileRef);
+	}
+	return ok;
+}
+bool TcsEpsgDataSetV6::GetParameterValue (double& parameterValue,const TcsEpsgCode& opCode,
+																 const TcsEpsgCode& opMethCode,
+																 const TcsEpsgCode& prmCode,
+																 const TcsEpsgCode& trgUomCode) const
+{
+	bool ok;
+
+	unsigned recordNumber;
+	unsigned invalidRecordNbr;
+
+	TcsEpsgCode recOprCode;
+	TcsEpsgCode recMthCode;
+	TcsEpsgCode recPrmCode;
+	TcsEpsgCode recUomCode (0UL);
+	TcsEpsgCode prmUomCode;
+
+	std::wstring fldData;
+
+	invalidRecordNbr = TcsCsvFileBase::GetInvalidRecordNbr ();
+
+	const TcsEpsgTable* prmTblPtr = GetTablePtr (epsgTblParameterValue);
+	ok = (prmTblPtr != 0);
+
+	if (ok)
+	{
+		recordNumber = LocateParameterValue (opCode,opMethCode,prmCode);
+		ok = (recordNumber != invalidRecordNbr);
+		if (ok)
+		{
+			ok = prmTblPtr->GetField (fldData,recordNumber,epsgFldParameterValue);
+			if (ok)
+			{
+				ok = prmTblPtr->GetAsEpsgCode (recUomCode,recordNumber,epsgFldUomCode);
+			}
+			if (ok)
+			{
+				ok = FieldToReal (parameterValue,trgUomCode,fldData.c_str (),recUomCode);
+			}
+		}
+	}
+	return ok;
+}
+extern "C" struct cs_Datum_ *cs_Wgs84Ptr;
+bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& ellipsoid,
+															  const TcsEpsgCode& epsgDtmCode,
+															  unsigned variant) const
+{
 	bool ok (false);
-	bool deprecated (false);
-	bool coordFrame (false);
-
-	short to84_via (cs_DTCTYP_NONE);
-	short csPrmCount (0);
-	
-	unsigned variant;
-	unsigned variantCount;
 
 	EcsDtmType dtmType (epsgDtmTypNone);
 
 	TcsEpsgCode ellpCode;
 	TcsEpsgCode baseCode;
 	TcsEpsgCode pmerCode;
+	TcsEpsgCode dtmOpCode;
 	TcsEpsgCode operationCode (0UL);
 	TcsEpsgCode opMthCode (0UL);
 	TcsEpsgCode uomCode (0UL);
 
-	double parmValue;
-
-	unsigned variants [maxVariants];
-
 	std::wstring dtmName;
 	std::wstring fldData;
-	std::wstring parm8656;
-	std::wstring parm8657;
-	std::wstring parm8658;
 
-	const TcsCsMapDtmCodeMap* viaMapTblPtr;
+	// The basic scheme her is to find the transformation from the provided
+	// datum code to WGS84 (i.e. 6326/4326).  When provided with a datum code
+	// value of 6326, obviously, this will fail.  So we intercept this now
+	// and provide the canned result declared in CSdata.c.
+	if (epsgDtmCode == 6326UL)
+	{
+		struct cs_Dtdef_* dtDefPtr = CS_dtdef ("WGS84");
+		memcpy (&datum,dtDefPtr,sizeof (datum));
+		CS_free (dtDefPtr);
+		struct cs_Eldef_* elDefPtr = CS_eldef ("WGS84");
+		memcpy (&ellipsoid,elDefPtr,sizeof (ellipsoid));
+		CS_free (elDefPtr);
+		return true;
+	}
+
+	// Prepare for failure by ensuring the returned data is invalid.
+	memset (&datum,'\0',sizeof (datum));
+	memset (&ellipsoid,'\0',sizeof (ellipsoid));
 
 	// Get pointers to the required tables.
-	TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
-	TcsEpsgTable* pmrTblPtr = GetTablePtr (epsgTblPrimeMeridian);
-	TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
-	TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
-	TcsEpsgTable* pruTblPtr = GetTablePtr (epsgTblParameterUsage);
-	TcsEpsgTable* prmTblPtr = GetTablePtr (epsgTblParameterValue);
-	ok = (dtmTblPtr != 0) && (pmrTblPtr != 0) && (crsTblPtr != 0) && (copTblPtr != 0) &&
+	const TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
+	const TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
+	const TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
+	const TcsEpsgTable* pmrTblPtr = GetTablePtr (epsgTblPrimeMeridian);
+	const TcsEpsgTable* pruTblPtr = GetTablePtr (epsgTblParameterUsage);
+	const TcsEpsgTable* prmTblPtr = GetTablePtr (epsgTblParameterValue);
+	ok = (dtmTblPtr != 0) && (crsTblPtr != 0) && (copTblPtr != 0) && (pmrTblPtr != 0) &&
 																	 (pruTblPtr != 0) &&
 																	 (prmTblPtr != 0);
-
-	if (ok) ok = dtmTblPtr->SetCurrentRecord (epsgDtmCode);
 	if (ok)
 	{
-		// Get the type of the datum.  If its not "geodetic", we don't want to
+		// Get the type of the datum.  If it's not "geodetic", we don't want to
 		// deal with it; not yet anyway.
-		ok = dtmTblPtr->GetField (fldData,epsgFldDatumType);
+		ok = dtmTblPtr->GetField (fldData,epsgDtmCode,epsgFldDatumType);	//lint !e613 (use of null pointer)
 		if (ok)
 		{
 			dtmType = GetEpsgDtmType (fldData.c_str ());
@@ -3217,310 +2111,374 @@ bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& 
 	if (ok)
 	{
 		// Do the ellipsoid.
-		ok = dtmTblPtr->GetAsEpsgCode (ellpCode,epsgFldEllipsoidCode);
+		ok = dtmTblPtr->GetAsEpsgCode (ellpCode,epsgDtmCode,epsgFldEllipsoidCode);		//lint !e613 (use of null pointer)
 		if (ok)
 		{
-			// This function will position the ellipsoid table for us, should
-			// we need it later.
 			ok = GetCsMapEllipsoid (ellipsoid,ellpCode);
 		}
 	}
-	if (ok)
-	{    
-		// We really don't need the prime meridian, but what the heck!
-		ok = dtmTblPtr->GetAsEpsgCode (pmerCode,epsgFldPrimeMeridianCode);
-		if (ok)
-		{
-			pmrTblPtr->SetCurrentRecord (pmerCode);
-		}
-	}
 
-	// Now to the datum specifics.  This can get rather tricky.
+	// Now to the datum specifics.  This can get rather tricky.  There may be
+	// several variants, and there may be two or more operations in each
+	// variant.  To address this, there is a TcsOpVariants object.
 	if (ok)
 	{
-		ok = dtmTblPtr->GetField (dtmName,epsgFldDatumName);
+		ok = dtmTblPtr->GetField (dtmName,epsgDtmCode,epsgFldDatumName);		//lint !e613 (use of null pointer)
 
-		// Need to locate "the" geographic coordinate reference system which
-		// references this datum.
-		baseCode = LocateGeographicBase (epsgCrsTypGeographic2D,epsgDtmCode);
-		if (baseCode.IsNotValid ())
+		// Need to "locate" the geographic coordinate reference system which
+		// references this datum.  That is, search the CRS table for a
+		// geographic reference system which is referenced to the datum
+		// whose definition we are building.
+		ok = LocateGeographicBase (baseCode,epsgCrsTypGeographic2D,epsgDtmCode);
+		if (ok && baseCode.IsNotValid ())
 		{
-			baseCode = LocateGeographicBase (epsgCrsTypGeographic3D,epsgDtmCode);
-		}
-		ok = baseCode.IsValid ();
-		if (ok)
-		{
-			ok = crsTblPtr->SetCurrentRecord (baseCode);
-		}
-
-		if (ok)
-		{
-			ok = LocateOperationVariants (variantCount,variants,maxVariants,epsgOpTypTransformation,
-																			baseCode,
-																			4326UL);
-			if (ok && variantCount == 0)
-			{
-				ok = LocateOperationVariants (variantCount,variants,maxVariants,epsgOpTypTransformation,
-																				baseCode,
-																				4326UL);
-			}
-			if (ok && variantCount == 0)
-			{
-				ok = false;
-			}
-		}
-	
-		if (ok)
-		{
-			if (instance < 0L || static_cast<unsigned>(instance) >= variantCount)
-			{
-				ok = false;
-			}
-		}
-		if (ok)
-		{
-			// Now, we need to search the Coordinate Operation table for an
-			// entry to converts the located base code to WGS84 (i.e. 4326).
-			variant = variants [instance];
-			operationCode = LocateOperation (epsgOpTypTransformation,baseCode,4326UL,variant);
-			if (operationCode.IsNotValid ())
-			{
-				operationCode = LocateOperation (epsgOpTypConcatenated,baseCode,4326UL,variant);
-			}
-			ok = operationCode.IsValid ();
+			// No 2D system, see if there is a 3D system.
+			ok = LocateGeographicBase (baseCode,epsgCrsTypGeographic3D,epsgDtmCode);
 			if (ok)
 			{
-				
+				ok = baseCode.IsValid ();
 			}
 		}
 
-		// Position the Operation table to the located operation and extract the
-		// method code.
+		// At this time, it is convenient to build all the non numeric stuff in
+		// the datum definition.
 		if (ok)
 		{
-			ok = copTblPtr->SetCurrentRecord (operationCode);
+			char revisionLevel [64];
+			wcstombs (revisionLevel,RevisionLevel.c_str (),sizeof (revisionLevel));
+			sprintf (datum.key_nm,"EPSG::%lu",static_cast<unsigned long>(epsgDtmCode));
+			strncpy (datum.ell_knm,ellipsoid.key_nm,sizeof (datum.ell_knm));
+			datum.ell_knm [sizeof (datum.ell_knm) - 1] = '\0';
+			datum.group [0] = '\0';
+			datum.locatn [0] = '\0';
+			datum.cntry_st [0] = '\0';
+			datum.fill [0] = '\0';
+			datum.fill [1] = '\0';
+			datum.fill [2] = '\0';
+			datum.fill [3] = '\0';
+			datum.fill [4] = '\0';
+			datum.fill [5] = '\0';
+			datum.fill [6] = '\0';
+			datum.fill [7] = '\0';
+			wcstombs (datum.name,dtmName.c_str (),sizeof (datum.name));
+			sprintf (datum.source,"Converted from EPSG %s by CS-MAP",revisionLevel);
+			datum.protect = 0;
+			datum.epsgNbr = static_cast<short>(epsgDtmCode);
+			datum.wktFlvr = wktFlvrEpsg;
+			datum.fill01 = 0;
+			datum.fill02 = 0;
+			datum.fill03 = 0;
+			datum.fill04 = 0;
+		}
+
+		// We have the base geographic system for this datum. We no construct a
+		// TcsOpVariants to obtain a list of all variants which will convert the
+		// datum of this base to WGS84.
+		if (ok)
+		{
+			TcsOpVariants dtmOpVariants (*this,baseCode,4326UL);
+			ok = (dtmOpVariants.GetVariantCount () != 0);
 			if (ok)
 			{
-				ok = copTblPtr->GetAsEpsgCode (opMthCode,epsgFldCoordOpMethodCode);
-			}
-		}
-
-		// OK, we have a Source CRS code, Target CRS code (4326), and a method
-		// code.  Using the table defined above, we might be done if we find a
-		// match.
-		if (ok)
-		{
-			for (viaMapTblPtr = KcsCsMapDtmCodeMap;viaMapTblPtr->MethodCode != 0UL;viaMapTblPtr += 1)
-			{
-				if (viaMapTblPtr->MethodCode == opMthCode &&
-					viaMapTblPtr->SourceBaseCode == baseCode &&
-					viaMapTblPtr->TargetBaseCode == 4326UL)
+				// If the user has specified a variant, we use that one.
+				if (variant >= 1L)
 				{
-					csPrmCount = 0;
-					to84_via = viaMapTblPtr->CsMapTo84Code;
-					break;
+					dtmOpCode = dtmOpVariants.GetOprtnCodeByVariant (variant);
+				}
+				else
+				{
+					// Select the "best" of the variations available.  "Best" in
+					// this case is defined by the TcsOpVariants object.
+					dtmOpCode = dtmOpVariants.GetBestOprtnCode (*this);
+					ok = dtmOpCode.IsValid ();
 				}
 			}
+
+			// OK, construct a CS-MAP datum definition based on the specific
+			// operation code determined above.
+			ok = AddDatumParameterValues (datum,dtmOpCode);
 		}
+	}
+	return ok;
+}
+bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const TcsEpsgCode& operationCode) const
+{
+	bool ok;
+	bool coordFrame (false);
+	short to84_via (cs_DTCTYP_NONE);
+	short csPrmCount;
 
-		// If we didn't find a match, we need to extract the method and
-		// parameters from the EPSG table.
-		if (ok && to84_via == cs_DTCTYP_NONE)
+	TcsEpsgCode opMthCode;
+	TcsEpsgCode uomCode;
+
+	double parmValue;
+
+	csPrmCount = 0;
+
+	// Get pointers to the required tables.
+	const TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
+	ok = (copTblPtr != 0);
+	if (ok)
+	{
+		to84_via = DetermineCsMapDatumMethod (operationCode,coordFrame);
+		ok = (to84_via != 0);
+		if (!ok)
 		{
-			// Position the parameter usage table to the position of the first
-			// parameter, although we don't use it, yet!!!
-			if (ok)
-			{
-				ok = pruTblPtr->PositionToFirst (epsgFldCoordOpMethodCode,opMthCode);		
-			}
-
-			// Position the parameter value table to the position of the first
-			// parameter.
-			if (ok)
-			{
-				ok = prmTblPtr->PositionToFirst (epsgFldCoordOpCode,operationCode);
-			}
-		}
-
-		// Map the EPSG Method Code to a CS-MAP to84_via value.
-		if (ok && to84_via == 0)
-		{
-			switch (opMthCode) {
-			case 9603:				// Geocentric Translation
-				to84_via = cs_DTCTYP_GEOCTR;
-				csPrmCount = 3;
-				break;
-			case 9604:				// Molodensky
-				to84_via = cs_DTCTYP_MOLO;
-				csPrmCount = 3;
-				break;
-			case 9605:				// Abridged Molodensky
-				to84_via = cs_DTCTYP_MOLO;
-				csPrmCount = 3;
-				break;
-			case 9606:				// Position Vector
-				to84_via = cs_DTCTYP_BURS;
-				csPrmCount = 7;
-				break;
-			case 9607:				// Coordinate Frame
-				to84_via = cs_DTCTYP_BURS;
-				csPrmCount = 7;
-				coordFrame = true;
-				break;
-
-			case 9613:				// NADCON
-			case 9614:				// NTv1
-			case 9615:				// NTv2
-			case 9634:				// Maritime TRANSFORM
-			case 9655:				// French
-			case 9633:				// OSNT
-			default:
-				ok = false;
-				to84_via = cs_DTCTYP_NONE;
-				break;
-			}
+			to84_via = DetermineCsMapDatumMethod (operationCode,coordFrame);
 		}
 	}
 
-	// If we are still OK, we now setup the general stuff in the cs_Dtdef_ structure.
 	if (ok)
 	{
-		sprintf (datum.key_nm,"EPSG::%lu",static_cast<unsigned long>(epsgDtmCode));
-		strncpy (datum.ell_knm,ellipsoid.key_nm,sizeof (datum.ell_knm));
-		datum.ell_knm [sizeof (datum.ell_knm) - 1] = '\0';
-		datum.group [0] = '\0';
-		datum.locatn [0] = '\0';
-		datum.cntry_st [0] = '\0';
-		datum.fill [0] = '\0';
-		datum.fill [1] = '\0';
-		datum.fill [2] = '\0';
-		datum.fill [3] = '\0';
-		datum.fill [4] = '\0';
-		datum.fill [5] = '\0';
-		datum.fill [6] = '\0';
-		datum.fill [7] = '\0';
-		datum.delta_X  = 0.0;
-		datum.delta_Y  = 0.0;
-		datum.delta_Z  = 0.0;
-		datum.rot_X    = 0.0;
-		datum.rot_Y    = 0.0;
-		datum.rot_Z    = 0.0;
-		datum.bwscale  = 0.0;
-		wcstombs (datum.name,dtmName.c_str (),sizeof (datum.name));
-		sprintf (datum.source,"Converted from EPSG %S by CS-MAP",RevisionLevel.c_str ());
-		datum.protect = 0;
-		datum.to84_via = to84_via;
-		datum.epsgNbr = static_cast<short>(epsgDtmCode);
-		datum.wktFlvr = wktFlvrEpsg;
-		datum.fill01 = variant;
-		datum.fill02 = 0;
-		datum.fill03 = 0;
-		datum.fill04 = 0;
+		
+		ok = copTblPtr->GetAsEpsgCode (opMthCode,operationCode,epsgFldCoordOpMethodCode);
+	}
+	
+	// Determine the number and nature of the parameters required.
+	if (ok)
+	{
+		switch (opMthCode) {
+		case 9603:				// Geocentric Translation
+			to84_via = cs_DTCTYP_GEOCTR;
+			csPrmCount = 3;
+			break;
+		case 9604:				// Molodensky
+			to84_via = cs_DTCTYP_MOLO;
+			csPrmCount = 3;
+			break;
+		case 9605:				// Abridged Molodensky
+			to84_via = cs_DTCTYP_MOLO;
+			csPrmCount = 3;
+			break;
+		case 9606:				// Position Vector
+			to84_via = cs_DTCTYP_BURS;
+			csPrmCount = 7;
+			break;
+		case 9607:				// Coordinate Frame
+			to84_via = cs_DTCTYP_BURS;
+			csPrmCount = 7;
+			coordFrame = true;
+			break;
+
+		case 9613:				// NADCON
+		case 9614:				// NTv1
+		case 9615:				// NTv2
+		case 9634:				// Maritime TRANSFORM
+		case 9655:				// French
+		case 9633:				// OSNT
+		default:
+			csPrmCount = 0;
+			to84_via = cs_DTCTYP_NONE;
+			break;
+		}
 	}
 
 	// OK, we now add the parameter values.
 	if (ok && csPrmCount >= 3)
 	{
-		double toMeters (0.0);
-		uomCode = GetParameterValue (parmValue,operationCode,opMthCode,8605UL);
-		ok = (uomCode != 0UL);
+		ok = GetParameterValue (parmValue,operationCode,opMthCode,8605UL,9001UL);
 		if (ok)
 		{
-			ok = GetUomToMeters (toMeters,uomCode);
-			if (ok)
-			{
-				datum.delta_X = parmValue * toMeters;
-			}
+			datum.delta_X = parmValue;
 		}
-		uomCode = GetParameterValue (parmValue,operationCode,opMthCode,8606UL);
-		ok = (uomCode != 0UL);
+		ok = GetParameterValue (parmValue,operationCode,opMthCode,8606UL,9001UL);
 		if (ok)
 		{
-			ok = GetUomToMeters (toMeters,uomCode);
-			if (ok)
-			{
-				datum.delta_Y = parmValue * toMeters;
-			}
+			datum.delta_Y = parmValue;
 		}
-		uomCode = GetParameterValue (parmValue,operationCode,opMthCode,8607UL);
-		ok = (uomCode != 0UL);
+		ok = GetParameterValue (parmValue,operationCode,opMthCode,8607UL,9001UL);
 		if (ok)
 		{
-			ok = GetUomToMeters (toMeters,uomCode);
-			if (ok)
-			{
-				datum.delta_Z = parmValue * toMeters;
-			}
+			datum.delta_Z = parmValue;
 		}
-	}	
+	}
+				
 	if (ok && csPrmCount >= 6)
 	{
-		double toDegrees (0.0);
-		uomCode = GetParameterValue (parmValue,operationCode,opMthCode,8608UL);
-		ok = (uomCode != 0UL);
+		ok = GetParameterValue (parmValue,operationCode,opMthCode,8608UL,9104UL);
 		if (ok)
 		{
-			ok = GetUomToDegrees (toDegrees,uomCode);
-			if (ok)
-			{
-				datum.rot_X = parmValue * toDegrees * 3600.0;
-				if (coordFrame) datum.rot_X *= -1.0;
-			}
+			datum.rot_X = parmValue;
+			if (coordFrame) datum.rot_X *= -1.0;
 		}
-		uomCode = GetParameterValue (parmValue,operationCode,opMthCode,8609UL);
-		ok = (uomCode != 0UL);
+		ok = GetParameterValue (parmValue,operationCode,opMthCode,8609UL,9104UL);
 		if (ok)
 		{
-			ok = GetUomToDegrees (toDegrees,uomCode);
-			if (ok)
-			{
-				datum.rot_Y = parmValue * toDegrees * 3600.0;
-				if (coordFrame) datum.rot_Y *= -1.0;
-			}
+			datum.rot_Y = parmValue;
+			if (coordFrame) datum.rot_Y *= -1.0;
 		}
-		uomCode = GetParameterValue (parmValue,operationCode,opMthCode,8610UL);
-		ok = (uomCode != 0UL);
+		ok = GetParameterValue (parmValue,operationCode,opMthCode,8610UL,9104UL);
 		if (ok)
 		{
-			ok = GetUomToDegrees (toDegrees,uomCode);
-			if (ok)
-			{
-				datum.rot_Z = parmValue * toDegrees * 3600.0;
-				if (coordFrame) datum.rot_Z *= -1.0;
-			}
+			datum.rot_Z = parmValue;
+			if (coordFrame) datum.rot_Z *= -1.0;
 		}
 	}	
 	if (ok && csPrmCount >= 7)
 	{
-		uomCode = GetParameterValue (parmValue,operationCode,opMthCode,8611UL);
-		ok = (uomCode != 0UL);
+		ok = GetParameterValue (parmValue,operationCode,opMthCode,8611UL,9202UL);
 		if (ok)
 		{
-			if (uomCode == 9202UL)
-			{
-				datum.bwscale = parmValue;
-			}
-			else if (uomCode == 9201UL || uomCode == 9203UL)
-			{
-				datum.bwscale = (1.0 - parmValue) * 1000000.0;
-			}
-			else
-			{
-				ok = false;
-			}
-		}		
+			datum.bwscale = parmValue;
+		}
+	}
+	if (ok)
+	{
+		datum.to84_via = to84_via;
 	}
 	return ok;
 }
-bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dtdef_& datum,struct cs_Eldef_& ellipsoid,TcsEpsgCode crsEpsgCode)
+// Note that the following table is used to map the source datums.
+// That is, the file name is simply used to determine what EPSG
+// is converting from.  The conversion method may be converting
+// to something other than WGS84, but we only need to know what
+// EPSG is converting from.
+struct TcsGsbNameToCodeMap 
+{
+	char gsbName [64];
+	short to84Code;
+} KcsGsbNameToCodeMap [] =
+{
+	{	"A66 National (13.09.01).gsb",    cs_DTCTYP_AGD66  },
+	{	"BETA2007.gsb",                   cs_DTCTYP_DHDN   },
+	{	"CGQ77-83.gsb",                   cs_DTCTYP_NONE   },
+	{	"CGQ77-98.gsb",                   cs_DTCTYP_ATS77  },
+	{	"NAD83-98.gsb",                   cs_DTCTYP_CSRS   },
+	{	"National 84 (02.07.01).gsb",     cs_DTCTYP_AGD84  },
+	{	"NB7783v2.gsb",                   cs_DTCTYP_ATS77  },
+	{	"NS7783v2.gsb",                   cs_DTCTYP_ATS77  },
+	{	"PE7783v2.gsb",                   cs_DTCTYP_ATS77  },
+	{	"nt_0599.gsb",                    cs_DTCTYP_AGD66  },
+	{	"NTv2_0.gsb",                     cs_DTCTYP_NAD27  },
+	{	"nzgd2kgrid0005.gsb",             cs_DTCTYP_NZGD49 },
+	{	"QUE27-83.gsb",                   cs_DTCTYP_NAD27  },
+	{	"QUE27-98.gsb",                   cs_DTCTYP_NAD27  },
+	{	"rgf93_ntf.gsb",                  cs_DTCTYP_RGF93  },
+	{	"SEAust_21_06_00.gsb",            cs_DTCTYP_AGD66  },
+	{	"SK27-98.gsb",                    cs_DTCTYP_NAD27  },
+	{	"SK83-98.gsb",                    cs_DTCTYP_NAD83  },
+	{	"sped2et.gsb",                    cs_DTCTYP_ED50   },
+	{	"SPED2ETV2.gsb",                  cs_DTCTYP_ED50   },
+	{	"tas_1098.gsb",                   cs_DTCTYP_AGD66  },
+	{	"SK8398",                         cs_DTCTYP_NAD83  },
+	{	"vic_0799.gsb",                   cs_DTCTYP_AGD66  },
+	{	"wa_0400.gsb",                    cs_DTCTYP_AGD84  },
+	{	"wa_0700.gsb",                    cs_DTCTYP_AGD84  },
+	{	"\0",                             cs_DTCTYP_NONE   }
+};
+short TcsEpsgDataSetV6::DetermineCsMapDatumMethod (const TcsEpsgCode& operationCode,bool& coordFrame) const
+{
+	bool ok;
+	short to84_via (cs_DTCTYP_NONE);
+
+	TcsEpsgCode opMthCode;
+
+	std::wstring fileName;
+	std::wstring fileName1;
+	
+	char fileNameC [64];
+
+	coordFrame = false;
+
+	// Get pointers to the required tables.
+	const TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
+	const TcsEpsgTable* prmTblPtr = GetTablePtr (epsgTblParameterValue);
+	ok = (copTblPtr != 0) && (prmTblPtr != 0);
+
+	// Get the EPSG operation method.
+	if (ok)
+	{
+		ok = copTblPtr->GetAsEpsgCode (opMthCode,operationCode,epsgFldCoordOpMethodCode);	//lint !e613  (possible use of null pointer)
+	}
+
+	// Map the method to a CS-MAP to84_via value.	
+	if (ok)
+	{
+		if (opMthCode == 9603UL)			// Geocentric Translation
+		{
+			to84_via = cs_DTCTYP_GEOCTR;
+		}
+		else if (opMthCode == 9604UL)		// Molodensky
+		{			
+			to84_via = cs_DTCTYP_MOLO;
+		}
+		else if (opMthCode == 9605UL)		// Abridged Molodensky
+		{
+			to84_via = cs_DTCTYP_MOLO;
+		}
+		else if (opMthCode == 9606UL)		// Position Vector
+		{
+			to84_via = cs_DTCTYP_BURS;
+		}
+		else if (opMthCode == 9607UL)		// Coordinate Frame
+		{
+			to84_via = cs_DTCTYP_BURS;
+			coordFrame = true;
+		}
+		else if (opMthCode ==  9613UL)		// NADCON
+		{
+			// Get the file name parameter.
+			ok = GetParameterFileName (fileName,operationCode,opMthCode,8656UL);
+			wcstombs (fileNameC,fileName.c_str(),sizeof (fileNameC));
+		}
+		else if (opMthCode ==  9614UL)		// NTv1
+		{
+			to84_via = cs_DTCTYP_NAD27;
+		}
+		else if (opMthCode ==  9615UL)		// NTv2
+		{
+			ok = GetParameterFileName (fileName,operationCode,opMthCode,8656UL);
+			if (ok)
+			{
+				wcstombs (fileNameC,fileName.c_str(),sizeof (fileNameC));
+				for (int idx = 0;KcsGsbNameToCodeMap[idx].gsbName [0] != '\0';idx++)
+				{
+					if (!CS_stricmp (fileNameC,KcsGsbNameToCodeMap[idx].gsbName))
+					{
+						to84_via = KcsGsbNameToCodeMap[idx].to84Code;
+						break;
+					}
+				}
+			}
+		}
+		else if (opMthCode ==  9634UL)		// Maritime TRANSFORM
+		{
+			to84_via = cs_DTCTYP_ATS77;
+		}
+		else if (opMthCode ==  9655UL)		// French
+		{
+			// There is only one datum that uses this technique.
+			to84_via = cs_DTCTYP_RGF93;
+		}
+		else if (opMthCode ==  9633UL)		// OSNT
+		{
+			// CS-MAP implements this datum transformation in a very screwy
+			// way.  This needs to be adjusted when this piece of legacy is
+			// properly addressed.
+			to84_via = cs_DTCTYP_NONE;
+		}
+		else
+		{
+			// All other EPSG methods are unsupported.  Fortunately, the number
+			// and importance of these definitions is rather small.
+			to84_via = cs_DTCTYP_NONE;
+		}
+	}
+	return to84_via;
+}
+bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dtdef_& datum,
+																	struct cs_Eldef_& ellipsoid,
+																	const TcsEpsgCode& crsEpsgCode) const
 {
 	bool ok (false);
 
 	TcsEpsgCode dtmEpsgCode;
 	TcsEpsgCode areaOfUseCode;
+	TcsEpsgCode horzUomCode;
+	TcsEpsgCode vertUomCode;
 
 	EcsCrsType crsType (epsgCrsTypNone);
-	
+
 	std::wstring crsName;
 	std::wstring fldData;
 
@@ -3531,33 +2489,23 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 	memset (&ellipsoid,'\0',sizeof (ellipsoid));
 
 	// Get pointers to the required tables.
-	TcsEpsgTable* crsTblPtr  = GetTablePtr (epsgTblReferenceSystem);
-	TcsEpsgTable* areaTblPtr = GetTablePtr (epsgTblArea);
+	const TcsEpsgTable* crsTblPtr  = GetTablePtr (epsgTblReferenceSystem);
+	const TcsEpsgTable* areaTblPtr = GetTablePtr (epsgTblArea);
 	ok = (crsTblPtr != 0) && (areaTblPtr != 0);
 
 	// Verify that the provided code is OK, and the referenced CRS is not
 	// deprecated.
 	if (ok)
 	{
-		ok = crsTblPtr->SetCurrentRecord (crsEpsgCode);
-		if (ok)
-		{
-			// We don't convert deprecated definitions.
-			ok = !crsTblPtr->IsDeprecated ();
-		}
+		bool deprecated = crsTblPtr->IsDeprecated (crsEpsgCode);
+		ok = !deprecated;
 	}
 
 	// We'll need to know the type of this definition.
 	if (ok)
 	{
-		// Get the type of the CRS.  If its not "Projected" or "Geographic2D",
-		// we don't want to deal with it; not yet anyway.
-		ok = crsTblPtr->GetField (fldData,epsgFldCoordRefSysKind);
-		if (ok)
-		{
-			crsType = GetEpsgCrsType (fldData.c_str ());
-			ok = (crsType == epsgCrsTypProjected) || (crsType == epsgCrsTypGeographic2D);
-		}
+		crsType = GetCrsType (crsEpsgCode);
+		ok = (crsType == epsgCrsTypProjected) || (crsType == epsgCrsTypGeographic2D);
 	}
 
 	// Extract the reference datum code and pass it on to GetCsMapDatum.
@@ -3567,20 +2515,83 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 		ok = GetReferenceDatum (dtmEpsgCode,crsEpsgCode);
 		if (ok)
 		{
+			// We extracted a valid datum code, so we'll use the GetCsMapdatum
+			// function to get the datum definition for us.  This also gets the
+			// ellipsoid definition.
 			ok = GetCsMapDatum (datum,ellipsoid,dtmEpsgCode);
 		}
 	}
 
 	// Now for anything common to both geographic and projected.
+	// Determine the quad value to be used.
 	if (ok)
 	{
-		ok = crsTblPtr->GetField (crsName,epsgFldCoordRefSysName);
+		short quad;
+		double factor;
+
+		// CS-MAP's quad determines the order of the axes and the direction.
+		ok = GetCoordsysQuad (quad,horzUomCode,vertUomCode,crsEpsgCode);
+		if (ok)
+		{
+			coordsys.quad = (crsType == epsgCrsTypGeographic2D) ? -quad : quad;
+		}
+
+		// Determine the units by extracting a CS-MAP unit name which produces
+		// the same conversion factor as that associated with the horizontal
+		// unit we extracted from the EPSG coordinate system definition.
+		if (ok)
+		{
+			if (crsType == epsgCrsTypProjected)
+			{
+				ok = GetUomToMeters (factor,horzUomCode);
+				if (ok)
+				{
+					const char* cp = CS_unitluByFactor (cs_UTYP_LEN,factor);
+					ok = (cp != 0);
+					if (ok)
+					{
+						CS_stncp (coordsys.unit,cp,sizeof (coordsys.unit));
+					}
+				}
+			}
+			else if (crsType == epsgCrsTypGeographic2D ||
+					 crsType == epsgCrsTypGeographic3D)
+			{ 
+				ok = GetUomToDegrees (factor,horzUomCode);
+				if (ok)
+				{
+					const char* cp = CS_unitluByFactor (cs_UTYP_ANG,factor);
+					ok = (cp != 0);
+					if (ok)
+					{
+						CS_stncp (coordsys.unit,cp,sizeof (coordsys.unit));
+					}
+				}
+			}
+			else
+			{
+				ok = false;
+			}
+		}
+
+		// Set the EPSG code value in the definition.
+		coordsys.epsgNbr = static_cast<short>(crsEpsgCode);
+	}
+
+	if (ok)
+	{
+		char msgTemp [64];
+
+		ok = crsTblPtr->GetField (crsName,crsEpsgCode,epsgFldCoordRefSysName);
 		if (ok)
 		{
 			sprintf (coordsys.key_nm,"EPSG::%lu",static_cast<unsigned long>(crsEpsgCode));
 			if (static_cast<unsigned long>(dtmEpsgCode) >= 6001 &&
 				static_cast<unsigned long>(dtmEpsgCode) <= 6099)
 			{
+				// Here if the datum is one of the EPSG definitions which simply
+				// reference an ellipsoid.  We extract the ellipsoid definition
+				// from the datum definition already processed.
 				coordsys.dat_knm [0] = '\0';
 				CS_stncp (coordsys.elp_knm,ellipsoid.key_nm,sizeof (coordsys.elp_knm));
 			}
@@ -3590,9 +2601,10 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 				coordsys.elp_knm [0] = '\0';
 			}
 			wcstombs (coordsys.desc_nm,crsName.c_str (),sizeof (coordsys.desc_nm));
-			sprintf (coordsys.source,"Converted from EPSG %S by CS-MAP",RevisionLevel.c_str ());
+			wcstombs (msgTemp,RevisionLevel.c_str (),sizeof (msgTemp));
+			sprintf (coordsys.source,"Converted from EPSG %s by CS-MAP",msgTemp);
 			coordsys.epsgNbr = static_cast<short>(crsEpsgCode);
-			coordsys.wktFlvr = 0;
+			coordsys.wktFlvr = wktFlvrEpsg;
 		}
 	}
 
@@ -3609,20 +2621,16 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 		coordsys.xy_max [0] = cs_Zero;
 		coordsys.xy_max [1] = cs_Zero;
 
-		// We trun off the ll_min and ll_max in case there's a failure
+		// We turn off the ll_min and ll_max in case there's a failure
 		// in the code below.
-		ok = crsTblPtr->GetAsEpsgCode (areaOfUseCode,epsgFldAreaOfUseCode);
+		ok = crsTblPtr->GetAsEpsgCode (areaOfUseCode,crsEpsgCode,epsgFldAreaOfUseCode);
 		if (ok)
 		{
-			ok = areaTblPtr->SetCurrentRecord (areaOfUseCode);
-			if (ok)
-			{
-				// Get the EPSG useful range values.
-				mmOk  = areaTblPtr->GetAsReal (minLng,epsgFldAreaWestBoundLng);
-				mmOk &= areaTblPtr->GetAsReal (maxLng,epsgFldAreaEastBoundLng);
-				mmOk &= areaTblPtr->GetAsReal (minLat,epsgFldAreaSouthBoundLat);
-				mmOk &= areaTblPtr->GetAsReal (maxLat,epsgFldAreaNorthBoundLat);
-			}
+			// Get the EPSG useful range values.
+			mmOk  = areaTblPtr->GetAsReal (minLng,areaOfUseCode,epsgFldAreaWestBoundLng);
+			mmOk &= areaTblPtr->GetAsReal (maxLng,areaOfUseCode,epsgFldAreaEastBoundLng);
+			mmOk &= areaTblPtr->GetAsReal (minLat,areaOfUseCode,epsgFldAreaSouthBoundLat);
+			mmOk &= areaTblPtr->GetAsReal (maxLat,areaOfUseCode,epsgFldAreaNorthBoundLat);
 
 			// See if they are all Ok and consistent.
 			if (mmOk)
@@ -3633,6 +2641,9 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 				mmOk &= (maxLat >=  -90.0) && (maxLat <=  90.0);
 				if (mmOk)
 				{
+					//?? This might fail on a legal definition.  Don't know how EPSG
+					// wraps around the 180 degree crack.  Don't know right off hand
+					// any definitions which do (Alaska, maybe).
 					mmOk &= (minLng < maxLng)  && (minLat < maxLat);
 				}
 			}
@@ -3649,87 +2660,74 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 	// Do the stuff specific to the type.
 	if (ok && crsType == epsgCrsTypGeographic2D)
 	{
-		ok = GeographicCoordsys (coordsys,crsEpsgCode);
+		ok = GeographicCoordsys (coordsys,crsEpsgCode,horzUomCode);
 	}
 	else if (ok && crsType == epsgCrsTypProjected)
 	{
-		ok = ProjectedCoordsys (coordsys,crsEpsgCode);
+		ok = ProjectedCoordsys (coordsys,crsEpsgCode,horzUomCode);
 	}
 	return ok;
 }
-bool TcsEpsgDataSetV6::GetReferenceDatum (TcsEpsgCode& dtmEpsgCode,TcsEpsgCode crsEpsgCode)
+bool TcsEpsgDataSetV6::GetReferenceDatum (TcsEpsgCode& dtmEpsgCode,const TcsEpsgCode& crsEpsgCode) const
 {
 	bool ok;
 	TcsEpsgCode baseCode;
 	EcsCrsType crsType (epsgCrsTypNone);
 	std::wstring fldData;
 	
-	TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
-	TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
+	const TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
+	const TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
 
 	dtmEpsgCode.Invalidate ();
 	ok = (crsTblPtr != 0) && (dtmTblPtr != 0);
 	if (ok)
 	{
-		crsTblPtr->PushCurrentPosition ();
-		ok = crsTblPtr->SetCurrentRecord (crsEpsgCode);
-		if (ok)
+		// We don't convert deprecated definitions.
+		ok = !crsTblPtr->IsDeprecated (crsEpsgCode);		//lint !e613 (use of null pointer)
+	}
+	if (ok)
+	{
+		// Get the type (kind) of the CRS.
+		crsType = GetCrsType (crsEpsgCode);
+		ok = (crsType == epsgCrsTypProjected) || (crsType == epsgCrsTypGeographic2D);
+	}
+
+	// Extract the reference datum code.
+	if (ok)
+	{
+		if (crsType == epsgCrsTypProjected)
 		{
-			// We don't convert deprecated definitions.
-			ok = !crsTblPtr->IsDeprecated ();
-		}
-		if (ok)
-		{
-			// Get the type of the CRS.
-			ok = crsTblPtr->GetField (fldData,epsgFldCoordRefSysKind);
+			// For the projected type, we first need to locate the CRS given as
+			// the base.
+			ok = crsTblPtr->GetAsEpsgCode (baseCode,crsEpsgCode,epsgFldSourceGeogCrsCode);		//lint !e613 (use of null pointer)
 			if (ok)
 			{
-				crsType = GetEpsgCrsType (fldData.c_str ());
-				ok = (crsType == epsgCrsTypProjected) || (crsType == epsgCrsTypGeographic2D);
+				// OK, extract the datum code of the referenced geographic
+				// CRS record.  We could verify that the type is geographic.
+				ok = crsTblPtr->GetAsEpsgCode (dtmEpsgCode,baseCode,epsgFldDatumCode);		//lint !e613 (use of null pointer)
 			}
 		}
-
-		// Extract the reference datum code.
-		if (ok)
+		else if (crsType == epsgCrsTypGeographic2D)
 		{
-			if (crsType == epsgCrsTypProjected)
-			{
-				// For the projected type, we first need to locate the CRS given as
-				// the base.
-				ok = crsTblPtr->GetAsEpsgCode (baseCode,epsgFldSourceGeogCrsCode);
-				if (ok)
-				{
-					crsTblPtr->PushCurrentPosition ();
-					ok = crsTblPtr->PositionToFirst (epsgFldCoordRefSysCode,baseCode);
-					if (ok)
-					{
-						ok = crsTblPtr->GetAsEpsgCode (dtmEpsgCode,epsgFldDatumCode);
-					}
-					crsTblPtr->RestorePreviousPosition ();
-				}
-			}
-			else if (crsType == epsgCrsTypGeographic2D)
-			{
-				ok = crsTblPtr->GetAsEpsgCode (dtmEpsgCode,epsgFldDatumCode);
-			}
-			ok = dtmEpsgCode.IsValid ();
+			ok = crsTblPtr->GetAsEpsgCode (dtmEpsgCode,crsEpsgCode,epsgFldDatumCode);		//lint !e613 (use of null pointer)
 		}
-		crsTblPtr->RestorePreviousPosition ();
+		ok = dtmEpsgCode.IsValid ();
 	}
 	return ok;
 }
-// All EPSG longitude parameters are relative to the prime meridian.  SO it is
+// All EPSG longitude parameters are relative to the prime meridian.  So, it is
 // important that the prime meridian be made easily available.
-bool TcsEpsgDataSetV6::GetPrimeMeridian (double& primeMeridian,TcsEpsgCode crsEpsgCode)
+bool TcsEpsgDataSetV6::GetPrimeMeridian (double& primeMeridian,const TcsEpsgCode& crsEpsgCode) const
 {
 	bool ok;
 	TcsEpsgCode dtmEpsgCode;
 	TcsEpsgCode pmrEpsgCode;
 	TcsEpsgCode uomEpsgCode;
+	std::wstring fldData;
 	
-	TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
-	TcsEpsgTable* pmrTblPtr = GetTablePtr (epsgTblPrimeMeridian);
-	TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
+	const TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
+	const TcsEpsgTable* pmrTblPtr = GetTablePtr (epsgTblPrimeMeridian);
+	const TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
 	ok = (dtmTblPtr != 0) && (pmrTblPtr != 0) && (uomTblPtr != 0);
 
 	primeMeridian = -360.0;			// sure to be noticed if ever used by mistake.
@@ -3743,151 +2741,48 @@ bool TcsEpsgDataSetV6::GetPrimeMeridian (double& primeMeridian,TcsEpsgCode crsEp
 	// Use this datum code to extract the prime meridian in degrees.
 	if (ok)
 	{
-		dtmTblPtr->PushCurrentPosition ();
-		ok = dtmTblPtr->SetCurrentRecord (dtmEpsgCode);
+		ok = dtmTblPtr->GetAsEpsgCode (pmrEpsgCode,dtmEpsgCode,epsgFldPrimeMeridianCode);		//lint !e613 (use of null pointer)
 		if (ok)
 		{
-			ok = dtmTblPtr->GetAsEpsgCode (pmrEpsgCode,epsgFldPrimeMeridianCode);
+			ok = pmrTblPtr->GetField (fldData,pmrEpsgCode,epsgFldGreenwichLongitude);		//lint !e613 (use of null pointer)
 			if (ok)
 			{
-				pmrTblPtr->PushCurrentPosition ();
-				ok = pmrTblPtr->SetCurrentRecord (pmrEpsgCode);
-				if (ok)
-				{
-					double primeMeridian;
-					ok = pmrTblPtr->GetAsReal (primeMeridian,epsgFldGreenwichLongitude);
-					if (ok)
-					{
-						ok = pmrTblPtr->GetAsEpsgCode (uomEpsgCode,epsgFldUomCode);
-					}
-					if (ok)
-					{
-						double factor;
-						ok = GetUomToDegrees (factor,uomEpsgCode);
-						if (ok)
-						{
-							primeMeridian *= factor;
-						}
-					}
-					
-				}
-				pmrTblPtr->RestorePreviousPosition ();
-			}
-		}
-		dtmTblPtr->RestorePreviousPosition ();
-	}
-	return ok;
-}
-bool TcsEpsgDataSetV6::GetCoordsysQuad (short& quad,TcsEpsgCode crsEpsgCode)
-{
-	bool ok;
-	bool swap;
-
-	TcsEpsgCode sysEpsgCode;
-	TcsEpsgCode uomEpsgCode;
-
-	EcsOrientation axisOne (epsgOrntUnknown);
-	EcsOrientation axisTwo (epsgOrntUnknown);
-	EcsOrientation axisTmp;
-
-	quad = 0;
-	TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
-	TcsEpsgTable* axsTblPtr = GetTablePtr (epsgTblAxis);
-
-	ok = (crsTblPtr != 0) && (axsTblPtr != 0);
-	if (ok)
-	{
-		crsTblPtr->PushCurrentPosition ();
-		ok = crsTblPtr->SetCurrentRecord (crsEpsgCode);
-		if (ok)
-		{
-			std::wstring fldData;
-			ok = crsTblPtr->GetAsEpsgCode (sysEpsgCode,epsgFldCoordSysCode);
-			if (ok)
-			{
-				ok = axsTblPtr->PositionToFirst (epsgFldCoordSysCode,sysEpsgCode);
-				if (ok)
-				{
-					ok = axsTblPtr->GetField (fldData,epsgFldCoordAxisOrientation);
-					if (ok) axisOne = GetOrientation (fldData.c_str ());
-				}
+				ok = pmrTblPtr->GetAsEpsgCode (uomEpsgCode,pmrEpsgCode,epsgFldUomCode);		//lint !e613 (use of null pointer)
 			}
 			if (ok)
 			{
-				ok = axsTblPtr->PositionToNext (epsgFldCoordSysCode,sysEpsgCode);
-				if (ok)
-				{
-					ok = axsTblPtr->GetField (fldData,epsgFldCoordAxisOrientation);
-					if (ok) axisTwo = GetOrientation (fldData.c_str ());
-				}
-			}
-		}
-		crsTblPtr->RestorePreviousPosition ();
-	}
-	ok = (axisOne != epsgOrntUnknown) && (axisTwo != epsgOrntUnknown);
-	if (ok)
-	{
-		swap = (axisOne == epsgOrntNorth) || (axisOne == epsgOrntSouth);
-		if (swap)
-		{
-			axisTmp = axisOne;
-			axisOne = axisTwo;
-			axisTwo = axisOne;
-		}
-
-		if (axisOne == epsgOrntEast && axisTwo == epsgOrntNorth)
-		{
-			quad = 1;
-		}
-		else if (axisOne == epsgOrntWest && axisTwo == epsgOrntNorth)
-		{
-			quad = 2;
-		}
-		else if (axisOne == epsgOrntWest && axisTwo == epsgOrntSouth)
-		{
-			quad = 3;
-		}
-		else if (axisOne == epsgOrntEast && axisTwo == epsgOrntSouth)
-		{
-			quad = 4;
-		}
-		if (quad == 0)
-		{
-			ok = false;
-		}
-		else
-		{
-			if (swap)
-			{
-				quad = -quad;
+				ok = FieldToDegrees (primeMeridian,fldData.c_str (),uomEpsgCode);
 			}
 		}
 	}
 	return ok;
 }
-bool TcsEpsgDataSetV6::GeographicCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCode crsEpsgCode)
+bool TcsEpsgDataSetV6::GeographicCoordsys (struct cs_Csdef_& coordsys,const TcsEpsgCode& crsEpsgCode,
+																	  const TcsEpsgCode& horzUomCode) const
 {
 	bool ok;
+
+	double uomFactor;
 
 	TcsEpsgCode dtmEpsgCode;
 	TcsEpsgCode sysEpsgCode;
-	TcsEpsgCode uomEpsgCode;
+	TcsEpsgCode tmpHorzUom;
+	TcsEpsgCode tmpVertUom;
 	TcsEpsgCode pmrEpsgCode;
 	TcsEpsgCode baseCode;
 
 	double primeMeridian;			// in degrees
 	
-	EcsCrsType crsType (epsgCrsTypNone);
 	std::wstring fldData;
 
 	// Here for Geographic specific stuff.
 	// Get pointers to the required tables.
-	TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
-	TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
-	TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
-	TcsEpsgTable* pmrTblPtr = GetTablePtr (epsgTblPrimeMeridian);
-	TcsEpsgTable* sysTblPtr = GetTablePtr (epsgTblCoordinateSystem);
-	TcsEpsgTable* axsTblPtr = GetTablePtr (epsgTblAxis);
+	const TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
+	const TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
+	const TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
+	const TcsEpsgTable* pmrTblPtr = GetTablePtr (epsgTblPrimeMeridian);
+	const TcsEpsgTable* sysTblPtr = GetTablePtr (epsgTblCoordinateSystem);
+	const TcsEpsgTable* axsTblPtr = GetTablePtr (epsgTblAxis);
 
 	ok = (crsTblPtr != 0) && (dtmTblPtr != 0) && (uomTblPtr != 0) && (pmrTblPtr != 0) &&
 																	 (sysTblPtr != 0) &&
@@ -3896,57 +2791,38 @@ bool TcsEpsgDataSetV6::GeographicCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCod
 	// Initialize the following to default values.
 	if (ok)
 	{
-		coordsys.org_lat  = cs_Zero;
-		coordsys.x_off    = cs_Zero;
-		coordsys.y_off    = cs_Zero;
-		coordsys.scl_red  = cs_One;
-		coordsys.unit_scl = cs_One;
-		coordsys.map_scl  = cs_One;
-		coordsys.scale    = cs_One;
-		coordsys.zero [0] = 1.0E-12 * coordsys.unit_scl;
-		coordsys.zero [1] = 1.0E-12 * coordsys.unit_scl;
+		coordsys.org_lat  = 0.0;
+		coordsys.x_off    = 0.0;
+		coordsys.y_off    = 0.0;
+		coordsys.scl_red  = 1.0;
+		coordsys.unit_scl = 1.0;
+		coordsys.map_scl  = 1.0;
+		coordsys.scale    = 1.0;
 		coordsys.order    = 0;
 		coordsys.zones    = 0;
 	}
 
-	// We assume that when called, epsgTblReferenceSystem is properly
-	// positioned.  It is required that this position is retained upon
-	// return.
 	if (ok)
 	{
 		CS_stncp (coordsys.prj_knm,"LL",sizeof (coordsys.prj_knm));
 		CS_stncp (coordsys.group,"LL",sizeof (coordsys.group));
 
-		// Determine the units by examining the UOM of the first axis.
-		ok = crsTblPtr->GetAsEpsgCode (sysEpsgCode,epsgFldCoordSysCode);
+		ok = GetUomToDegrees (uomFactor,horzUomCode);
 		if (ok)
 		{
-			ok = axsTblPtr->PositionToFirst (epsgFldCoordSysCode,sysEpsgCode);
+			const char* cp = CS_unitluByFactor (cs_UTYP_ANG,uomFactor);
+			ok = (cp != 0);
 			if (ok)
 			{
-				ok = axsTblPtr->GetAsEpsgCode (uomEpsgCode,epsgFldUomCode);
-				if (ok)
-				{
-					double factor;
-					ok = GetUomToDegrees (factor,uomEpsgCode);
-					if (ok)
-					{
-						coordsys.unit_scl = factor;
-						const char* cp = CS_unitluByFactor (cs_UTYP_ANG,factor);
-						ok = (cp != 0);
-						if (ok)
-						{
-							CS_stncp (coordsys.unit,cp,sizeof (coordsys.unit));
-						}
-					}
-				}
+				CS_stncp (coordsys.unit,cp,sizeof (coordsys.unit));
+				coordsys.unit_scl = CS_unitlu (cs_UTYP_ANG,cp);
 			}
 		}
 	}
 
 	if (ok)
 	{
-		// Parm1 and parm2 are the longitude range parameters.  EOSG doesn't
+		// Parm1 and parm2 are the longitude range parameters.  EPSG doesn't
 		// support this feature, so we use the CS-MAP default values.  The
 		// remainder of the parameters are not used in geographic systems.
 		coordsys.prj_prm1 = cs_Zero;
@@ -3964,18 +2840,6 @@ bool TcsEpsgDataSetV6::GeographicCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCod
 		}
 	}
 
-	if (ok)
-	{
-		short quad;
-
-		// CS-MAP's quad determines the order of the axes and the direction.
-		ok = GetCoordsysQuad (quad,crsEpsgCode);
-		if (ok)
-		{
-			coordsys.quad = quad;
-		}
-	}
-
 	// The rest is pretty easy.
 	if (ok)
 	{
@@ -3984,48 +2848,53 @@ bool TcsEpsgDataSetV6::GeographicCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCod
 	}
 	return ok;
 }
-
-bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCode crsEpsgCode)
+// This function should only be called by the GetCsMapCoordsys function, as
+// it assumes that all the stuff common to both Geographic and Projected
+// coordinate systems has already been taken care of and the valid results
+// are in the definition structure passed to it.
+//lint -save -esym(613,prjTblPtr)
+bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEpsgCode& crsEpsgCode,
+																	 const TcsEpsgCode& horzUomCode) const
 {
-	bool ok;
-
-	unsigned long flags (0UL);
-
-	int minZprec (3);
-	int utmZone;
-
-	long lngTemp;
+	bool ok (false);
 
 	TcsEpsgCode sysEpsgCode;
 	TcsEpsgCode copEpsgCode;
 	TcsEpsgCode mthEpsgCode;
-	TcsEpsgCode uomEpsgCode;
 	TcsEpsgCode areaOfUseCode;
 
-	EcsCrsType crsType (epsgCrsTypNone);
+	const struct cs_Prjtab_* prjTblPtr (0);
+	const struct cs_Prjprm_* prmTblPtr (0);
+	const struct cs_PrjprmMap_* useTblPtr (0);
 
-	double primeMeridian = cs_Zero;
-	
+	double toMeters (cs_Zero);			// intentionally a really bogus value
+	double primeMeridian (5000.0);		// intentionally a really bogus value
+
 	std::wstring fldData;
 	std::wstring crsName;
 
 	// Here for Projective specific stuff.
 	// Get pointers to the required tables.
-	TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
-	TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
-	TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
-	TcsEpsgTable* sysTblPtr = GetTablePtr (epsgTblCoordinateSystem);
-	TcsEpsgTable* axsTblPtr = GetTablePtr (epsgTblAxis);
+	const TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
+	const TcsEpsgTable* copTblPtr = GetTablePtr (epsgTblCoordinateOperation);
+	const TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
+	const TcsEpsgTable* sysTblPtr = GetTablePtr (epsgTblCoordinateSystem);
+	const TcsEpsgTable* axsTblPtr = GetTablePtr (epsgTblAxis);
 
 	ok = (crsTblPtr != 0) && (copTblPtr != 0) && (uomTblPtr != 0) && (sysTblPtr != 0) &&
 																	 (axsTblPtr != 0);
 
-	// We assume that when called, epsgTblReferenceSystem is properly
-	// positioned.  It is required that this position is retained upon
-	// return.
+	// Get the system UOM to Meters factor, we'll need that in various places.
 	if (ok)
 	{
-		ok = crsTblPtr->GetField (crsName,epsgFldCoordRefSysName);
+		ok = GetUomToMeters (toMeters,horzUomCode);
+	}
+
+	// Get the the prime meridian.  We need this as it applies to all the
+	// longitude parameters.
+	if (ok)
+	{
+		ok = GetPrimeMeridian (primeMeridian,crsEpsgCode);
 	}
 
 	// Determine the group to which this definition should belong.  This is
@@ -4036,7 +2905,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCode
 		CS_stncp (coordsys.group,"EPSGPRJ",sizeof (coordsys.group));
 		
 		// Get the AreaOfUse code from the 
-		ok = crsTblPtr->GetAsEpsgCode (areaOfUseCode,epsgFldAreaOfUseCode);
+		ok = crsTblPtr->GetAsEpsgCode (areaOfUseCode,crsEpsgCode,epsgFldAreaOfUseCode);
 		if (ok)
 		{
 			short shrtEpsgCode = static_cast<short>(areaOfUseCode);
@@ -4054,973 +2923,1375 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCode
 		}
 	}
 
-	// Determine the units by examining the UOM of the first axis.
-	if (ok)
-	{
-		ok = crsTblPtr->GetAsEpsgCode (sysEpsgCode,epsgFldCoordSysCode);
-		if (ok)
-		{
-			ok = axsTblPtr->PositionToFirst (epsgFldCoordSysCode,sysEpsgCode);
-			if (ok)
-			{
-				ok = axsTblPtr->GetAsEpsgCode (uomEpsgCode,epsgFldUomCode);
-				if (ok)
-				{
-					double factor;
-					ok = GetUomToDegrees (factor,uomEpsgCode);
-					if (ok)
-					{
-						const char* cp = CS_unitluByFactor (cs_UTYP_LEN,factor);
-						ok = (cp != 0);
-						if (ok)
-						{
-							CS_stncp (coordsys.unit,cp,sizeof (coordsys.unit));
-						}
-					}
-				}
-			}
-		}
-	}			
-
-	// Determine the quad value to be used.
-	if (ok)
-	{
-		short quad;
-
-		// CS-MAP's quad determines the order of the axes and the direction.
-		ok = GetCoordsysQuad (quad,crsEpsgCode);
-		if (ok)
-		{
-			coordsys.quad = quad;
-		}
-	}
-	
-	// Get the the prime meridian.  We need this as it applies to all the
-	// longitude parameters.
-	if (ok)
-	{
-		ok = GetPrimeMeridian (primeMeridian,crsEpsgCode);
-	}
-
 	// Extract the Coordinate Operation code and the Coordinate operation
 	// Method code.
 	if (ok)
 	{
-		ok = crsTblPtr->GetAsEpsgCode (copEpsgCode,epsgFldProjectionConvCode);
+		ok = crsTblPtr->GetAsEpsgCode (copEpsgCode,crsEpsgCode,epsgFldProjectionConvCode);
 		if (ok)
 		{
-			ok = copTblPtr->SetCurrentRecord (copEpsgCode);
-			if (ok)
-			{
-				ok = copTblPtr->GetAsEpsgCode (mthEpsgCode,epsgFldCoordOpMethodCode);
-			}
+			ok = copTblPtr->GetAsEpsgCode (mthEpsgCode,copEpsgCode,epsgFldCoordOpMethodCode);
 		}
 	}
-#pragma message ("Development in progress, currently incomplete; and untested.")
-#ifdef __SKIP__
-	// If this is a UTM zone, we arrange to produce a UTM Zone projection code.
+
 	if (ok)
+	{
+		// Use the EPSG operation method code to locate the projection in the
+		// CS-MAP projection table which matches this projection.  If we can't
+		// find it in the projection table, than CS-MAP doesn't support that
+		// projection method, and we have failed.  Note that there is _NOT_ a
+		// one to one correspondence between EPSG projection methods and
+		// CS-MAP projections.
+		for (prjTblPtr = cs_Prjtab;prjTblPtr->code != cs_PRJCOD_END;prjTblPtr += 1)
+		{
+			if (mthEpsgCode == prjTblPtr->epsg)
+			{
+				break;
+			}
+		}
+		ok = (prjTblPtr->code != cs_PRJCOD_END);
+	}
+
+	if (ok && mthEpsgCode == 9807UL)
 	{
 		double orgLat;
 		double sclRed;
 		double xxxOff;
 		double prjPrm1;
-		std::wstring::size_type idx;
 
-		idx = crsName.find (L"UTM");
-		if (idx != std::wstring::npos && mthEpsgCode == 9807UL)
+		// This is a Transverse Mercator based system.  See if it is a
+		// definition of a UTM zone.  If so, we use the cs_PRJCOD_UTM entry
+		// in the CS-MAP projection table.
+		if (CS_stristr (coordsys.desc_nm,"UTM") != 0)
 		{
-			ok  = GetParameterValue (orgLat,copEpsgCode,mthEpsgCode,8801UL);
-			ok &= GetParameterValue (sclRed,copEpsgCode,mthEpsgCode,8805UL);
-			ok &= GetParameterValue (xxxOff,copEpsgCode,mthEpsgCode,8806UL);
+			// The name contains "UTM" and the projection is Transverse
+			// Mercator; a good prospect for a UTM zone definition.  We do
+			// this separately as CS-MAP has a projection code specifically
+			// for UTM zones.
+			ok  = GetParameterValue (orgLat,copEpsgCode,mthEpsgCode,8801UL,9102UL);
+			ok &= GetParameterValue (sclRed,copEpsgCode,mthEpsgCode,8805UL,9201UL);
+			ok &= GetParameterValue (xxxOff,copEpsgCode,mthEpsgCode,8806UL,horzUomCode);
 			if (ok &&
 			    (fabs (orgLat) < 1.0E-05) &&
 				(fabs (sclRed - 0.9996) < 1.0E-07) &&
-				(fabs (xxxOff - 500000.00) < 1.0E-04)
+				(fabs ((xxxOff * toMeters) - 500000.00) < 1.0E-04)
 			   )
 			{
 				// Still looks good.  Central meridian must be a valid UTM value.
-				ok  = GetParameterValue (prjPrm1,copEpsgCode,mthEpsgCode,8802UL);
+				ok  = GetParameterValue (prjPrm1,copEpsgCode,mthEpsgCode,8802UL,9102UL);
 				if (ok)
 				{
-					utmZone = static_cast<int>(prjPrm1 + 183.00001) / 6;
+					int utmZone = static_cast<int>(prjPrm1 + 183.00001) / 6;
 					if (utmZone >= 1 && utmZone <= 60)
 					{
-						// Yup!!! Its a UTM zone.
-						mthEpsgCode = 19807;
+						// OK, I'm satisified that er have a UTM zone.
+						for (prjTblPtr = cs_Prjtab;prjTblPtr->code != cs_PRJCOD_END;prjTblPtr += 1)
+						{
+							if (prjTblPtr->code == cs_PRJCOD_UTM)
+							{
+								break;
+							}
+						}
+						ok = (prjTblPtr->code != cs_PRJCOD_END);
 					}
 				}
 			}
 		}
 	}
-
+	// For the remainder of this execution, mthEpsgCode has the EPSG Operation
+	// Method code, and prjTblPtr points to the corresponding CS-MAP projection
+	// table entry.  these are heavily relied upon below.
+						
 	// Deal with the projection and parameters.
 	if (ok)
 	{
-		switch (mthEpsgCode) {
+		unsigned char csMapPrmCode;
 
-		case 19807:						// Special code for UTM zone.
-			CS_stncp (coordsys.prj_knm,"UTM",sizeof (coordsys.prj_knm));
-			ok  = GetParameterValue (tmpDbl,copEpsgCode,mthEpsgCode,8802UL);
-			if (ok)
-			{
-				utmZone = static_cast<int>(tmpDbl + 183.00001) / 6;
-				coordsys.prj_prm1 = static_cast<double>(utmZone);
-			}
-			if (ok)
-			{
-				ok  = GetParameterValue (tmpDbl,copEpsgCode,mthEpsgCode,8807UL);
-			}
-			if (ok)
-			{
-				if (fabs (tmpDbl) < cs_One)
-				{
-					coordsys.prj_prm2 = cs_One;
-				}
-				else
-				{
-					coordsys.prj_prm2 = cs_Mone;
-				}
-			}
-			break;
+		short prjCode;
+		ulong32_t prjFlags;
+		TcsEpsgCode epsgPrmCode;
 
-		case 9801:						// Lambert Conformal Conic, 1SP
-			cmStrNCpy (projCode,"LM1SP",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			sclRed  = EpsgParmValue.GetAsScale   (coordOpCode,8805,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
+		// Capture the stuff that applies to most every projection or can be
+		// determined from the flag's work in the projection table.  Some of
+		// this may be overwritten below where we deal with special situations.
+		// (There always has to be some special situations, don't you know;
+		// else a whole bunch of us would be out of a job.)
+		//
+		// Set uyp some default values to keep the logic below clean.
+		coordsys.org_lng = cs_Zero;
+		coordsys.org_lat = cs_Zero;
+		coordsys.scl_red = cs_One;
+		coordsys.x_off = cs_Zero;
+		coordsys.y_off = cs_Zero;
 
-			orgLng += primeMeridian;	
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9802:						// Lambert Conformal Conic, 2SP
-			cmStrNCpy (projCode,"LM",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8821,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8822,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8826,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8827,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8823,EpsgUnitOfMeasure);
-			prjPrm2 = EpsgParmValue.GetAsDegrees (coordOpCode,8824,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;	
-			orgLng = cmAdjust180 (orgLng);
-			frmtPrjPrm1 = KcmATOF_LATDFLT;
-			frmtPrjPrm2 = KcmATOF_LATDFLT;
-			break;
-
-		case 9803:						// Lambert Conformal Conic, 2SP - Belgium
-			cmStrNCpy (projCode,"LMBLGN",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8821,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8822,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8826,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8827,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8823,EpsgUnitOfMeasure);
-			prjPrm2 = EpsgParmValue.GetAsDegrees (coordOpCode,8824,EpsgUnitOfMeasure);
-
-			orgLng = cmAdjust180 (orgLng);
-			frmtPrjPrm1 = KcmATOF_LATDFLT;
-			frmtPrjPrm2 = KcmATOF_LATDFLT;
-			break;
-
-		case 9804:						// Mercator, 1SP
-			cmStrNCpy (projCode,"MRCATK",sizeof (projCode));
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			sclRed  = EpsgParmValue.GetAsScale   (coordOpCode,8805,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			prjPrm1 += primeMeridian;	
-			prjPrm1 = cmAdjust180 (prjPrm1);
-			frmtPrjPrm1 = KcmATOF_LNGDFLT;
-			break;
-
-		case 9805:						// Mercator, 2SP
-			cmStrNCpy (projCode,"MRCAT",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			prjPrm1 += primeMeridian;	
-			prjPrm1 = cmAdjust180 (prjPrm1);
-			frmtPrjPrm1 = KcmATOF_LNGDFLT;
-			break;
-
-		case 9806:						// Cassini-Soldner
-			cmStrNCpy (projCode,"CASSINI",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			prjPrm1 += primeMeridian;	
-			prjPrm1 = cmAdjust180 (prjPrm1);
-			frmtPrjPrm1 = KcmATOF_LNGDFLT;
-			break;
-
-		case 9807:						// Transverse Mercator
-			cmStrNCpy (projCode,"TM",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			sclRed  = EpsgParmValue.GetAsScale   (coordOpCode,8805,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			prjPrm1 += primeMeridian;	
-			prjPrm1 = cmAdjust180 (prjPrm1);
-			frmtPrjPrm1 = KcmATOF_LNGDFLT;
-			break;
-
-		case 9808:						// Transverse Mercator, South Orientated
-			cmStrNCpy (projCode,"TM",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			sclRed  = EpsgParmValue.GetAsScale   (coordOpCode,8805,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-			csmapQuad = qdWestSouth;
-
-			prjPrm1 += primeMeridian;	
-			prjPrm1 = cmAdjust180 (prjPrm1);
-			frmtPrjPrm1 = KcmATOF_LNGDFLT;
-			break;
-
-		case 9809:						// Oblique Stereographic
-			cmStrNCpy (projCode,"OSTERO",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			sclRed  = EpsgParmValue.GetAsScale   (coordOpCode,8805,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;	
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9810:						// Polar Stereographic
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			if (fabs (orgLat) > 89.99)
-			{
-				cmStrNCpy (projCode,"PSTERO",sizeof (projCode));
-			}
-			else
-			{
-				cmStrNCpy (projCode,"OSTERO",sizeof (projCode));
-			}
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			sclRed  = EpsgParmValue.GetAsScale   (coordOpCode,8805,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9811:						// New Zealand Map Grid
-			cmStrNCpy (projCode,"NZEALAND",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			sclRed  = KcmOne;
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9812:						// Hotine Oblique Mercator
-			cmStrNCpy (projCode,"HOM1XY",sizeof (projCode));
-			prjPrm2 = EpsgParmValue.GetAsDegrees (coordOpCode,8811,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8812,EpsgUnitOfMeasure);
-			sclRed  = EpsgParmValue.GetAsScale   (coordOpCode,8815,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-			prjPrm3 = EpsgParmValue.GetAsDegrees (coordOpCode,8813,EpsgUnitOfMeasure);
-
-			prjPrm1 += primeMeridian;
-			prjPrm3 += primeMeridian;
-			prjPrm1 = cmAdjust180 (prjPrm1);
-			prjPrm3 = cmAdjust180 (prjPrm3);
-			frmtPrjPrm1 = KcmATOF_LNGDFLT;
-			frmtPrjPrm2 = KcmATOF_LATDFLT;
-			frmtPrjPrm3 = KcmATOF_CNVDFLT;
-			break;
-
-		case 9813:						// Laborde Oblique Mercator
-			// Unsupported.
-			comment = L"Laborde Oblique Mercator is not supported.";
-			break;
-
-		case 9814:						// Swiss Oblique Mercator
-			cmStrNCpy (projCode,"HOM1XY",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8811,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8812,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8816,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8817,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;	
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9815:						// Oblique Mercator
-			dblTemp = EpsgParmValue.GetAsDegrees (coordOpCode,8813,EpsgUnitOfMeasure);
-			dblTemp -= 90.0;
-			if (fabs (dblTemp) < 0.0001)
-			{
-				// This is really an Oblique Cylindrical; typically the Swiss variety.
-				cmStrNCpy (projCode,"SWISS",sizeof (projCode));
-				orgLat = EpsgParmValue.GetAsDegrees (coordOpCode,8811,EpsgUnitOfMeasure);
-				orgLng = EpsgParmValue.GetAsDegrees (coordOpCode,8812,EpsgUnitOfMeasure);
-				xxxOff = EpsgParmValue.GetAsMeters  (coordOpCode,8816,EpsgUnitOfMeasure);
-				yyyOff = EpsgParmValue.GetAsMeters  (coordOpCode,8817,EpsgUnitOfMeasure);
-				orgLng += primeMeridian;	
-				orgLng = cmAdjust180 (orgLng);
-			}
-			else
-			{
-				cmStrNCpy (projCode,"RSKEW",sizeof (projCode));
-				prjPrm2 = EpsgParmValue.GetAsDegrees (coordOpCode,8811,EpsgUnitOfMeasure);
-				prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8812,EpsgUnitOfMeasure);
-				sclRed  = EpsgParmValue.GetAsScale   (coordOpCode,8815,EpsgUnitOfMeasure);
-				xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8816,EpsgUnitOfMeasure);
-				yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8817,EpsgUnitOfMeasure);
-				prjPrm3 = EpsgParmValue.GetAsDegrees (coordOpCode,8813,EpsgUnitOfMeasure);
-				frmtPrjPrm1 = KcmATOF_LNGDFLT;
-				frmtPrjPrm2 = KcmATOF_LATDFLT;
-				frmtPrjPrm3 = KcmATOF_CNVDFLT;
-				prjPrm1 += primeMeridian;	
-				prjPrm1 = cmAdjust180 (prjPrm1);
-				prjPrm3 += primeMeridian;
-				prjPrm3 = cmAdjust180 (prjPrm3);
-			}
-			break;
-
-		case 9816:						// Tunisia Mining Grid
-			// Unsupported
-			ok = false;
-			comment += L"Tunisia Mining Grid is not supported.\n";
-			break;
-
-		case 9817:						// Lambert Conic Near-Conformal
-			// unsupported
-			ok = false;
-			comment += L"Lambert Conic Near-Conformal is not supported.\n";
-			break;
-
-		case 9818:						// American Polyconic
-			cmStrNCpy (projCode,"PLYCN",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			prjPrm1 += primeMeridian;
-			prjPrm1 = cmAdjust180 (prjPrm1);
-			frmtPrjPrm1 = KcmATOF_LNGDFLT;
-			break;
-
-		case 9819:						// Krovak Oblique Conic Conformal
-			// We don't support the same set of parameters as EPSG.  We don't
-			// understand the EPSG parameters, so we can't map them into CS-MAP
-			// parameters.  Maybe sometime in the near future.
-			ok = false;
-			comment += L"EPSG Krovak Oblique Conformal Conic parameterization is not supported.\n";
-			break;
-
-		case 9820:						// Lambert Azimuthal Equal Area
-			cmStrNCpy (projCode,"AZMEA",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			orgLng = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9821:						// Lambert Azimuthal Equal Area Spherical
-			cmStrNCpy (projCode,"AZMEA",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			orgLng = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9822:						// Albers Equal Area
-			cmStrNCpy (projCode,"AE",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8821,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8822,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8826,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8827,EpsgUnitOfMeasure);
-			prjPrm1 = EpsgParmValue.GetAsDegrees (coordOpCode,8823,EpsgUnitOfMeasure);
-			prjPrm2 = EpsgParmValue.GetAsDegrees (coordOpCode,8824,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;
-			orgLng = cmAdjust180 (orgLng);
-			frmtPrjPrm1 = KcmATOF_LATDFLT;
-			frmtPrjPrm2 = KcmATOF_LATDFLT;
-			break;
-
-		case 9823:						// Equidistant Cylindrical
-			cmStrNCpy (projCode,"EDCYL",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8821,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8822,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9824:						// Transverse Mercator Zoned Grid System
-			// Unsupported.  This variation is one where the zone number is part of
-			// the easting coordinate.
-			ok = false;
-			comment += L"Transverse Mercator Zoned Grid System is not supported.\n";
-			break;
-
-		case 9825:						// Pseudo Plate Carree
-			// Unsupported
-			ok = false;
-			comment += L"Pseudo Platte Caree is not supported.\n";
-			break;
-
-		case 9826:						// Lambert Conic Conformal (West Orientated)
-			// Unsupported
-			ok = false;
-			comment += L"Lambert Conformal Conic (West Orientated) is not supported.\n";
-			break;
-
-		case 9827:						// Bonne
-			cmStrNCpy (projCode,"BONNE",sizeof (projCode));
-			orgLat  = EpsgParmValue.GetAsDegrees (coordOpCode,8801,EpsgUnitOfMeasure);
-			orgLng  = EpsgParmValue.GetAsDegrees (coordOpCode,8802,EpsgUnitOfMeasure);
-			xxxOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8806,EpsgUnitOfMeasure);
-			yyyOff  = EpsgParmValue.GetAsMeters  (coordOpCode,8807,EpsgUnitOfMeasure);
-
-			orgLng += primeMeridian;
-			orgLng = cmAdjust180 (orgLng);
-			break;
-
-		case 9828:						// Bonne West Orientated
-			// Unsupported
-			ok = false;
-			comment += L"Bonne West Orientated is not supported.\n";
-			break;
-
-		default:
-			ok = false;
-			comment += L"Unrecognized operation method encountered.\n";
-			break;
-		}
-	}
-
-	// Adjust the false origin to force units equal to the units of the
-	// coordinatye system.  Above, we always forced them to meters.
-	if (ok)
-	{
-		unitFactor = EpsgUnitOfMeasure.FactorToMeters (cmEpsgCSysToUnitCode (coordSysCode));
-		xxxOff /= unitFactor;
-		yyyOff /= unitFactor;
-		minNzX = 0.001 / unitFactor;
-		minNzY = 0.001 / unitFactor;
-		minZprec = static_cast<int>(fabs (log10 (fabs (minNzX)) + 0.5));
-		if (minZprec < 3) minZprec = 3;
-
-		// Finally, in certain cases we need to tweak the group code.
-		if (!cmWcsICmp (groupCode,L"SPCS"))
+		// Populate coordsys with what we cna having a pointer to the appropriate
+		// entry of the projection table.		
+		prjCode = prjTblPtr->code;
+		prjFlags = prjTblPtr->flags;
+		CS_stncp (coordsys.prj_knm,prjTblPtr->key_nm,sizeof (coordsys.prj_knm));
+		if ((prjFlags & cs_PRJFLG_ORGLNG) == 0UL)
 		{
-			if (!cmWcsICmp (newDtName,L"NAD27"))
+			// The projection requires an origin longitude which is not carried
+			// as projection parameter 1.
+			if (mthEpsgCode == 9819UL)
 			{
-				cmStrNCpy (groupCode,L"SPCS27",wcCount (groupCode));
-			}
-			else if (!cmWcsICmp (newDtName,L"NAD83"))
-			{
-				if (!cmWcsICmp (unitCode,L"FOOT"))
-				{
-					cmStrNCpy (groupCode,"SPCS83F",wcCount (groupCode));
-				}
-				else if (!cmWcsICmp (unitCode,L"IFOOT"))
-				{
-					cmStrNCpy (groupCode,L"SPCS83I",wcCount (groupCode));
-				}
-				else
-				{
-					cmStrNCpy (groupCode,L"SPCS83",wcCount (groupCode));
-				}
-			}
-			else if (!cmWcsICmp (newDtName,L"HPGN"))
-			{
-				if (!cmWcsICmp (unitCode,L"FOOT"))
-				{
-					cmStrNCpy (groupCode,L"SPCSHPF",wcCount (groupCode));
-				}
-				else if (!cmWcsICmp (unitCode,L"IFOOT"))
-				{
-					cmStrNCpy (groupCode,L"SPCSHPI",wcCount (groupCode));
-				}
-				else
-				{
-					cmStrNCpy (groupCode,L"SPCSHP",wcCount (groupCode));
-				}
+				coordsys.org_lng = cs_Zero;
 			}
 			else
 			{
-				cmStrNCpy (groupCode,L"OTHR-US",wcCount (groupCode));
+				epsgPrmCode = 8802UL;
+				if (mthEpsgCode == 9802UL || mthEpsgCode == 9803UL || mthEpsgCode == 9822UL)
+				{
+					epsgPrmCode = 8822UL;
+				}
+				ok &= GetParameterValue (coordsys.org_lng,copEpsgCode,mthEpsgCode,epsgPrmCode,9102UL);
+			}
+			coordsys.org_lng += primeMeridian;
+		}
+		if ((prjFlags & cs_PRJFLG_ORGLAT) == 0UL)
+		{
+			// The projection requires an origin latitude.
+			epsgPrmCode = 8801UL;
+			if (mthEpsgCode == 9802UL || mthEpsgCode == 9803UL || mthEpsgCode == 9822UL)
+			{
+				epsgPrmCode = 8821UL;
+			}
+			else if (mthEpsgCode == 9819UL)
+			{
+				// Krovak Oblique Conic
+				epsgPrmCode = 8811UL;
+			}
+			ok &= GetParameterValue (coordsys.org_lat,copEpsgCode,mthEpsgCode,epsgPrmCode,9102UL);
+		}
+		if ((prjFlags & cs_PRJFLG_SCLRED) != 0UL)
+		{
+			epsgPrmCode = 8805UL;
+			if (mthEpsgCode == 9819UL)
+			{
+				// Krovak Oblique Conic
+				epsgPrmCode = 8819UL;
+			}
+			ok &= GetParameterValue (coordsys.scl_red,copEpsgCode,mthEpsgCode,epsgPrmCode,9201UL);
+		}
+		if ((prjFlags & cs_PRJFLG_ORGFLS) == 0UL)
+		{
+			epsgPrmCode = 8806UL;
+			if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic - 2SP
+			    mthEpsgCode == 9803UL ||		// Lambert Conformal Conic - 2SP Belgium
+			    mthEpsgCode == 9816UL ||		// Tunisia Mining Grid
+			    mthEpsgCode == 9822UL ||		// Albers Equal Area
+			    mthEpsgCode == 9830UL)			// Polar Stereographic - Variant C
+			{
+				epsgPrmCode = 8826UL;
+			}
+			ok &= GetParameterValue (coordsys.x_off,copEpsgCode,mthEpsgCode,epsgPrmCode,horzUomCode);
+			epsgPrmCode = 8807UL;
+			if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic - 2SP
+			    mthEpsgCode == 9803UL ||		// Lambert Conformal Conic - 2SP Belgium
+			    mthEpsgCode == 9816UL ||		// Tunisia Mining Grid
+			    mthEpsgCode == 9822UL ||		// Albers Equal Area
+			    mthEpsgCode == 9830UL)			// Polar Stereographic - Variant C
+			{
+				epsgPrmCode = 8827UL;
+			}
+			ok &= GetParameterValue (coordsys.y_off,copEpsgCode,mthEpsgCode,epsgPrmCode,horzUomCode);
+		}
+
+		// We finish this by simply adding the appropriate projection parameter
+		// values.  This is table driven and works for most projections.  The special
+		// situations handling below will overwrite this default processing as is
+		// appropriate.
+
+		// We first locate the appropriate entry in the parameter usage
+		// table.
+		for (useTblPtr = cs_PrjprmMap;useTblPtr->prj_code != cs_PRJCOD_END;useTblPtr += 1)
+		{
+			if (useTblPtr->prj_code == prjCode)
+			{
+				break;
+			}
+		}
+		ok = (useTblPtr->prj_code != cs_PRJCOD_END);
+
+		// We now loop through the parameter use specification and process
+		// each parameter required by this particular projection. 
+		if (ok)
+		{
+			int prmIdx;
+			double prmTemp;
+
+			for (prmIdx = 0;useTblPtr->prm_types [prmIdx] != 0;prmIdx += 1)
+			{
+				csMapPrmCode = useTblPtr->prm_types [prmIdx];
+				prmTblPtr = &csPrjprm [csMapPrmCode];
+				epsgPrmCode = prmTblPtr->epsg;
+				if (epsgPrmCode == 0UL)
+				{
+					// This can happen for the projections for which there are
+					// different parameterizations between EPSG and CS-MAP.  We
+					// assume here that any discrepancy here will be dealt with
+					// below where we have projection specific code.
+					continue;
+				}
+				
+				// Some kludges to adjust to EPSG idosyncrasies.
+				if (mthEpsgCode == 9805UL && epsgPrmCode == 8832UL)
+				{
+					// For the Mercator 2SP projection, there really is only
+					// one standard parallel, but the EPSG parameterization
+					// uses the 1st standard parallel parameter for THE
+					// standard parallel.
+					epsgPrmCode = 8823UL;
+				}
+
+				// Get the parameter value.
+				switch (prmTblPtr->log_type) {
+				case cs_PRMLTYP_LNG:
+					// Longitude needs special processing as we need to apply any
+					// prime meridian which may be active in EPSG.  In CS-MAP
+					// all longitude type parameter values are referenced to
+					// Greenwich by definition.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9102UL);
+					prmTemp += primeMeridian;
+					break;
+				case cs_PRMLTYP_LAT:
+					// We need to make sure the units are degrees.  CS-MAP
+					// requires all angular parameters to be in degrees.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9102UL);
+					break;
+				case cs_PRMLTYP_AZM:
+				case cs_PRMLTYP_ANGD:
+					// Same as latitude, with the exception that we adjust the
+					// value to be between -180 and +180.  Epsg likes to use
+					// the 0 to +360 range.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9102UL);
+					if (prmTemp > 180.0)
+					{
+						prmTemp -= 360.0;
+					}
+					break;
+				case cs_PRMLTYP_CMPLXC:
+					// I don't think there are any of these in EPSG yet.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9203UL);
+					break;
+				case cs_PRMLTYP_ZNBR:
+					// I don't think there are any of these in EPSG yet.  At
+					// least not for the set of operation methods currently
+					// supported by CS-MAP.  We simply set ok to true as there
+					// is special code below to compute this value.
+					ok  = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,8802UL,9102UL);
+					if (ok)
+					{
+						prmTemp = (double)((int)(prmTemp + 183.00001) / 6);			//lint !e653   (possible loss of fraction)
+					}
+					break;
+				case cs_PRMLTYP_HSNS:
+					// I don't think there are, or ever will be, any of these
+					// in EPSG.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,8807UL,horzUomCode);
+					if (ok)
+					{
+						prmTemp = (prmTemp > cs_One) ? cs_One : cs_Mone;
+					}
+					break;
+				case cs_PRMLTYP_GHGT:
+					// I don't think there are any of these in EPSG yet.  Geoid
+					// heightrameter values are always in meters.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9001UL);
+					break;
+				case cs_PRMLTYP_ELEV:
+					// I don't think there are any of these in EPSG yet.
+					// Average elevation values (in CS-MAP) are always in the
+					// system unit.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,horzUomCode);
+					break;
+				case cs_PRMLTYP_AFCOEF:
+					// These parameter types exist in EPSG and CS-MAP, but the
+					// methods that use them  in EPSG are not supported by
+					// CS-MAP and vice versa.  SO, for now anyway, this code
+					// should never be executed.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9203UL);
+					break;
+				case cs_PRMLTYP_XYCRD:
+					// There may be some of these in EPSG, but only for methods
+					// which are not supported by CS-MAP.  So for now, this
+					// code should never be executed.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,horzUomCode);
+					break;
+				case cs_PRMLTYP_SCALE:
+					// Scale values in CS-MAP projected definitions are always
+					// at the unity level.
+					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9201UL);
+					break;
+				case cs_PRMLTYP_NONE:
+				default:
+					// We provide a zero (successfully) for all other parameter
+					// values.  They __SHOULD__ be adjusted in the projection
+					// specific code below.
+					ok = true;
+					prmTemp = cs_Zero;
+					break;
+				}
+				
+				// Stuff the parameter into the definition structure.
+				if (ok)
+				{
+					*(&coordsys.prj_prm1 + prmIdx) = prmTemp;
+				}
 			}
 		}
 	}
 
+	// That should do it for most all projections.  Of course there are some
+	// special situations which we deal with here.
 	if (ok)
 	{
-		lclResult << L"CS_NAME: " << newCsName << std::endl;
-		lclResult << L"          GROUP: " << groupCode << std::endl;
-		wcPtr = EpsgCoordSysRef.EpsgName (epsgCode);
-		if (wcslen (wcPtr) >= 64)
+		if (prjTblPtr->code == cs_PRJCOD_UTM)
 		{
-			cmStrNCpy (tmpBufr,wcPtr,64);
-			wcPtr = tmpBufr;
-		}
-		lclResult << L"        DESC_NM: " << wcPtr << std::endl;
-		wcPtr = EpsgCoordSysRef.InformationSource (epsgCode);
-		cmStrNCpy (tmpBufr,wcPtr,40);
-		wchar_t* wcPtrV = tmpBufr;
-		while (wcPtrV != 0)
-		{
-			wcPtrV = wcschr (wcPtrV,L'\n');
-			if (wcPtrV != 0)
+			double prjPrm1;
+			double yyyOff;
+			// It was determined above that this is a UTM zone.  We make the
+			// proper adjustments here to convert it to a CS-MAP UTM projection.
+			ok  = GetParameterValue (prjPrm1,copEpsgCode,mthEpsgCode,8802UL,9102UL);
+			ok &= GetParameterValue (yyyOff,copEpsgCode,mthEpsgCode,8807UL,horzUomCode);
+			if (ok)
 			{
-				*wcPtrV++ = L' ';
+				int utmZone = static_cast<int>(prjPrm1 + 183.00001) / 6;
+				ok = (utmZone >= 1 && utmZone <= 60);
+				if (ok)
+				{
+					CS_stncp (coordsys.prj_knm,"UTM",sizeof (coordsys.prj_knm));
+					coordsys.prj_prm1 = static_cast<double>(utmZone);
+					coordsys.prj_prm2 = (fabs (yyyOff) <= cs_One) ? cs_One : cs_Mone;
+				}
 			}
 		}
-		lclResult << L"         SOURCE: EPSG, V" << RevIdW
-				  << L", " << epsgCode
-				  << L" [" << tmpBufr << L"]"
-				  << std::endl;
-		lclResult << L"           EPSG: "
-				  << epsgCode
-				  << std::endl;
-
-		// See if this is referenced to a datum or an ellipsoid.
-		if (datumCode >= 6001 && datumCode <= 6047)
+		else if (mthEpsgCode == 9808UL)
 		{
-			// Referenced to an ellipsoid.
-			long ellipsoidCode = EpsgDatum.EpsgEllipsoidCode (datumCode);
-			elEpsgNbr = static_cast<unsigned long>(ellipsoidCode);
-			wcPtr = elKeyNameMap.MapNumber (nmMapMsiName,nbrMapEpsgNbr,elEpsgNbr);
-			if (wcPtr == 0 || *wcPtr == L'\0')
+			// South oriented Transverse Mercator.
+			coordsys.quad = 1;
+		}
+		else if (mthEpsgCode == 9812UL)
+		{
+			double alpha;
+			double gamma;
+
+			// Hotine Oblique Mercator/Rectified Skew Orthomorphic.  EPSG has
+			// only one projection variation, while CS-MAP has two.  This is
+			// true as the EPSG parameterization requires two angles; the
+			// CS-MAP parameterizations only one angle.  This is possible,
+			// as given on of these angles, you can compute the other.  You
+			// just need to know which one you have; thus two projection
+			// variatiuons in CS-MAP.
+			
+			// So, we get both of the angle parameters provided in the
+			// EPSG database, and based on the values thereof, we select
+			// a CS-MAP projection code.  In the EPSG database, 8813 is
+			// the azimuth of the central geodesic at the projection center,
+			// and 8814 is the rotation angle applied to the skew grid in
+			// order to cause the Y grid axis to be true north.  When both
+			// of these values are equal, you have the Hotine Mercator
+			// variation; when they are not equal, you have the Rectified
+			// Skew Orthomorphic variation.			
+			ok  = GetParameterValue (alpha,copEpsgCode,mthEpsgCode,8813UL,9102UL);
+			ok &= GetParameterValue (gamma,copEpsgCode,mthEpsgCode,8814UL,9102UL);
+			alpha = CS_adj180 (alpha);
+			gamma = CS_adj180 (gamma);
+			if (fabs (alpha - gamma) < 1.0E-02)
 			{
+				// The two angles are equal, we have the Hotine Oblique
+				// Mercator variation.
+				CS_stncp (coordsys.prj_knm,"HOM1XY",sizeof (coordsys.prj_knm));
+				coordsys.prj_prm3 = alpha;
+			}
+			else
+			{
+				// This is a Rectified Skew Orthomorphic
+				CS_stncp (coordsys.prj_knm,"RSKEW",sizeof (coordsys.prj_knm));
+				coordsys.prj_prm3 = alpha;
+			}
+		}
+		else if (mthEpsgCode == 9819UL)
+		{
+			double oblqPoleCoLat;
+			// Krovak Conformal Conic.
+			//
+			// This gets strange.  The parameterization of the this projection
+			// outside of CS-MAP is weird.  The parameter is called:
+			//
+			// 8813: Azimuth of initial line
+			// The azimuthal direction (north zero, east of north being
+			// positive) of the great circle which is the centre line of an
+			// oblique projection. The azimuth is given at the projection
+			// centre.
+			//
+			// This value is obvisouly not a real parameter that someone
+			// would choose.  What it really is is the co-latitude of the
+			// oblique pole on the gaussian surface.  This is calculatable
+			// if tiy are given a real parameter, such as the latitude of
+			// the oblique pole on the basic ellipsoid.  That is the
+			// parameter CS-MAP expects.
+			//
+			// Since there is only one basoc coordinate system which uses
+			// this projection, the following code works real fine, last a
+			// long time.
+			//
+			// The standard code above should have properly place most of
+			// the correct values.
+			ok  = GetParameterValue (oblqPoleCoLat,copEpsgCode,mthEpsgCode,8813UL,9102UL);
+			if (ok && (fabs (coordsys.org_lat - 49.5) < 1.0E-03) &&
+					  (fabs (oblqPoleCoLat - 30.28814) < 1.0E-03)
+			   )
+			{
+				// This is indeed the Krovak, actually the only CRS which
+				// uses this projection.  So, we can now do this, rather
+				// confidently.
+				coordsys.org_lng  = 17.66666666667;		// Actually, meridian of Ferro.
+				coordsys.org_lat  = 49.5;				// Latitude at which the gaussian radius is computed.
+				coordsys.prj_prm1 = 42.5;				// Longitude of the oblique pole relative to ther Ferro meridian)
+				coordsys.prj_prm2 = 59.75759855555555555;	// Latitude of the oblique pole (Riga, Estonia).
+				coordsys.prj_prm3 = 78.5;				// Standard parallel on the oblique code.
+				coordsys.scl_red  = 0.9999;				// 1:10,000
+			}
+			else
+			{
+				// This isn't the Krovak we know, thus we can it now.
 				ok = false;
-				comment += L"Couldn't map cartographic reference name.\n";
 			}
-			else
+		}
+		else if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic (2SP)
+				 mthEpsgCode == 9803UL ||		// Lambert Conformal Conic (2SP Belgium)
+				 mthEpsgCode == 9817UL ||		// Lambert Conformal Conic, Near Conformal
+				 mthEpsgCode == 9822UL ||		// Albers Equal Area Conic
+				 mthEpsgCode == 9826UL)			// Lambert Conic Conformal (West Orientated)
+		{
+			double prmTemp;
+
+			// For conics of the two standard parallel variety, we make sure
+			// that the northern most of the two parallels is in pri_prm1.
+			// That is a CS-MAP convention.  It doesn't make much difference
+			// to the mathmatics, but it makes comparing two definitions a
+			// bit problematical.
+			if (coordsys.prj_prm1 < coordsys.prj_prm2)
 			{
-				cmStrNCpy (tmpBufr,wcPtr,wcCount (tmpBufr));
-				lclResult << L"        EL_NAME: " << wcPtr << std::endl;
+				prmTemp = coordsys.prj_prm1;
+				coordsys.prj_prm1 = coordsys.prj_prm2;
+				coordsys.prj_prm2 = prmTemp;
 			}
 		}
 		else
 		{
-			lclResult << L"        DT_NAME: " << newDtName << std::endl;
+			ok = true;
 		}
 	}
-	
+
 	if (ok)
 	{
-		lclResult << L"           PROJ: " << projCode << std::endl;
-		lclResult << L"           UNIT: " << unitCode << std::endl;
-		if (prjPrm1 > myNanTest)
+		// Finally, in certain cases we need to tweak the group code.
+		if (!CS_stricmp (coordsys.group,"SPCS"))
 		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm1,frmtPrjPrm1);
-			lclResult << L"          PARM1: " <<  tmpBufr << std::endl;
-		}
-		if (prjPrm2 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm2,frmtPrjPrm2);
-			lclResult << L"          PARM2: " << tmpBufr << std::endl;
-		}
-		if (prjPrm3 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm3,frmtPrjPrm3);
-			lclResult << L"          PARM3: " << tmpBufr << std::endl;
-		}
-		if (prjPrm4 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm4,frmtPrjPrm4);
-			lclResult << L"          PARM4: " << tmpBufr << std::endl;
-		}
-		if (prjPrm5 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm5,frmtPrjPrm5);
-			lclResult << L"          PARM5: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm6 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm6,frmtPrjPrm6);
-			lclResult << L"          PARM6: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm7 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm7,frmtPrjPrm7);
-			lclResult << L"          PARM7: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm8 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm8,frmtPrjPrm8);
-			lclResult << L"          PARM8: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm9 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm9,frmtPrjPrm9);
-			lclResult << L"          PARM9: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm10 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm10,frmtPrjPrm10);
-			lclResult << L"         PARM10: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm11 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm11,frmtPrjPrm11);
-			lclResult << L"         PARM11: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm12 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm12,frmtPrjPrm12);
-			lclResult << L"         PARM12: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm13 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm13,frmtPrjPrm13);
-			lclResult << L"         PARM13: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm14 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm14,frmtPrjPrm14);
-			lclResult << L"         PARM14: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm15 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm15,frmtPrjPrm15);
-			lclResult << L"         PARM15: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm16 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm16,frmtPrjPrm16);
-			lclResult << L"         PARM16: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm17 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm17,frmtPrjPrm17);
-			lclResult << L"         PARM17: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm18 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm18,frmtPrjPrm18);
-			lclResult << L"         PARM18: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm19 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm19,frmtPrjPrm19);
-			lclResult << L"         PARM19: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm20 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm20,frmtPrjPrm20);
-			lclResult << L"         PARM20: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm21 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm21,frmtPrjPrm21);
-			lclResult << L"         PARM21: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm22 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm22,frmtPrjPrm22);
-			lclResult << L"         PARM22: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm23 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm23,frmtPrjPrm23);
-			lclResult << L"         PARM23: " << tmpBufr  << std::endl;
-		}
-		if (prjPrm24 > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),prjPrm24,frmtPrjPrm24);
-			lclResult << L"         PARM24: " << tmpBufr  << std::endl;
-		}
-	}
-	
-	if (ok)
-	{
-		lclResult << std::setprecision (6);
-		if (sclRed > myNanTest)
-		{
-			// Compute the approriate ration value.  If it is an integer, we use
-			// the ratio formatting.  Otherwise, we just output the double value.
-			dblTemp = 1.0 / (1.0 - sclRed);
-			lngTemp = static_cast<long>(fabs (dblTemp));
-			dblTemp = fabs (dblTemp - static_cast<double>(lngTemp));
-			if (sclRed >= KcmOne || dblTemp > 1.0E-08)
+			if (!CS_stricmp (coordsys.dat_knm,"NAD27"))
 			{
-				cmFtoa (tmpBufr,wcCount (tmpBufr),sclRed,9L);
-				lclResult << L"        SCL_RED: " << tmpBufr << std::endl;
+				CS_stncp (coordsys.group,"SPCS27",sizeof (coordsys.group));
+			}
+			else if (!CS_stricmp (coordsys.dat_knm,"NAD83"))
+			{
+				if (!CS_stricmp (coordsys.unit,"FOOT"))
+				{
+					CS_stncp (coordsys.group,"SPCS83F",sizeof (coordsys.group));
+				}
+				else if (!CS_stricmp (coordsys.unit,"IFOOT"))
+				{
+					CS_stncp (coordsys.group,"SPCS83I",sizeof (coordsys.group));
+				}
+				else
+				{
+					CS_stncp (coordsys.group,"SPCS83",sizeof (coordsys.group));
+				}
+			}
+			else if (!CS_stricmp (coordsys.dat_knm,"HPGN"))
+			{
+				if (!CS_stricmp (coordsys.unit,"FOOT"))
+				{
+					CS_stncp (coordsys.group,"SPCSHPF",sizeof (coordsys.group));
+				}
+				else if (!CS_stricmp (coordsys.unit,"IFOOT"))
+				{
+					CS_stncp (coordsys.group,"SPCSHPI",sizeof (coordsys.group));
+				}
+				else
+				{
+					CS_stncp (coordsys.group,"SPCSHP",sizeof (coordsys.group));
+				}
 			}
 			else
 			{
-				cmFtoa (tmpBufr,wcCount (tmpBufr),sclRed,frmtSclRed);
-				lclResult << L"        SCL_RED: " << tmpBufr << std::endl;
+				CS_stncp (coordsys.group,"OTHR-US",sizeof (coordsys.group));
 			}
 		}
-		if (orgLng > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),orgLng,frmtOrgLng);
-			lclResult << L"        ORG_LNG: " << tmpBufr << std::endl;
-		}
-		if (orgLat > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),orgLat,frmtOrgLat);
-			lclResult << L"        ORG_LAT: " << tmpBufr << std::endl;
-		}
-		if (xxxOff > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),xxxOff,frmtXxxOff);
-			lclResult << L"          X_OFF: " << tmpBufr << std::endl;
-		}
-		if (yyyOff > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),yyyOff,frmtYyyOff);
-			lclResult << L"          Y_OFF: " << tmpBufr << std::endl;
-		}
-		lclResult << L"           QUAD: " << static_cast<short>(csmapQuad) << std::endl;
-	
-		if (minLng > myNanTest && maxLng > myNanTest &&
-		    minLat > myNanTest && maxLat > myNanTest)
-		{
-			cmFtoa (tmpBufr,wcCount (tmpBufr),minLng,KcmATOF_LNGDFLT);
-			lclResult << L"        MIN_LNG: " << tmpBufr << std::endl;
-			cmFtoa (tmpBufr,wcCount (tmpBufr),minLat,KcmATOF_LATDFLT);
-			lclResult << L"        MIN_LAT: " << tmpBufr << std::endl;
-			cmFtoa (tmpBufr,wcCount (tmpBufr),maxLng,KcmATOF_LNGDFLT);
-			lclResult << L"        MAX_LNG: " << tmpBufr << std::endl;
-			cmFtoa (tmpBufr,wcCount (tmpBufr),maxLat,KcmATOF_LATDFLT);
-			lclResult << L"        MAX_LAT: " << tmpBufr << std::endl;
-		}
-
-		lclResult << std::setprecision (minZprec);
-		if (minNzX < 1.0E-05 || minNzY < 1.0E-05)
-		{
-			lclResult << std::scientific;
-		}
-		if (minNzX > myNanTest)
-		{
-			lclResult << L"         ZERO_X: " << minNzX << std::endl;
-		}
-		if (minNzY > myNanTest)
-		{
-			lclResult << L"         ZERO_Y: " << minNzY << std::endl;
-		}
-		lclResult << std::fixed;
-		lclResult << std::setprecision (3);
-		lclResult << L"        MAP_SCL: " << KcmOne << std::endl;
-		lclResult << std::endl;
-	}
-	
-	// Finishup and return.
-	if (ok) flags |= 0x010000;
-	if (deprecated) flags |= 0x020000;
-	pcKeyNameMap.SetDynamicFlag (nbrMapEpsgNbr,epsgNbr,flags);
-	if (!comment.empty ())
-	{
-		pcKeyNameMap.SetComment (nbrMapEpsgNbr,epsgNbr,comment.c_str ());
-	}
-	if (ok)
-	{
-		result = lclResult.str ();
 	}
 	return ok;
 }
+//lint -restore
 //=============================================================================
 // Protected Support Functions
 //=============================================================================
 // Private Support Functions
-bool TcsEpsgDataSetV6::ResolveConcatenatedXfrm (short& csMapViaCode,TcsEpsgCode pathOprtnCode)
+///////////////////////////////////////////////////////////////////////////////
+// General, and Protected, Support functions
+EcsCrsType TcsEpsgDataSetV6::GetCrsType (const TcsEpsgCode& crsCode) const
+{
+	bool ok;
+	EcsCrsType crsType (epsgCrsTypUnknown);
+	std::wstring fldData;
+
+	const TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
+	if (crsTblPtr != 0)
+	{
+		ok = crsTblPtr->GetField (fldData,crsCode,epsgFldCoordRefSysKind);
+		if (ok)
+		{
+			crsType = GetEpsgCrsType (fldData.c_str ());
+		}
+	}
+	return crsType;
+}
+EcsUomType TcsEpsgDataSetV6::GetUomFactor (double& uomFactor,const TcsEpsgCode& uomCode) const
 {
 	bool ok (false);
-	long step;
-	short pathCount (0);
-	TcsEpsgCode singleOp;
-	TcsEpsgCode ccOprtnSource;
-	TcsEpsgCode ccOprtnTarget;
-	TcsEpsgCode soOprtnSource;
-	TcsEpsgCode soOprtnTarget;
+	EcsUomType uomType (epsgUomTypUnknown);
+	double factorB;
+	double factorC;
+	std::wstring unitType;
 
-	// We could use a vector, but we can only rarely produce decent results when
-	// the path exceeds two anyway.  So, we go with a fixed array of 4, and bag
-	// it if the path count exceeds 4 entries in length.
-#	define cs_PTHEXP_COUNT 4
-	struct TcsEpsgPathExpansion
+	// We adopt the convention that UOM code 9000 means the associated
+	// value is unitless.
+	if (uomCode == 9000UL)
 	{
-		TcsEpsgCode PathCode;
-		long PathStep;
-		TcsEpsgCode OperationCode;
-		TcsEpsgCode SourceSystem;
-		TcsEpsgCode TargetSystem;
-		bool IsNullXfrm;
-		bool IsMeridianXfrm;		
-		short To84Via;
-	} epsgPathExpansion [cs_PTHEXP_COUNT];
-	
-	for (step = 0;step < cs_PTHEXP_COUNT;step += 1)
-	{
-		memset (&epsgPathExpansion [step],'\0',sizeof (TcsEpsgPathExpansion));
-		//epsgPathExpansion [idx].PathStep = MAXLONG;
+		uomType =  epsgUomTypNone;
+		uomFactor = 1.00000;
 	}
-
-	// Get the Path record.
-	TcsEpsgTable* pathTblPtr = GetTablePtr (epsgTblOperationPath);
-	TcsEpsgTable* oprtnTblPtr = GetTablePtr (epsgTblCoordinateOperation);
-
-	ok = oprtnTblPtr->SetCurrentRecord (pathOprtnCode);
-	if (ok)
+	else
 	{
-		ok = oprtnTblPtr->GetAsEpsgCode (ccOprtnSource,epsgFldSourceCrsCode);
-		if (ok)
+		const TcsEpsgTable* uomTblPtr = GetTablePtr (epsgTblUnitOfMeasure);
+		if (uomTblPtr != 0)
 		{
-			ok = oprtnTblPtr->GetAsEpsgCode (ccOprtnSource,epsgFldTargetCrsCode);
-		}
-	}
-
-	ok = (pathTblPtr != 0) && (oprtnTblPtr != 0);
-	if (ok)
-	{
-		ok = pathTblPtr->PositionToFirst (epsgFldConcatOperationCode,pathOprtnCode);
-		while (ok)
-		{
-			ok = pathTblPtr->GetAsLong (step,epsgFldOpPathStep);
+			ok = uomTblPtr->GetField (unitType,uomCode,epsgFldUnitOfMeasType);
 			if (ok)
 			{
-				if (step <= 0L || step > cs_PTHEXP_COUNT)
+				uomType = GetEpsgUomType (unitType.c_str ());
+				if (uomType != epsgUomTypUnknown)
 				{
-					ok = false;
-					break;
-				}
-				pathCount += 1;
-				step -= 1;
-				ok = pathTblPtr->GetAsEpsgCode (singleOp,epsgFldSingleOperationCode);
-				if (ok)
-				{
-					ok = oprtnTblPtr->GetAsEpsgCode (soOprtnSource,epsgFldSourceCrsCode);
+					ok  = uomTblPtr->GetAsReal (factorB,uomCode,epsgFldFactorB);
+					ok &= uomTblPtr->GetAsReal (factorC,uomCode,epsgFldFactorC);
 					if (ok)
 					{
-						ok = oprtnTblPtr->GetAsEpsgCode (soOprtnSource,epsgFldTargetCrsCode);
+						ok = (fabs (factorC) > 1.0E-12);
+					}
+					if (ok)
+					{
+						uomFactor = (factorB / factorC);
 					}
 				}
-				if (ok)
-				{
-					epsgPathExpansion [step].PathStep = step + 1;
-					epsgPathExpansion [step].OperationCode = singleOp;
-					epsgPathExpansion [step].SourceSystem = singleOp;
-					epsgPathExpansion [step].TargetSystem = singleOp;
-				}
 			}
-			ok = pathTblPtr->PositionToNext (epsgFldConcatOperationCode,pathOprtnCode);
 		}
 	}
-
-	// Examine all of the transformations and make determinations as appropriate.
-	// First, we'll mark the NULL transformations.  A lot of busy work, but
-	// rather straight forward.
-	if (ok)
-	{
-		for (step = 0;ok && step < pathCount;step++)
-		{
-			ok = IsNullTransform (epsgPathExpansion [step].IsNullXfrm,epsgPathExpansion [step].OperationCode);
-			ok = IsPrMerRotation (epsgPathExpansion [step].IsMeridianXfrm,epsgPathExpansion [step].OperationCode);
-		}
-	}
-#endif
-	return ok;
+	return uomType;
 }
-bool TcsEpsgDataSetV6::IsNullTransform (bool& isNull,const TcsEpsgCode& oprtnCode)
+bool TcsEpsgDataSetV6::GetUomToDegrees (double& toDegrees,const TcsEpsgCode& uomCode) const
 {
-	bool ok;
-	TcsEpsgCode epsgCode;
-	TcsEpsgCode uomCode;
-	double deltaX;
-	double deltaY;
-	double deltaZ;
+	bool ok (false);
+	EcsUomType uomType;
+	double uomFactor;
 
-	isNull = false;
-	TcsEpsgTable* oprtnTblPtr = GetTablePtr (epsgTblCoordinateOperation);
-	TcsEpsgTable* paramTblPtr = GetTablePtr (epsgTblParameterValue);
-
-	ok = (oprtnTblPtr != 0) && (paramTblPtr != 0);
-	if (ok)
+	uomType = GetUomFactor (uomFactor,uomCode);
+	if (uomType == epsgUomTypAngular)
 	{
-		oprtnTblPtr->PushCurrentPosition ();
-		paramTblPtr->PushCurrentPosition ();
-		if (ok)
-		{
-			ok = oprtnTblPtr->SetCurrentRecord (oprtnCode);
-		}
-		if (ok)
-		{
-			ok = oprtnTblPtr->GetAsEpsgCode (epsgCode,epsgFldCoordOpMethodCode);
-			if (ok && (epsgCode == 9603UL))
-			{
-				uomCode = GetParameterValue (deltaX,oprtnCode,epsgCode,8605UL);
-				ok = uomCode.IsValid ();
-				if (ok)
-				{
-					uomCode = GetParameterValue (deltaY,oprtnCode,epsgCode,8606UL);
-					ok = uomCode.IsValid ();
-				}
-				if (ok)
-				{
-					uomCode = GetParameterValue (deltaZ,oprtnCode,epsgCode,8607UL);
-					ok = uomCode.IsValid ();
-				}
-				isNull = (fabs (deltaX) < 1.0E-10) && (fabs (deltaY) < 1.0E-10) && (fabs (deltaZ) < 1.0E-10);
-			}
-		}
-		oprtnTblPtr->RestorePreviousPosition ();
-		paramTblPtr->RestorePreviousPosition ();
+		toDegrees = uomFactor * 57.29577951308238;
+		ok = true;
 	}
 	return ok;
 }
-bool TcsEpsgDataSetV6::IsPrMerRotation (bool& isPrMerRot,const TcsEpsgCode& oprtnCode)
+bool TcsEpsgDataSetV6::GetUomToMeters (double& toMeters,const TcsEpsgCode& uomCode) const
 {
-	bool ok;
-	TcsEpsgCode epsgCode;
-	TcsEpsgCode uomCode;
+	bool ok (false);
+	EcsUomType uomType;
+	double uomFactor;
 
-	isPrMerRot = false;
-	TcsEpsgTable* oprtnTblPtr = GetTablePtr (epsgTblCoordinateOperation);
-
-	ok = (oprtnTblPtr != 0);
-	if (ok)
+	uomType = GetUomFactor (uomFactor,uomCode);
+	if (uomType == epsgUomTypLinear)
 	{
-		oprtnTblPtr->PushCurrentPosition ();
+		toMeters = uomFactor;
+		ok = true;
+	}
+	return ok;
+}
+bool TcsEpsgDataSetV6::GetUomToUnity (double& toUnity,const TcsEpsgCode& uomCode) const
+{
+	bool ok (false);
+	EcsUomType uomType;
+	double uomFactor;
+
+	uomType = GetUomFactor (uomFactor,uomCode);
+	if (uomType == epsgUomTypScale)
+	{
+		toUnity = uomFactor;
+		ok = true;
+	}
+	return ok;
+}
+bool TcsEpsgDataSetV6::ConvertUnits (double& value,const TcsEpsgCode& trgUomCode,const TcsEpsgCode& srcUomCode) const
+{
+	bool ok (true);
+
+	EcsUomType srcType;
+	EcsUomType trgType;
+	
+	double srcFactor;
+	double trgFactor;
+
+	if (srcUomCode != trgUomCode)
+	{
+		srcType = GetUomFactor (srcFactor,srcUomCode);
+		trgType = GetUomFactor (trgFactor,trgUomCode);
+		ok = (srcType != epsgUomTypUnknown && srcType == trgType);
 		if (ok)
 		{
-			ok = oprtnTblPtr->SetCurrentRecord (oprtnCode);
-		}
-		if (ok)
-		{
-			ok = oprtnTblPtr->GetAsEpsgCode (epsgCode,epsgFldCoordOpMethodCode);
-			if (ok && (epsgCode == 9601UL))
+			if (srcType != epsgUomTypNone)
 			{
-				isPrMerRot = true;
+				value *= (srcFactor / trgFactor);
 			}
 		}
-		oprtnTblPtr->RestorePreviousPosition ();
 	}
-	return ok;	
+	return ok;
 }
+// This function converts field value presented as a wchar_t string to a real
+// value.  This function is smart enough to know of the different
+// representations of angular and scale values in the EPSG database.  Thus,
+// hopefully, all the logic required to deal with these different
+// representations is isolated in this function.
+//
+// This function is considered private; examine the public and protected
+// functions for a function more useful to your purpose.
+bool TcsEpsgDataSetV6::FieldToReal (double& result,const TcsEpsgCode& trgUomCode,
+												   const wchar_t* fldData,
+												   const TcsEpsgCode& srcUomCode) const
+{
+	bool ok (false);
+
+	EcsUomType srcType;
+	EcsUomType trgType;
+
+	wchar_t* endPtr;
+	double realValue (0.0);
+	double srcFactor;
+	double trgFactor;
+	
+	std::wstring tmpString;
+
+	result = 0.0;
+	srcType = GetUomFactor (srcFactor,srcUomCode);
+	trgType = GetUomFactor (trgFactor,trgUomCode);
+	ok = (srcType != epsgUomTypUnknown && srcType == trgType);
+
+	if (ok)
+	{
+		if (srcType == epsgUomTypAngular)
+		{
+			ok = FieldToDegrees (realValue,fldData,srcUomCode);
+			srcType = GetUomFactor (srcFactor,9102UL);
+		}
+		else
+		{
+			realValue = wcstod (fldData,&endPtr);
+			while (iswspace (*endPtr)) endPtr++;
+			ok = (*endPtr == L'\0');
+		}
+	}
+	if (ok)
+	{
+		if (srcUomCode != trgUomCode)
+		{
+			result = realValue * (srcFactor / trgFactor);
+		}
+		else
+		{
+			result = realValue;
+		}
+	}
+	return ok;
+}
+// There is a ton of duplicated code in the following function.  My apologies,
+// but I chose duplicate code over a huge pot of spaghetti which would be the
+// alternative.
+bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const TcsEpsgCode& uomCode) const
+{
+	//lint -save -esym(644,minus,minutes,seconds)		(posibly not initialized)
+	bool ok;
+	double realValue;
+	wchar_t* wcPtr;
+	wchar_t* endPtr;
+	wchar_t wrkBufr [64];
+
+	ok = false;								// intermediate ok
+	
+	result = realValue = 0.0;
+	if (uomCode == 9110UL)
+	{
+		// sexagesimal DMS -> +DDD.MMSSsssssss
+		bool minus;
+		size_t fillCnt;
+		long degrees;
+		long minutes;
+		double seconds;
+
+		wchar_t wcDegrees [16];
+		wchar_t wcMinutes [16];
+		wchar_t wcSeconds [32];
+
+		// Get a copy of the field we are to convert in a place where we
+		// modify same.
+		wcsncpy (wrkBufr,field,64);
+		wrkBufr [63] = L'\0';
+		fillCnt = 63 - wcslen (wrkBufr);
+		
+		// It is common for values to not have a decimal point, which makes
+		// the deciphering of values in formats other than straight decimal
+		// notation difficult.  We try to fox this problem here.
+		wcPtr = wcschr (wrkBufr,L'.');
+		if (wcPtr == 0)
+		{
+			// No decimal point, we add one.
+			wcscat (wrkBufr,L".");
+			fillCnt -= 1;
+		}
+
+		// The following is required as below we assume that the minutes
+		// and seconds characters are there.
+		wcsncat (wrkBufr,L"00000000000000000",fillCnt);
+		wrkBufr [63] = L'\0';
+
+		wcPtr = wcschr (wrkBufr,L'.');
+		if (wcPtr != 0)
+		{
+			*wcPtr++ = L'\0';
+			wcsncpy (wcDegrees,wrkBufr,16);
+			wcDegrees [15] = L'\0';
+			degrees = wcstol (wcDegrees,&endPtr,10);
+			ok = (*endPtr == L'\0');
+			if (ok)
+			{
+				minus = degrees < 0L;
+				if (minus)
+				{
+					degrees = -degrees;
+				}
+				ok = (degrees < 360L);
+			}
+			if (ok)
+			{
+				wcMinutes [0] = *wcPtr++;
+				wcMinutes [1] = *wcPtr++;
+				wcMinutes [2] = L'\0';
+				minutes = wcstol (wcMinutes,&endPtr,10);
+				ok = (*endPtr == L'\0') && (minutes < 60L);
+			}
+			if (ok)
+			{
+				wcSeconds [0] = *wcPtr++;
+				wcSeconds [1] = *wcPtr++;
+				wcSeconds [2] = L'.';
+				wcsncpy (&wcSeconds [3],wcPtr,28);
+				wcSeconds [31] = L'\0';
+				seconds = wcstod (wcSeconds,&endPtr);
+				ok = (*endPtr == L'\0') && (seconds < 60.0);
+			}
+			if (ok)
+			{
+				realValue = static_cast<double>(degrees) + static_cast<double>(minutes) / 60.0 + seconds / 3600.0;
+				if (minus)
+				{
+					realValue = -realValue;
+				}
+			}
+		}
+	}
+	else if (uomCode == 9111UL)
+	{
+		// sexagesimal DM -> +DDD.MMmmmmmm
+		bool minus;
+		size_t fillCnt;
+		long degrees;
+		double minutes;
+
+		wchar_t wcDegrees [16];
+		wchar_t wcMinutes [32];
+
+		wcsncpy (wrkBufr,field,64);
+		wrkBufr [63] = L'\0';
+		fillCnt = 63 - wcslen (wrkBufr);
+		wcsncat (wrkBufr,L"00000000000000000",fillCnt);
+		wrkBufr [63] = L'\0';
+
+		wcPtr = wcschr (wrkBufr,L'.');
+		if (wcPtr != 0)
+		{
+			*wcPtr++ = L'\0';
+			wcsncpy (wcDegrees,wrkBufr,16);
+			wcDegrees [15] = L'\0';
+			degrees = wcstol (wcDegrees,&endPtr,10);
+			ok = (*endPtr == L'0');
+			if (ok)
+			{
+				minus = degrees < 0L;
+				if (minus)
+				{
+					degrees = -degrees;
+				}
+				ok = (degrees < 360L);
+			}
+			if (ok)
+			{
+				wcMinutes [0] = *wcPtr++;
+				wcMinutes [1] = *wcPtr++;
+				wcMinutes [2] = L'.';
+				wcsncpy (wcMinutes,wcPtr,28);
+				wcMinutes [31] = L'\0';
+				minutes = wcstod (wcMinutes,&endPtr);
+				ok = (*endPtr == L'0' && minutes < 60.0);
+			}
+			if (ok)
+			{
+				realValue = static_cast<double>(degrees) + minutes / 60.0;
+				if (minus)
+				{
+					realValue = -realValue;
+				}
+			}
+		}
+	}
+	else if (uomCode == 9107UL || uomCode == 9121UL)
+	{
+		// Degrees (int), minutes (int), seconds (real).  Not really used in
+		// the tables pre se; the tables usually use double field type for
+		// numeric values and the 9110 & 9111 types are usually used.
+		bool minus;
+		long degrees;
+		long minutes;
+		double seconds;
+
+		// Get a copy of the field we are to convert in a place where we
+		// modify same.  Not really necessary in this case, but what the heck.
+		wcsncpy (wrkBufr,field,64);
+
+		minutes = 0L;
+		seconds = 0.0;
+		degrees = wcstol (wrkBufr,&endPtr,10);
+		ok = (degrees >= -360L && degrees <= 360L);
+		if (ok)
+		{
+			minus = degrees < 0L;
+			if (minus)
+			{
+				degrees = -degrees;
+			}
+		}
+		if (ok && *endPtr != L'\0')
+		{
+			// We assume a single non-space delimter character, we care
+			// not what that character is.  Space can be used.  Allowing
+			// space(s) enables this code to valid for 9121.
+			endPtr++;
+			minutes = wcstol (endPtr,&endPtr,10);
+			ok = (minutes >= 0L && minutes < 60L);
+		}
+		if (ok && *endPtr != L'\0')
+		{
+			seconds = wcstod (endPtr,&endPtr);
+			// There is supposed to be a delimiter, we allow it or none.
+			if (*endPtr != L'\0') endPtr += 1;
+			ok = (*endPtr == L'\0') && (seconds >= 0.0 && seconds < 60.0);
+		}
+		if (ok)
+		{
+			realValue = static_cast<double>(degrees) + static_cast<double>(minutes) / 60.0 + seconds / 3600.0;
+			if (minus)
+			{
+				realValue = -realValue;
+			}
+		}
+	}
+	else if (uomCode == 9108UL)
+	{
+		// Degrees (int), minutes (int), seconds (real).  Not really used in
+		// the tables pre se; the tables usually use double field type for
+		// numeric values and the 9110 & 9111 types are usually used.
+		// sexagesimal DMS -> +DDD.MMSSsssssss
+		bool minus;
+		long degrees;
+		long minutes;
+		double seconds;
+
+		// Get a copy of the field we are to convert in a place where we
+		// modify same.  Not really necessary, but whatthe heck.
+		wcsncpy (wrkBufr,field,64);
+
+		minutes = 0L;
+		seconds = 0.0;
+		degrees = wcstol (wrkBufr,&endPtr,10);
+		ok = (*endPtr != L'\0' && degrees >= 0L && degrees <= 360L);
+		if (ok)
+		{
+			// We assume a single non-space delimter character, we care
+			// not what that character is.  Space can be used.
+			endPtr++;
+			minutes = wcstol (endPtr,&endPtr,10);
+			ok = (*endPtr != L'\0' && minutes >= 0L && minutes < 60L);
+		}
+		if (ok)
+		{
+			seconds = wcstod (endPtr,&endPtr);
+			ok = (*endPtr != L'\0') && (seconds >= 0.0 && seconds < 60.0);
+		}
+		if (ok)
+		{
+			// Need to extract the hemisphere (i.e. sign).  We'll skip any
+			// white space which may be there.
+			while (iswspace (*endPtr)) endPtr++;
+			switch (*endPtr) {
+			case L'N':	minus = false; break;
+			case L'n':	minus = false; break;
+			case L'E':	minus = false; break;
+			case L'e':	minus = false; break;
+			case L'S':	minus = true;  break;
+			case L's':	minus = true;  break;
+			case L'W':	minus = true;  break;
+			case L'w':	minus = true;  break;
+			default:
+				ok = false;
+			}
+		}
+		if (ok)
+		{
+			realValue = static_cast<double>(degrees) + static_cast<double>(minutes) / 60.0 + seconds / 3600.0;
+			if (minus)
+			{
+				realValue = -realValue;
+			}
+		}
+	}
+	else if ((uomCode >= 9101UL && uomCode <= 9106UL) ||
+			 (uomCode == 9109UL) ||
+	         (uomCode >= 9112UL && uomCode <= 9114UL))
+	{
+		// 9101 -> radians
+		// 9102 -> degrees
+		// 9103 -> arc-minute
+		// 9104 -> arc-second
+		// 9105 -> grad
+		// 9106 -> gon
+		// 9109 -> microradian
+		// 9112 -> centesimal minute
+		// 9113 -> centesimal second
+		// 9114 -> mil_6400
+		double uomFactor;
+		realValue = wcstod (field,&endPtr);
+		ok = (*endPtr == L'\0' &&  fabs (realValue) < 360.0);
+		if (ok)
+		{
+			ok = GetUomToDegrees (uomFactor,uomCode);
+			if (ok && uomFactor != 0.0)
+			{
+				realValue = realValue * uomFactor;
+			}
+		}
+	}
+	else if (uomCode == 9115UL)
+	{
+		// Degrees (int), minutes (real).  Not really used in the tables per se;
+		// the tables usually use double field type for numeric values and the
+		// 9110 & 9111 types are usually used.
+		bool minus;
+		long degrees;
+		double minutes;
+
+		// Get a copy of the field we are to convert in a place where we
+		// modify same.  Not really necessary, but whatthe heck.
+		wcsncpy (wrkBufr,field,64);
+
+		minutes = 0.0;
+		degrees = wcstol (wrkBufr,&endPtr,10);
+		ok = (degrees >= -360L && degrees <= 360L);
+		if (ok)
+		{
+			minus = degrees < 0L;
+			if (minus)
+			{
+				degrees = -degrees;
+			}
+		}
+		if (ok && *endPtr != L'\0')
+		{
+			minutes = wcstod (endPtr,&endPtr);
+			// There is supposed to be a delimiter, we allow it or none.
+			if (*endPtr != L'\0') endPtr += 1;
+			ok = (*endPtr == L'\0') && (minutes >= 0.0 && minutes < 60.0);
+		}
+		if (ok)
+		{
+			realValue = static_cast<double>(degrees) + minutes / 60.0;
+			if (minus)
+			{
+				realValue = -realValue;
+			}
+		}
+	}
+	else if (uomCode == 9116UL)
+	{
+		bool minus (false);
+
+		realValue = wcstod (field,&endPtr);
+		ok = (*endPtr != L'\0' &&  realValue >= 0.0 && realValue < 360.0);
+		if (ok)
+		{
+			// Need to extract the hemisphere (i.e. sign).  We'll skip any
+			// white space which may be there.
+			while (iswspace (*endPtr)) endPtr++;
+			switch (*endPtr) {
+			case L'N':	minus = false; break;
+			case L'n':	minus = false; break;
+			case L'E':	minus = false; break;
+			case L'e':	minus = false; break;
+			case L'S':	minus = true;  break;
+			case L's':	minus = true;  break;
+			case L'W':	minus = true;  break;
+			case L'w':	minus = true;  break;
+			default:
+				ok = false;
+				break;
+			}
+		}
+		if (ok && minus)
+		{
+			realValue = -realValue;
+		}
+	}
+	else if (uomCode == 9117UL)
+	{
+		bool minus (false);
+
+		// Get a copy of the field we are to convert in a place where we
+		// modify same.  Not really necessary, but what the heck.
+		wcsncpy (wrkBufr,field,64);
+
+		// Need to extract the hemisphere (i.e. sign).  We'll skip any
+		// white space which may be there.
+		ok = true;
+		endPtr = wrkBufr;
+		while (iswspace (*endPtr)) endPtr++;
+		switch (*endPtr) {
+		case L'N':	minus = false; break;
+		case L'n':	minus = false; break;
+		case L'E':	minus = false; break;
+		case L'e':	minus = false; break;
+		case L'S':	minus = true;  break;
+		case L's':	minus = true;  break;
+		case L'W':	minus = true;  break;
+		case L'w':	minus = true;  break;
+		default:
+			ok = false;
+			break;
+		}
+		if (ok)
+		{
+			endPtr += 1;
+			realValue = wcstod (field,&endPtr);
+			ok = (*endPtr == L'\0' &&  realValue >= 0.0 && realValue < 360.0);
+		}
+		if (ok && minus)
+		{
+			realValue = -realValue;
+		}
+	}
+	else if (uomCode == 9118UL)
+	{
+		// Degrees (int), minutes (real), hemisphere.  Not really used in the
+		// tables per se; the tables usually use double field type for numeric
+		// values and the 9110 & 9111 types are usually used.
+		bool minus;
+		long degrees;
+		double minutes;
+
+		// Get a copy of the field we are to convert in a place where we
+		// modify same.  Not really necessary, but whatthe heck.
+		wcsncpy (wrkBufr,field,64);
+
+		minutes = 0.0;
+		degrees = wcstol (wrkBufr,&endPtr,10);
+		ok = (degrees >= 0L && degrees <= 360L);
+		if (ok)
+		{
+			minus = degrees < 0L;
+			if (minus)
+			{
+				degrees = -degrees;
+			}
+		}
+		if (ok && *endPtr != L'\0')
+		{
+			minutes = wcstod (endPtr,&endPtr);
+			// There is supposed to be a delimiter, we allow it or none.
+			if (*endPtr != L'\0') endPtr += 1;
+			ok = (*endPtr == L'\0') && (minutes >= 0.0 && minutes < 60.0);
+		}
+		if (ok)
+		{
+			// Need to extract the hemisphere (i.e. sign).  We'll skip any
+			// white space which may be there.
+			while (iswspace (*endPtr)) endPtr++;
+			switch (*endPtr) {
+			case L'N':	minus = false; break;
+			case L'n':	minus = false; break;
+			case L'E':	minus = false; break;
+			case L'e':	minus = false; break;
+			case L'S':	minus = true;  break;
+			case L's':	minus = true;  break;
+			case L'W':	minus = true;  break;
+			case L'w':	minus = true;  break;
+			default:
+				ok = false;
+				break;
+			}
+		}
+		if (ok)
+		{
+			realValue = static_cast<double>(degrees) + minutes / 60.0;
+			if (minus)
+			{
+				realValue = -realValue;
+			}
+		}
+	}
+	else if (uomCode == 9119UL)
+	{
+		// Degrees (int), minutes (real), hemisphere.  Not really used in the
+		// tables per se; the tables usually use double field type for numeric
+		// values and the 9110 & 9111 types are usually used.
+		bool minus (false);
+		long degrees;
+		double minutes;
+
+		// Get a copy of the field we are to convert in a place where we
+		// modify same.  Not really necessary, but whatthe heck.
+		wcsncpy (wrkBufr,field,64);
+
+		// Need to extract the hemisphere (i.e. sign).  We'll skip any
+		// white space which may be there.
+		ok = true;
+		degrees = 0L;
+		minutes = 0.0;
+		endPtr = wrkBufr;
+		while (iswspace (*endPtr)) endPtr++;
+		switch (*endPtr) {
+		case L'N':	minus = false; break;
+		case L'n':	minus = false; break;
+		case L'E':	minus = false; break;
+		case L'e':	minus = false; break;
+		case L'S':	minus = true;  break;
+		case L's':	minus = true;  break;
+		case L'W':	minus = true;  break;
+		case L'w':	minus = true;  break;
+		default:
+			ok = false;
+			break;
+		}
+		if (ok)
+		{
+			degrees = wcstol (wrkBufr,&endPtr,10);
+			ok = (degrees >= 0L && degrees <= 360L);
+			if (ok)
+			{
+				minus = degrees < 0L;
+				if (minus)
+				{
+					degrees = -degrees;
+				}
+			}
+		}
+		if (ok && *endPtr != L'\0')
+		{
+			minutes = wcstod (endPtr,&endPtr);
+			ok = (*endPtr == L'\0') && (minutes >= 0.0 && minutes < 60.0);
+		}
+		if (ok)
+		{
+			realValue = static_cast<double>(degrees) + minutes / 60.0;
+			if (minus)
+			{
+				realValue = -realValue;
+			}
+		}
+	}
+	if (ok)
+	{
+		result = realValue;
+	}
+	return ok;
+	//lint -restore
+}
+// Perhaps the following function should also return the vertical orientation,
+// but the orientation for all systems I've ever seen has always been "up".
+//lint -save -esym(550,axisThree)	  (axisThree set, but not used)
+bool TcsEpsgDataSetV6::GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsgCode& vertUom,const TcsEpsgCode& crsEpsgCode) const
+{
+	bool ok;
+	bool ok3 (false);
+	bool swap (false);
+
+	short myQuad;
+	unsigned recordNumber;
+
+	TcsEpsgCode sysEpsgCode;
+	TcsEpsgCode uomCodeOne;
+	TcsEpsgCode uomCodeTwo;
+	TcsEpsgCode uomCodeThree;
+
+	EcsOrientation axisOne (epsgOrntUnknown);
+	EcsOrientation axisTwo (epsgOrntUnknown);
+	EcsOrientation axisThree (epsgOrntUnknown);
+	EcsOrientation axisTmp;
+
+	std::wstring fldData;
+
+	myQuad = 0;
+	const TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
+	const TcsEpsgTable* axsTblPtr = GetTablePtr (epsgTblAxis);
+	ok = (crsTblPtr != 0) && (axsTblPtr != 0);
+	unsigned invalidRecordNbr = TcsCsvFileBase::GetInvalidRecordNbr ();
+
+	// Prepare for an error of some sort.
+	quad = 0;
+	horzUom.Invalidate ();
+	vertUom.Invalidate ();
+	uomCodeOne.Invalidate ();
+	uomCodeTwo.Invalidate ();
+	uomCodeThree.Invalidate ();
+
+	// OK, extract the information the best we can.  In the event of a two
+	// dimensional system, this function still returns true, but vertUom is
+	// left in the Invalid state.	
+	if (ok)
+	{
+		// Get the Coordinate System Code (different from the CRS code).
+		ok = crsTblPtr->GetAsEpsgCode (sysEpsgCode,crsEpsgCode,epsgFldCoordSysCode);		//lint !e613   (possible use of null pointer)
+		if (ok)
+		{
+			// We have the coordinate system code; we need to get the first two
+			// axes out of the table.  Note that we rely heavily on the sorted
+			// order of the table here.  That is, the first one we encounter
+			// is expected to have an "Order" value of 1. 
+			recordNumber = axsTblPtr->EpsgLocateFirst (epsgFldCoordSysCode,sysEpsgCode);
+			ok = (recordNumber != invalidRecordNbr);
+			if (ok)
+			{
+				ok = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
+				if (ok)
+				{
+					axisOne = GetOrientation (fldData.c_str ());
+				}
+				if (ok)
+				{
+					ok = axsTblPtr->GetAsEpsgCode (uomCodeOne,recordNumber,epsgFldUomCode);
+				}
+			}
+			if (ok)
+			{
+				recordNumber = axsTblPtr->EpsgLocateNext (recordNumber,epsgFldCoordSysCode,sysEpsgCode);
+				ok = (recordNumber != invalidRecordNbr);
+				if (ok)
+				{
+					ok = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
+					if (ok)
+					{
+						axisTwo = GetOrientation (fldData.c_str ());
+					}
+					if (ok)
+					{
+						ok = axsTblPtr->GetAsEpsgCode (uomCodeTwo,recordNumber,epsgFldUomCode);
+					}
+				}
+			}
+			if (ok)
+			{
+				// We get the third axis if it's there, even if we don't do
+				// anything with it.
+				recordNumber = axsTblPtr->EpsgLocateNext (recordNumber,epsgFldCoordSysCode,sysEpsgCode);
+				ok3 = (recordNumber != invalidRecordNbr);
+				if (ok3)
+				{
+					ok3 = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
+					if (ok3)
+					{
+						axisThree = GetOrientation (fldData.c_str ());
+					}
+					if (ok3)
+					{
+						ok3 = axsTblPtr->GetAsEpsgCode (uomCodeThree,recordNumber,epsgFldUomCode);
+					}
+				}
+			}
+		}
+	}
+	if (ok)
+	{
+		ok  = (axisOne != epsgOrntUnknown) && (axisTwo != epsgOrntUnknown);
+		ok &= (uomCodeOne.IsValid () && uomCodeTwo.IsValid ());
+	}
+	if (ok)
+	{
+		swap = (axisOne == epsgOrntNorth) || (axisOne == epsgOrntSouth);
+		if (swap)
+		{
+			axisTmp = axisOne;
+			axisOne = axisTwo;
+			axisTwo = axisTmp;
+		}
+
+		if (axisOne == epsgOrntEast && axisTwo == epsgOrntNorth)
+		{
+			myQuad = 1;
+		}
+		else if (axisOne == epsgOrntWest && axisTwo == epsgOrntNorth)
+		{
+			myQuad = 2;
+		}
+		else if (axisOne == epsgOrntWest && axisTwo == epsgOrntSouth)
+		{
+			myQuad = 3;
+		}
+		else if (axisOne == epsgOrntEast && axisTwo == epsgOrntSouth)
+		{
+			myQuad = 4;
+		}
+	}
+	ok = (myQuad != 0);
+	if (ok && swap)
+	{
+		myQuad = -myQuad;
+	}
+	if (ok)
+	{
+		ok = (uomCodeOne == uomCodeTwo);
+	}
+	if (ok)
+	{
+		quad = myQuad;
+		horzUom = uomCodeOne;
+		if (ok3)
+		{
+			vertUom = uomCodeThree;
+		}
+	}
+	return ok;
+}
+//lint -restore
