@@ -517,141 +517,141 @@
 
 struct cs_Prjtab_ cs_Prjtab [] =
 {
-	{         "LL",CSunityS,CSunityQ,cs_PRJCOD_UNITY,cs_PRJFLGS_UNITY,
+	{         "LL",CSunityS,CSunityQ,cs_PRJCOD_UNITY,cs_PRJFLGS_UNITY,0UL,
 				"Null Projection, produces/processes Latitude & Longitude"},
-	{         "LM",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LM2SP,cs_PRJFLGS_LM2SP,
+	{         "LM",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LM2SP,cs_PRJFLGS_LM2SP,9802UL,
 	    			"Lambert Conformal Conic Projection, Two Standard Parallels"},
-	{      "LM1SP",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LM1SP,cs_PRJFLGS_LM1SP,
+	{      "LM1SP",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LM1SP,cs_PRJFLGS_LM1SP,9801UL,
 	    			"Lambert Conformal Conic Projection, One Standard Parallel"},
-	{     "LMBLGN",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LMBLG,cs_PRJFLGS_LMBLG,
+	{     "LMBLGN",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LMBLG,cs_PRJFLGS_LMBLG,9803UL,
 	    			"Lambert Conformal Conic Projection, Belgian Variation"},
-	{    "LM-WCCS",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_WCCSL,cs_PRJFLGS_WCCSL,
+	{    "LM-WCCS",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_WCCSL,cs_PRJFLGS_WCCSL,0UL,
 	    			"Lambert Conformal Conic, Wisconsin County Variation"},
-	{   "LM-MNDOT",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_MNDOTL,cs_PRJFLGS_MNDOTL,
+	{   "LM-MNDOT",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_MNDOTL,cs_PRJFLGS_MNDOTL,0UL,
 	    			"Lambert Conformal Conic, Minnesota DOT Variation"},
-	{         "TM",CStrmerS,CStrmerQ,cs_PRJCOD_TRMER,cs_PRJFLGS_TRMER,
+	{         "TM",CStrmerS,CStrmerQ,cs_PRJCOD_TRMER,cs_PRJFLGS_TRMER,9807UL,
 	    			"Transverse Mercator or Gauss Kruger Projection"},
-	{        "UTM",CStrmerS,CStrmerQ,cs_PRJCOD_UTM,cs_PRJFLGS_UTM,
+	{        "UTM",CStrmerS,CStrmerQ,cs_PRJCOD_UTM,cs_PRJFLGS_UTM,0UL,
 	    			"Universal Transverse Mercator System"},
-	{     "GAUSSK",CStrmerS,CStrmerQ,cs_PRJCOD_GAUSSK,cs_PRJFLGS_GAUSSK,
+	{     "GAUSSK",CStrmerS,CStrmerQ,cs_PRJCOD_GAUSSK,cs_PRJFLGS_GAUSSK,9807UL,
 	    			"Gauss Kruger Projection, aka Gauss"},
-	{       "SOTM",CStrmerS,CStrmerQ,cs_PRJCOD_SOTRM,cs_PRJFLGS_SOTRM,
+	{       "SOTM",CStrmerS,CStrmerQ,cs_PRJCOD_SOTRM,cs_PRJFLGS_SOTRM,9808UL,
 	    			"South Oriented Transverse Mercator"},
-	{    "TM-WCCS",CStrmerS,CStrmerQ,cs_PRJCOD_WCCST,cs_PRJFLGS_WCCST,
+	{    "TM-WCCS",CStrmerS,CStrmerQ,cs_PRJCOD_WCCST,cs_PRJFLGS_WCCST,0UL,
 	    			"Transverse Mercator, Wisconsin County Variation"},
-	{   "TM-MNDOT",CStrmerS,CStrmerQ,cs_PRJCOD_MNDOTT,cs_PRJFLGS_MNDOTT,
+	{   "TM-MNDOT",CStrmerS,CStrmerQ,cs_PRJCOD_MNDOTT,cs_PRJFLGS_MNDOTT,0UL,
 	    			"Transverse Mercator, Minnesota DOT Variation"},
-	{  "TM-SNYDER",CStrmrsS,CStrmrsQ,cs_PRJCOD_TRMRS,cs_PRJFLGS_TRMRS,
+	{  "TM-SNYDER",CStrmrsS,CStrmrsQ,cs_PRJCOD_TRMRS,cs_PRJFLGS_TRMRS,9807UL,
 	    			"Transverse Mercator per J. P. Snyder"},
-	{         "AE",CSalberS,CSalberQ,cs_PRJCOD_ALBER,cs_PRJFLGS_ALBER,
+	{         "AE",CSalberS,CSalberQ,cs_PRJCOD_ALBER,cs_PRJFLGS_ALBER,9822UL,
 	    			"Albers Equal Area Conic Projection"},
-	{     "HOM1UV",CSoblqmS,CSoblqmQ,cs_PRJCOD_HOM1UV,cs_PRJFLGS_HOM1UV,
+	{     "HOM1UV",CSoblqmS,CSoblqmQ,cs_PRJCOD_HOM1UV,cs_PRJFLGS_HOM1UV,0UL,
 	    			"Unrectified Hotine Oblique Mercator Projection"},
-	{     "HOM1XY",CSoblqmS,CSoblqmQ,cs_PRJCOD_HOM1XY,cs_PRJFLGS_HOM1XY,
+	{     "HOM1XY",CSoblqmS,CSoblqmQ,cs_PRJCOD_HOM1XY,cs_PRJFLGS_HOM1XY,9812UL,
 	    			"Alaska Variation of Hotine Oblique Mercator Projection"},
-	{     "HOM2UV",CSoblqmS,CSoblqmQ,cs_PRJCOD_HOM2UV,cs_PRJFLGS_HOM2UV,
+	{     "HOM2UV",CSoblqmS,CSoblqmQ,cs_PRJCOD_HOM2UV,cs_PRJFLGS_HOM2UV,0UL,
 	    			"Unrectified Hotine Oblique Mercator Projection, Two Point Form"},
-	{     "HOM2XY",CSoblqmS,CSoblqmQ,cs_PRJCOD_HOM2XY,cs_PRJFLGS_HOM2XY,
+	{     "HOM2XY",CSoblqmS,CSoblqmQ,cs_PRJCOD_HOM2XY,cs_PRJFLGS_HOM2XY,0UL,
 	    			"Rectified Skew Orthomorphic, Two Point Form"},
-	{      "RSKEW",CSoblqmS,CSoblqmQ,cs_PRJCOD_RSKEW,cs_PRJFLGS_RSKEW,
+	{      "RSKEW",CSoblqmS,CSoblqmQ,cs_PRJCOD_RSKEW,cs_PRJFLGS_RSKEW,9812UL,
 	    			"Rectified Skew Orthomorphic, Azimuth at Projection Center"},
-	{     "RSKEWC",CSoblqmS,CSoblqmQ,cs_PRJCOD_RSKEWC,cs_PRJFLGS_RSKEWC,
+	{     "RSKEWC",CSoblqmS,CSoblqmQ,cs_PRJCOD_RSKEWC,cs_PRJFLGS_RSKEWC,9815UL,
 	    			"Rectified Skew Orthomorphic, Origin & Azimuth at Center"},
-	{      "MRCAT",CSmrcatS,CSmrcatQ,cs_PRJCOD_MRCAT,cs_PRJFLGS_MRCAT,
+	{      "MRCAT",CSmrcatS,CSmrcatQ,cs_PRJCOD_MRCAT,cs_PRJFLGS_MRCAT,9805UL,
 	    			"Mercator Cylindrical Projection with Standard Parallel"},
-	{     "MRCATK",CSmrcatS,CSmrcatQ,cs_PRJCOD_MRCATK,cs_PRJFLGS_MRCATK,
+	{     "MRCATK",CSmrcatS,CSmrcatQ,cs_PRJCOD_MRCATK,cs_PRJFLGS_MRCATK,9804UL,
 	    			"Mercator Cylindrical Projection with Scale Reduction"},
-	{      "AZMED",CSazmedS,CSazmedQ,cs_PRJCOD_AZMED,cs_PRJFLGS_AZMED,
+	{      "AZMED",CSazmedS,CSazmedQ,cs_PRJCOD_AZMED,cs_PRJFLGS_AZMED,0UL,
 	    			"Lambert Azimuthal Equidistant Projection"},
-	{      "AZMEA",CSazmeaS,CSazmeaQ,cs_PRJCOD_AZMEA,cs_PRJFLGS_AZMEA,
+	{      "AZMEA",CSazmeaS,CSazmeaQ,cs_PRJCOD_AZMEA,cs_PRJFLGS_AZMEA,9820UL,
 	    			"Lambert Azimuthal Equal Area Projection"},
-	{      "LMTAN",CSlmtanS,CSlmtanQ,cs_PRJCOD_LMTAN,cs_PRJFLGS_LMTAN,
+	{      "LMTAN",CSlmtanS,CSlmtanQ,cs_PRJCOD_LMTAN,cs_PRJFLGS_LMTAN,9801UL,
 	    			"Lambert Tangential Conformal Conic Projection"},
-	{      "PLYCN",CSplycnS,CSplycnQ,cs_PRJCOD_PLYCN,cs_PRJFLGS_PLYCN,
+	{      "PLYCN",CSplycnS,CSplycnQ,cs_PRJCOD_PLYCN,cs_PRJFLGS_PLYCN,9818UL,
 	    			"Hassler American Polyconic Projection"},
-	{      "MODPC",CSmodpcS,CSmodpcQ,cs_PRJCOD_MODPC,cs_PRJFLGS_MODPC,
+	{      "MODPC",CSmodpcS,CSmodpcQ,cs_PRJCOD_MODPC,cs_PRJFLGS_MODPC,0UL,
 	    			"Lallemand IMW Modified Polyconic Projection"},
-	{      "EDCNC",CSedcncS,CSedcncQ,cs_PRJCOD_EDCNC,cs_PRJFLGS_EDCNC,
+	{      "EDCNC",CSedcncS,CSedcncQ,cs_PRJCOD_EDCNC,cs_PRJFLGS_EDCNC,0UL,
 	    			"Equidistant Conic Projection, aka Simple Conic"},
-	{     "MILLER",CSmillrS,CSmillrQ,cs_PRJCOD_MILLR,cs_PRJFLGS_MILLR,
+	{     "MILLER",CSmillrS,CSmillrQ,cs_PRJCOD_MILLR,cs_PRJFLGS_MILLR,0UL,
 	    			"Miller Cylindrical Projection"},
-	{   "OSTEROUS",CSsstroS,CSsstroQ,cs_PRJCOD_SSTRO,cs_PRJFLGS_SSTRO,
+	{   "OSTEROUS",CSsstroS,CSsstroQ,cs_PRJCOD_SSTRO,cs_PRJFLGS_SSTRO,0UL,
 	    			"Oblique Sterographic Projection, per Snyder (USA)"},
-	{     "OSTERO",CSostroS,CSostroQ,cs_PRJCOD_OSTRO,cs_PRJFLGS_OSTRO,
+	{     "OSTERO",CSostroS,CSostroQ,cs_PRJCOD_OSTRO,cs_PRJFLGS_OSTRO,9809UL,
 	    			"Oblique Sterographic Projection"},
-	{     "PSTERO",CSpstroS,CSpstroQ,cs_PRJCOD_PSTRO,cs_PRJFLGS_PSTRO,
+	{     "PSTERO",CSpstroS,CSpstroQ,cs_PRJCOD_PSTRO,cs_PRJFLGS_PSTRO,9810UL,
 	    			"Polar Sterographic Projection"},
-	{   "PSTEROSL",CSpstroS,CSpstroQ,cs_PRJCOD_PSTROSL,cs_PRJFLGS_PSTROSL,
+	{   "PSTEROSL",CSpstroS,CSpstroQ,cs_PRJCOD_PSTROSL,cs_PRJFLGS_PSTROSL,9829UL,
 	    			"Polar Sterographic Projection with Standard Circle"},
-	{      "SINUS",CSsinusS,CSsinusQ,cs_PRJCOD_SINUS,cs_PRJFLGS_SINUS,
+	{      "SINUS",CSsinusS,CSsinusQ,cs_PRJCOD_SINUS,cs_PRJFLGS_SINUS,0UL,
 	    			"Sinusoidal Projection, Optionally Interrupted"},
-	{      "ORTHO",CSorthoS,CSorthoQ,cs_PRJCOD_ORTHO,cs_PRJFLGS_ORTHO,
+	{      "ORTHO",CSorthoS,CSorthoQ,cs_PRJCOD_ORTHO,cs_PRJFLGS_ORTHO,0UL,
 	    			"Orthographic Projection"},
-	{   "GNOMONIC",CSgnomcS,CSgnomcQ,cs_PRJCOD_GNOMC,cs_PRJFLGS_GNOMC,
+	{   "GNOMONIC",CSgnomcS,CSgnomcQ,cs_PRJCOD_GNOMC,cs_PRJFLGS_GNOMC,0UL,
 	    			"Gnomonic Projection"},
-	{      "EDCYL",CSedcylS,CSedcylQ,cs_PRJCOD_EDCYL,cs_PRJFLGS_EDCYL,
+	{      "EDCYL",CSedcylS,CSedcylQ,cs_PRJCOD_EDCYL,cs_PRJFLGS_EDCYL,9823UL,
 	    			"Equidistant Cylindrical Projection"},
-	{    "VDGRNTN",CSvdgrnS,CSvdgrnQ,cs_PRJCOD_VDGRN,cs_PRJFLGS_VDGRN,
+	{    "VDGRNTN",CSvdgrnS,CSvdgrnQ,cs_PRJCOD_VDGRN,cs_PRJFLGS_VDGRN,0UL,
 	    			"Van Der Grinten Projection"},
-	{    "CASSINI",CScsiniS,CScsiniQ,cs_PRJCOD_CSINI,cs_PRJFLGS_CSINI,
+	{    "CASSINI",CScsiniS,CScsiniQ,cs_PRJCOD_CSINI,cs_PRJFLGS_CSINI,9806UL,
 	    			"Cassini Projection"},
-	{     "MSTERO",CSmstroS,CSmstroQ,cs_PRJCOD_MSTRO,cs_PRJFLGS_MSTRO,
+	{     "MSTERO",CSmstroS,CSmstroQ,cs_PRJCOD_MSTRO,cs_PRJFLGS_MSTRO,0UL,
 	    			"Modified Stereographic Projection"},
-	{   "NZEALAND",CSnzlndS,CSnzlndQ,cs_PRJCOD_NZLND,cs_PRJFLGS_NZLND,
+	{   "NZEALAND",CSnzlndS,CSnzlndQ,cs_PRJCOD_NZLND,cs_PRJFLGS_NZLND,9811UL,
 	    			"New Zealand National Grid"},
-	{   "ROBINSON",CSrobinS,CSrobinQ,cs_PRJCOD_ROBIN,cs_PRJFLGS_ROBIN,
+	{   "ROBINSON",CSrobinS,CSrobinQ,cs_PRJCOD_ROBIN,cs_PRJFLGS_ROBIN,0UL,
 	    			"Robinson Cylindrical Projection"},
-	{      "BONNE",CSbonneS,CSbonneQ,cs_PRJCOD_BONNE,cs_PRJFLGS_BONNE,
+	{      "BONNE",CSbonneS,CSbonneQ,cs_PRJCOD_BONNE,cs_PRJFLGS_BONNE,9827UL,
 	    			"Bonne Pseudoconical Projection"},
-	{    "ECKERT4",CSekrt4S,CSekrt4Q,cs_PRJCOD_EKRT4,cs_PRJFLGS_EKRT4,
+	{    "ECKERT4",CSekrt4S,CSekrt4Q,cs_PRJCOD_EKRT4,cs_PRJFLGS_EKRT4,0UL,
 	    			"Ekert Pseudocylindrical Projection, Number IV"},
-	{    "ECKERT6",CSekrt6S,CSekrt6Q,cs_PRJCOD_EKRT6,cs_PRJFLGS_EKRT6,
+	{    "ECKERT6",CSekrt6S,CSekrt6Q,cs_PRJCOD_EKRT6,cs_PRJFLGS_EKRT6,0UL,
 	    			"Ekert Pseudocylindrical Projection, Number VI"},
-	{   "MOLLWEID",CSmolwdS,CSmolwdQ,cs_PRJCOD_MOLWD,cs_PRJFLGS_MOLWD,
+	{   "MOLLWEID",CSmolwdS,CSmolwdQ,cs_PRJCOD_MOLWD,cs_PRJFLGS_MOLWD,0UL,
 	    			"Mollweide Projection"},
-	{      "GOODE",CShmlsnS,CShmlsnQ,cs_PRJCOD_HMLSN,cs_PRJFLGS_HMLSN,
+	{      "GOODE",CShmlsnS,CShmlsnQ,cs_PRJCOD_HMLSN,cs_PRJFLGS_HMLSN,0UL,
 	    			"Goode Homolosine Projection"},
-	{     "NEACYL",CSnacylS,CSnacylQ,cs_PRJCOD_NACYL,cs_PRJFLGS_NACYL,
+	{     "NEACYL",CSnacylS,CSnacylQ,cs_PRJCOD_NACYL,cs_PRJFLGS_NACYL,0UL,
 	    			"Normal Aspect, Equal Area Cylindrical Projection"},
-	{     "TEACYL",CStacylS,CStacylQ,cs_PRJCOD_TACYL,cs_PRJFLGS_TACYL,
+	{     "TEACYL",CStacylS,CStacylQ,cs_PRJCOD_TACYL,cs_PRJFLGS_TACYL,0UL,
 	    			"Transverse Aspect, Equal Area Cylindrical Projection"},
-	{    "BIPOLAR",CSbpcncS,CSbpcncQ,cs_PRJCOD_BPCNC,cs_PRJFLGS_BPCNC,
+	{    "BIPOLAR",CSbpcncS,CSbpcncQ,cs_PRJCOD_BPCNC,cs_PRJFLGS_BPCNC,0UL,
 	    			"Bipolar Oblique Conformal Conic Projection"},
-	{      "SWISS",CSswissS,CSswissQ,cs_PRJCOD_SWISS,cs_PRJFLGS_SWISS,
+	{      "SWISS",CSswissS,CSswissQ,cs_PRJCOD_SWISS,cs_PRJFLGS_SWISS,9814UL,
 	    			"Swiss Oblique Cylindrical Projection"},
-	{     "KROVAK",CSkrovkS,CSkrovkQ,cs_PRJCOD_KROVAK,cs_PRJFLGS_KROVAK,
+	{     "KROVAK",CSkrovkS,CSkrovkQ,cs_PRJCOD_KROVAK,cs_PRJFLGS_KROVAK,9819UL,
 	    			"Krovak Oblique Conformal Conic, Czechoslovokia"},
-	{   "KROVAK95",CSkrovkS,CSkrovkQ,cs_PRJCOD_KRVK95,cs_PRJFLGS_KRVK95,
+	{   "KROVAK95",CSkrovkS,CSkrovkQ,cs_PRJCOD_KRVK95,cs_PRJFLGS_KRVK95,0UL,
 	    			"Krovak Oblique Conformal Conic/95 Adjustment"},
-	{       "TMAF",CStrmerS,CStrmerQ,cs_PRJCOD_TRMERAF,cs_PRJFLGS_TRMERAF,
+	{       "TMAF",CStrmerS,CStrmerQ,cs_PRJCOD_TRMERAF,cs_PRJFLGS_TRMERAF,0UL,
 	    			"Transverse Mercator (Gauss/Kruger) with Affine Post Process"},
-	{      "NERTH",CSnerthS,CSnerthQ,cs_PRJCOD_NERTH,cs_PRJFLGS_NERTH,
+	{      "NERTH",CSnerthS,CSnerthQ,cs_PRJCOD_NERTH,cs_PRJFLGS_NERTH,0UL,
 	    			"Non-georeferenced (aka non-earth) coordinate system"},
-	{     "OBQCYL",CSswissS,CSswissQ,cs_PRJCOD_OBQCYL,cs_PRJFLGS_OBQCYL,
+	{     "OBQCYL",CSswissS,CSswissQ,cs_PRJCOD_OBQCYL,cs_PRJFLGS_OBQCYL,0UL,
 	    			"Oblique Cylindrical Projection (Generalized)"},
-	{   "SYSTM34",CSsys34S,CSsys34Q,cs_PRJCOD_SYS34,cs_PRJFLGS_SYS34,
+	{   "SYSTM34",CSsys34S,CSsys34Q,cs_PRJCOD_SYS34,cs_PRJFLGS_SYS34,0UL,
 	    			"Danish System 34, UTM + polynomials (pre-1999 vintage)"},
-	{    "OSTN97",CStrmerS,CStrmerQ,cs_PRJCOD_OSTN97,cs_PRJFLGS_OSTN97,
+	{    "OSTN97",CStrmerS,CStrmerQ,cs_PRJCOD_OSTN97,cs_PRJFLGS_OSTN97,0UL,
 	    			"Ordnance Survey National Grid Transformation of 1997"},
-	{"AZMED-ELEV",CSazmedS,CSazmedQ,cs_PRJCOD_AZEDE,cs_PRJFLGS_AZEDE,
+	{"AZMED-ELEV",CSazmedS,CSazmedQ,cs_PRJCOD_AZEDE,cs_PRJFLGS_AZEDE,0UL,
 	    			"Lambert Azimuthal Equidistant, Elevated Ellipsoid"},
-	{    "OSTN02",CStrmerS,CStrmerQ,cs_PRJCOD_OSTN02,cs_PRJFLGS_OSTN02,
+	{    "OSTN02",CStrmerS,CStrmerQ,cs_PRJCOD_OSTN02,cs_PRJFLGS_OSTN02,0UL,
 	    			"Ordnance Survey National Grid Transformation of 2002"},
-	{"SYSTM34-99",CSsys34S,CSsys34Q,cs_PRJCOD_SYS34_99,cs_PRJFLGS_SYS34_99,
+	{"SYSTM34-99",CSsys34S,CSsys34Q,cs_PRJCOD_SYS34_99,cs_PRJFLGS_SYS34_99,0UL,
 	    			"Danish System 34, UTM + polynomials (1999 vintage)"},
-	{     "RSKEWO",CSoblqmS,CSoblqmQ,cs_PRJCOD_RSKEWO,cs_PRJFLGS_RSKEWO,
+	{     "RSKEWO",CSoblqmS,CSoblqmQ,cs_PRJCOD_RSKEWO,cs_PRJFLGS_RSKEWO,9815UL,
 					"Rectified Skew Orthomorphic, Skew Azimuth at Rectified Origin"},
-	{    "TRMRKRG",CStrmerS,CStrmerQ,cs_PRJCOD_TRMRKRG,cs_PRJFLGS_TRMRKRG,
+	{    "TRMRKRG",CStrmerS,CStrmerQ,cs_PRJCOD_TRMRKRG,cs_PRJFLGS_TRMRKRG,0UL,
 	    			"Transverse Mercator using Kruger Formulation"},
-	{     "WINKEL",CSwinklS,CSwinklQ,cs_PRJCOD_WINKL,cs_PRJFLGS_WINKL,
+	{     "WINKEL",CSwinklS,CSwinklQ,cs_PRJCOD_WINKL,cs_PRJFLGS_WINKL,0UL,
 					"Winkel-Tripel, variable standard latitude" },
-	{  "NERTH-SRT",CSnerthS,CSnerthQ,cs_PRJCOD_NRTHSRT,cs_PRJFLGS_NRTHSRT,
+	{  "NERTH-SRT",CSnerthS,CSnerthQ,cs_PRJCOD_NRTHSRT,cs_PRJFLGS_NRTHSRT,0UL,
 	    			"Non-georeferenced coordinate system with Scale & Rotate"},
-	{       "LMAF",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LMBRTAF,cs_PRJFLGS_LMBRTAF,
+	{       "LMAF",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LMBRTAF,cs_PRJFLGS_LMBRTAF,0UL,
 	    			"Lambert Conformal Conic (2SP) with Affine Post Process"},
-	{"SYSTM34-01",CSsys34S,CSsys34Q,cs_PRJCOD_SYS34_01,cs_PRJFLGS_SYS34_01,
+	{"SYSTM34-01",CSsys34S,CSsys34Q,cs_PRJCOD_SYS34_01,cs_PRJFLGS_SYS34_01,0UL,
 	    			"Danish System 34, UTM + polynomials (2001 vintage)"},
-	{           "",NULL,    NULL,    cs_PRJCOD_END,  0L,
+	{           "",NULL,    NULL,    cs_PRJCOD_END,  0L,  0UL,
 					""}	/* End of table marker. */
 };
 /*
@@ -685,6 +685,7 @@ struct cs_Prjprm_ csPrjprm [] =
 			"Not Used for this projection",		/* Label */
 						   cs_PRMPTYP_NONE,		/* Physical Type */
 						   cs_PRMLTYP_NONE,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -701,6 +702,7 @@ struct cs_Prjprm_ csPrjprm [] =
 						"Central Meridian",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									8802UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -717,6 +719,7 @@ struct cs_Prjprm_ csPrjprm [] =
 			  "Northern Standard Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									8823UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -733,6 +736,7 @@ struct cs_Prjprm_ csPrjprm [] =
 			  "Southern Standard Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									8824UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -749,6 +753,7 @@ struct cs_Prjprm_ csPrjprm [] =
 					   "Standard Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									8832UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -765,6 +770,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				   "First Point Longitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -781,6 +787,7 @@ struct cs_Prjprm_ csPrjprm [] =
 					"First Point Latitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -797,6 +804,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				  "Second Point Longitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -813,6 +821,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				   "Second Point Latitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -829,6 +838,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				 "Central Point Longitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									8812UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -845,6 +855,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				  "Central Point Latitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									8811UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -861,6 +872,7 @@ struct cs_Prjprm_ csPrjprm [] =
    "Geodesic Azimuth at Projection Center",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_AZM,		/* Logical Type */
+									8813UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -877,6 +889,7 @@ struct cs_Prjprm_ csPrjprm [] =
 						  "Y Axis Azimuth",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_AZM,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -893,6 +906,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				"Eastern Standard Meridian",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -909,6 +923,7 @@ struct cs_Prjprm_ csPrjprm [] =
 					   "Northern Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -925,6 +940,7 @@ struct cs_Prjprm_ csPrjprm [] =
 					   "Southern Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -941,6 +957,7 @@ struct cs_Prjprm_ csPrjprm [] =
 					"First Pole Longitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -957,6 +974,7 @@ struct cs_Prjprm_ csPrjprm [] =
 					 "First Pole Latitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -973,6 +991,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				   "Second Pole Longitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -989,6 +1008,7 @@ struct cs_Prjprm_ csPrjprm [] =
 					"Second Pole Latitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1005,6 +1025,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				  "Distance Between Poles",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						   cs_PRMLTYP_ANGD,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1021,6 +1042,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	 "Distance to First Standard Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						   cs_PRMLTYP_ANGD,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1037,6 +1059,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	"Distance to Second Standard Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						   cs_PRMLTYP_ANGD,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1053,6 +1076,7 @@ struct cs_Prjprm_ csPrjprm [] =
 		  "Complex Series Coefficient A%d",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						 cs_PRMLTYP_CMPLXC,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 1		/* Sprintf Processing */
@@ -1069,6 +1093,7 @@ struct cs_Prjprm_ csPrjprm [] =
 		  "Complex Series Coefficient B%d",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						 cs_PRMLTYP_CMPLXC,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 1		/* Sprintf Processing */
@@ -1085,6 +1110,7 @@ struct cs_Prjprm_ csPrjprm [] =
 		  "Western End of Longitude Range",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1101,6 +1127,7 @@ struct cs_Prjprm_ csPrjprm [] =
 		  "Eastern End of Longitude Range",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1117,6 +1144,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				"UTM Zone Number (1 - 60)",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						   cs_PRMLTYP_ZNBR,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1133,6 +1161,7 @@ struct cs_Prjprm_ csPrjprm [] =
 			  "Hemisphere, North or South",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						   cs_PRMLTYP_HSNS,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1146,9 +1175,10 @@ struct cs_Prjprm_ csPrjprm [] =
 										4L,		/* CS_ftoa format */
 										0L,		/* Help ID */
 										0L,		/* String ID */
-			"Average Geoid Height (meters)",		/* Label */
+		   "Average Geoid Height (meters)",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						   cs_PRMLTYP_GHGT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1165,6 +1195,7 @@ struct cs_Prjprm_ csPrjprm [] =
 		 "Average Elevation (system unit)",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						   cs_PRMLTYP_ELEV,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1181,6 +1212,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				  "Oblique Pole Longitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LNG,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1197,6 +1229,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				   "Oblique Pole Latitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1213,6 +1246,7 @@ struct cs_Prjprm_ csPrjprm [] =
 		  "Oblique Cone Standard Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									8818UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1229,6 +1263,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				"Standard Circle Latitude",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1245,6 +1280,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	"Affine Transformation A0 Coefficient",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						 cs_PRMLTYP_AFCOEF,		/* Logical Type */
+									8623UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1261,6 +1297,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	"Affine Transformation B0 Coefficient",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						 cs_PRMLTYP_AFCOEF,		/* Logical Type */
+									8639UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1277,6 +1314,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	"Affine Transformation A1 Coefficient",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						 cs_PRMLTYP_AFCOEF,		/* Logical Type */
+									8624UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1293,6 +1331,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	"Affine Transformation A2 Coefficient",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						 cs_PRMLTYP_AFCOEF,		/* Logical Type */
+									8625UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1309,6 +1348,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	"Affine Transformation B1 Coefficient",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						 cs_PRMLTYP_AFCOEF,		/* Logical Type */
+									8640UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1325,6 +1365,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	"Affine Transformation B2 Coefficient",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						 cs_PRMLTYP_AFCOEF,		/* Logical Type */
+									8641UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1341,6 +1382,7 @@ struct cs_Prjprm_ csPrjprm [] =
 						 "Normal Parallel",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_LAT,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1357,6 +1399,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	 "Danish 34/45 Region (1=J, 2=S, 3=B)",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						   cs_PRMLTYP_ZNBR,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1372,6 +1415,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	    "Skew Azimuth at Rectified Origin",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_AZM,		/* Logical Type */
+									8814UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1388,6 +1432,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	 "X Coordinate of Scale/Rotate Origin",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						  cs_PRMLTYP_XYCRD,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1403,6 +1448,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	 "Y Coordinate of Scale/Rotate Origin",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						  cs_PRMLTYP_XYCRD,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1418,6 +1464,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				  "Cartesian Scale Factor",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 						  cs_PRMLTYP_SCALE,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
@@ -1433,6 +1480,7 @@ struct cs_Prjprm_ csPrjprm [] =
 				"Cartesian Rotation Angle",		/* Label */
 							cs_PRMPTYP_DBL,		/* Physical Type */
 							cs_PRMLTYP_AZM,		/* Logical Type */
+									   0UL,		/* EPSG parameter code */
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */

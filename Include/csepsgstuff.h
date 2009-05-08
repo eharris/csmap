@@ -6,6 +6,7 @@
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
+ 
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
@@ -27,7 +28,10 @@
 
 #include <math.h>
 #include <stack>
+#include <list>
 
+// An enumeration of the tables in the EPSG Parameter Dataset.  All tables are
+// enumerated even though some are not actually used.
 enum EcsEpsgTable { epsgTblNone = 0,
 					epsgTblAlias,
 					epsgTblArea,
@@ -53,6 +57,11 @@ enum EcsEpsgTable { epsgTblNone = 0,
 					epsgTblUnknown
 				  };
 
+// An enumeration of the fields within the EPSG Parameter Dataset.  To the
+// extent possible, fields in the EPSG tables which are the same as fields
+// in other tabl.es are given the same enumerator.  For example, the
+// enumerator value epsgFldDatumCode is used to access the datuam code
+// value in all three (or is it four?) tables in which this value appears.
 enum EcsEpsgField { epsgFldNone = 0,
 					epsgFldAction,
 					epsgFldAliasCode,
@@ -176,8 +185,7 @@ enum EcsEpsgField { epsgFldNone = 0,
 					epsgFldUnknown
 				  };
 
-// Note there is a difference between a CRS and  Csys
-
+// Note there is a difference between a CRS and  CSys
 enum EcsCsysType { epsgCsysTypNone = 0,
 			 	   epsgCsysTypAffine,
 				   epsgCsysTypCartesian,
@@ -248,7 +256,7 @@ struct TcsEpsgFldMap
 	EcsEpsgTable TableId;
 	EcsEpsgField FieldId;
 	short        FieldNbr;
-	wchar_t      FieldName [48];
+	wchar_t      FieldName [64];
 };
 
 struct TcsEpsgCsysTypeMap
@@ -287,6 +295,12 @@ struct TcsEpsgOrntTypeMap
 	wchar_t         OrntTypeName [64];
 };
 
+// The following functions simply provide access to the tables defined above.
+// They are independent of the TcsEPsgDatSetV6 object.  However, it is unlikely
+// that the results produced by these functions have much value outside the
+// environment of a TcsEpsgDataSetV6 object.  So, they could. and some day
+// probably will be, moved to reside within the namespace of the
+// TcsEPsgDataSetV6 object.
 const wchar_t* GetEpsgTableName (EcsEpsgTable tblId);
 EcsEpsgTable GetEpsgTableId (const wchar_t* tableName);
 short GetEpsgCodeFieldNbr (EcsEpsgTable tableId);
@@ -297,13 +311,14 @@ EcsCrsType GetEpsgCrsType (const wchar_t* crsTypeName);
 EcsOpType GetEpsgOpType (const wchar_t* opTypeName);
 EcsDtmType GetEpsgDtmType (const wchar_t* dtmTypeName);
 EcsUomType GetEpsgUomType (const wchar_t* uomTypeName);
-
 //newPage//
 //============================================================================
 // EPSG Code Variable
 //
 // This object is used to represent an EPSG code.  All code specific to EPSG
 // code values is handled within this object.
+//
+// Look to TcsEPsgSupport.cpp for the implementation of this object.
 //
 class TcsEpsgCode
 {
@@ -338,10 +353,10 @@ public:
 	TcsEpsgCode& operator-= (int rhs);
 	TcsEpsgCode operator-- (void);
 	TcsEpsgCode operator-- (int dummy);
-	TcsEpsgCode operator+ (unsigned long rhs);
-	TcsEpsgCode operator+ (int rhs);
-	TcsEpsgCode operator- (unsigned long rhs);
-	TcsEpsgCode operator- (int rhs);
+	TcsEpsgCode operator+ (unsigned long rhs) const;
+	TcsEpsgCode operator+ (int rhs) const;
+	TcsEpsgCode operator- (unsigned long rhs) const;
+	TcsEpsgCode operator- (int rhs) const;
 	//=========================================================================
 	// Public Named Functions
 	bool IsValid (void) const {return EpsgCode != 0UL; }
@@ -363,7 +378,6 @@ private:
 	// Private Data Members
 	unsigned long EpsgCode;
 };
-
 //newPage//
 //============================================================================
 // EPSG Table Specialization
@@ -372,11 +386,19 @@ private:
 // features particular to EPSG tables:
 //
 // 1> Maintains a binary unsigned long index on the first field of each table.
+//    The default Index feature of the TcsCsvFileBase object is std::wstring
+//    based and not as useful as the unsigned long based index used in this
+//    object.
 // 2> Provides for setting a current record, and accessing fields in that record.
-// 3> Provides getting field data in a specific form.
+//    Use of this feature is discouraged, as a multi-thread safe API is now
+//    available.
+// 3> Provides getting field data in the specific forms useful for dealing
+//    with EPSG type data.
 //
-// Due to the CurrentRecord feature, and the TcsCsvStatus member, this object
-// is not multi-thread safe.
+// Currently, there are several tables which are sorted by the EPSG code
+// value.  In this case, generating an Index for the table is superfluous,
+// a simple binary search (i.e. lower_bound) would work just as well.
+// Eliminating this redundancy remains a "TODO" item.
 //
 class TcsEpsgTable : public TcsCsvFileBase
 {
@@ -385,6 +407,8 @@ public:
 	// Static Constants, Variables, and Member Functions
 	static const wchar_t LogicalTrue  [6];
 	static const wchar_t LogicalFalse [6];
+	static bool IsLogicalTrue (const wchar_t* logicalValue);
+	static bool IsLogicalFalse (const wchar_t* logicalValue);
 	//=========================================================================
 	// Construction  /  Destruction  /  Assignment
 	TcsEpsgTable (const TcsEpsgTblMap& tblMap,const wchar_t* databaseFldr);
@@ -398,177 +422,319 @@ public:
 	bool IsOk (void) const {return Ok; };
 	EcsEpsgTable GetTableId (void) const {return TableId; };
 	const TcsCsvStatus& GetStatus (void) const {return CsvStatus; };
-	bool SetCurrentRecord (const TcsEpsgCode& epsgCode);
-	bool PushCurrentPosition (void);
-	bool RestorePreviousPosition (void);
-	bool EpsgLocateCode (TcsEpsgCode& epsgCode,EcsEpsgField fieldId,const wchar_t* fldValue);
-	bool PositionToFirst (EcsEpsgField fieldId,const wchar_t* fldValue,bool honorCase = false);
-	bool PositionToFirst (EcsEpsgField fieldId,const TcsEpsgCode& epsgCode);
-	bool PositionToNext (EcsEpsgField fieldId,const wchar_t* fldValue,bool honorCase = false);
-	bool PositionToNext (EcsEpsgField fieldId,const TcsEpsgCode& epsgCode);
+	unsigned LocateRecordByEpsgCode (const TcsEpsgCode& epsgCode) const;
+	bool EpsgLocateCode (TcsEpsgCode& epsgCode,EcsEpsgField fieldId,const wchar_t* fldValue) const;
 
-	bool IsDeprecated (void);
+	// The following functions locate the record which meets the criteria
+	// provided, and return its record number.  In this case, the first data
+	// record is record number zero as there are no label records in this
+	// environment.  (There may be labels, but they are not considered a
+	// record.)
+	unsigned EpsgLocateFirst (EcsEpsgField fieldId,const wchar_t* fldValue,bool honorCase = false) const;
+	unsigned EpsgLocateFirst (EcsEpsgField fieldId,const TcsEpsgCode& epsgCode) const;
+	unsigned EpsgLocateNext (unsigned startAfter,EcsEpsgField fieldId,const wchar_t* fldValue,
+																	  bool honorCase = false) const;
+	unsigned EpsgLocateNext (unsigned startAfter,EcsEpsgField fieldId,const TcsEpsgCode& epsgCode) const;
 
-	bool GetField (std::wstring& result,short fieldNbr);
-	bool GetAsLong (long& result,short fieldNbr);
-	bool GetAsULong (unsigned long& result,short fieldNbr);
-	bool GetAsEpsgCode (TcsEpsgCode& result,short fieldNbr);
-	bool GetAsReal (double& result,short fieldNbr);
-	bool GetAsLogical (bool& result,short fieldNbr);
+	// The following apply to the record identified by the epsgCode parameter,
+	// or the recordd number parameter, as the case may be; they do not affect
+	// the current record setting.  More importantly, they will work on a
+	// "const" object and are multi-thread safe.
+	bool IsDeprecated (const TcsEpsgCode& epsgCode) const;
+	bool IsDeprecated (unsigned recNbr) const;
+	bool GetField (std::wstring& result,const TcsEpsgCode& epsgCode,short fieldNbr) const;
+	bool GetAsLong (long& result,const TcsEpsgCode& epsgCode,short fieldNbr) const;
+	bool GetAsULong (unsigned long& result,const TcsEpsgCode& epsgCode,short fieldNbr) const;
+	bool GetAsEpsgCode (TcsEpsgCode& result,const TcsEpsgCode& epsgCode,short fieldNbr) const;
+	bool GetAsReal (double& result,const TcsEpsgCode& epsgCode,short fieldNbr) const;
 
-	bool GetField (std::wstring& result,EcsEpsgField fieldId);
-	bool GetAsLong (long& result,EcsEpsgField fieldId);
-	bool GetAsULong (unsigned long& result,EcsEpsgField fieldId);
-	bool GetAsEpsgCode (TcsEpsgCode& result,EcsEpsgField fieldId);
-	bool GetAsReal (double& result,EcsEpsgField fieldId);
-	bool GetAsLogical (bool& result,EcsEpsgField fieldId);
+	bool GetField (std::wstring& result,const TcsEpsgCode& epsgCode,EcsEpsgField fieldId) const;
+	bool GetAsLong (long& result,const TcsEpsgCode& epsgCode,EcsEpsgField fieldId) const;
+	bool GetAsULong (unsigned long& result,const TcsEpsgCode& epsgCode,EcsEpsgField fieldId) const;
+	bool GetAsEpsgCode (TcsEpsgCode& result,const TcsEpsgCode& epsgCode,EcsEpsgField fieldId) const;
+	bool GetAsReal (double& result,const TcsEpsgCode& epsgCode,EcsEpsgField fieldId) const;
 
-	bool GetField (std::wstring result,const TcsEpsgCode& epsgCode,short fieldNbr);
-	bool GetAsLong (long& result,const TcsEpsgCode& epsgCode,short fieldNbr);
-	bool GetAsULong (unsigned long& result,const TcsEpsgCode& epsgCode,short fieldNbr);
-	bool GetAsEpsgCode (TcsEpsgCode& result,const TcsEpsgCode& epsgCode,short fieldNbr);
-	bool GetAsReal (double& result,const TcsEpsgCode& epsgCode,short fieldNbr);
+	// The following apply to the record identified by the recordNbr parameter,
+	// they do not affect the current record setting.
+	bool GetField (std::wstring& result,unsigned recNbr,EcsEpsgField fieldId) const;
+	bool GetAsLong (long& result,unsigned recNbr,EcsEpsgField fieldId) const;
+	bool GetAsULong (unsigned long& result,unsigned recNbr,EcsEpsgField fieldId) const;
+	bool GetAsEpsgCode (TcsEpsgCode& result,unsigned recNbr,EcsEpsgField fieldId) const;
+	bool GetAsReal (double& result,unsigned recNbr,EcsEpsgField fieldId) const;
 
+	// This structure is used to provide the csvStatus parameter required by
+	// the TcsCsvFileBase base object.  The contents are highly dependent
+	// on the context and last operation.  Probably should be a protected
+	// function.
 	const TcsCsvStatus& GetCsvStatus (void) const;
 private:
 	//=========================================================================
 	// Private Support Functions
 	bool PrepareCsvFile (void);
+	bool BuildEpsgIndex (short fldNbr,TcsCsvStatus& csvStatus);
 	//=========================================================================
 	// Private Data Members
-	bool Ok;
-	bool Sorted;
-	bool Indexed;
-	EcsEpsgTable TableId;
-	EcsEpsgField CodeKeyField;
-	TcsEpsgCode CurrentCodeValue;
-	unsigned CurrentRecordNbr;
-	TcsCsvSortFunctor SortFunctor;
-	std::stack<TcsEpsgCode> CodeKeyStack;
-	TcsCsvStatus CsvStatus;
+	bool Ok;								// true = construction succeeded
+	bool Sorted;							// Sorted in designated order
+	bool Indexed;							// true = indexed by EPSG code
+	EcsEpsgTable TableId;					// The ID of this table.
+	EcsEpsgField CodeKeyField;				// ID of EPSG unique identifying code
+	TcsCsvSortFunctor SortFunctor;			// Specifies sort order for this table
+	std::map<TcsEpsgCode,unsigned> CodeIndex;
+	TcsCsvStatus CsvStatus;					// Status of CSV operations
 };
+//newPage//
 //=============================================================================
 // TcsEpsgDataSetV6  -  An EPSG dataset based on the version 6 model.
 //
 // An image of the dataset in .csv form is expected to reside in the directory
-// provided to the constructor.  The object is intended to be a read only object
-// but nothing specific was done to preclude changing the underlying tables or
-// writing changes back to the .csv files.  There are just no member functions
-// at this time to support such operation.
+// provided to the constructor.  This object is intended to be a read only
+// object but nothing specific was done to preclude changing the underlying
+// tables or writing changes back to the .csv files.  There are just no member
+// functions at this time to support such operation.
 //
 class TcsEpsgDataSetV6
 {
 public:
 	//=========================================================================
 	// Static Constants, Variables, and Member Functions
-	//
-	//=========================================================================
-	// The following structure is used to map EPSG source/target Base
-	// Coordinate Reference System codes to CS-MAP to84_via codes in special
-	// cases.  The special cases revolve around three concepts:
-	//
-	// 1) The null datum concept where a specific datum is considered to be
-	//    close enough to WGS84 such that there is no datum transformation
-	//    necessary.
-	// 2) The datum transformation involves a datum shift data file and
-	//    related algorithms.
-	// 3) The datum shifts are basically parameterless.
-	//
-	// The Coordinate Operation Method code was originally included to reduce
-	// the likehood of an inappropriateuse of the table. Turns out that the
-	// implemnetation doesn't actually use them.
-	//
-	// The base codes are all 2D variations.
-	struct TcsCsMapDtmCodeMap
-	{
-		TcsEpsgCode MethodCode;
-		TcsEpsgCode SourceBaseCode;
-		TcsEpsgCode TargetBaseCode;
-		short         CsMapTo84Code;
-	};
-	static const TcsCsMapDtmCodeMap KcsCsMapDtmCodeMap [];
     static short GetFldNbr (EcsEpsgTable tableId,EcsEpsgField fieldId);
     static short GetFldName (std::wstring& fieldName,EcsEpsgTable tableId,EcsEpsgField fieldId);
     //=========================================================================
-    // Construction  /  Destruction  /  Assignment
-    TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t* revLevel);
-    TcsEpsgDataSetV6 (const TcsEpsgDataSetV6& source);
-    virtual ~TcsEpsgDataSetV6 (void);
-    TcsEpsgDataSetV6& operator= (const TcsEpsgDataSetV6& rhs);
-    //=========================================================================
-    // Operator Overrides
-    //=========================================================================
-    // Public Named Functions
-    TcsEpsgTable* GetTablePtr (EcsEpsgTable tableId);
-    const TcsEpsgTable* GetTablePtr (EcsEpsgTable tableId) const;
-    bool GetField (std::wstring result,EcsEpsgTable tableId,EcsEpsgField fieldId);
-    bool GetFieldAsLong (long& result,EcsEpsgTable tableId,EcsEpsgField fieldId);
-    bool GetFieldAsULong (unsigned long& result,EcsEpsgTable tableId,EcsEpsgField fieldId);
-    bool GetFieldAsReal (double& result,EcsEpsgTable tableId,EcsEpsgField fieldId);
-    bool GetFieldAsEpsgCode (TcsEpsgCode& result,EcsEpsgTable tableId,EcsEpsgField fieldId);
-	bool GetUomToDegrees (double& toDegrees,TcsEpsgCode uomCode);
-	bool GetUomToMeters (double& toMeters,TcsEpsgCode uomCode);
-	bool GetUomToUnity (double& toUnity,TcsEpsgCode uomCode);
-    bool GetFieldAsDegrees (double& result,EcsEpsgTable tableId,EcsEpsgField fieldId,
-																TcsEpsgCode uomCode);
-    bool GetFieldAsMeters (double& result,EcsEpsgTable tableId,EcsEpsgField fieldId,
-															   TcsEpsgCode uomCode);
-    bool ConvertUnits (double& result,TcsEpsgCode trgUomCode,double value,
-															 TcsEpsgCode srcUomCode);
-    //=========================================================================
-    unsigned GetRecordCount (EcsEpsgTable tableId);
-    bool GetFieldByIndex (std::wstring& fieldData,EcsEpsgTable tableId,EcsEpsgField fieldId,
-																	   unsigned recNbr);
-    bool GetCodeByIndex (TcsEpsgCode& epsgCode,EcsEpsgTable tableId,EcsEpsgField fieldId,
-																	unsigned recNbr);
-    bool GetFieldByCode (std::wstring& fieldData,EcsEpsgTable tableId,EcsEpsgField fieldId,
-																	  TcsEpsgCode epsgCode);
-    bool CompareCsMapUnits (const struct cs_Unittab_* csMapUnitTbl,bool useNameMap = false);
-    bool GetCsMapEllipsoid (struct cs_Eldef_& ellipsoid,TcsEpsgCode epsgCode);
-    TcsEpsgCode LocateGeographicBase (EcsCrsType crsType,TcsEpsgCode datumCode);
-    bool LocateOperationVariants (unsigned& variantCount,unsigned variants[],
-													     unsigned variantsSize,
-													     EcsOpType opType,
-													     TcsEpsgCode sourceCode,
-													     TcsEpsgCode targetCode);
-    TcsEpsgCode LocateOperation (EcsOpType crsType,TcsEpsgCode sourceCode,TcsEpsgCode targetCode,
-																		  long variant = 1L);
-    bool ResolveConcatenatedXfrm (short& csMapViaCode,TcsEpsgCode oprtnCode);
-	TcsEpsgCode GetParameterValue (double& parameterValue,TcsEpsgCode opCode,TcsEpsgCode opMethCode,
-																			 TcsEpsgCode prmCode);
-	bool ResolveConcatenatedXfrm (short& csMapViaCode,TcsEpsgCode pathOprtnCode) const;
-	bool IsNullTransform (bool& isNull,const TcsEpsgCode& oprtnCode);
-	bool IsPrMerRotation (bool& isPrMerRot,const TcsEpsgCode& oprtnCode);
-    bool GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& ellipsoid,TcsEpsgCode epsgDtmCode,
-																			long instance = 0L);
+	// Construction  /  Destruction  /  Assignment
+	TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t* revLevel);
+	TcsEpsgDataSetV6 (const TcsEpsgDataSetV6& source);
+	virtual ~TcsEpsgDataSetV6 (void);
+	TcsEpsgDataSetV6& operator= (const TcsEpsgDataSetV6& rhs);
+	//=========================================================================
+	// Operator Overrides
+	//=========================================================================
+	// Public Named Functions
+	// Implementation of these functions can be found in csEpsgStuff.cpp
+	//=========================================================================
+	//		Basic Support Functions
+	TcsEpsgTable* GetTablePtr (EcsEpsgTable tableId);
+	const TcsEpsgTable* GetTablePtr (EcsEpsgTable tableId) const;
+	unsigned GetRecordCount (EcsEpsgTable tableId) const;
+	bool ConvertUnits (double& result,TcsEpsgCode trgUomCode,double value,
+															 TcsEpsgCode srcUomCode) const;
+	//=========================================================================
+	// Some general access functions:
+	// Step through an EPSG table one record at a time.
+	bool GetFieldByIndex (std::wstring& fieldData,EcsEpsgTable tableId,EcsEpsgField fieldId,
+																	   unsigned recNbr) const;
+	bool GetCodeByIndex (TcsEpsgCode& epsgCode,EcsEpsgTable tableId,EcsEpsgField fieldId,
+																	unsigned recNbr) const;
+	// Get a field from a table which is indexed by an EPSG code.
+	bool GetFieldByCode (std::wstring& fieldData,EcsEpsgTable tableId,EcsEpsgField fieldId,
+																	  const TcsEpsgCode& epsgCode) const;
+	bool GetFieldByCode (TcsEpsgCode& result,EcsEpsgTable tableId,EcsEpsgField fieldId,
+																  const TcsEpsgCode& epsgCode) const;
+	// Is a record in table indexed by an EPSG code deprecated?
+	bool IsDeprecated (EcsEpsgTable tableId,const TcsEpsgCode& epsgCode) const;
+
+	//=========================================================================
+	// These functions will work on a constant object and, therefore, are
+	// multi-thread safe.
+	bool LocateGeographicBase (TcsEpsgCode& geographicBase,EcsCrsType crsType,
+														   const TcsEpsgCode& datumCode) const;
+	TcsEpsgCode LocateOperation (EcsOpType crsType,const TcsEpsgCode& sourceCode,
+												   const TcsEpsgCode& targetCode,
+												   long variant = 1L) const;
+	bool GetParameterFileName (std::wstring& parameterFileName,const TcsEpsgCode& opCode,
+					 										   const TcsEpsgCode& opMethCode,
+															   const TcsEpsgCode& prmCode) const;
+	bool GetParameterValue (double& parameterValue,const TcsEpsgCode& opCode,
+												   const TcsEpsgCode& opMethCode,
+												   const TcsEpsgCode& prmCode,
+												   const TcsEpsgCode& trgUomCode) const;
+	bool GetCsMapEllipsoid (struct cs_Eldef_& ellipsoid,const TcsEpsgCode& epsgCode) const;
+	bool GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& ellipsoid,const TcsEpsgCode& epsgDtmCode,
+																			unsigned variant = 0U) const;
 	bool GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dtdef_& datum,struct cs_Eldef_& ellipsoid,
-																			  TcsEpsgCode crsEpsgCode);
+																			  const TcsEpsgCode& crsEpsgCode) const;
+	short DetermineCsMapDatumMethod (const TcsEpsgCode& operationCode,bool& coordFrame) const;
 protected:
-    //=========================================================================
-    // Protected Support Functions
-    bool GetCoordsysQuad (short& quad,TcsEpsgCode crsEpsgCode);
-    bool GetReferenceDatum (TcsEpsgCode& dtmEpsgCode,TcsEpsgCode crsEpsgCode);
-	bool GetPrimeMeridian (double& primeMeridian,TcsEpsgCode crsEpsgCode);
-	bool GeographicCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCode crsEpsgCode);
-	bool ProjectedCoordsys (struct cs_Csdef_& coordsys,TcsEpsgCode crsEpsgCode);
+	//=========================================================================
+	// Protected Support Functions
+	//
+	// These functions provide support for the public member functions of this
+	// object.  Implementation of these members can be found in
+	// csEPsgSupport.cpp  Selecting these members to be protected is quite
+	// /arbitrary.
+	EcsCrsType GetCrsType (const TcsEpsgCode& crsCode) const;
+	EcsUomType GetUomFactor (double& uomFactor,const TcsEpsgCode& uomCode) const;
+	bool GetUomToDegrees (double& toDegrees,const TcsEpsgCode& uomCode) const;
+	bool GetUomToMeters (double& toMeters,const TcsEpsgCode& uomCode) const;
+	bool GetUomToUnity (double& toUnity,const TcsEpsgCode& uomCode) const;
+	bool ConvertUnits (double& value,const TcsEpsgCode& trgUomCode,const TcsEpsgCode& srcUomCode) const;
+	bool FieldToReal (double& result,const TcsEpsgCode& trgUomCode,const wchar_t* fldData,const TcsEpsgCode& srcUomCode) const;
+	bool FieldToDegrees (double& result,const wchar_t* field,const TcsEpsgCode& uomCode) const;
+	bool GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsgCode& vertUom,
+														   const TcsEpsgCode& crsEpsgCode) const;
+	bool GetReferenceDatum (TcsEpsgCode& dtmEpsgCode,const TcsEpsgCode& crsEpsgCode) const;
+	bool GetPrimeMeridian (double& primeMeridian,const TcsEpsgCode& crsEpsgCode) const;
+	bool IsPrMerRotation (bool& isPrMerRot,const TcsEpsgCode& oprtnCode) const;
+	unsigned LocateParameterValue (const TcsEpsgCode& opCode,const TcsEpsgCode& opMethCode,
+															 const TcsEpsgCode& prmCode) const;
+	bool AddDatumParameterValues (struct cs_Dtdef_& datum,const TcsEpsgCode& operationCode) const;
 private:
-    //=========================================================================
-    // Private Support Functions
-    //=========================================================================
-    // Private Data Members
-    std::wstring RevisionLevel;
-	std::wstring DatabaseFolder;
+	//=========================================================================
+	// Private Support Functions
+	// These are private as they are called by GetCsMapCoordsys only after all
+	// the stuff common to both types is done.  Calling by any other function
+	// is likely to cause some real problems.
+	bool GeographicCoordsys (struct cs_Csdef_& coordsys,const TcsEpsgCode& crsEpsgCode,
+														const TcsEpsgCode& horzUomCode) const;
+	bool ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEpsgCode& crsEpsgCode,
+													   const TcsEpsgCode& horzUomCode) const;
+	//=========================================================================
+	// Private Data Members
+	std::wstring RevisionLevel;				// The revision level of the EPSG data in this object
+	std::wstring DatabaseFolder;			// The folder in which the .CSV files reside.
 	std::map<EcsEpsgTable,TcsEpsgTable*> EpsgTables;
+											// The individual tables of the EPSG dataset.
 };
-
-// Locate Operation returns an array and a count.  The array contains the op-codes of a path,
-// and the count indicates how many there are.  The return value of the function is the
-// count, thus zero remains the indication that there are none.  The dimensions of the
-// operation code array are passed as an additional parameter.
-
-// Also, I have an array which maps operation codes to specific CS-MAP to84_via codes.
-// Thus, the "null" modem operation codes should for the most part, map to an CS-MAP code.
-
-// Finally, we have a table that associates EPSG method codes and files names to
-// CS-MAP codes.  So, when we encounter the NTv2 EPSG code, we extract the file
-// name, and look it up; the result should be a CS-MAP to84_via code.
+//newPage//
+//=============================================================================
+// The followoing objects were developed in response to the issue of datums and
+// geodetic transformations within EPSG.  Model the EPSG structure in a form
+// which is somewhat rational and can be understood, used, and maintained by
+// us mere mortals.  Implementation of these objects can be found in
+// cs_EpsgSupport.cpp.
+//
+// Within EPSG, a conversion or transformation (usually transformation) may
+// have serveal applicable variations.  Some more precise than others, but
+// none the less, all have a certain degree of validity.  Especially with
+// respect to datum transformations, there may be several variations which
+// will get you from one datum to another.
+//
+// To complicate matters further, a variant maybe a concatenated operation.
+// That is, consist of two or more single operations which must be performed
+// in a specific order.  Generally, concatenated operations are defined in the
+// Coordinate_Operation Path table.  Often, one or more of these concatenated
+// operations are: 1> the null transformation, or 2> a lonigtude translation
+// (i.e. application of a prime meridian).  In either of these two cases,
+// they can usually be ignored in the CS-MAP environment.
+//
+// TcsOpSingle is a definition of a single operation. TcsSingleOp represents
+//		an entry in the operation table which is NOT a concatenated entry.
+// TcsOpVariant is a std::list of TcsOpSingle objects, often only one.
+//		TcsOpVariant will contain more than one TcsOpSingle in the case
+//		of a variant which is a concatenated operation.  Each phase of the
+//		concatenated operation is represented by its own TcsOpSingle.
+// TcsOpsVariants is a std::vector od TcsVariant objects, which is usually
+//		sorted by the Accuracy member of the TcsOpVariant object.
+//
+struct TcsSingleOp
+{
+	//=========================================================================
+	// Static Constants, Variables, and Member Functions
+	//=========================================================================
+	// Construction  /  Destruction  /  Assignment
+public:
+	TcsSingleOp (const	TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& operationCode);
+	TcsSingleOp (const TcsSingleOp& source);
+	~TcsSingleOp (void);
+	TcsSingleOp& operator= (const TcsSingleOp& rhs);
+	//=========================================================================
+	// Operator Overrides
+	//=========================================================================
+	// Public Named Member Functions
+	bool IsValid (void) const {return OperationCode.IsValid (); }
+	bool IsNull (void) const {return Null; }
+	bool IsLngXlation (void) const {return LngXlation; }
+	EcsOpType GetType (void) const {return Type; }
+	TcsEpsgCode GetSourceCRS (void) const {return SourceCRS; }
+	TcsEpsgCode GetTargetCRS (void) const {return TargetCRS; }
+	TcsEpsgCode GetOperationCode (void) const {return OperationCode; }
+	TcsEpsgCode GetMethodCode (void) const {return OperationMethod; }
+	double GetAccuracy (void) const {return Accuracy; }
+	std::wstring GetOpName (void) const {return OpName; }
+	const wchar_t* GetOpNamePtr (void) const {return OpName.c_str (); }
+	//=========================================================================
+	// Private Support Member Functions
+	bool Classify (const TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& oprtnCode);
+	//=========================================================================
+	// Private Data Memebers
+	bool Null;					// true says Null transformation
+	bool LngXlation;			// true says Lonigtude Translation
+	EcsOpType Type;				// Conversion or Transformation.
+	TcsEpsgCode SourceCRS;		// Somewhat redundant, but convenient
+	TcsEpsgCode TargetCRS;		// Somewhat redundant, but convenient
+	TcsEpsgCode OperationCode;	// EPSG Operation code of the non-concatenated operation
+	TcsEpsgCode OperationMethod;// EPSG Operation Method code for this operation
+	double Accuracy;			// Accuracy of this operation per EPSG database
+	std::wstring OpName;		// Name of the operation, usually for report generation
+};
+// TcsOpVariant represents an entry in the operation table which MAY BE
+// concatenated.  Typically, it is not concatenated, and the Singles container
+// will only carry a single element.  As CsMap does not support concatenated
+// operations, it is at this level that an equivalent Datum Definition can
+// be generated.  We use a list as the std::list object does not require a
+// default constructor, and all such objects should be valid representations
+// of a TcsSingleOp.
+class TcsOpVariant
+{
+	//=========================================================================
+	// Static Constants, Variables, and Member Functions
+public:
+	//=========================================================================
+	// Construction  /  Destruction  /  Assignment
+	TcsOpVariant (const TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& operationCode);
+	TcsOpVariant (const TcsOpVariant& source);
+	~TcsOpVariant (void);
+	TcsOpVariant& operator= (const TcsOpVariant& rhs);
+	//=========================================================================
+	// Public Named Member Functions
+	bool IsValid (void) const;
+	unsigned GetOperationCount (void) const;
+	EcsOpType GetType (void) const {return Type; }
+	unsigned GetVariantNbr (void) const {return VariantNbr; }
+	double GetAccuracy (void) const;
+	const wchar_t* GetVariantNamePtr (void) const {return VariantName.c_str (); }
+	TcsEpsgCode GetOpCodeForCsMap (void) const;
+private:
+	EcsOpType Type;						// May be Concatenated.
+	unsigned VariantNbr;				// EPSG variant number.  There is
+										// no requirement about how variants
+										// are numbered, only that they should be
+										// (but aren't always) unique.
+	std::wstring Version;				// Verision from EPSG operation table
+	double Accuracy;					// Accuracy from the EPSG Operation table.
+	std::wstring VariantName;			// Operation name, use in report generation.
+	std::list<TcsSingleOp> Singles;		// container of the individual components of
+										// a concatenated operation.   Order is the
+										// order in which the operations are to be
+										// performed, per EPSG Path table.
+};
+// TcsOpVariants is a collection of TcsOpVariant's.  Quite often, there is
+// only one TcsOpVariant; but the exceptional cases need to be handled.
+class TcsOpVariants
+{
+	//=========================================================================
+	// Static Constants, Variables, and Member Functions
+public:
+	//=========================================================================
+	// Construction  /  Destruction  /  Assignment
+	TcsOpVariants (const TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& sourceCRS,
+												  const TcsEpsgCode& targetCRS);
+	TcsOpVariants (const TcsOpVariants& source);
+	~TcsOpVariants (void);
+	TcsOpVariants& operator= (const TcsOpVariants& rhs);
+	//=========================================================================
+	// Public Named Member Functions
+	unsigned GetVariantCount (void) const {return Variants.size (); }
+	TcsEpsgCode GetSourceCRS (void) const {return SourceCrs; }
+	TcsEpsgCode GetTargetCRS (void) const {return TargetCrs; }
+	bool GetVariant (TcsOpVariant& variant,unsigned index) const;
+	const TcsOpVariant* GetVariantPtr (unsigned index) const;
+	TcsEpsgCode GetOprtnCodeByVariant (unsigned variant) const;
+	TcsEpsgCode GetBestOprtnCode (const TcsEpsgDataSetV6& epsgDB) const;
+private:
+	TcsEpsgCode SourceCrs;				// EPSG Code of the source CRS
+	TcsEpsgCode TargetCrs;				// EPSG code of the target CRS
+	std::vector<TcsOpVariant> Variants;	// Collection of variants.  Usually
+										// only one, but there can be as many
+										// as 100.
+};
