@@ -14,6 +14,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "Test\Console
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTestCpp", "TestCpp\ConsoleTestCpp.vcproj", "{C1373A1E-E433-44C7-A0F1-425BCD7A3874}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F36FF087-3739-4458-96F3-56799FC3E3D2} = {F36FF087-3739-4458-96F3-56799FC3E3D2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

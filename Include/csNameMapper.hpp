@@ -216,9 +216,15 @@ public:
 	short GetDupSort (void) const {return DupSort; }
 	short GetAliasFlag (void) const {return AliasFlag; }
 	void* GetUserValue (void) const;
+	const wchar_t* GetComments (void) const;
+	void GetComments (std::wstring& comments) const;
+	const wchar_t* GetRemarks (void) const;
+	void GetRemarks (std::wstring& remarks) const;
 	void SetDupSort (short dupSort) {DupSort = dupSort; }
 	void SetAliasFlag (short aliasFlag) {AliasFlag = aliasFlag; }
 	void* SetUserValue (void* userValue);
+	void SetComments (const wchar_t* comments);
+	void SetRemarks (const wchar_t* remarks);
 	void WriteAsCsv (std::wostream& outStrm,bool flvrLbls = false) const;
 
 	void SetGenericId (const TcsGenericId& newId) {GenericId = newId; }
@@ -295,6 +301,7 @@ public:
     bool SetCurrentRecord (unsigned recordNbr);
     bool GetField (std::wstring& fieldValue,EcsMapTableFields fieldId) const;
     unsigned long GetFieldAsUL (EcsMapTableFields fieldId) const;
+    void GetFileRecordId (std::wstring& fileRecId) const;
     bool ReplaceField (EcsMapTableFields fieldId,std::wstring& fieldValue);
     bool ReplaceField (EcsMapTableFields fieldId,unsigned long fieldValue);
 private:
@@ -365,7 +372,7 @@ public:
 	void ClearDuplicateList (void);
 	EcsCsvStatus ReadFromStream (std::wistream& inStrm);
 	EcsCsvStatus ReadFromStream (std::wistream& inStrm,TcsCsvStatus& status);
-	bool Add (TcsNameMap& newItem,bool addDupName = false);
+	bool Add (TcsNameMap& newItem,bool addDupName = false,const wchar_t* objSrcId = 0);
 	bool Add (const TcsNameMap& newItem);		// can't add a duplicate if the item is const
 	bool Replace (const TcsNameMap& newItem);
 	TcsGenericId Locate (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* name) const;
@@ -378,6 +385,7 @@ public:
 	bool SetUserByName (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* name,void* userValue);
 	const wchar_t* FlavorToName (EcsNameFlavor flavor) const;
 	unsigned long GetNextDfltId (EcsNameFlavor flavor);
+	void WriteLabelLine (std::wostream& outStrm) const;
 	void WriteAsCsv (std::wostream& outStrm,bool flvrLbls = false) const;
 	void WriteDuplicates (std::wostream& outStrm);
 	unsigned long LocateIdByIdx (EcsMapObjType type,EcsNameFlavor flavor,unsigned index,

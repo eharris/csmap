@@ -51,8 +51,8 @@ enum EcsMapObjType {	csMapNone = 0,
 						csMapProjectedCSysKeyName,
 						csMapGeographic3DKeyName,
 						csMapUnknown,
-						csMapUnitKeyName,				 // See comments below
-						csMapProjGeoCSys                 // See comments below
+						csMapUnitKeyName,				// See comments below
+						csMapProjGeoCSys				// See comments below
 				   };
 
 // The various flavors currently supported.
@@ -98,7 +98,7 @@ enum EcsNameFlavor {	csMapFlvrNone      =  0,		// 0x00000000
 // needs of the individual editing the file.  Probably not necessary in this
 // particular 'C' header, but its nice to have the enumerations in one place.
 //
-enum EcsMapTableFields {    csMapFldInternalId         = 0,
+enum EcsMapTableFields {    csMapFldSeqNbr             = 0,
                             csMapFldEpsgNbr            = 1,
                             csMapFldEsriNbr            = 2,
                             csMapFldOracleNbr          = 3,

@@ -729,7 +729,7 @@ const unsigned TcsKeyNameMapFile::BogusNbr = 0xFFFFFFFF;
 // name mapping CSV file.
 const TcsKeyNameMapFile::TcsMapTableFields TcsKeyNameMapFile::KcsMapTableFields [] =
 {
-    {  csMapFldInternalId,            csMapFlvrNone,        false,  L"InternalId"          },
+    {  csMapFldSeqNbr,                csMapFlvrNone,        false,  L"SeqNbr"              },
     {  csMapFldEpsgNbr,               csMapFlvrEpsg,        true,   L"EpsgNbr"             },
     {  csMapFldEsriNbr,               csMapFlvrEsri,        true,   L"EsriNbr"             },
     {  csMapFldOracleNbr,             csMapFlvrOracle,      true,   L"OracleNbr"           },
@@ -765,7 +765,7 @@ void TcsKeyNameMapFile::WriteCsvFileHeader (std::wostream& oStrm)
 	
 	for (tblPtr = KcsMapTableFields;tblPtr->FldId != csMapFldUnknown;++tblPtr)
 	{
-		if (tblPtr->FldId != csMapFldInternalId)
+		if (tblPtr->FldId != csMapFldSeqNbr)
 		{
 			oStrm << L',';
 		}
@@ -946,6 +946,21 @@ unsigned long TcsKeyNameMapFile::GetFieldAsUL (EcsMapTableFields fieldId) const
         rtnValue = wcstoul (fieldValue.c_str (),0,10);
     }
     return rtnValue;
+}
+void TcsKeyNameMapFile::GetFileRecordId (std::wstring& fileRecId) const
+{
+	wchar_t msgBufr [1024];
+
+    if ((CurrentRecord < BogusNbr) && (CurrentRecord < RecordCount ()))
+    {
+		unsigned long seqNbr = GetFieldAsUL (csMapFldSeqNbr);
+		swprintf (msgBufr,L"%.32s::%u::%lu",GetObjectName (),CurrentRecord,seqNbr);
+		fileRecId = msgBufr;
+	}
+	else
+	{
+		fileRecId.clear ();
+	}
 }
 bool TcsKeyNameMapFile::ReplaceField (EcsMapTableFields fieldId,std::wstring& fieldValue)
 {
