@@ -347,11 +347,35 @@ void* TcsNameMap::GetUserValue (void) const
 {
 	return User;
 }
+const wchar_t* TcsNameMap::GetComments (void) const
+{
+	return Comments.c_str ();
+}
+void TcsNameMap::GetComments (std::wstring& comments) const
+{
+	comments = Comments;
+}
+const wchar_t* TcsNameMap::GetRemarks (void) const
+{
+	return Remarks.c_str ();
+}
+void TcsNameMap::GetRemarks (std::wstring& remarks) const
+{
+	remarks = Remarks;
+}
 void* TcsNameMap::SetUserValue (void* userValue)
 {
 	void* rtnValue = User;
 	User = userValue;
 	return rtnValue;
+}
+void TcsNameMap::SetComments (const wchar_t* comments)
+{
+	Comments = comments;
+}
+void TcsNameMap::SetRemarks (const wchar_t* remarks)
+{
+	Remarks = remarks;
 }
 void TcsNameMap::WriteAsCsv (std::wostream& outStrm,bool flvrLbls) const
 {
@@ -523,7 +547,7 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& 
 	}
 	return csvStatus;
 }
-bool TcsNameMapper::Add (TcsNameMap& newItem,bool addDupName)
+bool TcsNameMapper::Add (TcsNameMap& newItem,bool addDupName,const wchar_t* objSrcId)
 {
 	std::pair<iterator,bool> insertStatus;
 
@@ -541,7 +565,9 @@ bool TcsNameMapper::Add (TcsNameMap& newItem,bool addDupName)
 	// Record all duplicates, even if we eventually add it.
 	if (RecordDuplicates && !insertStatus.second)
 	{
-		Duplicates.push_back (newItem);
+		TcsNameMap dupItem (newItem);
+		dupItem.SetComments (objSrcId);
+		Duplicates.push_back (dupItem);
 	}
 
 	// If so requested, we add a duplicate name.  A little defensive
@@ -681,6 +707,21 @@ unsigned long TcsNameMapper::GetNextDfltId (EcsNameFlavor flavor)
 	newId = InitialDfltFlvrIds [flavor] + ((flavor) * KcsNameMapBias);
 	return newId;
 }
+void TcsNameMapper::WriteLabelLine (std::wostream& outStrm) const
+{
+	outStrm         << L"GenericId"
+			<< L',' << L"NameType"
+			<< L',' << L"Flavor"
+			<< L',' << L"NumericId"
+			<< L',' << L"NameId"
+			<< L',' << L"DupSort"
+			<< L',' << L"AliasFlag"
+			<< L',' << L"Flags"
+			<< L',' << L"Deprecation"
+			<< L',' << L"Remarks"
+			<< L',' << L"Comment"
+			<< std::endl;
+}
 void TcsNameMapper::WriteAsCsv (std::wostream& outStrm,bool flvrLbls) const
 {
 	const_iterator setItr;
@@ -696,20 +737,8 @@ void TcsNameMapper::WriteAsCsv (std::wostream& outStrm,bool flvrLbls) const
 	// sense to a human observer.
 	std::sort (sortedVector.begin (),sortedVector.end (),TcsNameMap::CsvSort);
 
-	// Ouput a label line.  (This should be in a named member function
-	// of the TcsNameMapper object.)
-	outStrm         << L"GenericId"
-			<< L',' << L"NameType"
-			<< L',' << L"Flavor"
-			<< L',' << L"NumericId"
-			<< L',' << L"NameId"
-			<< L',' << L"DupSort"
-			<< L',' << L"AliasFlag"
-			<< L',' << L"Flags"
-			<< L',' << L"Deprecation"
-			<< L',' << L"Remarks"
-			<< L',' << L"Comment"
-			<< std::endl;
+	// We always label the Name Mapper file.
+	WriteLabelLine (outStrm);
 
 	// Output each of the entries in the sorted vector.
 	for (sortedItr = sortedVector.begin ();sortedItr != sortedVector.end ();sortedItr++)
@@ -723,6 +752,8 @@ void TcsNameMapper::WriteDuplicates (std::wostream& outStrm)
 	std::vector<TcsNameMap>::iterator dupItr;
 
 	std::sort (Duplicates.begin (),Duplicates.end (),TcsNameMap::CsvSort);
+	
+	WriteLabelLine (outStrm);
 	for (dupItr = Duplicates.begin ();dupItr != Duplicates.end ();dupItr++)
 	{
 		dupItr->WriteAsCsv (outStrm,true);
@@ -1056,9 +1087,11 @@ bool TcsNameMapper::AddKeyMapFields (EcsMapObjType mapType,unsigned long generic
     EcsNameFlavor flavor = csMapFlvrNone;
     EcsMapTableFields nbrItmId;
     EcsMapTableFields nameItmId;
+	std::wstring sourceId;
     std::wstring itmName;
     std::pair<iterator,bool> setStatus;
-
+ 
+    
 	addDups = (mapType == csMapParameterKeyName) ||
 			  (mapType == csMapProjectionKeyName) ||
 			  (mapType == csMapLinearUnitKeyName) ||
@@ -1105,12 +1138,19 @@ bool TcsNameMapper::AddKeyMapFields (EcsMapObjType mapType,unsigned long generic
 						end = itmName.length ();
 					}
 					std::wstring nextName = itmName.substr (start,end - start);
+
 	                TcsNameMap newItem (genericId,mapType,flavor,itmNbr,nextName.c_str ());
 	                if (start != 0)
 	                {
 						newItem.SetAliasFlag (1);
 	                }
-	                ok = Add (newItem,addDups);
+	                
+	                // We obtain a string which identifies the source.  The Add
+	                // overload that we use here will add the source to the
+	                // comments field if the record is added to the Duplicates
+	                // name map.
+					mapFileObj.GetFileRecordId (sourceId);
+	                ok = Add (newItem,addDups,sourceId.c_str ());
 					start = end + 1;
 	            } while (end < itmName.length ());
             }
