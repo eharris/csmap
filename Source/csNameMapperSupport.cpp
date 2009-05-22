@@ -950,11 +950,12 @@ unsigned long TcsKeyNameMapFile::GetFieldAsUL (EcsMapTableFields fieldId) const
 void TcsKeyNameMapFile::GetFileRecordId (std::wstring& fileRecId) const
 {
 	wchar_t msgBufr [1024];
+	size_t bufrLen = (sizeof (msgBufr)) / (sizeof (wchar_t));
 
     if ((CurrentRecord < BogusNbr) && (CurrentRecord < RecordCount ()))
     {
 		unsigned long seqNbr = GetFieldAsUL (csMapFldSeqNbr);
-		swprintf (msgBufr,L"%.32s::%u::%lu",GetObjectName (),CurrentRecord,seqNbr);
+		swprintf (msgBufr,bufrLen,L"%.32s::%u::%lu",GetObjectName (),CurrentRecord,seqNbr);
 		fileRecId = msgBufr;
 	}
 	else
