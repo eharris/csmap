@@ -757,12 +757,12 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			dtDef->fill02   = dtDefPtr->fill02;
 			dtDef->fill03   = dtDefPtr->fill03;
 			dtDef->fill04   = dtDefPtr->fill04;
-			CS_free (dtDefPtr);
 
 			// Leave the original WKT name alone. It is useful info.
 			// Use the source field to indicate where the definition came from.
 			CS_stncp (dtDef->source,"Obtained from dictionary by mapping the WKT datum name.",sizeof (dtDef->source));
 		}
+		CS_free (dtDefPtr);
 	}
 	else
 	{
