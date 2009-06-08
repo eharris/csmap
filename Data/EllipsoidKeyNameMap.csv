@@ -46,6 +46,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 4500,7054,0,0,0,0,0,,PZ-90,PZ-90,PZ-90,PZ-90,,,,,,,,,,,,,,0,0,0
 4600,7055,0,0,0,0,0,,Clarke1866/IntnlFt,Clarke1866/IntnlFt,Clarke1866/IntnlFt,Clarke 1880 (international foot),,,,,,,,,,,,,,0,0,0
 4700,7056,0,0,0,0,0,,Everest1969/RSO,Everest1969/RSO,Everest1969/RSO,Everest 1830 (RSO 1969),Everest_Modified_1969,,,,,,,,,,,,,0,0,0
+4300,7057,0,0,0,0,0,,,,Intnl24AuthalicSphere,International 1924 Authalic Sphere,,,,,,,,,,,,,,0,0,0
+4300,7058,0,0,0,0,0,,,,Hughes1980,Hughes 1980,,,,,,,,,,,,,,0,0,0
+4300,7059,0,0,0,0,0,,,,VisualisationSphere,Popular Visualisation Sphere,,,,,,,,,,,,,,0,0,0
 4800,0,0,0,0,0,0,,AUSSIE52,AIG52,AUSSIE52,,,,,,,,,,,,,,,0,0,0
 4900,0,0,0,0,0,0,,AIRY49,Airy1848,AIRY49,,,,,,,,,,,,,,,0,0,0
 5000,0,0,0,0,0,0,,APL4-5,APL4-5,APL4-5,,,,,,,,,,,,,,,0,0,0

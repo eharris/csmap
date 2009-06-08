@@ -1377,6 +1377,9 @@ typedef long32_t cs_magic_t;
 									   expansion used in Denmark.  Polynominals are of the
 									   1999 vintage, except for Bornholm, which are post
 									   1999. */
+#define cs_PRJCOD_PCARREE  67		/* Plate Carree, standard form */
+#define cs_PRJCOD_MRCATPV  68		/* Psuedo Mercator, Popular Visualization. */
+
 
 #define cs_PRJCOD_HOM1UV   ((cs_PRJCOD_OBLQM << 8) + 1)
 #define cs_PRJCOD_HOM1XY   ((cs_PRJCOD_OBLQM << 8) + 2)
@@ -1534,6 +1537,8 @@ typedef long32_t cs_magic_t;
 #define cs_WKTCOD_ROTATY   155
 #define cs_WKTCOD_ROTATZ   156
 #define cs_WKTCOD_BWSCAL   157
+
+#define cs_PRMCOD_INVLD    255
 
 #define cs_PRMCOD_NOTYET   499
 
@@ -7199,7 +7204,7 @@ int			EXP_LVL7	CS_cscmp (Const struct cs_Csdef_ *pp,Const struct cs_Csdef_ *qq);
 double		EXP_LVL3	CS_cscnv (Const struct cs_Csprm_ *csprm,Const double ll [3]);
 struct cs_Csdef_* EXP_LVL3	CS_csdef (Const char *cs_nam);
 int			EXP_LVL1	CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize);
-int			EXP_LVL1	CS_csDefCmpEx (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize,double* qPtr);
+int			EXP_LVL1	CS_csDefCmpEx (double* qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_csdel (struct cs_Csdef_ *csdef);
 int			EXP_LVL5	CS_csDiff (FILE *rptStrm,struct cs_Csdef_ *was,struct cs_Csdef_ *is);
 int			EXP_LVL1	CS_csEnum (int index,char *key_name,int size);
@@ -7225,6 +7230,7 @@ int			EXP_LVL3	CS_cswr (csFILE *strm,Const struct cs_Csdef_ *cs_def,int crypt);
 
 int			EXP_LVL1	CS_cmpDbls (double first,double second);
 int			EXP_LVL3	CS_defCmpPrjPrm (struct cs_Prjtab_* pp,int prmNbr,double orgValue,double revValue,char *message,size_t messageSize);
+int			EXP_LVL3	CS_defCmpPrjPrmEx (struct cs_Prjtab_* pp,int prmNbr,double orgValue,double revValue,char *message,size_t messageSize,double* qValue);
 long32_t	EXP_LVL5	CS_degToSec (double degrees);
 void		EXP_LVL3	CS_dtcls (struct cs_Dtcprm_ *dtc_ptr);
 int			EXP_LVL7	CS_dtcmp (Const struct cs_Dtdef_ *pp,Const struct cs_Dtdef_ *qq);
@@ -7233,7 +7239,7 @@ int			EXP_LVL3	CS_dtcvt (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [2],doubl
 int			EXP_LVL3	CS_dtcvt3D (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [3],double ll_out [3]);
 struct cs_Dtdef_* EXP_LVL3     CS_dtdef (Const char *dat_nam);
 int			EXP_LVL3	CS_dtDefCmp (Const struct cs_Dtdef_ *original,Const struct cs_Dtdef_ *revised,char* message,size_t messageSize);
-int			EXP_LVL3	CS_dtDefCmpEx (Const struct cs_Dtdef_ *original,Const struct cs_Dtdef_ *revised,char* message,size_t messageSize,double *qPtr);
+int			EXP_LVL3	CS_dtDefCmpEx (double *qValuePtr,Const struct cs_Dtdef_ *original,Const struct cs_Dtdef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_dtdel (struct cs_Dtdef_ *dtdef);
 char*		EXP_LVL1	CS_dtdflt (Const char *dflt_dt);
 void		EXP_LVL7	CS_dtDictCls (csFILE* stream);
@@ -7254,7 +7260,7 @@ Const char*	EXP_LVL3	CS_ecvt (double value,int count,int *dec,int *sign);
 int			EXP_LVL7	CS_elcmp (Const struct cs_Eldef_ *pp,Const struct cs_Eldef_ *qq);
 struct cs_Eldef_* EXP_LVL3     CS_eldef (Const char *el_nam);
 int			EXP_LVL3	CS_elDefCmp (Const struct cs_Eldef_ *original,Const struct cs_Eldef_ *revised,char* message,size_t messageSize);
-int			EXP_LVL3	CS_elDefCmpEx (Const struct cs_Eldef_ *original,Const struct cs_Eldef_ *revised,char* message,size_t messageSize,double* qPtr);
+int			EXP_LVL3	CS_elDefCmpEx (double* qValuePtr,Const struct cs_Eldef_ *original,Const struct cs_Eldef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_eldel (struct cs_Eldef_ *eldef);
 char*		EXP_LVL1	CS_eldflt (Const char *dflt_el);
 void		EXP_LVL7	CS_elDictCls (csFILE* stream);
@@ -7400,6 +7406,7 @@ int			EXP_LVL1	CS_prjEnum (int index,ulong32_t *prj_flags,char *prj_keynm,int ke
 											  char *prj_descr,
 											  int descr_sz);
 int			EXP_LVL3	CS_prjprm (struct cs_Prjprm_ *result,unsigned short prj_code,int parm_nbr);
+double		EXP_LVL3	CS_prmValue (Const struct cs_Csdef_ *csDefPtr,int parm_nbr);
 int			EXP_LVL1	CS_putcs (Const struct cs_Csdef_ *csdef,int crypt);
 int			EXP_LVL1	CS_putdt (Const struct cs_Dtdef_ *dtdef,int crypt);
 int			EXP_LVL1	CS_putel (Const struct cs_Eldef_ *eldef,int crypt);
@@ -7424,6 +7431,7 @@ unsigned    EXP_LVL9    CS_spaceParse (char *lineBuffer,char *ptrs [],unsigned m
 int			EXP_LVL1	CS_spZoneNbrMap (char *zoneNbr,int is83);
 
 const char*	EXP_LVL3	CS_stateEnum (int index);
+char *		EXP_LVL3	CS_stncat (char *dest,Const char *source,int count);
 char *		EXP_LVL3	CS_stcpy (char *dest,Const char *source);
 char *		EXP_LVL3	CS_stncp (char *dest,Const char *source,int count);
 int			EXP_LVL3	CS_stricmp (Const char *cp1,Const char *cp2);
@@ -7597,6 +7605,7 @@ struct cs_Csprm_* EXP_LVL3	CScsloc2 (struct cs_Csdef_ *cs_ptr,
 									  struct cs_Dtdef_ *dt_ptr,
 									  struct cs_Eldef_ *el_ptr);
 
+double		EXP_LVL3	CSdefCmpPrjPrm (struct cs_Prjtab_* pp,int prmNbr,double orgValue,double revValue,char *message,size_t messageSize);
 int			EXP_LVL9	CSdfltpro (int type,char *name,int size);
 int			EXP_LVL7	CSdhdnInit (void);
 void		EXP_LVL7	CSdhdnCls (void);
@@ -7913,6 +7922,11 @@ int			EXP_LVL9	CSplycnL (Const struct cs_Plycn_ *plycn,int cnt,Const double pnts
 int			EXP_LVL9	CSplycnQ (Const struct cs_Csdef_ *csdef,unsigned short prj_code,int err_list [],int list_sz);
 void		EXP_LVL9	CSplycnS (struct cs_Csprm_ *csprm);
 int			EXP_LVL9	CSplycnX (Const struct cs_Plycn_ *plycn,int cnt,Const double pnts [][3]);
+
+int			EXP_LVL3	CSprjPrmCmp (double* qValue,short prmNbr,Const struct cs_Csdef_* original,
+																 Const struct cs_Csdef_* revised,
+																 char* message,
+																 size_t msgSize);
 
 double		EXP_LVL9	CSpstroC (Const struct cs_Pstro_ *pstro,Const double ll [2]);
 int			EXP_LVL9	CSpstroF (Const struct cs_Pstro_ *pstro,double xy [2],Const double ll [2]);

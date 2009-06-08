@@ -32,25 +32,26 @@
 // The types of objects which have names.  Note that an object type and a
 // name flavor uniquely define a name space.
 //
+//                                                      for debug/test convenience
 enum EcsMapObjType {	csMapNone = 0,
-						csMapFlavorName,
-						csMapParameterKeyName,
-						csMapProjectionKeyName,
-						csMapGeodeticOpMthKeyName,
-						csMapVerticalOpMthKeyName,
-						csMapLinearUnitKeyName,
-						csMapAngularUnitKeyName,
-						csMapPrimeMeridianKeyName,
-						csMapEllipsoidKeyName,
-						csMapGeodeticXfrmKeyName,
-						csMapVerticalXfrmKeyName,
-						csMapDatumKeyName,
-						csMapVerticalDatumKeyName,
-						csMapGeoidKeyName,
-						csMapGeographicCSysKeyName,
-						csMapProjectedCSysKeyName,
-						csMapGeographic3DKeyName,
-						csMapUnknown,
+						csMapFlavorName,				//   1
+						csMapParameterKeyName,			//   2
+						csMapProjectionKeyName,			//   3
+						csMapGeodeticOpMthKeyName,		//   4
+						csMapVerticalOpMthKeyName,		//   5
+						csMapLinearUnitKeyName,			//   6
+						csMapAngularUnitKeyName,		//   7
+						csMapPrimeMeridianKeyName,		//   8
+						csMapEllipsoidKeyName,			//   9
+						csMapGeodeticXfrmKeyName,		//  10
+						csMapVerticalXfrmKeyName,		//  11
+						csMapDatumKeyName,				//  12
+						csMapVerticalDatumKeyName,		//  13
+						csMapGeoidKeyName,				//  14
+						csMapGeographicCSysKeyName,		//  15
+						csMapProjectedCSysKeyName,		//  16
+						csMapGeographic3DKeyName,		//  17
+						csMapUnknown,					//  18
 						csMapUnitKeyName,				// See comments below
 						csMapProjGeoCSys				// See comments below
 				   };

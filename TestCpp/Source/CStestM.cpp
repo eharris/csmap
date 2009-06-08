@@ -130,7 +130,7 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			}
 			else
 			{
-				legacy = (CS_stricmp (csMapElDef->group,"LEGACY") == 0);
+				legacy = (CS_stricmp (csMapElDef->group,"LEGAC") == 0);
 				if (deprecated && !legacy)
 				{
 					deprCnt += 1;

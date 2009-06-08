@@ -95,7 +95,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 9100,6169,0,0,0,0,0,,AmSamoa62,AmSamoa62,Samoa1962,American Samoa 1962,D_American_Samoa_1962,American Samoa 1962 (EPSG ID 6169),,,,,,,,,,,,0,0,0
 9200,6170,0,0,0,0,0,,GRSSA,GRSSA,GRSSA,Sistema de Referencia Geocentrico para America del Sur 1995,D_SIRGAS,Sistema de Referencia Geocentrico para America del Sur (EPSG ID 6170),,,Sistema de Referencia Geocentrico para America del Sur,,,,,,,,,0,0,0
 9300,6171,0,0,0,0,0,,RGF93,RGF93,RGF93,Reseau Geodesique Francais 1993,D_RGF_1993,Reseau Geodesique Francais 1993 (EPSG ID 6171),,,Reseau Geodesique Francais 1993,,,,,,,,,0,0,0
-9400,6172,0,0,0,0,0,,PosGAr,PosGAr,PosGAr98,Posiciones Geodesicas Argentinas,D_POSGAR,Posiciones Geodesicas Argentinas (EPSG ID 6172),,,Posiciones Geodesicas Argentinas,,,,,,,,,0,0,0
+9400,6172,0,0,0,0,0,,PosGAr,PosGAr,PosGAr-MOD,Posiciones Geodesicas Argentinas,D_POSGAR,Posiciones Geodesicas Argentinas (EPSG ID 6172),,,Posiciones Geodesicas Argentinas,,,,,,,,,0,0,0
 9500,6173,0,0,0,0,0,,IRENET95,Ireland95,IRENET95,IRENET95,D_IRENET95,IRENET95 (EPSG ID 6173),,,IRENET95,,,,,,,,,0,0,0
 9600,6174,0,0,0,0,0,,SierraLeone24,SierraLeone24,,Sierra Leone Colony 1924,D_Sierra_Leone_1924,Sierra Leone Colony 1924 (EPSG ID 6174),,,Sierra Leone Colony 1924,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 9700,6175,0,0,0,0,0,,SierraLeone68,SierraLeone68,SierraLeone1968,Sierra Leone 1968,D_Sierra_Leone_1968,Sierra Leone 1968 (EPSG ID 6175),,,Sierra Leone 1968,,,,,,,,,0,0,0
@@ -258,8 +258,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 ",,0,0,0
 25100,6610,0,0,0,0,0,,Xian80,Xian80,Xian80,Xian 1980,D_Xian_1980,Xian 1980 (EPSG ID 6610),,,Xian 1980,,,,,,,,,0,0,0
 25200,6611,0,0,0,0,0,,HongKong80,HongKong80,HongKong80,Hong Kong 1980,D_Hong_Kong_1980,Hong Kong 1980 (EPSG ID 6611),,,Hong Kong 1980,,,,,,,,,0,0,0
-25300,6612,0,0,0,0,0,,JGD2000,JGD2000,JGD2000-MOD,Japanese Geodetic Datum 2000,D_JGD_2000,Japanese Geodetic Datum 2000 (EPSG ID 6612),,,Japanese Geodetic Datum 2000,,,,,,,,,0,0,0
-25400,6613,0,0,0,0,0,,Segara,GunungSegara,Samboja_1,Gunung Segara,D_Gunung_Segara,Gunung Segara (EPSG ID 6613),,,Gunung Segara,,,,,,,,,0,0,0
+25300,6612,0,0,0,0,0,,JGD2000,JGD2000,JGD2000,Japanese Geodetic Datum 2000,D_JGD_2000,Japanese Geodetic Datum 2000 (EPSG ID 6612),,,Japanese Geodetic Datum 2000,,,,,,,,,0,0,0
+25400,6613,0,0,0,0,0,,Segara,GunungSegara,GunungSegara,Gunung Segara,D_Gunung_Segara,Gunung Segara (EPSG ID 6613),,,Gunung Segara,,,,,,,,,0,0,0
 25500,6614,0,0,0,0,0,,QatarNtl95,QatarNtl95,QatarNtl95,Qatar National Datum 1995,D_QND_1995,Qatar National Datum 1995 (EPSG ID 6614),,,Qatar National Datum 1995,,,,,,,,,0,0,0
 25600,6615,0,0,0,0,0,,MADEIRA,PortoSanto1936,MAD_SE,Porto Santo 1936,D_Porto_Santo_1936,Porto Santo 1936 (EPSG ID 6615),,,Porto Santo,,,,Southeast Base,,,,,0,0,0
 25700,6616,0,0,0,0,0,,SelvagemGrande,SelvagemGrande,Selvagem,Selvagem Grande,D_Selvagem_Grande_1938,Selvagem Grande (EPSG ID 6616),,,Selvagem Grande,,,,,,,,,0,0,0
@@ -276,7 +276,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 26800,6627,0,0,0,0,0,,Reunion92,Reunion92,Reunion92,Reseau Geodesique de la Reunion 1992,D_RGR_1992,Reseau Geodesique de la Reunion 1992 (EPSG ID 6627),,,,,,,,,,,,0,0,0
 26900,6628,0,0,0,0,0,,Tahiti,Tahiti,Tahiti52,Tahiti 52,D_Tahiti,Tahiti (EPSG ID 6628),,,,,,,,,,,,0,0,0
 27000,6629,0,0,0,0,0,,Tahaa,Tahaa,Tahaa54,Tahaa 54,D_Tahaa,Tahaa (EPSG ID 6629),,,,,,,,,,,,0,0,0
-27100,6630,0,0,0,0,0,,IGN72NukuHiva|IGN72/NH,IGN72NukuHiva,IGN72NukuHiva|IGN72/NH,IGN72 Nuku Hiva,D_IGN72_Nuku_Hiva,IGN72 Nuku Hiva (EPSG ID 6630),,,,,,,,,,,,0,65536,0
+27100,6630,0,0,0,0,0,,IGN72NukuHiva|IGN72/NH,IGN72NukuHiva,IGN72/NukuHiva|IGN72/NH,IGN72 Nuku Hiva,D_IGN72_Nuku_Hiva,IGN72 Nuku Hiva (EPSG ID 6630),,,,,,,,,,,,0,65536,0
 27200,6631,0,0,0,0,0,,K01949,K0/49,K0/1949,K0 1949,D_K0_1949,K0 1949 (EPSG ID 6631),,,,,,,,,,,,0,0,0
 27300,6632,0,0,0,0,0,,Combani50,Combani50,Combani1950,Combani 1950,D_Combani_1950,Combani 1950 (EPSG ID 6632),,,,,,,,,,,,0,0,0
 27400,6633,0,0,0,0,0,,IGN56Lifou,IGN56Lifou,IGN56/Lifou,IGN56 Lifou,D_IGN56_Lifou,IGN56 Lifou (EPSG ID 6633),,,,,,,,,,,,0,0,0
@@ -326,7 +326,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 31700,6678,0,0,0,0,0,,Lao1997,Lao1997,Lao97,Lao National Datum 1997,D_Lao_National_Datum_1997,,,,,,,,,,,,,0,65536,0
 31800,6679,0,0,0,0,0,,Jouik1961,Jouik1961,Jouik61,Jouik 1961,D_Jouik_1961,,,,,,,,,,,,,0,65536,0
 31900,6680,0,0,0,0,0,,Nouakchott1965,Nouakchott1965,Nouakchott65,Nouakchott 1965,D_Nouakchott_1965,,,,,,,,,,,,,0,65536,0
-32000,6681,0,0,0,0,0,,Mauritania1999,Mauritania1999,Mauritania1999,Mauritania 1999,D_Mauritania_1999,,,,,,,,,,,,Name duplication cuased by EPSG deprecation.  DeprecationID: 1038 ,0,0,0
+32000,6702,0,0,0,0,0,,Mauritania1999,Mauritania1999,Mauritania1999,Mauritania 1999,D_Mauritania_1999,,,,,,,,,,,,Name duplication cuased by EPSG deprecation.  DeprecationID: 1038 ,0,0,0
 32100,6682,0,0,0,0,0,,Gulshan,Gulshan-303,Gulshan303,Gulshan 303,D_Gulshan_303,,,,,,,,,,,,,0,65536,0
 32200,6683,0,0,0,0,0,,PRS92,PRS92,PRS92/02,Philippine Reference System 1992,,,,,,,,,,,,"Coordinate frame transformation converted to 7PARAMATER by conversion program.
 ",,0,65536,0

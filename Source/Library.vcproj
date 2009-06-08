@@ -494,6 +494,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CS_defCmpEx.c"
+				>
+			</File>
+			<File
 				RelativePath=".\CS_dhdn.c"
 				>
 			</File>
