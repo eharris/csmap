@@ -724,7 +724,7 @@ public:
 	TcsOpVariants& operator= (const TcsOpVariants& rhs);
 	//=========================================================================
 	// Public Named Member Functions
-	unsigned GetVariantCount (void) const {return Variants.size (); }
+	unsigned GetVariantCount (void) const {return static_cast<unsigned>(Variants.size ()); }
 	TcsEpsgCode GetSourceCRS (void) const {return SourceCrs; }
 	TcsEpsgCode GetTargetCRS (void) const {return TargetCrs; }
 	bool GetVariant (TcsOpVariant& variant,unsigned index) const;

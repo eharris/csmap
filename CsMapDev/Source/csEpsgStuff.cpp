@@ -3071,6 +3071,13 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 				// Krovak Oblique Conic
 				epsgPrmCode = 8819UL;
 			}
+			else if (mthEpsgCode == 9812UL ||
+					 mthEpsgCode == 9813UL ||
+					 mthEpsgCode == 9815UL)
+			{
+				// Hotine Oblique Mercator, Laborde Oblique Mercator, Oblkique Mercator
+				epsgPrmCode = 8815UL;
+			}
 			ok &= GetParameterValue (coordsys.scl_red,copEpsgCode,mthEpsgCode,epsgPrmCode,9201UL);
 		}
 		if ((prjFlags & cs_PRJFLG_ORGFLS) == 0UL)
@@ -3586,6 +3593,7 @@ bool TcsEpsgDataSetV6::FieldToReal (double& result,const TcsEpsgCode& trgUomCode
 	double realValue (0.0);
 	double srcFactor;
 	double trgFactor;
+	double degFactor;
 	
 	std::wstring tmpString;
 
@@ -3599,7 +3607,8 @@ bool TcsEpsgDataSetV6::FieldToReal (double& result,const TcsEpsgCode& trgUomCode
 		if (srcType == epsgUomTypAngular)
 		{
 			ok = FieldToDegrees (realValue,fldData,srcUomCode);
-			srcType = GetUomFactor (srcFactor,9102UL);
+			srcType = GetUomFactor (degFactor,9102UL);
+			realValue *= (degFactor / srcFactor);
 		}
 		else
 		{

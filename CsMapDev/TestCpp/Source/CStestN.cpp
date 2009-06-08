@@ -72,6 +72,8 @@ extern "C"
 	#endif
 }
 
+extern "C" double cs_One;
+
 int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 {
 	bool ok;
@@ -94,7 +96,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 	TcsEpsgCode epsgCode;
 	TcsEpsgCode oprtnCode;
 
-	double qFactor;
+	double qValue;
 
 	struct cs_Eldef_ epsgElDef;
 	struct cs_Eldef_ *csMapElDef;
@@ -165,12 +167,12 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		ok = (csMapElDef != 0);
 		if (ok)
 		{
-			// Compare the two ellipsoids.  The qFactor is essentially the
+			// Compare the two ellipsoids.  The qValue is essentially the
 			// difference in meters of the meridional arc from the equator
-			// to the 60th parallel on the two ellipsoids.  the tolerance of
-			// .6 millimeters is very strict.
-			int st = CS_elDefCmpEx (csMapElDef,&epsgElDef,message,sizeof (message),&qFactor);
-			if (qFactor < 6.0E-04)
+			// to the 60th parallel on the two ellipsoids.  The tolerance of
+			// 5 millimeters is fairly liberal.
+			int st = CS_elDefCmpEx (&qValue,csMapElDef,&epsgElDef,message,sizeof (message));
+			if (qValue < 5.0E-03)
 			{
 				okCnt += 1;
 			}
@@ -178,7 +180,8 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			{
 				printf ("CS-MAP ellipsoid '%s' differs from EPSG '%s' [%lu]:\n\t%s\n",csMapKeyName,
 																					  epsgKeyName,
-																					  static_cast<ulong32_t>(epsgCode),message);
+																					  static_cast<ulong32_t>(epsgCode),
+																					  message);
 				diffCnt += 1;
 			}
 			CS_free (csMapElDef);
@@ -312,7 +315,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 					lclOk = (csMapDtDef != 0);
 					if (lclOk)
 					{
-						double bestQFactor = 9.0E+99;
+						double bestQValue = 9.0E+99;
 						unsigned bestVariant = 1;		// in case all this all goes to pot
 						
 						// For each variant, we extract from EPSG a datum
@@ -338,12 +341,12 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 								lclOk = true;
 								continue;
 							}
-							int st = CS_dtDefCmpEx (csMapDtDef,&epsgDtDef,0,0,&qFactor);
-							if (qFactor < bestQFactor)
+							int st = CS_dtDefCmpEx (&qValue,csMapDtDef,&epsgDtDef,0,0);
+							if (qValue < bestQValue)
 							{
 								// This one is better than the last one.
 								bestVariant = lclVariant;
-								bestQFactor = qFactor;
+								bestQValue = qValue;
 								oprtnCode = variantPtr->GetOpCodeForCsMap ();
 							}
 						}
@@ -407,8 +410,8 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 
 			// Perhaps we should use the CS_dtDefCMpEx() function here.  We'll
 			// see how this all works out and then decide.
-			int st = CS_dtDefCmp (csMapDtDef,&epsgDtDef,message,sizeof (message));
-			if (st == 0)
+			int st = CS_dtDefCmpEx (&qValue,csMapDtDef,&epsgDtDef,message,sizeof (message));
+			if (qValue <= 0.5)
 			{
 				okCnt += 1;
 			}
@@ -520,8 +523,8 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				// With these adjustments, we're ready to compare the EPSG
 				// version with the CS-MAP version and get some meaningful
 				// results.
-				int st = CS_csDefCmpEx (csMapCsDef,&epsgCsDef,message,sizeof (message),&qFactor);
-				if (st == 0)
+				int st = CS_csDefCmpEx (&qValue,csMapCsDef,&epsgCsDef,message,sizeof (message));
+				if (qValue < 0.5)
 				{
 					okCnt += 1;
 				}

@@ -25,7 +25,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 2400,4027,4027,4027,0,0,0,,,,,Unknown datum based upon the Plessis 1817 ellipsoid,GCS_Plessis_1817,Unknown datum based upon the Plessis 1817 ellipsoid,,,Unknown datum based upon the Plessis 1817 ellipsoid,,,,,,,,,0,0,0
 2500,4028,4028,4028,0,0,0,,,,,Unknown datum based upon the Struve 1860 ellipsoid,GCS_Struve_1860,Unknown datum based upon the Struve 1860 ellipsoid,,,Unknown datum based upon the Struve 1860 ellipsoid,,,,,,,,,0,0,0
 2600,4029,4029,4029,0,0,0,,,,,Unknown datum based upon the War Office ellipsoid,GCS_War_Office,Unknown datum based upon the War Office ellipsoid,,,Unknown datum based upon the War Office ellipsoid,,,,,,,,,0,0,0
-2700,4030,0,4030,0,0,0,,,,,Unknown datum based upon the WGS 84 ellipsoid,,Unknown datum based upon the WGS 84 ellipsoid,,,Unknown datum based upon the WGS 84 ellipsoid,,,,,,,,,0,0,0
+2700,4030,0,4030,0,0,0,,LL,Unreferenced.LL,LL,Unknown datum based upon the WGS 84 ellipsoid,,Unknown datum based upon the WGS 84 ellipsoid,,,Unknown datum based upon the WGS 84 ellipsoid,,,,,,,,,0,0,0
 2800,4031,4031,4031,0,0,0,,,,,Unknown datum based upon the GEM 10C ellipsoid,GCS_GEM_10C,Unknown datum based upon the GEM 10C ellipsoid,,,Unknown datum based upon the GEM 10C ellipsoid,,,,,,,,,0,0,0
 2900,4032,4032,4032,0,0,0,,,,,Unknown datum based upon the OSU86F ellipsoid,GCS_OSU_86F,Unknown datum based upon the OSU86F ellipsoid,,,Unknown datum based upon the OSU86F ellipsoid,,,,,,,,,0,0,0
 3000,4033,4033,4033,0,0,0,,,,,Unknown datum based upon the OSU91A ellipsoid,GCS_OSU_91A,Unknown datum based upon the OSU91A ellipsoid,,,Unknown datum based upon the OSU91A ellipsoid,,,,,,,,,0,0,0
@@ -205,8 +205,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 20400,0,0,0,0,0,8286,,Qatar.LL,,Qatar.LL,,,,,,,,,,Longitude / Latitude (Qatar National),,,,"Ellipsoid on the original definitions, as taken from DMA 8352, is wrong.  Is International 1924, should have been Helmert 1906.  Qatar48.LL is correct.",0,0,0
 20500,4288,4288,4288,0,0,0,,LomaQuintana.LL,LomaQuintana.LL,,Loma Quintana,GCS_Loma_Quintana,Loma Quintana,,,Loma Quintana,,,,,,,,,0,0,0
 20600,4289,4289,4289,0,0,8273,,Amersfoort.LL,Amersfoort.LL,Amersfoort.LL,Amersfoort,GCS_Amersfoort,Amersfoort,,,Amersfoort,,,,Longitude / Latitude (Netherlands),,,,,0,0,0
-20700,4291,4291,4618,0,0,8292,,SAD69.LL,SA1969.LL,SAD1969.LL/01,SAD69,GCS_South_American_1969,SAD69,,,SAD69,,,,Longitude / Latitude (SAD 69),,,,,0,0,0
-20800,0,0,0,0,0,0,,,,SAD69.LL,xSAD69,x_South_American_1969,xSAD69,,,xSAD69,,,,Longitude / Latitude (xSAD 69),,,,,0,0,0
+20700,4291,,,0,0,,,,,SAD69.LL,SAD69|xSAD69,x_South_American_1969,xSAD69,,,xSAD69,,,,Longitude / Latitude (xSAD 69),,,,,0,0,0
 20900,4292,4292,4292,0,0,8295,0,Sapper.LL,,Sapper.LL,Sapper Hill 1943,GCS_Sapper_Hill_1943,Sapper Hill 1943,,,Sapper Hill 1943,,,,Longitude / Latitude (Sapper Hill 1943),,,,,,,
 21000,4293,4293,4293,0,0,8296,,Schwarzk.LL,Schwarzeck.LL,Schwarzk.LL,Schwarzeck,GCS_Schwarzeck,Schwarzeck,,,Schwarzeck,,,,Longitude / Latitude (Schwarzeck),,,,,0,0,0
 21100,4295,4295,4295,0,0,0,,Serindung.LL,Serindung.LL,,Serindung,GCS_Serindung,Serindung,,,Serindung,,,,,,,,,0,0,0
@@ -253,7 +252,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 25200,4614,4614,4614,0,0,0,,QatarNtl95.LL,QatarNtl95.LL,QatarNtl95.LL,QND95,GCS_QND_1995,QND95,,,QND95,,,,,,,,,0,0,0
 25300,4615,4615,4615,0,0,8298,,MADEIRA.LL,PortoSanto.LL,MADEIRA.LL,Porto Santo,GCS_Porto_Santo_1936,Porto Santo,,,Porto Santo,,,,Longitude / Latitude (Southeast Base),,,,,0,0,0
 25400,4616,37250,4616,0,0,0,,SelvagemGrande.LL,SelvagemGrande.LL,Selvagem.LL,Selvagem Grande,GCS_Selvagem_Grande_1938,Selvagem Grande,,,Selvagem Grande,,,,,,,,,0,0,0
-25500,4618,0,0,0,0,8292,,SAD69.LL,SAD69.LL,SAD1969.LL/01,SAD69,,,,,,,,,Longitude / Latitude (SAD 69),,,,,0,0,0
+25500,4618,4291,4618,0,0,8292,,SAD69.LL,SAD69.LL,SAD1969.LL/01,SAD69,GCS_South_American_1969,SAD69,,,SAD69,,,,Longitude / Latitude (SAD 69),,,,,0,0,0
 25600,4619,4619,4619,0,0,0,,SWEREF99.LL,SWEREF99.LL,SWEREF99.LL,SWEREF99,GCS_SWEREF99,SWEREF99,,,,,,,,,,,,0,0,0
 25700,4620,37211,4620,0,0,0,,Point58.LL,Point58.LL,Point1958.LL,Point 58,GCS_Point_58,Point 58,,,,,,,,,,,,0,0,0
 25800,4621,4621,4621,0,0,0,,FortMarigot.LL,FortMarigot.LL,FortMarigot_1.LL,Fort Marigot,GCS_Fort_Marigot,Fort Marigot,,,,,,,,,,,,0,0,0
@@ -304,7 +303,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 30300,4678,4678,0,0,0,0,,Lao1997.LL,Lao1997.LL,Lao97.LL,Lao 1997,GCS_Lao_1997,,,,,,,,,,,,,0,0,0
 30400,4679,4679,0,0,0,0,,Jouik1961.LL,Jouik1961.LL,Jouik61.LL,Jouik 1961,GCS_Jouik_1961,,,,,,,,,,,,,0,0,0
 30500,4680,4680,0,0,0,0,,Nouakchott1965.LL,Nouakchott1965.LL,Nouakchott65.LL,Nouakchott 1965,GCS_Nouakchott_1965,,,,,,,,,,,,,0,0,0
-30600,4681,4681,0,0,0,0,,Mauritania1999.LL,Mauritania1999.LL,Mauritania1999.LL,Mauritania 1999,GCS_Mauritania_1999,,,,,,,,,,,,,0,0,0
 30700,4682,4682,0,0,0,0,,Gulshan-303.LL,Gulshan-303.LL,Gulshan303.LL,Gulshan 303,GCS_Gulshan_303,,,,,,,,,,,,,0,0,0
 30800,4683,0,0,0,0,0,,Philippine1992.LL,Philippine1992.LL,Philippine1992.LL,PRS92,,,,,,,,,,,,,,0,0,0
 30900,4684,37232,0,0,0,0,,Gan1970.LL,Gan70.LL,Gan70.LL,Gan 1970,GCS_Gan_1970,,,,,,,,,,,,,0,0,0
@@ -325,7 +323,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 32400,4699,0,0,0,0,0,,LePouce1934.LL,LePouce1934.LL,LePouce34.LL,Le Pouce 1934,,,,,,,,,,,,,,0,0,0
 32500,4700,0,0,0,0,0,,IGNAstro1960.LL,IGNAstro1960.LL,,IGN Astro 1960,,,,,,,,,,,,,,0,0,0
 32600,4701,0,0,0,0,0,,CongoBelge1955.LL,CongoBelge1955.LL,CongoBelge55.LL,IGCB 1955,,,,,,,,,,,,,,0,0,0
-32700,4702,0,0,0,0,0,,Mauritania1999.LL,Mauritania1999.LL,Mauritania1999.LL,Mauritania 1999,,,,,,,,,,,,,,0,0,0
+32700,4702,4702,0,0,0,0,,Mauritania1999.LL,Mauritania1999.LL,Mauritania1999.LL,Mauritania 1999,GCS_Mauritania_1999,,,,,,,,,,,,,0,0,0
 32800,4703,0,0,0,0,0,,SaoTome1951.LL,SaoTome1951.LL,,Mhast 1951,,,,,,,,,,,,,,0,0,0
 32900,4704,0,0,0,0,0,,Mhast/OnShore.LL,Mhast/OnShore.LL,,Mhast (onshore),,,,,,,,,,,,,,0,0,0
 33000,4705,0,0,0,0,0,,Mhast/OffShore.LL,Mhast/OffShore.LL,,Mhast (offshore),,,,,,,,,,,,,,0,0,0
