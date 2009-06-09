@@ -1244,6 +1244,41 @@ int EXP_LVL3  CS_prjprm (struct cs_Prjprm_ *result,unsigned short prj_code,int p
 	}
 	return (1);
 }
+double EXP_LVL3  CS_prmValue (Const struct cs_Csdef_ *csDefPtr,int parm_nbr)
+{
+	extern double cs_Mhuge;
+
+	double rtnValue;
+
+	switch (parm_nbr) {
+	case  1:  rtnValue = csDefPtr->prj_prm1;    break;
+	case  2:  rtnValue = csDefPtr->prj_prm2;    break;
+	case  3:  rtnValue = csDefPtr->prj_prm3;    break;
+	case  4:  rtnValue = csDefPtr->prj_prm4;    break;
+	case  5:  rtnValue = csDefPtr->prj_prm5;    break;
+	case  6:  rtnValue = csDefPtr->prj_prm6;    break;
+	case  7:  rtnValue = csDefPtr->prj_prm7;    break;
+	case  8:  rtnValue = csDefPtr->prj_prm8;    break;
+	case  9:  rtnValue = csDefPtr->prj_prm9;    break;
+	case 10:  rtnValue = csDefPtr->prj_prm10;   break;
+	case 11:  rtnValue = csDefPtr->prj_prm11;   break;
+	case 12:  rtnValue = csDefPtr->prj_prm12;   break;
+	case 13:  rtnValue = csDefPtr->prj_prm13;   break;
+	case 14:  rtnValue = csDefPtr->prj_prm14;   break;
+	case 15:  rtnValue = csDefPtr->prj_prm15;   break;
+	case 16:  rtnValue = csDefPtr->prj_prm16;   break;
+	case 17:  rtnValue = csDefPtr->prj_prm17;   break;
+	case 18:  rtnValue = csDefPtr->prj_prm18;   break;
+	case 19:  rtnValue = csDefPtr->prj_prm19;   break;
+	case 20:  rtnValue = csDefPtr->prj_prm20;   break;
+	case 21:  rtnValue = csDefPtr->prj_prm21;   break;
+	case 22:  rtnValue = csDefPtr->prj_prm22;   break;
+	case 23:  rtnValue = csDefPtr->prj_prm23;   break;
+	case 24:  rtnValue = csDefPtr->prj_prm24;   break;
+	default:  rtnValue = cs_Mhuge;              break;
+	}
+	return rtnValue;
+}
 
 /**********************************************************************
 **	CS_fillIn (csPtr);
