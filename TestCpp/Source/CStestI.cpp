@@ -122,6 +122,10 @@ int CStestI (bool verbose,long32_t duration)
 		   weird stuff. */
 		if (!CS_stricmp (tp->group,"TEST")) continue;
 
+		/* We skip the LEGACY group, as the definition is likely to contain
+		   bogus stuff which can generate spurious errors. */
+		if (!CS_stricmp (tp->group,"LEGACY")) continue;
+
 		/* Loop through the definitions in this group. */
 		CS_csgrp (tp->group,&grp_list);
 		for (gp = grp_list;gp != NULL;gp = gp->next)
