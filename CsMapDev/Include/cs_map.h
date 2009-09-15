@@ -1295,7 +1295,13 @@ typedef long32_t cs_magic_t;
 #define cs_PRJCOD_SINUS    17
 #define cs_PRJCOD_ORTHO    18
 #define cs_PRJCOD_GNOMC    19
-#define cs_PRJCOD_EDCYL    20
+#define cs_PRJCOD_EDCYL    20       /* Deprecated, preserved for LEGACY use only.
+                                       Use cs_PRJCOD_EDCYLE which supports both the
+                                       spherical form and the ellipsoidal form of
+                                       this projection.  The original form is retained
+                                       only to maintain consistency of definitions
+                                       which referenced this system to a datum and
+                                       thus to an ellipsoid. */
 #define cs_PRJCOD_VDGRN    21
 #define cs_PRJCOD_CSINI    22
 #define cs_PRJCOD_ROBIN    23
@@ -1377,9 +1383,12 @@ typedef long32_t cs_magic_t;
 									   expansion used in Denmark.  Polynominals are of the
 									   1999 vintage, except for Bornholm, which are post
 									   1999. */
-#define cs_PRJCOD_PCARREE  67		/* Plate Carree, standard form */
-#define cs_PRJCOD_MRCATPV  68		/* Psuedo Mercator, Popular Visualization. */
-
+#define cs_PRJCOD_EDCYLE   67		/* Equidistant Cylindrical, ellipsoid form supported.
+                                       This variation replaces the original variation which
+                                       only supported the psherical form of this projection. */
+#define cs_PRJCOD_PCARREE  68		/* Plate Carree, standard form.  This is _NOT_ the same
+                                       as EPSG 9825 - Pseudo Plate Carree. */
+#define cs_PRJCOD_MRCATPV  69		/* Psuedo Mercator, Popular Visualization. */
 
 #define cs_PRJCOD_HOM1UV   ((cs_PRJCOD_OBLQM << 8) + 1)
 #define cs_PRJCOD_HOM1XY   ((cs_PRJCOD_OBLQM << 8) + 2)
@@ -3503,6 +3512,13 @@ struct cs_Mrcat_
 	short quad;				/* Non-zero specifies a cartesian system
 							   other than the standard right handed
 							   system. */
+	unsigned short prj_code;
+							/* Implementation of the Popular
+							   Visualisation Pseudo Mercator
+							   requires something to tell the
+							   calculation functions which
+							   variation is being used (specifically
+							   the scale functions) */
 };
 
 /*
@@ -4400,9 +4416,25 @@ struct cs_Edcyl_
 							   units.  Used to trap zero coordinate
 							   values. */
 	double e_rad;			/* Equatorial radius of the ellipsoid. */
+	double ecent;			/* The ecentricity of the datum in
+							   use. */
+	double e_sq;			/* The square of the ecentricity of the
+							   datum in use. */
+
+	double nu0;				/* radius of curvatire of the first vertical
+							   section of the ellipsoid at the reference
+							   latitude. */
 	double cos_ref_lat;		/* Cosine of the reference latitude. */
 	double Rcos_ref_lat;	/* Cosine of the reference latitude times
 							   the scaled equatorial radius. */
+	double M0;				/* Meridonal distance from the equator
+							   to the origin latitude. */
+	struct cs_MmcofF_ mmcofF;
+							/* The coefficients necessary to compute
+							   meridonal distance from the equator. */
+	struct cs_MmcofI_ mmcofI;
+							/* Coeffieients necessary to compute the
+							   foot print latitude. */
 	short quad;				/* Non-zero specifies a cartesian system
 							   other than the standard right handed
 							   system. */
@@ -7803,6 +7835,7 @@ int			EXP_LVL9	CSmolwdX (Const struct cs_Molwd_ *molwd,int cnt,Const double pnts
 
 double		EXP_LVL9	CSmrcatC (Const struct cs_Mrcat_ *mrcat,Const double ll [2]);
 int			EXP_LVL9	CSmrcatF (Const struct cs_Mrcat_ *mrcat,double xy [2],Const double ll [2]);
+double		EXP_LVL9	CSmrcatH (Const struct cs_Mrcat_ *mrcat,Const double ll [2]);
 int			EXP_LVL9	CSmrcatI (Const struct cs_Mrcat_ *mrcat,double ll [2],Const double xy [2]);
 double		EXP_LVL9	CSmrcatK (Const struct cs_Mrcat_ *mrcat,Const double ll [2]);
 int			EXP_LVL9	CSmrcatL (Const struct cs_Mrcat_ *mrcat,int cnt,Const double pnts [][3]);

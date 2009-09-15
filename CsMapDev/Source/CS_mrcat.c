@@ -53,6 +53,8 @@ int EXP_LVL9 CSmrcatQ (	Const struct cs_Csdef_ *cs_def,unsigned short prj_code,i
 {
 	extern double cs_MinLng;		/* -180.0 */
 	extern double cs_MaxLng;		/* +180.0 */
+	extern double cs_SclRedMin;		/*    0.5 */
+	extern double cs_SclRedMax;		/*    1.5 */
 
 	int err_cnt;
 
@@ -68,14 +70,23 @@ int EXP_LVL9 CSmrcatQ (	Const struct cs_Csdef_ *cs_def,unsigned short prj_code,i
 		if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_ORGLNG;
 	}
 
-	/* We use the cosine of the standard parallel quite a lot.  It
-	   should not be zero.  The value 80 is an arbitrary value which
-	   should several times larger than any normal value.  Theoreticaly,
-	   this value could be 89. */
-   
-	if (cs_def->prj_prm2 <= -80.0 || cs_def->prj_prm2 >= 80.0)
+	if (prj_code == cs_PRJCOD_MRCAT)
 	{
-		if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_STDLAT;
+		/* We use the cosine of the standard parallel quite a lot.  It
+		   should not be zero.  The value 80 is an arbitrary value which
+		   should several times larger than any normal value.  Theoreticaly,
+		   this value could be 89. */
+		if (cs_def->prj_prm2 <= -80.0 || cs_def->prj_prm2 >= 80.0)
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_STDLAT;
+		}
+	}
+	else if (prj_code == cs_PRJCOD_MRCATK)
+	{
+		if (cs_def->scl_red < cs_SclRedMin || cs_def->scl_red > cs_SclRedMax)
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_SCLRED;
+		}
 	}
 
 	/* That's it for Mercator. */
@@ -122,6 +133,7 @@ void EXP_LVL9 CSmrcatS (struct cs_Csprm_ *csprm)
 
 	mrcat = &csprm->proj_prms.mrcat;
 
+	mrcat->prj_code = csprm->prj_code;
 	mrcat->cent_lng = csprm->csdef.prj_prm1 * cs_Degree;
 	mrcat->x_off = csprm->csdef.x_off;
 	mrcat->y_off = csprm->csdef.y_off;
@@ -149,7 +161,22 @@ void EXP_LVL9 CSmrcatS (struct cs_Csprm_ *csprm)
 
 	case cs_PRJCOD_MRCATK:
 		/* Here for the scale reduction case. */
+		mrcat->std_lat = cs_Zero;
 		mrcat->cos_sp = csprm->csdef.scl_red;
+		break;
+
+	case cs_PRJCOD_MRCATPV:
+		/* Here for the Google Earth (Popular Visualisation Pseudo Mercator).
+		   We need to use the spherical formulas for the projection
+		   calculations, even if the definition is referenced to an ellipsoid.
+		   We can't just set mrcat->ecent to zero, as the scale calculations
+		   still need the eccentricity.  This sounds very strange, I know.
+		   But the definition is still referenced to an ellipsoid, so the
+		   scale calculations still include the shape of the spheoid in use.
+		   It's the projection calculations that are wierd, essentially a
+		   major screw up by Google!!! */
+		mrcat->std_lat = cs_Zero;		/* reference parallel and scale reduction not used */
+		mrcat->cos_sp = cs_One;			/* reference parallel and scale reduction not used */
 		break;
 	}
 
@@ -159,7 +186,7 @@ void EXP_LVL9 CSmrcatS (struct cs_Csprm_ *csprm)
 
 	/* We need to do a little extra for the ellipsoidal case. */
 
-	if (mrcat->ecent != 0.0)
+	if (mrcat->ecent != 0.0 && mrcat->prj_code != cs_PRJCOD_MRCATPV)
 	{
 		/* Set up the latitude power series coefficients. */
 		CSchiIsu (&mrcat->chicofI,mrcat->e_sq);
@@ -251,7 +278,7 @@ void EXP_LVL9 CSmrcatS (struct cs_Csprm_ *csprm)
 	csprm->cs2ll    = (cs_CS2LL_CAST)CSmrcatI;
 	csprm->cs_scale = (cs_SCALE_CAST)CSmrcatK;
 	csprm->cs_sclk  = (cs_SCALK_CAST)CSmrcatK;
-	csprm->cs_sclh  = (cs_SCALH_CAST)CSmrcatK;
+	csprm->cs_sclh  = (cs_SCALH_CAST)CSmrcatH;
 	csprm->cs_cnvrg = (cs_CNVRG_CAST)CSmrcatC;
 	csprm->llchk    = (cs_LLCHK_CAST)CSmrcatL;
 	csprm->xychk    = (cs_XYCHK_CAST)CSmrcatX;
@@ -340,7 +367,7 @@ int EXP_LVL9 CSmrcatF (Const struct cs_Mrcat_ *mrcat,double xy [2],Const double 
 	sin_lat = sin (lat);
 	tmp1 = (cs_One + sin_lat) / (cs_One - sin_lat);
 
-	if (mrcat->ecent == 0.0)
+	if (mrcat->ecent == 0.0 || mrcat->prj_code == cs_PRJCOD_MRCATPV)
 	{
 		/* Here for a sphere. */
 		
@@ -445,7 +472,7 @@ int EXP_LVL9 CSmrcatI (Const struct cs_Mrcat_ *mrcat,double ll [2],Const double 
 
 	/* Finish off the latitude as appropriate. */
 
-	if (mrcat->ecent == 0.0)
+	if (mrcat->ecent == 0.0 || mrcat->prj_code == cs_PRJCOD_MRCATPV)
 	{
 		/* Here for a sphere. */
 
@@ -524,6 +551,7 @@ double EXP_LVL9 CSmrcatK (Const struct cs_Mrcat_ *mrcat,Const double ll [2])
 
 	if (fabs (lat) > cs_NPTest)
 	{
+		/* Note this makes the divide by cosine (lat) below safe. */
 		kk = cs_SclInf;
 	}
 	else
@@ -540,7 +568,8 @@ double EXP_LVL9 CSmrcatK (Const struct cs_Mrcat_ *mrcat,Const double ll [2])
 		}
 		else
 		{
-			/* An ellipsoid. */
+			/* An ellipsoid.  This code is also valid for the Popular
+			   Visualization Pseudo Meractor (i.e. cos_sp == 1.0). */
 
 			sin_lat = sin (lat);
 			tmp1 = cs_One - (mrcat->e_sq * sin_lat * sin_lat);
@@ -549,6 +578,68 @@ double EXP_LVL9 CSmrcatK (Const struct cs_Mrcat_ *mrcat,Const double ll [2])
 		if (kk > cs_SclInf) kk = cs_SclInf;
 	}
 	return (kk);
+}
+
+/**********************************************************************
+**	kk = CSmrcatH (mrcat,ll);
+**
+**	struct cs_Mrcat_ *mrcat;	structure containing all parameters necessary
+**								for the transformation.
+**	double ll [2];				location of the point to be computed is given
+**								here; longitude ([0]) and latitude ([1]) in
+**			degrees.
+**	double hh;				the true map scale factor at the specified point.
+**								Should be compared with the mrcat->k.
+**********************************************************************/
+
+double EXP_LVL9 CSmrcatH (Const struct cs_Mrcat_ *mrcat,Const double ll [2])
+{
+	extern double cs_Degree;			/* 1.0 / 57.29577... */
+	extern double cs_One;				/* 1.0 */
+	extern double cs_SclInf;			/* 9.9E+04, the value we
+										   return for infinite
+										   scale. */
+	extern double cs_NPTest;			/* .001 arc second short
+										   of the north pole in
+										   radians. */
+
+	double hh;
+	double lat;
+
+	double cos_lat;
+	double sin_lat;
+	double rho;				/* radius of curvature in the merional section, sans the semi-major radius */
+	double tmp1;
+
+	if (mrcat->prj_code == cs_PRJCOD_MRCATPV)
+	{
+		lat = ll [LAT] * cs_Degree;
+		if (fabs (lat) > cs_NPTest)
+		{
+			/* This also insures that cosine (lat) will never be zero below. */
+			hh = cs_SclInf;
+		}
+		else
+		{
+			/* The Popular Visualisation Pseudo Mercator is not conformal. */
+			sin_lat = sin (lat);
+			tmp1 = cs_One - (mrcat->e_sq * sin_lat * sin_lat);
+			rho = (cs_One - mrcat->e_sq) / (tmp1 * sqrt (tmp1));
+			hh = cs_One / (rho * cos (lat));
+			if (hh > cs_SclInf)
+			{
+				/* Very close to either pole. */
+				hh = cs_SclInf;
+			}
+		}
+	}
+	else
+	{
+		/* All variations of the Mercator are conformal, except the Popular
+		   Visualisation Pseudo Mercator; so we just use the 'K' calculation. */
+		hh = CSmrcatK (mrcat,ll);
+	}
+	return (hh);
 }
 
 /**********************************************************************

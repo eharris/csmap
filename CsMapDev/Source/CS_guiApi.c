@@ -1356,6 +1356,7 @@ void EXP_LVL3 CS_fillIn (struct cs_Csdef_ *csPtr)
 		/* This is a historical artifact; see HOM1UV et. al. below */ 
 		break;
 	case cs_PRJCOD_MRCAT:
+	case cs_PRJCOD_MRCATPV:
 		csPtr->org_lng = csPtr->prj_prm1;
 		break;
 	case cs_PRJCOD_AZMED:
@@ -1386,6 +1387,7 @@ void EXP_LVL3 CS_fillIn (struct cs_Csdef_ *csPtr)
 	case cs_PRJCOD_GNOMC:
 		break;
 	case cs_PRJCOD_EDCYL:
+	case cs_PRJCOD_EDCYLE:
 		break;
 	case cs_PRJCOD_VDGRN:
 		break;
@@ -1582,6 +1584,8 @@ void EXP_LVL3 CS_fillIn (struct cs_Csdef_ *csPtr)
 	case cs_PRJCOD_WINKL:
 		break;
 	case cs_PRJCOD_NRTHSRT:
+		break;
+	case cs_PRJCOD_PCARREE:
 		break;
 	}
 	return;

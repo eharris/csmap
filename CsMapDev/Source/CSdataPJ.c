@@ -483,7 +483,22 @@
 							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
 							 cs_PRJFLG_ORGFLS)
 
-/* 
+#define cs_PRJFLGS_EDCYLE	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
+							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG | \
+							 cs_PRJFLG_EDIST  | \
+							 cs_PRJFLG_CYLND)
+
+#define cs_PRJFLGS_PCARREE	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
+							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG | \
+							 cs_PRJFLG_EDIST  | \
+							 cs_PRJFLG_CYLND)
+
+#define cs_PRJFLGS_MRCATPV	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
+							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG  | \
+							 cs_PRJFLG_CYLND  | \
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG)
+							 
+/*
 	Obsolete definitions; preserved for historical reasons only.
 
 #define cs_PRJFLGS_OBLQM	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
@@ -589,8 +604,8 @@ struct cs_Prjtab_ cs_Prjtab [] =
 	    			"Orthographic Projection"},
 	{   "GNOMONIC",CSgnomcS,CSgnomcQ,cs_PRJCOD_GNOMC,cs_PRJFLGS_GNOMC,0UL,
 	    			"Gnomonic Projection"},
-	{      "EDCYL",CSedcylS,CSedcylQ,cs_PRJCOD_EDCYL,cs_PRJFLGS_EDCYL,9823UL,
-	    			"Equidistant Cylindrical Projection"},
+	{      "EDCYL",CSedcylS,CSedcylQ,cs_PRJCOD_EDCYL,cs_PRJFLGS_EDCYL,1029UL,
+	    			"Equidistant Cylindrical Projection (Deprecated: Spherical Only)"},
 	{    "VDGRNTN",CSvdgrnS,CSvdgrnQ,cs_PRJCOD_VDGRN,cs_PRJFLGS_VDGRN,0UL,
 	    			"Van Der Grinten Projection"},
 	{    "CASSINI",CScsiniS,CScsiniQ,cs_PRJCOD_CSINI,cs_PRJFLGS_CSINI,9806UL,
@@ -651,9 +666,16 @@ struct cs_Prjtab_ cs_Prjtab [] =
 	    			"Lambert Conformal Conic (2SP) with Affine Post Process"},
 	{"SYSTM34-01",CSsys34S,CSsys34Q,cs_PRJCOD_SYS34_01,cs_PRJFLGS_SYS34_01,0UL,
 	    			"Danish System 34, UTM + polynomials (2001 vintage)"},
+	{    "EDCYL-E",CSedcylS,CSedcylQ,cs_PRJCOD_EDCYLE,cs_PRJFLGS_EDCYLE,1028UL,
+	    			"Equidistant Cylindrical Projection (Ellipsoidal or Spherical)"},
+	{   "PCARREE",CSedcylS,CSedcylQ,cs_PRJCOD_PCARREE,cs_PRJFLGS_PCARREE,0UL,
+	    			"Plate Carree / Simple Cylindrical"},
+	{  "MRCAT-PV",CSmrcatS,CSmrcatQ,cs_PRJCOD_MRCATPV,cs_PRJFLGS_MRCATPV,1024UL,
+	    			"Popular Visualisation Pseudo Mercator"},
 	{           "",NULL,    NULL,    cs_PRJCOD_END,  0L,  0UL,
 					""}	/* End of table marker. */
 };
+
 /*
 	The following table defines the various parameter types.
 */
@@ -1590,5 +1612,9 @@ struct cs_PrjprmMap_ cs_PrjprmMap [] =
    {cs_PRJCOD_LMBRTAF, { cs_PRMCOD_NSTDPLL, cs_PRMCOD_SSTDPLL,  cs_PRMCOD_AFA0, cs_PRMCOD_AFB0,
 						 cs_PRMCOD_AFA1, cs_PRMCOD_AFA2, cs_PRMCOD_AFB1, cs_PRMCOD_AFB2}},
   {cs_PRJCOD_SYS34_01, { cs_PRMCOD_DENRGN }},
+   { cs_PRJCOD_EDCYLE, { cs_PRMCOD_STDPLL }},
+  { cs_PRJCOD_PCARREE, { 0 }},
+   {cs_PRJCOD_MRCATPV, { cs_PRMCOD_CNTMER}},
+
 	{   cs_PRJCOD_END, { 0 }}
 };

@@ -1766,6 +1766,8 @@ int CSwktToCs (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Eldef_ 
 			break;
 		case cs_PRJCOD_MRCAT:
 			break;
+		case cs_PRJCOD_MRCATPV:
+			break;
 		case cs_PRJCOD_AZMED:
 			break;
 		case cs_PRJCOD_LMTAN:
@@ -1791,6 +1793,7 @@ int CSwktToCs (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Eldef_ 
 		case cs_PRJCOD_GNOMC:
 			break;
 		case cs_PRJCOD_EDCYL:
+		case cs_PRJCOD_EDCYLE:
 			break;
 		case cs_PRJCOD_VDGRN:
 			break;
@@ -1886,6 +1889,8 @@ int CSwktToCs (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Eldef_ 
         case cs_PRJCOD_RSKEWC:
 			break;
         case cs_PRJCOD_RSKEWO:
+			break;
+		case cs_PRJCOD_PCARREE:
 			break;
 		default:
 			break;
