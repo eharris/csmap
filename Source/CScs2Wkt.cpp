@@ -882,6 +882,11 @@ int EXP_LVL3 CScs2WktEx (char *csWktBufr,size_t bufrSize,enum ErcWktFlavor flavo
 			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_PRMCOD_STDPLL,cs_def->prj_prm2,paramFlags);
 			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_PRMCOD_CNTMER,cs_def->prj_prm1,paramFlags);
 			break;
+		case  cs_PRJCOD_MRCATPV:
+			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_FEAST,cs_def->x_off,paramFlags);
+			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_FNORTH,cs_def->y_off,paramFlags);
+			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_PRMCOD_CNTMER,cs_def->prj_prm1,paramFlags);
+			break;
 		case  cs_PRJCOD_AZMED:
 			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_FEAST,cs_def->x_off,paramFlags);
 			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_FNORTH,cs_def->y_off,paramFlags);
@@ -957,6 +962,7 @@ int EXP_LVL3 CScs2WktEx (char *csWktBufr,size_t bufrSize,enum ErcWktFlavor flavo
 			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_ORGLAT,cs_def->org_lat,paramFlags);
 			break;
 		case  cs_PRJCOD_EDCYL:
+		case  cs_PRJCOD_EDCYLE:
 			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_FEAST,cs_def->x_off,paramFlags);
 			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_FNORTH,cs_def->y_off,paramFlags);
 			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_PRMCOD_STDPLL,cs_def->prj_prm1,paramFlags);
@@ -1427,6 +1433,12 @@ int EXP_LVL3 CScs2WktEx (char *csWktBufr,size_t bufrSize,enum ErcWktFlavor flavo
 				CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_PRMCOD_GCPLNG,cs_def->org_lng,paramFlags);
 				CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_PRMCOD_GCPLAT,cs_def->org_lat,paramFlags);
 			}
+			break;
+		case  cs_PRJCOD_PCARREE:
+			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_FEAST,cs_def->x_off,paramFlags);
+			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_FNORTH,cs_def->y_off,paramFlags);
+			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_PRMCOD_CNTMER,cs_def->org_lng,paramFlags);
+			CSAddParamValue (parmWkt,sizeof (parmWkt),nmFlavor,cs_WKTCOD_ORGLAT,cs_def->org_lat,paramFlags);
 			break;
 		}												/*lint !e744 */
 

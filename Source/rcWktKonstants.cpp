@@ -408,7 +408,7 @@ extern "C" struct cs_EpsgOpMthMap_ cs_EpsgOpMthMap [] =
 	{ 19962, 19964,  cs_PRJCOD_TRMER},
 	{ 19965, 19965,  cs_PRJCOD_AZMEA},
 	{ 19966, 19967,  cs_PRJCOD_TRMER},
-	{ 19968, 19968,  cs_PRJCOD_EDCYL},
+	{ 19968, 19968,  cs_PRJCOD_EDCYLE},
 	{ 19969, 19974,  cs_PRJCOD_TRMER},
 	{ 19975, 19975,  cs_PRJCOD_CSINI},
 	{ 19976, 19977,  cs_PRJCOD_LM2SP},

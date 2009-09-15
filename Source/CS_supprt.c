@@ -1100,6 +1100,52 @@ char * EXP_LVL3 CS_stncp (char *dest,Const char *source,int count)
 }
 
 /**********************************************************************
+**	pntr = CS_stncat (dest,from,count);
+**
+**	char *dest;					character array to be appended to.
+**	char *source;				location of the string to be copied.
+**	int count;					size of the destination array.
+**	char *pntr;					returns pointer to the terminating
+**								null character of the result.
+**
+**	Performs the function of strncat with five(5) major differences:
+**
+**	1> The count parameter MUST be the size of the target array.
+**	2> The destination array is NEVER overlfowed.
+**	3> the result in dest is ALWAYS null terminated.
+**	4> returns a pointer to the terminating null character in the
+**	   destination array.
+**	5> returns a null pointer if the arguments are bogus.
+**
+**********************************************************************/
+
+char * EXP_LVL3 CS_stncat (char *dest,Const char *source,int count)
+{
+	int length;
+	int room;
+	char *cPtr;
+
+	cPtr = NULL;
+	if (count > 0)
+	{
+		/* Determine how much room we have in the target character array. */
+		length = (int)strlen (dest);
+		room = count - length - 1;
+		if (room >= 0)
+		{
+			cPtr = dest + length;
+			if (room > 0)
+			{
+				/* Append the appropriate number of characters on to the end of target
+				   array. */
+				cPtr = CS_stncp (cPtr,source,room);
+			}
+		}
+	}
+	return cPtr;
+}
+
+/**********************************************************************
 **	CS_tmpfn (tmp_fnm);
 **
 **	char tmp_fnm [];			location at which the temporary file name

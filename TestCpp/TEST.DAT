@@ -3386,6 +3386,19 @@ NTF.LL,2.058422997,46.658674537,LL-RGF93,2.057710501,46.658619953,1.0E-08,1.0E-0
 #LL-RGF93,00 47 30.68089W,44 55 50.96768N,NTF.Lambert-3-ClrkIGN,353101.587,297011.145,0.002,0.002
 ###############################################################################
 #
+#	Equidistant Cylindrical Test from EPSG Guidance Note 7-2 (EPSG V7.1)
+#
+LL,10.0,55.0,T-EDCYLE,1113194.91,6097230.31,0.015,0.015
+T-EDCYLE,1113194.91,6097230.31,LL,10.0,55.0,0.000001,0.000001
+###############################################################################
+#
+#	Popular Visualisation Pseudo Mercator (Google Maps, Virtual World, etc.)
+#	from EPSG Guidance Note 7-2 (EPSG V7.1), page 34
+#
+LL,100 20 00.000W,24 22 54.433N,WGS84.PseudoMercator,-11169055.58,2800000.00,0.015,0.015
+WGS84.PseudoMercator,-11169055.58,2800000.00,LL,100 20 00.000W,24 22 54.433N,0.000001,0.000001
+###############################################################################
+#
 # That's it.  If you have some more cases documented by reputable sources,
 # we'll be glad to add them.
 #
