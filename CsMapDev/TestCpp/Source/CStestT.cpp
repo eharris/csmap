@@ -63,7 +63,7 @@ int CStestT (bool verbose,long32_t duration)
     int err_cnt = 0;
 
 #ifndef __SKIP__
-    printf ("Running temporary code module.\n");
+    printf ("Running temporary test code module.\n");
 #else
     int st;
     int counter;
