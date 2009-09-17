@@ -441,7 +441,7 @@ double CStstsclh (struct cs_Csprm_ *csprm,double ll [2])
 
 	lat = my_ll [LAT] * cs_Degree;
 
-	my_ll [LAT] -= 0.00005;
+	my_ll [LAT] -= 0.0001;
 	status = CS_ll2cs (csprm,xy1,my_ll);
 	if (status != cs_CNVRT_NRML)
 	{
@@ -461,7 +461,7 @@ double CStstsclh (struct cs_Csprm_ *csprm,double ll [2])
 	e_rad = csprm->datum.e_rad * csprm->csdef.scale;
 	ecent = csprm->datum.ecent;
 
-	if (ecent == 0.0 || (csprm->prj_flags & cs_PRJFLG_ELLIPS) == 0)
+	if (ecent == 0.0 || ((csprm->prj_flags & cs_PRJFLG_ELLIPS) == 0))
 	{
 		/* Here if the reference ellipsoid is actually a
 		   sphere, or the projection is defined for the
@@ -472,7 +472,6 @@ double CStstsclh (struct cs_Csprm_ *csprm,double ll [2])
 	else
 	{
 		/* Need to take the ellipsoid into account. */
-
 		tmp = ecent * sin (lat);
 		tmp = cs_One - tmp * tmp;
 		M = e_rad * (cs_One - (ecent * ecent)) / (tmp * sqrt (tmp));
