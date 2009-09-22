@@ -282,6 +282,7 @@ int EXP_LVL3 CSdt2WktEx (char *datum,size_t datumSize,char *geoTran,size_t geoTr
 	case cs_DTCTYP_TOKYO:
 	case cs_DTCTYP_ED50:
 	case cs_DTCTYP_DHDN:
+	case cs_DTCTYP_CHENYX:
 	default:
 		/* These may be supported in EPSG, but they are not supported in WKT. */
 		parmCount = 0;

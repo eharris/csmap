@@ -110,6 +110,7 @@ static struct cs_DtTypeT_ cs_DtTypeT [] =
 	{         "RGF93",cs_DTCTYP_RGF93},
 	{          "ED50",cs_DTCTYP_ED50},
 	{          "DHDN",cs_DTCTYP_DHDN},
+	{        "CHENYX",cs_DTCTYP_CHENYX},
 	{        "ETRF89",cs_DTCTYP_ETRF89},
 	{    "GEOCENTRIC",cs_DTCTYP_GEOCTR},
 	{    "6PARAMETER",cs_DTCTYP_6PARM},
@@ -679,6 +680,7 @@ int CSdtdefwr (	csFILE *outStrm,
 	case cs_DTCTYP_RGF93:
 	case cs_DTCTYP_ED50:
 	case cs_DTCTYP_DHDN:
+	case cs_DTCTYP_CHENYX:
 	case cs_DTCTYP_ETRF89:
 		break;
 

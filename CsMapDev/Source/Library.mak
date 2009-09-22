@@ -28,6 +28,7 @@ CS_caV1GridFile.c \
 CS_caV2GridFile.c \
 CScs2Wkt.c \
 cscscomp.c \
+CS_ch1903.c \
 CS_csini.c \
 CS_csio.c \
 CS_csprm.c \
@@ -47,6 +48,7 @@ CSdt2Wkt.c \
 CS_dtAgd66ToGda94.c \
 CS_dtAgd84ToGda94.c \
 CS_dtAts77ToNad83.c \
+CS_dtCh1903ToPlus.c \
 CS_dtcalc.c \
 CSdtcomp.c \
 CS_dtEd50ToEtrf89.c \
@@ -160,6 +162,7 @@ CS_caDatum.o \
 CS_category.o \
 CS_caV1GridFile.o \
 CS_caV2GridFile.o \
+CS_ch1903.o \
 CScs2Wkt.o \
 cscscomp.o \
 CS_csini.o \
@@ -183,6 +186,7 @@ CS_dtAgd84ToGda94.o \
 CS_dtAts77ToNad83.o \
 CS_dtcalc.o \
 CSdtcomp.o \
+CS_dtCh1903ToPlus.o \
 CS_dtDhdnToEtrf89.o \
 CS_dtEd50ToEtrf89.o \
 CS_dtio.o \

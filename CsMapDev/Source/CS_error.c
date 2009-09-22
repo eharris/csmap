@@ -692,6 +692,12 @@ struct csErrtab_ csErrtab [] =
 						   "Argument 9 of %s is not a valid memory address/pointer."},
  { cs_SYS34_NOSRC,        0,cs_ERSUP_SOFT,
 						   "KMS System 34/45 polynomial code/coefficients unavailable as Open Source."},
+ {cs_CHENYX_RNG_F, csET_LOC,cs_ERSUP_RNG,
+						   "Encountered data at %s which is outside CH1903<->CH1903+ data file coverage."},
+ {cs_CHENYX_RNG_W, csET_LOC,cs_ERSUP_RNG,
+						   "WARNING: Data in range %s is outside CH1903<->CH1903+ data file coverage; conversion results are unshifted."},
+ {cs_CHENYX_RNG_A, csET_LOC,cs_ERSUP_OPR,
+						   "WARNING: Data in range %s is outside CH1903<->CH1903+ data file coverage; using fallback approximation." },
  {              0,       0,0,""}
 };
 

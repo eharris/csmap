@@ -843,7 +843,7 @@ int EXP_LVL9 CS_7p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct 
 	geoctr = CS_gcInit (srcDatum,trgDatum);
 
 	struct cs_Datum_  *srcDatum; pointer to the definition of the source datum.
-	struct cs_Datum_  *trgDatuu; pointer to the definition of the target datum.
+	struct cs_Datum_  *trgDatum; pointer to the definition of the target datum.
 	struct cs_Geoctr_ *geoctr;	 returns a pointer to an initialized parameter
 								 structure which is the required argument for
 								 CS_gcForwd and CS_gcInvrs.
@@ -2695,7 +2695,28 @@ int EXP_LVL9 CSwgs84ToEtrf89 (double ll_etrf89 [3],Const double ll_wgs84 [3])
 	/* This is always successful (currently). */
 	return 0;
 }
+/******************************************************************************
+	The following are hooks for possible future implementation of a difference
+	between ETRF89 and CHTRS95.
+*/
+int EXP_LVL9 CSchtrs95ToEtrf89 (double ll_etrf89 [3],Const double ll_chtrs95 [3])
+{
+	ll_etrf89 [LNG] = ll_chtrs95 [LNG];
+	ll_etrf89 [LAT] = ll_chtrs95 [LAT];
+	ll_etrf89 [HGT] = ll_chtrs95 [HGT];
 
+	/* This is always successful (currently). */
+	return 0;
+}
+int EXP_LVL9 CSetrf89ToChtrs95 (double ll_chtrs95 [3],Const double ll_etrf89 [3])
+{
+	ll_chtrs95 [LNG] = ll_etrf89 [LNG];
+	ll_chtrs95 [LAT] = ll_etrf89 [LAT];
+	ll_chtrs95 [HGT] = ll_etrf89 [HGT];
+
+	/* This is always successful (currently). */
+	return 0;
+}
 /******************************************************************************
 	parm3 = CS_3pInit (srcDatum,trgDatum);
 
@@ -2973,3 +2994,4 @@ int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct 
 	}
 	return rtnVal;
 }
+

@@ -25,6 +25,7 @@ CS_SRC = \
 	CS_category.c \
 	CS_caV1GridFile.c \
 	CS_caV2GridFile.c \
+	CS_ch1903.c \
 	CS_csini.c \
 	CS_csio.c \
 	CS_csprm.c \
@@ -38,6 +39,7 @@ CS_SRC = \
 	CS_dtAgd84ToGda94.c \
 	CS_dtAts77ToNad83.c \
 	CS_dtCalc.c \
+	CS_dtCh1903ToPlus.c \
 	CS_dtDhdnToEtrf89.c \
 	CS_dtEd50ToEtrf89.c \
 	CS_dtio.c \
@@ -169,6 +171,7 @@ CS_OBJ = \
 	CS_category.obj \
 	CS_caV1GridFile.obj \
 	CS_caV2GridFile.obj \
+	CS_ch1903.obj \
 	CS_csini.obj \
 	CS_csio.obj \
 	CS_csprm.obj \
@@ -182,6 +185,7 @@ CS_OBJ = \
 	CS_dtAgd84ToGda94.obj \
 	CS_dtAts77ToNad83.obj \
 	CS_dtCalc.obj \
+	CS_dtCh1903ToPlus.obj \
 	CS_dtDhdnToEtrf89.obj \
 	CS_dtEd50ToEtrf89.obj \
 	CS_dtio.obj \

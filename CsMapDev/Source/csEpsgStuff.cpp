@@ -2341,6 +2341,7 @@ struct TcsGsbNameToCodeMap
 {
 	{	"A66 National (13.09.01).gsb",    cs_DTCTYP_AGD66  },
 	{	"BETA2007.gsb",                   cs_DTCTYP_DHDN   },
+	{	"CHENyx06.gsb",                   cs_DTCTYP_CHENYX },
 	{	"CGQ77-83.gsb",                   cs_DTCTYP_NONE   },
 	{	"CGQ77-98.gsb",                   cs_DTCTYP_ATS77  },
 	{	"NAD83-98.gsb",                   cs_DTCTYP_CSRS   },
