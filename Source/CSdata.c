@@ -130,6 +130,7 @@ csThread char cs_Jgd2kName   [cs_FNM_MAXLEN]  = cs_JGD2K_NAME;
 csThread char cs_Ed50Name    [cs_FNM_MAXLEN]  = cs_ED50_NAME;
 csThread char cs_Rgf93Name   [cs_FNM_MAXLEN]  = cs_RGF93_NAME;
 csThread char cs_DhdnName    [cs_FNM_MAXLEN]  = cs_DHDN_NAME;
+csThread char cs_Ch1903Name  [cs_FNM_MAXLEN]  = cs_CH1903_NAME;
 csThread char cs_N27A77Name  [cs_FNM_MAXLEN]  = cs_N27A77_NAME;
 
 /*

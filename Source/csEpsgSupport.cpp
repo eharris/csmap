@@ -949,9 +949,9 @@ bool TcsSingleOp::Classify (const TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& op
 
 	if (OperationMethod == 9603UL)
 	{
-		double deltaX;
-		double deltaY;
-		double deltaZ;
+		double deltaX (0.0);
+		double deltaY (0.0);
+		double deltaZ (0.0);
 		TcsEpsgCode uomCode;
 
 		uomCode = epsgDB.GetParameterValue (deltaX,oprtnCode,OperationMethod,8605UL,9001UL);
@@ -1002,7 +1002,7 @@ TcsOpVariant::TcsOpVariant (const TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& op
 	bool ok (false);
 	bool deprecated (false);
 
-	EcsOpType opType;
+	EcsOpType opType (epsgOpTypNone);
 	TcsEpsgCode codeSingle;
 	std::wstring fldData;
 
@@ -1320,6 +1320,7 @@ static short KcsTo94ViaPreference [] =
 	cs_DTCTYP_RGF93,
 	cs_DTCTYP_ED50,
 	cs_DTCTYP_DHDN,
+	cs_DTCTYP_CHENYX,
 	cs_DTCTYP_GDA94,
 	cs_DTCTYP_NZGD2K,
 	cs_DTCTYP_NAD83,

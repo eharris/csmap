@@ -1,5 +1,4 @@
 #######################################################################
-#######################################################################
 #
 # Copyright (c) 2008, Autodesk, Inc.
 # All rights reserved.
@@ -3397,6 +3396,43 @@ T-EDCYLE,1113194.91,6097230.31,LL,10.0,55.0,0.000001,0.000001
 #
 LL,100 20 00.000W,24 22 54.433N,WGS84.PseudoMercator,-11169055.58,2800000.00,0.015,0.015
 WGS84.PseudoMercator,-11169055.58,2800000.00,LL,100 20 00.000W,24 22 54.433N,0.000001,0.000001
+###############################################################################
+#
+#	Test cases taken from:
+#	
+#	Formulas and constants for the calculation of the Swiss conformal cylindrical
+#	projection and for the transformation between coordinate systems
+#			October 2008
+#	http://www.swisstopo.admin.ch/internet/swisstopo/en/home/topics/survey/sys/refsys/switzerland.parsysrelated1.37696.downloadList.97912.DownloadFile.tmp/swissprojectionen.pdf
+#
+#	These tests verify the operation of the CHENYX06.gsb data file and the
+#	internal (hard coded) geocentric conversion from CH1903+ to CHTRS95.
+#
+#	The tolerances on these cases have been expanded to account for the fact
+#	at this time this conversion test facility is two dimensional in nature.
+#	The data points have significant elevations and the elevations are adjusted
+#	from orthometric height to ellipsoid height and back again.  Thus, the
+#	tolerances are rather high.
+#
+#	Manual testing with 3D coordinates indicate that the actual conversion
+#	results are on the order of 1.0E-09/1.0E-03 (varies depending upon the elevation
+#	of the test point).
+#
+# Zimmerwald (LN02 elevation 897.915)
+CH1903/GSB.LV03-M,602030.680,191775.030,LL84,7 27 54.983506,46 52 37.540562N,5.0E-07,5.0E-07
+LL84,7 27 54.983506,46 52 37.540562N,CH1903/GSB.LV03-M,602030.680,191775.030,3.0E-02,3.0E-02
+# Chrischona (LN02 elevation 456.064)
+CH1903/GSB.LV03-M,617306.300,268507.300,LL84,7 40 6.983077E,47 34 1.385301N,5.0E-07,5.0E-07
+LL84,7 40 6.983077E,47 34 1.385301N,CH1903/GSB.LV03-M,617306.300,268507.300,3.0E-02,3.0E-02
+# Pfaender  (LN02 elevation 1042.624)
+CH1903/GSB.LV03-M,776668.105,265372.681,LL84,9 47 3.697723E,47 30 55.172797N,5.0E-07,5.0E-07
+LL84,9 47 3.697723E,47 30 55.172797N,CH1903/GSB.LV03-M,776668.105,265372.681,3.0E-02,3.0E-02
+# La Givrine (LN02 elevation 1207.434)
+CH1903/GSB.LV03-M,497313.292,145625.438,LL84,6 6 7.32631E,46 27 14.690021N,5.0E-07,5.0E-07
+LL84,6 6 7.32631E,46 27 14.690021N,CH1903/GSB.LV03-M,497313.292,145625.438,3.0E-02,3.0E-02
+# Monte Generoso (LN02 elevation 1636.600)
+CH1903/GSB.LV03-M,722758.810,87649.670,LL84,9 1 16.389053E,45 55 45.438020N,5.0E-07,5.0E-07
+LL84,9 1 16.389053E,45 55 45.438020N,CH1903/GSB.LV03-M,722758.810,87649.670,3.0E-02,3.0E-02
 ###############################################################################
 #
 # That's it.  If you have some more cases documented by reputable sources,

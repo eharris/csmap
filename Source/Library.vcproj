@@ -462,6 +462,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CS_ch1903.c"
+				>
+			</File>
+			<File
 				RelativePath=".\CS_csini.c"
 				>
 			</File>
@@ -515,6 +519,10 @@
 			</File>
 			<File
 				RelativePath=".\CS_dtcalc.c"
+				>
+			</File>
+			<File
+				RelativePath=".\CS_dtCh1903ToPlus.c"
 				>
 			</File>
 			<File

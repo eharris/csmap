@@ -307,6 +307,7 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 			case cs_DTCTYP_DHDN:    paramUseCount = 0; break;
 			case cs_DTCTYP_ETRF89:  paramUseCount = 0; break;
 			case cs_DTCTYP_GEOCTR:  paramUseCount = 3; break;
+			case cs_DTCTYP_CHENYX:  paramUseCount = 0; break;
 			case cs_DTCTYP_NONE:
 			default:
 				paramUseCount = -1;

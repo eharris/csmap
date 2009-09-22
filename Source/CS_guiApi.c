@@ -973,7 +973,8 @@ static struct viaTable_
 	{   cs_DTCTYP_6PARM, "Six Parameter Transformation" },
 	{   cs_DTCTYP_7PARM, "Seven Parameter Transformation" },
 	{   cs_DTCTYP_4PARM, "Four Parameter Transformation" },
-	{  cs_DTCTYP_GEOCTR, "*Three Parameter Transformation" }
+	{  cs_DTCTYP_GEOCTR, "*Three Parameter Transformation" },
+	{  cs_DTCTYP_CHENYX, "CH1903<->WGS84 via CHENyx.gsb" }
 };
 int EXP_LVL1 CS_viaEnum (int index,char *descr,int size,int *ident)
 {

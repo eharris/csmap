@@ -465,6 +465,7 @@ int EXP_LVL3 CS_dtDefCmp (Const struct cs_Dtdef_ *original,Const struct cs_Dtdef
 		case cs_DTCTYP_DHDN:    paramUseCount = 0; ellipsoidUse = FALSE; break;
 		case cs_DTCTYP_ETRF89:  paramUseCount = 0; ellipsoidUse = FALSE; break;
 		case cs_DTCTYP_GEOCTR:  paramUseCount = 3; ellipsoidUse =  TRUE; break;
+		case cs_DTCTYP_CHENYX:  paramUseCount = 0; ellipsoidUse = FALSE; break;
 		case cs_DTCTYP_NONE:
 		default:
 			paramUseCount = -1;
@@ -473,7 +474,7 @@ int EXP_LVL3 CS_dtDefCmp (Const struct cs_Dtdef_ *original,Const struct cs_Dtdef
 		}
 	}
 
-	/* Check the aparameters as is appropriate. */
+	/* Check the parameters as is appropriate. */
 
 	if (paramUseCount > 0)
 	{

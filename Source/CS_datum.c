@@ -61,6 +61,9 @@
 *******************************************************************************/
 
 #define csDTCMAP_SIZE 4
+
+static char modl_name [] = "CS_datum";
+
 struct cs_DatMap_
 {
 	int to84_via;
@@ -167,8 +170,12 @@ struct cs_DatMap_ cs_DatMap [] =
 		{dtcTypNone,             dtcTypNone,            dtcTypNone,           dtcTypNone  }
 	},
 	{cs_DTCTYP_3PARM,
-		{dtcTypThreeParm,        dtcTypNone,             dtcTypNone,          dtcTypNone  },
-		{dtcTypThreeParmInv,     dtcTypNone,             dtcTypNone,          dtcTypNone  }
+		{dtcTypThreeParm,        dtcTypNone,            dtcTypNone,          dtcTypNone  },
+		{dtcTypThreeParmInv,     dtcTypNone,            dtcTypNone,          dtcTypNone  }
+	},
+	{cs_DTCTYP_CHENYX,
+		{dtcTypCh1903ToPlus,     dtcTypChPlusToChtrs95, dtcTypChtrs95ToEtrf89, dtcTypEtrf89ToWgs84  },
+		{dtcTypWgs84ToEtrf89,    dtcTypEtrf89ToChtrs95, dtcTypChtrs95ToChPlus, dtcTypPlusToCh1903   }
 	},
 	/* The following marks the end of the table. */
 	{cs_DTCTYP_NONE,
@@ -183,7 +190,44 @@ struct cs_Datum_ cs_Wgs84Dt =
 	"",
 	0.0,
 	0.0,
-	0.0
+	0.0,
+	0.0,
+	0.0,
+	0.0,
+	0.0,
+	0.0,
+	0.0,
+	0.0,
+	0.0,
+	0,
+	"",
+	""
+};
+
+/* The following is, in hard coded form, the result that one would expect
+   should one do a CS_dtloc ("CH1903Plus_1") function call.  This definition
+   is hardcoded to insulate this code module from changes made in the
+   dictionary.  Thus this module will return the same (and correct) results
+   regardless of what the user might do to a datum dictionary.
+*/
+struct cs_Datum_ cs_Chrts95Dt =
+{
+	"ChPlusToChrts95",
+	"BESSEL",
+	6377397.155,
+	6356078.962822,
+	0.0033427731816160992517306360336969,
+	0.081696831215255833813584066738272,
+	674.374,
+	15.056,
+	405.346,
+	0.0,
+	0.0,
+	0.0,
+	0.0,
+	cs_DTCTYP_GEOCTR,
+	"CH1903+ to CHTRS95 (Swiss Terrestrial Reference System 1995)",
+	"Bessel, 1841"
 };
 
 /**********************************************************************
@@ -309,7 +353,7 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 	int st;
 	int same;
 	int src_typ, dst_typ;
-	int nadFlg, hpgFlg, agd66Flg, agd84Flg, nzgd49Flg, ats77Flg, csrsFlg, jgd2kFlg, rgf93Flg, csrs27Flg, ed50Flg, n27a77Flg;
+	int nadFlg, hpgFlg, agd66Flg, agd84Flg, nzgd49Flg, ats77Flg, csrsFlg, jgd2kFlg, rgf93Flg, csrs27Flg, ed50Flg, dhdnFlg, ch1903Flg, n27a77Flg;
 
 	enum cs_DtcXformType xfrmType;
 	struct cs_Datum_ *wgs84Ptr;
@@ -333,6 +377,8 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 	rgf93Flg = FALSE;
 	csrs27Flg = FALSE;
 	ed50Flg = FALSE;
+	dhdnFlg = FALSE;
+	ch1903Flg = FALSE;
 	n27a77Flg = FALSE;
 	CS_stncp (csErrnam,__FILE__,MAXPATH);
 
@@ -588,9 +634,9 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 	}
 
 	/* Kludge Time.
-	   We need to be abel to handle the conversion of NAD27 to CSRS directly, not
+	   We need to be able to handle the conversion of NAD27 to CSRS directly, not
 	   going through WGS84.  This is necessary as the Canadian provinces are
-	   distributing grid shoft files which convert directly from NAD27 to CSRS.
+	   distributing grid shift files which convert directly from NAD27 to CSRS.
 	   Of course, the results are not identical, but more importantly, clients
 	   want to use these files.  So, here goes. */
 	if (nad27ToCsrsExists)
@@ -734,13 +780,20 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 			   vertical datum for Europe, but we'll add it here once we
 			   do. */
 			st = CSdhdnInit ();
-			if (st == 0) ed50Flg = TRUE;
+			if (st == 0) dhdnFlg = TRUE;
+			break;
+
+		case dtcTypCh1903ToPlus:
+		case dtcTypPlusToCh1903:
+			/* Initialize the Swiss stuff. */
+			st = CSch1903Init ();
+			if (st == 0) ch1903Flg = TRUE;
 			break;
 
 		case dtcTypNzgd49ToNzgd2K:
 		case dtcTypNzgd2KToNzgd49:
-			/* Initialize the Australian stuff.  Don't know how to do the
-			   vertical datum for Australia, but we'll add it here once we
+			/* Initialize the New Zealand stuff.  Don't know how to do the
+			   vertical datum for New Zealand, but we'll add it here once we
 			   do. */
 			st = CSnzgd49Init ();
 			if (st == 0) nzgd49Flg = TRUE;
@@ -806,8 +859,19 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 		case dtcTypWgs84ToNzgd2K:
 		case dtcTypEtrf89ToWgs84:
 		case dtcTypWgs84ToEtrf89:
-			/* No initializations required. */
+		case dtcTypChtrs95ToEtrf89:
+		case dtcTypEtrf89ToChtrs95:
+			/* No initializations required, yet. */
 			st = 0;
+			break;
+
+		case dtcTypChPlusToChtrs95:
+		case dtcTypChtrs95ToChPlus:
+			dtc_ptr->xforms [ii].parms.geoctr = CS_gcInit (&cs_Chrts95Dt,&cs_Wgs84Dt);
+			if (dtc_ptr->xforms [ii].parms.geoctr == NULL)
+			{
+					st = -1;
+			}
 			break;
 
 		case dtcTypMolodensky:
@@ -981,6 +1045,14 @@ error:
 	{
 		CSed50Cls ();
 	}
+	if (dhdnFlg)
+	{
+		CSdhdnCls ();
+	}
+	if (ch1903Flg)
+	{
+		CSch1903Cls ();
+	}
 	if (nzgd49Flg)
 	{
 		CSnzgd49Cls ();
@@ -1065,6 +1137,8 @@ void CSdtcXformFree (struct cs_DtcXform_ *xfrmPtr)
 		break;
 	case dtcTypGeoCtr:
 	case dtcTypGeoCtrInv:
+	case dtcTypChtrs95ToChPlus:
+	case dtcTypChPlusToChtrs95:
 		if (xfrmPtr->parms.geoctr != NULL)
 		{
 			CS_free (xfrmPtr->parms.geoctr);
@@ -1166,6 +1240,11 @@ void EXP_LVL3 CS_dtcls (struct cs_Dtcprm_ *dtc_ptr)
 			CSdhdnCls ();
 			break;
 
+		case dtcTypCh1903ToPlus:
+		case dtcTypPlusToCh1903:
+			CSch1903Cls ();
+			break;
+
 		case dtcTypNzgd49ToNzgd2K:
 		case dtcTypNzgd2KToNzgd49:
 			CSnzgd49Cls ();
@@ -1217,6 +1296,8 @@ void EXP_LVL3 CS_dtcls (struct cs_Dtcprm_ *dtc_ptr)
 		case dtcTypNzgd2KToWgs84:
 		case dtcTypEtrf89ToWgs84:
 		case dtcTypWgs84ToEtrf89:
+		case dtcTypEtrf89ToChtrs95:
+		case dtcTypChtrs95ToEtrf89:
 			/* At the current time, all the above do not
 			   require any closing at all, i.e. these
 			   conversions do not allocate any specific
@@ -1240,6 +1321,8 @@ void EXP_LVL3 CS_dtcls (struct cs_Dtcprm_ *dtc_ptr)
 		case dtcTypFourParmInv:
 		case dtcTypThreeParm:
 		case dtcTypThreeParmInv:
+		case dtcTypChtrs95ToChPlus:
+		case dtcTypChPlusToChtrs95:
 			CSdtcXformFree (&dtc_ptr->xforms [ii]);
 			break;
 
@@ -1335,12 +1418,11 @@ struct cs_Dtcprm_ * EXP_LVL9 CSnulinit (Const char *src_name,Const char *dst_nam
    appears immediately following. */
 int EXP_LVL3 CS_dtcvt (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [3],double ll_out [3])
 {
+	extern csFILE* csDiagnostic;
 	extern char csErrnam [];
 	extern int csErrlng;
 	extern int csErrlat;
 	extern double cs_Zero;
-extern csFILE* csDiagnostic;
-static char modl_name [] = "CS_datum";
 
 	int ii;
 	int itrStat;				/* status of current iteration */
@@ -1352,7 +1434,10 @@ static char modl_name [] = "CS_datum";
 
 	double ll_wrk [3];
 
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d]\n",modl_name,__LINE__);
+	if (csDiagnostic != 0)
+	{
+		fprintf (csDiagnostic,"%s[%d]\n",modl_name,__LINE__);
+	}
 	CS_stncp (csErrnam,"CS_datum:0",MAXPATH);
 	rptCode = cs_ISER;
 
@@ -1389,18 +1474,21 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d]\n",modl_name,__LINE__);
 			}
 
 			/* Redundant conversions are optimized out and
-			   replaced with csGRFC_SKIP. */
+			   replaced with dtcTypSkip. */
 			if (xfrmType == dtcTypSkip) continue;
 
 			/* Call the approriate function.  Convention here is:
 			   functions return  0 for OK,
 			   functions return -1 for hard error, already reported,
 			   functions return  1 for block error not reported yet,
-			   functions return  2 for soft error. already reported.
+			   functions return  2 for soft error, already reported.
 			*/
 
 			ll_wrk [HGT] = cs_Zero;
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xfrmType);
+			if (csDiagnostic != 0)
+			{
+				fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xfrmType);
+			}
 			switch (xfrmType) {
 
 			case dtcTypNad27ToNad83:
@@ -1431,16 +1519,32 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 				itrStat = CSed50ToEtrf89 (ll_wrk,ll_wrk);
 				break;
 
-			case dtcTypDhdnToEtrf89:
-				itrStat = CSdhdnToEtrf89 (ll_wrk,ll_wrk);
-				break;
-
 			case dtcTypEtrf89ToEd50:
 				itrStat = CSetrf89ToEd50 (ll_wrk,ll_wrk);
 				break;
 
+			case dtcTypDhdnToEtrf89:
+				itrStat = CSdhdnToEtrf89 (ll_wrk,ll_wrk);
+				break;
+
 			case dtcTypEtrf89ToDhdn:
 				itrStat = CSetrf89ToDhdn (ll_wrk,ll_wrk);
+				break;
+
+			case dtcTypChtrs95ToEtrf89:
+				itrStat = CSchtrs95ToEtrf89 (ll_wrk,ll_wrk);
+				break;
+
+			case dtcTypEtrf89ToChtrs95:
+				itrStat = CSetrf89ToChtrs95 (ll_wrk,ll_wrk);
+				break;
+
+			case dtcTypCh1903ToPlus:
+				itrStat = CSch1903ToPlus (ll_wrk,ll_wrk);
+				break;
+
+			case dtcTypPlusToCh1903:
+				itrStat = CSplusToCh1903 (ll_wrk,ll_wrk);
 				break;
 
 			case dtcTypNzgd49ToNzgd2K:
@@ -1579,10 +1683,12 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 				itrStat = CS_7p2dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm7);
 				break;
 
+			case dtcTypChPlusToChtrs95:
 			case dtcTypGeoCtr:
 				itrStat = CS_gc2dFowrd (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.geoctr);
 				break;
 
+			case dtcTypChtrs95ToChPlus:
 			case dtcTypGeoCtrInv: 
 				itrStat = CS_gc2dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.geoctr);
 				break;
@@ -1619,7 +1725,11 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 				break;
 			}
 
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,itrStat);
+			if (csDiagnostic != 0)
+			{
+				fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,itrStat);
+			}
+
 			/* See what happened.  If itrStat is negative, we have a fatal error. */
 			if (itrStat < 0)
 			{
@@ -1634,7 +1744,6 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				   hard (fatal) error.  We need to derive the correct code
 				   value.  Could have done that above, but that would slow
 				   successful calculations. */
-
 				status = -1;
 				switch (xfrmType) {
 				case dtcTypNad27ToNad83:
@@ -1689,6 +1798,10 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				case dtcTypNad27ToCsrs:
 					rptCode = cs_CSRS27_RNG_F;
 					break;
+				case dtcTypCh1903ToPlus:
+				case dtcTypPlusToCh1903:
+					rptCode = cs_CHENYX_RNG_F;
+					break;
 				case dtcTypMolodensky:
 				case dtcTypMolodenskyInv:
 				case dtcTypBursaWolf:
@@ -1703,6 +1816,8 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				case dtcTypFourParmInv: 
 				case dtcTypThreeParm:
 				case dtcTypThreeParmInv: 
+				case dtcTypChtrs95ToChPlus:
+				case dtcTypChPlusToChtrs95:
 					rptCode = cs_XYZ_ITR;
 					break;
 				case dtcTypDMAMulReg:
@@ -1719,9 +1834,11 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				case dtcTypWgs72ToWgs84:
 				case dtcTypEtrf89ToWgs84:
 				case dtcTypWgs84ToEtrf89:
+				case dtcTypEtrf89ToChtrs95:
+				case dtcTypChtrs95ToEtrf89:
 					/* Currently, these conversions can't produce an error,
 					   soft or hard, so it is difficult to determine which
-					   erro rmessage to report. */
+					   error message to report. */
 					CS_stncp (csErrnam,"CS_datum:7A",MAXPATH);
 					rptCode = cs_ISER;
 					break;
@@ -1799,6 +1916,10 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 					case dtcTypNad27ToCsrs:
 						rptCode = (status == 2) ? cs_CSRS27_RNG_A : cs_CSRS27_RNG_W;
 						break;
+					case dtcTypCh1903ToPlus:
+					case dtcTypPlusToCh1903:
+						rptCode = (status == 2) ? cs_CHENYX_RNG_A : cs_CHENYX_RNG_W;
+						break;
 					case dtcTypMolodensky:
 					case dtcTypMolodenskyInv:
 					case dtcTypBursaWolf:
@@ -1806,13 +1927,15 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 					case dtcTypSevenParm:
 					case dtcTypSevenParmInv:
 					case dtcTypGeoCtr:
-					case dtcTypGeoCtrInv: 
+					case dtcTypGeoCtrInv:
 					case dtcTypSixParm:
 					case dtcTypSixParmInv:
 					case dtcTypFourParm:
-					case dtcTypFourParmInv: 
+					case dtcTypFourParmInv:
 					case dtcTypThreeParm:
-					case dtcTypThreeParmInv: 
+					case dtcTypThreeParmInv:
+					case dtcTypChtrs95ToChPlus:
+					case dtcTypChPlusToChtrs95:
 						rptCode = cs_XYZ_ITR;
 						status = -1;
 						break;
@@ -1830,6 +1953,8 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 					case dtcTypWgs72ToWgs84:
 					case dtcTypEtrf89ToWgs84:
 					case dtcTypWgs84ToEtrf89:
+					case dtcTypEtrf89ToChtrs95:
+					case dtcTypChtrs95ToEtrf89:
 						CS_stncp (csErrnam,"CS_datum:8A",MAXPATH);
 						CS_erpt (cs_ISER);
 						status = -1;
@@ -1962,13 +2087,17 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 	}
 
 	/* The conversion is complete.  Return to the user. */
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,status);
+	if (csDiagnostic != 0)
+	{
+		fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,status);
+	}
 	return status;
 }
 
 /*  This is the three dimensional datum conversion function. */
 int EXP_LVL3 CS_dtcvt3D (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [3],double ll_out [3])
 {
+	extern csFILE* csDiagnostic;
 	extern char csErrnam [];
 	extern int csErrlng;
 	extern int csErrlat;
@@ -1983,9 +2112,11 @@ int EXP_LVL3 CS_dtcvt3D (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [3],doubl
 	int rptCode;
 	double deltaHgt;
 	double ll_wrk [3];
-extern csFILE* csDiagnostic;
-static char modl_name [] = "CS_datum";
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d]\n",modl_name,__LINE__);
+	
+	if (csDiagnostic != 0)
+	{
+		fprintf (csDiagnostic,"%s[%d]\n",modl_name,__LINE__);
+	}
 
 	CS_stncp (csErrnam,"CS_datum:00",MAXPATH);
 	rptCode = cs_ISER;
@@ -2033,7 +2164,10 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d]\n",modl_name,__LINE__);
 			   functions return -1 for hard error, cause already reported.
 			   functions return +1 for block error, not yet reported.
 			   functions return >1 for soft error, already reported. */
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xfrmType);
+			if (csDiagnostic != 0)
+			{
+				fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xfrmType);
+			}
 			switch (xfrmType) {
 
 			case dtcTypNad27ToNad83:
@@ -2093,16 +2227,24 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 				itrStat = CSed50ToEtrf89 (ll_wrk,ll_wrk);
 				break;
 
-			case dtcTypDhdnToEtrf89:
-				itrStat = CSdhdnToEtrf89 (ll_wrk,ll_wrk);
-				break;
-
 			case dtcTypEtrf89ToEd50:
 				itrStat = CSetrf89ToEd50 (ll_wrk,ll_wrk);
 				break;
 
+			case dtcTypDhdnToEtrf89:
+				itrStat = CSdhdnToEtrf89 (ll_wrk,ll_wrk);
+				break;
+
 			case dtcTypEtrf89ToDhdn:
 				itrStat = CSetrf89ToDhdn (ll_wrk,ll_wrk);
+				break;
+
+			case dtcTypCh1903ToPlus:
+				itrStat = CSch1903ToPlus (ll_wrk,ll_wrk);
+				break;
+
+			case dtcTypPlusToCh1903:
+				itrStat = CSplusToCh1903 (ll_wrk,ll_wrk);
 				break;
 
 			case dtcTypAgd84ToGda94:
@@ -2249,10 +2391,12 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 				itrStat = CS_7p3dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.parm7);
 				break;
 
+			case dtcTypChPlusToChtrs95:
 			case dtcTypGeoCtr:
 				itrStat = CS_gc3dFowrd (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.geoctr);
 				break;
 
+			case dtcTypChtrs95ToChPlus:
 			case dtcTypGeoCtrInv: 
 				itrStat = CS_gc3dInvrs (ll_wrk,ll_wrk,dtc_ptr->xforms [ii].parms.geoctr);
 				break;
@@ -2289,7 +2433,11 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,xf
 				break;
 			}
 
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,itrStat);
+			if (csDiagnostic != 0)
+			{
+				fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,itrStat);
+			}
+
 			/* See what happened.  If itrStat is negative, we have a fatal error.
 			   Otherwise, we have a warning condition and we keep on chugging. */
 			if (itrStat < 0)
@@ -2326,6 +2474,10 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				case dtcTypDhdnToEtrf89:
 				case dtcTypEtrf89ToDhdn:
 					rptCode = cs_DHDN_RNG_F;
+					break;
+				case dtcTypCh1903ToPlus:
+				case dtcTypPlusToCh1903:
+					rptCode = cs_CHENYX_RNG_F;
 					break;
 				case dtcTypNzgd49ToNzgd2K:
 				case dtcTypNzgd2KToNzgd49:
@@ -2372,7 +2524,9 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				case dtcTypFourParm:
 				case dtcTypFourParmInv: 
 				case dtcTypThreeParm:
-				case dtcTypThreeParmInv: 
+				case dtcTypThreeParmInv:
+				case dtcTypChtrs95ToChPlus:
+				case dtcTypChPlusToChtrs95:
 					rptCode = cs_XYZ_ITR;
 					break;
 				case dtcTypDMAMulReg:
@@ -2389,6 +2543,8 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 				case dtcTypWgs72ToWgs84:
 				case dtcTypEtrf89ToWgs84:
 				case dtcTypWgs84ToEtrf89:
+				case dtcTypEtrf89ToChtrs95:
+				case dtcTypChtrs95ToEtrf89:
 					CS_stncp (csErrnam,"CS_datum:11A",MAXPATH);
 					rptCode = cs_ISER;
 					break;
@@ -2433,6 +2589,10 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 					case dtcTypDhdnToEtrf89:
 					case dtcTypEtrf89ToDhdn:
 						rptCode = (status == 2) ? cs_DHDN_RNG_A : cs_DHDN_RNG_W;
+						break;
+					case dtcTypCh1903ToPlus:
+					case dtcTypPlusToCh1903:
+						rptCode = (status == 2) ? cs_CHENYX_RNG_A : cs_CHENYX_RNG_W;
 						break;
 					case dtcTypNzgd49ToNzgd2K:
 					case dtcTypNzgd2KToNzgd49:
@@ -2480,6 +2640,8 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 					case dtcTypFourParmInv: 
 					case dtcTypThreeParm:
 					case dtcTypThreeParmInv: 
+					case dtcTypChtrs95ToChPlus:
+					case dtcTypChPlusToChtrs95:
 						rptCode = cs_XYZ_ITR;
 						status = -1;
 						break;
@@ -2497,6 +2659,8 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 					case dtcTypWgs72ToWgs84:
 					case dtcTypEtrf89ToWgs84:
 					case dtcTypWgs84ToEtrf89:
+					case dtcTypEtrf89ToChtrs95:
+					case dtcTypChtrs95ToEtrf89:
 						CS_stncp (csErrnam,"CS_datum:12A",MAXPATH);
 						CS_erpt (cs_ISER);
 						status = -1;
@@ -2619,7 +2783,10 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,it
 	}
 
 	/* The conversion is complete.  Return to the user. */
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,status);
+	if (csDiagnostic != 0)
+	{
+		fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,status);
+	}
 	return status;
 }
 /**********************************************************************

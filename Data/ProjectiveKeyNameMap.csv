@@ -1594,7 +1594,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 158500,0,21483,21483,0,0,0,,Beijing54.GK-23N,Beijing54.GK-23,Beijing1954.GK-23N,,Beijing_1954_GK_Zone_23N,Beijing 1954 / Gauss-Kruger 23N,,,Beijing 1954 / Gauss-Kruger 23N,,,,,,,,,0,0,0
 158600,21500,21500,21500,0,0,0,,Belge50.Lambert50,Belge50.BelgeLambert50,BELGE-50,Belge 1950 (Brussels) / Belge Lambert 50,Belge_Lambert_1950,Belge 1950 (Brussels) / Belge Lambert 50,,,Belge 1950 (Brussels) / Belge Lambert 50,,,,,,,,,0,0,0
 158700,21780,21780,0,0,0,352256,,CH1903.LV03C,Bern1938.LV03C,CH1903.LV03C/01,Bern 1898 (Bern) / LV03C,Bern_1898_Bern_LV03C,,,,Bern 1898 (Bern) / LV03C,,,,Liechtenstein National System,,,,,0,0,0
-158800,21781,21781,0,0,0,352257,,CH1903.LV03,CH1903.LV03,CH1903.LV03/01,CH1903 / LV03,CH1903_LV03,,,,CH1903 / LV03,,,,Swiss National System,,,,,0,0,0
+158800,21781,21781,0,0,0,352257,,CH1903.LV03,CH1903.LV03,CH1903/GSB.LV03-M|CH1903.LV03/01,CH1903 / LV03,CH1903_LV03,,,,CH1903 / LV03,,,,Swiss National System,,,,,0,0,0
+158810,21782,21782,0,0,0,0,,,,CH1903/GSB.LV03-C,CH1903 / LV03C-G,,,,,,,,,Swiss National System,,,,,0,0,0
 158900,0,21817,21817,0,0,0,,BOGOTA.UTM-17N,Bogota.UTM-17N,Bogota.UTM-17N,,Bogota_UTM_Zone_17N,Bogota 1975 / UTM zone 17N,,,Bogota 1975 / UTM zone 17N,,,,,,,,,0,0,0
 159000,21818,21818,21818,0,0,0,,BOGOTA.UTM-18N,Bogota75.UTM-18N,Bogota.UTM-18N,Bogota 1975 / UTM zone 18N,Bogota_UTM_Zone_18N,Bogota 1975 / UTM zone 18N,,,Bogota 1975 / UTM zone 18N,,,,,,,,,0,0,0
 159100,21896,21891,21891,0,0,0,,BOGOTA.Colombia-W,Bogota75.Colombia-West,BOGOTA.Colombia-W,Bogota 1975 / Colombia West zone,Colombia_West_Zone,Bogota 1975 / Colombia West zone,,,Bogota 1975 / Colombia West zone,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 969.  Axis direction was given as the reason.",0,0,0

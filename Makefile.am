@@ -19,6 +19,7 @@ libCsmap_la_SOURCES = \
   Source/CS_category.c \
   Source/CS_caV1GridFile.c \
   Source/CS_caV2GridFile.c \
+  Source/CS_ch1903.c \
   Source/CS_csini.c \
   Source/CS_csio.c \
   Source/CS_csprm.c \
@@ -32,6 +33,7 @@ libCsmap_la_SOURCES = \
   Source/CS_dtAgd84ToGda94.c \
   Source/CS_dtAts77ToNad83.c \
   Source/CS_dtcalc.c \
+  Source/CS_dtCh1903ToPlus.c \
   Source/CS_dtDhdnToEtrf89.c \
   Source/CS_dtEd50ToEtrf89.c \
   Source/CS_dtio.c \

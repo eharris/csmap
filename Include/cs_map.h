@@ -1881,6 +1881,7 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_DHDN_NAME         "DhdnToEtrf89.gdc"
 #define cs_N27A77_NAME       "Nad27ToAts77.gdc"
 #define cs_RGF93_NAME        "Rgf93ToNtf.gdc"		
+#define cs_CH1903_NAME       "Ch1903ToPlus.gdc"
 
 #define cs_OSTN97_NAME       "OSTN97.TXT"
 #define cs_OSTN02_NAME       "OSTN02.txt"
@@ -5795,6 +5796,7 @@ enum cs_GdcCatalogs
 	gdcFileGeoidHeight,						/*  13 */
 	gdcFileVertcon,							/*  14 */
 	gdcFileRgf93ToNtf,						/*  15 */
+	gdcFileCh1903ToPlus,					/*  16 */
 	gdcFileDisabled = 9999
 };
 
@@ -5901,6 +5903,7 @@ struct cs_Unittab_
 #define cs_DTCTYP_DHDN    23
 #define cs_DTCTYP_ETRF89  24
 #define cs_DTCTYP_GEOCTR  25
+#define cs_DTCTYP_CHENYX  26
 
 /*
 	The following structures carry definitions of datums
@@ -6162,6 +6165,9 @@ enum cs_DtcXformType
 	dtcTypEtrf89ToWgs84,					/*   24 */
 	dtcTypNad27ToAts77,						/*   25 */
 	dtcTypThreeParm,						/*   26 */
+	dtcTypCh1903ToPlus,						/*   27 */
+	dtcTypChPlusToChtrs95,					/*   28 */
+	dtcTypChtrs95ToEtrf89,  				/*   29 */
 
 	/* Inverse of the above */
 	dtcTypStartOfInverses = 1000,			/* 1000 */
@@ -6191,6 +6197,9 @@ enum cs_DtcXformType
 	dtcTypWgs84ToEtrf89,					/* 1024 */
 	dtcTypAts77ToNad27,						/* 1025 */
 	dtcTypThreeParmInv,						/* 1026 */
+	dtcTypEtrf89ToChtrs95,					/* 1027 */
+	dtcTypChtrs95ToChPlus,					/* 1028 */
+	dtcTypPlusToCh1903, 					/* 1029 */
 
 	/* A programming convenience */
 	dtcTypSkip = 9999						/* 9999 */
@@ -7163,6 +7172,10 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 
 #define cs_SYS34_NOSRC    439		/* Danish System 34 source code unavailable.  */
 
+#define cs_CHENYX_RNG_F   440       /* FATAL: Data point outside range of CHENYX conversion. */
+#define cs_CHENYX_RNG_W   441       /* WARNING: Data outside CHENYX coverage, coordinates unshifted. */
+#define cs_CHENYX_RNG_A   442       /* WARNING: Data outside CHENYX coverage, fallback used successfully. */
+
 /*
 	The following casts are used to eliminate warnings from
 	ANSI compilers.  I don't understand why they are necessary,
@@ -7600,10 +7613,16 @@ int			EXP_LVL9	CSbpcncX (Const struct cs_Bpcnc_ *bpcnc,int cnt,Const double pnts
 
 double		EXP_LVL5	CSccsphrD (Const double ll0 [2],Const double ll1 [2]);
 double		EXP_LVL5	CSccsphrR (Const double ll0 [2],Const double ll1 [2]);
+int			EXP_LVL7	CSch1903Init (void);
+void		EXP_LVL7	CSch1903Cls (void);
+int			EXP_LVL7	CSch1903ToPlus (double llPlus [3],Const double llCh1903 [3]);
+Const char *EXP_LVL7	CSch1903ToPlusLog (Const double llCh1903 [2]);
 double		EXP_LVL5	CSchiFcal (Const struct cs_ChicofF_ *chiF_ptr,double lat);
 void		EXP_LVL5	CSchiFsu (struct cs_ChicofF_ *chiF_ptr,double e_sq);
 double		EXP_LVL5	CSchiIcal (Const struct cs_ChicofI_ *chiI_ptr,double chi);
 void		EXP_LVL5	CSchiIsu (struct cs_ChicofI_ *chiI_ptr,double e_sq);
+int			EXP_LVL9	CSchtrs95ToEtrf89 (double ll_etrf89 [3],Const double ll_chtrs95 [3]);
+
 
 int			EXP_LVL9	CScnt2init (int fd,Const char *name);
 int			EXP_LVL9	CScnt2mm (int fd,double min_ll [2],double max_ll [2],double *density);
@@ -7714,6 +7733,7 @@ long32_t	EXP_LVL3	CSepsgByIdxEL (int index);
 
 Const char*	EXP_LVL3	CSmsiByIdxCS (int index);
 
+int			EXP_LVL9	CSetrf89ToChtrs95 (double ll_chtrs95 [3],Const double ll_etrf89 [3]);
 int			EXP_LVL7	CSetrf89ToDhdn (double ll_dhdn [3],Const double ll_etrf89 [3]);
 int			EXP_LVL7	CSetrf89ToEd50 (double ll_ed50 [3],Const double ll_etrf89 [3]);
 int			EXP_LVL7	CSetrf89ToWgs84 (double ll_wgs84 [3],Const double ll_etrf89 [3]);
@@ -7945,6 +7965,8 @@ int			EXP_LVL9	CSostroL (Const struct cs_Ostro_ *ostro,int cnt,Const double pnts
 int			EXP_LVL9	CSostroQ (Const struct cs_Csdef_ *csdef,unsigned short prj_code,int err_list [],int list_sz);
 void		EXP_LVL9	CSostroS (struct cs_Csprm_ *csprm);
 int			EXP_LVL9	CSostroX (Const struct cs_Ostro_ *stero,int cnt,Const double pnts [][3]);
+
+int			EXP_LVL7	CSplusToCh1903 (double llCh1903 [3],Const double llPlus [3]);
 
 double		EXP_LVL9	CSplycnC (Const struct cs_Plycn_ *plycn,Const double ll [2]);
 int			EXP_LVL9	CSplycnF (Const struct cs_Plycn_ *plycn,double xy [2],Const double ll [2]);
@@ -8566,6 +8588,33 @@ struct csDhdnToEtrf89Entry_
 {
 	struct csDhdnToEtrf89Entry_ *next;
 	enum csDhdnToEtrf89Type type;
+	union
+	{
+		struct csDatumShiftCa2_ *c2DatumPtr;
+	} pointers;
+};
+
+/******************************************************************************
+	CH1903 to Ch1903Plus Datum Shift Object
+	This object enables multiple grid shift files to convert from Ch1903 to
+	Ch1903+.  As of this writing, there is only one file available.  This
+	file is in the Canadian NTv2 format.  We shall see.  It is a conversion
+	from the older Ch1903 (era 1903 one presumes) to CH1903+ (whatever that
+	is).  It remains to be seen if something has to be done to get from
+	CH1903+ to WGS84, and if so execatly where and how that extra shift
+	wll be implemented.
+*/
+enum csCh1903ToPlusType { dtCh1903ToPlusNoneYet, dtCh1903ToPlusC2 };
+struct csCh1903ToPlus_
+{
+	struct cs_DtcXform_ *fallback;
+	struct csLLGridCellCache_ *cachePtr;
+	struct csCh1903ToPlusEntry_ *listHead;
+};
+struct csCh1903ToPlusEntry_
+{
+	struct csCh1903ToPlusEntry_ *next;
+	enum csCh1903ToPlusType type;
 	union
 	{
 		struct csDatumShiftCa2_ *c2DatumPtr;
@@ -10007,6 +10056,21 @@ void CSreleaseDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This);
 double CStestDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This,Const double llDhdn [3]);
 int CScalcDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This,double ll89 [3],Const double llDhdn [3],struct csLLGridCellCache_ *cachePtr);
 Const char *CSsourceDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This,Const double *llDhdn);
+
+struct csCh1903ToPlus_* CSnewCh1903ToPlus (Const char *catalog);
+void CSdeleteCh1903ToPlus (struct csCh1903ToPlus_* __This);
+struct csCh1903ToPlusEntry_* CSselectCh1903ToPlus (struct csCh1903ToPlus_* __This,Const double llCh1903 [3]);
+void CSfirstCh1903ToPlus (struct csCh1903ToPlus_* __This,struct csCh1903ToPlusEntry_* dtEntryPtr);
+int CScalcCh1903ToPlus (struct csCh1903ToPlus_* __This,double llPlus [3],Const double llCh1903 [3]);
+int CSinverseCh1903ToPlus (struct csCh1903ToPlus_* __This,double llCh1903 [3],Const double llPlus [3]);
+void CSreleaseCh1903ToPlus (struct csCh1903ToPlus_* __This);
+Const char *CSsourceCh1903ToPlus (struct csCh1903ToPlus_* __This,Const double llCh1903 [2]);
+struct csCh1903ToPlusEntry_* CSnewCh1903ToPlusEntry (struct csDatumCatalogEntry_* catPtr);
+void CSdeleteCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This);
+void CSreleaseCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This);
+double CStestCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This,Const double llCh1903 [3]);
+int CScalcCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This,double llPlus [3],Const double llCh1903 [3],struct csLLGridCellCache_ *cachePtr);
+Const char *CSsourceCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This,Const double *llCh1903);
 
 struct csNzgd49ToNzgd2K_* CSnewNzgd49ToNzgd2K (Const char *catalog);
 void CSdeleteNzgd49ToNzgd2K (struct csNzgd49ToNzgd2K_* __This);
