@@ -108,34 +108,34 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 10700,2102,2102,0,0,0,0,,Lake.Maracaibo,Lake.Maracaibo,,Lake / Maracaibo Grid,Lake_Maracaibo_Grid,,,,Lake / Maracaibo Grid,,,,,,,,,0,0,0
 10800,2103,2103,0,0,0,0,,Lake.Maracaibo-M3,Lake.Maracaibo-M3,,Lake / Maracaibo Grid M3,Lake_Maracaibo_Grid_M3,,,,Lake / Maracaibo Grid M3,,,,,,,,,0,0,0
 10900,2104,2104,0,0,0,0,,Lake.Maracaibo-LaRosa,Lake.Maracaibo-LaRosa,,Lake / Maracaibo La Rosa Grid,Lake_Maracaibo_La_Rosa_Grid,,,,Lake / Maracaibo La Rosa Grid,,,,,,,,,0,0,0
-11000,2105,2105,2105,0,0,0,,NZGD2K.MountEden,NZGD2000.MountEden,NZGD2K.MountEden,NZGD2000 / Mount Eden 2000,NZGD_2000_Mount_Eden_Circuit,NZGD2000 / Mount Eden Circuit 2000,,,NZGD2000 / Mount Eden Circuit 2000,,,,,,,,,0,0,0
+11000,2105,2105,2105,0,0,0,,NZGD2K.MountEden,NZGD2000.MountEden,NZGD2K.MountEden|NZ-MTE-2000,NZGD2000 / Mount Eden 2000,NZGD_2000_Mount_Eden_Circuit,NZGD2000 / Mount Eden Circuit 2000,,,NZGD2000 / Mount Eden Circuit 2000,,,,,,,,,0,0,0
 11100,2106,2106,2106,0,0,0,,NZGD2K.BayofPlenty,NZGD2000.BayofPlenty,NZGD2K.BayofPlenty,NZGD2000 / Bay of Plenty 2000,NZGD_2000_Bay_of_Plenty_Circuit,NZGD2000 / Bay of Plenty Circuit 2000,,,NZGD2000 / Bay of Plenty Circuit 2000,,,,,,,,,0,0,0
-11200,2107,2107,2107,0,0,0,,NZGD2K.PovertyBay,NZGD2000.PovertyBay,NZGD2K.PovertyBay,NZGD2000 / Poverty Bay 2000,NZGD_2000_Poverty_Bay_Circuit,NZGD2000 / Poverty Bay Circuit 2000,,,NZGD2000 / Poverty Bay Circuit 2000,,,,,,,,,0,0,0
-11300,2108,2108,2108,0,0,0,,NZGD2K.HawkesBay,NZGD2000.HawkesBay,NZGD2K.HawkesBay,NZGD2000 / Hawkes Bay 2000,NZGD_2000_Hawkes_Bay_Circuit,NZGD2000 / Hawkes Bay Circuit 2000,,,NZGD2000 / Hawkes Bay Circuit 2000,,,,,,,,,0,0,0
+11200,2107,2107,2107,0,0,0,,NZGD2K.PovertyBay,NZGD2000.PovertyBay,NZGD2K.PovertyBay|NZ-PB-2000,NZGD2000 / Poverty Bay 2000,NZGD_2000_Poverty_Bay_Circuit,NZGD2000 / Poverty Bay Circuit 2000,,,NZGD2000 / Poverty Bay Circuit 2000,,,,,,,,,0,0,0
+11300,2108,2108,2108,0,0,0,,NZGD2K.HawkesBay,NZGD2000.HawkesBay,NZGD2K.HawkesBay|NZ-HB-2000,NZGD2000 / Hawkes Bay 2000,NZGD_2000_Hawkes_Bay_Circuit,NZGD2000 / Hawkes Bay Circuit 2000,,,NZGD2000 / Hawkes Bay Circuit 2000,,,,,,,,,0,0,0
 11400,2109,2109,2109,0,0,0,,NZGD2K.Taranaki,NZGD2000.Taranaki,NZGD2K.Taranaki,NZGD2000 / Taranaki 2000,NZGD_2000_Taranaki_Circuit,NZGD2000 / Taranaki Circuit 2000,,,NZGD2000 / Taranaki Circuit 2000,,,,,,,,,0,0,0
-11500,2110,2110,2110,0,0,0,,NZGD2K.Tuhirangi,NZGD2000.Tuhirangi,NZGD2K.Tuhirangi,NZGD2000 / Tuhirangi 2000,NZGD_2000_Tuhirangi_Circuit,NZGD2000 / Tuhirangi Circuit 2000,,,NZGD2000 / Tuhirangi Circuit 2000,,,,,,,,,0,0,0
-11600,2111,2111,2111,0,0,0,,NZGD2K.Wanganui,NZGD2000.Wanganui,NZGD2K.Wanganui,NZGD2000 / Wanganui 2000,NZGD_2000_Wanganui_Circuit,NZGD2000 / Wanganui Circuit 2000,,,NZGD2000 / Wanganui Circuit 2000,,,,,,,,,0,0,0
-11700,2112,2112,2112,0,0,0,,NZGD2K.Wairarapa,NZGD2000.Wairarapa,NZGD2K.Wairarapa,NZGD2000 / Wairarapa 2000,NZGD_2000_Wairarapa_Circuit,NZGD2000 / Wairarapa Circuit 2000,,,NZGD2000 / Wairarapa Circuit 2000,,,,,,,,,0,0,0
+11500,2110,2110,2110,0,0,0,,NZGD2K.Tuhirangi,NZGD2000.Tuhirangi,NZGD2K.Tuhirangi|NZ-TU-2000,NZGD2000 / Tuhirangi 2000,NZGD_2000_Tuhirangi_Circuit,NZGD2000 / Tuhirangi Circuit 2000,,,NZGD2000 / Tuhirangi Circuit 2000,,,,,,,,,0,0,0
+11600,2111,2111,2111,0,0,0,,NZGD2K.Wanganui,NZGD2000.Wanganui,NZGD2K.Wanganui|NZ-WAN-2000,NZGD2000 / Wanganui 2000,NZGD_2000_Wanganui_Circuit,NZGD2000 / Wanganui Circuit 2000,,,NZGD2000 / Wanganui Circuit 2000,,,,,,,,,0,0,0
+11700,2112,2112,2112,0,0,0,,NZGD2K.Wairarapa,NZGD2000.Wairarapa,NZGD2K.Wairarapa|NZ-WA-2000,NZGD2000 / Wairarapa 2000,NZGD_2000_Wairarapa_Circuit,NZGD2000 / Wairarapa Circuit 2000,,,NZGD2000 / Wairarapa Circuit 2000,,,,,,,,,0,0,0
 11800,2113,2113,2113,0,0,0,,NZGD2K.Wellington,NZGD2000.Wellington,NZGD2K.Wellington,NZGD2000 / Wellington 2000,NZGD_2000_Wellington_Circuit,NZGD2000 / Wellington Circuit 2000,,,NZGD2000 / Wellington Circuit 2000,,,,,,,,,0,0,0
-11900,2114,2114,2114,0,0,0,,NZGD2K.Collingwood,NZGD2000.Collingwood,NZGD2K.Collingwood,NZGD2000 / Collingwood 2000,NZGD_2000_Collingwood_Circuit,NZGD2000 / Collingwood Circuit 2000,,,NZGD2000 / Collingwood Circuit 2000,,,,,,,,,0,0,0
-12000,2115,2115,2115,0,0,0,,NZGD2K.Nelson,NZGD2000.Nelson,NZGD2K.Nelson,NZGD2000 / Nelson 2000,NZGD_2000_Nelson_Circuit,NZGD2000 / Nelson Circuit 2000,,,NZGD2000 / Nelson Circuit 2000,,,,,,,,,0,0,0
-12100,2116,2116,2116,0,0,0,,NZGD2K.Karamea,NZGD2000.Karamea,NZGD2K.Karamea,NZGD2000 / Karamea 2000,NZGD_2000_Karamea_Circuit,NZGD2000 / Karamea Circuit 2000,,,NZGD2000 / Karamea Circuit 2000,,,,,,,,,0,0,0
-12200,2117,2117,2117,0,0,0,,NZGD2K.Buller,NZGD2000.Buller,NZGD2K.Buller,NZGD2000 / Buller 2000,NZGD_2000_Buller_Circuit,NZGD2000 / Buller Circuit 2000,,,NZGD2000 / Buller Circuit 2000,,,,,,,,,0,0,0
-12300,2118,2118,2118,0,0,0,,NZGD2K.Grey,NZGD2000.Grey,NZGD2K.Grey,NZGD2000 / Grey 2000,NZGD_2000_Grey_Circuit,NZGD2000 / Grey Circuit 2000,,,NZGD2000 / Grey Circuit 2000,,,,,,,,,0,0,0
-12400,2119,2119,2119,0,0,0,,NZGD2K.Amuri,NZGD2000.Amuri,NZGD2K.Amuri,NZGD2000 / Amuri 2000,NZGD_2000_Amuri_Circuit,NZGD2000 / Amuri Circuit 2000,,,NZGD2000 / Amuri Circuit 2000,,,,,,,,,0,0,0
-12500,2120,2120,2120,0,0,0,,NZGD2K.Marlborough,NZGD2000.Marlborough,NZGD2K.Marlborough,NZGD2000 / Marlborough 2000,NZGD_2000_Marlborough_Circuit,NZGD2000 / Marlborough Circuit 2000,,,NZGD2000 / Marlborough Circuit 2000,,,,,,,,,0,0,0
-12600,2121,2121,2121,0,0,0,,NZGD2K.Hokitika,NZGD2000.Hokitika,NZGD2K.Hokitika,NZGD2000 / Hokitika 2000,NZGD_2000_Hokitika_Circuit,NZGD2000 / Hokitika Circuit 2000,,,NZGD2000 / Hokitika Circuit 2000,,,,,,,,,0,0,0
-12700,2122,2122,2122,0,0,0,,NZGD2K.Okarito,NZGD2000.Okarito,NZGD2K.Okarito,NZGD2000 / Okarito 2000,NZGD_2000_Okarito_Circuit,NZGD2000 / Okarito Circuit 2000,,,NZGD2000 / Okarito Circuit 2000,,,,,,,,,0,0,0
-12800,2123,2123,2123,0,0,0,,NZGD2K.JacksonsBay,NZGD2000.JacksonsBay,NZGD2K.JacksonsBay,NZGD2000 / Jacksons Bay 2000,NZGD_2000_Jacksons_Bay_Circuit,NZGD2000 / Jacksons Bay Circuit 2000,,,NZGD2000 / Jacksons Bay Circuit 2000,,,,,,,,,0,0,0
-12900,2124,2124,2124,0,0,0,,NZGD2K.MountPleasant,NZGD2000.MountPleasant,NZGD2K.MountPleasant,NZGD2000 / Mount Pleasant 2000,NZGD_2000_Mount_Pleasant_Circuit,NZGD2000 / Mount Pleasant Circuit 2000,,,NZGD2000 / Mount Pleasant Circuit 2000,,,,,,,,,0,0,0
-13000,2125,2125,2125,0,0,0,,NZGD2K.Gawler,NZGD2000.Gawler,NZGD2K.Gawler,NZGD2000 / Gawler 2000,NZGD_2000_Gawler_Circuit,NZGD2000 / Gawler Circuit 2000,,,NZGD2000 / Gawler Circuit 2000,,,,,,,,,0,0,0
-13100,2126,2126,2126,0,0,0,,NZGD2K.Timaru,NZGD2000.Timaru,NZGD2K.Timaru,NZGD2000 / Timaru 2000,NZGD_2000_Timaru_Circuit,NZGD2000 / Timaru Circuit 2000,,,NZGD2000 / Timaru Circuit 2000,,,,,,,,,0,0,0
-13200,2127,2127,2127,0,0,0,,NZGD2K.LindisPeak,NZGD2000.LindisPeak,NZGD2K.LindisPeak,NZGD2000 / Lindis Peak 2000,NZGD_2000_Lindis_Peak_Circuit,NZGD2000 / Lindis Peak Circuit 2000,,,NZGD2000 / Lindis Peak Circuit 2000,,,,,,,,,0,0,0
-13300,2128,2128,2128,0,0,0,,NZGD2K.MountNicholas,NZGD2000.MountNicholas,NZGD2K.MountNicholas,NZGD2000 / Mount Nicholas 2000,NZGD_2000_Mount_Nicholas_Circuit,NZGD2000 / Mount Nicholas Circuit 2000,,,NZGD2000 / Mount Nicholas Circuit 2000,,,,,,,,,0,0,0
-13400,2129,2129,2129,0,0,0,,NZGD2K.MountYork,NZGD2000.MountYork,NZGD2K.MountYork,NZGD2000 / Mount York 2000,NZGD_2000_Mount_York_Circuit,NZGD2000 / Mount York Circuit 2000,,,NZGD2000 / Mount York Circuit 2000,,,,,,,,,0,0,0
-13500,2130,2130,2130,0,0,0,,NZGD2K.ObservationPnt,NZGD2000.ObservationPnt,NZGD2K.ObservationPnt,NZGD2000 / Observation Point 2000,NZGD_2000_Observation_Point_Circuit,NZGD2000 / Observation Point Circuit 2000,,,NZGD2000 / Observation Point Circuit 2000,,,,,,,,,0,0,0
-13600,2131,2131,2131,0,0,0,,NZGD2K.NorthTaieri,NZGD2000.NorthTaieri,NZGD2K.NorthTaieri,NZGD2000 / North Taieri 2000,NZGD_2000_North_Taieri_Circuit,NZGD2000 / North Taieri Circuit 2000,,,NZGD2000 / North Taieri Circuit 2000,,,,,,,,,0,0,0
-13700,2132,2132,2132,0,0,0,,NZGD2K.Bluff,NZGD2000.Bluff,NZGD2K.Bluff,NZGD2000 / Bluff 2000,NZGD_2000_Bluff_Circuit,NZGD2000 / Bluff Circuit 2000,,,NZGD2000 / Bluff Circuit 2000,,,,,,,,,0,0,0
+11900,2114,2114,2114,0,0,0,,NZGD2K.Collingwood,NZGD2000.Collingwood,NZGD2K.Collingwood|NZ-COL-2000,NZGD2000 / Collingwood 2000,NZGD_2000_Collingwood_Circuit,NZGD2000 / Collingwood Circuit 2000,,,NZGD2000 / Collingwood Circuit 2000,,,,,,,,,0,0,0
+12000,2115,2115,2115,0,0,0,,NZGD2K.Nelson,NZGD2000.Nelson,NZGD2K.Nelson|NZ-NL-2000,NZGD2000 / Nelson 2000,NZGD_2000_Nelson_Circuit,NZGD2000 / Nelson Circuit 2000,,,NZGD2000 / Nelson Circuit 2000,,,,,,,,,0,0,0
+12100,2116,2116,2116,0,0,0,,NZGD2K.Karamea,NZGD2000.Karamea,NZGD2K.Karamea|NZ-KA-2000,NZGD2000 / Karamea 2000,NZGD_2000_Karamea_Circuit,NZGD2000 / Karamea Circuit 2000,,,NZGD2000 / Karamea Circuit 2000,,,,,,,,,0,0,0
+12200,2117,2117,2117,0,0,0,,NZGD2K.Buller,NZGD2000.Buller,NZGD2K.Buller|NZ-BUL-2000,NZGD2000 / Buller 2000,NZGD_2000_Buller_Circuit,NZGD2000 / Buller Circuit 2000,,,NZGD2000 / Buller Circuit 2000,,,,,,,,,0,0,0
+12300,2118,2118,2118,0,0,0,,NZGD2K.Grey,NZGD2000.Grey,NZGD2K.Grey|NZ-GRY-2000,NZGD2000 / Grey 2000,NZGD_2000_Grey_Circuit,NZGD2000 / Grey Circuit 2000,,,NZGD2000 / Grey Circuit 2000,,,,,,,,,0,0,0
+12400,2119,2119,2119,0,0,0,,NZGD2K.Amuri,NZGD2000.Amuri,NZGD2K.Amuri|NZ-AM-2000,NZGD2000 / Amuri 2000,NZGD_2000_Amuri_Circuit,NZGD2000 / Amuri Circuit 2000,,,NZGD2000 / Amuri Circuit 2000,,,,,,,,,0,0,0
+12500,2120,2120,2120,0,0,0,,NZGD2K.Marlborough,NZGD2000.Marlborough,NZGD2K.Marlborough|NZ-MA-2000,NZGD2000 / Marlborough 2000,NZGD_2000_Marlborough_Circuit,NZGD2000 / Marlborough Circuit 2000,,,NZGD2000 / Marlborough Circuit 2000,,,,,,,,,0,0,0
+12600,2121,2121,2121,0,0,0,,NZGD2K.Hokitika,NZGD2000.Hokitika,NZGD2K.Hokitika|NZ-HO-2000,NZGD2000 / Hokitika 2000,NZGD_2000_Hokitika_Circuit,NZGD2000 / Hokitika Circuit 2000,,,NZGD2000 / Hokitika Circuit 2000,,,,,,,,,0,0,0
+12700,2122,2122,2122,0,0,0,,NZGD2K.Okarito,NZGD2000.Okarito,NZGD2K.Okarito|NZ-OK-2000,NZGD2000 / Okarito 2000,NZGD_2000_Okarito_Circuit,NZGD2000 / Okarito Circuit 2000,,,NZGD2000 / Okarito Circuit 2000,,,,,,,,,0,0,0
+12800,2123,2123,2123,0,0,0,,NZGD2K.JacksonsBay,NZGD2000.JacksonsBay,NZGD2K.JacksonsBay|NZ-JB-2000,NZGD2000 / Jacksons Bay 2000,NZGD_2000_Jacksons_Bay_Circuit,NZGD2000 / Jacksons Bay Circuit 2000,,,NZGD2000 / Jacksons Bay Circuit 2000,,,,,,,,,0,0,0
+12900,2124,2124,2124,0,0,0,,NZGD2K.MountPleasant,NZGD2000.MountPleasant,NZGD2K.MountPleasant|NZ-MTP-2000,NZGD2000 / Mount Pleasant 2000,NZGD_2000_Mount_Pleasant_Circuit,NZGD2000 / Mount Pleasant Circuit 2000,,,NZGD2000 / Mount Pleasant Circuit 2000,,,,,,,,,0,0,0
+13000,2125,2125,2125,0,0,0,,NZGD2K.Gawler,NZGD2000.Gawler,NZGD2K.Gawler|NZ-GAW-2000,NZGD2000 / Gawler 2000,NZGD_2000_Gawler_Circuit,NZGD2000 / Gawler Circuit 2000,,,NZGD2000 / Gawler Circuit 2000,,,,,,,,,0,0,0
+13100,2126,2126,2126,0,0,0,,NZGD2K.Timaru,NZGD2000.Timaru,NZGD2K.Timaru|NZ-TI-2000,NZGD2000 / Timaru 2000,NZGD_2000_Timaru_Circuit,NZGD2000 / Timaru Circuit 2000,,,NZGD2000 / Timaru Circuit 2000,,,,,,,,,0,0,0
+13200,2127,2127,2127,0,0,0,,NZGD2K.LindisPeak,NZGD2000.LindisPeak,NZGD2K.LindisPeak|NZ-LP-2000,NZGD2000 / Lindis Peak 2000,NZGD_2000_Lindis_Peak_Circuit,NZGD2000 / Lindis Peak Circuit 2000,,,NZGD2000 / Lindis Peak Circuit 2000,,,,,,,,,0,0,0
+13300,2128,2128,2128,0,0,0,,NZGD2K.MountNicholas,NZGD2000.MountNicholas,NZGD2K.MountNicholas|NZ-MTN-2000,NZGD2000 / Mount Nicholas 2000,NZGD_2000_Mount_Nicholas_Circuit,NZGD2000 / Mount Nicholas Circuit 2000,,,NZGD2000 / Mount Nicholas Circuit 2000,,,,,,,,,0,0,0
+13400,2129,2129,2129,0,0,0,,NZGD2K.MountYork,NZGD2000.MountYork,NZGD2K.MountYork|NZ-MTY-2000,NZGD2000 / Mount York 2000,NZGD_2000_Mount_York_Circuit,NZGD2000 / Mount York Circuit 2000,,,NZGD2000 / Mount York Circuit 2000,,,,,,,,,0,0,0
+13500,2130,2130,2130,0,0,0,,NZGD2K.ObservationPnt,NZGD2000.ObservationPnt,NZGD2K.ObservationPnt|NZ-OBP-2000,NZGD2000 / Observation Point 2000,NZGD_2000_Observation_Point_Circuit,NZGD2000 / Observation Point Circuit 2000,,,NZGD2000 / Observation Point Circuit 2000,,,,,,,,,0,0,0
+13600,2131,2131,2131,0,0,0,,NZGD2K.NorthTaieri,NZGD2000.NorthTaieri,NZGD2K.NorthTaieri|NZ-NT-2000,NZGD2000 / North Taieri 2000,NZGD_2000_North_Taieri_Circuit,NZGD2000 / North Taieri Circuit 2000,,,NZGD2000 / North Taieri Circuit 2000,,,,,,,,,0,0,0
+13700,2132,2132,2132,0,0,0,,NZGD2K.Bluff,NZGD2000.Bluff,NZGD2K.Bluff|NZ-BLF-2000,NZGD2000 / Bluff 2000,NZGD_2000_Bluff_Circuit,NZGD2000 / Bluff Circuit 2000,,,NZGD2000 / Bluff Circuit 2000,,,,,,,,,0,0,0
 13800,2133,2133,2133,0,0,0,,NZGD2K.UTM-58S,NZGD2000.UTM-58S,NZGD2K.UTM-58S,NZGD2000 / UTM zone 58S,NZGD_2000_UTM_Zone_58S,NZGD2000 / UTM zone 58S,,,NZGD2000 / UTM zone 58S,,,,,,,,,0,0,0
 13900,2134,2134,2134,0,0,0,,NZGD2K.UTM-59S,NZGD2000.UTM-59S,NZGD2K.UTM-59S,NZGD2000 / UTM zone 59S,NZGD_2000_UTM_Zone_59S,NZGD2000 / UTM zone 59S,,,NZGD2000 / UTM zone 59S,,,,,,,,,0,0,0
 14000,2135,2135,2135,0,0,0,,NZGD2K.UTM-60S,NZGD2000.UTM-60S,NZGD2K.UTM-60S,NZGD2000 / UTM zone 60S,NZGD_2000_UTM_Zone_60S,NZGD2000 / UTM zone 60S,,,NZGD2000 / UTM zone 60S,,,,,,,,,0,0,0
@@ -156,7 +156,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 15500,2165,2165,2165,0,0,0,,Abidjan87.TM-5NW,Abidjan87.TM-5NW,Abidjan1987.TM-5NW,Abidjan 1987 / TM 5 NW,Abidjan_1987_TM_5_NW,Abidjan 1987 / TM 5 NW,,,Abidjan 1987 / TM 5 NW,,,,,,,,,0,0,0
 15600,2169,2169,2169,0,0,0,,Luxembourg30.Gauss,Luxembourg30.Gauss,Luxembourg30.Gauss,Luxembourg 1930 / Gauss,Luxembourg_1930_Gauss,Luxembourg 1930 / Gauss,,,Luxembourg 1930 / Gauss,,,,,,,,,0,0,0
 15700,2170,2170,2170,0,0,0,,MGI.Slovenia,MGI.Slovenia,MGI/gc.Slovenia,MGI / Slovenia Grid,MGI_Slovenia_Grid,MGI / Slovenia Grid,,,MGI / Slovenia Grid,,,,,,,,,0,0,0
-15800,3120,0,2171,0,0,0,,Pulkovo/58.Poland-I,Pulkovo/58.Poland-I,Pulkovo/58.Poland-I/a,Pulkovo 1942(58) / Poland zone I,,Pulkovo 1942(58) / Poland zone I,,,Pulkovo 1942(58) / Poland zone I,,,,,,,,,0,0,0
+15800,3120,0,2171,0,0,0,,Pulkovo/58.Poland-I,Pulkovo/58.Poland-I,,Pulkovo 1942(58) / Poland zone I,,Pulkovo 1942(58) / Poland zone I,,,Pulkovo 1942(58) / Poland zone I,,,,,,,,,0,0,0
 15900,2172,0,2172,0,0,0,,Pulkovo/58.Poland-II,Pulkovo/58.Poland-II,Pulkovo/58.Poland-II,Pulkovo 1942(58) / Poland zone II,,Pulkovo 1942(58) / Poland zone II,,,Pulkovo 1942(58) / Poland zone II,,,,,,,,,0,0,0
 16000,2173,0,2173,0,0,0,,Pulkovo/58.Poland-III,Pulkovo/58.Poland-III,Pulkovo/58.Poland-III,Pulkovo 1942(58) / Poland zone III,,Pulkovo 1942(58) / Poland zone III,,,Pulkovo 1942(58) / Poland zone III,,,,,,,,,0,0,0
 16100,2174,0,2174,0,0,0,,Pulkovo/58.Poland-IV,Pulkovo/58.Poland-IV,Pulkovo/58.Poland-IV,Pulkovo 1942(58) / Poland zone IV,,Pulkovo 1942(58) / Poland zone IV,,,Pulkovo 1942(58) / Poland zone IV,,,,,,,,,0,0,0
@@ -168,12 +168,12 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 16700,2180,2180,2180,0,0,0,,ETRS89.PolandCS92,ETRF89.PolandCS92,ETRS89.PolandCS92,ETRS89 / Poland CS92,ETRS_1989_Poland_CS92,ETRS89 / Poland CS92,,,ETRS89 / Poland CS92,,,,,,,,,0,0,0
 16800,2188,0,2188,0,0,0,,AzoresOccdtl39.UTM-25N,AzoresOccdtl39.UTM-25N,AzoresWest1939.UTM-25N,Azores Occidental 1939 / UTM zone 25N,,Azores Occidental 1939 / UTM zone 25N,,,Azores Occidental 1939 / UTM zone 25N,,,,,,,,,0,0,0
 16900,2189,0,2189,0,0,0,,AzoresCntrl48.UTM-26N,AzoresCntrl48.UTM-26N,F26-GR,Azores Central 1948 / UTM zone 26N,,Azores Central 1948 / UTM zone 26N,,,Azores Central 1948 / UTM zone 26N,,,,,,,,,0,0,0
-17000,2190,0,2190,0,0,0,,AzoresOrntl40.UTM-26N,AzoresOrntl40.UTM-26N,AzoresOrntl40.UTM-26N,Azores Oriental 1940 / UTM zone 26N,,Azores Oriental 1940 / UTM zone 26N,,,Azores Oriental 1940 / UTM zone 26N,,,,,,,,,0,0,0
+17000,2190,0,2190,0,0,0,,AzoresOrntl40.UTM-26N,AzoresOrntl40.UTM-26N,AzoresOrntl40.UTM-26N|F26-SB,Azores Oriental 1940 / UTM zone 26N,,Azores Oriental 1940 / UTM zone 26N,,,Azores Oriental 1940 / UTM zone 26N,,,,,,,,,0,0,0
 17100,2191,0,2191,0,0,0,,Madeira36.UTM-28N,Madeira36.UTM-28N,,Madeira 1936 / UTM zone 28N,,Madeira 1936 / UTM zone 28N,,,Madeira 1936 / UTM zone 28N,,,,,,,,,0,0,0
 17200,2192,2192,2192,0,0,0,,ED50.EuroLambert,ED50.EuroLambert,ED50.EuroLambert,ED50 / France EuroLambert,ED_1950_France_EuroLambert,ED50 / France EuroLambert,,,,,,,,,,,,0,0,0
-17300,2193,2193,2193,0,0,0,,NZTM,NZGD2000.NewZealand/TM,NZTM,NZGD2000 / New Zealand Transverse Mercator 2000,NZGD_2000_New_Zealand_Transverse_Mercator,NZGD2000 / New Zealand Transverse Mercator,,,NZGD2000 / New Zealand Transverse Mercator,,,,,,,,,0,0,0
+17300,2193,2193,2193,0,0,0,,NZTM,NZGD2000.NewZealand/TM,NZTM|NZ-TM,NZGD2000 / New Zealand Transverse Mercator 2000,NZGD_2000_New_Zealand_Transverse_Mercator,NZGD2000 / New Zealand Transverse Mercator,,,NZGD2000 / New Zealand Transverse Mercator,,,,,,,,,0,0,0
 17400,2194,0,0,0,0,0,,AmSamoa62.Lambert,AmSamoa62.Lambert,AmSamoa62.Lambert,American Samoa 1962 / American Samoa Lambert,,,,,,,,,,,,,"Duplicate names caused by EPSG depcrecation, ID: 943.",0,0,0
-17500,2195,2195,2195,0,0,0,,HARN.UTM-2S,HARN.UTM-2S,HARN.UTM-2S,NAD83(HARN) / UTM zone 2S,NAD_1983_HARN_UTM_Zone_2S,NAD83(HARN) / UTM zone 2S,,,NAD83(HARN) / UTM zone 2S,,,,,,,,,0,0,0
+17500,2195,2195,2195,0,0,0,,HARN.UTM-2S,HARN.UTM-2S,HARN.UTM-2S|SAMOA-HARN,NAD83(HARN) / UTM zone 2S,NAD_1983_HARN_UTM_Zone_2S,NAD83(HARN) / UTM zone 2S,,,NAD83(HARN) / UTM zone 2S,,,,,,,,,0,0,0
 17600,2196,2196,2196,0,0,0,,ETRS89.Kp2K-Jutland,ETRF89.Kp2K-Jutland,ETRS89.Kp2K-Jutland,ETRS89 / Kp2000 Jutland,ETRS_1989_Kp2000_Jutland,ETRS89 / Kp2000 Jutland,,,ETRS89 / Kp2000 Jutland,,,,,,,,,0,0,0
 17700,2197,2197,2197,0,0,0,,ETRS89.Kp2K-Zealand,ETRF89.Kp2K-Zealand,ETRS89.Kp2K-Zealand,ETRS89 / Kp2000 Zealand,ETRS_1989_Kp2000_Zealand,ETRS89 / Kp2000 Zealand,,,ETRS89 / Kp2000 Zealand,,,,,,,,,0,0,0
 17800,2198,2198,2198,0,0,0,,ETRS89.Kp2K-Bornholm,ETRS89.Kp2K-Bornholm,ETRS89.Kp2K-Bornholm,ETRS89 / Kp2000 Bornholm,ETRS_1989_Kp2000_Bornholm,ETRS89 / Kp2000 Bornholm,,,ETRS89 / Kp2000 Bornholm,,,,,,,,,0,0,0
@@ -195,8 +195,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 19400,2216,2216,2216,0,0,0,,Qornoq27.UTM-22N,Qornoq27.UTM-22N,Qornoq1927.UTM-22N,Qornoq 1927 / UTM zone 22N,Qornoq_1927_UTM_Zone_22N,Qornoq 1927 / UTM zone 22N,,,Qornoq 1927 / UTM zone 22N,,,,,,,,,0,0,0
 19500,2217,2217,2217,0,0,0,,Qornoq27.UTM-23N,Qornoq27.UTM-23N,Qornoq1927.UTM-23N,Qornoq 1927 / UTM zone 23N,Qornoq_1927_UTM_Zone_23N,Qornoq 1927 / UTM zone 23N,,,Qornoq 1927 / UTM zone 23N,,,,,,,,,0,0,0
 19600,2218,0,2218,0,0,0,,Greenland52-5E,Scoresbysund52.Greenland-5E,,Scoresbysund 1952 / Greenland zone 5 east,,Scoresbysund 1952 / Greenland zone 5 east,,,Scoresbysund 1952 / Greenland zone 5 east,,,,,,,,,0,0,0
-19700,2219,2219,2219,0,0,0,,ATS77.UTM-19N,ATS77.UTM-19N,ATS77.UTM-19N,ATS77 / UTM zone 19N,ATS_1977_UTM_Zone_19N,ATS77 / UTM zone 19N,,,,,,,,,,,,0,0,0
-19800,2220,2220,2220,0,0,0,,ATS77.UTM-20N,ATS77.UTM-20N,ATS77.UTM-20N,ATS77 / UTM zone 20N,ATS_1977_UTM_Zone_20N,ATS77 / UTM zone 20N,,,,,,,,,,,,0,0,0
+19700,2219,2219,2219,0,0,0,,ATS77.UTM-19N,ATS77.UTM-19N,ATS77.UTM-19N|CANNB-19N-ATS,ATS77 / UTM zone 19N,ATS_1977_UTM_Zone_19N,ATS77 / UTM zone 19N,,,,,,,,,,,,0,0,0
+19800,2220,2220,2220,0,0,0,,ATS77.UTM-20N,ATS77.UTM-20N,ATS77.UTM-20N|CANNB-20N-ATS,ATS77 / UTM zone 20N,ATS_1977_UTM_Zone_20N,ATS77 / UTM zone 20N,,,,,,,,,,,,0,0,0
 19900,2221,0,2221,0,0,0,,Greenland52-6E,Scoresbysund52.Greenland-6E,,Scoresbysund 1952 / Greenland zone 6 east,,Scoresbysund 1952 / Greenland zone 6 east,,,Scoresbysund 1952 / Greenland zone 6 east,,,,,,,,,0,0,0
 20000,2222,2222,2222,0,0,81977,,AZ83-EIF,NAD83.AZ-EI.IntnlFt,AZ83-EIF,NAD83 / Arizona East (ft),NAD_1983_StatePlane_Arizona_East_FIPS_0201_Feet_Intl,NAD83 / Arizona East (ft),,,,,,,"Arizona 0201, Eastern Zone (1983, feet)",,,,,0,0,0
 20100,2223,2223,2223,0,0,81981,,AZ83-CIF,NAD83.AZ-CI.IntnlFt,AZ83-CIF,NAD83 / Arizona Central (ft),NAD_1983_StatePlane_Arizona_Central_FIPS_0202_Feet_Intl,NAD83 / Arizona Central (ft),,,,,,,"Arizona 0202, Central Zone (1983, feet)",,,,,0,0,0
@@ -487,7 +487,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 48600,2513,0,2513,0,0,0,,Pulkovo42.GK/CM-135E,Pulkovo42.GK/CM-135E,Pulkovo42.GK/CM-135E,Pulkovo 1942 / Gauss-Kruger CM 135E,Pulkovo_1942_GK_Zone_23N,Pulkovo 1942 / Gauss-Kruger CM 135E,,,Pulkovo 1942 / Gauss-Kruger CM 135E,,,,,,,,,0,0,0
 48700,2514,0,2514,0,0,0,,Pulkovo42.GK/CM-141E,Pulkovo42.GK/CM-141E,Pulkovo42.GK/CM-141E,Pulkovo 1942 / Gauss-Kruger CM 141E,Pulkovo_1942_GK_Zone_24N,Pulkovo 1942 / Gauss-Kruger CM 141E,,,Pulkovo 1942 / Gauss-Kruger CM 141E,,,,,,,,,0,0,0
 48800,2515,0,2515,0,0,0,,Pulkovo42.GK/CM-147E,Pulkovo42.GK/CM-147E,Pulkovo42.GK/CM-147E,Pulkovo 1942 / Gauss-Kruger CM 147E,Pulkovo_1942_GK_Zone_25N,Pulkovo 1942 / Gauss-Kruger CM 147E,,,Pulkovo 1942 / Gauss-Kruger CM 147E,,,,,,,,,0,0,0
-48900,2516,0,2516,0,0,0,,Pulkovo42.GK/CM-153E,Pulkovo42.GK/CM-153E,Pulkovo42.GK/CM-153E,Pulkovo 1942 / Gauss-Kruger CM 153E,Pulkovo_1942_GK_Zone_26N,Pulkovo 1942 / Gauss-Kruger CM 153E,,,Pulkovo 1942 / Gauss-Kruger CM 153E,,,,,,,,,0,0,0
+48900,2516,0,2516,0,0,0,,Pulkovo42.GK/CM-153E,Pulkovo42.GK/CM-153E,Pulkovo42.GK/CM-153E|GK42-26N,Pulkovo 1942 / Gauss-Kruger CM 153E,Pulkovo_1942_GK_Zone_26N,Pulkovo 1942 / Gauss-Kruger CM 153E,,,Pulkovo 1942 / Gauss-Kruger CM 153E,,,,,,,,,0,0,0
 49000,2517,0,2517,0,0,0,,Pulkovo42.GK/CM-159E,Pulkovo42.GK/CM-159E,Pulkovo42.GK/CM-159E,Pulkovo 1942 / Gauss-Kruger CM 159E,Pulkovo_1942_GK_Zone_27N,Pulkovo 1942 / Gauss-Kruger CM 159E,,,Pulkovo 1942 / Gauss-Kruger CM 159E,,,,,,,,,0,0,0
 49100,2518,0,2518,0,0,0,,Pulkovo42.GK/CM-165E,Pulkovo42.GK/CM-165E,Pulkovo42.GK/CM-165E,Pulkovo 1942 / Gauss-Kruger CM 165E,Pulkovo_1942_GK_Zone_28N,Pulkovo 1942 / Gauss-Kruger CM 165E,,,Pulkovo 1942 / Gauss-Kruger CM 165E,,,,,,,,,0,0,0
 49200,2519,0,2519,0,0,0,,Pulkovo42.GK/CM-171E,Pulkovo42.GK/CM-171E,Pulkovo42.GK/CM-171E,Pulkovo 1942 / Gauss-Kruger CM 171E,Pulkovo_1942_GK_Zone_29N,Pulkovo 1942 / Gauss-Kruger CM 171E,,,Pulkovo 1942 / Gauss-Kruger CM 171E,,,,,,,,,0,0,0
@@ -752,11 +752,11 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 75100,2779,2779,2779,0,0,0,,FLHP-N,HARN.FL-N,FLHP-N,NAD83(HARN) / Florida North,NAD_1983_HARN_StatePlane_Florida_North_FIPS_0903,NAD83(HARN) / Florida North,,,NAD83(HARN) / Florida North,,,,,,,,,0,0,0
 75200,2780,2780,2780,0,0,0,,GAHP-E,HARN.GA-E,GAHP-E,NAD83(HARN) / Georgia East,NAD_1983_HARN_StatePlane_Georgia_East_FIPS_1001,NAD83(HARN) / Georgia East,,,NAD83(HARN) / Georgia East,,,,,,,,,0,0,0
 75300,2781,2781,2781,0,0,0,,GAHP-W,HARN.GA-W,GAHP-W,NAD83(HARN) / Georgia West,NAD_1983_HARN_StatePlane_Georgia_West_FIPS_1002,NAD83(HARN) / Georgia West,,,NAD83(HARN) / Georgia West,,,,,,,,,0,0,0
-75400,2782,2782,2782,0,0,0,,HIHP-1,HARN.HI-1,HIHP-1-MOD,NAD83(HARN) / Hawaii zone 1,NAD_1983_HARN_StatePlane_Hawaii_1_FIPS_5101,NAD83(HARN) / Hawaii zone 1,,,NAD83(HARN) / Hawaii zone 1,,,,,,,,,0,0,0
-75500,2783,2783,2783,0,0,0,,HIHP-2,HARN.HI-2,HIHP-2-MOD,NAD83(HARN) / Hawaii zone 2,NAD_1983_HARN_StatePlane_Hawaii_2_FIPS_5102,NAD83(HARN) / Hawaii zone 2,,,NAD83(HARN) / Hawaii zone 2,,,,,,,,,0,0,0
-75600,2784,2784,2784,0,0,0,,HIHP-3,HARN.HI-3,HIHP-3,NAD83(HARN) / Hawaii zone 3,NAD_1983_HARN_StatePlane_Hawaii_3_FIPS_5103,NAD83(HARN) / Hawaii zone 3,,,NAD83(HARN) / Hawaii zone 3,,,,,,,,,0,0,0
-75700,2785,2785,2785,0,0,0,,HIHP-4,HARN.HI-4,HIHP-4,NAD83(HARN) / Hawaii zone 4,NAD_1983_HARN_StatePlane_Hawaii_4_FIPS_5104,NAD83(HARN) / Hawaii zone 4,,,NAD83(HARN) / Hawaii zone 4,,,,,,,,,0,0,0
-75800,2786,2786,2786,0,0,0,,HIHP-5,HARN.HI-5,HIHP-5,NAD83(HARN) / Hawaii zone 5,NAD_1983_HARN_StatePlane_Hawaii_5_FIPS_5105,NAD83(HARN) / Hawaii zone 5,,,NAD83(HARN) / Hawaii zone 5,,,,,,,,,0,0,0
+75400,2782,2782,2782,0,0,0,,HIHP-1,HARN.HI-1,HIHP-1|HIHP-1-MOD,NAD83(HARN) / Hawaii zone 1,NAD_1983_HARN_StatePlane_Hawaii_1_FIPS_5101,NAD83(HARN) / Hawaii zone 1,,,NAD83(HARN) / Hawaii zone 1,,,,,,,,,0,0,0
+75500,2783,2783,2783,0,0,0,,HIHP-2,HARN.HI-2,HIHP-2|HIHP-2-MOD,NAD83(HARN) / Hawaii zone 2,NAD_1983_HARN_StatePlane_Hawaii_2_FIPS_5102,NAD83(HARN) / Hawaii zone 2,,,NAD83(HARN) / Hawaii zone 2,,,,,,,,,0,0,0
+75600,2784,2784,2784,0,0,0,,HIHP-3,HARN.HI-3,HIHP-3|HIHP-3-MOD,NAD83(HARN) / Hawaii zone 3,NAD_1983_HARN_StatePlane_Hawaii_3_FIPS_5103,NAD83(HARN) / Hawaii zone 3,,,NAD83(HARN) / Hawaii zone 3,,,,,,,,,0,0,0
+75700,2785,2785,2785,0,0,0,,HIHP-4,HARN.HI-4,HIHP-4|HIHP-4-MOD,NAD83(HARN) / Hawaii zone 4,NAD_1983_HARN_StatePlane_Hawaii_4_FIPS_5104,NAD83(HARN) / Hawaii zone 4,,,NAD83(HARN) / Hawaii zone 4,,,,,,,,,0,0,0
+75800,2786,2786,2786,0,0,0,,HIHP-5,HARN.HI-5,HIHP-5|HIHP-5-MOD,NAD83(HARN) / Hawaii zone 5,NAD_1983_HARN_StatePlane_Hawaii_5_FIPS_5105,NAD83(HARN) / Hawaii zone 5,,,NAD83(HARN) / Hawaii zone 5,,,,,,,,,0,0,0
 75900,2787,2787,2787,0,0,0,,IDHP-E,HARN.ID-E,IDHP-E,NAD83(HARN) / Idaho East,NAD_1983_HARN_StatePlane_Idaho_East_FIPS_1101,NAD83(HARN) / Idaho East,,,NAD83(HARN) / Idaho East,,,,,,,,,0,0,0
 76000,2788,2788,2788,0,0,0,,IDHP-C,HARN.ID-C,IDHP-C,NAD83(HARN) / Idaho Central,NAD_1983_HARN_StatePlane_Idaho_Central_FIPS_1102,NAD83(HARN) / Idaho Central,,,NAD83(HARN) / Idaho Central,,,,,,,,,0,0,0
 76100,2789,2789,2789,0,0,0,,IDHP-W,HARN.ID-W,IDHP-W,NAD83(HARN) / Idaho West,NAD_1983_HARN_StatePlane_Idaho_West_FIPS_1103,NAD83(HARN) / Idaho West,,,NAD83(HARN) / Idaho West,,,,,,,,,0,0,0
@@ -903,33 +903,33 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 90200,2932,0,2932,0,0,0,,QND95.QatarNational,QND95.QatarNational,QND95.QatarNational,QND95 / Qatar National Grid,,QND95 / Qatar National Grid,,,QND95 / Qatar National Grid,,,,,,,,,0,0,0
 90300,2933,2550,2933,0,0,0,,Segara.UTM-50S,Segara.UTM-50S,GunungSegara.UTM-50S,Segara / UTM zone 50S,Samboja_UTM_Zone_50S,Segara / UTM zone 50S,,,Segara / UTM zone 50S,,,,,,,,,0,0,0
 90400,2934,0,0,0,0,0,,,,,Segara (Jakarta) / NEIEZ,,,,,Segara (Jakarta) / NEIEZ,,,,,,,,,0,0,0
-90500,2935,2935,2935,0,0,0,,Pulkovo42.CS63-A1,Pulkovo42.CS63-A1,Pulkovo42.CS63-A1,Pulkovo 1942 / CS63 zone A1,Pulkovo_1942_CS63_Zone_A1,Pulkovo 1942 / CS63 zone A1,,,Pulkovo 1942 / CS63 zone A1,,,,,,,,,0,0,0
-90600,2936,2936,2936,0,0,0,,Pulkovo42.CS63-A2,Pulkovo42.CS63-A2,Pulkovo42.CS63-A2,Pulkovo 1942 / CS63 zone A2,Pulkovo_1942_CS63_Zone_A2,Pulkovo 1942 / CS63 zone A2,,,Pulkovo 1942 / CS63 zone A2,,,,,,,,,0,0,0
-90700,2937,2937,2937,0,0,0,,Pulkovo42.CS63-A3,Pulkovo42.CS63-A3,Pulkovo42.CS63-A3,Pulkovo 1942 / CS63 zone A3,Pulkovo_1942_CS63_Zone_A3,Pulkovo 1942 / CS63 zone A3,,,Pulkovo 1942 / CS63 zone A3,,,,,,,,,0,0,0
-90800,2938,2938,2938,0,0,0,,Pulkovo42.CS63-A4,Pulkovo42.CS63-A4,Pulkovo42.CS63-A4,Pulkovo 1942 / CS63 zone A4,Pulkovo_1942_CS63_Zone_A4,Pulkovo 1942 / CS63 zone A4,,,Pulkovo 1942 / CS63 zone A4,,,,,,,,,0,0,0
-90900,2939,2939,2939,0,0,0,,Pulkovo42.CS63-K2,Pulkovo42.CS63-K2,Pulkovo42.CS63-K2,Pulkovo 1942 / CS63 zone K2,Pulkovo_1942_CS63_Zone_K2,Pulkovo 1942 / CS63 zone K2,,,Pulkovo 1942 / CS63 zone K2,,,,,,,,,0,0,0
-91000,2940,2940,2940,0,0,0,,Pulkovo42.CS63-K3,Pulkovo42.CS63-K3,Pulkovo42.CS63-K3,Pulkovo 1942 / CS63 zone K3,Pulkovo_1942_CS63_Zone_K3,Pulkovo 1942 / CS63 zone K3,,,Pulkovo 1942 / CS63 zone K3,,,,,,,,,0,0,0
-91100,2941,2941,2941,0,0,0,,Pulkovo42.CS63-K4,Pulkovo42.CS63-K4,Pulkovo42.CS63-K4,Pulkovo 1942 / CS63 zone K4,Pulkovo_1942_CS63_Zone_K4,Pulkovo 1942 / CS63 zone K4,,,Pulkovo 1942 / CS63 zone K4,,,,,,,,,0,0,0
+90500,2935,2935,2935,0,0,0,,Pulkovo42.CS63-A1,Pulkovo42.CS63-A1,Pulkovo42.CS63-A1|CS63-A1,Pulkovo 1942 / CS63 zone A1,Pulkovo_1942_CS63_Zone_A1,Pulkovo 1942 / CS63 zone A1,,,Pulkovo 1942 / CS63 zone A1,,,,,,,,,0,0,0
+90600,2936,2936,2936,0,0,0,,Pulkovo42.CS63-A2,Pulkovo42.CS63-A2,Pulkovo42.CS63-A2|CS63-A2,Pulkovo 1942 / CS63 zone A2,Pulkovo_1942_CS63_Zone_A2,Pulkovo 1942 / CS63 zone A2,,,Pulkovo 1942 / CS63 zone A2,,,,,,,,,0,0,0
+90700,2937,2937,2937,0,0,0,,Pulkovo42.CS63-A3,Pulkovo42.CS63-A3,Pulkovo42.CS63-A3|CS63-A3,Pulkovo 1942 / CS63 zone A3,Pulkovo_1942_CS63_Zone_A3,Pulkovo 1942 / CS63 zone A3,,,Pulkovo 1942 / CS63 zone A3,,,,,,,,,0,0,0
+90800,2938,2938,2938,0,0,0,,Pulkovo42.CS63-A4,Pulkovo42.CS63-A4,Pulkovo42.CS63-A4|CS63-A4,Pulkovo 1942 / CS63 zone A4,Pulkovo_1942_CS63_Zone_A4,Pulkovo 1942 / CS63 zone A4,,,Pulkovo 1942 / CS63 zone A4,,,,,,,,,0,0,0
+90900,2939,2939,2939,0,0,0,,Pulkovo42.CS63-K2,Pulkovo42.CS63-K2,Pulkovo42.CS63-K2|CS63-K2,Pulkovo 1942 / CS63 zone K2,Pulkovo_1942_CS63_Zone_K2,Pulkovo 1942 / CS63 zone K2,,,Pulkovo 1942 / CS63 zone K2,,,,,,,,,0,0,0
+91000,2940,2940,2940,0,0,0,,Pulkovo42.CS63-K3,Pulkovo42.CS63-K3,Pulkovo42.CS63-K3|CS63-K3,Pulkovo 1942 / CS63 zone K3,Pulkovo_1942_CS63_Zone_K3,Pulkovo 1942 / CS63 zone K3,,,Pulkovo 1942 / CS63 zone K3,,,,,,,,,0,0,0
+91100,2941,2941,2941,0,0,0,,Pulkovo42.CS63-K4,Pulkovo42.CS63-K4,Pulkovo42.CS63-K4|CS63-K4,Pulkovo 1942 / CS63 zone K4,Pulkovo_1942_CS63_Zone_K4,Pulkovo 1942 / CS63 zone K4,,,Pulkovo 1942 / CS63 zone K4,,,,,,,,,0,0,0
 91200,2942,2942,2942,0,0,0,,PortoSanto.UTM-28N,PortoSanto.UTM-28N,PortoSanto36.UTM-28N,Porto Santo / UTM zone 28N,Porto_Santo_1936_UTM_Zone_28N,Porto Santo / UTM zone 28N,,,Porto Santo / UTM zone 28N,,,,,,,,,0,0,0
 91300,2943,0,2943,0,0,0,,SelvagemGrande.UTM-28N,SelvagemGrande.UTM-28N,Selvagem.UTM-28N,Selvagem Grande / UTM zone 28N,,Selvagem Grande / UTM zone 28N,,,Selvagem Grande / UTM zone 28N,,,,,,,,,0,0,0
-91400,2944,2139,2944,0,0,0,,CSRS.SCoPQ-2,CSRS.SCoPQ-2,CSRS.SCoPQ-2,NAD83(CSRS) / SCoPQ zone 2,NAD_1983_CSRS98_MTM_2_SCoPQ,NAD83(CSRS) / SCoPQ zone 2,,,NAD83(CSRS) / SCoPQ zone 2,,,,,,,,,0,0,0
-91500,2945,2140,2945,0,0,0,,CSRS.MTM-3,CSRS.MTM-3,CSRS.MTM-3,NAD83(CSRS) / MTM zone 3,NAD_1983_CRS98_MTM_3,NAD83(CSRS) / MTM zone 3,,,NAD83(CSRS) / MTM zone 3,,,,,,,,,0,0,0
-91600,2946,2141,2946,0,0,0,,CSRS.MTM-4,CSRS.MTM-4,CSRS.MTM-4,NAD83(CSRS) / MTM zone 4,NAD_1983_CRS98_MTM_4,NAD83(CSRS) / MTM zone 4,,,NAD83(CSRS) / MTM zone 4,,,,,,,,,0,0,0
-91700,2947,2142,2947,0,0,0,,CSRS.MTM-5,CSRS.MTM-5,CSRS.MTM-5,NAD83(CSRS) / MTM zone 5,NAD_1983_CRS98_MTM_5,NAD83(CSRS) / MTM zone 5,,,NAD83(CSRS) / MTM zone 5,,,,,,,,,0,0,0
-91800,2948,2143,2948,0,0,0,,CSRS.MTM-6,CSRS.MTM-6,CSRS.MTM-6,NAD83(CSRS) / MTM zone 6,NAD_1983_CRS98_MTM_6,NAD83(CSRS) / MTM zone 6,,,NAD83(CSRS) / MTM zone 6,,,,,,,,,0,0,0
-91900,2949,2144,2949,0,0,0,,CSRS.MTM-7,CSRS.MTM-7,CSRS.MTM-7,NAD83(CSRS) / MTM zone 7,NAD_1983_CRS98_MTM_7,NAD83(CSRS) / MTM zone 7,,,NAD83(CSRS) / MTM zone 7,,,,,,,,,0,0,0
-92000,2950,2145,2950,0,0,0,,CSRS.MTM-8,CSRS.MTM-8,CSRS.MTM-8,NAD83(CSRS) / MTM zone 8,NAD_1983_CRS98_MTM_8,NAD83(CSRS) / MTM zone 8,,,NAD83(CSRS) / MTM zone 8,,,,,,,,,0,0,0
-92100,2951,2146,2951,0,0,0,,CSRS.MTM-9,CSRS.MTM-9,CSRS.MTM-9,NAD83(CSRS) / MTM zone 9,NAD_1983_CRS98_MTM_9,NAD83(CSRS) / MTM zone 9,,,NAD83(CSRS) / MTM zone 9,,,,,,,,,0,0,0
-92200,2952,2147,2952,0,0,0,,CSRS.MTM-10,CSRS.MTM-10,CSRS.MTM-10,NAD83(CSRS) / MTM zone 10,NAD_1983_CRS98_MTM_10,NAD83(CSRS) / MTM zone 10,,,NAD83(CSRS) / MTM zone 10,,,,,,,,,0,0,0
+91400,2944,2139,2944,0,0,0,,CSRS.SCoPQ-2,CSRS.SCoPQ-2,CSRS.SCoPQ-2|NAD83/98.SCoPQ-2,NAD83(CSRS) / SCoPQ zone 2,NAD_1983_CSRS98_MTM_2_SCoPQ,NAD83(CSRS) / SCoPQ zone 2,,,NAD83(CSRS) / SCoPQ zone 2,,,,,,,,,0,0,0
+91500,2945,2140,2945,0,0,0,,CSRS.MTM-3,CSRS.MTM-3,CSRS.MTM-3|NAD83/98.MTM-3,NAD83(CSRS) / MTM zone 3,NAD_1983_CRS98_MTM_3,NAD83(CSRS) / MTM zone 3,,,NAD83(CSRS) / MTM zone 3,,,,,,,,,0,0,0
+91600,2946,2141,2946,0,0,0,,CSRS.MTM-4,CSRS.MTM-4,CSRS.MTM-4|NAD83/98.MTM-4,NAD83(CSRS) / MTM zone 4,NAD_1983_CRS98_MTM_4,NAD83(CSRS) / MTM zone 4,,,NAD83(CSRS) / MTM zone 4,,,,,,,,,0,0,0
+91700,2947,2142,2947,0,0,0,,CSRS.MTM-5,CSRS.MTM-5,CSRS.MTM-5|NAD83/98.MTM-5,NAD83(CSRS) / MTM zone 5,NAD_1983_CRS98_MTM_5,NAD83(CSRS) / MTM zone 5,,,NAD83(CSRS) / MTM zone 5,,,,,,,,,0,0,0
+91800,2948,2143,2948,0,0,0,,CSRS.MTM-6,CSRS.MTM-6,CSRS.MTM-6|NAD83/98.MTM-6,NAD83(CSRS) / MTM zone 6,NAD_1983_CRS98_MTM_6,NAD83(CSRS) / MTM zone 6,,,NAD83(CSRS) / MTM zone 6,,,,,,,,,0,0,0
+91900,2949,2144,2949,0,0,0,,CSRS.MTM-7,CSRS.MTM-7,CSRS.MTM-7|NAD83/98.MTM-7,NAD83(CSRS) / MTM zone 7,NAD_1983_CRS98_MTM_7,NAD83(CSRS) / MTM zone 7,,,NAD83(CSRS) / MTM zone 7,,,,,,,,,0,0,0
+92000,2950,2145,2950,0,0,0,,CSRS.MTM-8,CSRS.MTM-8,CSRS.MTM-8|NAD83/98.MTM-8,NAD83(CSRS) / MTM zone 8,NAD_1983_CRS98_MTM_8,NAD83(CSRS) / MTM zone 8,,,NAD83(CSRS) / MTM zone 8,,,,,,,,,0,0,0
+92100,2951,2146,2951,0,0,0,,CSRS.MTM-9,CSRS.MTM-9,CSRS.MTM-9|NAD83/98.MTM-9,NAD83(CSRS) / MTM zone 9,NAD_1983_CRS98_MTM_9,NAD83(CSRS) / MTM zone 9,,,NAD83(CSRS) / MTM zone 9,,,,,,,,,0,0,0
+92200,2952,2147,2952,0,0,0,,CSRS.MTM-10,CSRS.MTM-10,CSRS.MTM-10|NAD83/98.MTM-10,NAD83(CSRS) / MTM zone 10,NAD_1983_CRS98_MTM_10,NAD83(CSRS) / MTM zone 10,,,NAD83(CSRS) / MTM zone 10,,,,,,,,,0,0,0
 92300,2953,2036,2953,0,0,0,,NewBrunswickCSRS,CSRS.NewBrunswick/Stereo,CANST-NB83-CSRS,NAD83(CSRS) / New Brunswick Stereographic,NAD_1983_CSRS98_New_Brunswick_Stereographic,,,,NAD83(CSRS) / New Brunswick Stereo,,,,,,,,,0,0,0
-92500,2955,2153,2955,0,0,0,,CSRS.UTM-11N,CSRS.UTM-11N,CSRS.UTM-11N,NAD83(CSRS) / UTM zone 11N,NAD83(CSRS98) / UTM zone 11N,NAD83(CSRS) / UTM zone 11N,,,NAD83(CSRS) / UTM zone 11N,,,,,,,,,0,0,0
-92600,2956,2152,2956,0,0,0,,CSRS.UTM-12N,CSRS.UTM-12N,CSRS.UTM-12N,NAD83(CSRS) / UTM zone 12N,NAD83(CSRS98) / UTM zone 12N,NAD83(CSRS) / UTM zone 12N,,,NAD83(CSRS) / UTM zone 12N,,,,,,,,,0,0,0
-92700,2957,2151,2957,0,0,0,,CSRS.UTM-13N,CSRS.UTM-13N,CSRS.UTM-13N,NAD83(CSRS) / UTM zone 13N,NAD83(CSRS98) / UTM zone 13N,NAD83(CSRS) / UTM zone 13N,,,NAD83(CSRS) / UTM zone 13N,,,,,,,,,0,0,0
-92800,2958,2150,2958,0,0,0,,CSRS.UTM-17N,CSRS.UTM-17N,CSRS.UTM-17N,NAD83(CSRS) / UTM zone 17N,NAD83(CSRS98) / UTM zone 17N,NAD83(CSRS) / UTM zone 17N,,,NAD83(CSRS) / UTM zone 17N,,,,,,,,,0,0,0
-92900,2959,2149,2959,0,0,0,,CSRS.UTM-18N,CSRS.UTM-18N,CSRS.UTM-18N,NAD83(CSRS) / UTM zone 18N,NAD83(CSRS98) / UTM zone 18N,NAD83(CSRS) / UTM zone 18N,,,NAD83(CSRS) / UTM zone 18N,,,,,,,,,0,0,0
-93000,2960,2037,2960,0,0,0,,CSRS.UTM-19N,CSRS.UTM-19N,CSRS.UTM-19N,NAD83(CSRS) / UTM zone 19N,NAD_1983_CSRS98_UTM_Zone_19N,NAD83(CSRS) / UTM zone 19N,,,NAD83(CSRS) / UTM zone 19N,,,,,,,,,0,0,0
-93100,2961,0,2961,0,0,0,,CSRS.UTM-20N,CSRS.UTM-20N,CSRS.UTM-20N,NAD83(CSRS) / UTM zone 20N,NAD_1983_CSRS98_UTM_Zone_20N,NAD83(CSRS) / UTM zone 20N,,,NAD83(CSRS) / UTM zone 20N,,,,,,,,,0,0,0
-93200,2962,2148,2962,0,0,0,,CSRS.UTM-21N,CSRS.UTM-21N,CSRS.UTM-21N,NAD83(CSRS) / UTM zone 21N,NAD83(CSRS98) / UTM zone 21N,NAD83(CSRS) / UTM zone 21N,,,NAD83(CSRS) / UTM zone 21N,,,,,,,,,0,0,0
+92500,2955,2153,2955,0,0,0,,CSRS.UTM-11N,CSRS.UTM-11N,CSRS.UTM-11N|NAD83/98.UTM-11N,NAD83(CSRS) / UTM zone 11N,NAD83(CSRS98) / UTM zone 11N,NAD83(CSRS) / UTM zone 11N,,,NAD83(CSRS) / UTM zone 11N,,,,,,,,,0,0,0
+92600,2956,2152,2956,0,0,0,,CSRS.UTM-12N,CSRS.UTM-12N,CSRS.UTM-12N|NAD83/98.UTM-12N,NAD83(CSRS) / UTM zone 12N,NAD83(CSRS98) / UTM zone 12N,NAD83(CSRS) / UTM zone 12N,,,NAD83(CSRS) / UTM zone 12N,,,,,,,,,0,0,0
+92700,2957,2151,2957,0,0,0,,CSRS.UTM-13N,CSRS.UTM-13N,CSRS.UTM-13N|NAD83/98.UTM-13N,NAD83(CSRS) / UTM zone 13N,NAD83(CSRS98) / UTM zone 13N,NAD83(CSRS) / UTM zone 13N,,,NAD83(CSRS) / UTM zone 13N,,,,,,,,,0,0,0
+92800,2958,2150,2958,0,0,0,,CSRS.UTM-17N,CSRS.UTM-17N,CSRS.UTM-17N|NAD83/98.UTM-17N,NAD83(CSRS) / UTM zone 17N,NAD83(CSRS98) / UTM zone 17N,NAD83(CSRS) / UTM zone 17N,,,NAD83(CSRS) / UTM zone 17N,,,,,,,,,0,0,0
+92900,2959,2149,2959,0,0,0,,CSRS.UTM-18N,CSRS.UTM-18N,CSRS.UTM-18N|NAD83/98.UTM-18N,NAD83(CSRS) / UTM zone 18N,NAD83(CSRS98) / UTM zone 18N,NAD83(CSRS) / UTM zone 18N,,,NAD83(CSRS) / UTM zone 18N,,,,,,,,,0,0,0
+93000,2960,2037,2960,0,0,0,,CSRS.UTM-19N,CSRS.UTM-19N,CSRS.UTM-19N|NAD83/98.UTM-19N,NAD83(CSRS) / UTM zone 19N,NAD_1983_CSRS98_UTM_Zone_19N,NAD83(CSRS) / UTM zone 19N,,,NAD83(CSRS) / UTM zone 19N,,,,,,,,,0,0,0
+93100,2961,0,2961,0,0,0,,CSRS.UTM-20N,CSRS.UTM-20N,CSRS.UTM-20N|NAD83/98.UTM-20N,NAD83(CSRS) / UTM zone 20N,NAD_1983_CSRS98_UTM_Zone_20N,NAD83(CSRS) / UTM zone 20N,,,NAD83(CSRS) / UTM zone 20N,,,,,,,,,0,0,0
+93200,2962,2148,2962,0,0,0,,CSRS.UTM-21N,CSRS.UTM-21N,CSRS.UTM-21N|NAD83/98.UTM-21N,NAD83(CSRS) / UTM zone 21N,NAD83(CSRS98) / UTM zone 21N,NAD83(CSRS) / UTM zone 21N,,,NAD83(CSRS) / UTM zone 21N,,,,,,,,,0,0,0
 93300,2963,0,2963,0,0,0,,Lisbon1890.Portugal,Lisbon1890.Portugal/Bonne,,Lisbon 1890 (Lisbon) / Portugal Bonne,,Lisbon 1890 (Lisbon) / Portugal Bonne,,,Lisbon 1890 (Lisbon) / Portugal Bonne,,,,,,,,,0,0,0
 93400,2964,2964,2964,0,0,0,,,NAD27.Alaska/Albers.USFt,,NAD27 / Alaska Albers,NAD_1927_Alaska_Albers_Feet,'NAD27 / Alaska Albers,,,,,,,,,,,,0,0,0
 93500,2965,2965,2965,0,0,82081,,IN83-EF,NAD83.IN-E.USFt,IN83-EF,NAD83 / Indiana East (ftUS),NAD_1983_StatePlane_Indiana_East_FIPS_1301_Feet,NAD83 / Indiana East (ftUS),,,,,,,"Indiana 1301, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
@@ -956,7 +956,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 95600,2988,2988,2988,0,0,0,,MOP78.UTM-1S,MOP78.UTM-1S,MOP1978.UTM-1S,MOP78 / UTM zone 1S,MOP78_UTM_1S,MOP78 / UTM zone 1S,,,,,,,,,,,,0,0,0
 95700,2989,2989,2989,0,0,0,,RRAF91.UTM-20N,Antilles91.UTM-20N,RRAF91.UTM-20N,RRAF 1991 / UTM zone 20N,RRAF_1991_UTM_20N,RRAF 1991 / UTM zone 20N,,,,,,,,,,,,0,0,0
 95800,3727,2990,2990,0,0,0,,REUNION.TmReunion,REUNION.TmReunion,REUNION.Reunion/TM/01,Reunion 1947 / TM Reunion,Piton_des_Neiges_TM_Reunion,Piton des Neiges / TM Reunion,,,,,,,,,,,,0,0,0
-95900,2991,2991,2991,0,0,0,,NAD83.OregonLambert,NAD83.OregonLambert,NAD83.OregonLambert,NAD83 / Oregon Lambert,NAD_1983_Oregon_Statewide_Lambert,NAD83 / Oregon Lambert,,,,,,,,,,,,0,0,0
+95900,2991,2991,2991,0,0,0,,NAD83.OregonLambert,NAD83.OregonLambert,NAD83.OregonLambert|OR-GIS83-M,NAD83 / Oregon Lambert,NAD_1983_Oregon_Statewide_Lambert,NAD83 / Oregon Lambert,,,,,,,,,,,,0,0,0
 96000,2992,2992,2992,0,0,0,,OR83-SSCGIS,NAD83.OregonLambert.IntnlFt,OR-GIS83,NAD83 / Oregon Lambert (ft),NAD_1983_Oregon_Statewide_Lambert_Feet_Intl,NAD83 / Oregon Lambert (ft),,,,,,,,,,,,0,0,0
 96100,2993,2993,2993,0,0,0,,HARN.OregonLambert,HARN.OregonLambert,HARN.OregonLambert,NAD83(HARN) / Oregon Lambert,NAD_1983_HARN_Oregon_Statewide_Lambert,NAD83(HARN) / Oregon Lambert,,,,,,,,,,,,0,0,0
 96200,2994,2994,2994,0,0,0,,HARN.OregonLambert.ft,HARN.OregonLambert.IntnlFt,HARN.OregonLambert.ft,NAD83(HARN) / Oregon Lambert (ft),NAD_1983_HARN_Oregon_Statewide_Lambert_Feet_Intl,NAD83(HARN) / Oregon Lambert (ft),,,,,,,,,,,,0,0,0
@@ -1019,9 +1019,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 101900,3051,0,3051,0,0,0,,ETRF89.TM39,ETRF89.TM39,ETRF89.TM39,ETRS89 / ETRS-TM39,,ETRS89 / ETRS-TM39,,,,,,,,,,,,0,0,0
 102000,3052,0,3052,0,0,0,,Reykjavik.IcelandGrid,Reykjavik.IcelandGrid,Reykjavik.IcelandGrid,Reykjavik 1900 / Lambert 1900,,Reykjavik 1900 / Lambert 1900,,,,,,,,,,,,0,0,0
 102100,3053,0,3053,0,0,0,,Hjorsey.IcelandGrid,Hjorsey.IcelandGrid,Hjorsey.IcelandGrid,Hjorsey 1955 / Lambert 1955,,Hjorsey 1955 / Lambert 1955,,,,,,,,,,,,0,0,0
-102200,3054,3054,3054,0,0,0,,Hjorsey.UTM-26N,Hjorsey.UTM-26N,Hjorsey.UTM-26N,Hjorsey 1955 / UTM zone 26N,Hjorsey_1955_UTM_Zone_26N,Hjorsey 1955 / UTM zone 26N,,,,,,,,,,,,0,0,0
-102300,3055,3055,3055,0,0,0,,Hjorsey.UTM-27N,Hjorsey.UTM-27N,Hjorsey.UTM-27N,Hjorsey 1955 / UTM zone 27N,Hjorsey_1955_UTM_Zone_27N,Hjorsey 1955 / UTM zone 27N,,,,,,,,,,,,0,0,0
-102400,3056,3056,3056,0,0,0,,Hjorsey.UTM-28N,Hjorsey.UTM-28N,Hjorsey.UTM-28N,Hjorsey 1955 / UTM zone 28N,Hjorsey_1955_UTM_Zone_28N,Hjorsey 1955 / UTM zone 28N,,,,,,,,,,,,0,0,0
+102200,3054,3054,3054,0,0,0,,Hjorsey.UTM-26N,Hjorsey.UTM-26N,Hjorsey.UTM-26N|ICE-26,Hjorsey 1955 / UTM zone 26N,Hjorsey_1955_UTM_Zone_26N,Hjorsey 1955 / UTM zone 26N,,,,,,,,,,,,0,0,0
+102300,3055,3055,3055,0,0,0,,Hjorsey.UTM-27N,Hjorsey.UTM-27N,Hjorsey.UTM-27N|ICE-27,Hjorsey 1955 / UTM zone 27N,Hjorsey_1955_UTM_Zone_27N,Hjorsey 1955 / UTM zone 27N,,,,,,,,,,,,0,0,0
+102400,3056,3056,3056,0,0,0,,Hjorsey.UTM-28N,Hjorsey.UTM-28N,Hjorsey.UTM-28N|ICE-28,Hjorsey 1955 / UTM zone 28N,Hjorsey_1955_UTM_Zone_28N,Hjorsey 1955 / UTM zone 28N,,,,,,,,,,,,0,0,0
 102500,3057,3057,3057,0,0,0,,ISN93.IcelandGrid,ISN93.IcelandGrid,ISN93.IcelandGrid,ISN93 / Lambert 1993,ISN_1993_Lambert_1993,ISN93 / Lambert 1993,,,,,,,,,,,,0,0,0
 102600,3058,3058,3058,0,0,0,,Helle1954.JanMayen,Helle1954.JanMayenGrid,Helle1954.JanMayen,Helle 1954 / Jan Mayen Grid,Helle_1954_Jan_Mayen_Grid,Helle 1954 / Jan Mayen Grid,,,,,,,,,,,,0,0,0
 102700,3059,3059,3059,0,0,0,,Latvia1992.TM,Latvia1992.TM,Latvia1992.TM,LKS92 / Latvia TM,LKS_1992_Latvia_TM,LKS92 / Latvia TM,,,,,,,,,,,,0,0,0
@@ -1052,9 +1052,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 105200,3084,3084,0,0,0,0,,HARN.Texas/Lambert,HARN.Texas/Lambert,HARN.Texas/Lambert,NAD83(HARN) / Texas Centric Lambert Conformal,NAD_1983_HARN_Texas_Centric_Mapping_System_Lambert,,,,,,,,,,,,,0,0,0
 105300,3085,3085,0,0,0,0,,HARN.Texas/Albers,HARN.Texas/Albers,HARN.Texas/Albers,NAD83(HARN) / Texas Centric Albers Equal Area,NAD_1983_HARN_Texas_Centric_Mapping_System_Albers,,,,,,,,,,,,,0,0,0
 105400,3086,3086,0,0,0,0,,NAD83.FloridaGDL/Albers,NAD83.FloridaGDL/Albers,NAD83.FloridaGDL/Albers,NAD83 / Florida GDL Albers,NAD_1983_Florida_GDL_Albers,,,,,,,,,,,,,0,0,0
-105500,3087,3087,0,0,0,0,,HARN.FloridaGDL/Albers,HARN.FloridaGDL/Albers,HARN.FloridaGDL/Albers,NAD83(HARN) / Florida GDL Albers,NAD_1983_HARN_Florida_GDL_Albers,,,,,,,,,,,,,0,0,0
-105600,3088,3088,0,0,0,0,,KY83,NAD83.KY,KY83,NAD83 / Kentucky Single Zone,NAD_1983_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
-105700,3089,3089,0,0,0,0,,KY83F,NAD83.KY.USFt,KY83F,NAD83 / Kentucky Single Zone (ftUS),NAD_1983_StatePlane_Kentucky_FIPS_1600_Feet,,,,,,,,,,,,,0,0,0
+105500,3087,3087,0,0,0,0,,HARN.FloridaGDL/Albers,HARN.FloridaGDL/Albers,HARN.FloridaGDL/Albers|FLHP,NAD83(HARN) / Florida GDL Albers,NAD_1983_HARN_Florida_GDL_Albers,,,,,,,,,,,,,0,0,0
+105600,3088,3088,0,0,0,0,,KY83,NAD83.KY,KY83|KY1Z-M,NAD83 / Kentucky Single Zone,NAD_1983_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
+105700,3089,3089,0,0,0,0,,KY83F,NAD83.KY.USFt,KY83F|KY1Z-FT,NAD83 / Kentucky Single Zone (ftUS),NAD_1983_StatePlane_Kentucky_FIPS_1600_Feet,,,,,,,,,,,,,0,0,0
 105800,3090,3090,0,0,0,0,,KYHP,HARN.KY,KYHP,NAD83(HARN) / Kentucky Single Zone,NAD_1983_HARN_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
 105900,3091,3091,0,0,0,0,,KYHPF,HARN.KY.USFt,KYHPF,NAD83(HARN) / Kentucky Single Zone (ftUS),NAD_1983_HARN_StatePlane_Kentucky_FIPS_1600_Feet,,,,,,,,,,,,,0,0,0
 106000,3092,3092,0,0,0,82396,,TOKYO.UTM-51N,Tokyo.UTM-51N,TOKYO.UTM-51N,Tokyo / UTM zone 51N,Tokyo_UTM_Zone_51N,,,,,,,,UTM Zone 51 (Tokyo),,,,,0,0,0
@@ -1085,7 +1085,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 108500,3117,0,0,0,0,0,,MAGNA.Columbia-EastCtrl,MAGNA.Columbia-EastCentral,MAGNA.Columbia-EastCtrl,MAGNA-SIRGAS / Colombia East Central zone,,,,,,,,,,,,,,0,0,0
 108600,3118,0,0,0,0,0,,MAGNA.Columbia-East,MAGNA.Columbia-East,MAGNA.Columbia-East,MAGNA-SIRGAS / Colombia East zone,,,,,,,,,,,,,,0,0,0
 108700,3119,0,0,0,0,0,,Douala48.AEF-West,Douala1948.AEF-West,Douala1948.AEF-West,Douala 1948 / AEF west,Douala_1948_AOF_West,Douala 1948 / AOF west,,,Douala 1948 / AOF west,,,,,,,,,0,0,0
-108800,3120,0,0,0,0,0,,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1,Pulkovo 1942(58) / Poland zone I,,,,,,,,,,,,,,0,0,0
+108800,3120,0,0,0,0,0,,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1|Pulkovo/58.Poland-I/a,Pulkovo 1942(58) / Poland zone I,,,,,,,,,,,,,,0,0,0
 108900,3121,0,0,0,0,0,,PRS92.Philippines-1,PRS92.Philippines-1,PRS92.Philippines-1,PRS92 / Philippines zone 1,,,,,,,,,,,,,,0,0,0
 109000,3122,0,0,0,0,0,,PRS92.Philippines-2,PRS92.Philippines-2,PRS92.Philippines-2,PRS92 / Philippines zone 2,,,,,,,,,,,,,,0,0,0
 109100,3123,0,0,0,0,0,,PRS92.Philippines-3,PRS92.Philippines-3,PRS92.Philippines-3,PRS92 / Philippines zone 3,,,,,,,,,,,,,,0,0,0
@@ -1507,8 +1507,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 149800,20092,20092,20092,0,0,0,,Pulkovo95.GK-32N,Pulkovo95.GK-32N,,Pulkovo 1995 / Gauss-Kruger 32N,Pulkovo_1995_GK_Zone_32N,Pulkovo 1995 / Gauss-Kruger 32N,,,Pulkovo 1995 / Gauss-Kruger 32N,,,,,,,,,0,0,0
 149900,20135,0,20135,0,0,0,,Adindan.UTM-35N,Adindan.UTM-35N,Adindan.UTM-35N,Adindan / UTM zone 35N,,Adindan / UTM zone 35N,,,,,,,,,,,,0,0,0
 150000,20136,0,20136,0,0,0,,Adindan.UTM-36N,Adindan.UTM-36N,Adindan.UTM-36N,Adindan / UTM zone 36N,,Adindan / UTM zone 36N,,,,,,,,,,,,0,0,0
-150100,20137,20137,20137,0,0,0,,Adindan.UTM-37N,Adindan.UTM-37N,Adindan.UTM-37N,Adindan / UTM zone 37N,Adindan_UTM_Zone_37N,Adindan / UTM zone 37N,,,Adindan / UTM zone 37N,,,,,,,,,0,0,0
-150200,20138,20138,20138,0,0,0,,Adindan.UTM-38N,Adindan.UTM-38N,Adindan.UTM-38N,Adindan / UTM zone 38N,Adindan_UTM_Zone_38N,Adindan / UTM zone 38N,,,Adindan / UTM zone 38N,,,,,,,,,0,0,0
+150100,20137,20137,20137,0,0,0,,Adindan.UTM-37N,Adindan.UTM-37N,Adindan.UTM-37N|ETSU_W,Adindan / UTM zone 37N,Adindan_UTM_Zone_37N,Adindan / UTM zone 37N,,,Adindan / UTM zone 37N,,,,,,,,,0,0,0
+150200,20138,20138,20138,0,0,0,,Adindan.UTM-38N,Adindan.UTM-38N,Adindan.UTM-38N|ETSU_E,Adindan / UTM zone 38N,Adindan_UTM_Zone_38N,Adindan / UTM zone 38N,,,Adindan / UTM zone 38N,,,,,,,,,0,0,0
 150300,20248,20248,20248,0,0,81922,,AMG66-48,AGD66.AMG-48,AMG66-48-GRID,AGD66 / AMG zone 48,AGD_1966_AMG_Zone_48,AGD66 / AMG zone 48,,,AGD66 / AMG zone 48,,,,AMG Zone 48 (AGD 66),,,,,0,0,0
 150400,20249,20249,20249,0,0,81924,,AMG66-49,AGD66.AMG-49,AMG66-49-Grid,AGD66 / AMG zone 49,AGD_1966_AMG_Zone_49,AGD66 / AMG zone 49,,,AGD66 / AMG zone 49,,,,AMG Zone 49 (AGD 66),,,,,0,0,0
 150500,20250,20250,20250,0,0,81926,,AMG66-50,AGD66.AMG-50,AMG66-50-Grid,AGD66 / AMG zone 50,AGD_1966_AMG_Zone_50,AGD66 / AMG zone 50,,,AGD66 / AMG zone 50,,,,AMG Zone 50 (AGD 66),,,,,0,0,0
@@ -1532,27 +1532,27 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 152300,20357,20357,20357,0,0,81941,,AMG84-57,AGD84.AMG-57,AMG-57-Grid,AGD84 / AMG zone 57,AGD_1984_AMG_Zone_57,AGD84 / AMG zone 57,,,AGD84 / AMG zone 57,,,,AMG Zone 57 (AGD 84),,,,,0,0,0
 152400,20358,20358,20358,0,0,81943,,AMG84-58,AGD84.AMG-58,AMG84-58-GRID,AGD84 / AMG zone 58,AGD_1984_AMG_Zone_58,AGD84 / AMG zone 58,,,AGD84 / AMG zone 58,,,,AMG Zone 58 (AGD 84),,,,,0,0,0
 152500,20436,0,0,0,0,0,,AinElAbd.UTM-36N,AinElAbd.UTM-36N,AinElAbd.UTM-36N,Ain el Abd / UTM zone 36N,,,,,,,,,,,,,,0,0,0
-152600,20437,20437,20437,0,0,0,,AinElAbd.UTM-37N,AinElAbd.UTM-37N,AinElAbd.UTM-37N,Ain el Abd / UTM zone 37N,Ain_el_Abd_UTM_Zone_37N,Ain el Abd / UTM zone 37N,,,Ain el Abd / UTM zone 37N,,,,,,,,,0,0,0
-152700,20438,20438,20438,0,0,0,,AinElAbd.UTM-38N,AinElAbd.UTM-38N,AinElAbd.UTM-38N,Ain el Abd / UTM zone 38N,Ain_el_Abd_UTM_Zone_38N,Ain el Abd / UTM zone 38N,,,Ain el Abd / UTM zone 38N,,,,,,,,,0,0,0
-152800,20439,20439,20439,0,0,0,,AinElAbd.UTM-39N,AinElAbd.UTM-39N,AinElAbd.UTM-39N,Ain el Abd / UTM zone 39N,Ain_el_Abd_UTM_Zone_39N,Ain el Abd / UTM zone 39N,,,Ain el Abd / UTM zone 39N,,,,,,,,,0,0,0
-152900,20440,0,0,0,0,0,,AinElAbd.UTM-39N,AinElAbd.UTM-40N,AinElAbd.UTM-39N,Ain el Abd / UTM zone 40N,,,,,,,,,,,,,,0,0,0
-153000,20499,20499,20499,0,0,0,,AinElAbd.BahrainGrid,AinElAbd.BahrainGrid,AinElAbd.BahrainGrid,Ain el Abd / Bahrain Grid,Bahrain_State_Grid,Ain el Abd / Bahrain Grid,,,Ain el Abd / Bahrain Grid,,,,,,,,,0,0,0
-153100,20538,20538,20538,0,0,0,,Afgooye.UTM-38N,Afgooye.UTM-38N,Afgooye.UTM-38N,Afgooye / UTM zone 38N,Afgooye_UTM_Zone_38N,Afgooye / UTM zone 38N,,,Afgooye / UTM zone 38N,,,,,,,,,0,0,0
-153200,20539,20539,20539,0,0,0,,Afgooye.UTM-39N,Afgooye.UTM-39N,Afgooye.UTM-39N,Afgooye / UTM zone 39N,Afgooye_UTM_Zone_39N,Afgooye / UTM zone 39N,,,Afgooye / UTM zone 39N,,,,,,,,,0,0,0
+152600,20437,20437,20437,0,0,0,,AinElAbd.UTM-37N,AinElAbd.UTM-37N,AinElAbd.UTM-37N|SAUD-W,Ain el Abd / UTM zone 37N,Ain_el_Abd_UTM_Zone_37N,Ain el Abd / UTM zone 37N,,,Ain el Abd / UTM zone 37N,,,,,,,,,0,0,0
+152700,20438,20438,20438,0,0,0,,AinElAbd.UTM-38N,AinElAbd.UTM-38N,AinElAbd.UTM-38N|KU-AEA|SAUD-C,Ain el Abd / UTM zone 38N,Ain_el_Abd_UTM_Zone_38N,Ain el Abd / UTM zone 38N,,,Ain el Abd / UTM zone 38N,,,,,,,,,0,0,0
+152800,20439,20439,20439,0,0,0,,AinElAbd.UTM-39N,AinElAbd.UTM-39N,,Ain el Abd / UTM zone 39N,Ain_el_Abd_UTM_Zone_39N,Ain el Abd / UTM zone 39N,,,Ain el Abd / UTM zone 39N,,,,,,,,,0,0,0
+152900,20440,0,0,0,0,0,,AinElAbd.UTM-39N,AinElAbd.UTM-40N,,Ain el Abd / UTM zone 40N,,,,,,,,,,,,,,0,0,0
+153000,20499,20499,20499,0,0,0,,AinElAbd.BahrainGrid,AinElAbd.BahrainGrid,AinElAbd.BahrainGrid|AinElAbd.UTM-39N|BAH-SG|SAUD-E,Ain el Abd / Bahrain Grid,Bahrain_State_Grid,Ain el Abd / Bahrain Grid,,,Ain el Abd / Bahrain Grid,,,,,,,,,0,0,0
+153100,20538,20538,20538,0,0,0,,Afgooye.UTM-38N,Afgooye.UTM-38N,Afgooye.UTM-38N|SOMAL-W,Afgooye / UTM zone 38N,Afgooye_UTM_Zone_38N,Afgooye / UTM zone 38N,,,Afgooye / UTM zone 38N,,,,,,,,,0,0,0
+153200,20539,20539,20539,0,0,0,,Afgooye.UTM-39N,Afgooye.UTM-39N,Afgooye.UTM-39N|SOMAL-E,Afgooye / UTM zone 39N,Afgooye_UTM_Zone_39N,Afgooye / UTM zone 39N,,,Afgooye / UTM zone 39N,,,,,,,,,0,0,0
 153300,20790,20790,20790,0,0,0,,Lisbon37.PortNtlGrid,Lisbon37.PortNtlGrid,,Lisbon (Lisbon)/Portuguese National Grid,Portuguese_National_Grid,Lisbon (Lisbon)/Portuguese National Grid,,,Lisbon (Lisbon)/Portuguese National Grid,,,,,,,,,0,0,0
 153400,20791,0,20791,0,0,0,,Lisbon37.PortGrid,Lisbon37.PortGrid,,Lisbon (Lisbon)/Portuguese Grid,,Lisbon (Lisbon)/Portuguese Grid,,,Lisbon (Lisbon)/Portuguese Grid,,,,,,,,,0,0,0
 153500,20822,20822,20822,0,0,0,,Aratu.UTM-22S,Aratu.UTM-22S,Aratu_1.UTM-22S,Aratu / UTM zone 22S,Aratu_UTM_Zone_22S,Aratu / UTM zone 22S,,,Aratu / UTM zone 22S,,,,,,,,,0,0,0
 153600,20823,20823,20823,0,0,0,,Aratu.UTM-23S,Aratu.UTM-23S,Aratu_1.UTM-23S,Aratu / UTM zone 23S,Aratu_UTM_Zone_23S,Aratu / UTM zone 23S,,,Aratu / UTM zone 23S,,,,,,,,,0,0,0
 153700,20824,20824,20824,0,0,0,,Aratu.UTM-24S,Aratu.UTM-24S,Aratu_1.UTM-24S,Aratu / UTM zone 24S,Aratu_UTM_Zone_24S,Aratu / UTM zone 24S,,,Aratu / UTM zone 24S,,,,,,,,,0,0,0
-153800,20934,20934,20934,0,0,0,,ARC1950.UTM-34S,ARC1950.UTM-34S,AFR50-34S/01,Arc 1950 / UTM zone 34S,Arc_1950_UTM_Zone_34S,Arc 1950 / UTM zone 34S,,,Arc 1950 / UTM zone 34S,,,,,,,,,0,0,0
-153900,20935,20935,20935,0,0,0,,ARC1950.UTM-35S,ARC1950.UTM-35S,AFR50-35S/01,Arc 1950 / UTM zone 35S,Arc_1950_UTM_Zone_35S,Arc 1950 / UTM zone 35S,,,Arc 1950 / UTM zone 35S,,,,,,,,,0,0,0
-154000,20936,20936,20936,0,0,0,,ARC1950.UTM-36S,ARC1950.UTM-36S,AFR50-36S/01,Arc 1950 / UTM zone 36S,Arc_1950_UTM_Zone_36S,Arc 1950 / UTM zone 36S,,,Arc 1950 / UTM zone 36S,,,,,,,,,0,0,0
-154100,21035,21035,21035,0,0,0,,ARC1960.UTM-35S,ARC1960.UTM-35S,ARC1960.UTM-35S,Arc 1960 / UTM zone 35S,Arc_1960_UTM_Zone_35S,Arc 1960 / UTM zone 35S,,,Arc 1960 / UTM zone 35S,,,,,,,,,0,0,0
-154200,21036,21036,21036,0,0,0,,ARC1960.UTM-36S,ARC1960.UTM-36S,ARC1960.UTM-36S,Arc 1960 / UTM zone 36S,Arc_1960_UTM_Zone_36S,Arc 1960 / UTM zone 36S,,,Arc 1960 / UTM zone 36S,,,,,,,,,0,0,0
-154300,21037,21037,21037,0,0,0,,ARC1960.UTM-37S,ARC1960.UTM-37S,ARC1960.UTM-37S,Arc 1960 / UTM zone 37S,Arc_1960_UTM_Zone_37S,Arc 1960 / UTM zone 37S,,,Arc 1960 / UTM zone 37S,,,,,,,,,0,0,0
-154400,21095,21095,21095,0,0,0,,ARC1960.UTM-35N,ARC1960.UTM-35N,ARC1960.UTM-35N,Arc 1960 / UTM zone 35N,Arc_1960_UTM_Zone_35N,Arc 1960 / UTM zone 35N,,,Arc 1960 / UTM zone 35N,,,,,,,,,0,0,0
-154500,21096,21096,21096,0,0,0,,ARC1960.UTM-36N,ARC1960.UTM-36N,ARC1960.UTM-36N,Arc 1960 / UTM zone 36N,Arc_1960_UTM_Zone_36N,Arc 1960 / UTM zone 36N,,,Arc 1960 / UTM zone 36N,,,,,,,,,0,0,0
-154600,21097,21097,21097,0,0,0,,ARC1960.UTM-37N,ARC1960.UTM-37N,ARC1960.UTM-37N,Arc 1960 / UTM zone 37N,Arc_1960_UTM_Zone_37N,Arc 1960 / UTM zone 37N,,,Arc 1960 / UTM zone 37N,,,,,,,,,0,0,0
+153800,20934,20934,20934,0,0,0,,ARC1950.UTM-34S,ARC1950.UTM-34S,ARC1950.UTM-34S/01|AFR50-34S/01,Arc 1950 / UTM zone 34S,Arc_1950_UTM_Zone_34S,Arc 1950 / UTM zone 34S,,,Arc 1950 / UTM zone 34S,,,,,,,,,0,0,0
+153900,20935,20935,20935,0,0,0,,ARC1950.UTM-35S,ARC1950.UTM-35S,ARC1950.UTM-35S/01|AFR50-35S/01|ZIM-35/01,Arc 1950 / UTM zone 35S,Arc_1950_UTM_Zone_35S,Arc 1950 / UTM zone 35S,,,Arc 1950 / UTM zone 35S,,,,,,,,,0,0,0
+154000,20936,20936,20936,0,0,0,,ARC1950.UTM-36S,ARC1950.UTM-36S,ARC1950.UTM-36S/01|AFR50-36S/01|ZIM-36/01,Arc 1950 / UTM zone 36S,Arc_1950_UTM_Zone_36S,Arc 1950 / UTM zone 36S,,,Arc 1950 / UTM zone 36S,,,,,,,,,0,0,0
+154100,21035,21035,21035,0,0,0,,ARC1960.UTM-35S,ARC1960.UTM-35S,ARC1960.UTM-35S|AFR60-35S,Arc 1960 / UTM zone 35S,Arc_1960_UTM_Zone_35S,Arc 1960 / UTM zone 35S,,,Arc 1960 / UTM zone 35S,,,,,,,,,0,0,0
+154200,21036,21036,21036,0,0,0,,ARC1960.UTM-36S,ARC1960.UTM-36S,ARC1960.UTM-36S|AFR60-36S|KEN-S-W,Arc 1960 / UTM zone 36S,Arc_1960_UTM_Zone_36S,Arc 1960 / UTM zone 36S,,,Arc 1960 / UTM zone 36S,,,,,,,,,0,0,0
+154300,21037,21037,21037,0,0,0,,ARC1960.UTM-37S,ARC1960.UTM-37S,ARC1960.UTM-37S|AFR60-37S|KEN-S-E,Arc 1960 / UTM zone 37S,Arc_1960_UTM_Zone_37S,Arc 1960 / UTM zone 37S,,,Arc 1960 / UTM zone 37S,,,,,,,,,0,0,0
+154400,21095,21095,21095,0,0,0,,ARC1960.UTM-35N,ARC1960.UTM-35N,ARC1960.UTM-35N|AFR60-35N,Arc 1960 / UTM zone 35N,Arc_1960_UTM_Zone_35N,Arc 1960 / UTM zone 35N,,,Arc 1960 / UTM zone 35N,,,,,,,,,0,0,0
+154500,21096,21096,21096,0,0,0,,ARC1960.UTM-36N,ARC1960.UTM-36N,ARC1960.UTM-36N|AFR60-36N|KEN-N-W,Arc 1960 / UTM zone 36N,Arc_1960_UTM_Zone_36N,Arc 1960 / UTM zone 36N,,,Arc 1960 / UTM zone 36N,,,,,,,,,0,0,0
+154600,21097,21097,21097,0,0,0,,ARC1960.UTM-37N,ARC1960.UTM-37N,ARC1960.UTM-37N|AFR60-37N|KEN-N-E,Arc 1960 / UTM zone 37N,Arc_1960_UTM_Zone_37N,Arc 1960 / UTM zone 37N,,,Arc 1960 / UTM zone 37N,,,,,,,,,0,0,0
 154700,21100,0,0,0,0,0,,,,,Batavia (Jakarta) / NEIEZ,,,,,Batavia (Jakarta) / NEIEZ,,,,,,,,,0,0,0
 154800,21148,21148,21148,0,0,0,,Batavia.UTM-48S,Batavia.UTM-48S,Batavia_1.UTM-48S,Batavia / UTM zone 48S,Batavia_UTM_Zone_48S,Batavia / UTM zone 48S,,,Batavia / UTM zone 48S,,,,,,,,,0,0,0
 154900,21149,21149,21149,0,0,0,,Batavia.UTM-49S,Batavia.UTM-49S,Batavia_1.UTM-49S,Batavia / UTM zone 49S,Batavia_UTM_Zone_49S,Batavia / UTM zone 49S,,,Batavia / UTM zone 49S,,,,,,,,,0,0,0
@@ -1570,38 +1570,38 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 156100,21421,21421,21421,0,0,0,,Beijing54.GK-21,Beijing54.GK-21,Beijing1954.GK-21,Beijing 1954 / Gauss-Kruger zone 21,Beijing_1954_GK_Zone_21,Beijing 1954 / Gauss-Kruger zone 21,,,Beijing 1954 / Gauss-Kruger zone 21,,,,,,,,,0,0,0
 156200,21422,21422,21422,0,0,0,,Beijing54.GK-22,Beijing54.GK-22,Beijing1954.GK-22,Beijing 1954 / Gauss-Kruger zone 22,Beijing_1954_GK_Zone_22,Beijing 1954 / Gauss-Kruger zone 22,,,Beijing 1954 / Gauss-Kruger zone 22,,,,,,,,,0,0,0
 156300,21423,21423,21423,0,0,0,,Beijing54.GK-23,Beijing54.GK-23,Beijing1954.GK-23,Beijing 1954 / Gauss-Kruger zone 23,Beijing_1954_GK_Zone_23,Beijing 1954 / Gauss-Kruger zone 23,,,Beijing 1954 / Gauss-Kruger zone 23,,,,,,,,,0,0,0
-156400,21453,0,21453,0,0,0,,Beijing54.GK/CM-75E,Beijing54.GK/CM-75E,Beijing1954.GK/CM-75E,Beijing 1954 / Gauss-Kruger CM 75E,,Beijing 1954 / Gauss-Kruger CM 75E,,,Beijing 1954 / Gauss-Kruger CM 75E,,,,,,,,,0,0,0
-156500,21454,0,21454,0,0,0,,Beijing54.GK/CM-81E,Beijing54.GK/CM-81E,Beijing1954.GK/CM-81E,Beijing 1954 / Gauss-Kruger CM 81E,,Beijing 1954 / Gauss-Kruger CM 81E,,,Beijing 1954 / Gauss-Kruger CM 81E,,,,,,,,,0,0,0
-156600,21455,0,21455,0,0,0,,Beijing54.GK/CM-87E,Beijing54.GK/CM-87E,Beijing1954.GK/CM-87E,Beijing 1954 / Gauss-Kruger CM 87E,,Beijing 1954 / Gauss-Kruger CM 87E,,,Beijing 1954 / Gauss-Kruger CM 87E,,,,,,,,,0,0,0
-156700,21456,0,21456,0,0,0,,Beijing54.GK/CM-93E,Beijing54.GK/CM-93E,Beijing1954.GK/CM-93E,Beijing 1954 / Gauss-Kruger CM 93E,,Beijing 1954 / Gauss-Kruger CM 93E,,,Beijing 1954 / Gauss-Kruger CM 93E,,,,,,,,,0,0,0
-156800,21457,0,21457,0,0,0,,Beijing54.GK/CM-99E,Beijing54.GK/CM-99E,Beijing1954.GK/CM-99E,Beijing 1954 / Gauss-Kruger CM 99E,,Beijing 1954 / Gauss-Kruger CM 99E,,,Beijing 1954 / Gauss-Kruger CM 99E,,,,,,,,,0,0,0
-156900,21458,0,21458,0,0,0,,Beijing54.GK/CM-105E,Beijing54.GK/CM-105E,Beijing1954.GK/CM-105E,Beijing 1954 / Gauss-Kruger CM 105E,,Beijing 1954 / Gauss-Kruger CM 105E,,,Beijing 1954 / Gauss-Kruger CM 105E,,,,,,,,,0,0,0
-157000,21459,0,21459,0,0,0,,Beijing54.GK/CM-111E,Beijing54.GK/CM-111E,Beijing1954.GK/CM-111E,Beijing 1954 / Gauss-Kruger CM 111E,,Beijing 1954 / Gauss-Kruger CM 111E,,,Beijing 1954 / Gauss-Kruger CM 111E,,,,,,,,,0,0,0
-157100,21460,0,21460,0,0,0,,Beijing54.GK/CM-117E,Beijing54.GK/CM-117E,Beijing1954.GK/CM-117E,Beijing 1954 / Gauss-Kruger CM 117E,,Beijing 1954 / Gauss-Kruger CM 117E,,,Beijing 1954 / Gauss-Kruger CM 117E,,,,,,,,,0,0,0
-157200,21461,0,21461,0,0,0,,Beijing54.GK/CM-123E,Beijing54.GK/CM-123E,Beijing1954.GK/CM-123E,Beijing 1954 / Gauss-Kruger CM 123E,,Beijing 1954 / Gauss-Kruger CM 123E,,,Beijing 1954 / Gauss-Kruger CM 123E,,,,,,,,,0,0,0
-157300,21462,0,21462,0,0,0,,Beijing54.GK/CM-129E,Beijing54.GK/CM-129E,Beijing1954.GK/CM-129E,Beijing 1954 / Gauss-Kruger CM 129E,,Beijing 1954 / Gauss-Kruger CM 129E,,,Beijing 1954 / Gauss-Kruger CM 129E,,,,,,,,,0,0,0
-157400,21463,0,21463,0,0,0,,Beijing54.GK/CM-135E,Beijing54.GK/CM-135E,Beijing1954.GK/CM-135E,Beijing 1954 / Gauss-Kruger CM 135E,,Beijing 1954 / Gauss-Kruger CM 135E,,,Beijing 1954 / Gauss-Kruger CM 135E,,,,,,,,,0,0,0
-157500,0,21473,21473,0,0,0,,Beijing54.GK-13N,Beijing54.GK-13,Beijing1954.GK-13N,,Beijing_1954_GK_Zone_13N,Beijing 1954 / Gauss-Kruger 13N,,,Beijing 1954 / Gauss-Kruger 13N,,,,,,,,,0,0,0
-157600,0,21474,21474,0,0,0,,Beijing54.GK-14N,Beijing54.GK-14,Beijing1954.GK-14N,,Beijing_1954_GK_Zone_14N,Beijing 1954 / Gauss-Kruger 14N,,,Beijing 1954 / Gauss-Kruger 14N,,,,,,,,,0,0,0
-157700,0,21475,21475,0,0,0,,Beijing54.GK-15N,Beijing54.GK-15,Beijing1954.GK-15N,,Beijing_1954_GK_Zone_15N,Beijing 1954 / Gauss-Kruger 15N,,,Beijing 1954 / Gauss-Kruger 15N,,,,,,,,,0,0,0
-157800,0,21476,21476,0,0,0,,Beijing54.GK-16N,Beijing54.GK-16,Beijing1954.GK-16N,,Beijing_1954_GK_Zone_16N,Beijing 1954 / Gauss-Kruger 16N,,,Beijing 1954 / Gauss-Kruger 16N,,,,,,,,,0,0,0
-157900,0,21477,21477,0,0,0,,Beijing54.GK-17N,Beijing54.GK-17,Beijing1954.GK-17N,,Beijing_1954_GK_Zone_17N,Beijing 1954 / Gauss-Kruger 17N,,,Beijing 1954 / Gauss-Kruger 17N,,,,,,,,,0,0,0
-158000,0,21478,21478,0,0,0,,Beijing54.GK-18N,Beijing54.GK-18,Beijing1954.GK-18N,,Beijing_1954_GK_Zone_18N,Beijing 1954 / Gauss-Kruger 18N,,,Beijing 1954 / Gauss-Kruger 18N,,,,,,,,,0,0,0
-158100,0,21479,21479,0,0,0,,Beijing54.GK-19N,Beijing54.GK-19,Beijing1954.GK-19N,,Beijing_1954_GK_Zone_19N,Beijing 1954 / Gauss-Kruger 19N,,,Beijing 1954 / Gauss-Kruger 19N,,,,,,,,,0,0,0
-158200,0,21480,21480,0,0,0,,Beijing54.GK-20N,Beijing54.GK-20,Beijing1954.GK-20N,,Beijing_1954_GK_Zone_20N,Beijing 1954 / Gauss-Kruger 20N,,,Beijing 1954 / Gauss-Kruger 20N,,,,,,,,,0,0,0
-158300,0,21481,21481,0,0,0,,Beijing54.GK-21N,Beijing54.GK-21,Beijing1954.GK-21N,,Beijing_1954_GK_Zone_21N,Beijing 1954 / Gauss-Kruger 21N,,,Beijing 1954 / Gauss-Kruger 21N,,,,,,,,,0,0,0
-158400,0,21482,21482,0,0,0,,Beijing54.GK-22N,Beijing54.GK-22,Beijing1954.GK-22N,,Beijing_1954_GK_Zone_22N,Beijing 1954 / Gauss-Kruger 22N,,,Beijing 1954 / Gauss-Kruger 22N,,,,,,,,,0,0,0
-158500,0,21483,21483,0,0,0,,Beijing54.GK-23N,Beijing54.GK-23,Beijing1954.GK-23N,,Beijing_1954_GK_Zone_23N,Beijing 1954 / Gauss-Kruger 23N,,,Beijing 1954 / Gauss-Kruger 23N,,,,,,,,,0,0,0
+156400,21453,0,21453,0,0,0,,Beijing54.GK/CM-75E,Beijing54.GK/CM-75E,Beijing1954.GK/CM-75E|Beijing1954.GK-13N,Beijing 1954 / Gauss-Kruger CM 75E,,Beijing 1954 / Gauss-Kruger CM 75E,,,Beijing 1954 / Gauss-Kruger CM 75E,,,,,,,,,0,0,0
+156500,21454,0,21454,0,0,0,,Beijing54.GK/CM-81E,Beijing54.GK/CM-81E,Beijing1954.GK/CM-81E|Beijing1954.GK-14N,Beijing 1954 / Gauss-Kruger CM 81E,,Beijing 1954 / Gauss-Kruger CM 81E,,,Beijing 1954 / Gauss-Kruger CM 81E,,,,,,,,,0,0,0
+156600,21455,0,21455,0,0,0,,Beijing54.GK/CM-87E,Beijing54.GK/CM-87E,Beijing1954.GK/CM-87E|Beijing1954.GK-15N,Beijing 1954 / Gauss-Kruger CM 87E,,Beijing 1954 / Gauss-Kruger CM 87E,,,Beijing 1954 / Gauss-Kruger CM 87E,,,,,,,,,0,0,0
+156700,21456,0,21456,0,0,0,,Beijing54.GK/CM-93E,Beijing54.GK/CM-93E,Beijing1954.GK/CM-93E|Beijing1954.GK-16N,Beijing 1954 / Gauss-Kruger CM 93E,,Beijing 1954 / Gauss-Kruger CM 93E,,,Beijing 1954 / Gauss-Kruger CM 93E,,,,,,,,,0,0,0
+156800,21457,0,21457,0,0,0,,Beijing54.GK/CM-99E,Beijing54.GK/CM-99E,Beijing1954.GK/CM-99E|Beijing1954.GK-17N,Beijing 1954 / Gauss-Kruger CM 99E,,Beijing 1954 / Gauss-Kruger CM 99E,,,Beijing 1954 / Gauss-Kruger CM 99E,,,,,,,,,0,0,0
+156900,21458,0,21458,0,0,0,,Beijing54.GK/CM-105E,Beijing54.GK/CM-105E,Beijing1954.GK/CM-105E|Beijing1954.GK-18N,Beijing 1954 / Gauss-Kruger CM 105E,,Beijing 1954 / Gauss-Kruger CM 105E,,,Beijing 1954 / Gauss-Kruger CM 105E,,,,,,,,,0,0,0
+157000,21459,0,21459,0,0,0,,Beijing54.GK/CM-111E,Beijing54.GK/CM-111E,Beijing1954.GK/CM-111E|Beijing1954.GK-19N,Beijing 1954 / Gauss-Kruger CM 111E,,Beijing 1954 / Gauss-Kruger CM 111E,,,Beijing 1954 / Gauss-Kruger CM 111E,,,,,,,,,0,0,0
+157100,21460,0,21460,0,0,0,,Beijing54.GK/CM-117E,Beijing54.GK/CM-117E,Beijing1954.GK/CM-117E|Beijing1954.GK-20N,Beijing 1954 / Gauss-Kruger CM 117E,,Beijing 1954 / Gauss-Kruger CM 117E,,,Beijing 1954 / Gauss-Kruger CM 117E,,,,,,,,,0,0,0
+157200,21461,0,21461,0,0,0,,Beijing54.GK/CM-123E,Beijing54.GK/CM-123E,Beijing1954.GK/CM-123E|Beijing1954.GK-21N,Beijing 1954 / Gauss-Kruger CM 123E,,Beijing 1954 / Gauss-Kruger CM 123E,,,Beijing 1954 / Gauss-Kruger CM 123E,,,,,,,,,0,0,0
+157300,21462,0,21462,0,0,0,,Beijing54.GK/CM-129E,Beijing54.GK/CM-129E,Beijing1954.GK/CM-129E|Beijing1954.GK-22N,Beijing 1954 / Gauss-Kruger CM 129E,,Beijing 1954 / Gauss-Kruger CM 129E,,,Beijing 1954 / Gauss-Kruger CM 129E,,,,,,,,,0,0,0
+157400,21463,0,21463,0,0,0,,Beijing54.GK/CM-135E,Beijing54.GK/CM-135E,Beijing1954.GK/CM-135E|Beijing1954.GK-23N,Beijing 1954 / Gauss-Kruger CM 135E,,Beijing 1954 / Gauss-Kruger CM 135E,,,Beijing 1954 / Gauss-Kruger CM 135E,,,,,,,,,0,0,0
+157500,0,21473,21473,0,0,0,,Beijing54.GK-13N,Beijing54.GK-13,,,Beijing_1954_GK_Zone_13N,Beijing 1954 / Gauss-Kruger 13N,,,Beijing 1954 / Gauss-Kruger 13N,,,,,,,,,0,0,0
+157600,0,21474,21474,0,0,0,,Beijing54.GK-14N,Beijing54.GK-14,,,Beijing_1954_GK_Zone_14N,Beijing 1954 / Gauss-Kruger 14N,,,Beijing 1954 / Gauss-Kruger 14N,,,,,,,,,0,0,0
+157700,0,21475,21475,0,0,0,,Beijing54.GK-15N,Beijing54.GK-15,,,Beijing_1954_GK_Zone_15N,Beijing 1954 / Gauss-Kruger 15N,,,Beijing 1954 / Gauss-Kruger 15N,,,,,,,,,0,0,0
+157800,0,21476,21476,0,0,0,,Beijing54.GK-16N,Beijing54.GK-16,,,Beijing_1954_GK_Zone_16N,Beijing 1954 / Gauss-Kruger 16N,,,Beijing 1954 / Gauss-Kruger 16N,,,,,,,,,0,0,0
+157900,0,21477,21477,0,0,0,,Beijing54.GK-17N,Beijing54.GK-17,,,Beijing_1954_GK_Zone_17N,Beijing 1954 / Gauss-Kruger 17N,,,Beijing 1954 / Gauss-Kruger 17N,,,,,,,,,0,0,0
+158000,0,21478,21478,0,0,0,,Beijing54.GK-18N,Beijing54.GK-18,,,Beijing_1954_GK_Zone_18N,Beijing 1954 / Gauss-Kruger 18N,,,Beijing 1954 / Gauss-Kruger 18N,,,,,,,,,0,0,0
+158100,0,21479,21479,0,0,0,,Beijing54.GK-19N,Beijing54.GK-19,,,Beijing_1954_GK_Zone_19N,Beijing 1954 / Gauss-Kruger 19N,,,Beijing 1954 / Gauss-Kruger 19N,,,,,,,,,0,0,0
+158200,0,21480,21480,0,0,0,,Beijing54.GK-20N,Beijing54.GK-20,,,Beijing_1954_GK_Zone_20N,Beijing 1954 / Gauss-Kruger 20N,,,Beijing 1954 / Gauss-Kruger 20N,,,,,,,,,0,0,0
+158300,0,21481,21481,0,0,0,,Beijing54.GK-21N,Beijing54.GK-21,,,Beijing_1954_GK_Zone_21N,Beijing 1954 / Gauss-Kruger 21N,,,Beijing 1954 / Gauss-Kruger 21N,,,,,,,,,0,0,0
+158400,0,21482,21482,0,0,0,,Beijing54.GK-22N,Beijing54.GK-22,,,Beijing_1954_GK_Zone_22N,Beijing 1954 / Gauss-Kruger 22N,,,Beijing 1954 / Gauss-Kruger 22N,,,,,,,,,0,0,0
+158500,0,21483,21483,0,0,0,,Beijing54.GK-23N,Beijing54.GK-23,,,Beijing_1954_GK_Zone_23N,Beijing 1954 / Gauss-Kruger 23N,,,Beijing 1954 / Gauss-Kruger 23N,,,,,,,,,0,0,0
 158600,21500,21500,21500,0,0,0,,Belge50.Lambert50,Belge50.BelgeLambert50,BELGE-50,Belge 1950 (Brussels) / Belge Lambert 50,Belge_Lambert_1950,Belge 1950 (Brussels) / Belge Lambert 50,,,Belge 1950 (Brussels) / Belge Lambert 50,,,,,,,,,0,0,0
 158700,21780,21780,0,0,0,352256,,CH1903.LV03C,Bern1938.LV03C,CH1903.LV03C/01,Bern 1898 (Bern) / LV03C,Bern_1898_Bern_LV03C,,,,Bern 1898 (Bern) / LV03C,,,,Liechtenstein National System,,,,,0,0,0
 158800,21781,21781,0,0,0,352257,,CH1903.LV03,CH1903.LV03,CH1903/GSB.LV03-M|CH1903.LV03/01,CH1903 / LV03,CH1903_LV03,,,,CH1903 / LV03,,,,Swiss National System,,,,,0,0,0
 158810,21782,21782,0,0,0,0,,,,CH1903/GSB.LV03-C,CH1903 / LV03C-G,,,,,,,,,Swiss National System,,,,,0,0,0
 158900,0,21817,21817,0,0,0,,BOGOTA.UTM-17N,Bogota.UTM-17N,Bogota.UTM-17N,,Bogota_UTM_Zone_17N,Bogota 1975 / UTM zone 17N,,,Bogota 1975 / UTM zone 17N,,,,,,,,,0,0,0
 159000,21818,21818,21818,0,0,0,,BOGOTA.UTM-18N,Bogota75.UTM-18N,Bogota.UTM-18N,Bogota 1975 / UTM zone 18N,Bogota_UTM_Zone_18N,Bogota 1975 / UTM zone 18N,,,Bogota 1975 / UTM zone 18N,,,,,,,,,0,0,0
-159100,21896,21891,21891,0,0,0,,BOGOTA.Colombia-W,Bogota75.Colombia-West,BOGOTA.Colombia-W,Bogota 1975 / Colombia West zone,Colombia_West_Zone,Bogota 1975 / Colombia West zone,,,Bogota 1975 / Colombia West zone,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 969.  Axis direction was given as the reason.",0,0,0
-159200,21897,21892,21892,0,0,0,,BOGOTA.Colombia-Bogota,Bogota75.Colombia-Bogota,BOGOTA.Colombia-Bogota,Bogota 1975 / Colombia Bogota zone,Colombia_Bogota_Zone,Bogota 1975 / Colombia Bogota zone,,,Bogota 1975 / Colombia Bogota zone,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 970.  Axis direction was given as the reason.",0,0,0
-159300,21898,21893,21893,0,0,0,,BOGOTA.Colombia-EC,Bogota75.Colombia-EastCentral,BOGOTA.Colombia-EC,Bogota 1975 / Colombia East Central zone,Colombia_East_Central_Zone,Bogota 1975 / Colombia East Central zone,,,Bogota 1975 / Colombia East Central zone,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 971.  Axis direction was given as the reason.",0,0,0
-159400,21899,21894,21894,0,0,0,,BOGOTA.ColombiaE,Bogota75.Colombia-East,BOGOTA.ColombiaE,Bogota 1975 / Colombia East,Colombia_East_Zone,Bogota 1975 / Colombia East,,,Bogota 1975 / Colombia East,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 972.  Axis direction was given as the reason.",0,0,0
+159100,21896,21891,21891,0,0,0,,BOGOTA.Colombia-W,Bogota75.Colombia-West,BOGOTA.Colombia-W|COL-O-B,Bogota 1975 / Colombia West zone,Colombia_West_Zone,Bogota 1975 / Colombia West zone,,,Bogota 1975 / Colombia West zone,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 969.  Axis direction was given as the reason.",0,0,0
+159200,21897,21892,21892,0,0,0,,BOGOTA.Colombia-Bogota,Bogota75.Colombia-Bogota,BOGOTA.Colombia-Bogota|COL-B-B,Bogota 1975 / Colombia Bogota zone,Colombia_Bogota_Zone,Bogota 1975 / Colombia Bogota zone,,,Bogota 1975 / Colombia Bogota zone,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 970.  Axis direction was given as the reason.",0,0,0
+159300,21898,21893,21893,0,0,0,,BOGOTA.Colombia-EC,Bogota75.Colombia-EastCentral,BOGOTA.Colombia-EC|COL-EC-B,Bogota 1975 / Colombia East Central zone,Colombia_East_Central_Zone,Bogota 1975 / Colombia East Central zone,,,Bogota 1975 / Colombia East Central zone,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 971.  Axis direction was given as the reason.",0,0,0
+159400,21899,21894,21894,0,0,0,,BOGOTA.ColombiaE,Bogota75.Colombia-East,BOGOTA.ColombiaE|COL-EE-B,Bogota 1975 / Colombia East,Colombia_East_Zone,Bogota 1975 / Colombia East,,,Bogota 1975 / Colombia East,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 972.  Axis direction was given as the reason.",0,0,0
 159500,22032,22032,22032,0,0,0,,Camacupa.UTM-32S,Camacupa.UTM-32S,Camacupa_1.UTM-32S,Camacupa / UTM zone 32S,Camacupa_UTM_Zone_32S,Camacupa / UTM zone 32S,,,Camacupa / UTM zone 32S,,,,,,,,,0,0,0
 159600,22033,22033,22033,0,0,0,,Camacupa.UTM-33S,Camacupa.UTM-33S,Camacupa_1.UTM-33S,Camacupa / UTM zone 33S,Camacupa_UTM_Zone_33S,Camacupa / UTM zone 33S,,,Camacupa / UTM zone 33S,,,,,,,,,0,0,0
 159700,22091,22091,22091,0,0,0,,Camacupa.TM-1130SE,Camacupa.TM-1130SE,Camacupa_1.TM-1130SE,Camacupa / TM 11.30 SE,Camacupa_TM_11_30_SE,Camacupa / TM 11.30 SE,,,Camacupa / TM 11.30 SE,,,,,,,,,0,0,0
@@ -1620,13 +1620,13 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 161000,22185,0,0,0,0,0,,PGA94.Argentina-5,PGA94.Argentina-5,,POSGAR 94 / Argentina 5,,,,,,,,,,,,,,0,0,0
 161100,22186,0,0,0,0,0,,PGA94.Argentina-6,PGA94.Argentina-6,,POSGAR 94 / Argentina 6,,,,,,,,,,,,,,0,0,0
 161200,22187,0,0,0,0,0,,PGA94.Argentina-7,PGA94.Argentina-7,,POSGAR 94 / Argentina 7,,,,,,,,,,,,,,0,0,0
-161300,22191,22191,22191,0,0,0,,Campo.Argentina 1,CampoInchauspe.Argentina-1,Campo.Argentina1,Campo Inchauspe / Argentina 1,Argentina_Zone_1,Campo Inchauspe / Argentina 1,,,Campo Inchauspe / Argentina 1,,,,,,,,,0,0,0
-161400,22192,22192,22192,0,0,0,,Campo.Argentina 2,CampoInchauspe.Argentina-2,Campo.Argentina2,Campo Inchauspe / Argentina 2,Argentina_Zone_2,Campo Inchauspe / Argentina 2,,,Campo Inchauspe / Argentina 2,,,,,,,,,0,0,0
-161500,22193,22193,22193,0,0,0,,Campo.Argentina 3,CampoInchauspe.Argentina-3,Campo.Argentina3,Campo Inchauspe / Argentina 3,Argentina_Zone_3,Campo Inchauspe / Argentina 3,,,Campo Inchauspe / Argentina 3,,,,,,,,,0,0,0
-161600,22194,22194,22194,0,0,0,,Campo.Argentina 4,CampoInchauspe.Argentina-4,Campo.Argentina4,Campo Inchauspe / Argentina 4,Argentina_Zone_4,Campo Inchauspe / Argentina 4,,,Campo Inchauspe / Argentina 4,,,,,,,,,0,0,0
-161700,22195,22195,22195,0,0,0,,Campo.Argentina 5,CampoInchauspe.Argentina-5,Campo.Argentina5,Campo Inchauspe / Argentina 5,Argentina_Zone_5,Campo Inchauspe / Argentina 5,,,Campo Inchauspe / Argentina 5,,,,,,,,,0,0,0
-161800,22196,22196,22196,0,0,0,,Campo.Argentina 6,CampoInchauspe.Argentina-6,Campo.Argentina6,Campo Inchauspe / Argentina 6,Argentina_Zone_6,Campo Inchauspe / Argentina 6,,,Campo Inchauspe / Argentina 6,,,,,,,,,0,0,0
-161900,22197,22197,22197,0,0,0,,Campo.Argentina 7,CampoInchauspe.Argentina-7,Campo.Argentina7,Campo Inchauspe / Argentina 7,Argentina_Zone_7,Campo Inchauspe / Argentina 7,,,Campo Inchauspe / Argentina 7,,,,,,,,,0,0,0
+161300,22191,22191,22191,0,0,0,,Campo.Argentina 1,CampoInchauspe.Argentina-1,Campo.Argentina1|FAJA-1,Campo Inchauspe / Argentina 1,Argentina_Zone_1,Campo Inchauspe / Argentina 1,,,Campo Inchauspe / Argentina 1,,,,,,,,,0,0,0
+161400,22192,22192,22192,0,0,0,,Campo.Argentina 2,CampoInchauspe.Argentina-2,Campo.Argentina2|FAJA-2,Campo Inchauspe / Argentina 2,Argentina_Zone_2,Campo Inchauspe / Argentina 2,,,Campo Inchauspe / Argentina 2,,,,,,,,,0,0,0
+161500,22193,22193,22193,0,0,0,,Campo.Argentina 3,CampoInchauspe.Argentina-3,Campo.Argentina3|FAJA-3,Campo Inchauspe / Argentina 3,Argentina_Zone_3,Campo Inchauspe / Argentina 3,,,Campo Inchauspe / Argentina 3,,,,,,,,,0,0,0
+161600,22194,22194,22194,0,0,0,,Campo.Argentina 4,CampoInchauspe.Argentina-4,Campo.Argentina4|FAJA-4,Campo Inchauspe / Argentina 4,Argentina_Zone_4,Campo Inchauspe / Argentina 4,,,Campo Inchauspe / Argentina 4,,,,,,,,,0,0,0
+161700,22195,22195,22195,0,0,0,,Campo.Argentina 5,CampoInchauspe.Argentina-5,Campo.Argentina5|FAJA-5,Campo Inchauspe / Argentina 5,Argentina_Zone_5,Campo Inchauspe / Argentina 5,,,Campo Inchauspe / Argentina 5,,,,,,,,,0,0,0
+161800,22196,22196,22196,0,0,0,,Campo.Argentina 6,CampoInchauspe.Argentina-6,Campo.Argentina6|FAJA-6,Campo Inchauspe / Argentina 6,Argentina_Zone_6,Campo Inchauspe / Argentina 6,,,Campo Inchauspe / Argentina 6,,,,,,,,,0,0,0
+161900,22197,22197,22197,0,0,0,,Campo.Argentina 7,CampoInchauspe.Argentina-7,Campo.Argentina7|FAJA-7,Campo Inchauspe / Argentina 7,Argentina_Zone_7,Campo Inchauspe / Argentina 7,,,Campo Inchauspe / Argentina 7,,,,,,,,,0,0,0
 162000,22234,22234,22234,0,0,0,,Cape-1.UTM-34S,Cape.UTM-34S,Cape-1.UTM-34S,Cape / UTM zone 34S,Cape_UTM_Zone_34S,Cape / UTM zone 34S,,,Cape / UTM zone 34S,,,,,,,,,0,0,0
 162100,22235,22235,22235,0,0,0,,Cape-1.UTM-35S,Cape.UTM-35S,Cape-1.UTM-35S,Cape / UTM zone 35S,Cape_UTM_Zone_35S,Cape / UTM zone 35S,,,Cape / UTM zone 35S,,,,,,,,,0,0,0
 162200,22236,22236,22236,0,0,0,,Cape-1.UTM-36S,Cape.UTM-36S,Cape-1.UTM-36S,Cape / UTM zone 36S,Cape_UTM_Zone_36S,Cape / UTM zone 36S,,,Cape / UTM zone 36S,,,,,,,,,0,0,0
@@ -1641,13 +1641,13 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 163100,22291,0,22291,0,0,0,,Cape-1.SACS-31,Cape.SouthAfrica-31,Cape-1.SACS-31,Cape / Lo31,,South African Coordinate System zone 31,,,South African Coordinate System zone 31,,,,,,,,,0,0,0
 163200,22293,0,22293,0,0,0,,Cape-1.SACS-33,Cape.SouthAfrica-33,Cape-1.SACS-33,Cape / Lo33,,South African Coordinate System zone 33,,,South African Coordinate System zone 33,,,,,,,,,0,0,0
 163300,22300,0,22300,0,0,0,,,,,Carthage (Paris) / Tunisia Mining Grid,,Carthage (Paris) / Tunisia Mining Grid,,,Carthage (Paris) / Tunisia Mining Grid,,,,,,,,,0,0,0
-163400,22332,22332,22332,0,0,0,,Carthage.UTM-32N,Carthage.UTM-32N,Carthage.UTM-32N,Carthage / UTM zone 32N,Carthage_UTM_Zone_32N,Carthage / UTM zone 32N,,,Carthage / UTM zone 32N,,,,,,,,,0,0,0
+163400,22332,22332,22332,0,0,0,,Carthage.UTM-32N,Carthage.UTM-32N,Carthage.UTM-32N|TUNIS-O-MOD,Carthage / UTM zone 32N,Carthage_UTM_Zone_32N,Carthage / UTM zone 32N,,,Carthage / UTM zone 32N,,,,,,,,,0,0,0
 163500,22391,22391,22391,0,0,0,,Carthage.NordTunisie,Carthage.NordTunisie,Carthage.NordTunisie,Carthage / Nord Tunisie,Nord_Tunisie,Carthage / Nord Tunisie,,,Carthage / Nord Tunisie,,,,,,,,,0,0,0
 163600,22392,22392,22392,0,0,0,,Carthage.SudTunisie,Carthage.SudTunisie,Carthage.SudTunisie,Carthage / Sud Tunisie,Sud_Tunisie,Carthage / Sud Tunisie,,,Carthage / Sud Tunisie,,,,,,,,,0,0,0
 163700,22521,0,0,0,0,82286,,Corrego.UTM-21S,Corrego.UTM-21S,Corrego.UTM-21S,Corrego Alegre / UTM zone 21S,,,,,,,,,"UTM Zone 21, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
 163800,22522,0,0,0,0,82294,,Corrego.UTM-22S,Corrego.UTM-22S,Corrego.UTM-22S,Corrego Alegre / UTM zone 22S,,,,,,,,,"UTM Zone 22, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
-163900,22523,22523,22523,0,0,82300,,Corrego.UTM-23S,Corrego.UTM-23S,Corrego.UTM-23S,Corrego Alegre / UTM zone 23S,Corrego_Alegre_UTM_Zone_23S,Corrego Alegre / UTM zone 23S,,,Corrego Alegre / UTM zone 23S,,,,"UTM Zone 23, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
-164000,22524,22524,22524,0,0,82306,,Corrego.UTM-24S,Corrego.UTM-24S,Corrego.UTM-24S,Corrego Alegre / UTM zone 24S,Corrego_Alegre_UTM_Zone_24S,Corrego Alegre / UTM zone 24S,,,Corrego Alegre / UTM zone 24S,,,,"UTM Zone 24, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
+163900,22523,22523,22523,0,0,82300,,Corrego.UTM-23S,Corrego.UTM-23S,Corrego.UTM-23S|BRAC-NE1,Corrego Alegre / UTM zone 23S,Corrego_Alegre_UTM_Zone_23S,Corrego Alegre / UTM zone 23S,,,Corrego Alegre / UTM zone 23S,,,,"UTM Zone 23, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
+164000,22524,22524,22524,0,0,82306,,Corrego.UTM-24S,Corrego.UTM-24S,Corrego.UTM-24S|BRAC-NE2,Corrego Alegre / UTM zone 24S,Corrego_Alegre_UTM_Zone_24S,Corrego Alegre / UTM zone 24S,,,Corrego Alegre / UTM zone 24S,,,,"UTM Zone 24, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
 164100,22525,0,0,0,0,82312,,,Corrego.UTM-25S,,Corrego Alegre / UTM zone 25S,,,,,,,,,"UTM Zone 25, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
 164200,22700,22700,22700,0,0,0,,DeirEzZor.Levant,DeirEzZor.LevantZone,,Deir ez Zor / Levant Zone,Deir_ez_Zor_Levant_Zone,Deir ez Zor / Levant Zone,,,Deir ez Zor / Levant Zone,,,,,,,,,0,0,0
 164300,22770,22770,22770,0,0,0,,DeirEzZor.Syria,DeirEzZor.SyriaLambert,DeirEzZor_1.Syria,Deir ez Zor / Syria Lambert,Deir_ez_Zor_Syria_Lambert,Deir ez Zor / Syria Lambert,,,Deir ez Zor / Syria Lambert,,,,,,,,,0,0,0
@@ -1738,9 +1738,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 172800,24381,24381,24381,0,0,0,,Kalianpur75.India-III,Kalianpur75.India-III,Kalianpur1975.India-III,Kalianpur 1975 / India zone III,Kalianpur_1975_India_Zone_III,Kalianpur 1975 / India zone III,,,Kalianpur 1975 / India zone III,,,,,,,,,0,0,0
 172900,24382,24382,0,0,0,0,,Kalnpur1880.India-IIb,Kalnpur1880.India-IIb,IND-IIB/a,Kalianpur 1880 / India zone IIb,Kalianpur_1880_India_Zone_IIb,,,,,,,,,,,,,0,0,0
 173000,24383,24383,24383,0,0,0,,Kalianpur75.India-IV,Kalianpur75.India-IV,Kalianpur1975.India-IV,Kalianpur 1975 / India zone IV,Kalianpur_1975_India_Zone_IV,Kalianpur 1975 / India zone IV,,,Kalianpur 1975 / India zone IV,,,,,,,,,0,0,0
-173100,24500,24500,24500,0,0,0,,Kertau.SingaporeGrid,Kertau.SingaporeGrid,Kertau.SingaporeGrid,Kertau 1968 / Singapore Grid,Kertau_Singapore_Grid,Kertau / Singapore Grid,,,Kertau / Singapore Grid,,,,,,,,,0,0,0
-173200,24547,24547,24547,0,0,0,,Kertau.UTM-47N,Kertau.UTM-47N,Kertau.UTM-47N,Kertau 1968 / UTM zone 47N,Kertau_UTM_Zone_47N,Kertau / UTM zone 47N,,,Kertau / UTM zone 47N,,,,,,,,,0,0,0
-173300,24548,24548,24548,0,0,0,,Kertau.UTM-48N,Kertau.UTM-48N,Kertau.UTM-48N,Kertau 1968 / UTM zone 48N,Kertau_UTM_Zone_48N,Kertau / UTM zone 48N,,,Kertau / UTM zone 48N,,,,,,,,,0,0,0
+173100,24500,24500,24500,0,0,0,,Kertau.SingaporeGrid,Kertau.SingaporeGrid,Kertau.SingaporeGrid|SING-G,Kertau 1968 / Singapore Grid,Kertau_Singapore_Grid,Kertau / Singapore Grid,,,Kertau / Singapore Grid,,,,,,,,,0,0,0
+173200,24547,24547,24547,0,0,0,,Kertau.UTM-47N,Kertau.UTM-47N,Kertau.UTM-47N|MAL-W_W,Kertau 1968 / UTM zone 47N,Kertau_UTM_Zone_47N,Kertau / UTM zone 47N,,,Kertau / UTM zone 47N,,,,,,,,,0,0,0
+173300,24548,24548,24548,0,0,0,,Kertau.UTM-48N,Kertau.UTM-48N,Kertau.UTM-48N|MAL-W_E,Kertau 1968 / UTM zone 48N,Kertau_UTM_Zone_48N,Kertau / UTM zone 48N,,,Kertau / UTM zone 48N,,,,,,,,,0,0,0
 173400,24600,24600,24600,0,0,0,,KuwaitOilCo.Lambert,KuwaitOilCo.Lambert,KuwaitOil.Lambert,KOC Lambert,KOC_Lambert,KOC Lambert,,,KOC Lambert,,,,,,,,,0,0,0
 173500,24718,24718,24718,0,0,0,,LaCanoa.UTM-18N,LaCanoa.UTM-18N,LaCanoa/E.UTM-18N,La Canoa / UTM zone 18N,La_Canoa_UTM_Zone_18N,La Canoa / UTM zone 18N,,,La Canoa / UTM zone 18N,,,,,,,,,0,0,0
 173600,24719,24719,24719,0,0,0,,LaCanoa.UTM-19N,LaCanoa.UTM-19N,LaCanoa/E.UTM-19N,La Canoa / UTM zone 19N,La_Canoa_UTM_Zone_19N,La Canoa / UTM zone 19N,,,La Canoa / UTM zone 19N,,,,,,,,,0,0,0
@@ -1761,11 +1761,11 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 175100,24893,24893,24893,0,0,0,,PSAD56.PeruEast,PSAD56.PeruEast,PSAD56.PeruEast,PSAD56 / Peru east zone,Peru_East_Zone,PSAD56 / Peru east zone,,,PSAD56 / Peru east zone,,,,,,,,,0,0,0
 175200,25000,25000,25000,0,0,0,,Leigon.GhanaMetreGrid,Leigon.GhanaMetreGrid,Leigon_1.GhanaMetreGrid,Leigon / Ghana Metre Grid,Ghana_Metre_Grid,Leigon / Ghana Metre Grid,,,Leigon / Ghana Metre Grid,,,,,,,,,0,0,0
 175300,25231,25231,25231,0,0,0,,Lome.UTM-31N,Lome.UTM-31N,,Lome / UTM zone 31N,Lome_UTM_Zone_31N,Lome / UTM zone 31N,,,Lome / UTM zone 31N,,,,,,,,,0,0,0
-175400,25391,25391,25391,0,0,0,,Luzon.Philippines-I,Luzon.Philippines-I,Luzon.Philippines-I,Luzon 1911 / Philippines zone I,Philippines_Zone_I,Luzon 1911 / Philippines zone I,,,Luzon 1911 / Philippines zone I,,,,,,,,,0,0,0
-175500,25392,25392,25392,0,0,0,,Luzon.Philippines-II,Luzon.Philippines-II,Luzon.Philippines-II,Luzon 1911 / Philippines zone II,Philippines_Zone_II,Luzon 1911 / Philippines zone II,,,Luzon 1911 / Philippines zone II,,,,,,,,,0,0,0
-175600,25393,25393,25393,0,0,0,,Luzon.Philippines-III,Luzon.Philippines-III,Luzon.Philippines-III,Luzon 1911 / Philippines zone III,Philippines_Zone_III,Luzon 1911 / Philippines zone III,,,Luzon 1911 / Philippines zone III,,,,,,,,,0,0,0
-175700,25394,25394,25394,0,0,0,,Luzon.Philippines-IV,Luzon.Philippines-IV,Luzon.Philippines-IV,Luzon 1911 / Philippines zone IV,Philippines_Zone_IV,Luzon 1911 / Philippines zone IV,,,Luzon 1911 / Philippines zone IV,,,,,,,,,0,0,0
-175800,25395,25395,25395,0,0,0,,Luzon.Philippines-V,Luzon.Philippines-V,Luzon.Philippines-V,Luzon 1911 / Philippines zone V,Philippines_Zone_V,Luzon 1911 / Philippines zone V,,,Luzon 1911 / Philippines zone V,,,,,,,,,0,0,0
+175400,25391,25391,25391,0,0,0,,Luzon.Philippines-I,Luzon.Philippines-I,Luzon.Philippines-I|PHIL-I,Luzon 1911 / Philippines zone I,Philippines_Zone_I,Luzon 1911 / Philippines zone I,,,Luzon 1911 / Philippines zone I,,,,,,,,,0,0,0
+175500,25392,25392,25392,0,0,0,,Luzon.Philippines-II,Luzon.Philippines-II,Luzon.Philippines-II|PHIL-II,Luzon 1911 / Philippines zone II,Philippines_Zone_II,Luzon 1911 / Philippines zone II,,,Luzon 1911 / Philippines zone II,,,,,,,,,0,0,0
+175600,25393,25393,25393,0,0,0,,Luzon.Philippines-III,Luzon.Philippines-III,Luzon.Philippines-III|PHIL-III,Luzon 1911 / Philippines zone III,Philippines_Zone_III,Luzon 1911 / Philippines zone III,,,Luzon 1911 / Philippines zone III,,,,,,,,,0,0,0
+175700,25394,25394,25394,0,0,0,,Luzon.Philippines-IV,Luzon.Philippines-IV,Luzon.Philippines-IV|PHIL-IV,Luzon 1911 / Philippines zone IV,Philippines_Zone_IV,Luzon 1911 / Philippines zone IV,,,Luzon 1911 / Philippines zone IV,,,,,,,,,0,0,0
+175800,25395,25395,25395,0,0,0,,Luzon.Philippines-V,Luzon.Philippines-V,Luzon.Philippines-V|PHIL-V,Luzon 1911 / Philippines zone V,Philippines_Zone_V,Luzon 1911 / Philippines zone V,,,Luzon 1911 / Philippines zone V,,,,,,,,,0,0,0
 175900,25700,0,0,0,0,0,,,,,Makassar (Jakarta) / NEIEZ,,,,,Makassar (Jakarta) / NEIEZ,,,,,,,,,0,0,0
 176000,25828,25828,25828,0,0,0,,ETRS89.UTM-28N,ETRF89.UTM-28N,ETRS89.UTM-28N,ETRS89 / UTM zone 28N,ETRS_1989_UTM_Zone_28N|ETRF_1989_UTM_Zone_28N,ETRS89 / UTM zone 28N,,,ETRS89 / UTM zone 28N,,,,"UTM Zone 28, (ETRS 89)",,,,,0,0,0
 176100,25829,25829,25829,0,0,0,,ETRS89.UTM-29N,ETRF89.UTM-29N,ETRS89.UTM-29N,ETRS89 / UTM zone 29N,ETRS_1989_UTM_Zone_29N|ETRF_1989_UTM_Zone_29N,ETRS89 / UTM zone 29N,,,ETRS89 / UTM zone 29N,,,,"UTM Zone 29, (ETRS 89)",,,,,0,0,0
@@ -1781,23 +1781,23 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 177100,25884,25884,25884,0,0,0,,ETRS89.TM-Baltic,ETRF89.TM-Baltic,ETRS89.TM-Baltic,ETRS89 / TM Baltic93,ETRS_1989_TM_Baltic_1993,ETRS89 / TM Baltic93,,,ETRS89 / TM Baltic93,,,,,,,,,0,0,0
 177200,25932,25932,25932,0,0,0,,Malongo87.UTM-32S,Malongo87.UTM-32S,Malongo1987.UTM-32S,Malongo 1987 / UTM zone 32S,Malongo_1987_UTM_Zone_32S,Malongo 1987 / UTM zone 32S,,,Malongo 1987 / UTM zone 32S,,,,,,,,,0,0,0
 177300,26191,26191,26191,0,0,0,,Merchich.NordMaroc,Merchich.NordMaroc,Merchich.NordMaroc/01,Merchich / Nord Maroc,Nord_Maroc,Merchich / Nord Maroc,,,Merchich / Nord Maroc,,,,,,,,,0,0,0
-177400,26192,26192,26192,0,0,0,,Merchich.SudMaroc,Merchich.SudMaroc,Merchich.SudMaroc/01,Merchich / Sud Maroc,Sud_Maroc,Merchich / Sud Maroc,,,Merchich / Sud Maroc,,,,,,,,,0,0,0
+177400,26192,26192,26192,0,0,0,,Merchich.SudMaroc,Merchich.SudMaroc,Merchich.SudMaroc/01|Morocco-S/01,Merchich / Sud Maroc,Sud_Maroc,Merchich / Sud Maroc,,,Merchich / Sud Maroc,,,,,,,,,0,0,0
 177500,26193,26193,26193,0,0,0,,Merchich.Sahara,Merchich.Sahara,Merchich.Sahara/01,Merchich / Sahara,Sahara,Merchich / Sahara,,,Merchich / Sahara,,,,,,,,"Deprecated by EPSG, ID: 462",0,0,0
 177600,26194,0,26194,0,0,0,,Merchich.SaharaNord,Merchich.SaharaNord,Merchich.SaharaNord/01,Merchich / Sahara Nord,,Merchich / Sahara Nord,,,,,,,,,,,,0,0,0
 177700,26195,0,26195,0,0,0,,Merchich.SaharaSud,Merchich.SaharaSud,Merchich.SaharaSud/01,Merchich / Sahara Sud,,Merchich / Sahara Sud,,,,,,,,,,,,0,0,0
-177800,26237,26237,26237,0,0,0,,Massawa.UTM-37N,Massawa.UTM-37N,Massawa.UTM-37N,Massawa / UTM zone 37N,Massawa_UTM_Zone_37N,Massawa / UTM zone 37N,,,Massawa / UTM zone 37N,,,,,,,,,0,0,0
+177800,26237,26237,26237,0,0,0,,Massawa.UTM-37N,Massawa.UTM-37N,Massawa.UTM-37N|ERITREA,Massawa / UTM zone 37N,Massawa_UTM_Zone_37N,Massawa / UTM zone 37N,,,Massawa / UTM zone 37N,,,,,,,,,0,0,0
 177900,26331,26331,26331,0,0,0,,Minna.UTM-31N,Minna.UTM-31N,Minna.UTM-31N,Minna / UTM zone 31N,Minna_UTM_Zone_31N,Minna / UTM zone 31N,,,Minna / UTM zone 31N,,,,,,,,,0,0,0
 178000,26332,26332,26332,0,0,0,,Minna.UTM-32N,Minna.UTM-32N,Minna.UTM-32N,Minna / UTM zone 32N,Minna_UTM_Zone_32N,Minna / UTM zone 32N,,,Minna / UTM zone 32N,,,,,,,,,0,0,0
-178100,26391,26391,26391,0,0,0,,Minna.NigeriaWest,Minna.NigeriaWest,Minna.NigeriaWest,Minna / Nigeria West Belt,Nigeria_West_Belt,Minna / Nigeria West Belt,,,Minna / Nigeria West Belt,,,,,,,,,0,0,0
-178200,26392,26392,26392,0,0,0,,Minna.NigeriaMid,Minna.NigeriaMid,Minna.NigeriaMid,Minna / Nigeria Mid Belt,Nigeria_Mid_Belt,Minna / Nigeria Mid Belt,,,Minna / Nigeria Mid Belt,,,,,,,,,0,0,0
-178300,26393,26393,26393,0,0,0,,Minna.NigeriaEast,Minna.NigeriaEast,Minna.NigeriaEast,Minna / Nigeria East Belt,Nigeria_East_Belt,Minna / Nigeria East Belt,,,Minna / Nigeria East Belt,,,,,,,,,0,0,0
+178100,26391,26391,26391,0,0,0,,Minna.NigeriaWest,Minna.NigeriaWest,Minna.NigeriaWest|NGRA-W,Minna / Nigeria West Belt,Nigeria_West_Belt,Minna / Nigeria West Belt,,,Minna / Nigeria West Belt,,,,,,,,,0,0,0
+178200,26392,26392,26392,0,0,0,,Minna.NigeriaMid,Minna.NigeriaMid,Minna.NigeriaMid|NGRA-M,Minna / Nigeria Mid Belt,Nigeria_Mid_Belt,Minna / Nigeria Mid Belt,,,Minna / Nigeria Mid Belt,,,,,,,,,0,0,0
+178300,26393,26393,26393,0,0,0,,Minna.NigeriaEast,Minna.NigeriaEast,Minna.NigeriaEast|NGRA-E,Minna / Nigeria East Belt,Nigeria_East_Belt,Minna / Nigeria East Belt,,,Minna / Nigeria East Belt,,,,,,,,,0,0,0
 178400,26432,26432,26432,0,0,0,,Mhast.UTM-32S,Mhast.UTM-32S,Mhast/gc.UTM-32S,Mhast / UTM zone 32S,Mhast_UTM_Zone_32S,Mhast / UTM zone 32S,,,Mhast / UTM zone 32S,,,,,,,,,0,0,0
 178500,26591,26591,26591,0,0,0,,MonteMario.Italy-1,MonteMario.Italy-1,MonteMario_1.Italy-1,Monte Mario (Rome) / Italy zone 1,Monte_Mario_Rome_Italy_1,Monte Mario (Rome) / Italy zone 1,,,Monte Mario (Rome) / Italy zone 1,,,,,,,,,0,0,0
 178600,26592,26592,26592,0,0,0,,MonteMario.Italy-2,MonteMario.Italy-2,MonteMario_1.Italy-2,Monte Mario (Rome) / Italy zone 2,Monte_Mario_Rome_Italy_2,Monte Mario (Rome) / Italy zone 2,,,Monte Mario (Rome) / Italy zone 2,,,,,,,,,0,0,0
 178700,26632,26632,26632,0,0,0,,Mporaloko.UTM-32N,Mporaloko.UTM-32N,Mporaloko_1.UTM-32N,M'poraloko / UTM zone 32N,Mporaloko_UTM_Zone_32N,M'poraloko / UTM zone 32N,,,M'poraloko / UTM zone 32N,,,,,,,,,0,0,0
 178800,26692,26692,26692,0,0,0,,Mporaloko.UTM-32S,Mporaloko.UTM-32S,Mporaloko_1.UTM-32S,M'poraloko / UTM zone 32S,Mporaloko_UTM_Zone_32S,M'poraloko / UTM zone 32S,,,M'poraloko / UTM zone 32S,,,,,,,,,0,0,0
-178900,26701,102124,0,0,0,0,,UTM27-1N,NAD27.UTM-1N,UTM27-1N,NAD27 / UTM zone 1N,NAD_1927_UTM_Zone_1N,,,,,,,,,,,,,0,0,0
-179000,26702,102125,0,0,0,0,,UTM27-2N,NAD27.UTM-2N,UTM27-2N,NAD27 / UTM zone 2N,NAD_1927_UTM_Zone_2N,,,,,,,,,,,,,0,0,0
+178900,26701,102124,0,0,0,0,,UTM27-1N,NAD27.UTM-1N,UTM27-1|UTM27-1N,NAD27 / UTM zone 1N,NAD_1927_UTM_Zone_1N,,,,,,,,,,,,,0,0,0
+179000,26702,102125,0,0,0,0,,UTM27-2N,NAD27.UTM-2N,UTM27-2|UTM27-2N,NAD27 / UTM zone 2N,NAD_1927_UTM_Zone_2N,,,,,,,,,,,,,0,0,0
 179100,26703,26703,26703,0,0,0,,UTM27-3,NAD27.UTM-3N,UTM27-3,NAD27 / UTM zone 3N,NAD_1927_UTM_Zone_3N,NAD27 / UTM zone 3N,,,,,,,UTM Zone 3 (NAD 27 for Alaska),,,,,0,0,0
 179200,26704,26704,26704,0,0,82366,,UTM27-4,NAD27.UTM-4N,UTM27-4,NAD27 / UTM zone 4N,NAD_1927_UTM_Zone_4N,NAD27 / UTM zone 4N,,,,,,,UTM Zone 4 (NAD 27 for Alaska),,,,,0,0,0
 179300,26705,26705,26705,0,0,82390,,UTM27-5,NAD27.UTM-5N,UTM27-5,NAD27 / UTM zone 5N,NAD_1927_UTM_Zone_5N,NAD27 / UTM zone 5N,,,,,,,UTM Zone 5 (NAD 27 for Alaska),,,,,0,0,0
@@ -1880,9 +1880,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 187000,26797,26797,26797,0,0,82127,,MO-C,NAD27.MO-C.USFt,MO-C,NAD27 / Missouri Central,NAD_1927_StatePlane_Missouri_Central_FIPS_2402,NAD27 / Missouri Central,,,,,,,"Missouri 2402, Central Zone (1927)",,,,,0,0,0
 187100,26798,26798,26798,0,0,82130,,MO-W,NAD27.MO-W.USFt,MO-W,NAD27 / Missouri West,NAD_1927_StatePlane_Missouri_West_FIPS_2403,NAD27 / Missouri West,,,,,,,"Missouri 2403, Western Zone (1927)",,,,,0,0,0
 187200,26799,26747,26747,0,0,40988,,CA-VII,NAD27.CA-VII.USFt,CA-VII,NAD27 / California zone VII,NAD_1927_StatePlane_California_VII_FIPS_0407,NAD27 / California zone VII,,,,,,,"California 0407, Zone VII (1927)",,,,,0,0,0
-187300,26801,26801,26801,0,0,0,,MICHIGAN.East,MICHIGAN.East,MICHIGAN.East,NAD Michigan / Michigan East,NAD_Michigan_StatePlane_Michigan_East_Old_FIPS_2101,NAD Michigan / Michigan East,,,,,,,,,,,,0,0,0
-187400,26802,26802,26802,0,0,0,,MICHIGAN.OldCentral,MICHIGAN.OldCentral,MICHIGAN.OldCentral,NAD Michigan / Michigan Old Central,NAD_Michigan_StatePlane_Michigan_Central_Old_FIPS_2102,NAD Michigan / Michigan Old Central,,,,,,,,,,,,0,0,0
-187500,26803,26803,26803,0,0,0,,MICHIGAN.West,MICHIGAN.West,MICHIGAN.West,NAD Michigan / Michigan West,NAD_Michigan_StatePlane_Michigan_West_Old_FIPS_2103,NAD Michigan / Michigan West,,,,,,,,,,,,0,0,0
+187300,26801,26801,26801,0,0,0,,MICHIGAN.East,MICHIGAN.East,MICHIGAN.East|MI27-OE,NAD Michigan / Michigan East,NAD_Michigan_StatePlane_Michigan_East_Old_FIPS_2101,NAD Michigan / Michigan East,,,,,,,,,,,,0,0,0
+187400,26802,26802,26802,0,0,0,,MICHIGAN.OldCentral,MICHIGAN.OldCentral,MICHIGAN.OldCentral|MI27-OC,NAD Michigan / Michigan Old Central,NAD_Michigan_StatePlane_Michigan_Central_Old_FIPS_2102,NAD Michigan / Michigan Old Central,,,,,,,,,,,,0,0,0
+187500,26803,26803,26803,0,0,0,,MICHIGAN.West,MICHIGAN.West,MICHIGAN.West|MI27-OW,NAD Michigan / Michigan West,NAD_Michigan_StatePlane_Michigan_West_Old_FIPS_2103,NAD Michigan / Michigan West,,,,,,,,,,,,0,0,0
 187600,26811,26811,26811,0,0,41056,,MI27-N,MICHIGAN.MI-N.USFt,MI27-N,NAD Michigan / Michigan North,NAD_Michigan_StatePlane_Michigan_North_FIPS_2111,NAD Michigan / Michigan North,,,,,,,"Michigan 2111, Northern Zone (1927)",,,,,0,0,0
 187700,26812,26812,26812,0,0,41060,,MI27-C,MICHIGAN.MI-C.USFt,MI27-C,NAD Michigan / Michigan Central,NAD_Michigan_StatePlane_Michigan_Central_FIPS_2112,NAD Michigan / Michigan Central,,,,,,,"Michigan 2112, Central Zone (1927)",,,,,0,0,0
 187800,26813,26813,26813,0,0,41064,,MI27-S,MICHIGAN.MI-S.USFt,MI27-S,NAD Michigan / Michigan South,NAD_Michigan_StatePlane_Michigan_South_FIPS_2113,NAD Michigan / Michigan South,,,,,,,"Michigan 2113, Southern Zone (1927)",,,,,0,0,0
@@ -2052,7 +2052,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 203400,27592,27592,0,0,0,0,,,,,NTF (Paris) / Centre France,NTF_Paris_Centre_France,,,,NTF (Paris) / Centre France,,,,,,,,,0,0,0
 203500,27593,27593,0,0,0,0,,,,,NTF (Paris) / Sud France,NTF_Paris_Sud_France,,,,NTF (Paris) / Sud France,,,,,,,,,0,0,0
 203600,27594,27594,0,0,0,0,,,,,NTF (Paris) / Corse,NTF_Paris_Corse,,,,NTF (Paris) / Corse,,,,,,,,,0,0,0
-203700,27700,27700,81989,0,0,81989,,BritishNatGrid,OSGB.BritishNtlGrid,BritishNatGrid,OSGB 1936 / British National Grid,British_National_Grid,British National Grid,,,OSGB 1936 / British National Grid,,,,British National Grid,,,,,0,0,0
+203700,27700,27700,81989,0,0,81989,,BritishNatGrid,OSGB.BritishNtlGrid,BritishNatGrid|GB_ORD1-MOD,OSGB 1936 / British National Grid,British_National_Grid,British National Grid,,,OSGB 1936 / British National Grid,,,,British National Grid,,,,,0,0,0
 203800,28191,28191,28191,0,0,0,,Palestine23.Grid,Palestine23.Grid,Palestine23.Grid,Palestine 1923 / Palestine Grid,Palestine_1923_Palestine_Grid,Palestine 1923 / Palestine Grid,,,Palestine 1923 / Palestine Grid,,,,,,,,,0,0,0
 203900,28192,28192,28192,0,0,0,,Palestine23.Belt,Palestine23.Belt,Palestine23.Belt,Palestine 1923 / Palestine Belt,Palestine_1923_Palestine_Belt,Palestine 1923 / Palestine Belt,,,Palestine 1923 / Palestine Belt,,,,,,,,,0,0,0
 204000,28193,28193,81989001,0,0,0,,Palestine23.IsraeliGrd,Palestine23.IsraeliGrd,Palestine23.IsraeliGrd,Palestine 1923 / Israeli CS Grid,Palestine_1923_Israel_CS_Grid,Palestine 1923 / Israeli CS Grid,,,Palestine 1923 / Israeli CS Grid,,,,Palestine 1923 / Israeli CS Grid,,,,,0,0,0
@@ -2105,23 +2105,23 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 208700,28991,28991,28991,0,0,0,,Netherlands-RD-Old,Amersfoot.RD/Old,Netherlands-RDOld,Amersfoort / RD Old,RD_Old,Amersfoort / RD Old,,,Amersfoort / RD Old,,,,,,,,,0,0,0
 208800,28992,28992,28992,0,0,90112,,Netherlands-RD-New,Amersfoot.RD/New,Netherlands-RDNew,Amersfoort / RD New,RD_New,Amersfoort / RD New,,,Amersfoort / RD New,,,,Netherlands National System,,,,,0,0,0
 208900,29101,29100,29101,0,0,0,,SAD69.BzPolyconic,SAD69.BzPolyconic,SAD1969.BzPolyconic/01,SAD69 / Brazil Polyconic,SAD_1969_Brazil_Polyconic,SAD69 / Brazil Polyconic,,,SAD69 / Brazil Polyconic,,,,,,,,"Deprecated (ID:431), thus names may be duplicatedelsewhere.",0,0,0
-209000,29168,29118,29168,0,0,82255,,SAD69.UTM-18N,SAD69.UTM-18N,SAD69.UTM-18N,SAD69 / UTM zone 18N,SAD_1969_UTM_Zone_18N,SAD69 / UTM zone 18N,,,SAD69 / UTM zone 18N,,,,"UTM Zone 18, Northern Hemisphere (SAD 69)",,,,,0,0,0
-209100,29169,29119,29169,0,0,82264,,SAD69.UTM-19N,SAD69.UTM-19N,SAD69.UTM-19N,SAD69 / UTM zone 19N,SAD_1969_UTM_Zone_19N,SAD69 / UTM zone 19N,,,SAD69 / UTM zone 19N,,,,"UTM Zone 19, Northern Hemisphere (SAD 69)",,,,,0,0,0
-209200,29170,29120,29170,0,0,82276,,SAD69.UTM-20N,SAD69.UTM-20N,SAD69.UTM-20N,SAD69 / UTM zone 20N,SAD_1969_UTM_Zone_20N,SAD69 / UTM zone 20N,,,SAD69 / UTM zone 20N,,,,"UTM Zone 20, Northern Hemisphere (SAD 69)",,,,,0,0,0
-209300,29171,29121,29171,0,0,82284,,SAD69.UTM-21N,SAD69.UTM-21N,SAD69.UTM-21N,SAD69 / UTM zone 21N,SAD_1969_UTM_Zone_21N,SAD69 / UTM zone 21N,,,SAD69 / UTM zone 21N,,,,"UTM Zone 21, Northern Hemisphere (SAD 69)",,,,,0,0,0
-209400,29172,29122,29172,0,0,82292,,SAD69.UTM-22N,SAD69.UTM-22N,SAD69.UTM-22N,SAD69 / UTM zone 22N,SAD_1969_UTM_Zone_22N,SAD69 / UTM zone 22N,,,SAD69 / UTM zone 22N,,,,"UTM Zone 22, Northern Hemisphere (SAD 69)",,,,,0,0,0
-209500,29187,29177,29187,0,0,82250,,SAD69.UTM-17S,SAD69.UTM-17S,SAD69.UTM-17S,SAD69 / UTM zone 17S,SAD_1969_UTM_Zone_17S,SAD69 / UTM zone 17S,,,SAD69 / UTM zone 17S,,,,"UTM Zone 17, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:430), thus names may be duplicated elsewhere.",0,0,0
-209600,29188,29178,29188,0,0,82258,,SAD69.UTM-18S,SAD69.UTM-18S,SAD69.UTM-18S,SAD69 / UTM zone 18S,SAD_1969_UTM_Zone_18S,SAD69 / UTM zone 18S,,,SAD69 / UTM zone 18S,,,,"UTM Zone 18, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:440), thus names may be duplicated elsewhere.",0,0,0
-209700,29189,29179,29189,0,0,82267,,SAD69.UTM-19S,SAD69.UTM-19S,SAD69.UTM-19S,SAD69 / UTM zone 19S,SAD_1969_UTM_Zone_19S,SAD69 / UTM zone 19S,,,SAD69 / UTM zone 19S,,,,"UTM Zone 19, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:439), thus names may be duplicated elsewhere.",0,0,0
-209800,29190,29180,29190,0,0,82279,,SAD69.UTM-20S,SAD69.UTM-20S,SAD69.UTM-20S,SAD69 / UTM zone 20S,SAD_1969_UTM_Zone_20S,SAD69 / UTM zone 20S,,,SAD69 / UTM zone 20S,,,,"UTM Zone 20, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:438), thus names may be duplicated elsewhere.",0,0,0
-209900,29191,29181,29191,0,0,82287,,SAD69.UTM-21S,SAD69.UTM-21S,SAD69.UTM-21S,SAD69 / UTM zone 21S,SAD_1969_UTM_Zone_21S,SAD69 / UTM zone 21S,,,SAD69 / UTM zone 21S,,,,"UTM Zone 21, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:437), thus names may be duplicated elsewhere.",0,0,0
-210000,29192,29182,29192,0,0,82295,,SAD69.UTM-22S,SAD69.UTM-22S,SAD69.UTM-22S,SAD69 / UTM zone 22S,SAD_1969_UTM_Zone_22S,SAD69 / UTM zone 22S,,,SAD69 / UTM zone 22S,,,,"UTM Zone 22, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:435), thus names may be duplicated elsewhere.",0,0,0
-210100,29193,29183,29193,0,0,82301,,SAD69.UTM-23S,SAD69.UTM-23S,SAD69.UTM-23S,SAD69 / UTM zone 23S,SAD_1969_UTM_Zone_23S,SAD69 / UTM zone 23S,,,SAD69 / UTM zone 23S,,,,"UTM Zone 23, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:434), thus names may be duplicated elsewhere.",0,0,0
-210200,29194,29184,29194,0,0,82307,,SAD69.UTM-24S,SAD69.UTM-24S,SAD69.UTM-24S,SAD69 / UTM zone 24S,SAD_1969_UTM_Zone_24S,SAD69 / UTM zone 24S,,,SAD69 / UTM zone 24S,,,,"UTM Zone 24, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:433), thus names may be duplicated elsewhere.",0,0,0
-210300,29195,29185,29195,0,0,82313,,SAD69.UTM-25S,SAD69.UTM-25S,SAD69.UTM-25S,SAD69 / UTM zone 25S,SAD_1969_UTM_Zone_25S,SAD69 / UTM zone 25S,,,SAD69 / UTM zone 25S,,,,"UTM Zone 25, Southern Hemisphere (SAD 69)",,,,"Deprecated, thus names may be duplicated elsewhere.",0,0,0
+209000,29168,29118,29168,0,0,82255,,SAD69.UTM-18N,SAD69.UTM-18N,SAD69.UTM-18N|SA69-18N,SAD69 / UTM zone 18N,SAD_1969_UTM_Zone_18N,SAD69 / UTM zone 18N,,,SAD69 / UTM zone 18N,,,,"UTM Zone 18, Northern Hemisphere (SAD 69)",,,,,0,0,0
+209100,29169,29119,29169,0,0,82264,,SAD69.UTM-19N,SAD69.UTM-19N,SAD69.UTM-19N|SA69-19N,SAD69 / UTM zone 19N,SAD_1969_UTM_Zone_19N,SAD69 / UTM zone 19N,,,SAD69 / UTM zone 19N,,,,"UTM Zone 19, Northern Hemisphere (SAD 69)",,,,,0,0,0
+209200,29170,29120,29170,0,0,82276,,SAD69.UTM-20N,SAD69.UTM-20N,SAD69.UTM-20N|SA69-20N,SAD69 / UTM zone 20N,SAD_1969_UTM_Zone_20N,SAD69 / UTM zone 20N,,,SAD69 / UTM zone 20N,,,,"UTM Zone 20, Northern Hemisphere (SAD 69)",,,,,0,0,0
+209300,29171,29121,29171,0,0,82284,,SAD69.UTM-21N,SAD69.UTM-21N,SAD69.UTM-21N|SA69-21N,SAD69 / UTM zone 21N,SAD_1969_UTM_Zone_21N,SAD69 / UTM zone 21N,,,SAD69 / UTM zone 21N,,,,"UTM Zone 21, Northern Hemisphere (SAD 69)",,,,,0,0,0
+209400,29172,29122,29172,0,0,82292,,SAD69.UTM-22N,SAD69.UTM-22N,SAD69.UTM-22N|SA69-22N,SAD69 / UTM zone 22N,SAD_1969_UTM_Zone_22N,SAD69 / UTM zone 22N,,,SAD69 / UTM zone 22N,,,,"UTM Zone 22, Northern Hemisphere (SAD 69)",,,,,0,0,0
+209500,29187,29177,29187,0,0,82250,,SAD69.UTM-17S,SAD69.UTM-17S,SAD69.UTM-17S|SA69-17S,SAD69 / UTM zone 17S,SAD_1969_UTM_Zone_17S,SAD69 / UTM zone 17S,,,SAD69 / UTM zone 17S,,,,"UTM Zone 17, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:430), thus names may be duplicated elsewhere.",0,0,0
+209600,29188,29178,29188,0,0,82258,,SAD69.UTM-18S,SAD69.UTM-18S,SAD69.UTM-18S|SA69-18S,SAD69 / UTM zone 18S,SAD_1969_UTM_Zone_18S,SAD69 / UTM zone 18S,,,SAD69 / UTM zone 18S,,,,"UTM Zone 18, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:440), thus names may be duplicated elsewhere.",0,0,0
+209700,29189,29179,29189,0,0,82267,,SAD69.UTM-19S,SAD69.UTM-19S,SAD69.UTM-19S|SA69-19S|SGB-19|UTM-SGB,SAD69 / UTM zone 19S,SAD_1969_UTM_Zone_19S,SAD69 / UTM zone 19S,,,SAD69 / UTM zone 19S,,,,"UTM Zone 19, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:439), thus names may be duplicated elsewhere.",0,0,0
+209800,29190,29180,29190,0,0,82279,,SAD69.UTM-20S,SAD69.UTM-20S,SAD69.UTM-20S|SA69-20S|SGB-20,SAD69 / UTM zone 20S,SAD_1969_UTM_Zone_20S,SAD69 / UTM zone 20S,,,SAD69 / UTM zone 20S,,,,"UTM Zone 20, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:438), thus names may be duplicated elsewhere.",0,0,0
+209900,29191,29181,29191,0,0,82287,,SAD69.UTM-21S,SAD69.UTM-21S,SAD69.UTM-21S|SA69-21S|SGB-21,SAD69 / UTM zone 21S,SAD_1969_UTM_Zone_21S,SAD69 / UTM zone 21S,,,SAD69 / UTM zone 21S,,,,"UTM Zone 21, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:437), thus names may be duplicated elsewhere.",0,0,0
+210000,29192,29182,29192,0,0,82295,,SAD69.UTM-22S,SAD69.UTM-22S,SAD69.UTM-22S|SA69-22S|SGB-22,SAD69 / UTM zone 22S,SAD_1969_UTM_Zone_22S,SAD69 / UTM zone 22S,,,SAD69 / UTM zone 22S,,,,"UTM Zone 22, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:435), thus names may be duplicated elsewhere.",0,0,0
+210100,29193,29183,29193,0,0,82301,,SAD69.UTM-23S,SAD69.UTM-23S,SAD69.UTM-23S|SA69-23S|SGB-23,SAD69 / UTM zone 23S,SAD_1969_UTM_Zone_23S,SAD69 / UTM zone 23S,,,SAD69 / UTM zone 23S,,,,"UTM Zone 23, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:434), thus names may be duplicated elsewhere.",0,0,0
+210200,29194,29184,29194,0,0,82307,,SAD69.UTM-24S,SAD69.UTM-24S,SAD69.UTM-24S|SA69-24S|SGB-24,SAD69 / UTM zone 24S,SAD_1969_UTM_Zone_24S,SAD69 / UTM zone 24S,,,SAD69 / UTM zone 24S,,,,"UTM Zone 24, Southern Hemisphere (SAD 69)",,,,"Deprecated (ID:433), thus names may be duplicated elsewhere.",0,0,0
+210300,29195,29185,29195,0,0,82313,,SAD69.UTM-25S,SAD69.UTM-25S,SAD69.UTM-25S|SA69-25S|SGB-25,SAD69 / UTM zone 25S,SAD_1969_UTM_Zone_25S,SAD69 / UTM zone 25S,,,SAD69 / UTM zone 25S,,,,"UTM Zone 25, Southern Hemisphere (SAD 69)",,,,"Deprecated, thus names may be duplicated elsewhere.",0,0,0
 210400,29220,29220,29220,0,0,0,,Sapper.UTM-20S,Sapper.UTM-20S,Sapper.UTM-20S,Sapper Hill 1943 / UTM zone 20S,Sapper_Hill_1943_UTM_Zone_20S,Sapper Hill 1943 / UTM zone 20S,,,Sapper Hill 1943 / UTM zone 20S,,,,,,,,,0,0,0
 210500,29221,29221,29221,0,0,0,,Sapper.UTM-21S,Sapper.UTM-21S,Sapper.UTM-21S,Sapper Hill 1943 / UTM zone 21S,Sapper_Hill_1943_UTM_Zone_21S,Sapper Hill 1943 / UTM zone 21S,,,Sapper Hill 1943 / UTM zone 21S,,,,,,,,,0,0,0
-210600,29333,29333,29333,0,0,0,,Schwarzk.UTM-33S,Schwarzeck.UTM-33S,Schwarzk.UTM-33S,Schwarzeck / UTM zone 33S,Schwarzeck_UTM_Zone_33S,Schwarzeck / UTM zone 33S,,,,,,,,,,,,0,0,0
+210600,29333,29333,29333,0,0,0,,Schwarzk.UTM-33S,Schwarzeck.UTM-33S,Schwarzk.UTM-33S|NAM-U33,Schwarzeck / UTM zone 33S,Schwarzeck_UTM_Zone_33S,Schwarzeck / UTM zone 33S,,,,,,,,,,,,0,0,0
 210700,29371,0,29371,0,0,0,,Schwarzk.SWAfrican-11,Schwarzeck.SWAfrican-11,Schwarzk.SWAfrican-11,Schwarzeck / Lo22/11,,South West African Coord. System zone 11,,,,,,,,,,,,0,0,0
 210800,29373,0,29373,0,0,0,,Schwarzk.SWAfrican-13,Schwarzeck.SWAfrican-13,Schwarzk.SWAfrican-13,Schwarzeck / Lo22/13,,South West African Coord. System zone 13,,,,,,,,,,,,0,0,0
 210900,29375,0,29375,0,0,0,,Schwarzk.SWAfrican-15,Schwarzeck.SWAfrican-15,Schwarzk.SWAfrican-15,Schwarzeck / Lo22/15,,South West African Coord. System zone 15,,,,,,,,,,,,0,0,0
@@ -2141,7 +2141,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 212300,29872,29872,29872,0,0,0,,TMBLI-B.RSOBorneo.ft,Timbalai48.RSOBorneo.SearsFt,TMBLI-B.RSOBorneo.ft,Timbalai 1948 / RSO Borneo (ft),Timbalai_1948_RSO_Borneo_Feet,Timbalai 1948 / R.S.O. Borneo (ft),,,Timbalai 1948 / R.S.O. Borneo (ft),,,,,,,,,0,0,0
 212400,29873,29873,29873,0,0,0,,TMBLI-B.RSOBorneo.m,Timbalai48.RSOBorneo,TMBLI-B.RSOBorneo.m,Timbalai 1948 / RSO Borneo (m),Timbalai_1948_RSO_Borneo_Meters,Timbalai 1948 / R.S.O. Borneo (m),,,Timbalai 1948 / R.S.O. Borneo (m),,,,,,,,,0,0,0
 212500,29901,29901,29901,0,0,0,,OSNI52.IrishNtlGrid,OSNI52.IrishNtlGrid,OSNI52.IrishNtlGrid,OSNI 1952 / Irish National Grid,OSNI_1952_Irish_National_Grid,OSNI 1952 / Irish National Grid,,,OSNI 1952 / Irish National Grid,,,,,,,,,0,0,0
-212600,29902,29900,29902,0,0,0,,TM65.Irish Grid,TM65.Irish Grid,TM1965.IrishGrid,TM65 / Irish Grid,Irish_National_Grid,TM65 / Irish Grid,,,TM65 / Irish Grid,,,,,,,,,0,0,0
+212600,29902,29900,29902,0,0,0,,TM65.Irish Grid,TM65.Irish Grid,TM1965.IrishGrid|TM65g.IrishNationalGrid,TM65 / Irish Grid,Irish_National_Grid,TM65 / Irish Grid,,,TM65 / Irish Grid,,,,,,,,,0,0,0
 212700,29903,29903,29903,0,0,0,,TM75.Irish Grid,TM75.Irish Grid,ING-75,TM75 / Irish Grid,TM75_Irish_Grid,TM75 / Irish Grid,,,TM75 / Irish Grid,,,,,,,,,0,0,0
 212800,30161,30161,30161,0,0,0,,Tokyo.PlnRctCS-I,Tokyo.PlnRctCS-I,Tokyo.PlnRctCS-I,Tokyo / Japan Plane Rectangular CS I,Japan_Zone_1,Tokyo / Japan Plane Rectangular CS I,,,Tokyo / Japan Plane Rectangular CS I,,,,,,,,,0,0,0
 212900,30162,30162,30162,0,0,0,,Tokyo.PlnRctCS-II,Tokyo.PlnRctCS-II,Tokyo.PlnRctCS-II,Tokyo / Japan Plane Rectangular CS II,Japan_Zone_2,Tokyo / Japan Plane Rectangular CS II,,,Tokyo / Japan Plane Rectangular CS II,,,,,,,,,0,0,0
@@ -2177,10 +2177,10 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 215900,30792,0,30792,0,0,0,,NordSahara59.UnifieS,NordSahara59.UnifieS,NordSahara1959.UnifieS,Nord Sahara 1959 / Voirol Unifie Sud,,Nord Sahara 1959 / Voirol Unifie Sud,,,Nord Sahara 1959 / Voirol Unifie Sud,,,,,,,,,0,0,0
 216000,30800,30800,30800,0,0,0,,Stockholm38.RT-25V,Stockholm38.RT-25V,,RT38 2.5 gon W,Swedish_National_Grid,RT38 2.5 gon W,,,RT38 2.5 gon W,,,,,,,,"Deprecated by EPSG, ID: 513",0,0,0
 216100,31028,31028,31028,0,0,0,,Yoff.UTM-28N,Yoff.UTM-28N,,Yoff / UTM zone 28N,Yoff_1972_UTM_Zone_28N,Yoff / UTM zone 28N,,,Yoff / UTM zone 28N,,,,,,,,,0,0,0
-216200,31121,31121,31121,0,0,0,,Zanderij.UTM-21N,Zanderij.UTM-21N,Zanderij.UTM-21N,Zanderij / UTM zone 21N,Zanderij_1972_UTM_Zone_21N,Zanderij / UTM zone 21N,,,Zanderij / UTM zone 21N,,,,,,,,,0,0,0
+216200,31121,31121,31121,0,0,0,,Zanderij.UTM-21N,Zanderij.UTM-21N,Zanderij.UTM-21N|SUR,Zanderij / UTM zone 21N,Zanderij_1972_UTM_Zone_21N,Zanderij / UTM zone 21N,,,Zanderij / UTM zone 21N,,,,,,,,,0,0,0
 216300,31154,31154,31154,0,0,0,,Zanderij.TM-54NW,Zanderij.TM-54NW,Zanderij.TM-54NW,Zanderij / TM 54 NW,Zanderij_TM_54_NW,Zanderij / TM 54 NW,,,Zanderij / TM 54 NW,,,,,,,,,0,0,0
-216400,31170,31170,31170,0,0,0,,Zanderij.SurinameTMOld,Zanderij.SurinameTMOld,Zanderij.SurinameTMOld,Zanderij / Suriname Old TM,Zanderij_Suriname_Old_TM,Zanderij / Suriname Old TM,,,Zanderij / Suriname Old TM,,,,,,,,,0,0,0
-216500,31171,31171,31171,0,0,0,,Zanderij.SurinameTM,Zanderij.SurinameTM,Zanderij.SurinameTM,Zanderij / Suriname TM,Zanderij_Suriname_TM,Zanderij / Suriname TM,,,Zanderij / Suriname TM,,,,,,,,,0,0,0
+216400,31170,31170,31170,0,0,0,,Zanderij.SurinameTMOld,Zanderij.SurinameTMOld,Zanderij.SurinameTMOld|SUR-OLD,Zanderij / Suriname Old TM,Zanderij_Suriname_Old_TM,Zanderij / Suriname Old TM,,,Zanderij / Suriname Old TM,,,,,,,,,0,0,0
+216500,31171,31171,31171,0,0,0,,Zanderij.SurinameTM,Zanderij.SurinameTM,Zanderij.SurinameTM|SUR-NEW,Zanderij / Suriname TM,Zanderij_Suriname_TM,Zanderij / Suriname TM,,,Zanderij / Suriname TM,,,,,,,,,0,0,0
 216600,31251,,31251,0,0,0,0,,,MGI-AT/F.AUT-West/GK,MGI (Ferro) / Austria GK West Zone,,MGI (Ferro) / Austria GK West Zone,,,,,,,,,,,,,,
 216700,31252,,31252,0,0,0,0,,,MGI-AT/F.AUT-Central/GK,MGI (Ferro) / Austria GK Central Zone,,MGI (Ferro) / Austria GK Central Zone,,,,,,,,,,,,,,
 216800,31253,,31253,0,0,0,0,,,MGI-AT/F.AUT-East/GK,MGI (Ferro) / Austria GK East Zone,,MGI (Ferro) / Austria GK East Zone,,,,,,,,,,,,,,
@@ -2324,8 +2324,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 230600,32075,32075,32075,0,0,0,,NAD27.BLM-15N.Ift,NAD27.BLM-15N.Ift,NAD27.BLM-15N.Ift,NAD27 / BLM 15N (feet),NAD_1927_BLM_Zone_15N,NAD27 / BLM 15N (feet),,,,,,,,,,,,0,0,0
 230700,32076,32076,32076,0,0,0,,NAD27.BLM-16N.Ift,NAD27.BLM-16N.Ift,NAD27.BLM-16N.Ift,NAD27 / BLM 16N (feet),NAD_1927_BLM_Zone_16N,NAD27 / BLM 16N (feet),,,,,,,,,,,,0,0,0
 230800,32077,32077,32077,0,0,0,,NAD27.BLM-17N.Ift,NAD27.BLM-17N.IntnlFt,NAD27.BLM-17N.Ift,NAD27 / BLM 17N (feet),NAD_1927_BLM_Zone_17N,NAD27 / BLM 17N (feet),,,,,,,,,,,,0,0,0
-230900,32081,32081,32081,0,0,0,,NAD27.MTM-1,NAD27.MTM-1,NAD27.MTM-1,NAD27 / MTM zone 1,NAD_1927_MTM_1,NAD27 / MTM zone 1,,,,,,,,,,,,0,0,0
-231000,32082,32082,32082,0,0,0,,NAD27.MTM-2,NAD27.MTM-2,NAD27.MTM-2,NAD27 / MTM zone 2,NAD_1927_MTM_2,NAD27 / MTM zone 2,,,,,,,,,,,,0,0,0
+230900,32081,32081,32081,0,0,0,,NAD27.MTM-1,NAD27.MTM-1,NAD27.MTM-1|CANQ27-M1,NAD27 / MTM zone 1,NAD_1927_MTM_1,NAD27 / MTM zone 1,,,,,,,,,,,,0,0,0
+231000,32082,32082,32082,0,0,0,,NAD27.MTM-2,NAD27.MTM-2,NAD27.MTM-2|CANQ27-M2N,NAD27 / MTM zone 2,NAD_1927_MTM_2,NAD27 / MTM zone 2,,,,,,,,,,,,0,0,0
 231100,32083,32083,32083,0,0,0,,MTM27-3,NAD27.MTM-3,CANQ27-M3,NAD27 / MTM zone 3,NAD_1927_MTM_3,NAD27 / MTM zone 3,,,,,,,,,,,,0,0,0
 231200,32084,32084,32084,0,0,0,,MTM27-4,NAD27.MTM-4,CANQ27-M4,NAD27 / MTM zone 4,NAD_1927_MTM_4,NAD27 / MTM zone 4,,,,,,,,,,,,0,0,0
 231300,32085,32085,32085,0,0,0,,MTM27-5,NAD27.MTM-5,CANQ27-M5,NAD27 / MTM zone 5,NAD_1927_MTM_5,NAD27 / MTM zone 5,,,,,,,,,,,,0,0,0
@@ -2385,13 +2385,13 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 236700,32157,32157,32157,0,0,82456,,WY83-WC,NAD83.WY-WC,WY83-WC,NAD83 / Wyoming West Central,NAD_1983_StatePlane_Wyoming_West_Central_FIPS_4903,NAD83 / Wyoming West Central,,,,,,,"Wyoming 4903, West Central Zone (1983, meters)",,,,,0,0,0
 236800,32158,32158,32158,0,0,82459,,WY83-W,NAD83.WY-W,WY83-W,NAD83 / Wyoming West,NAD_1983_StatePlane_Wyoming_West_FIPS_4904,NAD83 / Wyoming West,,,,,,,"Wyoming 4904, Western Zone (1983, meters)",,,,,0,0,0
 236900,32161,32161,32161,0,0,41126,,PR83,NAD83.PR,PR83,NAD83 / Puerto Rico & Virgin Is.,NAD_1983_StatePlane_Puerto_Rico_Virgin_Islands_FIPS_5200,NAD83 / Puerto Rico & Virgin Is.,,,,,,,"Puerto Rico and Virgin Islands 5200 (1983, meters)",,,,,0,0,0
-237000,32164,0,0,0,0,0,,NAD83.BLM-14N,NAD83.BLM-14N.USFt,NAD83.BLM-14N,NAD83 / BLM 14N (ftUS),,,,,,,,,,,,,,0,0,0
-237100,32165,0,0,0,0,0,,NAD83.BLM-15NF,NAD83.BLM-15N.USFt,NAD83.BLM-15NF,NAD83 / BLM 15N (ftUS),,,,,,,,,,,,,,0,0,0
-237200,32166,0,0,0,0,0,,NAD83.BLM-16NF,NAD83.BLM-16N.USFt,NAD83.BLM-16NF,NAD83 / BLM 16N (ftUS),,,,,,,,,,,,,,0,0,0
-237300,32167,0,0,0,0,0,,NAD83.BLM-17NF,NAD83.BLM-17N.USFt,NAD83.BLM-17NF,NAD83 / BLM 17N (ftUS),,,,,,,,,,,,,,0,0,0
+237000,32164,0,0,0,0,0,,NAD83.BLM-14N,NAD83.BLM-14N.USFt,NAD83.BLM-14N|BLM-14,NAD83 / BLM 14N (ftUS),,,,,,,,,,,,,,0,0,0
+237100,32165,0,0,0,0,0,,NAD83.BLM-15NF,NAD83.BLM-15N.USFt,NAD83.BLM-15NF|BLM-15,NAD83 / BLM 15N (ftUS),,,,,,,,,,,,,,0,0,0
+237200,32166,0,0,0,0,0,,NAD83.BLM-16NF,NAD83.BLM-16N.USFt,NAD83.BLM-16NF|BLM-16,NAD83 / BLM 16N (ftUS),,,,,,,,,,,,,,0,0,0
+237300,32167,0,0,0,0,0,,NAD83.BLM-17NF,NAD83.BLM-17N.USFt,NAD83.BLM-17NF|BLM-17,NAD83 / BLM 17N (ftUS),,,,,,,,,,,,,,0,0,0
 237400,32180,32180,32180,0,0,0,,NAD83.SCoPQ-2,NAD83.SCoPQ-2,NAD83.SCoPQ-2,NAD83 / SCoPQ zone 2,NAD_1983_MTM_2_SCoPQ,NAD83 / SCoPQ zone 2,,,,,,,,,,,,0,0,0
 237500,32181,32181,32181,0,0,0,,MTM83-1,NAD83.MTM-1,CANQ-M1,NAD83 / MTM zone 1,NAD_1983_MTM_1,NAD83 / MTM zone 1,,,,,,,,,,,,0,0,0
-237600,32182,32182,32182,0,0,0,,MTM83-2,NAD83.MTM-2,MTM83-2,NAD83 / MTM zone 2,NAD_1983_MTM_2,NAD83 / MTM zone 2,,,,,,,,,,,,0,0,0
+237600,32182,32182,32182,0,0,0,,MTM83-2,NAD83.MTM-2,MTM83-2|CANQ-M2N,NAD83 / MTM zone 2,NAD_1983_MTM_2,NAD83 / MTM zone 2,,,,,,,,,,,,0,0,0
 237700,32183,32183,32183,0,0,0,,MTM83-3,NAD83.MTM-3,CANQ-M3,NAD83 / MTM zone 3,NAD_1983_MTM_3,NAD83 / MTM zone 3,,,,,,,,,,,,0,0,0
 237800,32184,32184,32184,0,0,0,,MTM83-4,NAD83.MTM-4,CANQ-M4,NAD83 / MTM zone 4,NAD_1983_MTM_4,NAD83 / MTM zone 4,,,,,,,,,,,,0,0,0
 237900,32185,32185,32185,0,0,0,,MTM83-5,NAD83.MTM-5,CANQ-M5,NAD83 / MTM zone 5,NAD_1983_MTM_5,NAD83 / MTM zone 5,,,,,,,,,,,,0,0,0
@@ -2407,7 +2407,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 238900,32195,32195,32195,0,0,0,,MTM83-15,NAD83.MTM-15,CAN83-15,NAD83 / MTM zone 15,NAD_1983_MTM_15,NAD83 / MTM zone 15,,,,,,,,,,,,0,0,0
 239000,32196,32196,32196,0,0,0,,MTM83-16,NAD83.MTM-16,CAN83-16,NAD83 / MTM zone 16,NAD_1983_MTM_16,NAD83 / MTM zone 16,,,,,,,,,,,,0,0,0
 239100,32197,32197,32197,0,0,0,,MTM83-17,NAD83.MTM-17,CAN83-17,NAD83 / MTM zone 17,NAD_1983_MTM_17,NAD83 / MTM zone 17,,,,,,,,,,,,0,0,0
-239200,32198,32198,32198,0,0,0,,NAD83.QuebecLambert,NAD83.QuebecLambert,NAD83.QuebecLambert,NAD83 / Quebec Lambert,NAD_1983_Quebec_Lambert,NAD83 / Quebec Lambert,,,,,,,,,,,,0,0,0
+239200,32198,32198,32198,0,0,0,,NAD83.QuebecLambert,NAD83.QuebecLambert,NAD83.QuebecLambert|CANQ-LCC-83,NAD83 / Quebec Lambert,NAD_1983_Quebec_Lambert,NAD83 / Quebec Lambert,,,,,,,,,,,,0,0,0
 239300,32199,0,0,0,0,41046,,LA83-O,NAD83.LA-O,LA83-O,NAD83 / Louisiana Offshore,,,,,,,,,"Louisiana 1703, Offshore Zone (1983, meters)",,,,,0,0,0
 239400,32201,32201,32201,0,0,0,,WGS72.UTM-1N,WGS72.UTM-1N,WGS72.UTM-1N,WGS 72 / UTM zone 1N,WGS_1972_UTM_Zone_1N,WGS 72 / UTM zone 1N,,,WGS 72 / UTM zone 1N,,,,,,,,,0,0,0
 239500,32202,32202,32202,0,0,0,,WGS72.UTM-2N,WGS72.UTM-2N,WGS72.UTM-2N,WGS 72 / UTM zone 2N,WGS_1972_UTM_Zone_2N,WGS 72 / UTM zone 2N,,,WGS 72 / UTM zone 2N,,,,,,,,,0,0,0
@@ -2667,9 +2667,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 264900,32615,32615,32615,0,0,82238,,UTM84-15N,WGS84.UTM-15N,UTM84-15N,WGS 84 / UTM zone 15N,WGS_1984_UTM_Zone_15N,WGS 84 / UTM zone 15N,,,WGS 84 / UTM zone 15N,,,,"UTM Zone 15, Northern Hemisphere (WGS 84)",,,,,0,0,0
 265000,32616,32616,32616,0,0,82243,,UTM84-16N,WGS84.UTM-16N,UTM84-16N,WGS 84 / UTM zone 16N,WGS_1984_UTM_Zone_16N,WGS 84 / UTM zone 16N,,,WGS 84 / UTM zone 16N,,,,"UTM Zone 16, Northern Hemisphere (WGS 84)",,,,,0,0,0
 265100,32617,32617,32617,0,0,82249,,UTM84-17N,WGS84.UTM-17N,UTM84-17N,WGS 84 / UTM zone 17N,WGS_1984_UTM_Zone_17N,WGS 84 / UTM zone 17N,,,WGS 84 / UTM zone 17N,,,,"UTM Zone 17, Northern Hemisphere (WGS 84)",,,,,0,0,0
-265200,32618,32618,32618,0,0,82256,,UTM84-18N,WGS84.UTM-18N,UTM84-18N,WGS 84 / UTM zone 18N,WGS_1984_UTM_Zone_18N,WGS 84 / UTM zone 18N,,,WGS 84 / UTM zone 18N,,,,"UTM Zone 18, Northern Hemisphere (WGS 84)",,,,,0,0,0
-265300,32619,32619,32619,0,0,82265,,UTM84-19N,WGS84.UTM-19N,UTM84-19N,WGS 84 / UTM zone 19N,WGS_1984_UTM_Zone_19N,WGS 84 / UTM zone 19N,,,WGS 84 / UTM zone 19N,,,,"UTM Zone 19, Northern Hemisphere (WGS 84)",,,,,0,0,0
-265400,32620,32620,32620,0,0,82277,,UTM84-20N,WGS84.UTM-20N,UTM84-20N,WGS 84 / UTM zone 20N,WGS_1984_UTM_Zone_20N,WGS 84 / UTM zone 20N,,,WGS 84 / UTM zone 20N,,,,"UTM Zone 20, Northern Hemisphere (WGS 84)",,,,,0,0,0
+265200,32618,32618,32618,0,0,82256,,UTM84-18N,WGS84.UTM-18N,UTM84-18N|VEN-18N,WGS 84 / UTM zone 18N,WGS_1984_UTM_Zone_18N,WGS 84 / UTM zone 18N,,,WGS 84 / UTM zone 18N,,,,"UTM Zone 18, Northern Hemisphere (WGS 84)",,,,,0,0,0
+265300,32619,32619,32619,0,0,82265,,UTM84-19N,WGS84.UTM-19N,UTM84-19N|VEN-19N,WGS 84 / UTM zone 19N,WGS_1984_UTM_Zone_19N,WGS 84 / UTM zone 19N,,,WGS 84 / UTM zone 19N,,,,"UTM Zone 19, Northern Hemisphere (WGS 84)",,,,,0,0,0
+265400,32620,32620,32620,0,0,82277,,UTM84-20N,WGS84.UTM-20N,UTM84-20N|VEN-20N,WGS 84 / UTM zone 20N,WGS_1984_UTM_Zone_20N,WGS 84 / UTM zone 20N,,,WGS 84 / UTM zone 20N,,,,"UTM Zone 20, Northern Hemisphere (WGS 84)",,,,,0,0,0
 265500,32621,32621,32621,0,0,82285,,UTM84-21N,WGS84.UTM-21N,UTM84-21N,WGS 84 / UTM zone 21N,WGS_1984_UTM_Zone_21N,WGS 84 / UTM zone 21N,,,WGS 84 / UTM zone 21N,,,,"UTM Zone 21, Northern Hemisphere (WGS 84)",,,,,0,0,0
 265600,32622,32622,32622,0,0,82293,,UTM84-22N,WGS84.UTM-22N,UTM84-22N,WGS 84 / UTM zone 22N,WGS_1984_UTM_Zone_22N,WGS 84 / UTM zone 22N,,,WGS 84 / UTM zone 22N,,,,"UTM Zone 22, Northern Hemisphere (WGS 84)",,,,,0,0,0
 265700,32623,32623,32623,0,0,82299,,UTM84-23N,WGS84.UTM-23N,UTM84-23N,WGS 84 / UTM zone 23N,WGS_1984_UTM_Zone_23N,WGS 84 / UTM zone 23N,,,WGS 84 / UTM zone 23N,,,,"UTM Zone 23, Northern Hemisphere (WGS 84)",,,,,0,0,0
@@ -2684,10 +2684,10 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 266600,32632,32632,32632,0,0,82344,,UTM84-32N,WGS84.UTM-32N,UTM84-32N,WGS 84 / UTM zone 32N,WGS_1984_UTM_Zone_32N,WGS 84 / UTM zone 32N,,,WGS 84 / UTM zone 32N,,,,"UTM Zone 32, Northern Hemisphere (WGS 84)",,,,,0,0,0
 266700,32633,32633,32633,0,0,82347,,UTM84-33N,WGS84.UTM-33N,UTM84-33N,WGS 84 / UTM zone 33N,WGS_1984_UTM_Zone_33N,WGS 84 / UTM zone 33N,,,WGS 84 / UTM zone 33N,,,,"UTM Zone 33, Northern Hemisphere (WGS 84)",,,,,0,0,0
 266800,32634,32634,32634,0,0,82350,,UTM84-34N,WGS84.UTM-34N,UTM84-34N,WGS 84 / UTM zone 34N,WGS_1984_UTM_Zone_34N,WGS 84 / UTM zone 34N,,,WGS 84 / UTM zone 34N,,,,"UTM Zone 34, Northern Hemisphere (WGS 84)",,,,,0,0,0
-266900,32635,32635,32635,0,0,82353,,UTM84-35N,WGS84.UTM-35N,UTM84-35N,WGS 84 / UTM zone 35N,WGS_1984_UTM_Zone_35N,WGS 84 / UTM zone 35N,,,WGS 84 / UTM zone 35N,,,,"UTM Zone 35, Northern Hemisphere (WGS 84)",,,,,0,0,0
+266900,32635,32635,32635,0,0,82353,,UTM84-35N,WGS84.UTM-35N,UTM84-35N|TURK84-35N,WGS 84 / UTM zone 35N,WGS_1984_UTM_Zone_35N,WGS 84 / UTM zone 35N,,,WGS 84 / UTM zone 35N,,,,"UTM Zone 35, Northern Hemisphere (WGS 84)",,,,,0,0,0
 267000,32636,32636,32636,0,0,82356,,UTM84-36N,WGS84.UTM-36N,UTM84-36N,WGS 84 / UTM zone 36N,WGS_1984_UTM_Zone_36N,WGS 84 / UTM zone 36N,,,WGS 84 / UTM zone 36N,,,,"UTM Zone 36, Northern Hemisphere (WGS 84)",,,,,0,0,0
-267100,32637,32637,32637,0,0,82359,,UTM84-37N,WGS84.UTM-37N,UTM84-37N,WGS 84 / UTM zone 37N,WGS_1984_UTM_Zone_37N,WGS 84 / UTM zone 37N,,,WGS 84 / UTM zone 37N,,,,"UTM Zone 37, Northern Hemisphere (WGS 84)",,,,,0,0,0
-267200,32638,32638,32638,0,0,82362,,UTM84-38N,WGS84.UTM-38N,UTM84-38N,WGS 84 / UTM zone 38N,WGS_1984_UTM_Zone_38N,WGS 84 / UTM zone 38N,,,WGS 84 / UTM zone 38N,,,,"UTM Zone 38, Northern Hemisphere (WGS 84)",,,,,0,0,0
+267100,32637,32637,32637,0,0,82359,,UTM84-37N,WGS84.UTM-37N,UTM84-37N|TURK84-37N,WGS 84 / UTM zone 37N,WGS_1984_UTM_Zone_37N,WGS 84 / UTM zone 37N,,,WGS 84 / UTM zone 37N,,,,"UTM Zone 37, Northern Hemisphere (WGS 84)",,,,,0,0,0
+267200,32638,32638,32638,0,0,82362,,UTM84-38N,WGS84.UTM-38N,UTM84-38N|TURK84-38N,WGS 84 / UTM zone 38N,WGS_1984_UTM_Zone_38N,WGS 84 / UTM zone 38N,,,WGS 84 / UTM zone 38N,,,,"UTM Zone 38, Northern Hemisphere (WGS 84)",,,,,0,0,0
 267300,32639,32639,32639,0,0,82364,,UTM84-39N,WGS84.UTM-39N,UTM84-39N,WGS 84 / UTM zone 39N,WGS_1984_UTM_Zone_39N,WGS 84 / UTM zone 39N,,,WGS 84 / UTM zone 39N,,,,"UTM Zone 39, Northern Hemisphere (WGS 84)",,,,,0,0,0
 267400,32640,32640,32640,0,0,82370,,UTM84-40N,WGS84.UTM-40N,UTM84-40N,WGS 84 / UTM zone 40N,WGS_1984_UTM_Zone_40N,WGS 84 / UTM zone 40N,,,WGS 84 / UTM zone 40N,,,,"UTM Zone 40, Northern Hemisphere (WGS 84)",,,,,0,0,0
 267500,32641,32641,32641,0,0,82372,,UTM84-41N,WGS84.UTM-41N,UTM84-41N,WGS 84 / UTM zone 41N,WGS_1984_UTM_Zone_41N,WGS 84 / UTM zone 41N,,,WGS 84 / UTM zone 41N,,,,"UTM Zone 41, Northern Hemisphere (WGS 84)",,,,,0,0,0
@@ -2698,8 +2698,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 268000,32646,32646,32646,0,0,82382,,UTM84-46N,WGS84.UTM-46N,UTM84-46N,WGS 84 / UTM zone 46N,WGS_1984_UTM_Zone_46N,WGS 84 / UTM zone 46N,,,WGS 84 / UTM zone 46N,,,,"UTM Zone 46, Northern Hemisphere (WGS 84)",,,,,0,0,0
 268100,32647,32647,32647,0,0,82384,,UTM84-47N,WGS84.UTM-47N,UTM84-47N,WGS 84 / UTM zone 47N,WGS_1984_UTM_Zone_47N,WGS 84 / UTM zone 47N,,,WGS 84 / UTM zone 47N,,,,"UTM Zone 47, Northern Hemisphere (WGS 84)",,,,,0,0,0
 268200,32648,32648,32648,0,0,82386,,UTM84-48N,WGS84.UTM-48N,UTM84-48N,WGS 84 / UTM zone 48N,WGS_1984_UTM_Zone_48N,WGS 84 / UTM zone 48N,,,WGS 84 / UTM zone 48N,,,,"UTM Zone 48, Northern Hemisphere (WGS 84)",,,,,0,0,0
-268300,32649,32649,32649,0,0,82388,,UTM84-49N,WGS84.UTM-49N,UTM84-49N,WGS 84 / UTM zone 49N,WGS_1984_UTM_Zone_49N,WGS 84 / UTM zone 49N,,,WGS 84 / UTM zone 49N,,,,"UTM Zone 49, Northern Hemisphere (WGS 84)",,,,,0,0,0
-268400,32650,32650,32650,0,0,82394,,UTM84-50N,WGS84.UTM-50N,UTM84-50N,WGS 84 / UTM zone 50N,WGS_1984_UTM_Zone_50N,WGS 84 / UTM zone 50N,,,WGS 84 / UTM zone 50N,,,,"UTM Zone 50, Northern Hemisphere (WGS 84)",,,,,0,0,0
+268300,32649,32649,32649,0,0,82388,,UTM84-49N,WGS84.UTM-49N,UTM84-49N|HK-49,WGS 84 / UTM zone 49N,WGS_1984_UTM_Zone_49N,WGS 84 / UTM zone 49N,,,WGS 84 / UTM zone 49N,,,,"UTM Zone 49, Northern Hemisphere (WGS 84)",,,,,0,0,0
+268400,32650,32650,32650,0,0,82394,,UTM84-50N,WGS84.UTM-50N,UTM84-50N|HK-50,WGS 84 / UTM zone 50N,WGS_1984_UTM_Zone_50N,WGS 84 / UTM zone 50N,,,WGS 84 / UTM zone 50N,,,,"UTM Zone 50, Northern Hemisphere (WGS 84)",,,,,0,0,0
 268500,32651,32651,32651,0,0,82397,,UTM84-51N,WGS84.UTM-51N,UTM84-51N,WGS 84 / UTM zone 51N,WGS_1984_UTM_Zone_51N,WGS 84 / UTM zone 51N,,,WGS 84 / UTM zone 51N,,,,"UTM Zone 51, Northern Hemisphere (WGS 84)",,,,,0,0,0
 268600,32652,32652,32652,0,0,82400,,UTM84-52N,WGS84.UTM-52N,UTM84-52N,WGS 84 / UTM zone 52N,WGS_1984_UTM_Zone_52N,WGS 84 / UTM zone 52N,,,WGS 84 / UTM zone 52N,,,,"UTM Zone 52, Northern Hemisphere (WGS 84)",,,,,0,0,0
 268700,32653,32653,32653,0,0,82403,,UTM84-53N,WGS84.UTM-53N,UTM84-53N,WGS 84 / UTM zone 53N,WGS_1984_UTM_Zone_53N,WGS 84 / UTM zone 53N,,,WGS 84 / UTM zone 53N,,,,"UTM Zone 53, Northern Hemisphere (WGS 84)",,,,,0,0,0
@@ -2710,7 +2710,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 269200,32658,32658,32658,0,0,82417,,UTM84-58N,WGS84.UTM-58N,UTM84-58N,WGS 84 / UTM zone 58N,WGS_1984_UTM_Zone_58N,WGS 84 / UTM zone 58N,,,WGS 84 / UTM zone 58N,,,,"UTM Zone 58, Northern Hemisphere (WGS 84)",,,,,0,0,0
 269300,32659,32659,32659,0,0,82419,,UTM84-59N,WGS84.UTM-59N,UTM84-59N,WGS 84 / UTM zone 59N,WGS_1984_UTM_Zone_59N,WGS 84 / UTM zone 59N,,,WGS 84 / UTM zone 59N,,,,"UTM Zone 59, Northern Hemisphere (WGS 84)",,,,,0,0,0
 269400,32660,32660,32660,0,0,82425,,UTM84-60N,WGS84.UTM-60N,UTM84-60N,WGS 84 / UTM zone 60N,WGS_1984_UTM_Zone_60N,WGS 84 / UTM zone 60N,,,WGS 84 / UTM zone 60N,,,,"UTM Zone 60, Northern Hemisphere (WGS 84)",,,,,0,0,0
-269500,32661,32661,32661,0,0,90113,,WGS84.UPSNorth,WGS84.UPSNorth,WGS84.UPSNorth,WGS 84 / UPS North,UPS_North,WGS 84 / UPS North,,,WGS 84 / UPS North,,,,UPS North Zone,,,,,0,0,0
+269500,32661,32661,32661,0,0,90113,,WGS84.UPSNorth,WGS84.UPSNorth,WGS84.UPSNorth|UPS-N,WGS 84 / UPS North,UPS_North,WGS 84 / UPS North,,,WGS 84 / UPS North,,,,UPS North Zone,,,,,0,0,0
 269600,32663,0,32662,0,0,0,,WGS84.PlateCarree,WGS84.PlateCarree,WGS84.PlateCarree,WGS 84 / World Equidistant Cylindrical,,WGS 84 / Plate Carree,,,WGS 84 / Plate Carree,,,,,,,,,0,0,0
 269700,32664,0,0,0,0,0,,WGS84.BLM-14NF,WGS84.BLM-14N.USFt,WGS84.BLM-14NF,WGS 84 / BLM 14N (ftUS),,,,,,,,,,,,,,0,0,0
 269800,32665,0,0,0,0,0,,WGS84.BLM-15NF,WGS84.BLM-15N.USFt,WGS84.BLM-15NF,WGS 84 / BLM 15N (ftUS),,,,,,,,,,,,,,0,0,0
@@ -2777,7 +2777,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 275900,32758,32758,32758,0,0,82418,,UTM84-58S,WGS84.UTM-58S,UTM84-58S,WGS 84 / UTM zone 58S,WGS_1984_UTM_Zone_58S,WGS 84 / UTM zone 58S,,,WGS 84 / UTM zone 58S,,,,"UTM Zone 58, Southern Hemisphere (WGS 84)",,,,,0,0,0
 276000,32759,32759,32759,0,0,82420,,UTM84-59S,WGS84.UTM-59S,UTM84-59S,WGS 84 / UTM zone 59S,WGS_1984_UTM_Zone_59S,WGS 84 / UTM zone 59S,,,WGS 84 / UTM zone 59S,,,,"UTM Zone 59, Southern Hemisphere (WGS 84)",,,,,0,0,0
 276100,32760,32760,32760,0,0,82426,,UTM84-60S,WGS84.UTM-60S,UTM84-60S,WGS 84 / UTM zone 60S,WGS_1984_UTM_Zone_60S,WGS 84 / UTM zone 60S,,,WGS 84 / UTM zone 60S,,,,"UTM Zone 60, Southern Hemisphere (WGS 84)",,,,,0,0,0
-276200,32761,32761,32761,0,0,90114,,WGS84.UPSSouth,WGS84.UPSSouth,WGS84.UPSSouth,WGS 84 / UPS South,UPS_South,WGS 84 / UPS South,,,WGS 84 / UPS South,,,,UPS South Zone,,,,,0,0,0
+276200,32761,32761,32761,0,0,90114,,WGS84.UPSSouth,WGS84.UPSSouth,WGS84.UPSSouth|UPS-S,WGS 84 / UPS South,UPS_South,WGS 84 / UPS South,,,WGS 84 / UPS South,,,,UPS South Zone,,,,,0,0,0
 276300,32766,32766,32766,0,0,0,,WGS84.TM-36SE,WGS84.TM-36SE,WGS84.TM-36SE,WGS 84 / TM 36 SE,WGS_1984_TM_36_SE,WGS 84 / TM 36 SE,,,WGS 84 / TM 36 SE,,,,,,,,,0,0,0
 276400,0,2181,0,0,0,0,,ED50.Turkey-9,ED50.Turkey-9,,,ED_1950_Turkey_9,,,,,,,,,,,,,0,0,0
 276500,0,2182,0,0,0,0,,ED50.Turkey-10,ED50.Turkey-10,,,ED_1950_Turkey_10,,,,,,,,,,,,,0,0,0
