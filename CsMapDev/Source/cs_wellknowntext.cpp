@@ -1990,6 +1990,8 @@ int CSwktToNerth (struct cs_Csdef_ *csDef,struct cs_Eldef_ *elDef,ErcWktFlavor f
 		if (elDefPtr != 0)
 		{
 			memcpy (elDef,elDefPtr,sizeof (*elDef));
+			CS_free (elDefPtr);
+			elDefPtr = NULL;
 			status = 0;
 		}
 		else
