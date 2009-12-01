@@ -6405,7 +6405,7 @@ struct cs_Grptbl_
 	unsigned short flags;
 };
 
-/* MGRS object definition.  (Militrary Grid Reference SYstem) */
+/* MGRS object definition.  (Military Grid Reference System) */
 struct cs_Mgrs_
 {
 	short Bessel;					/* 0 say standard, 1 says Bessel alternative */
@@ -6415,12 +6415,41 @@ struct cs_Mgrs_
 	struct cs_Trmer_ SouthHemi;		/* TM parameters, southern hemisphere */
 	struct cs_Pstro_ NorthPole;		/* UPS parameters, north pole */
 	struct cs_Pstro_ SouthPole;		/* UPS parameters, south pole */
-
-	/* I need a table here of the UTM Y values for each of the major
-	   latitude zones.  Then, on the inverse, I add 2,000,000 to the
-	   base UTM until I get within the rage of the indicated zone. */
-
 };
+
+/* The following enumerates the various possibilities of coodinate
+   values with regard to a specific MGRS grid square.  The default
+   value is cs_MGRS_GRDSQR_CENTER.
+   
+   Please note that the code referencing this enumerator often relies
+   on the fact that cs_MGRS_GRDSQR_NONE is less than cs_MGRS_GRDSQR_CENTER,
+   and that cs_MGRS_GRDSQR_CENTER is less than all other values.  Also,
+   the code assumes that the cs_MGRS_GRDSQR_UNKNOWN value is higher than
+   all other values. */
+#define cs_MGRS_GRDSQR_NONE       0
+#define cs_MGRS_GRDSQR_CENTER     1
+#define cs_MGRS_GRDSQR_SOUTHWEST  2
+#define cs_MGRS_GRDSQR_WEST       3
+#define cs_MGRS_GRDSQR_NORTHWEST  4
+#define cs_MGRS_GRDSQR_NORTH      5
+#define cs_MGRS_GRDSQR_NORTHEAST  6
+#define cs_MGRS_GRDSQR_EAST       7
+#define cs_MGRS_GRDSQR_SOUTHEAST  8
+#define cs_MGRS_GRDSQR_SOUTH      9
+#define cs_MGRS_GRDSQR_UNKNOWN    10
+
+/* A static array of the following structure is used to build a table
+   which will map all of the above defined enumerations into a unit
+   vector representing the direction in which a coordinate must be
+   adjusted to convert from the default "CENETER" position to the
+   requested position. */
+struct csMgrsGrdSqrVector_
+{
+    short enumValue;            /* Redundant, but helpful in test and debug. */
+    double xx;
+    double yy;
+};
+
 /* Three separate constructors.  In C++ they would be simple overloads.  In C,
    we need separate names. */
 
@@ -6581,9 +6610,10 @@ struct cs_Mgrs_ *CSnewMgrsD (Const char *datum,short bessel);
 void CSdeleteMgrs (struct cs_Mgrs_ *__This);
 int CScalcUtmUps (struct cs_Mgrs_ *__This,double utmUps [2],double latLng [2]);
 int CScalcLatLng (struct cs_Mgrs_ *__This,double latLng [2],double utmUps [2],int utmZone);
-int CScalcMgrsFromLl (struct cs_Mgrs_ *__This,char *result,int size,double latLngl [2],int prec); 
+int CScalcMgrsFromLl (struct cs_Mgrs_ *__This,char *result,int size,double latLngl [2],int prec);
 int CScalcMgrsFromLlUtm (struct cs_Mgrs_ *__This,char *result,int size,double latLng [2],double utmUps [2],int prec);
 int CScalcLlFromMgrs (struct cs_Mgrs_ *__This,double ll [2],Const char *mgrsString);
+int CScalcLlFromMgrsEx (struct cs_Mgrs_ *__This,double ll [2],Const char *mgrsString,short grdSqrPos);
 int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const char *mgrs);
 #ifdef __cplusplus
 }
@@ -7175,6 +7205,7 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_CHENYX_RNG_F   440       /* FATAL: Data point outside range of CHENYX conversion. */
 #define cs_CHENYX_RNG_W   441       /* WARNING: Data outside CHENYX coverage, coordinates unshifted. */
 #define cs_CHENYX_RNG_A   442       /* WARNING: Data outside CHENYX coverage, fallback used successfully. */
+#define cs_MGRS_GRDSQR    443       /* Invalid grid square position provided */
 
 /*
 	The following casts are used to eliminate warnings from

@@ -698,6 +698,8 @@ struct csErrtab_ csErrtab [] =
 						   "WARNING: Data in range %s is outside CH1903<->CH1903+ data file coverage; conversion results are unshifted."},
  {cs_CHENYX_RNG_A, csET_LOC,cs_ERSUP_OPR,
 						   "WARNING: Data in range %s is outside CH1903<->CH1903+ data file coverage; using fallback approximation." },
+ { cs_MGRS_GRDSQR,        0,cs_ERSUP_SOFT,
+						   "Application Software Error (MGRS): Invalid grid square position value provided." },
  {              0,       0,0,""}
 };
 

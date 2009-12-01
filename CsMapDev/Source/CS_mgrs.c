@@ -146,12 +146,35 @@ static const double csMgrsRoundOff [6] =
 	     5.0,
 	     0.5
 };
+
+/* The following table is used to map a grid square enumeration value to
+   a unit vector which will, given a value which properly represents the
+   prcision of the grid square, produce a vector which will properly
+   adjust a return UTM and/or lat/long coordinate.
+
+    Note that we use the enumerated values as an index directly,
+    thus the zero entry in this table is really only a place holder. */
+static const struct csMgrsGrdSqrVector_ csMgrsGrdSqrVector [] =
+{
+    { cs_MGRS_GRDSQR_NONE,          0.0,       0.0  },      // Defaults to same as CENTER */
+    { cs_MGRS_GRDSQR_CENTER,        0.0,       0.0  },
+    { cs_MGRS_GRDSQR_SOUTHWEST,    -1.0,      -1.0  },
+    { cs_MGRS_GRDSQR_WEST,         -1.0,       0.0  },
+    { cs_MGRS_GRDSQR_NORTHWEST,    -1.0,       1.0  },
+    { cs_MGRS_GRDSQR_NORTH,         0.0,       1.0  },
+    { cs_MGRS_GRDSQR_NORTHEAST,     1.0,       1.0  },
+    { cs_MGRS_GRDSQR_EAST,          1.0,       0.0  },
+    { cs_MGRS_GRDSQR_SOUTHEAST,     1.0,      -1.0  },
+    { cs_MGRS_GRDSQR_SOUTH,         0.0,      -1.0  },
+    { cs_MGRS_GRDSQR_UNKNOWN,   99999.0,  -99999.0  },
+};
+
 /*
 	Funtions to implement this capability follow.  We mimick
 	C++ as we will be porting everythig to C++ soon.
 
 	We construct with the ellipsoid parameters.
-*/	
+*/
 struct cs_Mgrs_ *CSnewMgrs (double e_rad,double e_sq,short bessel)
 {
 	extern double cs_Zero;					/* 0.0    */
@@ -648,6 +671,13 @@ int CScalcMgrsFromLlUtm (struct cs_Mgrs_ *__This,char *result,int size,double la
 /* Converts an Mgrs string to latitude and longitude. */
 int CScalcLlFromMgrs (struct cs_Mgrs_ *__This,double latLng [2],Const char *mgrsString)
 {
+	int status;
+	
+	status = CScalcLlFromMgrsEx (__This,latLng,mgrsString,cs_MGRS_GRDSQR_CENTER);
+	return status;
+}
+int CScalcLlFromMgrsEx (struct cs_Mgrs_ *__This,double latLng [2],Const char *mgrsString,short grdSqrPos)
+{
 	extern char csErrnam [MAXPATH];
 
 	char cc;
@@ -664,9 +694,20 @@ int CScalcLlFromMgrs (struct cs_Mgrs_ *__This,double latLng [2],Const char *mgrs
 	const char *chrPtr;
 	const struct csMgrsSet_ *setPtr;
 	double utmUps [2];
+	double grdSqrVector [2];
 	char mgrs [64];
 
 	rtnValue = 0;
+	
+	if (grdSqrPos <= cs_MGRS_GRDSQR_NONE || grdSqrPos >= cs_MGRS_GRDSQR_UNKNOWN)
+	{
+		CS_erpt (cs_MGRS_GRDSQR);
+		goto error;
+	}
+	
+	/* Extract the grid square position unit vector. */
+	grdSqrVector [0] = csMgrsGrdSqrVector [grdSqrPos].xx;
+	grdSqrVector [1] = csMgrsGrdSqrVector [grdSqrPos].yy;
 
 	/* Copy the MGRS string to a local array which can be modified.  In
 	   so doing, we strip all white space. */
@@ -793,6 +834,15 @@ int CScalcLlFromMgrs (struct cs_Mgrs_ *__This,double latLng [2],Const char *mgrs
 		utmUps [XX] += csMgrsRoundOff [count];
 		utmUps [YY] += csMgrsRoundOff [count];
 
+		/* We have calculated the location of the center of the cell, which
+		   is what we have been calculating for a decade.  Now (Dec 2009) we
+		   add the ability to return one of the eight other possibilities. */
+		if (grdSqrPos > cs_MGRS_GRDSQR_CENTER && grdSqrPos < cs_MGRS_GRDSQR_UNKNOWN)
+		{
+			utmUps [XX] += csMgrsRoundOff [count] * grdSqrVector [XX];
+			utmUps [YY] += csMgrsRoundOff [count] * grdSqrVector [YY];
+		}
+
 		/* Convert back to lat/longs. */
 		CSpstroI (&__This->SouthPole,latLng,utmUps);							/*lint !e534 */
 	}
@@ -877,6 +927,12 @@ int CScalcLlFromMgrs (struct cs_Mgrs_ *__This,double latLng [2],Const char *mgrs
 
 		utmUps [XX] += csMgrsRoundOff [count];
 		utmUps [YY] += csMgrsRoundOff [count];
+
+		if (grdSqrPos > cs_MGRS_GRDSQR_CENTER && grdSqrPos < cs_MGRS_GRDSQR_UNKNOWN)
+		{
+			utmUps [XX] += csMgrsRoundOff [count] * grdSqrVector [XX];
+			utmUps [YY] += csMgrsRoundOff [count] * grdSqrVector [YY];
+		}
 
 		CSpstroI (&__This->NorthPole,latLng,utmUps);			/*lint !e534 */
 	} 
@@ -1040,6 +1096,15 @@ int CScalcLlFromMgrs (struct cs_Mgrs_ *__This,double latLng [2],Const char *mgrs
 
 		utmUps [XX] += csMgrsRoundOff [count];
 		utmUps [YY] += csMgrsRoundOff [count];
+
+		/* We have calculated the location of the center of the cell, which
+		   is what we have been calculating for a decade.  Now (Dec 2009) we
+		   add the ability to return one of the eight other possibilities. */
+		if (grdSqrPos > cs_MGRS_GRDSQR_CENTER && grdSqrPos < cs_MGRS_GRDSQR_UNKNOWN)
+		{
+			utmUps [XX] += csMgrsRoundOff [count] * grdSqrVector [XX];
+			utmUps [YY] += csMgrsRoundOff [count] * grdSqrVector [YY];
+		}
 
 		/* Convert back to lat/long. Note, we do the add 2,000,000
 		   trick to get the right cycle of the Y coordinate.  That
