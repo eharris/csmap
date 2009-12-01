@@ -220,6 +220,15 @@ struct _mgrsTable
 	char lng  [16];
 };
 
+struct _mgrsTableEx
+{
+	char mgrs [16];
+	short grdSqrPos;
+	short zoneNbr;
+	double utmEasting;
+	double utmNorthing;
+};
+
 __ALIGNMENT__16				/* Required by some Sun compilers. */
 struct _mgrsTable mgrsTable [] =
 {
@@ -242,6 +251,29 @@ struct _mgrsTable mgrsTable [] =
 	{ "",                "",            ""              }
 };
 
+struct _mgrsTableEx mgrsTableEx [] =
+{
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_CENTER,      11,   438687.500,     3948955.500 },
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_SOUTHWEST,   11,   438687.000,     3948955.000 },
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_WEST,        11,   438687.000,     3948955.500 },
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_NORTHWEST,   11,   438687.000,     3948956.000 },
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_NORTH,       11,   438687.500,     3948956.000 },
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_NORTHEAST,   11,   438688.000,     3948956.000 },
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_EAST,        11,   438688.000,     3948955.500 },
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_SOUTHEAST,   11,   438688.000,     3948955.000 },
+	{ "11SMV3868748955",   cs_MGRS_GRDSQR_SOUTH,       11,   438687.500,     3948955.000 },
+
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_CENTER,      11,   438685.000,     3948955.000 },
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_SOUTHWEST,   11,   438680.000,     3948950.000 },
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_WEST,        11,   438680.000,     3948955.000 },
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_NORTHWEST,   11,   438680.000,     3948960.000 },
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_NORTH,       11,   438685.000,     3948960.000 },
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_NORTHEAST,   11,   438690.000,     3948960.000 },
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_EAST,        11,   438690.000,     3948955.000 },
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_SOUTHEAST,   11,   438690.000,     3948950.000 },
+	{ "11SMV38684895",     cs_MGRS_GRDSQR_SOUTH,       11,   438685.000,     3948950.000 },
+	{ "",                  cs_MGRS_GRDSQR_UNKNOWN,      0,        0.000,           0.000 }
+};
 
 int CStestH (bool verbose,long32_t duration)
 {
@@ -262,6 +294,7 @@ int CStestH (bool verbose,long32_t duration)
 	struct cs_Dtdef_ *dtPtr;
 	struct cs_Eldef_ *elPtr;
 	struct _mgrsTable *tblPtr;
+	struct _mgrsTableEx *tblPtrEx;
 	struct cs_Mgrs_ *mgrsPtr;
 	
 	double testValue;
@@ -269,6 +302,8 @@ int CStestH (bool verbose,long32_t duration)
 	double testLatLng [2];
 	double rsltLatLng [2];
 	double delLatLng [2];
+	double utmUps [2];
+	double delUtm [2];
 	char rsltMgrs [32];
 
 	printf ("Testing miscellaneous functions\n");
@@ -535,6 +570,33 @@ int CStestH (bool verbose,long32_t duration)
 			printf ("CScalcMgrsFromLl failure.\n");
 			err_cnt += 1;
 			continue;
+		}
+	}
+
+	for (tblPtrEx = mgrsTableEx;tblPtrEx->mgrs [0] != '\0';tblPtrEx += 1)
+	{
+		/* Convert the MGRS string to lat/long using the grdSqrPos value
+		   from the table. */
+		iStat =  CScalcLlFromMgrsEx (mgrsPtr,rsltLatLng,tblPtrEx->mgrs,tblPtrEx->grdSqrPos);
+		if (iStat >= 0L)
+		{
+			/* We need to convert the lat/long back to UTM. */
+			iStat = CScalcUtmUps (mgrsPtr,utmUps,rsltLatLng);
+		}
+		if (iStat >= 0L)
+		{
+			delUtm [0] = fabs (utmUps [0] - tblPtrEx->utmEasting);
+			delUtm [1] = fabs (utmUps [1] - tblPtrEx->utmNorthing);
+			if (delUtm [0] > 0.1 || delUtm [1] >= 0.1)
+			{
+				printf ("CScalcLlFromMgrsEx failure.\n");
+				err_cnt += 1;
+			}
+		}
+		else
+		{
+			printf ("CScalcLlFromMgrs failure.\n");
+			err_cnt += 1;
 		}
 	}
 	CS_free (mgrsPtr);
