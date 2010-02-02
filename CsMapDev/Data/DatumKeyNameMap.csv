@@ -531,4 +531,5 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 51600,0,0,0,0,0,0,0,,NAD27/Cuba,BAHAMAS,,,,,,,,,,NAD 27 (Bahamas),,,,,,,
 51700,0,0,0,0,0,0,0,,NAD27/Bahamas/SanSalvador,BAH-SAN,,,,,,,,,,NAD 27 (San Salvador),,,,,,,
 51800,0,0,0,0,0,0,0,,,NTF-G-Grid-ClrkIGN,,,,,,,,,,NTF (Paris meridian),,,,,,,
-51900,,0,0,0,0,0,,OMAN,,OMAN,,D_Oman,,,,,,,,,,,,"The CS-MAP OMAN datum is slightly different from Fahud in that it uses a DMA multiple regression formula for conversion to WGS84.  Therefore, we map this name separately.  Otherwise, this is really the Fahud datum.",0,0,0
+51900,0,0,0,0,0,0,,OMAN,,OMAN,,D_Oman,,,,,,,,,,,,"The CS-MAP OMAN datum is slightly different from Fahud in that it uses a DMA multiple regression formula for conversion to WGS84.  Therefore, we map this name separately.  Otherwise, this is really the Fahud datum.",0,0,0
+52000,0,0,0,0,0,0,0,,,Ocotepeque35a,,,,,,,,,,,,,,,,,
