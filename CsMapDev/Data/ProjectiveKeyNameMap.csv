@@ -1447,6 +1447,10 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 143800,3991,3991,3991,0,0,0,,PRVI.PR-1,PRVI.PR-1,PRVI.PR-1,Puerto Rico State Plane CS of 1927,Puerto_Rico_StatePlane_Puerto_Rico_FIPS_5201,Puerto Rico State Plane CS of 1927,,,Puerto Rico State Plane CS of 1927,,,,,,,,,0,0,0
 143900,3992,3992,3992,0,0,0,,PRVI.PR-2,PRVI.PR-2,PRVI.PR-2,Puerto Rico / St. Croix,Puerto_Rico_StatePlane_Virgin_Islands_St_Croix_FIPS_5202,Puerto Rico / St. Croix,,,Puerto Rico / St. Croix,,,,,,,,,0,0,0
 144000,3993,0,0,0,0,0,,GAUM63.Guam,Guam1963.Guam/SPCS,,Guam 1963 / Guam SPCS,,,,,,,,,,,,,,0,0,0
+144010,4093,4093,4093,,,,,,,ETRF89.DKTM1,ETRS89 / DKTM1,,,,,,,,,,,,,,,,
+144020,4094,4094,4094,,,,,,,ETRF89.DKTM2,ETRS89 / DKTM2,,,,,,,,,,,,,,,,
+144030,4095,4095,4095,,,,,,,ETRF89.DKTM3,ETRS89 / DKTM3,,,,,,,,,,,,,,,,
+144040,4096,4096,4096,,,,,,,ETRF89.DKTM4,ETRS89 / DKTM4,,,,,,,,,,,,,,,,
 144100,20004,20004,20004,0,0,0,,Pulkovo95.GK-4,Pulkovo95.GK-4,,Pulkovo 1995 / Gauss-Kruger zone 4,Pulkovo_1995_GK_Zone_4,Pulkovo 1995 / Gauss-Kruger zone 4,,,Pulkovo 1995 / Gauss-Kruger zone 4,,,,,,,,,0,0,0
 144200,20005,20005,20005,0,0,0,,Pulkovo95.GK-5,Pulkovo95.GK-5,,Pulkovo 1995 / Gauss-Kruger zone 5,Pulkovo_1995_GK_Zone_5,Pulkovo 1995 / Gauss-Kruger zone 5,,,Pulkovo 1995 / Gauss-Kruger zone 5,,,,,,,,,0,0,0
 144300,20006,20006,20006,0,0,0,,Pulkovo95.GK-6,Pulkovo95.GK-6,,Pulkovo 1995 / Gauss-Kruger zone 6,Pulkovo_1995_GK_Zone_6,Pulkovo 1995 / Gauss-Kruger zone 6,,,Pulkovo 1995 / Gauss-Kruger zone 6,,,,,,,,,0,0,0
