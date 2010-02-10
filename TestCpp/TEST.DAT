@@ -3529,6 +3529,19 @@ Ocotepeque35a.CR-N,576526.245,136646.328,LL84,-83.6350982,9.2423933,0.00006,0.00
 Ocotepeque35a.CR-N,576918.570,135998.915,LL84,-83.6315416,9.2365331,0.00006,0.00006
 Ocotepeque35a.CR-N,576973.342,135857.868,LL84,-83.6310461,9.2352570,0.00006,0.00006
 Ocotepeque35a.CR-N,577156.572,135545.251,LL84,-83.6293853,9.2324275,0.00006,0.00006
+###################################################################################
+# The following test cases provided by a client in Denmark, provided for testing
+# the definitions for the Danish Transversal Mercator systems.  There were some
+# typographical errors in the test data provided, so not all test cases appear
+# below.  No test cases were provided for DKTM4.  The precision on these test
+# cases is limited to two digits, so the tolerances are larger than we would
+# like.
+ETRF89.TM32,465342.58,6146791.73,ETRF89.DKTM1,165329.41,1149128.44,0.008,0.008
+ETRF89.DKTM1,165329.41,1149128.44,ETRF89.TM32,465342.58,6146791.73,0.008,0.008
+ETRF89.TM32,575114.51,6224159.2,ETRF89.DKTM2,413006.05,1225886.39,0.008,0.008
+ETRF89.DKTM2,413006.05,1225886.39,ETRF89.TM32,575114.51,6224159.2,0.008,0.008
+ETRF89.TM32,724354.31,6175753.97,ETRF89.DKTM3,651480.91,1172630.41,0.008,0.008
+ETRF89.DKTM3,651480.91,1172630.41,ETRF89.TM32,724354.31,6175753.97,0.008,0.008
 ###############################################################################
 #
 # That's it.  If you have some more cases documented by reputable sources,
