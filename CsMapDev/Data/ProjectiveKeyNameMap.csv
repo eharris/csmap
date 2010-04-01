@@ -2208,9 +2208,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 218600,31288,0,31288,0,0,0,,,,MGI-AT/F.M28,MGI (Ferro) / M28,,MGI (Ferro) / M28,,,,,,,,,,,,0,0,0
 218700,31289,0,31289,0,0,0,,,,MGI-AT/F.M31,MGI (Ferro) / M31,,MGI (Ferro) / M31,,,,,,,,,,,,0,0,0
 218800,31290,0,31290,0,0,0,,,,MGI-AT/F.M34,MGI (Ferro) / M34,,MGI (Ferro) / M34,,,,,,,,,,,,0,0,0
-218900,31291,31291,0,0,0,0,,MGI.AustriaWest,MGI.AustriaWest,MGI.AustriaWest,MGI (Ferro) / Austria West Zone,Austria_West_Zone,,,,MGI (Ferro) / Austria West Zone,,,,,,,,Depracted ID:74,0,0,0
+218900,31291,31291,0,0,0,0,,MGI.AustriaWest,MGI.AustriaWest,,MGI (Ferro) / Austria West Zone,Austria_West_Zone,,,,MGI (Ferro) / Austria West Zone,,,,,,,,Depracted ID:74,0,0,0
 219000,31292,31292,0,0,0,0,,MGI.AustriaCentral,MGI.AustriaCentral,,MGI (Ferro) / Austria Central Zone,Austria_Central_Zone,,,,MGI (Ferro) / Austria Central Zone,,,,,,,,Depracted ID:75,0,0,0
-219100,31293,31293,0,0,0,0,,MGI.AustriaEast,MGI.AustriaEast,MGI.AustriaEast,MGI (Ferro) / Austria East Zone,Austria_East_Zone,,,,MGI (Ferro) / Austria East Zone,,,,,,,,Depracted ID:76,0,0,0
+219100,31293,31293,0,0,0,0,,MGI.AustriaEast,MGI.AustriaEast,,MGI (Ferro) / Austria East Zone,Austria_East_Zone,,,,MGI (Ferro) / Austria East Zone,,,,,,,,Depracted ID:76,0,0,0
 219200,31297,31297,0,0,0,0,,MGI.AustriaLambert,MGI.AustriaLambert,MGI/gc.AustriaLambert,MGI / Austria Lambert,MGI_Austria_Lambert,,,,MGI / Austria Lambert,,,,,,,,Deprecated,0,0,0
 219300,31300,0,31300,0,0,0,,Belge72.Lambert72,Belge72.Lambert72,Belge72.Lambert72,Belge 1972 / Belge Lambert 72,,Belge 1972 / Belge Lambert 72,,,Belge 1972 / Belge Lambert 72,,,,,,,,,0,0,0
 219400,31370,31370,31370,0,0,0,,Belge72.Lambert72A,Belge72.Lambert72A,Belge72.Lambert72A,Belge 1972 / Belgian Lambert 72,Belge_Lambert_1972,Belge 1972 / Belgian Lambert 72,,,Belge 1972 / Belgian Lambert 72,,,,,,,,,0,0,0
