@@ -50,9 +50,14 @@ int CStestL (bool verbose,long32_t duration)
 	enum EcsMapSt csMapSt;
 
 	int err_cnt;
+	unsigned index;
 
+	struct cs_Eldef_ *elPtr;
+	struct cs_Dtdef_ *dtPtr;
+	struct cs_Csdef_ *csPtr;
 	struct cs_Csprm_* xyMeter;
 	struct cs_Csprm_* xyCentimeter;
+	const wchar_t* keyName;
 	
 	double src [3];
 	double ll [3];
@@ -60,12 +65,126 @@ int CStestL (bool verbose,long32_t duration)
 	
 	char cTemp [1024];
 
+	printf ("[ L] Checking NameMapper for invalid name references.\n");
 	err_cnt = 0;
-	
+
+	index = 0;
+	keyName = L"A";
+	while (keyName != 0)
+	{
+		keyName = csGetNamesByIdx (csMapEllipsoidKeyName,csMapFlvrAutodesk,index);
+		if (keyName != 0)
+		{
+			wcstombs (cTemp,keyName,sizeof (cTemp));
+			elPtr = CS_eldef (cTemp);
+			if (elPtr == 0)
+			{
+				printf ("Invalid ellipsoid name [%s] in NameMapper.\n",cTemp);
+				err_cnt += 1;
+			}
+			else
+			{
+				if (verbose && !CS_stricmp (elPtr->group,"LEGACY"))
+				{
+					printf ("LEGACY ellipsoid name [%s] in NameMapper.\n",cTemp);
+				}
+				CS_free (elPtr);
+			}
+		}
+		index += 1;
+	}
+
+	index = 0;
+	keyName = L"A";
+	while (keyName != 0)
+	{
+		keyName = csGetNamesByIdx (csMapDatumKeyName,csMapFlvrAutodesk,index);
+		if (keyName != 0)
+		{
+			wcstombs (cTemp,keyName,sizeof (cTemp));
+			dtPtr = CS_dtdef (cTemp);
+			if (dtPtr == 0)
+			{
+				printf ("Invalid datum name [%s] in NameMapper.\n",cTemp);
+				err_cnt += 1;
+			}
+			else
+			{
+				if (verbose && !CS_stricmp (dtPtr->group,"LEGACY"))
+				{
+					printf ("LEGACY datum name [%s] in NameMapper.\n",cTemp);
+				}
+				CS_free (dtPtr);
+			}
+		}
+		index += 1;
+	}
+	index = 0;
+	keyName = L"A";
+	while (keyName != 0)
+	{
+		keyName = csGetNamesByIdx (csMapGeographicCSysKeyName,csMapFlvrAutodesk,index);
+		if (keyName != 0)
+		{
+			wcstombs (cTemp,keyName,sizeof (cTemp));
+			csPtr = CS_csdef (cTemp);
+			if (csPtr == 0)
+			{
+				printf ("Invalid CRS name [%s] in NameMapper.\n",cTemp);
+				err_cnt += 1;
+			}
+			else
+			{
+				if (CS_stricmp (csPtr->prj_knm,"LL"))
+				{
+					printf ("Projective CRS name [%s] in NameMapper as a geographic CRS.\n",cTemp);
+					err_cnt += 1;
+				}
+				if (verbose && !CS_stricmp (csPtr->group,"LEGACY"))
+				{
+					printf ("LEGACY CRS name [%s] in NameMapper.\n",cTemp);
+				}
+				CS_free (csPtr);
+			}
+		}
+		index += 1;
+	}
+
+	index = 0;
+	keyName = L"A";
+	while (keyName != 0)
+	{
+		keyName = csGetNamesByIdx (csMapProjectedCSysKeyName,csMapFlvrAutodesk,index);
+		if (keyName != 0)
+		{
+			wcstombs (cTemp,keyName,sizeof (cTemp));
+			csPtr = CS_csdef (cTemp);
+			if (csPtr == 0)
+			{
+				printf ("Invalid CRS name [%s] in NameMapper.\n",cTemp);
+				err_cnt += 1;
+			}
+			else
+			{
+				if (!CS_stricmp (csPtr->prj_knm,"LL"))
+				{
+					printf ("Geographic CRS name [%s] in NameMapper as a projective CRS.\n",cTemp);
+					err_cnt += 1;
+				}
+				if (verbose && !CS_stricmp (csPtr->group,"LEGACY"))
+				{
+					printf ("LEGACY CRS name [%s] in NameMapper.\n",cTemp);
+				}
+				CS_free (csPtr);
+			}
+		}
+		index += 1;
+	}
+
 	csMapSt = csMapNameToNameC (csMapProjectionKeyName,cTemp,sizeof (cTemp),
-                                                        csMapFlvrOCR,
-												        csMapFlvrCsMap,
-														"LMTAN");
+															 csMapFlvrOCR,
+															 csMapFlvrCsMap,
+															"LMTAN");
 	if (csMapSt != csMapOk)
 	{
 		printf ("Name Mapper failed to map projection CS-MAP projection name \"LMTAN\".\n");
@@ -96,5 +215,5 @@ int CStestL (bool verbose,long32_t duration)
 		err_cnt += 1;
 	}
 	
-    return err_cnt;
+	return err_cnt;
 }

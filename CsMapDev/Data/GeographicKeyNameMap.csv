@@ -164,7 +164,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 16300,4245,4245,4245,0,0,8241,,Kertau48.LL,Kertau48.LL,Kertau48.LL,Kertau 1968,GCS_Kertau,Kertau,,,Kertau,,,,Longitude / Latitude (Kertau 1948),,,,,0,0,0
 16400,4246,4246,4246,0,0,0,,KuwaitOilCo.LL,KuwaitOilCo.LL,KuwaitOil.LL,KOC,GCS_Kuwait_Oil_Company,KOC,,,KOC,,,,,,,,,0,0,0
 16500,4247,4247,4247,0,0,0,,LaCanoa.LL,LaCanoa.LL,LaCanoa/E.LL,La Canoa,GCS_La_Canoa,La Canoa,,,La Canoa,,,,,,,,,0,0,0
-16600,4248,4248,4248,0,0,8282,,LLPSAD56,PSAD56.LL,LLPSAD56,PSAD56,GCS_Provisional_S_American_1956,PSAD56,,,PSAD56,,,,Longitude / Latitude (Provisional South American 1956),,,,,0,0,0
+16600,4248,4248,4248,0,0,8282,,LLPSAD56,PSAD56.LL,LL-PSAD56|LLPSAD56,PSAD56,GCS_Provisional_S_American_1956,PSAD56,,,PSAD56,,,,Longitude / Latitude (Provisional South American 1956),,,,,0,0,0
 16700,4249,4249,4249,0,0,0,,Lake.LL,Lake.LL,,Lake,GCS_Lake,Lake,,,Lake,,,,,,,,,0,0,0
 16800,4250,4250,4250,0,0,0,,Leigon.LL,Leigon.LL,Leigon_1.LL,Leigon,GCS_Leigon,Leigon,,,Leigon,,,,,,,,,0,0,0
 16900,4251,4251,4251,0,0,8243,,Liberia.LL,Liberia.LL,Liberia.LL,Liberia 1964,GCS_Liberia_1964,Liberia 1964,,,Liberia 1964,,,,Longitude / Latitude (Liberia 1964),,,,,0,0,0
@@ -382,7 +382,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 38300,4802,4802,4802,0,0,0,,Bogota75.LL.Bogota,Bogota75.LL.Bogota,,Bogota 1975 (Bogota),GCS_Bogota_Bogota,Bogota 1975 (Bogota),,,Bogota 1975 (Bogota),,,,,,,,,0,0,0
 38400,4803,4803,4803,0,0,0,,Lisbon37.LL.Lisbon,Lisbon37.LL.Lisbon,,Lisbon (Lisbon),GCS_Lisbon_Lisbon,Lisbon (Lisbon),,,Lisbon (Lisbon),,,,,,,,,0,0,0
 38500,4804,4804,4804,0,0,0,,Makassar.LL.Jakarta,Makassar.LL.Jakarta,,Makassar (Jakarta),GCS_Makassar_Jakarta,Makassar (Jakarta),,,Makassar (Jakarta),,,,,,,,,0,0,0
-38600,4805,4805,4805,0,0,0,,MGI.LL.Ferro,MGI.LL.Ferro,MGI-AT/F.LL,MGI (Ferro),GCS_MGI_Ferro,MGI (Ferro),,,MGI (Ferro),,,,,,,,,0,0,0
+38600,4805,4805,4805,0,0,0,,MGI.LL.Ferro,MGI.LL.Ferro,MGI-AT/F.LL/a,MGI (Ferro),GCS_MGI_Ferro,MGI (Ferro),,,MGI (Ferro),,,,,,,,,0,0,0
 38700,4806,4806,4806,0,0,0,,MonteMario.LL.Rome,MonteMario.LL.Rome,,Monte Mario (Rome),GCS_Monte_Mario_Rome,Monte Mario (Rome),,,Monte Mario (Rome),,,,,,,,,0,0,0
 38800,4807,4807,4807,0,0,8267,,NTF.LL.Paris.Grad,NTF.LL.Paris.Grad,LL-NTF-Grid,NTF (Paris),GCS_NTF_Paris,NTF (Paris),,,NTF (Paris),,,,Longitude / Latitude (NTF with Paris prime meridian),,,,,0,0,0
 38900,4808,4808,4808,0,0,0,,Padang1884.LL.Jakarta,Padang1884.LL.Jakarta,,Padang (Jakarta),GCS_Padang_1884_Jakarta,Padang (Jakarta),,,Padang (Jakarta),,,,,,,,,0,0,0

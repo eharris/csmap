@@ -714,8 +714,16 @@ int EXP_LVL3 CScs2WktEx (char *csWktBufr,size_t bufrSize,enum ErcWktFlavor flavo
 			kCp = "Madrid";
 			break;		
 		case -17:
-			primeMer = -17.666666666666667;
-			kCp = "Ferro";
+			if (fabs (cs_def->org_lng - (-17.6665931666667)) < 1.0E-05)
+			{
+				primeMer = -17.666593166666667;
+				kCp = "FerroPrecise";
+			}
+			else
+			{
+				primeMer = -17.666666666666667;
+				kCp = "Ferro";
+			}
 			break;
 		case -74:
 			primeMer = -74.08175;
