@@ -152,7 +152,13 @@ int CStestI (bool verbose,long32_t duration)
 			/* We skip several projection types which are not generally supported by WKT, if the flavor
 			   is not Autodesk. */
 			if (flavor != wktFlvrAutodesk &&
-				(prjPtr->code == cs_PRJCOD_MODPC    ||
+				(prjPtr->code == cs_PRJCOD_MRCATK   ||
+				 prjPtr->code == cs_PRJCOD_MRCATPV  ||		// TODO: Should be able to support this, just don't know what other vendors use for projection name.
+				 prjPtr->code == cs_PRJCOD_RSKEWC   ||
+				 prjPtr->code == cs_PRJCOD_RSKEWO   ||		// TODO:  We should be able to support this properly.
+				 prjPtr->code == cs_PRJCOD_LMBLG    ||		// TODO: ESRI does not support this, others do
+				 prjPtr->code == cs_PRJCOD_OBQCYL   ||		// Most others use an RSKEW approximation,
+				 prjPtr->code == cs_PRJCOD_MODPC    ||
 				 prjPtr->code == cs_PRJCOD_HMLSN    ||
 				 prjPtr->code == cs_PRJCOD_NACYL    ||
 				 prjPtr->code == cs_PRJCOD_TACYL    ||
@@ -173,8 +179,8 @@ int CStestI (bool verbose,long32_t duration)
 				 prjPtr->code == cs_PRJCOD_SYS34_99 ||
 				 prjPtr->code == cs_PRJCOD_TRMRKRG  ||
 				 prjPtr->code == cs_PRJCOD_LMBRTAF  ||
-			     prjPtr->code == cs_PRJCOD_MSTRO
-			    )
+				 prjPtr->code == cs_PRJCOD_MSTRO
+				)
 			   )
 			{
 				continue;
@@ -265,7 +271,7 @@ int CStestI (bool verbose,long32_t duration)
 				printf ("\rImported version of coordinate system %s does not match original; %s\n",csDefOriginal.key_nm,msgBufr);
 				err_cnt += 1;
 			}
-			
+
 			/* We skip the datum test as the WKT datum stuff is pretty flakey. */
 			//status = CS_dtDefCmp (&dtDefOriginal,&dtDefImported,msgBufr,sizeof (msgBufr));
 			//if (status > 0)

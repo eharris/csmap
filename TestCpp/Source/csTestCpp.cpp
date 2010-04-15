@@ -26,7 +26,7 @@
 
 extern const wchar_t csDataDir [] = L"C:\\Perforce\\caldiesel\\MgDev\\OS\\Oem\\CsMap\\Data";
 extern const char csDictDir [] = "C:\\Perforce\\caldiesel\\MgDev\\OS\\Oem\\CsMap\\dictionaries";
-extern const wchar_t csEpsgDir [] = L"C:\\Program Files\\Common Files\\GeodeticData\\EPSG\\EPSG-v6_18\\CSV";
+extern const wchar_t csEpsgDir [] = L"C:\\Program Files\\Common Files\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
 extern const TcsEpsgDataSetV6* KcsEpsgDataSetV6Ptr = 0;
 
 extern "C"
@@ -620,7 +620,7 @@ int main (int argc,char* argv [])
 			break;
 
 		case 'N':
-			// Perform test M.
+			// Perform test N.
 			if (KcsEpsgDataSetV6Ptr != 0)
 			{
 				test_st = CStestN (*KcsEpsgDataSetV6Ptr,verbose,duration);

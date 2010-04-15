@@ -1057,26 +1057,31 @@ bool TcsNameMapper::AddKeyNameMap (EcsMapObjType mapType,const wchar_t* mapFileP
 	bool ok = true;
     EcsNameFlavor flavor;
     unsigned long genericId;
+    TcsCsvStatus csvStatus;
 
     TcsKeyNameMapFile mapFileObj (mapFilePath,28);
-    
-	// Loop once for each record in the mapping table.
-    do
-    {
-		// Get a default flavor.
-		flavor = KeyMapFlavor (mapFileObj);
+    ok = (mapFileObj.GetStatus (csvStatus) == csvOk);
 
-		// Extract a generic ID from this record.
-		genericId = KeyMapGenericId (mapFileObj);
-		if (genericId == 0UL)
+	if (ok)
+	{        
+		// Loop once for each record in the mapping table.
+		do
 		{
-			// There were no numbers in the provided record.  Need to generate
-			// a flavor dependent generic ID.  To do this, we need to find the
-			// flavor of the base name we will use.
-			genericId = GetNextDfltId (flavor);
-		}
-		ok = AddKeyMapFields (mapType,genericId,mapFileObj);
-	} while (ok && mapFileObj.NextRecord ());
+			// Get a default flavor.
+			flavor = KeyMapFlavor (mapFileObj);
+
+			// Extract a generic ID from this record.
+			genericId = KeyMapGenericId (mapFileObj);
+			if (genericId == 0UL)
+			{
+				// There were no numbers in the provided record.  Need to generate
+				// a flavor dependent generic ID.  To do this, we need to find the
+				// flavor of the base name we will use.
+				genericId = GetNextDfltId (flavor);
+			}
+			ok = AddKeyMapFields (mapType,genericId,mapFileObj);
+		} while (ok && mapFileObj.NextRecord ());
+	}
 	return ok;
 }
 bool TcsNameMapper::AddKeyMapFields (EcsMapObjType mapType,unsigned long genericId,const TcsKeyNameMapFile& mapFileObj)

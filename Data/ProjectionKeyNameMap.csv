@@ -4,7 +4,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 300,9822,,,,,,4,AE,,Albers Equal Area Conic|AE,Albers Equal AreaAE,Albers|AE,Albers Conical Equal Area|AE,,,Albers_Conic_Equal_Area|AE,Albers_Conic_Equal_Area,Albers_Conic_Equal_Area|AE,CT_AlbersEqualArea|AE,Albers Conical Equal Area|AE,,,,,,,
 400,9804,,,,,,49,MRCATK,,Mercator Cylindrical with Scale Reduction,Mercator (1SP),,,,,Mercator_1SP,Mercator_1SP|Mercator Cylindrical Projection with Scale Reduction,Mercator_1SP,,,,,,,,,
 500,9805,,,,,,6,MRCAT,,Mercator Cylindrical with Standard Parallel,Mercator (2SP),Mercator,Mercator,,,Mercator_2SP,Mercator_2SP,Mercator_2SP,CT_Mercator,Mercator,,,,,,,
-550,1024,,,,,,69,MRCAT-PV,,Popular Visualisation Pseudo Mercator,Popular Visualisation Pseudo Mercator,,,,,,,,,,,,,,,,
+550,1024,,,,,,69,MRCAT-PV,,Popular Visualisation Pseudo Mercator,Popular Visualisation Pseudo Mercator,,,,,,Popular Visualisation Pseudo Mercator,Popular Visualisation Pseudo Mercator,,,,,,,,,
 600,0,,,,,,7,AZMED,,Lambert Azimuthal Equidistant,Lambert Azimuthal Equidistant,Azimuthal_Equidistant,Azimuthal Equidistant,,,,Lambert_Azimuthal_Equidistant,Lambert_Azimuthal_Equidistant,CT_LambertAzimuthalEquidistant,Azimuthal Equidistant,,,,,,,
 700,0,,,,,,8,LMTAN,,Lambert Tangential Conformal Conic,,,Lambert Conformal Conic,,,,Lambert Tangential Conformal Conic Projection|Lambert Tangential,,,,,,,,,,
 800,9818,,,,,,9,PLYCN,,American Polyconic Projection,American Polyconic,Polyconic,Polyconic,,,American_Polyconic,Polyconic,Polyconic,CT_Polyconic,Polyconic,,,,,,,

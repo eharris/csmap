@@ -47,6 +47,7 @@ extern "C"
 
 	extern const unsigned long KcsNmMapNoNumber;
 	extern const unsigned long KcsNmInvNumber;
+	extern struct cs_Prjtab_ cs_Prjtab [];
 }
 
 int CStestJ (bool verbose,long32_t duration)
@@ -65,8 +66,10 @@ int CStestJ (bool verbose,long32_t duration)
 	char* localePtr;
 
 	const char *msiNamePtr;
+	struct cs_Csdef_ *csDefPtr;
 	struct cs_Csprm_ *msiCS;
 	struct cs_Csprm_ *epsgCS;
+	struct cs_Prjtab_ *prjPtr;
 
 	char csMapName [64];
 	char csWktBufr [2048];
@@ -151,6 +154,46 @@ int CStestJ (bool verbose,long32_t duration)
 			continue;
 		}
 		msiNamePtr = csMapName;
+		
+		csDefPtr = CS_csdef (msiNamePtr);
+		if (csDefPtr == 0)
+		{
+			if (verbose)
+			{
+				printf ("Couldn't objtain definition for CS-MAP CRS definition named %s.\n",msiNamePtr);
+			}
+			continue;
+		}
+		else
+		{
+			/* Locate the projection in the projection table.  We need this for access
+			   to the flag word for this projection. */
+			for (prjPtr = cs_Prjtab;prjPtr->code != cs_PRJCOD_END;prjPtr += 1)
+			{
+				if (!CS_stricmp (csDefPtr->prj_knm,prjPtr->key_nm)) break;
+			}
+			if (prjPtr->code == cs_PRJCOD_END) continue;
+
+			/* There are several projections we skip here:
+				LMBLGN   --> ESRI doesn't support this as a separate projection
+				OBQCYL   --> Most vendors support this as an RSKEW approximation
+				SWISS    --> Most vendors support this as an RSKEW approximation
+				TRMRKRG  --> Nobody supports this one but us
+				MRCATPV  --> Don't know what name ESRI (or others) use for this projection.
+
+				There are other projections which we don't want to handle here, but
+				they should not show up on an EPSG scan of the name mapper.
+			*/
+			if (prjPtr->code == cs_PRJCOD_LMBLG   ||
+			    prjPtr->code == cs_PRJCOD_OBQCYL  ||
+			    prjPtr->code == cs_PRJCOD_SWISS   ||
+			    prjPtr->code == cs_PRJCOD_TRMRKRG ||
+			    prjPtr->code == cs_PRJCOD_MRCATPV)
+			{
+				continue;
+			}
+			CS_free (csDefPtr);
+		}
 
 		if (verbose)
 		{

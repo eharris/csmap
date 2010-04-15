@@ -143,7 +143,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 14200,2137,2137,2137,0,0,0,,Accra.TM-1NW,Accra.TM-1NW,Accra1929.TM-1NW,Accra / TM 1 NW,Accra_TM_1_NW,Accra / TM 1 NW,,,Accra / TM 1 NW,,,,,,,,,0,0,0
 14300,2138,2138,2138,0,0,0,,NADq77.QuebecLambert,NADq77.Quebec/Lambert,,NAD27(CGQ77) / Quebec Lambert,NAD_1927_CGQ77_Quebec_Lambert,NAD27(CGQ77) / Quebec Lambert,,,,,,,,,,,,0,0,0
 14400,2154,2154,2154,0,0,0,,IGN-RGF93,RGF93.France/IGN,Lambert93,RGF93 / Lambert-93,RGF_1993_Lambert_93,RGF93 / Lambert-93,,,RGF93 / Lambert-93,,,,,,,,,0,0,0
-14500,2155,2155,2194,0,0,0,,AmSamoa62.Lambert,AmSamoa62.SamoaLambert,AmSamoa62.Lambert,American Samoa 1962 / American Samoa Lambert,Samoa_1962_Samoa_Lambert,American Samoa 1962 / American Samoa Lambert,,,,,,,,,,,,0,0,0
 14600,2156,0,2156,0,0,0,,HARN.UTM-59S,HARN.UTM-59S,,NAD83(HARN) / UTM zone 59S,,NAD83(HARN) / UTM zone 59S,,,NAD83(HARN) / UTM zone 59S,,,,,,,,,0,0,0
 14700,2157,2157,2157,0,0,0,,IRENET95.IrishTM,IRENET95.IrishTM,IRENET95.IrishTM,IRENET95 / Irish Transverse Mercator,IRENET95_Irish_Transverse_Mercator,IRENET95 / Irish Transverse Mercator,,,IRENET95 / Irish Transverse Mercator,,,,,,,,,0,0,0
 14800,2158,2158,2158,0,0,0,,IRENET95.UTM-29N,IRENET95.UTM-29N,IRENET95.UTM-29N,IRENET95 / UTM zone 29N,IRENET95_UTM_Zone_29N,IRENET95 / UTM zone 29N,,,IRENET95 / UTM zone 29N,,,,,,,,,0,0,0
@@ -548,7 +547,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 54700,2574,2574,2574,0,0,0,,Pulkovo42.GK3d-57,Pulkovo42.GK3d-57,Pulkovo42.GK3d-57,Pulkovo 1942 / 3-degree Gauss-Kruger zone 57,Pulkovo_1942_3_Degree_GK_Zone_57,Pulkovo 1942 / 3-degree Gauss-Kruger zone 57,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 57,,,,,,,,,0,0,0
 54800,2575,2575,2575,0,0,0,,Pulkovo42.GK3d-58,Pulkovo42.GK3d-58,Pulkovo42.GK3d-58,Pulkovo 1942 / 3-degree Gauss-Kruger zone 58,Pulkovo_1942_3_Degree_GK_Zone_58,Pulkovo 1942 / 3-degree Gauss-Kruger zone 58,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 58,,,,,,,,,0,0,0
 54900,2576,2576,2576,0,0,0,,Pulkovo42.GK3d-59,Pulkovo42.GK3d-59,Pulkovo42.GK3d-59,Pulkovo 1942 / 3-degree Gauss-Kruger zone 59,Pulkovo_1942_3_Degree_GK_Zone_59,Pulkovo 1942 / 3-degree Gauss-Kruger zone 59,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 59,,,,,,,,,0,0,0
-55000,2577,2577,2577,0,0,0,,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,Pulkovo_1942_3_Degree_GK_Zone_60,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,,,,,,"Deprecated by EPSG, ID:1061",0,0,0
+55000,2577,2577,2577,0,0,0,,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,,,,,,,,,,,"Deprecated by EPSG, ID:1061",0,0,0
 55100,2578,2578,2578,0,0,0,,Pulkovo42.GK3d-61,Pulkovo42.GK3d-61,Pulkovo42.GK3d-61,Pulkovo 1942 / 3-degree Gauss-Kruger zone 61,Pulkovo_1942_3_Degree_GK_Zone_61,Pulkovo 1942 / 3-degree Gauss-Kruger zone 61,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 61,,,,,,,,,0,0,0
 55200,2579,2579,2579,0,0,0,,Pulkovo42.GK3d-62,Pulkovo42.GK3d-62,Pulkovo42.GK3d-62,Pulkovo 1942 / 3-degree Gauss-Kruger zone 62,Pulkovo_1942_3_Degree_GK_Zone_62,Pulkovo 1942 / 3-degree Gauss-Kruger zone 62,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 62,,,,,,,,,0,0,0
 55300,2580,2580,2580,0,0,0,,Pulkovo42.GK3d-63,Pulkovo42.GK3d-63,Pulkovo42.GK3d-63,Pulkovo 1942 / 3-degree Gauss-Kruger zone 63,Pulkovo_1942_3_Degree_GK_Zone_63,Pulkovo 1942 / 3-degree Gauss-Kruger zone 63,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 63,,,,,,,,,0,0,0
@@ -868,7 +867,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 86700,2897,2897,2897,0,0,0,,MIHP-CIF,HARN.MI-CI.IntnlFt,MIHP-CIF,NAD83(HARN) / Michigan Central (ft),NAD_1983_HARN_StatePlane_Michigan_Central_FIPS_2112_Feet_Intl,NAD83(HARN) / Michigan Central (ft),,,NAD83(HARN) / Michigan Central (ft),,,,,,,,,0,0,0
 86800,2898,2898,2898,0,0,0,,MIHP-SIF,HARN.MI-SI.IntnlFt,MIHP-SIF,NAD83(HARN) / Michigan South (ft),NAD_1983_HARN_StatePlane_Michigan_South_FIPS_2113_Feet_Intl,NAD83(HARN) / Michigan South (ft),,,NAD83(HARN) / Michigan South (ft),,,,,,,,,0,0,0
 86900,2899,2899,2899,0,0,0,,MSHP-EF,HARN.MS-E.USFt,MSHP-EF,NAD83(HARN) / Mississippi East (ftUS),NAD_1983_HARN_StatePlane_Mississippi_East_FIPS_2301_Feet,NAD83(HARN) / Mississippi East (ftUS),,,NAD83(HARN) / Mississippi East (ftUS),,,,,,,,,0,0,0
-87000,2900,2900,2900,0,0,0,,MSHP-WF,HARN.MS-W.USFt,MSHP-WF,NAD83(HARN) / Mississippi West (ftUS),NAD_1983_HARN_StatePlane_Mississippi_West_FIPS_2302_Feet,NAD83(HARN) / Mississippi West (ftUS),,,NAD83(HARN) / Mississippi West (ftUS),,,,,,,,,0,0,0
+87000,2900,2900,2900,0,0,0,,MSHP-WF,HARN.MS-W.USFt,MSHP-WF/a,NAD83(HARN) / Mississippi West (ftUS),NAD_1983_HARN_StatePlane_Mississippi_West_FIPS_2302_Feet,NAD83(HARN) / Mississippi West (ftUS),,,NAD83(HARN) / Mississippi West (ftUS),,,,,,,,,0,0,0
 87100,2901,2901,2901,0,0,0,,MTHPIF,HARN.MTI.IntnlFt,MTHPIF,NAD83(HARN) / Montana (ft),NAD_1983_HARN_StatePlane_Montana_FIPS_2500_Feet_Intl,NAD83(HARN) / Montana (ft),,,NAD83(HARN) / Montana (ft),,,,,,,,,0,0,0
 87200,2902,2902,2902,0,0,0,,NMHP-EF,HARN.NM-E.USFt,NMHP-EF,NAD83(HARN) / New Mexico East (ftUS),NAD_1983_HARN_StatePlane_New_Mexico_East_FIPS_3001_Feet,NAD83(HARN) / New Mexico East (ftUS),,,NAD83(HARN) / New Mexico East (ftUS),,,,,,,,,0,0,0
 87300,2903,2903,2903,0,0,0,,NMHP-CF,HARN.NM-C.USFt,NMHP-CF,NAD83(HARN) / New Mexico Central (ftUS),NAD_1983_HARN_StatePlane_New_Mexico_Central_FIPS_3002_Feet,NAD83(HARN) / New Mexico Central (ftUS),,,NAD83(HARN) / New Mexico Central (ftUS),,,,,,,,,0,0,0
@@ -955,7 +954,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 95500,2987,2987,2987,0,0,0,,Miquelon50.UTM-21N,Miquelon50.UTM-21N,Miquelon1950.UTM-21N,Saint Pierre et Miquelon 1950 / UTM zone 21N,Saint_Pierre_et_Miquelon_1950_UTM_21N,Saint Pierre et Miquelon 1950 / UTM zone 21N,,,,,,,,,,,,0,0,0
 95600,2988,2988,2988,0,0,0,,MOP78.UTM-1S,MOP78.UTM-1S,MOP1978.UTM-1S,MOP78 / UTM zone 1S,MOP78_UTM_1S,MOP78 / UTM zone 1S,,,,,,,,,,,,0,0,0
 95700,2989,2989,2989,0,0,0,,RRAF91.UTM-20N,Antilles91.UTM-20N,RRAF91.UTM-20N,RRAF 1991 / UTM zone 20N,RRAF_1991_UTM_20N,RRAF 1991 / UTM zone 20N,,,,,,,,,,,,0,0,0
-95800,3727,2990,2990,0,0,0,,REUNION.TmReunion,REUNION.TmReunion,REUNION.Reunion/TM/01,Reunion 1947 / TM Reunion,Piton_des_Neiges_TM_Reunion,Piton des Neiges / TM Reunion,,,,,,,,,,,,0,0,0
+95800,3727,2990,2990,0,0,0,,REUNION.TmReunion,REUNION.TmReunion,REUNION.Reunion/TM/02,Reunion 1947 / TM Reunion,Piton_des_Neiges_TM_Reunion,Piton des Neiges / TM Reunion,,,,,,,,,,,,0,0,0
 95900,2991,2991,2991,0,0,0,,NAD83.OregonLambert,NAD83.OregonLambert,NAD83.OregonLambert|OR-GIS83-M,NAD83 / Oregon Lambert,NAD_1983_Oregon_Statewide_Lambert,NAD83 / Oregon Lambert,,,,,,,,,,,,0,0,0
 96000,2992,2992,2992,0,0,0,,OR83-SSCGIS,NAD83.OregonLambert.IntnlFt,OR-GIS83,NAD83 / Oregon Lambert (ft),NAD_1983_Oregon_Statewide_Lambert_Feet_Intl,NAD83 / Oregon Lambert (ft),,,,,,,,,,,,0,0,0
 96100,2993,2993,2993,0,0,0,,HARN.OregonLambert,HARN.OregonLambert,HARN.OregonLambert,NAD83(HARN) / Oregon Lambert,NAD_1983_HARN_Oregon_Statewide_Lambert,NAD83(HARN) / Oregon Lambert,,,,,,,,,,,,0,0,0
@@ -1041,7 +1040,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 104100,3463,102608,0,0,0,0,,ME2K-C,NAD83.Maine2000-C,ME2K-C,NAD83 / Maine CS2000 Central,NAD_1983_Maine_2000_Central_Zone,,,,,,,,,,,,,0,0,0
 104200,3074,102609,0,0,0,0,,ME2K-W,NAD83.Maine2000-W,ME2K-W,NAD83 / Maine CS2000 West,NAD_1983_Maine_2000_West_Zone,,,,,,,,,,,,,0,0,0
 104300,3075,102208,0,0,0,0,,HARN.ME2K-E,HARN.Maine2000-E,HARN.ME2K-E,NAD83(HARN) / Maine CS2000 East,NAD_1983_HARN_Maine_2000_East_Zone,,,,,,,,,,,,,0,0,0
-104400,3464,102209,0,0,0,0,,HARN.ME2K-C,HARN.Maine2000-C,HARN.ME2K-C,NAD83(HARN) / Maine CS2000 Central,NAD_1983_HARN_Maine_2000_Central_Zone,,,,,,,,,,,,,0,0,0
+104400,3464,102209,0,0,0,0,,HARN.ME2K-C,HARN.Maine2000-C,HARN.ME2K-C/a,NAD83(HARN) / Maine CS2000 Central,NAD_1983_HARN_Maine_2000_Central_Zone,,,,,,,,,,,,,0,0,0
 104500,3077,102210,0,0,0,0,,HARN.ME2K-W,HARN.Maine2000-W,HARN.ME2K-W,NAD83(HARN) / Maine CS2000 West,NAD_1983_HARN_Maine_2000_West_Zone,,,,,,,,,,,,,0,0,0
 104600,3078,3078,0,0,0,0,,MichiganGeoRef83,NAD83.MichiganGeoRef,MI83-OB,NAD83 / Michigan Oblique Mercator,NAD_1983_Michigan_GeoRef_Meters,,,,,,,,,,,,,0,0,0
 104700,3079,3079,0,0,0,0,,MichiganGeoRefHP,NAD83.MichiganGeoRef,MichiganGeoRefHP,NAD83(HARN) / Michigan Oblique Mercator,NAD_1983_HARN_Michigan_GeoRef_Meters,,,,,,,,,,,,,0,0,0
@@ -1067,7 +1066,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 106700,3099,3099,0,0,0,0,,JGD2000.UTM-53N,JGD2000.UTM-53N,JGD2000.UTM-53N,JGD2000 / UTM zone 53N,JGD_2000_UTM_Zone_53N,,,,,,,,,,,,,0,0,0
 106800,3100,3100,0,0,0,0,,JGD2000.UTM-54N,JGD2000.UTM-54N,JGD2000.UTM-54N,JGD2000 / UTM zone 54N,JGD_2000_UTM_Zone_54N,,,,,,,,,,,,,0,0,0
 106900,3101,3101,0,0,0,0,,JGD2000.UTM-55N,JGD2000.UTM-55N,JGD2000.UTM-55N,JGD2000 / UTM zone 55N,JGD_2000_UTM_Zone_55N,,,,,,,,,,,,,0,0,0
-107000,3102,65062,0,0,0,0,,AmSamoa62.Samoa/Lambert,AmSamoa62.Samoa/Lambert,Samoa1962.Samoa/Lambert,American Samoa 1962 / American Samoa Lambert,American_Samoa_1962_StatePlane_American_Samoa_FIPS_5300,,,,,,,,,,,,,0,0,0
+107000,3102,65062,2194,0,0,0,,AmSamoa62.Samoa/Lambert,AmSamoa62.Samoa/Lambert,Samoa1962.Samoa/Lambert,American Samoa 1962 / American Samoa Lambert,Samoa_1962_Samoa_Lambert|American_Samoa_1962_StatePlane_American_Samoa_FIPS_5300,American Samoa 1962 / American Samoa Lambert,,,,,,,,,,,,0,0,0
 107100,3103,3103,0,0,0,0,,Mauritania1999.UTM-28N,Mauritania1999.UTM-28N,,Mauritania 1999 / UTM zone 28N,Mauritania_1999_UTM_Zone_28N,,,,,,,,,,,,,0,0,0
 107200,3104,3104,0,0,0,0,,Mauritania1999.UTM-29N,Mauritania1999.UTM-29N,,Mauritania 1999 / UTM zone 29N,Mauritania_1999_UTM_Zone_29N,,,,,,,,,,,,,0,0,0
 107300,3105,3105,0,0,0,0,,Mauritania1999.UTM-30N,Mauritania1999.UTM-30N,,Mauritania 1999 / UTM zone 30N,Mauritania_1999_UTM_Zone_30N,,,,,,,,,,,,,0,0,0
@@ -1348,7 +1347,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 134800,3386,0,0,0,0,0,,,,,KKJ / Finland zone 0,,,,,,,,,,,,,,0,0,0
 134900,3387,0,0,0,0,0,,,,,KKJ / Finland zone 5,,,,,,,,,,,,,,0,0,0
 135000,3388,0,0,0,0,0,,CaspianSea,,CaspianSea,Pulkovo 1942 / Caspian Sea Mercator,,,,,,,,,,,,,,0,0,0
-135100,3389,2577,0,0,0,0,,Pulkovo42.GK3d-60/1,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60/1,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,Pulkovo_1942_3_Degree_GK_Zone_60,,,,,,,,,,,,,0,0,0
+135100,3389,2577,0,0,0,0,,Pulkovo42.GK3d-60/1,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60/1,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,Pulkovo_1942_3_Degree_GK_Zone_60,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,,,,,,,0,0,0
 135200,3391,0,0,0,0,0,,,,,Karbala 1979 (Polservice) / UTM zone 37N,,,,,,,,,,,,,,0,0,0
 135300,3392,0,0,0,0,0,,,,,Karbala 1979 (Polservice) / UTM zone 38N,,,,,,,,,,,,,,0,0,0
 135400,3393,0,0,0,0,0,,,,,Karbala 1979 (Polservice) / UTM zone 39N,,,,,,,,,,,,,,0,0,0
@@ -1596,7 +1595,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 158300,0,21481,21481,0,0,0,,Beijing54.GK-21N,Beijing54.GK-21,,,Beijing_1954_GK_Zone_21N,Beijing 1954 / Gauss-Kruger 21N,,,Beijing 1954 / Gauss-Kruger 21N,,,,,,,,,0,0,0
 158400,0,21482,21482,0,0,0,,Beijing54.GK-22N,Beijing54.GK-22,,,Beijing_1954_GK_Zone_22N,Beijing 1954 / Gauss-Kruger 22N,,,Beijing 1954 / Gauss-Kruger 22N,,,,,,,,,0,0,0
 158500,0,21483,21483,0,0,0,,Beijing54.GK-23N,Beijing54.GK-23,,,Beijing_1954_GK_Zone_23N,Beijing 1954 / Gauss-Kruger 23N,,,Beijing 1954 / Gauss-Kruger 23N,,,,,,,,,0,0,0
-158600,21500,21500,21500,0,0,0,,Belge50.Lambert50,Belge50.BelgeLambert50,BELGE-50,Belge 1950 (Brussels) / Belge Lambert 50,Belge_Lambert_1950,Belge 1950 (Brussels) / Belge Lambert 50,,,Belge 1950 (Brussels) / Belge Lambert 50,,,,,,,,,0,0,0
+158600,21500,21500,21500,0,0,0,,Belge50.Lambert50,Belge50.BelgeLambert50,BELGE-50/a,Belge 1950 (Brussels) / Belge Lambert 50,Belge_Lambert_1950,Belge 1950 (Brussels) / Belge Lambert 50,,,Belge 1950 (Brussels) / Belge Lambert 50,,,,,,,,,0,0,0
 158700,21780,21780,0,0,0,352256,,CH1903.LV03C,Bern1938.LV03C,CH1903.LV03C/01,Bern 1898 (Bern) / LV03C,Bern_1898_Bern_LV03C,,,,Bern 1898 (Bern) / LV03C,,,,Liechtenstein National System,,,,,0,0,0
 158800,21781,21781,0,0,0,352257,,CH1903.LV03,CH1903.LV03,CH1903/GSB.LV03-M|CH1903.LV03/01,CH1903 / LV03,CH1903_LV03,,,,CH1903 / LV03,,,,Swiss National System,,,,,0,0,0
 158810,21782,21782,0,0,0,0,,,,CH1903/GSB.LV03-C,CH1903 / LV03C-G,,,,,,,,,Swiss National System,,,,,0,0,0
@@ -2891,7 +2890,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 286900,0,65163,0,0,0,0,,,,,,NAD_1983_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
 287000,0,102001,0,0,0,0,,,NAD83.Canada/Albers,,,Canada_Albers_Equal_Area_Conic,,,,,,,,,,,,,0,0,0
 287100,0,102002,0,0,0,0,,,NAD83.Canada/Conformal,,,Canada_Lambert_Conformal_Conic,,,,,,,,,,,,,0,0,0
-287200,0,102003,0,0,0,32775,,US48,NAD83.US48/Albers,US48,,USA_Contiguous_Albers_Equal_Area_Conic,,,,,,,,Equal-Area Projection (United States),,,,,0,0,0
+287200,0,0,0,0,0,32775,,US48,NAD27.US48/Albers,US48,,,,,,,,,,Equal-Area Projection (United States),,,,,0,0,0
+287250,0,0,0,0,0,,,,,,,USA_Contiguous_Albers_Equal_Area_Conic,,,,,,,,,,,,,0,0,0
 287300,0,102004,0,0,0,0,,,NAD83.US48/Conformal,,,USA_Contiguous_Lambert_Conformal_Conic,,,,,,,,,,,,,0,0,0
 287400,0,102005,0,0,0,0,,,NAD83.US48/SmplConic,,,USA_Contiguous_Equidistant_Conic,,,,,,,,,,,,,0,0,0
 287500,0,102006,0,0,0,0,,,,,,Alaska_Albers_Equal_Area_Conic,,,,,,,,,,,,,0,0,0

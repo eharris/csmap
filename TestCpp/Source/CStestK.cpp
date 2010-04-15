@@ -30,6 +30,7 @@
 
 #include <locale.h>
 #include "cs_map.h"
+#include "cs_wkt.h"
 #include "csTestCpp.hpp"
 
 extern "C"
@@ -52,6 +53,45 @@ extern "C"
 extern char cs_TestDir [];
 extern char* cs_TestDirP;
 
+struct csTestKIgnores_
+{
+	ErcWktFlavor flavor;
+	char csMapName [32];	
+	char* comment [128];
+} csTestKIgnores [] =
+{
+	// The ESRI WKT data we have been using fro testing is more than a decade old.  It is unlikely
+	// that the discrepancies listed in the following table still exist in any ESRI product.  But
+	// the discrepancies do still exist in the ancient test data file we are using.
+	{ wktFlvrEsri,        "Carthage.TM-11NE", "ESRI GCS unit is grad, should be degree?  Affects interpretation of central meridian."                           },
+	{ wktFlvrEsri,   "Dabola1981.UTM-28N/01", "ESRI Has incorrect ellipsoid.  Is Clrk_1880-RGN, should be(?) Clrk-IGN."                                         },
+	{ wktFlvrEsri,   "Dabola1981.UTM-29N/01", "ESRI Has incorrect ellipsoid.  Is Clrk_1880-RGN, should be(?) Clrk-IGN."                                         },
+	{ wktFlvrEsri,            "HUN-EOV72-7P", "ESRI uses Hotine approximation to the Oblique Cynlindrical."                                                     },
+	{ wktFlvrEsri,                 "IND-0/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
+	{ wktFlvrEsri,                 "IND-I/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
+	{ wktFlvrEsri,               "IND-IIA/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
+	{ wktFlvrEsri,               "IND-IIB/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
+	{ wktFlvrEsri,              "IND-IIIA/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
+	{ wktFlvrEsri,               "IND-IVA/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
+	{ wktFlvrEsri, "Kalianpur1937.India-IIb", "ESRI false origin differs from CS-MAP and EPSG; assuming EPSG is correct."                                       },
+	{ wktFlvrEsri,   "Kalianpur1975.India-I", "ESRI false origin differs from CS-MAP and EPSG; assuming EPSG is correct."                                       },
+	{ wktFlvrEsri, "Kalianpur1975.India-IIa", "ESRI false origin differs from CS-MAP and EPSG; assuming EPSG is correct."                                       },
+	{ wktFlvrEsri, "Kalianpur1975.India-IIb", "ESRI false origin differs from CS-MAP and EPSG; assuming EPSG is correct."                                       },
+	{ wktFlvrEsri, "Kalianpur1975.India-III", "ESRI false origin differs from CS-MAP and EPSG; assuming EPSG is correct."                                       },
+	{ wktFlvrEsri,  "Kalianpur1975.India-IV", "ESRI false origin differs from CS-MAP and EPSG; assuming EPSG is correct."                                       },
+	{ wktFlvrEsri,       "KuwaitUtility.KTM", "ESRI has scale reduction of 0.9996; EPSG says 1.0.  Choosing EPSG over ESRI here."                               },
+	{ wktFlvrEsri,       "NAD27.CubaNorte/1", "ESRI uses 1SP Lambert, CS-MAP and EPSG uses the 2SP Lambert. Thus, the differences are difficult to reconcile."  },
+	{ wktFlvrEsri,         "NAD27.CubaSur/1", "ESRI uses 1SP Lambert, CS-MAP and EPSG uses the 2SP Lambert. Thus, the differences are difficult to reconcile."  },
+	{ wktFlvrEsri,     "OSNI52.IrishNtlGrid", "ESRI has Scale reduction at 1.000035; CS-MAP and EPSG say 1.0.  Who knows?"                                      },
+	{ wktFlvrEsri,  "Rassadiran_1.NakhlTaqi", "ESRI says org_lat == 27 34 7.7837; EPSG & CS_MAP say org_lat == 27 31 7.7837."                                   },
+	{ wktFlvrEsri,  "RGN/91-93.NewCaledonia", "ESRI ellipsoid is International 1924; should be GRS 1980?."                                                      },
+	{ wktFlvrEsri,      "ST87/Ouvea.UTM-58S", "ESRI ellipsoid is International 1924; should be GRS WGS84?."                                                     },
+	{ wktFlvrEsri,    "TMBLI-B.RSOBorneo.ch", "ESRI says false arigin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
+	{ wktFlvrEsri,    "TMBLI-B.RSOBorneo.ft", "ESRI says false arigin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
+	{ wktFlvrEsri,     "TMBLI-B.RSOBorneo.m", "ESRI says false arigin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
+	{ wktFlvrEsri,            "WGS84.TM-6NE", "ESRI says false northing is 10,000,000.0; EPSG says zero.  We go with EPSG."                                     },
+	{ wktFlvrNone,                        "", "End of table marker."                                                                                            }
+};
 int CStestK (bool verbose,long32_t duration)
 {
 	int err_cnt;
@@ -112,7 +152,7 @@ int CStestK (bool verbose,long32_t duration)
 	cmpReport = 0;
 	duration *= 3;
 
-	printf ("Checking Well Known Text import.\n");
+	printf ("[ K] Checking Well Known Text import.\n");
 	err_cnt = 0;
 	nmFlavor = csWktFlvrToCsMapFlvr (flavor);
 
@@ -223,6 +263,27 @@ int CStestK (bool verbose,long32_t duration)
 				}
 				else
 				{
+					/* See if this particular system is in the error table.  If
+					   so, we skip it as it is a known condition as described in
+					   the table. */
+					csTestKIgnores_* tblPtr;
+					for (tblPtr = csTestKIgnores;tblPtr->flavor != wktFlvrNone;tblPtr += 1)
+					{
+						if (tblPtr->flavor == flavor && !CS_stricmp (tblPtr->csMapName,dictName))
+						{
+							break;
+						}
+					}
+					if (tblPtr->flavor != wktFlvrNone)
+					{
+						if (verbose)
+						{
+							printf ("Skipping test of %s;; reason %s\n",dictName,tblPtr->comment);
+						}
+						continue;
+					}
+					
+					/* OK, we need to test this one. */
 					msiCS = CS_csloc (dictName);
 					if (msiCS == 0)
 					{

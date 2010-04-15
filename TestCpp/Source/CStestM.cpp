@@ -62,6 +62,7 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 	std::wstring fldData;
 
 	int errCnt = 0;				// total number of errors detected.
+	int wrnCnt = 0;				// total number of warnings detected (warning == noMap)
 
 	int failedCnt = 0;			// number failed due to EPSG access
 	int mapCnt = 0;				// number of EPSG ellipsoids which did not map to CS-MAP
@@ -69,9 +70,7 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 	int deprCnt = 0;			// number of deprecation mismatches.
 	int nameCnt = 0;            // number of mismatched name entries.
 	int okCnt = 0;				// number of successful name maps.
-	printf ("Auditing the NameMapper table\n");
-
-//FILE* testNstrm = fopen ("TestN.csv","wt");
+	printf ("[ M]Auditing the NameMapper table\n");
 
 	unsigned recordCount = epsgV6.GetRecordCount (epsgTblEllipsoid);
 	for (unsigned index = 0;index < recordCount;++index)
@@ -170,11 +169,12 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		    }
 		}
 	}
-	printf ("Ellipsoid Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
-	errCnt += (failedCnt + mapCnt + missingCnt + deprCnt);
+	printf ("Ellipsoid Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
+	errCnt += (failedCnt + missingCnt + deprCnt);
+	wrnCnt += mapCnt;
 
 	failedCnt = 0;			// number failed due to EPSG access
-	mapCnt = 0;				// number of EPSG ellipsoids which did not map to CS-MAP
+	mapCnt = 0;				// number of EPSG datums which did not map to CS-MAP
 	missingCnt = 0;			// number of missing CS-MAP definitions to which an EPSG code maps
 	deprCnt = 0;			// number of deprecation mismatches.
 	nameCnt = 0;            // number of names which don't match
@@ -230,7 +230,6 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			if (!deprecated)
 			{
 				mapCnt += 1;
-//fprintf (testNstrm,"DEM,%lu,%s,\n",static_cast<unsigned long>(epsgCode),epsgKeyName);
 				if (verbose)
 				{
 					// There's a ton of datums which we don't support.  So for
@@ -266,7 +265,6 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				if (deprecated && !legacy)
 				{
 					deprCnt += 1;
-//fprintf (testNstrm,"DED,%lu,%s,%s\n",static_cast<unsigned long>(epsgCode),epsgKeyName,csMapKeyName);
 					printf ("Deprecated EPSG datum '%s' [%lu] maps to CS-MAP '%s' which is _NOT_ in the LEGACY group.\n",
 							 epsgKeyName,
 							 static_cast<ulong32_t>(epsgCode),
@@ -275,7 +273,6 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				else if (legacy && !deprecated)
 				{
 					deprCnt += 1;
-//fprintf (testNstrm,"DCD,%lu,%s,%s\n",static_cast<unsigned long>(epsgCode),epsgKeyName,csMapKeyName);
 					printf ("EPSG datum '%s' [%lu] maps to CS-MAP '%s' which is in the LEGACY group.\n",
 							 epsgKeyName,
 							 static_cast<ulong32_t>(epsgCode),
@@ -303,12 +300,13 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			}
 		}
 	}
-	printf ("Datum Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d,nameDiff = %d, EPSGaccess = %d\n\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
-	errCnt += (failedCnt + mapCnt + missingCnt + deprCnt);
+	printf ("Datum Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d,nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
+	errCnt += (failedCnt + missingCnt + deprCnt);
+	wrnCnt += mapCnt;
 
 	// Now for the Coordinate System dictionary definitions.
 	failedCnt = 0;			// number failed due to EPSG access
-	mapCnt = 0;				// number of EPSG ellipsoids which did not map to CS-MAP
+	mapCnt = 0;				// number of EPSG coordinate systems which did not map to CS-MAP
 	missingCnt = 0;			// number of missing CS-MAP definitions to which an EPSG code maps
 	deprCnt = 0;			// number of deprecation mismatches.
 	nameCnt = 0;			// number of name mismatches.
@@ -376,7 +374,6 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			if (!deprecated)
 			{
 				mapCnt += 1;
-//fprintf (testNstrm,"CEM,%lu,%s,\n",static_cast<unsigned long>(epsgCode),epsgKeyName);
 				if (verbose)
 				{
 					// There's a tin of these.  We suppress reporting them
@@ -412,7 +409,6 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				if (deprecated && !legacy)
 				{
 					deprCnt += 1;
-//fprintf (testNstrm,"CED,%lu,%s,%s\n",static_cast<unsigned long>(epsgCode),epsgKeyName,csMapKeyName);
 					printf ("Deprecated EPSG CRS '%s' [%lu] maps to CS-MAP '%s' which is _NOT_ in the LEGACY group.\n",
 							 epsgKeyName,
 							 static_cast<ulong32_t>(epsgCode),
@@ -421,7 +417,6 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				else if (legacy && !deprecated)
 				{
 					deprCnt += 1;
-//fprintf (testNstrm,"CCD,%lu,%s,%s\n",static_cast<unsigned long>(epsgCode),epsgKeyName,csMapKeyName);
 					printf ("EPSG CRS '%s' [%lu] maps to CS-MAP '%s' which is in the LEGACY group.\n",
 							 epsgKeyName,
 							 static_cast<ulong32_t>(epsgCode),
@@ -452,10 +447,13 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			}
 		}
 	}
-	printf ("Coordinate System Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
-	errCnt += (failedCnt + mapCnt + missingCnt + deprCnt + nameCnt);
-
-//fclose (testNstrm);
+	printf ("Coordinate System Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
+	if (verbose)
+	{
+		printf ("%d Warning conditions encvountered in testM\n",wrnCnt);
+	}
+	errCnt += (failedCnt + missingCnt + deprCnt + nameCnt);
+	wrnCnt += mapCnt;
 
 	return errCnt;
 }
