@@ -142,6 +142,12 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 14100,2136,2136,2136,0,0,0,,Accra.GhanaNational,Accra.GhanaNational,Accra1929.GhanaNational,Accra / Ghana National Grid,Accra_Ghana_Grid,Accra / Ghana National Grid,,,Accra / Ghana National Grid,,,,,,,,,0,0,0
 14200,2137,2137,2137,0,0,0,,Accra.TM-1NW,Accra.TM-1NW,Accra1929.TM-1NW,Accra / TM 1 NW,Accra_TM_1_NW,Accra / TM 1 NW,,,Accra / TM 1 NW,,,,,,,,,0,0,0
 14300,2138,2138,2138,0,0,0,,NADq77.QuebecLambert,NADq77.Quebec/Lambert,,NAD27(CGQ77) / Quebec Lambert,NAD_1927_CGQ77_Quebec_Lambert,NAD27(CGQ77) / Quebec Lambert,,,,,,,,,,,,0,0,0
+14310,2148,0,2148,0,0,0,,,,NAD83/98.UTM-21N,NAD83(CSRS98) / UTM zone 21N,,NAD83(CSRS98) / UTM zone 21N,,,,,,,,,,,,,,
+14320,2149,0,2149,0,0,0,,,,NAD83/98.UTM-18N,NAD83(CSRS98) / UTM zone 18N,,NAD83(CSRS98) / UTM zone 18N,,,,,,,,,,,,,,
+14330,2150,0,2150,0,0,0,,,,NAD83/98.UTM-17N,NAD83(CSRS98) / UTM zone 17N,,NAD83(CSRS98) / UTM zone 17N,,,,,,,,,,,,,,
+14340,2151,0,2151,0,0,0,,,,NAD83/98.UTM-13N,NAD83(CSRS98) / UTM zone 13N,,NAD83(CSRS98) / UTM zone 13N,,,,,,,,,,,,,,
+14350,2152,0,2152,0,0,0,,,,NAD83/98.UTM-12N,NAD83(CSRS98) / UTM zone 12N,,NAD83(CSRS98) / UTM zone 12N,,,,,,,,,,,,,,
+14360,2153,0,2153,0,0,0,,,,NAD83/98.UTM-11N,NAD83(CSRS98) / UTM zone 11N,,NAD83(CSRS98) / UTM zone 11N,,,,,,,,,,,,,,
 14400,2154,2154,2154,0,0,0,,IGN-RGF93,RGF93.France/IGN,Lambert93,RGF93 / Lambert-93,RGF_1993_Lambert_93,RGF93 / Lambert-93,,,RGF93 / Lambert-93,,,,,,,,,0,0,0
 14600,2156,0,2156,0,0,0,,HARN.UTM-59S,HARN.UTM-59S,,NAD83(HARN) / UTM zone 59S,,NAD83(HARN) / UTM zone 59S,,,NAD83(HARN) / UTM zone 59S,,,,,,,,,0,0,0
 14700,2157,2157,2157,0,0,0,,IRENET95.IrishTM,IRENET95.IrishTM,IRENET95.IrishTM,IRENET95 / Irish Transverse Mercator,IRENET95_Irish_Transverse_Mercator,IRENET95 / Irish Transverse Mercator,,,IRENET95 / Irish Transverse Mercator,,,,,,,,,0,0,0
@@ -985,7 +991,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 98600,3018,3018,3018,0,0,0,,SWEREF 99 23 15,SWEREF99.23 15,SWEREF-99-23-15,SWEREF99 23 15,SWEREF99_23_15,SWEREF99 23 15,,,,,,,,,,,,0,0,0
 98700,3019,3019,3019,0,0,0,,RT90-7.5V,RT90.RT-75V,SW-75GONV,RT90 7.5 gon V,RT90_75_gon_V,RT90 7.5 gon V,,,,,,,,,,,,0,0,0
 98800,3020,3020,3020,0,0,0,,RT90-5V,RT90.RT-50V,SW-5GONV,RT90 5 gon V,RT90_5_gon_V,RT90 5 gon V,,,,,,,,,,,,0,0,0
-98900,3021,3021,3021,0,0,0,,RT90-2.5V,RT90.RT-25V,SW-25GONV,RT90 2.5 gon V,RT90_25_gon_V,RT90 2.5 gon V,,,,,,,,,,,,0,0,0
+98900,3021,3021,3021,0,0,82202,,RT90-2.5V,RT90.RT-25V,SW-25GONV,RT90 2.5 gon V,RT90_25_gon_V,RT90 2.5 gon V,,,,,,,Swedish National System (RT 90),,,,,0,0,0
 99000,3022,3022,3022,0,0,0,,RT90-0,RT90.RT-00,SW-0GONV,RT90 0 gon,RT90_0_gon,RT90 0 gon,,,,,,,,,,,,0,0,0
 99100,3023,3023,3023,0,0,0,,RT90-2.5O,RT90.RT-25O,SW-25GONO,RT90 2.5 gon O,RT90_25_gon_O,RT90 2.5 gon O,,,,,,,,,,,,0,0,0
 99200,3024,3024,3024,0,0,0,,RT90-5O,RT90.RT-50O,SW-5GONO,RT90 5 gon O,RT90_5_gon_O,RT90 5 gon O,,,,,,,,,,,,0,0,0
@@ -2193,13 +2199,17 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 217200,31257,,31257,0,0,0,0,,,MGI-AT.M28/Gka,MGI / Austria GK M28,,MGI / Austria GK M28,,,,,,,,,,,,,,
 217300,31258,,31258,0,0,0,0,,,MGI-AT.M31/Gka,MGI / Austria GK M31,,MGI / Austria GK M31,,,,,,,,,,,,,,
 217400,31259,,31259,0,0,0,0,,,MGI-AT.M34/Gka,MGI / Austria GK M34,,MGI / Austria GK M34,,,,,,,,,,,,,,
+217410,31265,0,31265,0,0,0,0,,,MGI/gc.Gauss3d-5,MGI / 3-degree Gauss zone 5,,MGI / 3-degree Gauss zone 5,,,,,,,,,,,,0,0,0
+217420,31266,0,31266,0,0,0,0,,,MGI/gc.Gauss3d-6,MGI / 3-degree Gauss zone 6,,MGI / 3-degree Gauss zone 6,,,,,,,,,,,,0,0,0
+217430,31267,0,31267,0,0,0,0,,,MGI/gc.Gauss3d-7,MGI / 3-degree Gauss zone 7,,MGI / 3-degree Gauss zone 7,,,,,,,,,,,,0,0,0
+217440,31268,0,31268,0,0,0,0,,,MGI/gc.Gauss3d-8,MGI / 3-degree Gauss zone 8,,MGI / 3-degree Gauss zone 8,,,,,,,,,,,,0,0,0
 217500,31275,31275,31275,0,0,0,,MGI.Balkans-5,MGI.Balkans-5,MGI/gc.Balkans-5,MGI / Balkans zone 5,MGI_Balkans_5,MGI / Balkans zone 5,,,MGI / Balkans zone 5,,,,,,,,,0,0,0
 217600,31276,31276,31276,0,0,0,,MGI.Balkans-6,MGI.Balkans-6,MGI/gc.Balkans-6,MGI / Balkans zone 6,MGI_Balkans_6,MGI / Balkans zone 6,,,MGI / Balkans zone 6,,,,,,,,,0,0,0
 217700,31277,31277,31277,0,0,0,,MGI.Balkans-7,MGI.Balkans-7,MGI/gc.Balkans-7,MGI / Balkans zone 7,MGI_Balkans_7,MGI / Balkans zone 7,,,MGI / Balkans zone 7,,,,,,,,,0,0,0
 217800,31279,31278,31278,0,0,0,,MGI.Balkans-8,MGI.Balkans-8,MGI/gc.Balkans-8,MGI / Balkans zone 8,MGI_Balkans_8,MGI / Balkans zone 8,,,MGI / Balkans zone 8,,,,,,,,,0,0,0
-217900,31281,31281,31291,0,0,0,,,MGI.AustriaWest,MGI-AT/F.AUT-West,MGI (Ferro) / Austria West Zone,Austria_West_Zone,,,,MGI (Ferro) / Austria West Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
-218000,31282,31282,31292,0,0,0,,,MGI.AustriaCentral,MGI-AT/F.AUT-Central,MGI (Ferro) / Austria Central Zone,Austria_Central_Zone,,,,MGI (Ferro) / Austria Central Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
-218100,31283,31283,31293,0,0,0,,,MGI.AustriaEast,MGI-AT/F.AUT-East,MGI (Ferro) / Austria East Zone,Austria_East_Zone,,,,MGI (Ferro) / Austria East Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
+217900,31281,31281,31291,0,0,0,,,MGI.AustriaWest,MGI-AT/F.AUT-West,MGI (Ferro) / Austria West Zone,Austria_West_Zone,MGI (Ferro) / Austria West Zone,,,MGI (Ferro) / Austria West Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
+218000,31282,31282,31292,0,0,0,,,MGI.AustriaCentral,MGI-AT/F.AUT-Central,MGI (Ferro) / Austria Central Zone,Austria_Central_Zone,MGI (Ferro) / Austria Central Zone,,,MGI (Ferro) / Austria Central Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
+218100,31283,31283,31293,0,0,0,,,MGI.AustriaEast,MGI-AT/F.AUT-East,MGI (Ferro) / Austria East Zone,Austria_East_Zone,MGI (Ferro) / Austria East Zone,,,MGI (Ferro) / Austria East Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
 218200,31284,31284,31294,0,0,0,,MGI.M28,MGI.M28,MGI-AT.M28,MGI / Austria M28,MGI_M28,MGI / M28,,,MGI / M28,,,,,,,,,0,0,0
 218300,31285,31285,31295,0,0,0,,MGI.M31,MGI.M31,MGI-AT.M31,MGI / Austria M31,MGI_M31,MGI / M31,,,MGI / M31,,,,,,,,,0,0,0
 218400,31286,31286,31296,0,0,0,,MGI.M34,MGI.M34,MGI-AT.M34,MGI / Austria M34,MGI_M34,MGI / M34,,,MGI / M34,,,,,,,,,0,0,0
