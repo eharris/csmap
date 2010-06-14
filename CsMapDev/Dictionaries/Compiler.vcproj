@@ -337,7 +337,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot;/b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
 			/>
 		</Configuration>
 	</Configurations>
