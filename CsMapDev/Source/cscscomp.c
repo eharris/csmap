@@ -145,6 +145,8 @@
 #define COUNTRY   55
 #define SOURCE    56
 #define EPSG_NBR  57
+#define SRID_NBR  58
+#define EPSG_QD   59
 
 struct cs_CscmpT_
 {
@@ -213,6 +215,8 @@ static struct cs_CscmpT_ cs_CscmpT [] =
 	{"\005UNIT:"     ,UNIT},
 	{"\005QUAD:"     ,QUAD},
 	{"\005EPSG:"     ,EPSG_NBR},
+	{"\005SRID:"     ,SRID_NBR},
+	{"\010EPSG_QD:"  ,EPSG_QD},
 	{""		 ,0}
 };
 
@@ -785,6 +789,14 @@ int EXP_LVL9 CScscomp (	Const char *inpt,
 
 		case EPSG_NBR:
 			cs_def.epsgNbr = (short)atoi (cp);
+			break;
+
+		case SRID_NBR:
+			cs_def.srid = (short)atoi (cp);
+			break;
+
+		case EPSG_QD:
+			cs_def.epsg_qd = (short)atoi (cp);
 			break;
 
 		default:

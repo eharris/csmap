@@ -314,19 +314,19 @@ int CS_csDiff (FILE *rptStrm,struct cs_Csdef_ *was,struct cs_Csdef_ *is)
 		errCnt += 1;
 		fprintf (rptStrm,"  Protection Flag (protect):\n       was: %d\n    is now: %d\n",was->protect,is->protect);
 	}
-	if (was->auto_geoid != is->auto_geoid)
+	if (was->epsg_qd != is->epsg_qd)
 	{
 		if (flag) fprintf (rptStrm,"\n%s has changed:\n",is->key_nm);
 		flag = FALSE;
 		errCnt += 1;
-		fprintf (rptStrm,"  Automatic Geoid Flag (auto_geoid):\n       was: %d\n    is now: %d\n",was->auto_geoid,is->auto_geoid);
+		fprintf (rptStrm,"  Automatic Geoid Flag (epsg_qd):\n       was: %d\n    is now: %d\n",was->epsg_qd,is->epsg_qd);
 	}
-	if (was->elev_tech != is->elev_tech)
+	if (was->srid != is->srid)
 	{
 		if (flag) fprintf (rptStrm,"\n%s has changed:\n",is->key_nm);
 		flag = FALSE;
 		errCnt += 1;
-		fprintf (rptStrm,"  Elevation Technique (elev_tech):\n       was: %d\n    is now: %d\n",was->elev_tech,is->elev_tech);
+		fprintf (rptStrm,"  Elevation Technique (srid):\n       was: %d\n    is now: %d\n",was->srid,is->srid);
 	}
 	if (was->epsgNbr != is->epsgNbr)
 	{
