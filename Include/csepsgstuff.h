@@ -554,6 +554,8 @@ public:
 	bool GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dtdef_& datum,struct cs_Eldef_& ellipsoid,
 																			  const TcsEpsgCode& crsEpsgCode) const;
 	short DetermineCsMapDatumMethod (const TcsEpsgCode& operationCode,bool& coordFrame) const;
+	bool GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsgCode& vertUom,
+														   const TcsEpsgCode& crsEpsgCode) const;
 protected:
 	//=========================================================================
 	// Protected Support Functions
@@ -570,8 +572,6 @@ protected:
 	bool ConvertUnits (double& value,const TcsEpsgCode& trgUomCode,const TcsEpsgCode& srcUomCode) const;
 	bool FieldToReal (double& result,const TcsEpsgCode& trgUomCode,const wchar_t* fldData,const TcsEpsgCode& srcUomCode) const;
 	bool FieldToDegrees (double& result,const wchar_t* field,const TcsEpsgCode& uomCode) const;
-	bool GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsgCode& vertUom,
-														   const TcsEpsgCode& crsEpsgCode) const;
 	bool GetReferenceDatum (TcsEpsgCode& dtmEpsgCode,const TcsEpsgCode& crsEpsgCode) const;
 	bool GetPrimeMeridian (double& primeMeridian,const TcsEpsgCode& crsEpsgCode) const;
 	bool IsPrMerRotation (bool& isPrMerRot,const TcsEpsgCode& oprtnCode) const;

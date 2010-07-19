@@ -147,6 +147,12 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 							 csMapKeyName,
 							 csMapKeyName);
 				}
+				// Verify that the dictionary has the appropriate EPSG code.
+				if (static_cast<long>(csMapElDef->epsgNbr) != static_cast<long>(epsgCode))
+				{
+					mapCnt += 1;
+					printf ("EPSG code which appears in definition of ellipsoid named '%s' does not match current EPSG database.\n",csMapKeyName);
+				}
 				okCnt += 1;
 				CS_free (csMapElDef);
 			}
@@ -277,6 +283,12 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 							 epsgKeyName,
 							 static_cast<ulong32_t>(epsgCode),
 							 csMapKeyName);
+				}
+				// Verify that the dictionary has the appropriate EPSG code.
+				if (static_cast<long>(csMapDtDef->epsgNbr) != static_cast<long>(epsgCode))
+				{
+					mapCnt += 1;
+					printf ("EPSG code which appears in definition of datum named '%s' does not match current EPSG database.\n",csMapKeyName);
 				}
 				okCnt += 1;
 				CS_free (csMapDtDef);
@@ -421,6 +433,12 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 							 epsgKeyName,
 							 static_cast<ulong32_t>(epsgCode),
 							 csMapKeyName);
+				}
+				// Verify that the dictionary has the appropriate EPSG code.
+				if (static_cast<long>(csMapCsDef->epsgNbr) != static_cast<long>(epsgCode))
+				{
+					mapCnt += 1;
+					printf ("EPSG code which appears in definition of CRS named '%s' does not match current EPSG database.\n",csMapKeyName);
 				}
 				okCnt += 1;
 				CS_free (csMapCsDef);

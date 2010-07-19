@@ -1862,6 +1862,8 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_DAT_NAME          "Datums.CSD"
 #define cs_ELL_NAME          "Elipsoid.CSD"
 #define cs_CT_NAME           "Category.CSD"
+#define cs_GX_NAME           "GeodeticTransform.CSD"
+#define cs_GP_NAME           "GeodeticPath.CSD"
 #define cs_NMP_NAME          "NameMapper.csv"
 #define cs_USR_CS_NAME		 "UserCoordsys.CSD"
 #define cs_USR_DAT_NAME		 "UserDatums.CSD"
@@ -2657,16 +2659,11 @@ struct cs_Csdef_
 	short protect;			/* Set to TRUE is this definition is to
 							   be protected from being changed by
 							   users. */
-	short auto_geoid;		/* It has been decided not to implement
-							   the specific feature this was intended
-							   for. Should be set to zero and will
-							   possibly be used for another feature
-							   in the future. */
-	short elev_tech;		/* Indicates which, if any, technique is
-							   to be used to adjust the grid coordinates
-							   of this system for elevation. Currently
-							   unused, required to be zero to be
-							   compatible with future releases. */
+	short epsg_qd;			/* In the same form as the quad member of this
+							   structure, this elelment carries quad as
+							   specified by the EPSG database, originally
+							   populated with values from EPSG 7.05 */
+	short srid;				/* The Oracle SRID number if known, else 0. */
 	short epsgNbr;			/* EPSG number, if known */
 	short wktFlvr;			/* WKT flavor, if dervied from WKT, else zero */
 };
@@ -2719,6 +2716,115 @@ struct csDmaMReg_
 							   150 are never used. */
 };
 #define cs_BSWP_DMAMREG "ll4c4l4l4lddd150d"
+
+/* A collection of the following structures represents a
+   geodetic path.  Paths do not have EPSG names, but they
+   do have EPSG codes.  The code value is actually an
+   operation code which is designated as the "concatenated"
+   type.  When one encounters an operation designated as
+   the "concatenated" type, one uses the operation code
+   to extract from the Path table the individual coordinate
+   operations necessary to complete the transformation.
+   
+   We use source and target datum names as the unique
+   identifier for Paths.  Be careful.  EPSG is a Parameter
+   Dataset.  They do not do conversions.  Thus, they have
+   no problem of moving stuff around.  For example, EPSG's
+   WGS84 is now equivalent to what we call HARN.  This
+   represents a movement of about 40 cm.  That's not a
+   problem for EPSG, as they do not have any legacy data
+   which they must support.  On the other hand, most of us
+   have legacy data which we need to be in the same place
+   it was five years ago.
+   
+   Thus, there is no real one to one EPSG code mapping when
+   dealing geodetic coordinate operations and paths. */
+
+//#define cs_XFRMPATH_MAGIC  (cs_MAGIC_BASE | 19)
+
+struct cs_GeodeticPathElement_
+{
+	char geodeticXformName [64];
+	short direction;					/* 0 == forward, 1 == inverse */
+	short fill01;
+	short fill02;
+	short fill03;
+	double fill05;
+	char  fill20 [32];
+};								/* 112 */
+
+/* The first 52 bytes of each record in the Path dictionary
+   shall consist of the folloiwng information. */
+
+struct cs_GeodeticPathKey_
+{
+	char srcDatum [cs_KEYNM_DEF];
+	char trgDatum [cs_KEYNM_DEF];
+	short rcrdNbr;
+	short rcrdCnt;
+	short fill01;
+	short fill02;							/* 56 */
+};
+
+/* The Geodetic Path dictionary is a sequence of fixed
+   length records in the following format.  The file is
+   sorted by the key value, so searches by both the source
+   and target datums, or by the source datum alone are
+   possible using binary search techniques.  Searches based
+   only on the target datum name will need to made linearly. */
+
+struct cs_GeodeticPathDef_
+{
+	/* The unique key is repeated on each record of a definition, a
+	   variable number with virtually no limit is thus supported. */
+	struct cs_GeodeticPathKey_ uniqueKey;		/*  56 */
+	char pathName [64];							/*  64 */
+	double accuracy;							/*   8 */
+	struct cs_GeodeticPathElement_ pathElement; /* 112 */
+	short epsgCode;								/*   2 */
+	short variant;								/*   2 */
+	short protect;								/*   2 */
+	short fill01;								/*   2 */
+	short fill02;								/*   2 */
+	short fill03;								/*   2 */
+	short fill04;								/*   2 */
+	short fill05;								/*   2 */
+};												/* 256 */
+
+/* This beast is written to disk, thus we must be able to swap it
+   whenever read or written from/to disk. */
+#define cs_BSWP_GPREC "24c24cssss64cd64cssssd32cssssssss"
+
+/* Upon extraction from the dictionary, the in memory form of
+   a Geodetic Path is as follows. This structure shall never
+   be written to a disk file.  This structure can be free'ed
+   using a normal free (i.e. CS_free) function which was one
+   of the design goals.  Note that with csPATHELE_BASE set
+   to 8, a realloc will never occur in normal usage.  This
+   value should be set to 0 evbery once in a while rto insure
+   that the realloc code works properly. */
+
+#define csPATHELE_BASE 8
+struct cs_GeodeticPath_
+{
+	char srcDatum [cs_KEYNM_DEF];
+	char trgDatum [cs_KEYNM_DEF]; 
+	char pathName [64];
+
+	short protect;				/* protection scheme value */
+	short epsgCode;				/* EPSG Path code is there is one and it is known */
+	short variant;				/* EPSG variation number; not sure this applies to paths. */
+	short reversible;			/* set to true if all elemnts in the path are reversible */
+	double accuracy;			/* greatest extent of error in meters */
+	short elementCount;
+	short allocatedCount;
+	struct cs_GeodeticPathElement_ geodeticPathElements [csPATHELE_BASE];
+};
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
 
 /*
 	We've finished defining all structures which get written to
@@ -6680,6 +6786,7 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_DTDEF_MAGIC07 (cs_MAGIC_BASE | 15)	/* Rls 7 Datum files. */
 #define cs_ELDEF_MAGIC07 (cs_MAGIC_BASE | 13)	/* Rls 7 Ellipsoid files. */
 
+#define cs_GPDEF_MAGIC   (cs_MAGIC_BASE | 19)	/* Current Geodetic Path dictionaries. */
 #define cs_CSDEF_MAGIC   (cs_MAGIC_BASE | 18)	/* Current Coordsys files. */
 #define cs_DTDEF_MAGIC   (cs_MAGIC_BASE | 17)	/* Current Datum files. */
 #define cs_ELDEF_MAGIC   (cs_MAGIC_BASE | 16)	/* Current Ellipsoid files. */
@@ -6687,6 +6794,8 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_MULREG_MAGIC  (cs_MAGIC_BASE | 25)	/* Current Multiple Regression
 												   Transformation files. */
 #define cs_FIPS_MAGIC    (cs_MAGIC_BASE | 32)	/* FIPS Code data file. */
+
+
 
 /*
 	CS_MAP errors are now classified into specific groups to
@@ -7207,6 +7316,13 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_CHENYX_RNG_A   442       /* WARNING: Data outside CHENYX coverage, fallback used successfully. */
 #define cs_MGRS_GRDSQR    443       /* Invalid grid square position provided */
 
+#define cs_GP_BAD_MAGIC   444		/* Magic number (first four bytes) of Geodetic Path
+									   Dictionary indicate that the file is not a Geodetic
+									   Path Dictionary. */
+#define cs_GPDICT         445		/* Open of the Geodetic Path Dictionary failed. */
+#define cs_GP_PROT        446		/* Attempt to change a distribution Geodetic Path dictionary entry. */
+#define cs_GP_UPROT       447		/* Attempt to change a protected user Geodetic Path dictionary entry. */
+
 /*
 	The following casts are used to eliminate warnings from
 	ANSI compilers.  I don't understand why they are necessary,
@@ -7404,6 +7520,17 @@ int			EXP_LVL1	CS_getReferenceOf (Const char *csKeyName,char *reference,int size
 int			EXP_LVL1	CS_getSourceOf (Const char *csKeyName,char *source,int size);
 int			EXP_LVL3	CS_getStateFips (Const char* stateName);
 int			EXP_LVL1	CS_getUnitsOf (Const char *csKeyName,char *unitName,int size);
+
+int			EXP_LVL7	CS_gpcmp (Const struct cs_GeodeticPathDef_ *pp,Const struct cs_GeodeticPathDef_ *qq);
+struct cs_GeodeticPath_*
+			EXP_LVL3	CS_gpdef (Const char *srcDatum,Const char *trgDatum);
+int			EXP_LVL3	CS_gpdel (struct cs_GeodeticPath_ *gpdef);
+void		EXP_LVL1	CS_gpfnm (Const char *new_name);
+csFILE *	EXP_LVL3	CS_gpopn (Const char *mode);
+int			EXP_LVL3	CS_gprd (csFILE *strm,struct cs_GeodeticPathDef_ *gp_rec);
+int			EXP_LVL3	CS_gpupd (struct cs_GeodeticPath_ *gpdef);
+int			EXP_LVL3	CS_gpwr (csFILE *strm,Const struct cs_GeodeticPathDef_ *gp_rec);
+int			EXP_LVL3	CS_gpdefWr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def);
 
 void		EXP_LVL5	CS_iicpy (const struct cs_Cmplx_ *aa,struct cs_Cmplx_ *bb);
 void		EXP_LVL5	CS_iicrt (struct cs_Cmplx_ *aa,double rVal,double iVal);
