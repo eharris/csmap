@@ -1642,8 +1642,8 @@ int CScsrupTo07 (struct csCsrup_ *csrup)
 	{
 		ptr07->protect = (short)((CS_time ((cs_Time_ *)0) - 1728000L) / 86400L);
 	}
-	ptr07->auto_geoid = FALSE;
-	ptr07->elev_tech = 0;
+	ptr07->epsg_qd = 0;
+	ptr07->srid = 0;
 
 	/* We don't need the old definition anymore. */
 
@@ -1890,8 +1890,8 @@ int CScsrupTo08 (struct csCsrup_ *csrup)
 		tmpl = (ptr07->protect * 86400L) + 1728000L;
 		ptr08->protect = (short)((tmpl - 630720000L) / 86400L);
 	}
-	ptr08->auto_geoid = ptr07->auto_geoid;
-	ptr08->elev_tech = ptr07->elev_tech;
+	ptr08->epsg_qd = ptr07->epsg_qd;
+	ptr08->srid = ptr07->srid;
 
 	/* We don't need the old definition anymore. */
 
