@@ -175,7 +175,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot;/b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
+				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -337,7 +337,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot;/b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
+				CommandLine="if %PROCESSOR_ARCHITECTURE%==AMD64 &quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
 			/>
 		</Configuration>
 	</Configurations>
