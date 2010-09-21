@@ -35,7 +35,6 @@ extern "C"
 	extern int csErrlng;
 	extern int csErrlat;
 	extern unsigned short cs_ErrSup;
-	extern struct csNad27ToNad83_* csNad27ToNad83;
 
 	#if _RUN_TIME <= _rt_UNIXPCC
 	extern ulong32_t cs_Doserr;
@@ -105,11 +104,8 @@ int CStest5 (bool verbose,long32_t duration)
 	CS_free (utm13);
 	CS_free (co83c);
 	CS_dtcls (dtcptr);
-	CSdeleteNad27ToNad83 (csNad27ToNad83);
-	csNad27ToNad83 = NULL;
 
 	/* Report on the performance. */
-
 	elapsed = (double)(done - start) / (double)CLOCKS_PER_SEC;
 	if (elapsed > 0.00001)
 	{

@@ -29,8 +29,9 @@
 //lint -esym(534,wcstombs)
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 #include "csCsvFileSupport.hpp"
-#include "csEpsgStuff.h"
+#include "csepsgstuff.h"
 
 //=============================================================================
 // TcsEpsgCode  --  Distinct type for an EPSG code value.
@@ -299,12 +300,12 @@ const wchar_t TcsEpsgTable::LogicalFalse [] = L"FALSE";
 
 bool TcsEpsgTable::IsLogicalTrue (const wchar_t* logicalValue)
 {
-	int cmpValue = wcsicmp (logicalValue,LogicalTrue);
+	int cmpValue = CS_wcsicmp (logicalValue,LogicalTrue);
 	return (cmpValue == 0);
 }
 bool TcsEpsgTable::IsLogicalFalse (const wchar_t* logicalValue)
 {
-	int cmpValue = wcsicmp (logicalValue,LogicalFalse);
+	int cmpValue = CS_wcsicmp (logicalValue,LogicalFalse);
 	return (cmpValue == 0);
 }
 //=============================================================================

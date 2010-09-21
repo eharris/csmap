@@ -170,7 +170,7 @@ void CSreleaseOsgm91 (struct cs_Osgm91_ *__This)
 double CStestOsgm91 (struct cs_Osgm91_ *__This,const double etrs89 [2])
 {
 	/* Returns zero if not covered, file density if covered. */
-	return CStestCoverageUS (&(__This->coverage),etrs89);
+	return CStestCoverage (&(__This->coverage),etrs89);
 }
 /* Note, the following function is also called by the CSinverseOsgm91 function. */
 int CScalcOsgm91 (struct cs_Osgm91_ *__This,double *geoidHgt,const double etrs89 [2])

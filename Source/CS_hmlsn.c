@@ -387,7 +387,7 @@ int EXP_LVL9 CShmlsnF ( Const struct cs_Hmlsn_ *hmlsn,double xy [2],Const double
 
 		theta = lat;
 		sin_lat = sin (lat);
-		while (TRUE)
+		for (;;)
 		{
 			sin_theta = sin (theta);
 			cos_theta = cos (theta);

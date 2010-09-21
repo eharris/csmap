@@ -55,8 +55,6 @@ static double csTestcoords [10][3] =
 
 int CStest5 (int verbose,long32_t duration)
 {
-	extern struct csNad27ToNad83_* csNad27ToNad83;
-
 	int ii;
 
 	long32_t cvt_cnt;
@@ -103,11 +101,8 @@ int CStest5 (int verbose,long32_t duration)
 	CS_free (utm13);
 	CS_free (co83c);
 	CS_dtcls (dtcptr);
-	CSdeleteNad27ToNad83 (csNad27ToNad83);
-	csNad27ToNad83 = NULL;
 
 	/* Report on the performance. */
-
 	elapsed = (double)(done - start) / (double)CLOCKS_PER_SEC;
 	if (elapsed > 0.00001)
 	{

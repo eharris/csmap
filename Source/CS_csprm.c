@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 
 /**********************************************************************
 	The function pointed to by the following variable is called after the

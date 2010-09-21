@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 
 /* Entire module skipped if this is an Embedded compile for project management
    convenience.  Don't think it likely that we'll need to compile dictionaries

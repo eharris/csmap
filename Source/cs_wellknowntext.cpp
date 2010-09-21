@@ -28,6 +28,7 @@
 /*lint -e766 */		/* Lint thinks the cs_map.h file is unreferenced. */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 #include "rcWellKnownText.hpp"
 #include "cs_wkt.h"
 #include "csNameMapperSupport.h"

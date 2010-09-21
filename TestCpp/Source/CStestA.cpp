@@ -39,12 +39,6 @@ extern "C"
 	#if _RUN_TIME <= _rt_UNIXPCC
 	extern ulong32_t cs_Doserr;
 	#endif
-
-	extern struct csNad27ToNad83_* csNad27ToNad83;
-	extern struct csNad83ToHarn_* csNad83ToHarn;
-	extern struct csAgd66ToGda94_* csAgd66ToGda94;
-	extern struct csAgd84ToGda94_* csAgd84ToGda94;
-	extern struct csNzgd49ToNzgd2K_* csNzgd49ToNzgd2K;
 }
 
 extern char cs_TestDir [];
@@ -208,41 +202,12 @@ int CStestA (bool verbose,char *test_file)
 	fclose (fs_tst);
 	CS_recvr ();
 
-	/* Note, CS_dtcls does not normally free up the
-	   NADCON file directory as it does not use up
-	   much memory, and is rather expensive (time wise)
-	   to build.  However, since we are checking
-	   heap allocations in this program, we must
-	   free it up ourselves. */
-
-	CSdeleteNad27ToNad83 (csNad27ToNad83);
-	csNad27ToNad83 = NULL;
-	CSdeleteNad83ToHarn (csNad83ToHarn);
-	csNad83ToHarn = NULL;
-	CSdeleteAgd66ToGda94 (csAgd66ToGda94);
-	csAgd66ToGda94 = NULL;
-	CSdeleteAgd84ToGda94 (csAgd84ToGda94);
-	csAgd84ToGda94 = NULL;
-	CSdeleteNzgd49ToNzgd2K (csNzgd49ToNzgd2K);
-	csNzgd49ToNzgd2K = NULL;
-
 	return (fail_cnt);
 
 frmterr:
 	printf ("Test data file format error on line %d.\n",line_nbr);
 	fclose (fs_tst);
 	CS_recvr ();
-
-	CSdeleteNad27ToNad83 (csNad27ToNad83);
-	csNad27ToNad83 = NULL;
-	CSdeleteNad83ToHarn (csNad83ToHarn);
-	csNad83ToHarn = NULL;
-	CSdeleteAgd66ToGda94 (csAgd66ToGda94);
-	csAgd66ToGda94 = NULL;
-	CSdeleteAgd84ToGda94 (csAgd84ToGda94);
-	csAgd84ToGda94 = NULL;
-	CSdeleteNzgd49ToNzgd2K (csNzgd49ToNzgd2K);
-	csNzgd49ToNzgd2K = NULL;
 
 	return (1);
 }

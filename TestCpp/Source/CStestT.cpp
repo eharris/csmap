@@ -61,9 +61,45 @@ extern "C"
 int CStestT (bool verbose,long32_t duration)
 {
     int err_cnt = 0;
-
 #ifndef __SKIP__
+	int st;
+
+    const char* csOneName = "LL27";
+    const char* csTwoName = "UTM27-13";
+
+    struct cs_Csprm_ *csOne;
+    struct cs_Csprm_ *csTwo;
+ 	struct cs_Dtcprm_ *dtcPrm;
+ 
+	double llTmp [3];
+ 	
     printf ("Running temporary test code module.\n");
+
+    csOne = CS_csloc (csOneName);
+    csTwo = CS_csloc (csTwoName);
+    if (csOne == NULL || csTwo == NULL)
+    {
+        return 1;
+    }
+
+    dtcPrm = CS_dtcsu (csOne,csTwo,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
+    if (dtcPrm == NULL)
+    {
+        return 1;
+    }
+    
+    llTmp [0] = -105.00;
+    llTmp [1] = 54.0;
+    llTmp [2] = 45.0; 
+ 
+	st = CS_dtcvt3D (dtcPrm,llTmp,llTmp);
+    
+	if (st != 0)
+	{
+		err_cnt += 1;
+	}
+	
+	CS_dtcls (dtcPrm);
 #else
     int st;
     int counter;

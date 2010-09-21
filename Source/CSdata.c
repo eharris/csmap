@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 
 /*
 	The following defines and declarations are used to
@@ -109,6 +110,9 @@ csThread char cs_Csname  [cs_FNM_MAXLEN]      = cs_CS_NAME;
 csThread char cs_Dtname  [cs_FNM_MAXLEN]      = cs_DAT_NAME;
 csThread char cs_Elname  [cs_FNM_MAXLEN]      = cs_ELL_NAME;
 csThread char cs_Ctname  [cs_FNM_MAXLEN]      = cs_CT_NAME;
+csThread char cs_Gxname  [cs_FNM_MAXLEN]      = cs_GX_NAME;
+csThread char cs_Gpname  [cs_FNM_MAXLEN]      = cs_GP_NAME;
+
 csThread char cs_Envvar  [cs_FNM_MAXLEN]      = cs_ENV_VAR;
 csThread char cs_NmMapNm [cs_FNM_MAXLEN]      = cs_NMP_NAME;
 

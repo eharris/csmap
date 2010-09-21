@@ -32,6 +32,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 
 /* The following function compares only those portions of a Coordinate System
    definition which affect numeric results.  The number of differences found

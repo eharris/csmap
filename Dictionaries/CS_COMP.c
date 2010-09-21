@@ -54,6 +54,8 @@ int main (int argc,char *argv [])
 	extern char cs_Ctname [];
 	extern char cs_Dtname [];
 	extern char cs_Elname [];
+	extern char cs_Gpname [];
+	extern char cs_Gxname [];
 	extern char cs_OptchrC;
 	extern char cs_DirsepC;
 	extern int cs_Sortbs;
@@ -81,6 +83,8 @@ int main (int argc,char *argv [])
 	char cs_path [MAXPATH];
 	char ct_path [MAXPATH];
 	char mr_path [MAXPATH];
+	char gp_path [MAXPATH];
+	char gx_path [MAXPATH];
 
 #if _MEM_MODEL == _mm_VIRTUAL
 	cs_Sortbs = (128 * 1024);
@@ -227,6 +231,12 @@ int main (int argc,char *argv [])
 	strcpy (cs_path,cs_Dir);
 	strcpy (cs_DirP,cs_Ctname);
 	strcpy (ct_path,cs_Dir);
+	strcpy (cs_DirP,cs_Ctname);
+	strcpy (ct_path,cs_Dir);
+	strcpy (cs_DirP,cs_Gxname);
+	strcpy (gx_path,cs_Dir);
+	strcpy (cs_DirP,cs_Gpname);
+	strcpy (gp_path,cs_Dir);
 	*cs_DirP = '\0';
 	strcpy (mr_path,cs_Dir);
 
@@ -266,7 +276,7 @@ int main (int argc,char *argv [])
 		return (1);
 	}
 
-	/* Compile the Category DIctionary. */
+	/* Compile the Category Dictionary. */
 	strcpy (src_name,src_dir);
 	strcat (src_name,"category.asc");
 	printf ("Compiling %s to %s.\n",src_name,ct_path);
@@ -278,18 +288,43 @@ int main (int argc,char *argv [])
 		return (1);
 	}
 
-	/* Compile the Multiple Regression definition files. */
+	///* Compile the Multiple Regression definition files. */
+	//strcpy (src_name,src_dir);
+	//strcat (src_name,"mreg.asc");
+	//printf ("Compiling %s to the %s directory.\n",src_name,mr_path);
+	//err_cnt = CSmrcomp (src_name,mr_path,flags,dt_path,err_disp);
+	//if (err_cnt != 0)
+	//{
+	//	printf ("%d errors detected in %s.\n",err_cnt,src_name);
+	//	printf ("Multiple Regression compile to %s is not complete.\n",mr_path);
+	//	if (!batch) acknowledge ();
+	//	return (1);
+	//}
+
+	/* Compile the Geodetic Transformation Dictionary. */
 	strcpy (src_name,src_dir);
-	strcat (src_name,"mreg.asc");
-	printf ("Compiling %s to the %s directory.\n",src_name,mr_path);
-	err_cnt = CSmrcomp (src_name,mr_path,flags,dt_path,err_disp);
+	strcat (src_name,"GeodeticTransformation.asc");
+	printf ("Compiling %s to %s.\n",src_name,gx_path);
+	err_cnt = CSgxcomp (src_name,gx_path,flags,dt_path,err_disp);
 	if (err_cnt != 0)
 	{
-		printf ("%d errors detected in %s.\n",err_cnt,src_name);
-		printf ("Multiple Regression compile to %s is not complete.\n",mr_path);
+		printf ("Compilation of %s failed, %s removed.\n",src_name,gp_path);
 		if (!batch) acknowledge ();
 		return (1);
 	}
+
+	/* Compile the Geodetic Path Dictionary. */
+	strcpy (src_name,src_dir);
+	strcat (src_name,"GeodeticPath.asc");
+	printf ("Compiling %s to %s.\n",src_name,gp_path);
+	err_cnt = CSgpcomp (src_name,gp_path,flags,dt_path,gx_path,err_disp);
+	if (err_cnt != 0)
+	{
+		printf ("Compilation of %s failed, %s removed.\n",src_name,gp_path);
+		if (!batch) acknowledge ();
+		return (1);
+	}
+
 
 	/* We're done. */
 	printf ("All dictionaries and multiple regressions compiled successfully.\n");

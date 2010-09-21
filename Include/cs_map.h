@@ -473,6 +473,7 @@
 /* If this is a Microsoft compiler, use pragma's to turn off several warnings
    which are more of a nusiance then a help. */
 #if defined (_MSC_VER) && _MSC_VER >= 800	/* MS Visual C++ 1.0 or later */
+#	pragma warning( disable : 4090 )		// bypassing compiler 'const' protection
 #	pragma warning( disable : 4100 )		// unreferenced formal parameter
 #	pragma warning( disable : 4251 )		// XXX needs to have dll-interface to be used by clients of class YYY (whatever that means)
 #	pragma warning( disable : 4273 )		// inconsistent DLL linkage (whatever that means)
@@ -790,7 +791,7 @@
 	The O_BINARY and O_TEXT defines are no longer used
 	by CS-MAP.  Maintained for legacy purposes only.
 */
-#if _RUN_TIME == _rt_UNIXPCC || _RUN_TIME == _rt_SUN32 || _RUN_TIME == rt_SUN64 || _RUN_TIME == _rt_MOSXUNIX || _RUN_TIME == _rt_HPUX
+#if _RUN_TIME == _rt_UNIXPCC || _RUN_TIME == _rt_SUN32 || _RUN_TIME == _rt_SUN64 || _RUN_TIME == _rt_MOSXUNIX || _RUN_TIME == _rt_HPUX
 #	ifndef O_BINARY
 #		define O_BINARY 0x8000	/* used for mode in open (); */
 #	endif
@@ -1399,12 +1400,12 @@ typedef long32_t cs_magic_t;
 #define cs_PRJCOD_RSKEWO   ((cs_PRJCOD_OBLQM << 8) + 7)
 
 #define cs_PRJCOD_NOTYET   500
-#define cs_PRJCOD_LABORD   cs_PRJCOD_NOTYET + 1
-#define cs_PRJCOD_TUNGRD   cs_PRJCOD_NOTYET + 2
-#define cs_PRJCOD_LMNC     cs_PRJCOD_NOTYET + 3
-#define cs_PRJCOD_AZMEAS   cs_PRJCOD_NOTYET + 4
-#define cs_PRJCOD_PSEUDO   cs_PRJCOD_NOTYET + 5
-#define cs_PRJCOD_LMWO     cs_PRJCOD_NOTYET + 6
+#define cs_PRJCOD_LABORD   (cs_PRJCOD_NOTYET + 1)
+#define cs_PRJCOD_TUNGRD   (cs_PRJCOD_NOTYET + 2)
+#define cs_PRJCOD_LMNC     (cs_PRJCOD_NOTYET + 3)
+#define cs_PRJCOD_AZMEAS   (cs_PRJCOD_NOTYET + 4)
+#define cs_PRJCOD_PSEUDO   (cs_PRJCOD_NOTYET + 5)
+#define cs_PRJCOD_LMWO     (cs_PRJCOD_NOTYET + 6)
 
 #define cs_PRJFLG_SPHERE  (1L <<  0)	/* Sphere supported. */
 #define cs_PRJFLG_ELLIPS  (1L <<  1)	/* Ellipsoid supported. */
@@ -1837,6 +1838,8 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 
 #define cs_KEYNM_DEF 24
 #define cs_KEYNM_MAX (cs_KEYNM_DEF - 1)
+#define cs_KEYNM_DEF1 64
+#define cs_KEYNM_MAX1 (cs_KEYNM_DEF1 - 1)
 
 /*
 	The following define the default file names for the coordinate
@@ -2668,163 +2671,6 @@ struct cs_Csdef_
 	short wktFlvr;			/* WKT flavor, if dervied from WKT, else zero */
 };
 #define cs_BSWP_CSDEF "24c24c24c24c24c24c48c16c8c24ddddddddd2ddddd2d2d2d2d64c64cssss4s"
-
-/*
-	Multiple regression file format.  This structure is, essentially, the
-	format of a .MRT file.  MRT files can only be written by the
-	dictionary compiler.  MRT files will soon be replaced with an
-	expanded datum dictionary format.
-*/
-
-#define cs_DMAMREG_MAXCOEF 150
-struct csDmaMReg_
-{
-	cs_magic_t magic;		/* Used to identify the file in which
-							   these structures are stored. */
-	long32_t mr_size;			/* Actual number of bytes required
-							   for the complete definition.  Not
-							   all 150 coefficients are written
-							   to a data file.  If you get this
-							   many bytes in the read, you are
-							   OK. */
-	unsigned char max_uu;   /* Maximum power of the uu term in all
-							   three expansions. */
-	unsigned char max_vv;
-	unsigned char lat_idx;  /* Index into coefs for the first
-							   latitude coeficient. */
-	unsigned char hgt_idx;
-	ulong32_t fill01;		/* Force alignment on an 8
-							   byte boundary for all
-							   compilers. */
-	ulong32_t lng_map [4];
-							/* A bit map of the coefficients which
-							   are present (i.e. non-zero) for the
-							   longitude calculation. */
-	ulong32_t lat_map [4];
-	ulong32_t hgt_map [4];
-	double kk;				/* The normalizing scale factor for the
-							   multiple regression. */
-	double uu_off;          /* The longitude offset. */
-	double vv_off;          /* The latitude offset. */
-	double coefs [cs_DMAMREG_MAXCOEF];
-							/* The coefficients for the calculations.
-							   This structure allocates space for the
-							   maximum we have encountered so far.
-							   The format of the file which we
-							   have devised supports having much
-							   less than 150 coefficients.  All
-							   150 are never used. */
-};
-#define cs_BSWP_DMAMREG "ll4c4l4l4lddd150d"
-
-/* A collection of the following structures represents a
-   geodetic path.  Paths do not have EPSG names, but they
-   do have EPSG codes.  The code value is actually an
-   operation code which is designated as the "concatenated"
-   type.  When one encounters an operation designated as
-   the "concatenated" type, one uses the operation code
-   to extract from the Path table the individual coordinate
-   operations necessary to complete the transformation.
-   
-   We use source and target datum names as the unique
-   identifier for Paths.  Be careful.  EPSG is a Parameter
-   Dataset.  They do not do conversions.  Thus, they have
-   no problem of moving stuff around.  For example, EPSG's
-   WGS84 is now equivalent to what we call HARN.  This
-   represents a movement of about 40 cm.  That's not a
-   problem for EPSG, as they do not have any legacy data
-   which they must support.  On the other hand, most of us
-   have legacy data which we need to be in the same place
-   it was five years ago.
-   
-   Thus, there is no real one to one EPSG code mapping when
-   dealing geodetic coordinate operations and paths. */
-
-//#define cs_XFRMPATH_MAGIC  (cs_MAGIC_BASE | 19)
-
-struct cs_GeodeticPathElement_
-{
-	char geodeticXformName [64];
-	short direction;					/* 0 == forward, 1 == inverse */
-	short fill01;
-	short fill02;
-	short fill03;
-	double fill05;
-	char  fill20 [32];
-};								/* 112 */
-
-/* The first 52 bytes of each record in the Path dictionary
-   shall consist of the folloiwng information. */
-
-struct cs_GeodeticPathKey_
-{
-	char srcDatum [cs_KEYNM_DEF];
-	char trgDatum [cs_KEYNM_DEF];
-	short rcrdNbr;
-	short rcrdCnt;
-	short fill01;
-	short fill02;							/* 56 */
-};
-
-/* The Geodetic Path dictionary is a sequence of fixed
-   length records in the following format.  The file is
-   sorted by the key value, so searches by both the source
-   and target datums, or by the source datum alone are
-   possible using binary search techniques.  Searches based
-   only on the target datum name will need to made linearly. */
-
-struct cs_GeodeticPathDef_
-{
-	/* The unique key is repeated on each record of a definition, a
-	   variable number with virtually no limit is thus supported. */
-	struct cs_GeodeticPathKey_ uniqueKey;		/*  56 */
-	char pathName [64];							/*  64 */
-	double accuracy;							/*   8 */
-	struct cs_GeodeticPathElement_ pathElement; /* 112 */
-	short epsgCode;								/*   2 */
-	short variant;								/*   2 */
-	short protect;								/*   2 */
-	short fill01;								/*   2 */
-	short fill02;								/*   2 */
-	short fill03;								/*   2 */
-	short fill04;								/*   2 */
-	short fill05;								/*   2 */
-};												/* 256 */
-
-/* This beast is written to disk, thus we must be able to swap it
-   whenever read or written from/to disk. */
-#define cs_BSWP_GPREC "24c24cssss64cd64cssssd32cssssssss"
-
-/* Upon extraction from the dictionary, the in memory form of
-   a Geodetic Path is as follows. This structure shall never
-   be written to a disk file.  This structure can be free'ed
-   using a normal free (i.e. CS_free) function which was one
-   of the design goals.  Note that with csPATHELE_BASE set
-   to 8, a realloc will never occur in normal usage.  This
-   value should be set to 0 evbery once in a while rto insure
-   that the realloc code works properly. */
-
-#define csPATHELE_BASE 8
-struct cs_GeodeticPath_
-{
-	char srcDatum [cs_KEYNM_DEF];
-	char trgDatum [cs_KEYNM_DEF]; 
-	char pathName [64];
-
-	short protect;				/* protection scheme value */
-	short epsgCode;				/* EPSG Path code is there is one and it is known */
-	short variant;				/* EPSG variation number; not sure this applies to paths. */
-	short reversible;			/* set to true if all elemnts in the path are reversible */
-	double accuracy;			/* greatest extent of error in meters */
-	short elementCount;
-	short allocatedCount;
-	struct cs_GeodeticPathElement_ geodeticPathElements [csPATHELE_BASE];
-};
-
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
 
 /*
 	We've finished defining all structures which get written to
@@ -5960,465 +5806,32 @@ struct cs_Unittab_
 	long32_t epsgCode;
 };
 
-/*
-	Here starts the NAD27 to NAD83 stuff.
-
-	The following define the extensions of the NADCON data
-	files. We used to have different cases for different
-	environments. The whole thing is now case insensitive.
-*/
-
-#define cs_NADCON_LOS "LOS"
-#define cs_NADCON_LAS "LAS"
-#define cs_HPGN_LOS   "LOS"
-#define cs_HPGN_LAS   "LAS"
-#define cs_HPGN_TAG   "HPGN"
-#define cs_CANNT_DAC  "DAC"
-#define cs_CANNT_GSB  "GSB"
-#define cs_MULREG_EXT "MRT"
+#include "cs_Geodetic.h"
 
 /*
-	The following define the codes used to distinguish the
-	different types of general geodetic reference system
-	transformations.
+	The following structures are used for group maintenance.
 */
 
-#define cs_DTCTYP_NONE    0
-#define cs_DTCTYP_MOLO    1
-#define cs_DTCTYP_MREG    2
-#define cs_DTCTYP_BURS    3
-#define cs_DTCTYP_NAD27   4
-#define cs_DTCTYP_NAD83   5
-#define cs_DTCTYP_WGS84   6
-#define cs_DTCTYP_WGS72   7
-#define cs_DTCTYP_HPGN    8
-#define cs_DTCTYP_7PARM   9
-#define cs_DTCTYP_AGD66   10
-#define cs_DTCTYP_3PARM   11
-#define cs_DTCTYP_6PARM   12
-#define cs_DTCTYP_4PARM   13
-#define cs_DTCTYP_AGD84   14
-#define cs_DTCTYP_NZGD49  15
-#define cs_DTCTYP_ATS77   16
-#define cs_DTCTYP_GDA94   17
-#define cs_DTCTYP_NZGD2K  18
-#define cs_DTCTYP_CSRS    19
-#define cs_DTCTYP_TOKYO   20
-#define cs_DTCTYP_RGF93   21
-#define cs_DTCTYP_ED50    22
-#define cs_DTCTYP_DHDN    23
-#define cs_DTCTYP_ETRF89  24
-#define cs_DTCTYP_GEOCTR  25
-#define cs_DTCTYP_CHENYX  26
-
-/*
-	The following structures carry definitions of datums
-	in various forms, suitable for the various transformation in
-	use.  Soon to be merged into a union in the cs_DtcXform_
-	structure, sort of like cs_Csprm_ structure above.
-
-	We stick to a concept which has worked well in the past and,
-	hopefully will continue to do so in the future.  That is, a
-	particular instance of one of these structures defines a datum.
-	Any such instance is suitable for use with either the forward
-	or the inverse algorithm.  Should it ever become necessary,
-	a given structure will be augmented to carry redundant
-	information to support both the forward and the inverse in
-	a single structure.
-
-	Note, that forward implies from the source datum to the
-	target datum as specified at setup time.  While WGS84
-	is the target datum 99.99% of the time, the algorithms
-	and/or structures do not require this.
-
-	In the general case, however, the source datum will always be
-	the datum in question.  The target datum will be WGS84.
-	Initializations will almost always be set up this way, and the
-	inverse code will see to it that the inverse is properly
-	calculated.
-
-	Thus, the resulting initialization will work for 2D/3D and
-	forward/inverse transformations.
-*/
-
-struct cs_Molo_
+struct cs_Csgrplst_
 {
-	double delta_X;					/* X component on the vector defining the
-									   geocenter of the local geodetic reference
-									   system and WGS84. */
-	double delta_Y;					/* Y component on the vector defining the
-									   geocenter of the local geodetic reference
-									   system and WGS84. */
-	double delta_Z;					/* Z component on the vector defining the
-									   geocenter of the local geodetic reference
-									   system and WGS84. */
-	double srcERad;					/* Major axis radius of the source datum
-									   ellipsoid. */
-	double srcPRad;					/* Minor axis radius of the source datum
-									   ellipsoid. */
-	double srcESqr;					/* Major eccentricity squared of the source
-									   datum ellipsoid. */
-	double srcFlat;					/* Flattening of the source ellipsoid. */
-	double trgERad;					/* Major axis radius of the source datum
-									   ellipsoid. */
-	double trgPRad;					/* Minor axis radius of the source datum
-									   ellipsoid. */
-	double trgESqr;					/* Major eccentricity squared of the source
-									   datum ellipsoid. */
-	double trgFlat;					/* Flattening of the target ellipsoid. */
-
-	char srcKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-	char trgKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
+	struct cs_Csgrplst_ *next;
+	char key_nm [24];
+	char descr [64];
+	char source [64];
+	char ref_typ [10];
+	char ref_to [24];
+	char unit [16];
 };
 
-struct cs_Geoctr_
+#define cs_GRPTBL_ACTIVE    0x01
+#define cs_GRPTBL_END	    0x80
+
+struct cs_Grptbl_
 {
-	double srcERad;		/* Equatorial radius of the ellipsoid on
-						   which the source datum is based. */
-	double srcESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the source datum is based. */
-	double trgERad;		/* Equatorial radius of the ellipsoid on
-						   which the target datum is based. */
-	double trgESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the target datum is based. */
-	/* Geocentric translation parameters. */
-	double delta_X;
-	double delta_Y;
-	double delta_Z;
-
-	char srcKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-	char trgKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
+	char group [24];
+	char descr [64];
+	unsigned short flags;
 };
-
-struct cs_Bursa_
-{
-	double srcERad;		/* Equatorial radius of the ellipsoid on
-						   which the source datum is based. */
-	double srcESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the source datum is based. */
-	double trgERad;		/* Equatorial radius of the ellipsoid on
-						   which the target datum is based. */
-	double trgESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the target datum is based. */
-	/* Geocentric translation parameters. */
-	double delta_X;
-	double delta_Y;
-	double delta_Z;
-
-	double scale;		/* Scale of the transformation. */
-	double rot_X;		/* X rotation angle in radians. */
-	double rot_Y;		/* Y rotation angle in radians. */
-	double rot_Z;		/* Z rotation angle in radians. */
-
-	char srcKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-	char trgKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-};
-
-struct cs_Parm6_
-{
-	double srcERad;		/* Equatorial radius of the ellipsoid on
-						   which the source datum is based. */
-	double srcESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the source datum is based. */
-	double trgERad;		/* Equatorial radius of the ellipsoid on
-						   which the target datum is based. */
-	double trgESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the target datum is based. */
-	/* Geocentric translation parameters. */
-	double delta_X;
-	double delta_Y;
-	double delta_Z;
-	/* The following represent a 3D rotation matrix.  This is a
-	   rigorous implementation of the transformation matrix as
-	   opposed to the Bursa/WOlfe which uses the sin(x) == x
-	   approximation. */
-	double rt11;
-	double rt12;
-	double rt13;
-	double rt21;
-	double rt22;
-	double rt23;
-	double rt31;
-	double rt32;
-	double rt33;
-
-	char srcKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-	char trgKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-};
-
-struct cs_Parm7_
-{
-	double srcERad;		/* Equatorial radius of the ellipsoid on
-						   which the source datum is based. */
-	double srcESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the source datum is based. */
-	double trgERad;		/* Equatorial radius of the ellipsoid on
-						   which the target datum is based. */
-	double trgESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the target datum is based. */
-	/* Geocentric translation parameters. */
-	double delta_X;
-	double delta_Y;
-	double delta_Z;
-	double scale;		/* Scale of the transformation. */
-	/* The following represent a 3D rotation matrix.  This is a
-	   rigorous implementation of the transformation matrix as
-	   opposed to the Bursa/WOlfe which uses the sin(x) == x
-	   approximation. */
-	double rt11;
-	double rt12;
-	double rt13;
-	double rt21;
-	double rt22;
-	double rt23;
-	double rt31;
-	double rt32;
-	double rt33;
-
-	char srcKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-	char trgKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-};
-
-struct cs_Parm4_
-{
-	double srcERad;					/* Equatorial radius of the ellipsoid on
-									   which the source datum is based. */
-	double srcESqr;					/* Eccentricity squared of the elllipsoid
-									   on which the source datum is based. */
-	double trgERad;					/* Equatorial radius of the ellipsoid on
-									   which the target datum is based. */
-	double trgESqr;					/* Eccentricity squared of the elllipsoid
-									   on which the target datum is based. */
-	/* Geocentric translation parameters. */
-	double delta_X;
-	double delta_Y;
-	double delta_Z;
-	double scale;		/* Scale of the transformation. */
-
-	char srcKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-	char trgKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-};
-
-struct cs_Parm3_
-{
-	double srcERad;		/* Equatorial radius of the ellipsoid on
-						   which the source datum is based. */
-	double srcESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the source datum is based. */
-	double trgERad;		/* Equatorial radius of the ellipsoid on
-						   which the target datum is based. */
-	double trgESqr;		/* Eccentricity squared of the elllipsoid
-						   on which the target datum is based. */
-	/* Geocentric translation parameters. */
-	double delta_X;
-	double delta_Y;
-	double delta_Z;
-
-	char srcKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-	char trgKeyName [cs_KEYNM_DEF];	/* Useful for debugging and error messages,
-									   otherwise not used. */
-};
-
-/*
-	A datum transformation may require several different transformations.
-	Each individual transformation is defined by one of the following
-	structures.  This structure, essentially, defines the type of the
-	transformation, and carries the parameters for the transformation
-	in the form of a union of each of the parameter requirements.
-
-	The supported transformation types are defined as an enumerator.
-*/
-
-enum cs_DtcXformType
-{
-	dtcTypNone = 0,
-	dtcTypMolodensky,						/*    1 */
-	dtcTypDMAMulReg,						/*    2 */
-	dtcTypBursaWolf,						/*    3 */
-	dtcTypNad27ToNad83,						/*    4 */
-	dtcTypNad83ToWgs84,						/*    5 */
-	dtcTypWgs72ToWgs84,						/*    6 */
-	dtcTypGda94ToWgs84,						/*    7 */
-	dtcTypNzgd2KToWgs84,					/*    8 */
-	dtcTypNad83ToHarn,						/*    9 */
-	dtcTypAgd66ToGda94,						/*   10 */
-	dtcTypAgd84ToGda94,						/*   11 */
-	dtcTypNzgd49ToNzgd2K,					/*   12 */
-	dtcTypAts77ToCsrs,						/*   13 */
-	dtcTypNad83ToCsrs,						/*   14 */
-	dtcTypSevenParm,						/*   15 */
-	dtcTypGeoCtr,							/*   16 */
-	dtcTypSixParm,							/*   17 */
-	dtcTypFourParm,							/*   18 */
-	dtcTypTokyoToJgd2k,						/*   19 */
-	dtcTypNtfToRgf93,						/*   20 */
-	dtcTypNad27ToCsrs,						/*   21 */
-	dtcTypEd50ToEtrf89,						/*   22 */
-	dtcTypDhdnToEtrf89,						/*   23 */
-	dtcTypEtrf89ToWgs84,					/*   24 */
-	dtcTypNad27ToAts77,						/*   25 */
-	dtcTypThreeParm,						/*   26 */
-	dtcTypCh1903ToPlus,						/*   27 */
-	dtcTypChPlusToChtrs95,					/*   28 */
-	dtcTypChtrs95ToEtrf89,  				/*   29 */
-
-	/* Inverse of the above */
-	dtcTypStartOfInverses = 1000,			/* 1000 */
-	dtcTypMolodenskyInv,					/* 1001 */
-	dtcTypDMAMulRegInv,						/* 1002 */
-	dtcTypBursaWolfInv,						/* 1003 */
-	dtcTypNad83ToNad27,						/* 1004 */
-	dtcTypWgs84ToNad83,						/* 1005 */
-	dtcTypWgs84ToWgs72,						/* 1006 */
-	dtcTypWgs84ToGda94,						/* 1007 */
-	dtcTypWgs84ToNzgd2K,					/* 1008 */
-	dtcTypHarnToNad83,						/* 1009 */
-	dtcTypGda94ToAgd66,						/* 1010 */
-	dtcTypGda94ToAgd84,						/* 1011 */
-	dtcTypNzgd2KToNzgd49,					/* 1012 */
-	dtcTypCsrsToAts77,						/* 1013 */
-	dtcTypCsrsToNad83,						/* 1014 */
-	dtcTypSevenParmInv,						/* 1015 */
-	dtcTypGeoCtrInv,						/* 1016 */
-	dtcTypSixParmInv,						/* 1017 */
-	dtcTypFourParmInv,						/* 1018 */
-	dtcTypJgd2kToTokyo,						/* 1019 */
-	dtcTypRgf93ToNtf,						/* 1020 */
-	dtcTypCsrsToNad27,						/* 1021 */
-	dtcTypEtrf89ToEd50,						/* 1022 */
-	dtcTypEtrf89ToDhdn,						/* 1023 */
-	dtcTypWgs84ToEtrf89,					/* 1024 */
-	dtcTypAts77ToNad27,						/* 1025 */
-	dtcTypThreeParmInv,						/* 1026 */
-	dtcTypEtrf89ToChtrs95,					/* 1027 */
-	dtcTypChtrs95ToChPlus,					/* 1028 */
-	dtcTypPlusToCh1903, 					/* 1029 */
-
-	/* A programming convenience */
-	dtcTypSkip = 9999						/* 9999 */
-};
-
-/*
-	The following variation on the DmaMReg theme includes a provision
-	for using an alternative fallback transformation when the data
-	being converted is outside the range of the multiple regression.
-*/
-
-struct cs_DmaMReg_
-{
-	struct csDmaMReg_ mReg;
-	enum cs_DtcXformType fallback;
-	union
-	{
-		struct cs_Molo_* molo;
-		struct cs_Parm6_* parm6;
-		struct cs_Parm7_* parm7;
-	} fallbackXfrm;
-};
-
-/*
-	The following is a generic transformation object.  That is, encapsulates
-	all variations (i.e. any type) of a single datum transformation into a
-	single obejct.
-*/
-
-struct cs_DtcXform_
-{
-	enum cs_DtcXformType xfrmType;
-	short flag3D;						/* Kludge: set true when and if Vertcon
-										   or other auxilliary 3D database was
-										   opened for this conversion.  Thus, 2D
-									       conversions can ocurr without error
-										   if auxilliary data is not available. */
-	union
-	{
-		struct cs_Molo_* molo;
-		struct cs_Bursa_* bursa;
-		struct cs_Parm7_* parm7;
-		struct cs_Geoctr_* geoctr;
-		struct cs_Parm6_* parm6;
-		struct cs_Parm4_* parm4;
-		struct cs_DmaMReg_* mreg;
-		struct cs_Parm3_* parm3;
-	} parms;
-	char sourceId [48];
-};
-
-/*
-
-	CS_dtcsu returns a pointer to a malloc'ed instance of the following
-	structure.  This structure includes all	of the information required
-	to perform datum conversions and is the argument required by the
-	CS_dtcvt function.
-
-	This structure should not be free'ed directly.  It contains pointers
-	to other structures.  Also, file descriptors may also be involved.
-*/
-
-#define cs_DTCXFRM_MAX 10
-struct cs_Dtcprm_
-{
-	char srcKeyName [24];		/* Key name of the source geodetic
-								   reference system (datum).  For error
-								   reporting purposes. */
-	char trgKeyName [24];		/* Key name of the target geodetic
-								   reference system (datum).  For
-								   error reporting purposes. */
-	short block_err;			/* Carries the block error reporting code:
-									cs_DTCFLG_BLK_F,
-									cs_DTCFLG_BLK_W,
-									cs_DTCFLG_BLK_1,
-									cs_DTCFLG_BLK_I
-								*/
-	short rptCount;				/* Used to suppress multiple reports of
-								   the same problem. */
-	short listCount;			/* number of entries used in the lat/long list. */
-	short errLngLat [10][2];	/* An error of longitude and latitude values which
-								   produced block errors.  Can be used to limit
-								   warning messages produced by errnat conversions. */
-	struct cs_DtcXform_ xforms [cs_DTCXFRM_MAX];
-								/* An array of transformation types and pointers
-								   to the parameters required by the various
-								   transformation techniques which are required to
-								   get from the source to the target system.
-								   Transformation is complete when a transformation
-								   type of dtcTypNone is encountered.  A null
-								   transformation is achieved if the first
-								   transformation has a type of dtcTypNone. */
-};
-
-/*
-	The following are the error control codes which are
-	used to control how the datum conversion routines deal
-	with errors.  There is one set for datums, i.e. dealing
-	with unsupported datum changes, and one set for a data
-	block which is not found, i.e. required data is not
-	present on the system.
-*/
-
-#define cs_DTCFLG_DAT_F   0		/* Fatal */
-#define cs_DTCFLG_DAT_W   1		/* Warning */
-#define cs_DTCFLG_DAT_W1  2		/* Warn Once */
-#define cs_DTCFLG_DAT_I   3		/* Ignore */
-
-#define cs_DTCFLG_BLK_F   0		/* Fatal */
-#define cs_DTCFLG_BLK_W   1		/* Warning */
-#define cs_DTCFLG_BLK_1   2		/* Warn, once per block */
-#define cs_DTCFLG_BLK_I   3		/* Ignore */
-#define cs_DTCFLG_BLK_10  4		/* Warn up to 10 blocks, then ignore. */
 
 /*
 	The following structures define the form of the
@@ -6458,57 +5871,6 @@ struct csDtcach_
 	struct cs_Dtcprm_ *dtc_ptr;
 	char src_cs [24];
 	char dst_cs [24];
-};
-
-/*
-	The following is used to determine if byte swapping is
-	at all necessary.  The character array is intialized to
-	a sequence of specific characters.  The actual value
-	of the resulting long is tested to see if the current
-	machine is a little indian or big indian machine.
-
-	NOTE:  The code as distributed by CS-MAP assumes
-	that all binary data files are in little indian format.
-	If you are running on a big indian system, and you want
-	to use data files in big indian format, simply write
-	your own stub version of void CS_bswap (char *rec,char *frmt)
-	which does nothing, and force link it rather than the
-	CS_bswap which resides in the CS_MAP library.
-*/
-
-union cs_Bswap_
-{
-	/* I should have, perhaps, used sizeof long here instead
-	   of 4.  However, if longs aren't 4 long, none of this
-	   byte swap stuff will work anyway. */
-
-	char cccc [4];
-	long32_t llll;
-};
-
-/*
-	The following structures are used for group maintenance.
-*/
-
-struct cs_Csgrplst_
-{
-	struct cs_Csgrplst_ *next;
-	char key_nm [24];
-	char descr [64];
-	char source [64];
-	char ref_typ [10];
-	char ref_to [24];
-	char unit [16];
-};
-
-#define cs_GRPTBL_ACTIVE    0x01
-#define cs_GRPTBL_END	    0x80
-
-struct cs_Grptbl_
-{
-	char group [24];
-	char descr [64];
-	unsigned short flags;
 };
 
 /* MGRS object definition.  (Military Grid Reference System) */
@@ -6786,7 +6148,8 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_DTDEF_MAGIC07 (cs_MAGIC_BASE | 15)	/* Rls 7 Datum files. */
 #define cs_ELDEF_MAGIC07 (cs_MAGIC_BASE | 13)	/* Rls 7 Ellipsoid files. */
 
-#define cs_GPDEF_MAGIC   (cs_MAGIC_BASE | 19)	/* Current Geodetic Path dictionaries. */
+#define cs_GPDEF_MAGIC   (cs_MAGIC_BASE | 20)	/* Current Geodetic Path files. */
+#define cs_GXDEF_MAGIC   (cs_MAGIC_BASE | 19)	/* Current Geodetic Transformation files. */
 #define cs_CSDEF_MAGIC   (cs_MAGIC_BASE | 18)	/* Current Coordsys files. */
 #define cs_DTDEF_MAGIC   (cs_MAGIC_BASE | 17)	/* Current Datum files. */
 #define cs_ELDEF_MAGIC   (cs_MAGIC_BASE | 16)	/* Current Ellipsoid files. */
@@ -6833,7 +6196,6 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 
 	Remember, these values are used in a biot map fashion.
 */
-
 
 #define cs_ERSUP_SOFT   1		/* Software problems; problems which are not
 								   supposed to happen if all is working per
@@ -7322,6 +6684,49 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_GPDICT         445		/* Open of the Geodetic Path Dictionary failed. */
 #define cs_GP_PROT        446		/* Attempt to change a distribution Geodetic Path dictionary entry. */
 #define cs_GP_UPROT       447		/* Attempt to change a protected user Geodetic Path dictionary entry. */
+#define cs_GP_NOT_FND     448		/* Geodetic path not found. */
+#define cs_GP_NOPATH      449		/* Geodetic path not found. */
+#define cs_GEOPATH_DUP    450		/* Duplicate entries in the Geodetic Path dictionary */
+
+#define cs_GX_BAD_MAGIC   451		/* Magic number (first four bytes) of Geodetic Transformation
+									   Dictionary indicate that the file is not a Geodetic
+									   Path Dictionary. */
+#define cs_GXDICT         452		/* Open of the Geodetic Transformation Dictionary failed. */
+#define cs_GX_PROT        453		/* Attempt to change a distribution Geodetic Transformation dictionary entry. */
+#define cs_GX_UPROT       454		/* Attempt to change a protected user Geodetic Transformation dictionary entry. */
+#define cs_GX_NOT_FND     455		/* Geodetic transformation not found. */
+
+#define cs_DTQ_DELTAX     456		/* Delta X transformation parameter is suspiciously large. */
+#define cs_DTQ_DELTAY     457		/* Delta Y transformation parameter is suspiciously large. */
+#define cs_DTQ_DELTAZ     458		/* Delta Z transformation parameter is suspiciously large. */
+#define cs_DTQ_ROTATEX    459		/* X Rotate transformation parameter is suspiciously large. */
+#define cs_DTQ_ROTATEY    461		/* Y Rotate transformation parameter is suspiciously large. */
+#define cs_DTQ_ROTATEZ    462		/* Z Rotate transformation parameter is suspiciously large. */
+#define cs_DTQ_BWSCALE    463		/* Datum transformation scale parameter is suspiciously large. */
+#define cs_DTQ_WGS72SRC   464		/* Source datum to the WGS72 transformation method is not WGS72. */
+#define cs_DTQ_WGS72TRG   465		/* Target datum to the WGS72 transformation method is not WGS84. */
+#define cs_DTQ_MTHCODE    466       /* Geodetic transformation method code is not recognized. */
+#define cs_DTQ_XFRMNM     467       /* Geodetic transformation name is not valid. */
+#define cs_DTQ_SRCDTNM    468       /* Geodetic transformation source datum name is invalid. */
+#define cs_DTQ_TRGDTNM    469       /* Geodetic transformation target datum name is invalid. */
+#define cs_DTQ_MAXITR     470       /* Geodetic transformation max iterations value is suspicious. */
+#define cs_DTQ_CNVRGV     471       /* Geodetic transformation convergence value is suspicious. */
+#define cs_DTQ_ERRORV     472       /* Geodetic transformation convergence error value is suspicious. */
+#define cs_DTQ_ACCRCY     473       /* Geodetic transformation accuracy value is suspicious. */
+
+#define cs_NULLX_CNVRG	  474		/* The iterative inverse Null Transformation
+									   calculation failed to converge. */
+#define cs_GEOCT_CNVRG	  475		/* The iterative inverse Geocentric Transformation
+									   calculation failed to converge. */
+#define cs_MULRG_CNVRG	  476		/* The iterative inverse multiple regression
+									   calculations failed to converge. */
+#define cs_UNKWN_DTCMTH   477		/* Unknown datum transformation method encountered in the
+									   Geodetic Transformation dictionary. */
+#define cs_GRD_RNG_FLBK   478		/* Out of coverage of grid files, fallback used. */
+#define cs_GRD_RNG_WRN    479		/* Out of coverage of grid files, warning only. */
+#define cs_GX_TOOMANY     480		/* Too many transformations required to do datum transformation. */
+#define cs_GEOXFRM_DUP    481		/* Duplicate geodetic transformation definitions. */
+#define cs_DT_NOPATH      482       /* Couldn't locate or construct a path between datums. */
 
 /*
 	The following casts are used to eliminate warnings from
@@ -7521,16 +6926,30 @@ int			EXP_LVL1	CS_getSourceOf (Const char *csKeyName,char *source,int size);
 int			EXP_LVL3	CS_getStateFips (Const char* stateName);
 int			EXP_LVL1	CS_getUnitsOf (Const char *csKeyName,char *unitName,int size);
 
-int			EXP_LVL7	CS_gpcmp (Const struct cs_GeodeticPathDef_ *pp,Const struct cs_GeodeticPathDef_ *qq);
+int			EXP_LVL7	CS_gpcmp (Const struct cs_GeodeticPath_ *pp,Const struct cs_GeodeticPath_ *qq);
 struct cs_GeodeticPath_*
-			EXP_LVL3	CS_gpdef (Const char *srcDatum,Const char *trgDatum);
+			EXP_LVL3	CS_gpdef (Const char *pathName);
+struct cs_GeodeticPath_*
+			EXP_LVL3	CS_gpdefEx (short *direction,Const char *srcDatum,Const char *trgDatum);
 int			EXP_LVL3	CS_gpdel (struct cs_GeodeticPath_ *gpdef);
 void		EXP_LVL1	CS_gpfnm (Const char *new_name);
 csFILE *	EXP_LVL3	CS_gpopn (Const char *mode);
-int			EXP_LVL3	CS_gprd (csFILE *strm,struct cs_GeodeticPathDef_ *gp_rec);
-int			EXP_LVL3	CS_gpupd (struct cs_GeodeticPath_ *gpdef);
-int			EXP_LVL3	CS_gpwr (csFILE *strm,Const struct cs_GeodeticPathDef_ *gp_rec);
-int			EXP_LVL3	CS_gpdefWr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def);
+int			EXP_LVL3	CS_gprd (csFILE *strm,struct cs_GeodeticPath_ *gp_def);
+int			EXP_LVL3	CS_gpupd (struct cs_GeodeticPath_ *gp_def);
+int			EXP_LVL3	CS_gpwr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def);
+
+int			EXP_LVL7	CS_gxcmp (Const struct cs_GeodeticTransform_ *pp,Const struct cs_GeodeticTransform_ *qq);
+struct cs_GeodeticTransform_*
+			EXP_LVL3	CS_gxdef (Const char *pathName);
+struct cs_GeodeticTransform_*
+			EXP_LVL3	CS_gxdefEx (Const char *srcDatum,Const char *trgDatum);
+int			EXP_LVL3	CS_gxdel (struct cs_GeodeticTransform_ *gpdef);
+void		EXP_LVL1	CS_gxfnm (Const char *new_name);
+csFILE *	EXP_LVL3	CS_gxopn (Const char *mode);
+int			EXP_LVL3	CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gp_def);
+int			EXP_LVL5	CS_gxswp (struct cs_GeodeticTransform_* gx_def);
+int			EXP_LVL3	CS_gxupd (struct cs_GeodeticTransform_ *gp_def);
+int			EXP_LVL3	CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gp_def);
 
 void		EXP_LVL5	CS_iicpy (const struct cs_Cmplx_ *aa,struct cs_Cmplx_ *bb);
 void		EXP_LVL5	CS_iicrt (struct cs_Cmplx_ *aa,double rVal,double iVal);
@@ -7590,6 +7009,7 @@ Const char*	EXP_LVL1	CS_msiName2Esri (Const char* msiName);
 const char*	EXP_LVL1	CS_msiName2Oracle (Const char* msiName);
 
 int			EXP_LVL5	CS_nampp (char *name);
+int			EXP_LVL5	CS_nampp64 (char *name);
 
 long32_t	EXP_LVL1	CS_oracleNbr2Epsg (long32_t oracleNbr,unsigned short* flags);
 long32_t	EXP_LVL1	CS_oracleName2Epsg (Const char* oracleName);
@@ -7821,12 +7241,14 @@ void		EXP_LVL7	CSdhdnCls (void);
 int			EXP_LVL7	CSdhdnToEtrf89 (double ll_etrf89 [3],Const double ll_dhdn [3]);
 Const char *EXP_LVL7	CSdhdnToEtrf89Log (Const double ll_dhdn [2]);
 
-void		EXP_LVL9	CSdtcXformFree (struct cs_DtcXform_ *xfrmPtr);
+int			EXP_LVL3	CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in [3],double ll_out [3]);
 int			EXP_LVL9	CSdtcomp (Const char *inpt,Const char *outp,
 												   int flags,
 												   Const char *elpath,
 												   int (*err_func)(char *mesg));
 struct cs_Dtcprm_* EXP_LVL3	CSdtcsu (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt,int dat_erf,int blk_erf);
+struct cs_Dtcprm_* EXP_LVL3	CSdtcsu1 (Const char* gxName,short direction,int blk_erf);
+
 char*		EXP_LVL9	CSdtKeyNames (void);
 struct cs_Datum_* EXP_LVL5	CSdtloc1 (Const struct cs_Dtdef_ *dtdef_p);
 struct cs_Datum_* EXP_LVL5	CSdtloc2 (Const struct cs_Dtdef_ *dtdef_p,Const struct cs_Eldef_ *eldef_p);
@@ -7922,6 +7344,9 @@ void		EXP_LVL9	CSgnomcS (struct cs_Csprm_ *csprm);
 int			EXP_LVL9	CSgnomcX (Const struct cs_Gnomc_ *gnomc,int cnt,Const double pnts [][3]);
 
 int			EXP_LVL9	CSgnricQ (struct cs_Csdef_ *csdef,int err_list [],int list_sz);
+
+int			EXP_LVL9	CSgpcomp (Const char *inpt,Const char *outp,int flags,char *datum,char* xforms,int (*err_func)(char *mesg));
+int			EXP_LVL9	CSgxcomp (Const char *inpt,Const char *outp,int flags,char *datum,int (*err_func)(char *mesg));
 
 int			EXP_LVL7	CSharnToNad83 (double ll_83 [3],Const double ll_91 [3]);
 void		EXP_LVL9	CSharnCls (void);
@@ -8079,6 +7504,8 @@ int			EXP_LVL9	CSnerthQ (Const struct cs_Csdef_ *csdef,unsigned short prj_code,i
 void		EXP_LVL9	CSnerthS (struct cs_Csprm_ *csprm);
 int			EXP_LVL9	CSnerthX (Const struct cs_Nerth_ *nerth,int cnt,Const double pnts [][3]);
 
+int			EXP_LVL7	CSnampp (char *name,size_t nameSize);
+
 int			EXP_LVL9	CSnzgd2KToWgs84 (double ll_wgs84 [3],Const double ll_nzgd2K [3]);
 int			EXP_LVL7	CSnzgd49Init (void);
 void		EXP_LVL7	CSnzgd49Cls (void);
@@ -8159,6 +7586,8 @@ int			EXP_LVL9	CSrobinL (Const struct cs_Robin_ *robin,int cnt,Const double onts
 int			EXP_LVL9	CSrobinQ (Const struct cs_Csdef_ *csdef,unsigned short prj_code,int err_list [],int list_sz);
 void		EXP_LVL9	CSrobinS (struct cs_Csprm_ *csprm);
 int			EXP_LVL9	CSrobinX (Const struct cs_Robin_ *robin,int cnt,Const double pnts [][3]);
+
+void		EXP_LVL5	CSrplDirSep (char *path);
 
 double		EXP_LVL9	CSsinusC (Const struct cs_Sinus_ *sinus,Const double ll [2]);
 int			EXP_LVL9	CSsinusF (Const struct cs_Sinus_ *sinus,double xy [2],Const double ll [2]);
@@ -8345,51 +7774,6 @@ int  EXP_LVL1 CS_geoCtrDlgA (char *elKeyName,double geographic [3],double geoCtr
 }
 #endif
 
-/******************************************************************************
-
-	New Datum Conversion Stuff.  Represents a complete rewrite of the
-	datum conversion stuff.
-
-******************************************************************************/
-
-/*
-	An enumerator which enumerates all different types of datum conversions,
-	including related matters such as VertCon, Geoid Height, and vertical
-	deflection.
-*/
-
-enum csDtCvtType {	dtcTypeNone = 0,
-					dtcTypeUS,
-					dtcTypeHarn,
-					dtcTypeCanadian1,
-					dtcTypeCanadian2,
-					dtcTypeAustralian,
-					dtcTypeGeoid96,
-					dtcTypeUSVertcon,
-					dtcTypeJapanese,
-					dtcTypeFrench
-				 };
-
-struct csLLGridCell_
-{
-	struct csLLGridCell_ *next;
-	enum csDtCvtType type;
-	double northEast [2];
-	double southWest [2];
-	double deltaLng, deltaLat;
-	double AA [2];
-	double BB [2];
-	double CC [2];
-	double DD [2];
-	char sourceId [32];
-};
-struct csLLGridCellCache_
-{
-	int maxCount;
-	int usedCount;
-	struct csLLGridCell_ *listHead;
-};
-
 /* The following is a one dimensional variation of csLLGridCell. */
 struct csZGridCell_
 {
@@ -8407,868 +7791,6 @@ struct csZGridCellCache_
 	int usedCount;
 	struct csZGridCell_ *listHead;
 };
-
-/******************************************************************************
-	Coverage Object
-	Carries the region of coverage for a grid file, a grid cell, whatever.
-	Note that the density of the source is also required if this object
-	is to be used to select one object over an another.
-*/
-struct csGridCoverage_
-{
-	/* A cell is marked as invalid by a southWest point northeast of the
-	   northeast point; i.e. a coverage which will not match anything. */
-	double southWest [2];
-	double northEast [2];
-	double density;				/* size of grid cell in seconds
-								   used to select one file over
-								   another in cases of overlap */
-};
-
-/******************************************************************************	
-	Grid Cell Object
-	Used to hold the definition of a grid cell.  As of this writing, all
-	grid techniques use the same concept, same algorithm, as defined for
-	this object.  Where these cells come from varies, but once extracted
-	from the appropriate data file, the cells are the same.
-*/
-struct csGridCell_
-{
-	struct csGridCoverage_ coverage;	/* cell coverage in this case */
-	double deltaLng;					/* dimensions of cell, degrees */
-	double deltaLat;
-	/* For performance, the AA, BB, CC, and DD values are precalculated
-	   after cell data has been fetched from the data file. */
-	double currentAA;
-	double currentBB;
-	double currentCC;
-	double currentDD;
-	char sourceId [32];					/* File name, and possibly
-										   sub-grid, of the source of
-										   the data. */
-};
-/******************************************************************************
-	United States Grid File Object
-
-	This object represents a single grid file in the format commonly
-	used by US governmental agencies.  This format is used for several
-	applications.  Thie implementation of this object is intended for
-	use in all US applications.
-
-	Applications in which this file format is used:
-	1> NADCON 27 to 83 and vice versa (two files, *.LAS & *.LOS )
-	2> HARN, aka HPGN.  (again two files, *.LAS & *.LOS)
-	3> VERTCON	(single file)
-	4> GEOID97  (single file)
-*/
-enum csGridFileUSType {	usGridTypeNoneYet,
-						usGridTypeNad27LOS,
-						usGridTypeNad27LAS,
-						usGridTypeHarnLAS,
-						usGridTypeHarnLOS,
-						usGridTypeVertCon,
-						usGridTypeGeoid96,
-						usGridTypeUnknown = 999
-					  };
-/* Data members of the Grid File Object. */
-struct csGridFileUS_
-{
-	enum csGridFileUSType type;			/* Type of file. */
-	struct csGridCoverage_ coverage;
-	long32_t elementCount;
-	long32_t recordCount;
-	long32_t recordSize;
-	double deltaLng;
-	double deltaLat;
-	/* Files are now heavily buffered.  In fact, in most cases the
-	   entire file resides in memory after the first access.  In such
-	   cases, the file stream will be closed. */
-	long32_t fileSize;					/* size of complete file on disk,
-									   stream will be closed if
-									   bufferSize == fileSize */
-	csFILE* strm;					/* file is not opened until required,
-									   may be closed if entire contents
-									   have been buffered. */
-	long32_t bufferSize;				/* size of buffer allocated */
-	long32_t bufferBeginPosition;		/* file position of 1st byte in buffer,
-									   -1 says nothing in buffer */
-	long32_t bufferEndPosition;			/* file position of last byte in buffer,
-									   -1 says nothing in buffer */
-	void *dataBuffer;				/* not allocated until required, i.e.
-									   file is actually opened. */
-	short CellIsValid;				/* +1 indicates that the currentCell
-									   element is valid. */
-	struct csGridCell_ currentCell;	/* Last cell used. Upon construction,
-									   the coverage element of this
-									   structure is set so that it
-									   won't match anything, thus
-									   disabling it.  This additional
-									   buffer does wonders for performance. */
-	char filePath [MAXPATH];		/* Full path name to the file. */
-	char FileName [16];				/* Last 15 characters of the actual
-									   file name, used to generate
-									   point data ID's. */
-};
-/*
-	The header information on a US Grid file has the following format.
-	The size of the header record is always equal to the size of a
-	record in the file.  This is the stuff that is in the disk file!
-	Note, that since a lot of this stuff is binary, byte swapping
-	may be required.
-*/
-struct csGridHdrUS_
-{
-	char ident [56];        /* NADCON's identification.  We don't
-							   use it. */
-	char pgm [8];           /* Don't use it. */
-	long32_t ele_cnt;           /* Number of data elements in each record.
-							   NADCON calls it a column count.  This
-							   value does not include the record number
-							   element which is the first item in
-							   each record.  It is used to calculate
-							   record size and the longitude extent of
-							   the rectangular region of coverage. */
-	long32_t rec_cnt;           /* The number of records in the file.
-							   Does not include the header record
-							   defined by this structure.  Notice, that
-							   the header record is the same length
-							   as the others, but only the first
-							   n bytes, as defined by this structure,
-							   are actually used.  This value also
-							   defines the latitude extent of
-							   the rectangular region of coverage. */
-	long32_t z_cnt;             /* Don't know what this is, we don't use
-							   it.  When, and if, NADCON ever uses it,
-							   we'll know what it is. */
-	float min_lng;          /* The longitude associated with the
-							   first record in the file. */
-	float del_lng;          /* The distance, in degrees of longitude,
-							   between the grid cells. */
-	float min_lat;          /* The latitude associated with the first
-							   data element in each record. */
-	float del_lat;          /* The distance, in degrees of latitude,
-							   between the grid cells. */
-	float angle;            /* Don't know what this is.  When NADCON
-							   ever gets around to using it, we'll
-							   know then. */
-};
-#define cs_BSWP_GridFileHdrUS "56c8clllfffff"
-
-/******************************************************************************
-	US Datum Shift Object
-	Since a datum shift using the US algorithm requires two files, we
-	have this object which groups two US Grid files together into a single
-	object.  Two such shifts are supported.
-*/
-enum csTypeDatumShiftUS_ { usNAD27Shift, usHARNShift };
-struct csDatumShiftUS_
-{
-	enum csDtCvtType type;
-	struct csGridFileUS_* lngShift;
-	struct csGridFileUS_* latShift;
-};
-
-/******************************************************************************
-	Catalog object
-	Supporting datum files are access through a list of files known as a
-	catalog.  The catalog is, of course, a text file itself.  This object
-	encapsulates the functionality of a catalog file. */
-struct csDatumCatalog_
-{
-	char fileFolder [520];
-	char fallback [cs_KEYNM_DEF];
-	struct csDatumCatalogEntry_ *listHead;
-	char *initialComment;
-	char *middleComment;
-	char *trailingComment;
-};
-struct csDatumCatalogEntry_
-{
-	struct csDatumCatalogEntry_ *next;
-	char pathName [520];
-	double density;
-	long32_t bufferSize;
-	ulong32_t flags;
-	short relative;
-};
-
-/******************************************************************************
-	NAD27 to NAD83 Datum Shift Object
-	This object is a listable union of the various datum shift structures
-	which we support.  The idea here is that a list of these things gets
-	scanned and the entry which produces a match with the lowest grid density
-	is used to perform the datum shift calculation.
-*/
-enum csNad27ToNad83Type { dtNad27To83NoneYet, dtNad27To83US, dtNad27To83C1, dtNad27To83C2 };
-struct csNad27ToNad83_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csNad27ToNad83Entry_ *listHead;
-	int VertconStatus;
-	char VertconReason [256];
-};
-struct csNad27ToNad83Entry_
-{
-	struct csNad27ToNad83Entry_ *next;
-	enum csNad27ToNad83Type type;
-	union
-	{
-		struct csDatumShiftUS_ *usDatumPtr;
-		struct csDatumShiftCa1_ *c1DatumPtr;
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	AGD66 to GDA94 Datum Shift Object
-	This object enables multiple grid shift files to convert from AGD66 to
-	GDA94.  It appears that the Aussies will be doing this on a state by
-	state basis.  Thus, this objects enables GDA94 to look like a single
-	object to the datum shift calculation code.  Currently, there is only
-	one data file format, so some of this stuff (copied from the
-	NAD27/NAD83 stuff) is superfluous.  However, it lets us use a lot
-	of debugged code without modification.  When we port to C++, the
-	superfluous stuff will be buried in an abstract base class.
-*/
-enum csAgd66ToGda94Type { dtAgd66To94NoneYet, dtAgd66To94C2 };
-struct csAgd66ToGda94_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csAgd66ToGda94Entry_ *listHead;
-};
-struct csAgd66ToGda94Entry_
-{
-	struct csAgd66ToGda94Entry_ *next;
-	enum csAgd66ToGda94Type type;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	AGD84 to GDA94 Datum Shift Object
-	This object enables multiple grid shift files to convert from AGD84 to
-	GDA94.  It appears that the Aussies will be doing this on a state by
-	state basis.  Thus, this objects enables the AGD84 <--> GDA94 datum shift
-	to look like a single object to the datum shift calculation code.  Currently,
-	there is only one data file format, so some of this stuff (copied from the
-	NAD27/NAD83 stuff) is superfluous.  However, it lets us use a lot
-	of debugged code without modification.  When we port to C++, the
-	superfluous stuff will be buried in an abstract base class.
-*/
-enum csAgd84ToGda94Type { dtAgd84To94NoneYet, dtAgd84To94C2 };
-struct csAgd84ToGda94_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csAgd84ToGda94Entry_ *listHead;
-};
-struct csAgd84ToGda94Entry_
-{
-	struct csAgd84ToGda94Entry_ *next;
-	enum csAgd84ToGda94Type type;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	ED50 to ETRF89 Datum Shift Object
-	This object enables multiple grid shift files to convert from ED50 to
-	ETRF89.  As of this writing, there is only one file available.  This
-	file is the spanish file and it is supposed to be in the Canadian
-	NTv2 format.  We shall see.
-*/
-enum csEd50ToEtrf89Type { dtEd50ToEtrf89NoneYet, dtEd50ToEtrf89C2 };
-struct csEd50ToEtrf89_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csEd50ToEtrf89Entry_ *listHead;
-};
-struct csEd50ToEtrf89Entry_
-{
-	struct csEd50ToEtrf89Entry_ *next;
-	enum csEd50ToEtrf89Type type;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	RGF93 to NTF Datum Shift Object
-	This object enables multiple grid shift files to convert from RGF93 to
-	NTF.  Two file formats are supported:
-	1> the original French grid data file gr3df97a.txt, and the
-	2> Canadian National Transformation (NTv2) format.
-	
-	The original text file covers the entire nation of France, and the NTv2
-	files are used for local municipal grids.
-*/
-enum csRgf93ToNtfType { dtRgf93ToNtfNone, dtRgf93ToNtfTxt, dtRgf93ToNtfC2 };
-struct csRgf93ToNtf_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csRgf93ToNtfEntry_ *listHead;
-};
-struct csRgf93ToNtfEntry_
-{
-	struct csRgf93ToNtfEntry_ *next;
-	enum csRgf93ToNtfType type;
-	union
-	{
-		struct csRgf93ToNtfTxt_ *txtDatumPtr;
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	DHDN to ETRF89 Datum Shift Object
-	This object enables multiple grid shift files to convert from DHDN to
-	ETRF89.  As of this writing, there is only one file available.  This
-	file is the German file and it is supposed to be in the Canadian
-	NTv2 format.  We shall see.
-*/
-enum csDhdnToEtrf89Type { dtDhdnToEtrf89NoneYet, dtDhdnToEtrf89C2 };
-struct csDhdnToEtrf89_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csDhdnToEtrf89Entry_ *listHead;
-};
-struct csDhdnToEtrf89Entry_
-{
-	struct csDhdnToEtrf89Entry_ *next;
-	enum csDhdnToEtrf89Type type;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	CH1903 to Ch1903Plus Datum Shift Object
-	This object enables multiple grid shift files to convert from Ch1903 to
-	Ch1903+.  As of this writing, there is only one file available.  This
-	file is in the Canadian NTv2 format.  We shall see.  It is a conversion
-	from the older Ch1903 (era 1903 one presumes) to CH1903+ (whatever that
-	is).  It remains to be seen if something has to be done to get from
-	CH1903+ to WGS84, and if so execatly where and how that extra shift
-	wll be implemented.
-*/
-enum csCh1903ToPlusType { dtCh1903ToPlusNoneYet, dtCh1903ToPlusC2 };
-struct csCh1903ToPlus_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csCh1903ToPlusEntry_ *listHead;
-};
-struct csCh1903ToPlusEntry_
-{
-	struct csCh1903ToPlusEntry_ *next;
-	enum csCh1903ToPlusType type;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	NZGD49 to NZGD2K Datum Shift Object
-	This object enables multiple grid shift files to convert from NZGD49 to
-	NZGD2K.
-*/
-enum csNzgd49ToNzgd2KType { dtNzgd49ToNzgd2KNoneYet, dtNzgd49ToNzgd2KC2 };
-struct csNzgd49ToNzgd2K_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csNzgd49ToNzgd2KEntry_ *listHead;
-};
-struct csNzgd49ToNzgd2KEntry_
-{
-	struct csNzgd49ToNzgd2KEntry_ *next;
-	enum csNzgd49ToNzgd2KType type;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	ATS77 to NAD27 Datum Shift Object
-	This object enables multiple grid shift files to convert from ATS77 to
-	NAD27 and vice versa.  THere are six files, two for each province.  One
-	file provides for the forward (NAD27 --> ATS77) conversion, and the
-	other implements the inverse.
-
-	This object is, essentially, an implementation of the TRANSFORM
-	program used in the Maritime provinces for many years now.
-*/
-enum cs_Ats77Prov_ {	ats77PrvNone = 0,
-						ats77PrvNB,
-						ats77PrvNS,
-						ats77PrvPE
-				   };
-enum cs_Ats77Dir_  {	ats77DirNone = 0,
-						ats77DirToAts77,
-						ats77DirToNad27
-				   };
-struct cs_Ats77Xfrm_
-{
-	/* Most of this comes from the header of the data file.  Note that the
-	   the numbers in the file are in little endian byte order.  Since this
-	   complies with the CS-MAP standard, we can simply run all binary
-	   values extracted through CS_bswap. */
-	struct csGridCoverage_ coverage;
-	enum cs_Ats77Prov_ province;
-	enum cs_Ats77Dir_ direction;
-	long32_t iMax;
-	long32_t jMax;
-	long32_t nf;
-	long32_t polynomialDegree;
-	long32_t controlStations;
-	long32_t coefficientCount;
-	double oprue; 
-	double rui2;						/* don't really know what this is;
-									   but it's pretty important. */
-	double localOrigin [2];
-	double dataScale [2];
-	double UO;
-	double VO;
-	double SU;
-	double SV;
-	double *coeffs;					/* An array of the complex coefficients which
-									   are read from the file.  The number is
-									   variable, depending upon the dgree of the
-									   polynomial, and the number of coefficients. */
-	struct cs_Cmplx_ ccc [10];
-	char filePath [MAXPATH];		/* Complete path to the data file. */
-	char fileName [32];				/* File name of the data file. */
-};
-
-/******************************************************************************
-	ATS77 to NAD83 Datum Shift Object
-	This object enables multiple grid shift files to convert from ATS77 to
-	NAD83.  There is one one file, and only one format.  However, we use the
-	more general scheme of things for consistency and user control.
-*/
-enum csAts77ToCsrsType { dtAts77ToCsrsNoneYet, dtAts77ToCsrsC2 };
-struct csAts77ToCsrs_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csAts77ToCsrsEntry_ *listHead;
-};
-struct csAts77ToCsrsEntry_
-{
-	struct csAts77ToCsrsEntry_ *next;
-	enum csAts77ToCsrsType type;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	ATS77 to NAD27 Datum Shift Object
-	This object enables multiple grid shift files to convert from NAD27 to
-	ATS77.  This is, essentially, a multi-file interface to the ATS77
-	TRANSFORM program.
-*/
-enum csNad27ToAts77Type { dtNad27ToAts77NoneYet, dtAts77Xfrm };
-struct csNad27ToAts77_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csNad27ToAts77Entry_ *listHead;
-};
-struct csNad27ToAts77Entry_
-{
-	struct csNad27ToAts77Entry_ *next;
-	enum csNad27ToAts77Type type;
-	union
-	{
-		struct cs_Ats77Xfrm_ *ats77XfrmPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	NAD83 to CSRS Datum Shift Object
-	This object enables multiple grid shift files to convert from NAD83 to
-	CSRS (Canadian Spatioal Reference System).  CSRS is, conceptually, the
-	Canadian equivalent of the US's HARN system.  There are several files,
-	one for several of the provinces at this writing.
-*/
-enum csNad83ToCsrsType { dtNad83ToCsrsNoneYet, dtNad83ToCsrsC2 };
-struct csNad83ToCsrs_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csNad83ToCsrsEntry_ *listHead;
-};
-struct csNad83ToCsrsEntry_
-{
-	struct csNad83ToCsrsEntry_ *next;
-	enum csNad83ToCsrsType type;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-	} pointers;
-};
-
-/******************************************************************************
-	NAD27 to CSRS Datum Shift Object
-	This object enables multiple grid shift files to convert from NAD27 to
-	CSRS (Canadian Spatioal Reference System) directly.  This is necessary
-	as several Canadian provinces have published grid shift files (.gsb)
-	that convert directly from NAD227 to CSRS without passing through NAD83.
-	Since the results are slightly different, and clients want the comfort
-	derived from using these new files, we have to support this concept.
-
-	Essentially (I hate ot admit) a lot of duplicated code from the
-	the above (Nad83ToCsrs).  C++ implementation will help us eliminate
-	lots of duplicated code.
-*/
-enum csNad27ToCsrsType { dtNad27ToCsrsNoneYet, dtNad27ToCsrsC2, dtNad27ToCsrsXfrm };
-/******************************************************************************
-	A real oddball here.  There is no direct means of going from NAD27 to
-	CSRS and vice versa in the Maritime Provinces.  Therefore, the official
-	benchmark, NBGeoCalc uses the TRANSFORM technique to go from NAD27 to
-	ATS77 and then the normal Ats77ToCsrs technique to get to CSRS.  Thus,
-	in the csNad27ToCsrs structure, we need to support the inclusion of the
-	following to support this technique, and allow the user to choose
-	this technique when appropriate. */
-struct csNad27ToCsrsXfrm_
-{
-	struct csNad27ToAts77_ *nad27ToAts77;
-	struct csAts77ToCsrs_  *ats77ToCsrs;
-};
-struct csNad27ToCsrs_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csNad27ToCsrsEntry_ *listHead;
-};
-struct csNad27ToCsrsEntry_
-{
-	struct csNad27ToCsrsEntry_ *next;
-	enum csNad27ToCsrsType type;
-	double density;
-	union
-	{
-		struct csDatumShiftCa2_ *c2DatumPtr;
-		struct csNad27ToCsrsXfrm_ *nad27ToCsrsViaXfrm;
-	} pointers;
-};
-/******************************************************************************
-	Canadian National Transformation, Version 1
-
-	The following structure defines the format of the Canadian	National
-	Transformation, Version 1, database file header.  We use it to access the
-	descriptive information supplied with the data file.
-
-	Records in this file are 16 bytes long, i.e. two doubles.  The header
-	information occupies the first 12 records.
-
-	In this structure, the only information that is of interest
-	to us is the maximum and minimum lat/longs and the the two
-	grid values.  We ignore all of the rest of the stuff.
-
-	NOTE: The Canadian algorithm is all based on longitudes
-	being positive.  This is the reverse of the US algorithm.
-*/
-struct csGridFileCa1Hdr_
-{
-	char hdr_hdr [8];       /* Carries the word HEADER with two
-							   blanks. */
-	short hdr_cnt;          /* The number of 16 bytes records
-							   devoted to the header.  Usually 12,
-							   but who knows. */
-	short fill_01;			/* Fill out to next boundary of 8,
-							   using shorts since the SUN likes
-							   to start character arrays on an
-							   8 byte boundary. */
-	short fill_02;			/* Ditto */
-	short fill_03;			/* Ditto */
-	char min_lat_lbl [8];   /* Carries "S LAT   " as a label for the
-							   double which follows. */
-	double min_lat;         /* The minimum latitude of the region
-							   covered by the data file. */
-	char max_lat_lbl [8];   /* Carries "N LAT   " as a label for the
-							   double which follows. */
-	double max_lat;         /* The maximum latitude of the region
-							   covered by the data file. */
-	char min_lng_lbl [8];   /* Carries "E LONG  " as a label for the
-							   double which follows. */
-	double min_lng;         /* The minimum longitude of the region
-							   covered by the data file. */
-	char max_lng_lbl [8];   /* Carries "W LONG  " as a label for the
-							   double which follows. */
-	double max_lng;         /* The maximum longitude of the region
-							   covered by the data file. */
-	char ngrid_lbl [8];     /* Carries the string "N GRID  " */
-	double del_lat;         /* The latitude, in seconds, between
-							   the grid cells in the data file. */
-	char wgrid_lbl [8];     /* Carries the string "W GRID  " */
-	double del_lng;         /* The longitude, in seconds, between
-							   the grid cells in the data file. */
-	char type_lbl [8];      /* Carries the string "TYPE    " */
-	char type_val [8];      /* Carries the string "SECONDS " */
-	char from_lbl [8];      /* Carries the string "FROM    " */
-	char from_val [8];      /* Carries the string "NAD27   " */
-	char to_lbl [8];        /* Carries the string "TO      " */
-	char to_val [8];        /* Carries the string "NAD83   " */
-	double fel_equ;         /* I believe this value is the equatorial
-							   radius for the NAD27 ellipsoid. */
-	double fel_plr;         /* I believe this value is the polar
-							   radius for the NAD27 ellipsoid. */
-	double tel_equ;         /* I believe this value is the equatorial
-							   radius for the NAD83 ellipsoid. */
-	double tel_plr;         /* I believe this value is the polar
-							   radius for the NAD83 ellipsoid. */
-};
-#define cs_BSWP_GridFileCa1Hdr "8cs3s8cd8cd8cd8cd8cd8cd8c8c8c8c8c8cdddd"
-/* The structure of the object itself.  Very similar to the US grid
-   file format. */
-struct csGridFileCa1_
-{
-	struct csGridCoverage_ coverage;
-	long32_t headerCount;					/* number of 16 byte header records */
-	long32_t elementCount;					/* number of data elements in a record */
-	long32_t recordCount;					/* number of longitude rows in the file. */
-	long32_t recordSize;					/* size of a longitude row */
-	double deltaLng;					/* grid cell size in degrees */
-	double deltaLat;					/* grid cell size in degrees */
-	long32_t fileSize;						/* size of complete file on disk,
-										   stream will be closed if
-										   bufferSize == fileSize */
-	csFILE* strm;							/* file is not opened until required,
-										   may be closed if entire contents
-										   have been buffered. */
-	long32_t bufferSize;					/* size of buffer allocated */
-	long32_t bufferBeginPosition;			/* file position of 1st byte in buffer,
-										   -1 says nothing in buffer */
-	long32_t bufferEndPosition;				/* file position of last byte in buffer,
-										   -1 says nothing in buffer */
-	void *dataBuffer;					/* not allocated until required, i.e.
-										   file is actually opened. */
-	short CellIsValid;					/* +1 indicates that the longitude and
-										   latitude cells are valid. */
-	struct csGridCell_ longitudeCell;	/* Last cell used, the longitude
-										   data. */
-	struct csGridCell_ latitudeCell;	/* Last cell used, the longitude
-										   data. */
-	char filePath [MAXPATH];			/* Full path name to the file. */
-	char FileName [16];					/* Last 15 characters of the actual
-										   file name, used to generate
-										   point data ID's. */
-};
-
-/******************************************************************************
-	Canadian National Transformation, Version 2 Object.
-	This object encapsulates the functionality of a Canadian National
-	Transformation, Version 2, grid data file.  There is also a version
-	1 which we also support.  The Australians have adopted this file
-	format also, but with some minor variations.
- 
-	The following structure(s) is/are used to read, byte swap, and
-	decipher the basic header on the front end of a CaNTv2 data file.
-	There are two versions.  It depends upon who producing the file.
-	The Aussie file is different from the Canadian file, and requires
-	the special packing indicated by the pragma directives.
-   
-	Job security for you and me. */
-
-#if   _RUN_TIME == _rt_BORLAND16 || _RUN_TIME == _rt_BORLAND32
-#	pragma option -a1
-#elif _RUN_TIME == _rt_METAWARE
-#	pragma Align_members (1)
-#elif _RUN_TIME == _rt_MSC16 || _RUN_TIME == _rt_MSVC16 || _RUN_TIME == _rt_MSDOTNET || \
-														   _RUN_TIME == _rt_MSWIN64 ||  \
-														   _RUN_TIME == _rt_MSVC32 ||   \
-														   _RUN_TIME == _rt_WINCE
-#	pragma pack (1)
-#elif _RUN_TIME == _rt_HPUX
-#	pragma pack 1
-#elif _RUN_TIME == _rt_AIX
-#	pragma options align=packed
-#elif _RUN_TIME >= _rt_UNIXPCC
-#	pragma pack (1)
-#else
-	/* I don't know what would work for WATCOM.  You may need to
-	   add your own stuff here depeneding on the compiler.  You need
-	   to enforce a packing factor of 1; i.e. the compiler MUST not
-	   add any packing to the structure for alignment. */
-#endif
-
-struct csGridFileCa2HdrCA
-{
-	char titl01 [8];		/* Should be "NUM_OREC" */
-	long32_t num_orec;			/* Number of records in the file
-							   header, including this one. */
-	long32_t fill01;
-	char titl02 [8];		/* Should be "NUM_SREC" */
-	long32_t num_srec;			/* Number of records in a sub_file
-							   header. */
-	long32_t fill02;
-	char titl03 [8];		/* Should be "NUM_FILE" */
-	long32_t num_file;			/* Number of sub-files in the
-							   main file. */
-	long32_t fill03;
-	char titl04 [8];		/* Should be "GS_TYPE " */
-	char gs_type [8];		/* Indicates the units used for
-							   real numbers in the file,
-							   typically "SECONDS" */
-	char titl05 [8];		/* Should be "VERSION " */
-	char version [8];		/* Currently "NTv2.0" */
-	char titl06 [8];		/* Should be "DATUM_F " */
-	char datum_f [8];		/* FROM datum, should be "NAD27" */
-	char titl07 [8];		/* Should be "DATUM_T " */
-	char datum_t [8];		/* TO datum, should be "NAD83" */
-	char titl08 [8];		/* Should be "MAJOR_F " */
-	double major_f;			/* Length of the major axis for
-							   the FROM ellipsoid. Not used
-							   anywhere, but its here. */
-	char titl09 [8];		/* Should be "MINOR_F " */
-	double minor_f;			/* Length of the minor axis for
-							   the FROM ellipsoid. Not used
-							   anywhere, but its here. */
-	char titl10 [8];		/* Should be "MAJOR_T " */
-	double major_t;			/* Length of the major axis for
-							   the TO ellipsoid. Not used
-							   anywhere, but its here. */
-	char titl11 [8];		/* Should be "MINOR_T " */
-	double minor_t;			/* Length of the minor axis for
-							   the TO ellipsoid. Not used
-							   anywhere, but its here. */
-};
-#define cs_BSWP_GridFileCa2HdrCA "8cll8cll8cll8c8c8c8c8c8c8c8c8cd8cd8cd8cd"
-
-/* Per a client, the following csGnuPack stuff is required for
-   proper compilation using certain Sun ANSI(?) compliant
-   compilers. */
-#if defined(__GNUC__) && (_PROCESSOR==_pc_SPARC32 || _PROCESSOR==_pc_SPARC64)
-#	define csGnuPack __attribute__ ((packed))
-#else
-#	define csGnuPack
-#endif
-
-struct csGridFileCa2HdrAU
-{
-	char titl01 [8]  csGnuPack;		/* Should be "NUM_OREC" */
-	long32_t num_orec    csGnuPack;		/* Number of records in the file
-									   header, including this one. */
-	char titl02 [8]  csGnuPack;		/* Should be "NUM_SREC" */
-	long32_t num_srec    csGnuPack;		/* Number of records in a sub_file
-									   header. */
-	char titl03 [8]  csGnuPack;		/* Should be "NUM_FILE" */
-	long32_t num_file    csGnuPack;		/* Number of sub-files in the
-									   main file. */
-	char titl04 [8]  csGnuPack;		/* Should be "GS_TYPE " */
-	char gs_type [8] csGnuPack;		/* Indicates the units used for
-									   real numbers in the file,
-									   typically "SECONDS" */
-	char titl05 [8]  csGnuPack;		/* Should be "VERSION " */
-	char version [8] csGnuPack;		/* Currently "NTv2.0" */
-	char titl06 [8]  csGnuPack;		/* Should be "DATUM_F " */
-	char datum_f [8] csGnuPack;		/* FROM datum */
-	char titl07 [8]  csGnuPack;		/* Should be "DATUM_T " */
-	char datum_t [8] csGnuPack;		/* TO datum */
-	char titl08 [8]  csGnuPack;		/* Should be "MAJOR_F " */
-	double major_f   csGnuPack;		/* Length of the major axis for
-									   the FROM ellipsoid. Not used
-									   anywhere, but its here. */
-	char titl09 [8]  csGnuPack;		/* Should be "MINOR_F " */
-	double minor_f   csGnuPack;		/* Length of the minor axis for
-									   the FROM ellipsoid. Not used
-									   anywhere, but its here. */
-	char titl10 [8]  csGnuPack;		/* Should be "MAJOR_T " */
-	double major_t   csGnuPack;		/* Length of the major axis for
-									   the TO ellipsoid. Not used
-									   anywhere, but its here. */
-	char titl11 [8]  csGnuPack;		/* Should be "MINOR_T " */
-	double minor_t   csGnuPack;		/* Length of the minor axis for
-									   the TO ellipsoid. Not used
-									   anywhere, but its here. */
-};
-#define cs_BSWP_GridFileCa2HdrAU "8cl8cl8cl8c8c8c8c8c8c8c8c8cd8cd8cd8cd"
-
-/*	The following union is an attempt to make sense out the
-	variations in file formats. */
-union csGridFileCa2Hdr
-{
-	struct csGridFileCa2HdrCA Canadian;
-	struct csGridFileCa2HdrAU Australian;
-};
-
-/* The following structure is used to read, byte swap, and decipher the
-   sub-file headers in the CaNTv2 data file.  Since the file header
-   provides the number of sub-files in the file, these are maintained
-   in an array (rather than the traditional linked list). */
-struct csGridFileCa2SubHdr
-{
-	char titl01 [8];		/* Should be "SUB_NAME" */
-	char sub_name [8];		/* Name of the sub file. */
-	char titl02 [8];		/* Should be "PARENT  " */
-	char parent [8];		/* Name of the parent sub-file,
-							   or "NONE" if this is the top
-							   of a heirarchy. */
-	char titl03 [8];		/* Should be "CREATED " */
-	char created [8];		/* Create date in ASCII (yy-mm-dd) */
-	char titl04 [8];		/* Should be "UPDATED " */
-	char updated [8];		/* Update date in ASCII (yy-mm-dd) */
-	char titl05 [8];		/* Should be "S_LAT   " */
-	double s_lat;			/* Latitude of the southern limit,
-							   in data file units, typically
-							   seconds. */
-	char titl06 [8];		/* Should be "N_LAT   " */
-	double n_lat;			/* Latitude of the northern limit,
-							   in data file units, typically
-							   seconds. */
-	char titl07 [8];		/* Should be "E_LONG  " */
-	double e_long;			/* Longitude of the eastern limit,
-							   in data file units, typically
-							   seconds.  Note, west longitude
-							   is carried as a positive number. */
-	char titl08 [8];		/* Should be "W_LONG  " */
-	double w_long;			/* Longitude of the western limit,
-							   in data file units, typically
-							   seconds.  Note, west longitude
-							   is carried as a positive number. */
-	char titl09 [8];		/* Should be "LAT_INC " */
-	double lat_inc;			/* Latitude increment between
-							   records in file units (i.e.
-							   seconds).  Typically 300. */
-	char titl10 [8];		/* Should beLongitude"LONG_INC" */
-	double long_inc;		/* Longitude increment between
-							   records in file units (i.e.
-							   seconds).  Typically 300. */
-	char titl11 [8];		/* Should be "GS_COUNT" */
-	long32_t gs_count;			/* Number of records in the sub-file
-							   including all records in the
-							   header. */
-	long32_t fill11;			/* Filler; not present in the
-							   Australian version. */
-};
-#define cs_BSWP_GridFileCa2SubHdrCA "8c8c8c8c8c8c8c8c8cd8cd8cd8cd8cd8cd8cll"
-#define cs_BSWP_GridFileCa2SubHdrAU "8c8c8c8c8c8c8c8c8cd8cd8cd8cd8cd8cd8cl"
-
-/* The following structure is used to read data elements from the
-   Canadian NT v2 data file.  This is common to both versions. */
-struct TcsCaNTv2Data
-{
-	float del_lat;			/* Latitude shift, in seconds. */
-	float del_lng;			/* Longitude shift, in seconds. */
-	float acc_lat;			/* Latitude accuracy */
-	float acc_lng;			/* Longitude accuracy */
-};
-#define cs_BSWP_GridFileCa2Data "ffff"
 
 /* The following is the header on a Geoid 99 file.  We define it here to
    take advanatge of whatever packing is currently in place. */
@@ -9335,197 +7857,6 @@ struct csBynGridFileHdr_
 };
 #define cs_BSWP_BynFileHDR "llllssssdssdssss28c"
 
-
-/*
-	Restore the structure packing to whatever was in effect prior
-	to the adjustment above.  CS-MAP no longer requires this.
-*/
-#if   _RUN_TIME == _rt_BORLAND16 || _RUN_TIME == _rt_BORLAND32
-#	pragma option -a.
-#elif _RUN_TIME == _rt_METAWARE
-#	pragma Align_members ()
-#elif _RUN_TIME == _rt_MSC16 || _RUN_TIME == _rt_MSVC16 || _RUN_TIME == _rt_MSDOTNET || \
-														   _RUN_TIME == _rt_MSWIN64 ||  \
-														   _RUN_TIME == _rt_MSVC32 ||   \
-														   _RUN_TIME == _rt_WINCE
-#	pragma pack ()
-#elif _RUN_TIME == _rt_HPUX
-#	pragma pack
-#elif _RUN_TIME == _rt_AIX
-#	pragma options align=reset
-#elif _RUN_TIME >= _rt_UNIXPCC
-#	pragma pack ()
-#else
-	/* I don't know what would work for WATCOM. */
-#endif
-
-/*
-	An array (not a linked list) of the following structure is built
-	for each sub-grid in a Canadian NTv2 data file.  Note, that the
-	"index" elements refer to zero based indices into this array.
-*/
-struct csGridFileCa2SubGrid_
-{
-	double SouthWest [2];		/* Geographic coordinates of the southwest
-								   extent of the sub-grid in degrees.  Note,
-								   this is a East Positive Value used to
-								   check coverage. */
-	double NorthEast [2];		/* Geographic coordinates of the northeast
-								   extent of the sub-grid, East Positive,
-								   in degrees. */
-	double SeReference [2];		/* Geographic coordinates of the southeast
-								   corner of the sub-grid, West Positive, in
-								   degrees.  This is the value used in the
-								   calculations. */
-	double NwReference [2];		/* Geographic coordinates of the northwest
-								   corner of the sub-grid in degrees, West
-								   Positive.  This is the value used in the
-								   calculations. */
-	double DeltaLng;			/* Size of a grid cell in degrees. */ 
-	double DeltaLat;			/* Size of a grid cell in degrees. */
-	double Density;				/* An inprecise value which indicates
-								   the density of the grid in the
-								   sub-grid.  Used to select one grid
-								   over another in overlap situations. */
-	long32_t FirstRecord;			/* The file position of the first data record
-								   in this sub-grid. */
-	long32_t GridRecCnt;			/* Number of 16 byte records in the
-								   sub-file. */
-	short ParentIndex;			/* Set to the index of the parent,
-								   if this is a child. */
-	short ChildIndex;			/* Set to a positive value if this
-								   sub-file is the parent of at
-								   least one or more sub-files. The
-								   value is the index of the first
-								   such sub-file in this directory. */
-	unsigned short RowCount;	/* The number of records (i.e. rows)
-								   in the sub-grid. */
-	unsigned short ElementCount;/* Number of data elements in each row. */
-	unsigned short RowSize;		/* Size of records in the sub-grid in
-								   bytes; i.e. the length of each row of
-								   longitude values (16 * ElementCount). */
-	short Cacheable;			/* TRUE says this sub-grid is cachable.
-								   Certain sub-grids have been found to
-								   be non-cachable due to a bust in the
-								   file format. */
-	char Name [16];				/* Name of the sub-grid. */
-	char Parent [16];			/* Name of the parent sub-file. Null
-								   string if this is a parent. */
-};
-/*
-   The following structure is constructed as an instance of a Canadian
-   National Transformation Object.  This will become a "class" object
-   in C++.  All remaining functions in this module will be members of
-   the resulting class.
-   
-   Since we're dealing with at least two different governmental
-   agencies here, we use csGridFileCa2Type to distinguish between
-   any different types which we encounter.  (Since the following
-   structure is never written to disk, the enum should not be
-   a problem.)
-
-   Since file I/O is required, these objects are NOT thread safe.
-   We would need to read the entire file in to make them thread
-   safe. Since the Canadian file is 14MB, this is probably not
-   desirable.
-*/
-
-enum csGridFileCa2Type {csCaNTv2TypeNone = 0,
-						csCaNTv2TypeCanada,
-						csCaNTv2TypeAustralia
-					   };
-struct csGridFileCa2_
-{
-	struct csGridFileCa2SubGrid_ *SubGridDir;
-									/* Since the header tells us how many
-									   of these things there are, we use
-									   an array of these things. */
-	csFILE *Stream;					/* Provides access to the data file. */
-	long32_t HdrRecCnt;					/* Number of 16 byte records in the
-									   file header.  In the Australian
-									   version, not all records are 16
-									   bytes; the first three are only 12
-									   bytes long. */
-	long32_t SubHdrRecCnt;				/* Number of 16 byte records in each sub
-									   grid header.  In the Australian version,
-									   the last record is only 12 bytes long. */
-	long32_t SubCount;					/* Number of sub grids in the file, also
-									   the number of elements in the
-									   SubGridDir array. */
-	unsigned short RecSize;			/* Size of records in this file (16) */
-	short CellIsValid;				/* +1 indicates Latitude and longitude
-									   cells are valid. */
-	short SubOverlap;				/* non-Zero indicates that overlap was
-									   detected in the parent grids. */
-	enum csDtCvtType ExtType;		/* The type of datum shift this object
-									   performs, per the user.  I.e. supplied
-									   by the user and not really used
-									   internally except to pass along to
-									   the grid cell cache. */
-	enum csGridFileCa2Type IntType;	/* Inidicates the type of the data file
-									   managed by this object.  Generated and
-									   maintained internally. */ 
-	long32_t BufferSize;				/* Size of buffer to be used for this
-									   object. */
-	struct csGridCell_ longitudeCell;
-									/* Last cell used, the longitude data. */
-	struct csGridCell_ latitudeCell;
-									/* Last cell used, the longitude data. */
-	char FilePath [MAXPATH];		/* The base name for the file being
-									   managed by this object. */
-	char FileName [16];				/* Last 15 characters of the actual
-									   file name, used to generate
-									   point data ID's. */
-	char sourceId [48];				/* Used to generate the source string, i.e.
-									   a string which includes the file name,
-									   and the actual sub-grid used to do
-									   a calculation. */
-
-	/* In future, we'll add some data buffering to this object.  Right
-	   now, we'll just use normal stream buffering.  Buffering is
-	   complicated by the fact that the Canadian file does not adhere
-	   to the specification.  Who knows what the Aussies will do when
-	   they start adding sub-grids.
-	   
-	   Thus, we'll avoid that issue for now (maybe forever). */
-};
-/******************************************************************************
-	Canadian, Version 1, Datum Shift object.
-	Not much to this thing.  Here primarily to remain consistent with the
-	US datum stuff.  The US datum stuff requires two grid files, thus the
-	need for a csDatumShiftUS object.  This guy just keeps the nameing and
-	functionality consistent. */
-struct csDatumShiftCa1_
-{
-	struct csGridFileCa1_* gridPtr;
-};
-
-/******************************************************************************
-	Canadian, Version 2, Datum Shift object.
-	Not much to this thing.  Here primarily to remain consistent with the
-	US datum stuff.  The US datum stuff requires two grid files, thus the
-	need for a csDatumShiftUS object.  This guy just keeps the nameing and
-	functionality consistent. */
-struct csDatumShiftCa2_
-{
-	struct csGridFileCa2_* gridPtr;
-};
-/******************************************************************************
-	Nad83 To HARN Object
-	Encspsulates the functionality of converting NAD83 to HARN and vice
-	versa.
-*/
-struct csNad83ToHarn_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csNad83ToHarnEntry_ *listHead;
-};
-struct csNad83ToHarnEntry_
-{
-	struct csNad83ToHarnEntry_ *next;
-	struct csDatumShiftUS_ *harnDatumPtr;
-};
 /******************************************************************************
 	US Geoid 96 file object.  Essentially the same as a csGridFileUS.  However,
 	the Geoid 96 algorithm uses the biquadratic calculation techique.  This is
@@ -9545,16 +7876,16 @@ struct csGeoid96GridFile_
 	double deltaLng;
 	double deltaLat;
 	long32_t fileSize;
-	csFILE* strm;					/* file is not opened until required,
-									   may be closed if entire contents
-									   have been buffered. */
+	csFILE* strm;						/* file is not opened until required,
+										   may be closed if entire contents
+										   have been buffered. */
 	long32_t bufferSize;				/* size of buffer allocated */
 	long32_t bufferBeginPosition;		/* file position of 1st byte in buffer,
-									   -1 says nothing in buffer */
-	long32_t bufferEndPosition;			/* file position of last byte in buffer,
-									   -1 says nothing in buffer */
-	void *dataBuffer;				/* not allocated until required, i.e.
-									   file is actually opened. */
+										   -1 says nothing in buffer */
+	long32_t bufferEndPosition;				/* file position of last byte in buffer,
+										   -1 says nothing in buffer */
+	void *dataBuffer;					/* not allocated until required, i.e.
+										   file is actually opened. */
 	char filePath [MAXPATH];
 	char fileName [16];
 };
@@ -9575,22 +7906,22 @@ struct csGeoid99GridFile_
 	double deltaLng;
 	double deltaLat;
 	long32_t fileSize;
-	csFILE* strm;					/* file is not opened until required,
-									   may be closed if entire contents
-									   have been buffered. */
+	csFILE* strm;						/* file is not opened until required,
+										   may be closed if entire contents
+										   have been buffered. */
 	long32_t bufferSize;
 	long32_t bufferBeginPosition;		/* file position of 1st byte in buffer,
-									   -1 says nothing in buffer */
+										   -1 says nothing in buffer */
 	long32_t bufferEndPosition;			/* file position of last byte in buffer,
-									   -2 says nothing in buffer */
-	void *dataBuffer;				/* not allocated until required, i.e.
-									   file is actually opened. */
+										   -2 says nothing in buffer */
+	void *dataBuffer;					/* not allocated until required, i.e.
+										   file is actually opened. */
 	long32_t iKind;						/* The value extracted from the header
-									   prior to swapping.  Generally, a
-									   value of one means no swapping
-									   required.  A value other than one,
-									   specifically 0x01000000 means
-									   swapping is required. */
+										   prior to swapping.  Generally, a
+										   value of one means no swapping
+										   required.  A value other than one,
+										   specifically 0x01000000 means
+										   swapping is required. */
 	char filePath [MAXPATH];
 	char fileName [32];
 };
@@ -9611,16 +7942,16 @@ struct cs_Ostn97_
 	long32_t recordCount;
 	long32_t recordSize;
 	long32_t elementSize;
-	csFILE* strm;					/* file is not opened until required,
-									   may be closed if entire contents
-									   have been buffered. */
+	csFILE* strm;						/* file is not opened until required,
+										   may be closed if entire contents
+										   have been buffered. */
 	long32_t bufferSize;
 	long32_t bufferBeginPosition;		/* file position of 1st byte in buffer,
-									   -1 says nothing in buffer */
+										   -1 says nothing in buffer */
 	long32_t bufferEndPosition;			/* file position of last byte in buffer,
-									   -2 says nothing in buffer */
-	void *dataBuffer;				/* not allocated until required, i.e.
-									   file is actually opened. */
+										   -2 says nothing in buffer */
+	void *dataBuffer;					/* not allocated until required, i.e.
+										   file is actually opened. */
 	char filePath [MAXPATH];
 	char fileName [32];
 };
@@ -9638,16 +7969,16 @@ struct cs_Osgm91_
 	long32_t recordCount;
 	long32_t recordSize;
 	long32_t elementSize;
-	csFILE* strm;					/* file is not opened until required,
-									   may be closed if entire contents
-									   have been buffered. */
+	csFILE* strm;						/* file is not opened until required,
+										   may be closed if entire contents
+										   have been buffered. */
 	long32_t bufferSize;
 	long32_t bufferBeginPosition;		/* file position of 1st byte in buffer,
-									   -1 says nothing in buffer */
+										   -1 says nothing in buffer */
 	long32_t bufferEndPosition;			/* file position of last byte in buffer,
-									   -2 says nothing in buffer */
-	void *dataBuffer;				/* not allocated until required, i.e.
-									   file is actually opened. */
+										   -2 says nothing in buffer */
+	void *dataBuffer;					/* not allocated until required, i.e.
+										   file is actually opened. */
 	char filePath [MAXPATH];
 	char fileName [32];
 	struct cs_Trmer_ osgb36Trmer;
@@ -9681,11 +8012,11 @@ struct cs_Ostn02_
 									   have been buffered. */
 	long32_t bufferSize;
 	long32_t bufferBeginPosition;		/* file position of 1st byte in buffer,
-									   -1 says nothing in buffer */
+										   -1 says nothing in buffer */
 	long32_t bufferEndPosition;			/* file position of last byte in buffer,
-									   -2 says nothing in buffer */
-	void *dataBuffer;				/* not allocated until required, i.e.
-									   file is actually opened. */
+										   -2 says nothing in buffer */
+	void *dataBuffer;					/* not allocated until required, i.e.
+										   file is actually opened. */
 	char filePath [MAXPATH];
 	char fileName [32];
 };
@@ -9716,114 +8047,18 @@ struct cs_Egm96_
 	long32_t recordCount;
 	long32_t recordSize;
 	long32_t elementSize;
-	csFILE* strm;					/* file is not opened until required,
-									   may be closed if entire contents
-									   have been buffered. */
+	csFILE* strm;						/* file is not opened until required,
+										   may be closed if entire contents
+										   have been buffered. */
 	long32_t bufferSize;
 	long32_t bufferBeginPosition;		/* file position of 1st byte in buffer,
-									   -1 says nothing in buffer */
+										   -1 says nothing in buffer */
 	long32_t bufferEndPosition;			/* file position of last byte in buffer,
-									   -2 says nothing in buffer */
-	void *dataBuffer;				/* not allocated until required, i.e.
-									   file is actually opened. */
+										   -2 says nothing in buffer */
+	void *dataBuffer;					/* not allocated until required, i.e.
+										   file is actually opened. */
 	char filePath [MAXPATH];
 	char fileName [32];
-};
-
-/*
-	The following object is used to create, manage, and use a
-	binary version of the Jgd2k data file.  We need a binary version
-	to insulate ourselves from ths possibility of a variable
-	length text file.  Also, it enables us to sort the data file.
-	There is no reason to believe that the text files will always be
-	properly sorted for rapid access.
-
-	Note, that unlike all the other grod data files, there is no
-	guarantee that the coverage of any such file is rectangular.
-	Therefore, there is now way that the coverage scheme will
-	work.  So, we are therefore limited to handling a single file
-	at a time.  The coverage is determined by the coverage of that
-	file.
-
-	So, to implement this in a rational way, we have a hardcoded
-	file name, and require it to exist in the data directory.
-
-	The binary file that we make consists of a number of the
-	following records, with two doubles on the front.  The
-	two doubles represent the southwesternmost meshcode in the
-	file.  After the rather tricvial header, the records appear
-	in ascending order by mesh code.
-*/
-struct csJgd2kGridRecord_
-{
-	ulong32_t meshCode;
-	long32_t deltaLat;				/* seconds * 100,000 */
-	long32_t deltaLng;				/* seconds * 100,000 */
-};
-struct csJgd2kGridFile_
-{
-	double ewDelta;				/* Grid cell size */
-	double nsDelta;				/* Grid cell size */
-	csFILE* strm;				/* file is not opened until required,
-								   may be closed if entire contents
-								   have been buffered. */
-	long32_t bufferSize;			/* Size of the I/O buffer in use. */
-	void *dataBuffer;			/* not allocated until required, i.e.
-								   file is actually opened. */
-	struct csGridCell_ lngCell;
-	struct csGridCell_ latCell;
-	char filePath [MAXPATH];	/* Full path to data source file, used for
-								   reporting purposes. */
-	char fileName [32];			/* File name only, used for error reporting. */
-};
-struct csTokyoToJgd2k_
-{
-	struct cs_DtcXform_ *fallback;
-	struct csLLGridCellCache_ *cachePtr;
-	struct csTokyoToJgd2kEntry_ *listHead;
-};
-struct csTokyoToJgd2kEntry_
-{
-	struct csTokyoToJgd2kEntry_ *next;
-	struct csJgd2kGridFile_ *jgd2kPtr;
-};
-
-/*	This object is used to convert geographic coordinates from RGF93 to NTF.
-	Note, this is the opposite of most other datum shifts.  Most techniques
-	convert from the old to the new.  This one converts from the new to the
-	old.  Of course, an inverse is initiated. */
-struct csRgf93ToNtfTxt_
-{
-	struct csGridCoverage_ coverage;	/* Carries the converage of the
-										   internal grid cells. */
-	long32_t lngCount;					/* number of nodes (not cells) in the
-										   east/west direction. */
-	long32_t latCount;					/* number of nodes (not cells) in the
-										   north/south direction. */
-	double deltaLng;
-	double deltaLat;
-	double rgf93ERad;					/* Radius of the rgf93 ellipsoid (GRS80). */
-	double rgf93ESq;					/* Eccentricity squared, RGF93 ellipsoid. */
-	double ntfERad;						/* Radius of the NTF ellipsoid (CLRK 1880). */
-	double ntfESq;						/* Eccentricity squared, NTF ellipsoid. */
-	char filePath [MAXPATH];			/* We keep this for logging and error
-										   reporting. */
-	char fileName [32];					/* For logging and error reporting. */
-	long32_t *deltaX;					/* an array of longs is malloc'ed and
-										   the pointer is stored here.  Note
-										   that the array is a lngCount x latCount
-										   two dimensional array of longs.*/ 
-	long32_t *deltaY;
-	long32_t *deltaZ;
-										/* For testing purposes only.  These three
-										   elements carry the crc16 check code for
-										   the three memory arrays which carry the
-										   transformation grid.  The idea here is
-										   to verify that CS-MAP is not hosing up
-										   the memory in these "heap" arrays. */
-	unsigned short crcX;
-	unsigned short crcY;
-	unsigned short crcZ;
 };
 
 /* This object represents an implementation of the Byn file
@@ -9841,25 +8076,25 @@ struct csBynGridFile_
 	long32_t recordSize;
 	double deltaLng;
 	double deltaLat;
-	double dataFactor;				/* used to convert the integer data to real
-									   form. */
+	double dataFactor;					/* used to convert the integer data to real
+										   form. */
 	long32_t fileSize;
-	csFILE* strm;					/* file is not opened until required,
-									   may be closed if entire contents
-									   have been buffered. */
+	csFILE* strm;						/* file is not opened until required,
+										   may be closed if entire contents
+										   have been buffered. */
 	long32_t bufferSize;
 	long32_t bufferBeginPosition;		/* file position of 1st byte in buffer,
-									   -1 says nothing in buffer */
+										   -1 says nothing in buffer */
 	long32_t bufferEndPosition;			/* file position of last byte in buffer,
-									   -2 says nothing in buffer */
-	void *dataBuffer;				/* not allocated until required, i.e.
-									   file is actually opened. */
-	short fileType;					/* file type from the file header. */
+										   -2 says nothing in buffer */
+	void *dataBuffer;					/* not allocated until required, i.e.
+										   file is actually opened. */
+	short fileType;						/* file type from the file header. */
 	short elementSize;
-	short byteOrder;				/* 0 == Big Endian, 1 == Little Endian,
-									   again, from the header file. */
-	short swapFlag;					/* Non-zero says the data elements, whatever
-									   size they are, need to be swapped. */
+	short byteOrder;					/* 0 == Big Endian, 1 == Little Endian,
+										   again, from the header file. */
+	short swapFlag;						/* Non-zero says the data elements, whatever
+										   size they are, need to be swapped. */
 	char filePath [MAXPATH];
 	char fileName [32];
 };
@@ -9915,14 +8150,38 @@ struct csGeoidHeightEntry_
 */
 struct csVertconUS_
 {
-	struct csZGridCellCache_ *cachePtr;
 	struct csVertconUSEntry_ *listHead;
 };
 struct csVertconUSEntry_
 {
 	struct csVertconUSEntry_ *next;
-	struct csGridFileUS_ *usGridPtr;
+	struct cs_NadconFile_ *usGridPtr;
 };
+
+/******************************************************************************
+	Catalog object
+	Supporting datum files are access through a list of files known as a
+	catalog.  The catalog is, of course, a text file itself.  This object
+	encapsulates the functionality of a catalog file. */
+struct csDatumCatalog_
+{
+	char fileFolder [520];
+	char fallback [cs_KEYNM_DEF];
+	struct csDatumCatalogEntry_ *listHead;
+	char *initialComment;
+	char *middleComment;
+	char *trailingComment;
+};
+struct csDatumCatalogEntry_
+{
+	struct csDatumCatalogEntry_ *next;
+	char pathName [520];
+	double density;
+	long32_t bufferSize;
+	ulong32_t flags;
+	short relative;
+};
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -9930,58 +8189,20 @@ extern "C" {
 /******************************************************************************
 	P R O T O T Y P E S
 ******************************************************************************/
-
-struct csLLGridCellCache_* CSnewLLGridCellCache (int cellCount);
-void CSdeleteLLGridCellCache (struct csLLGridCellCache_* __This);
-void CSreleaseLLGridCellCache (struct csLLGridCellCache_* __This);
-int CSaddLLGridCellCache (struct csLLGridCellCache_* __This,enum csDtCvtType cellType,struct csGridCell_* lngCell,struct csGridCell_* latCell);
-void CSfirstLLGridCellCache (struct csLLGridCellCache_* __This,struct csLLGridCell_* cellPtr);
-int CScalcLLGridCellCache (struct csLLGridCellCache_* __This,double trgLl [2],Const double srcLl [2]);
-Const char *CSsourceLLGridCellCache (struct csLLGridCellCache_* __This,Const double srcLL [2]);
-
-struct csZGridCellCache_* CSnewZGridCellCache (int cellCount);
-void CSdeleteZGridCellCache (struct csZGridCellCache_* __This);
-void CSreleaseZGridCellCache (struct csZGridCellCache_* __This);
-int CSaddZGridCellCache (struct csZGridCellCache_* __This,enum csDtCvtType cellType,struct csGridCell_* zzzCell);
-void CSfirstZGridCellCache (struct csZGridCellCache_* __This,struct csZGridCell_* cellPtr);
-int CScalcZGridCellCache (struct csZGridCellCache_* __This,double* target,Const double srcLl [2]);
-
-void CSinitCoverage (struct csGridCoverage_* __This);
-double CStestCoverageUS (struct csGridCoverage_* __This,Const double point [2]);
-double CStestCoverageCA (struct csGridCoverage_* __This,Const double point [2]);
-void CSsetCoverage (struct csGridCoverage_* __This,Const double* swLL,Const double* neLL);
-void CSinitGridCell (struct csGridCell_* __This);
-double CScalcGridCellUS (struct csGridCell_* __This,Const double geoCoord [2]);
-double CScalcGridCellCA (struct csGridCell_* __This,Const double sourceLL [2]);
-const char *CSsourceGridCell (struct csGridCell_* __This);
-
-void CSinitGridFileUS (struct csGridFileUS_ *__This);
-struct csGridFileUS_* CSnewGridFileUS (Const char *path,long32_t bufferSize,ulong32_t flags,double density);
-void CSdeleteGridFileUS (struct csGridFileUS_* __This);
-void CSreleaseGridFileUS (struct csGridFileUS_* __This);
-Const char* CSpathGridFileUS (struct csGridFileUS_* __This);
-double CStestGridFileUS (struct csGridFileUS_* __This,Const double geoCoord [2]);
-int CSextractGridCellUS (struct csGridFileUS_* __This,Const double geoCoord [2]);
-int CScalcGridFileUS (struct csGridFileUS_* __This,double* llResult,Const double llSource [2]);
-Const char *CSsourceGridFileUS (struct csGridFileUS_* __This,Const double* llSource);
-
-void CSinitGridFileCa1 (struct csGridFileCa1_ *__This);
-struct csGridFileCa1_* CSnewGridFileCa1 (Const char *path,long32_t bufferSize,ulong32_t flags,double density);
-void CSdeleteGridFileCa1 (struct csGridFileCa1_* __This);
-void CSreleaseGridFileCa1 (struct csGridFileCa1_* __This);
-double CStestGridFileCa1 (struct csGridFileCa1_* __This,Const double sourceLL [2]);
-int CSextractGridCellCa1 (struct csGridFileCa1_* __This,Const double sourceLL [2]);
-int CScalcGridFileCa1 (struct csGridFileCa1_* __This,double* deltaLL,Const double ll27 [2]);
-Const char *CSsourceGridFileCa1 (struct csGridFileCa1_* __This,Const double* ll27);
-
-
-struct csGridFileCa2_* CSnewGridFileCa2 (enum csDtCvtType type,Const char *filePath,long32_t bufferSize,ulong32_t flags,double density);
-void CSdeleteGridFileCa2 (struct csGridFileCa2_* __This);
-void CSreleaseGridFileCa2 (struct csGridFileCa2_* __This);
-Const char* CSpathGridFileCa2 (struct csGridFileCa2_* __This);
-int CScalcGridFileCa2 (struct csGridFileCa2_* __This,double deltaLL [2],Const double source [2]);
-double CStestGridFileCa2 (struct csGridFileCa2_* __This,Const double location [2]);
-Const char *CSsourceGridFileCa2 (struct csGridFileCa2_* __This,Const double llSource [2]);
+struct csDatumCatalog_* CSnewDatumCatalog (Const char* pathName);
+void CSdeleteDatumCatalog (struct csDatumCatalog_* __This);
+int CSwriteDatumCatalog (struct csDatumCatalog_* __This,Const char *path);
+Const char *CSgetFallbackName (struct csDatumCatalog_ *__This);
+int CSaddEntryDataumCatalog (struct csDatumCatalog_ *__This,struct csDatumCatalogEntry_ *entPtr);
+int CSdeleteEntryDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
+int CSmoveUpDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
+int CSmoveDownDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
+int CSmakeFirstDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
+int CSmakeLastDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
+struct csDatumCatalogEntry_* CSgetDatumCatalogEntry (struct csDatumCatalog_ *__This,int index);
+struct csDatumCatalogEntry_* CSnewDatumCatalogEntry (Const char* path,short relative,long32_t bufferSize,ulong32_t flags,double density);
+void CSdeleteDatumCatalogEntry (struct csDatumCatalogEntry_* __This);
+void CSwriteDatumCatalogEntry (struct csDatumCatalogEntry_* __This,csFILE *fstr,Const char *baseDir);
 
 double EXP_LVL9 CSgeoidQterp (double sourceDelta [2],float array [9]);
 double EXP_LVL9 CSgeoidQterp1 (double delta,double f0,double f1,double f2);
@@ -10009,254 +8230,11 @@ void CSreleaseBynGridFile (struct csBynGridFile_* __This);
 double CStestBynGridFile (struct csBynGridFile_* __This,Const double *sourceLL);
 int CScalcBynGridFile (struct csBynGridFile_* __This,double* result,Const double* sourceLL);
 
-struct csDatumShiftUS_* CSnewDatumShiftUS (enum csDtCvtType type,Const char *path,long32_t bufferSize,ulong32_t flags,double density);
-void CSdeleteDatumShiftUS (struct csDatumShiftUS_* __This);
-void CSreleaseDatumShiftUS (struct csDatumShiftUS_* __This);
-double CStestDatumShiftUS (struct csDatumShiftUS_ *__This,Const double coord [2]);
-int CScalcDatumShiftUS (struct csDatumShiftUS_* __This,double* llResult,Const double llSource [2],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceDatumShiftUS (struct csDatumShiftUS_* __This,Const double llSource [2]);
-
-struct csDatumShiftCa1_* CSnewDatumShiftCa1 (Const char *path,long32_t bufferSize,ulong32_t flags,double density);
-void CSdeleteDatumShiftCa1 (struct csDatumShiftCa1_* __This);
-void CSreleaseDatumShiftCa1 (struct csDatumShiftCa1_* __This);
-double CStestDatumShiftCa1 (struct csDatumShiftCa1_ *__This,Const double* coord);
-int CScalcDatumShiftCa1 (struct csDatumShiftCa1_* __This,double ll83 [2],Const double ll27 [2],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceDatumShiftCa1 (struct csDatumShiftCa1_* __This,Const double* source);
-
-struct csDatumShiftCa2_* CSnewDatumShiftCa2 (enum csDtCvtType type,Const char *path,long32_t bufferSize,ulong32_t flags,double density);
-void CSdeleteDatumShiftCa2 (struct csDatumShiftCa2_* __This);
-void CSreleaseDatumShiftCa2 (struct csDatumShiftCa2_* __This);
-double CStestDatumShiftCa2 (struct csDatumShiftCa2_* __This,Const double* coord);
-int CScalcDatumShiftCa2 (struct csDatumShiftCa2_* __This,double ll83 [2],Const double ll27 [2],struct csLLGridCellCache_ *cachePtr);
-int CSinverseDatumShiftCa2 (struct csDatumShiftCa2_* __This,double* trgLl,Const double* srcLl);
-Const char *CSsourceDatumShiftCa2 (struct csDatumShiftCa2_* __This,Const double ll27 [2]);
-
-struct csDatumCatalog_* CSnewDatumCatalog (Const char* pathName);
-void CSdeleteDatumCatalog (struct csDatumCatalog_* __This);
-int CSwriteDatumCatalog (struct csDatumCatalog_* __This,Const char *path);
-Const char *CSgetFallbackName (struct csDatumCatalog_ *__This);
-int CSaddEntryDataumCatalog (struct csDatumCatalog_ *__This,struct csDatumCatalogEntry_ *entPtr);
-int CSdeleteEntryDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
-int CSmoveUpDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
-int CSmoveDownDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
-int CSmakeFirstDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
-int CSmakeLastDatumCatalog (struct csDatumCatalog_ *__This,size_t index);
-struct csDatumCatalogEntry_* CSgetDatumCatalogEntry (struct csDatumCatalog_ *__This,int index);
-struct csDatumCatalogEntry_* CSnewDatumCatalogEntry (Const char* path,short relative,long32_t bufferSize,ulong32_t flags,double density);
-void CSdeleteDatumCatalogEntry (struct csDatumCatalogEntry_* __This);
-void CSwriteDatumCatalogEntry (struct csDatumCatalogEntry_* __This,csFILE *fstr,Const char *baseDir);
-
 struct cs_DtcXform_ *CSnewFallback (Const char *dtKeyName,Const char* catalog);
 void CSdeleteFallback (struct cs_DtcXform_ *__This);
 Const char *CSsourceFallback (struct cs_DtcXform_ *__This);
 int CScalcFallbackForward (struct cs_DtcXform_ *__This,double trg [3],Const double src [3]);
 int CScalcFallbackInverse (struct cs_DtcXform_ *__This,double trg [3],Const double src [3]);
-
-struct csNad27ToNad83_* CSnewNad27ToNad83 (Const char *catalog);
-void CSdeleteNad27ToNad83 (struct csNad27ToNad83_* __This);
-struct csNad27ToNad83Entry_* CSselectNad27ToNad83 (struct csNad27ToNad83_* __This,Const double ll27 [3]);
-void CSfirstNad27ToNad83 (struct csNad27ToNad83_* __This,struct csNad27ToNad83Entry_* dtEntryPtr);
-int CScalcNad27ToNad83 (struct csNad27ToNad83_* __This,double *ll83,Const double ll27 [3]);
-int CSinverseNad27ToNad83 (struct csNad27ToNad83_* __This,double ll27 [3],Const double ll83 [3]);
-void CSreleaseNad27ToNad83 (struct csNad27ToNad83_* __This);
-Const char *CSsourceNad27ToNad83 (struct csNad27ToNad83_* __This,Const double ll_in [2]);
-struct csNad27ToNad83Entry_* CSnewNad27ToNad83Entry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteNad27ToNad83Entry (struct csNad27ToNad83Entry_* __This);
-void CSreleaseNad27ToNad83Entry (struct csNad27ToNad83Entry_* __This);
-double CStestNad27ToNad83Entry (struct csNad27ToNad83Entry_* __This,Const double ll27 [3]);
-int CScalcNad27ToNad83Entry (struct csNad27ToNad83Entry_* __This,double ll83 [3],Const double ll27 [3],struct csLLGridCellCache_* cachePtr);
-Const char *CSsourceNad27ToNad83Entry (struct csNad27ToNad83Entry_* __This,Const double *ll27);
-const char *CSnad27ToNad83Src (double ll_in [2]);
-const char *CSnad83ToNad27Src (double ll_in [2]);
-
-struct csNad83ToCsrs_* CSnewNad83ToCsrs (Const char *catalog);
-void CSdeleteNad83ToCsrs (struct csNad83ToCsrs_* __This);
-struct csNad83ToCsrsEntry_* CSselectNad83ToCsrs (struct csNad83ToCsrs_* __This,Const double ll_nad83 [3]);
-void CSfirstNad83ToCsrs (struct csNad83ToCsrs_* __This,struct csNad83ToCsrsEntry_* dtEntryPtr);
-int CScalcNad83ToCsrs (struct csNad83ToCsrs_* __This,double ll_csrs [3],Const double ll_nad83 [3]);
-int CSinverseNad83ToCsrs (struct csNad83ToCsrs_* __This,double ll_nad83 [3],Const double ll_csrs [3]);
-void CSreleaseNad83ToCsrs (struct csNad83ToCsrs_* __This);
-Const char *CSsourceNad83ToCsrs (struct csNad83ToCsrs_* __This,Const double ll_83 [2]);
-struct csNad83ToCsrsEntry_* CSnewNad83ToCsrsEntry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteNad83ToCsrsEntry (struct csNad83ToCsrsEntry_* __This);
-void CSreleaseNad83ToCsrsEntry (struct csNad83ToCsrsEntry_* __This);
-double CStestNad83ToCsrsEntry (struct csNad83ToCsrsEntry_* __This,Const double ll_nad83 [3]);
-int CScalcNad83ToCsrsEntry (struct csNad83ToCsrsEntry_* __This,double ll_csrs [3],Const double ll_nad83 [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceNad83ToCsrsEntry (struct csNad83ToCsrsEntry_* __This,Const double *ll83);
-
-struct csNad27ToCsrs_* CSnewNad27ToCsrs (Const char *catalog);
-void CSdeleteNad27ToCsrs (struct csNad27ToCsrs_* __This);
-struct csNad27ToCsrsEntry_* CSselectNad27ToCsrs (struct csNad27ToCsrs_* __This,Const double ll_nad27 [3]);
-void CSfirstNad27ToCsrs (struct csNad27ToCsrs_* __This,struct csNad27ToCsrsEntry_* dtEntryPtr);
-int CScalcNad27ToCsrs (struct csNad27ToCsrs_* __This,double ll_csrs [3],Const double ll_nad27 [3]);
-int CSinverseNad27ToCsrs (struct csNad27ToCsrs_* __This,double ll_nad27 [3],Const double ll_csrs [3]);
-void CSreleaseNad27ToCsrs (struct csNad27ToCsrs_* __This);
-Const char *CSsourceNad27ToCsrs (struct csNad27ToCsrs_* __This,Const double ll_27 [2]);
-struct csNad27ToCsrsEntry_* CSnewNad27ToCsrsEntry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteNad27ToCsrsEntry (struct csNad27ToCsrsEntry_* __This);
-void CSreleaseNad27ToCsrsEntry (struct csNad27ToCsrsEntry_* __This);
-double CStestNad27ToCsrsEntry (struct csNad27ToCsrsEntry_* __This,Const double ll_nad27 [3]);
-int CScalcNad27ToCsrsEntry (struct csNad27ToCsrsEntry_* __This,double ll_csrs [3],Const double ll_nad27 [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceNad27ToCsrsEntry (struct csNad27ToCsrsEntry_* __This,Const double *ll27);
-
-struct csAgd66ToGda94_* CSnewAgd66ToGda94 (Const char *catalog);
-void CSdeleteAgd66ToGda94 (struct csAgd66ToGda94_* __This);
-struct csAgd66ToGda94Entry_* CSselectAgd66ToGda94 (struct csAgd66ToGda94_* __This,Const double ll66 [3]);
-void CSfirstAgd66ToGda94 (struct csAgd66ToGda94_* __This,struct csAgd66ToGda94Entry_* dtEntryPtr);
-int CScalcAgd66ToGda94 (struct csAgd66ToGda94_* __This,double ll94 [3],Const double ll66 [3]);
-int CSinverseAgd66ToGda94 (struct csAgd66ToGda94_* __This,double ll66 [3],Const double ll94 [3]);
-void CSreleaseAgd66ToGda94 (struct csAgd66ToGda94_* __This);
-Const char *CSsourceAgd66ToGda94 (struct csAgd66ToGda94_* __This,Const double ll_66 [2]);
-struct csAgd66ToGda94Entry_* CSnewAgd66ToGda94Entry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteAgd66ToGda94Entry (struct csAgd66ToGda94Entry_* __This);
-void CSreleaseAgd66ToGda94Entry (struct csAgd66ToGda94Entry_* __This);
-double CStestAgd66ToGda94Entry (struct csAgd66ToGda94Entry_* __This,Const double ll66 [3]);
-int CScalcAgd66ToGda94Entry (struct csAgd66ToGda94Entry_* __This,double ll94 [3],Const double ll66 [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceAgd66ToGda94Entry (struct csAgd66ToGda94Entry_* __This,Const double *ll66);
-
-struct csAgd84ToGda94_* CSnewAgd84ToGda94 (Const char *catalog);
-void CSdeleteAgd84ToGda94 (struct csAgd84ToGda94_* __This);
-struct csAgd84ToGda94Entry_* CSselectAgd84ToGda94 (struct csAgd84ToGda94_* __This,Const double ll84 [3]);
-void CSfirstAgd84ToGda94 (struct csAgd84ToGda94_* __This,struct csAgd84ToGda94Entry_* dtEntryPtr);
-int CScalcAgd84ToGda94 (struct csAgd84ToGda94_* __This,double ll94 [3],Const double ll84 [3]);
-int CSinverseAgd84ToGda94 (struct csAgd84ToGda94_* __This,double ll84 [3],Const double ll94 [3]);
-void CSreleaseAgd84ToGda94 (struct csAgd84ToGda94_* __This);
-Const char *CSsourceAgd84ToGda94 (struct csAgd84ToGda94_* __This,Const double ll_84 [2]);
-struct csAgd84ToGda94Entry_* CSnewAgd84ToGda94Entry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteAgd84ToGda94Entry (struct csAgd84ToGda94Entry_* __This);
-void CSreleaseAgd84ToGda94Entry (struct csAgd84ToGda94Entry_* __This);
-double CStestAgd84ToGda94Entry (struct csAgd84ToGda94Entry_* __This,Const double ll84 [3]);
-int CScalcAgd84ToGda94Entry (struct csAgd84ToGda94Entry_* __This,double ll94 [3],Const double ll84 [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceAgd84ToGda94Entry (struct csAgd84ToGda94Entry_* __This,Const double *ll84);
-
-struct cs_Ats77Xfrm_ *CSnewAts77Xfrm (Const char *filePath,ulong32_t flags,double density);
-void CSreleaseAts77Xfrm (struct cs_Ats77Xfrm_ *__This);
-void CSdeleteAts77Xfrm (struct cs_Ats77Xfrm_ *__This);
-double CStestAts77Xfrm (Const struct cs_Ats77Xfrm_ *__This,enum cs_Ats77Dir_ direction,Const double ll_test [2]);
-int CScalcAts77Xfrm (Const struct cs_Ats77Xfrm_ *__This,double shift [2],Const double ll_in [2]);
-enum cs_Ats77Dir_ CSdirectionAts77Xfrm (Const struct cs_Ats77Xfrm_ *__This);
-Const char *CSsourceAts77Xfrm (Const struct cs_Ats77Xfrm_ *__This);
-#ifdef _DEBUG
-double CS_Ats77XfrmTestFunction (void);
-#endif
-
-struct csAts77ToCsrs_* CSnewAts77ToCsrs (Const char *catalog);
-void CSdeleteAts77ToCsrs (struct csAts77ToCsrs_* __This);
-struct csAts77ToCsrsEntry_* CSselectAts77ToCsrs (struct csAts77ToCsrs_* __This,Const double ll_ats77 [3]);
-void CSfirstAts77ToCsrs (struct csAts77ToCsrs_* __This,struct csAts77ToCsrsEntry_* dtEntryPtr);
-int CScalcAts77ToCsrs (struct csAts77ToCsrs_* __This,double ll_csrs [3],Const double ll_ats77 [3]);
-int CSinverseAts77ToCsrs (struct csAts77ToCsrs_* __This,double ll_ats77 [3],Const double ll_csrs [3]);
-void CSreleaseAts77ToCsrs (struct csAts77ToCsrs_* __This);
-Const char *CSsourceAts77ToCsrs (struct csAts77ToCsrs_* __This,Const double ll_77 [2]);
-struct csAts77ToCsrsEntry_* CSnewAts77ToCsrsEntry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteAts77ToCsrsEntry (struct csAts77ToCsrsEntry_* __This);
-void CSreleaseAts77ToCsrsEntry (struct csAts77ToCsrsEntry_* __This);
-double CStestAts77ToCsrsEntry (struct csAts77ToCsrsEntry_* __This,Const double ll_ats77 [3]);
-int CScalcAts77ToCsrsEntry (struct csAts77ToCsrsEntry_* __This,double ll_csrs [3],Const double ll_ats77 [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceAts77ToCsrsEntry (struct csAts77ToCsrsEntry_* __This,Const double *ll77);
-
-struct csNad27ToAts77_* CSnewNad27ToAts77 (Const char *catalog);
-void CSdeleteNad27ToAts77 (struct csNad27ToAts77_* __This);
-struct csNad27ToAts77Entry_* CSselectNad27ToAts77 (struct csNad27ToAts77_* __This,enum cs_Ats77Dir_ direction,Const double ll_test [3]);
-int CScalcNad27ToAts77 (struct csNad27ToAts77_* __This,double ll_ats77 [3],Const double ll_nad27 [3]);
-int CScalcAts77ToNad27 (struct csNad27ToAts77_* __This,double ll_nad27 [3],Const double ll_ats77 [3]);
-void CSreleaseNad27ToAts77 (struct csNad27ToAts77_* __This);
-Const char *CSsourceNad27ToAts77 (struct csNad27ToAts77_* __This,Const double ll_27 [2]);
-struct csNad27ToAts77Entry_* CSnewNad27ToAts77Entry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteNad27ToAts77Entry (struct csNad27ToAts77Entry_* __This);
-void CSreleaseNad27ToAts77Entry (struct csNad27ToAts77Entry_* __This);
-double CStestNad27ToAts77Entry (struct csNad27ToAts77Entry_* __This,enum cs_Ats77Dir_ direction,Const double ll_test [3]);
-int CScalcNad27ToAts77Entry (struct csNad27ToAts77Entry_* __This,double ll_out [3],Const double ll_in [3]);
-Const char *CSsourceNad27ToAts77Entry (struct csNad27ToAts77Entry_* __This,Const double *ll27);
-
-struct csEd50ToEtrf89_* CSnewEd50ToEtrf89 (Const char *catalog);
-void CSdeleteEd50ToEtrf89 (struct csEd50ToEtrf89_* __This);
-struct csEd50ToEtrf89Entry_* CSselectEd50ToEtrf89 (struct csEd50ToEtrf89_* __This,Const double ll50 [3]);
-void CSfirstEd50ToEtrf89 (struct csEd50ToEtrf89_* __This,struct csEd50ToEtrf89Entry_* dtEntryPtr);
-int CScalcEd50ToEtrf89 (struct csEd50ToEtrf89_* __This,double ll89 [3],Const double ll50 [3]);
-int CSinverseEd50ToEtrf89 (struct csEd50ToEtrf89_* __This,double ll50 [3],Const double ll89 [3]);
-void CSreleaseEd50ToEtrf89 (struct csEd50ToEtrf89_* __This);
-Const char *CSsourceEd50ToEtrf89 (struct csEd50ToEtrf89_* __This,Const double ll_50 [2]);
-struct csEd50ToEtrf89Entry_* CSnewEd50ToEtrf89Entry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This);
-void CSreleaseEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This);
-double CStestEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,Const double ll50 [3]);
-int CScalcEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,double ll89 [3],Const double ll50 [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceEd50ToEtrf89Entry (struct csEd50ToEtrf89Entry_* __This,Const double *ll50);
-
-struct csRgf93ToNtf_* CSnewRgf93ToNtf (Const char *catalog);
-void CSdeleteRgf93ToNtf (struct csRgf93ToNtf_* __This);
-struct csRgf93ToNtfEntry_* CSselectRgf93ToNtf (struct csRgf93ToNtf_* __This,enum csRgf93ToNtfType srchType,Const double ll [3]);
-void CSfirstRgf93ToNtf (struct csRgf93ToNtf_* __This,struct csRgf93ToNtfEntry_* dtEntryPtr);
-int CScalcRgf93ToNtf (struct csRgf93ToNtf_* __This,double ll89 [3],Const double ll50 [3]);
-int CSinverseRgf93ToNtf (struct csRgf93ToNtf_* __This,double ll50 [3],Const double ll89 [3]);
-void CSreleaseRgf93ToNtf (struct csRgf93ToNtf_* __This);
-Const char *CSsourceRgf93ToNtf (struct csRgf93ToNtf_* __This,Const double ll_50 [2]);
-struct csRgf93ToNtfEntry_* CSnewRgf93ToNtfEntry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This);
-void CSreleaseRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This);
-double CStestRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This,Const double ll50 [3]);
-int CScalcRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This,double ll89 [3],Const double ll50 [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceRgf93ToNtfEntry (struct csRgf93ToNtfEntry_* __This,Const double *ll50);
-int CScheckRgf93ToNtfTxt (struct csRgf93ToNtfTxt_ *__This);
-
-struct csDhdnToEtrf89_* CSnewDhdnToEtrf89 (Const char *catalog);
-void CSdeleteDhdnToEtrf89 (struct csDhdnToEtrf89_* __This);
-struct csDhdnToEtrf89Entry_* CSselectDhdnToEtrf89 (struct csDhdnToEtrf89_* __This,Const double llDhdn [3]);
-void CSfirstDhdnToEtrf89 (struct csDhdnToEtrf89_* __This,struct csDhdnToEtrf89Entry_* dtEntryPtr);
-int CScalcDhdnToEtrf89 (struct csDhdnToEtrf89_* __This,double ll89 [3],Const double llDhdn [3]);
-int CSinverseDhdnToEtrf89 (struct csDhdnToEtrf89_* __This,double llDhdn [3],Const double ll89 [3]);
-void CSreleaseDhdnToEtrf89 (struct csDhdnToEtrf89_* __This);
-Const char *CSsourceDhdnToEtrf89 (struct csDhdnToEtrf89_* __This,Const double ll_50 [2]);
-struct csDhdnToEtrf89Entry_* CSnewDhdnToEtrf89Entry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This);
-void CSreleaseDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This);
-double CStestDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This,Const double llDhdn [3]);
-int CScalcDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This,double ll89 [3],Const double llDhdn [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceDhdnToEtrf89Entry (struct csDhdnToEtrf89Entry_* __This,Const double *llDhdn);
-
-struct csCh1903ToPlus_* CSnewCh1903ToPlus (Const char *catalog);
-void CSdeleteCh1903ToPlus (struct csCh1903ToPlus_* __This);
-struct csCh1903ToPlusEntry_* CSselectCh1903ToPlus (struct csCh1903ToPlus_* __This,Const double llCh1903 [3]);
-void CSfirstCh1903ToPlus (struct csCh1903ToPlus_* __This,struct csCh1903ToPlusEntry_* dtEntryPtr);
-int CScalcCh1903ToPlus (struct csCh1903ToPlus_* __This,double llPlus [3],Const double llCh1903 [3]);
-int CSinverseCh1903ToPlus (struct csCh1903ToPlus_* __This,double llCh1903 [3],Const double llPlus [3]);
-void CSreleaseCh1903ToPlus (struct csCh1903ToPlus_* __This);
-Const char *CSsourceCh1903ToPlus (struct csCh1903ToPlus_* __This,Const double llCh1903 [2]);
-struct csCh1903ToPlusEntry_* CSnewCh1903ToPlusEntry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This);
-void CSreleaseCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This);
-double CStestCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This,Const double llCh1903 [3]);
-int CScalcCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This,double llPlus [3],Const double llCh1903 [3],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceCh1903ToPlusEntry (struct csCh1903ToPlusEntry_* __This,Const double *llCh1903);
-
-struct csNzgd49ToNzgd2K_* CSnewNzgd49ToNzgd2K (Const char *catalog);
-void CSdeleteNzgd49ToNzgd2K (struct csNzgd49ToNzgd2K_* __This);
-struct csNzgd49ToNzgd2KEntry_* CSselectNzgd49ToNzgd2K (struct csNzgd49ToNzgd2K_* __This,Const double ll_49 [3]);
-void CSfirstNzgd49ToNzgd2K (struct csNzgd49ToNzgd2K_* __This,struct csNzgd49ToNzgd2KEntry_* dtEntryPtr);
-int CScalcNzgd49ToNzgd2K (struct csNzgd49ToNzgd2K_* __This,double ll_2K [3],Const double ll_49 [3]);
-int CSinverseNzgd49ToNzgd2K (struct csNzgd49ToNzgd2K_* __This,double ll_49 [3],Const double ll_2K [3]);
-void CSreleaseNzgd49ToNzgd2K (struct csNzgd49ToNzgd2K_* __This);
-struct csNzgd49ToNzgd2KEntry_* CSnewNzgd49ToNzgd2KEntry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteNzgd49ToNzgd2KEntry (struct csNzgd49ToNzgd2KEntry_* __This);
-void CSreleaseNzgd49ToNzgd2KEntry (struct csNzgd49ToNzgd2KEntry_* __This);
-double CStestNzgd49ToNzgd2KEntry (struct csNzgd49ToNzgd2KEntry_* __This,Const double ll_49 [3]);
-int CScalcNzgd49ToNzgd2KEntry (struct csNzgd49ToNzgd2KEntry_* __This,double ll_2K [3],Const double ll_49 [3],struct csLLGridCellCache_ *cachePtr);
-
-struct csNad83ToHarn_* CSnewNad83ToHarn (Const char *catalog);
-void CSdeleteNad83ToHarn (struct csNad83ToHarn_* __This);
-struct csNad83ToHarnEntry_* CSselectNad83ToHarn (struct csNad83ToHarn_* __This,Const double ll83 [2]);
-void CSfirstNad83ToHarn (struct csNad83ToHarn_* __This,struct csNad83ToHarnEntry_* dtEntryPtr);
-int CScalcNad83ToHarn (struct csNad83ToHarn_* __This,double *llHarn,Const double ll83 [2]);
-int CSinverseNad83ToHarn (struct csNad83ToHarn_* __This,double ll83 [2],Const double llHarn [2]);
-void CSreleaseNad83ToHarn (struct csNad83ToHarn_* __This);
-Const char *CSsourceNad83ToHarn (struct csNad83ToHarn_* __This,Const double ll_83 [2]);
-struct csNad83ToHarnEntry_* CSnewNad83ToHarnEntry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteNad83ToHarnEntry (struct csNad83ToHarnEntry_* __This);
-void CSreleaseNad83ToHarnEntry (struct csNad83ToHarnEntry_* __This);
-double CStestNad83ToHarnEntry (struct csNad83ToHarnEntry_* __This,Const double ll83 [2]);
-int CScalcNad83ToHarnEntry (struct csNad83ToHarnEntry_* __This,double llHarn [2],Const double ll83 [2],struct csLLGridCellCache_ *cachePtr);
-Const char *CSsourceNad83ToHarnEntry (struct csNad83ToHarnEntry_* __This,Const double *ll83);
 
 struct csGeoidHeight_* CSnewGeoidHeight (Const char *catalog);
 void CSdeleteGeoidHeight (struct csGeoidHeight_* __This);
@@ -10280,34 +8258,7 @@ struct csVertconUSEntry_* CSnewVertconUSEntry (struct csDatumCatalogEntry_* catP
 void CSdeleteVertconUSEntry (struct csVertconUSEntry_* __This);
 void CSreleaseVertconUSEntry (struct csVertconUSEntry_* __This);
 double CStestVertconUSEntry (struct csVertconUSEntry_* __This,Const double ll83 [2]);
-int CScalcVertconUSEntry (struct csVertconUSEntry_* __This,double* v88Mv29,Const double ll83 [2],struct csZGridCellCache_* cachePtr);
-
-int EXP_LVL7 CSjgd2kInit (void);
-void EXP_LVL7 CSjgd2kCls (void);
-int EXP_LVL7 CStokyoToJgd2k (double ll_jgd2k [3],Const double ll_tokyo [3]);
-int EXP_LVL7 CSjgd2kToTokyo (double ll_tokyo [3],Const double ll_jgd2k [3]);
-void EXP_LVL1 CS_jgd2kName (Const char *newName);
-
-ulong32_t CSjpnLlToMeshCode (const double ll [2]);
-void CSjpnMeshCodeToLl (double ll [2],ulong32_t meshCode);
-int CScompareJgd2kGridRecord (const struct csJgd2kGridRecord_ *elem1,const struct csJgd2kGridRecord_ *elem2);
-struct csJgd2kGridFile_ *CSnewJgd2kGridFile (Const char *path,long32_t bufferSize,ulong32_t flags,double density);
-void CSdeleteJgd2kGridFile (struct csJgd2kGridFile_ *__This);
-void CSreleaseJgd2kGridFile (struct csJgd2kGridFile_ *__This);
-double CStestJgd2kGridFile (struct csJgd2kGridFile_ *__This,Const double *sourceLL);
-int CSextractJgd2kGridFile (struct csJgd2kGridFile_ *__This,Const double* sourceLL);
-int CScalcJgd2kGridFile (struct csJgd2kGridFile_* __This,double result [2],Const double* sourceLL);
-int CSmkBinaryJgd2k (struct csJgd2kGridFile_* __This);
-
-struct csTokyoToJgd2k_* CSnewTokyoToJgd2k (Const char *catalog);
-void CSdeleteTokyoToJgd2k (struct csTokyoToJgd2k_* __This);
-int CScalcTokyoToJgd2k (struct csTokyoToJgd2k_* __This,double* llJgd2k,Const double *llTokyo);
-int CSinverseTokyoToJgd2k (struct csTokyoToJgd2k_* __This,double* llTokyo,Const double *llJgd2k);
-void CSreleaseTokyoToJgd2k (struct csTokyoToJgd2k_* __This);
-struct csTokyoToJgd2kEntry_* CSnewTokyoToJgd2kEntry (struct csDatumCatalogEntry_* catPtr);
-void CSdeleteTokyoToJgd2kEntry (struct csTokyoToJgd2kEntry_* __This);
-void CSreleaseTokyoToJgd2kEntry (struct csTokyoToJgd2kEntry_* __This);
-int CScalcTokyoToJgd2kEntry (struct csTokyoToJgd2kEntry_* __This,double* llJgd2k,Const double *llTokyo,struct csLLGridCellCache_ *cachePtr);
+int CScalcVertconUSEntry (struct csVertconUSEntry_* __This,double* v88Mv29,Const double ll83 [2]);
 
 struct cs_Ostn97_ *CSnewOstn97 (const char *filePath);
 void CSdeleteOstn97 (struct cs_Ostn97_ *__This);
@@ -10319,6 +8270,7 @@ int CSmkBinaryOstn97 (struct cs_Ostn97_ *__This);
 #ifdef _DEBUG
 double CStestOstn97 (struct cs_Ostn97_ *__This);
 #endif
+
 
 struct cs_Ostn02_ *CSnewOstn02 (const char *filePath);
 void CSdeleteOstn02 (struct cs_Ostn02_ *__This);
@@ -10352,61 +8304,6 @@ double CSdebugEgm96 (struct cs_Egm96_ *__This);
 
 void EXP_LVL5 CS_llhToXyz (double xyz [3],Const double llh [3],double e_rad,double e_sq);
 int EXP_LVL5 CS_xyzToLlh (double llh [3],Const double xyz [3],double e_rad,double e_sq);
-
-struct cs_Bursa_ * EXP_LVL9 CS_bwInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
-int EXP_LVL9 CS_bw3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Bursa_ *bursa);
-int EXP_LVL9 CS_bw2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Bursa_ *bursa);
-int EXP_LVL9 CS_bw3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Bursa_ *bursa);
-int EXP_LVL9 CS_bw2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Bursa_ *bursa);
-struct cs_Parm7_ * EXP_LVL9 CS_7pInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
-int EXP_LVL9 CS_7p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm7_ *parm7);
-int EXP_LVL9 CS_7p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm7_ *parm7);
-int EXP_LVL9 CS_7p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm7_ *parm7);
-int EXP_LVL9 CS_7p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm7_ *parm7);
-struct cs_Molo_* EXP_LVL9 CS_moInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
-int EXP_LVL7 CS_mo3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Molo_ *molo);
-int EXP_LVL7 CS_mo2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Molo_ *molo);
-int EXP_LVL7 CS_mo3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Molo_ *molo);
-int EXP_LVL7 CS_mo2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Molo_ *molo);
-struct cs_DmaMReg_ * EXP_LVL9 CS_dmaMrInit (Const struct cs_Datum_* srcDatum);
-int EXP_LVL7 CS_dmaMr3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_DmaMReg_ *mreg);
-int EXP_LVL7 CS_dmaMr2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_DmaMReg_ *mreg);
-int EXP_LVL7 CS_dmaMr3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_DmaMReg_ *mreg);
-int EXP_LVL7 CS_dmaMr2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_DmaMReg_ *mreg);
-struct cs_Geoctr_ * EXP_LVL9 CS_gcInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
-int EXP_LVL9 CS_gc3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr);
-int EXP_LVL9 CS_gc2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr);
-int EXP_LVL9 CS_gc3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr);
-int EXP_LVL9 CS_gc2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Geoctr_ *geoctr);
-struct cs_Parm6_ * EXP_LVL9 CS_6pInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
-int EXP_LVL9 CS_6p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm6_ *parm6);
-int EXP_LVL9 CS_6p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm6_ *parm6);
-int EXP_LVL9 CS_6p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm6_ *parm6);
-int EXP_LVL9 CS_6p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm6_ *parm6);
-struct cs_Parm4_ * EXP_LVL9 CS_4pInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
-int EXP_LVL9 CS_4p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm4_ *parm4);
-int EXP_LVL9 CS_4p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm4_ *parm4);
-int EXP_LVL9 CS_4p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm4_ *parm4);
-int EXP_LVL9 CS_4p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm4_ *parm4);
-struct cs_Parm3_ * EXP_LVL9 CS_3pInit (Const struct cs_Datum_* srcDatum,Const struct cs_Datum_* trgDatum);
-int EXP_LVL9 CS_3p3dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
-int EXP_LVL9 CS_3p2dFowrd (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
-int EXP_LVL9 CS_3p3dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
-int EXP_LVL9 CS_3p2dInvrs (double trgLl [3],Const double srcLl [3],Const struct cs_Parm3_ *parm3);
-
-int EXP_LVL7 CSrgf93Init (void);
-int EXP_LVL7 CSrgf93Chk (void);
-void EXP_LVL7 CSrgf93Cls (void);
-int EXP_LVL7 CSrgf93ToNtf (double ll_ntf [3],Const double ll_rgf93 [3]);
-int EXP_LVL7 CSntfToRgf93 (double ll_rgf93 [3],Const double ll_ntf [3]);
-
-struct csRgf93ToNtfTxt_ *CSnewRgf93ToNtfTxt (Const char *filePath,long32_t bufferSize,ulong32_t flags,double density);
-void CSreleaseRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This);
-void CSdeleteRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This);
-double CStestRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This,Const double llRgf93 [3]);
-int CScalcRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This,double ll_ntf [3],Const double ll_rgf93 [3]);
-int CSinverseRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This,double ll_ntf [3],Const double ll_rgf93 [3]);
-Const char *CSsourceRgf93ToNtfTxt (struct csRgf93ToNtfTxt_* __This);
 
 #if _FILE_SYSTEM == _fs_UNIX
 csFILE *CS_fopen (const char *filename,const char *mode);
