@@ -281,7 +281,7 @@ int CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFl
 	{
 		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_ERRORV;
 	}
-	if (gxXform->accuracy < 0.0 || gxXform->accuracy >= 500.0)
+	if (gxXform->accuracy < 0.0 || gxXform->accuracy >= 1000.0)
 	{
 		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_ACCRCY;
 	}

@@ -1030,7 +1030,11 @@ struct cs_GeodeticTransform_
 	short protect;
 	double cnvrgValue;
 	double errorValue;
-	double accuracy; /* Complete: 364 */
+	double accuracy;
+	double rangeMinLng;
+	double rangeMaxLng;
+	double rangeMinLat;
+	double rangeMaxLat;
 	/* The active member of the following union is a function of
 	   the method type. */
 	union csGeodeticXformParameters

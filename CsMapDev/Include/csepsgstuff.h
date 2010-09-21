@@ -530,6 +530,8 @@ public:
 																	  const TcsEpsgCode& epsgCode) const;
 	bool GetFieldByCode (TcsEpsgCode& result,EcsEpsgTable tableId,EcsEpsgField fieldId,
 																  const TcsEpsgCode& epsgCode) const;
+	bool GetFieldByCode (double& result,EcsEpsgTable tableId,EcsEpsgField fieldId,
+															 const TcsEpsgCode& epsgCode) const;
 	// Is a record in table indexed by an EPSG code deprecated?
 	bool IsDeprecated (EcsEpsgTable tableId,const TcsEpsgCode& epsgCode) const;
 
@@ -604,7 +606,7 @@ private:
 // cs_EpsgSupport.cpp.
 //
 // Within EPSG, a conversion or transformation (usually transformation) may
-// have serveal applicable variations.  Some more precise than others, but
+// have serveral applicable variations.  Some more precise than others, but
 // none the less, all have a certain degree of validity.  Especially with
 // respect to datum transformations, there may be several variations which
 // will get you from one datum to another.
@@ -613,7 +615,7 @@ private:
 // That is, consist of two or more single operations which must be performed
 // in a specific order.  Generally, concatenated operations are defined in the
 // Coordinate_Operation Path table.  Often, one or more of these concatenated
-// operations are: 1> the null transformation, or 2> a lonigtude translation
+// operations are: 1> the null transformation, or 2> a longitude translation
 // (i.e. application of a prime meridian).  In either of these two cases,
 // they can usually be ignored in the CS-MAP environment.
 //
@@ -623,7 +625,7 @@ private:
 //		TcsOpVariant will contain more than one TcsOpSingle in the case
 //		of a variant which is a concatenated operation.  Each phase of the
 //		concatenated operation is represented by its own TcsOpSingle.
-// TcsOpsVariants is a std::vector od TcsVariant objects, which is usually
+// TcsOpsVariants is a std::vector of TcsVariant objects, which is usually
 //		sorted by the Accuracy member of the TcsOpVariant object.
 //
 struct TcsSingleOp
