@@ -1264,7 +1264,7 @@ public:
 	//}}AFX_DATA
 	ulong32_t m_Options;
 	const struct cs_GdcCatalogTable_ *m_CatalogTable;
-	CString m_BaseDir;
+	char m_BaseDir [MAXPATH];
 	char m_RelPath [MAXPATH];
 /// Overrides
 	// ClassWizard generated virtual function overrides

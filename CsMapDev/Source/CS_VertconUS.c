@@ -27,11 +27,10 @@
 
 /*		       * * * * R E M A R K S * * * *
 
-	This object maintains a list of csGridFileUS objects which
-	contain the difference in orthometric height in the form of
-	NADV88 - NADV29, in meters.  Thus, the conversion of the
-	Z coordinate from one to the other consists of a single
-	object.
+	This object maintains a list of cs_NadconFile_ objects which contain the
+	difference in orthometric height in the form of NADV88 - NADV29, in meters.
+	Thus, the conversion of the Z coordinate from one to the other consists of
+	a single object.
 */
 
 #include "cs_map.h"
@@ -42,26 +41,25 @@
 struct csVertconUS_* CSnewVertconUS (Const char *catalog)
 {
 	int index;
-	struct csVertconUS_ *__This;
+	struct csVertconUS_ *thisPtr;
 	struct csDatumCatalog_ *catPtr;
 	struct csDatumCatalogEntry_ *catEntryPtr;
 	struct csVertconUSEntry_* vcEntryPtr;
 	struct csVertconUSEntry_* findPtr;
 
 	/* Prepare for an error. */
-	__This = NULL;
+	thisPtr = NULL;
 	catPtr = NULL;
 	catEntryPtr = NULL;
 	vcEntryPtr = NULL;
 
-	__This = (struct csVertconUS_*) CS_malc (sizeof (struct csVertconUS_));
-	if (__This == NULL)
+	thisPtr = (struct csVertconUS_*) CS_malc (sizeof (struct csVertconUS_));
+	if (thisPtr == NULL)
 	{
 		CS_erpt (cs_NO_MEM);
 		goto error;
 	}
-	__This->cachePtr = NULL;
-	__This->listHead = NULL;
+	thisPtr->listHead = NULL;
 
 	/* Open the catalog file. */
 	catPtr = CSnewDatumCatalog (catalog);
@@ -82,57 +80,43 @@ struct csVertconUS_* CSnewVertconUS (Const char *catalog)
 			goto error;
 		}
 		/* Keep the list in the same order as they appear in the file. */
-		if (__This->listHead == NULL)
+		if (thisPtr->listHead == NULL)
 		{
-			__This->listHead = vcEntryPtr;
+			thisPtr->listHead = vcEntryPtr;
 		}
 		else
 		{
-			for (findPtr = __This->listHead;findPtr->next != NULL;findPtr = findPtr->next);		/*lint !e722 */
+			for (findPtr = thisPtr->listHead;findPtr->next != NULL;findPtr = findPtr->next);
 			findPtr->next = vcEntryPtr;
 		}
 	}
 	CSdeleteDatumCatalog (catPtr);
 	catPtr = NULL;
 
-	/* Having done that successfully, allocate a grid cell cache.  If
-	   this fails, we can either report it as an error, or just leave it
-	   alone.  Lets report it as an error. */
-	__This->cachePtr = CSnewZGridCellCache (32);
-	if (__This->cachePtr == NULL)
-	{
-		goto error;
-	}
-
 	/* OK, we ;re done. */
-	return __This;
+	return thisPtr;
 error:
 	if (catPtr != NULL) CSdeleteDatumCatalog (catPtr);
-	if (__This != NULL) CS_free (__This);
+	if (thisPtr != NULL) CS_free (thisPtr);
 	return NULL;
 }
 
 /******************************************************************************
 	Destructor
 */
-void CSdeleteVertconUS (struct csVertconUS_* __This)
+void CSdeleteVertconUS (struct csVertconUS_* thisPtr)
 {
 	struct csVertconUSEntry_ *vcEntryPtr;
 
-	if (__This != NULL)
+	if (thisPtr != NULL)
 	{
-		if (__This->cachePtr != NULL)
+		while (thisPtr->listHead != NULL)
 		{
-			CSdeleteZGridCellCache (__This->cachePtr);
-			__This->cachePtr = NULL;
-		}
-		while (__This->listHead != NULL)
-		{
-			vcEntryPtr = __This->listHead;
-			__This->listHead = __This->listHead->next;
+			vcEntryPtr = thisPtr->listHead;
+			thisPtr->listHead = thisPtr->listHead->next;
 			CSdeleteVertconUSEntry (vcEntryPtr);
 		}
-		CS_free (__This);
+		CS_free (thisPtr);
 	}
 	return;
 }
@@ -141,7 +125,7 @@ void CSdeleteVertconUS (struct csVertconUS_* __This)
 	Coverage Locator -- All files have the same density (so far) so a little of
 	this is unecessary.
 */
-struct csVertconUSEntry_* CSselectVertconUS (struct csVertconUS_* __This,Const double *ll83)
+struct csVertconUSEntry_* CSselectVertconUS (struct csVertconUS_* thisPtr,Const double *ll83)
 {
 	double testValue;
 	double bestSoFar;
@@ -150,7 +134,7 @@ struct csVertconUSEntry_* CSselectVertconUS (struct csVertconUS_* __This,Const d
 
 	rtnValue = NULL;
 	bestSoFar = 3600000.00;
-	vcEntryPtr = __This->listHead;
+	vcEntryPtr = thisPtr->listHead;
 	while (vcEntryPtr != NULL)
 	{
 		testValue = CStestVertconUSEntry (vcEntryPtr,ll83);
@@ -170,24 +154,24 @@ struct csVertconUSEntry_* CSselectVertconUS (struct csVertconUS_* __This,Const d
 		to keep the order of these things the same as they appear in the
 		catalog file.
 */
-void CSfirstVertconUS (struct csVertconUS_* __This,struct csVertconUSEntry_* vcEntryPtr)
+void CSfirstVertconUS (struct csVertconUS_* thisPtr,struct csVertconUSEntry_* vcEntryPtr)
 {
 	struct csVertconUSEntry_* curPtr;
 	struct csVertconUSEntry_* prvPtr;
 
 	/* Take care of the already first situation very quickly. */
-	if (vcEntryPtr == __This->listHead) return;
+	if (vcEntryPtr == thisPtr->listHead) return;
 
 	/* Locate this guy on the list. */
-	for (curPtr = __This->listHead,prvPtr = NULL;
+	for (curPtr = thisPtr->listHead,prvPtr = NULL;
 		 curPtr != NULL;
 		 prvPtr = curPtr,curPtr = curPtr->next)
 	{
 		if (curPtr == vcEntryPtr)
 		{
-			prvPtr->next = curPtr->next;						/*lint !e613 */
-			curPtr->next = __This->listHead;
-			__This->listHead = curPtr;
+			prvPtr->next = curPtr->next;
+			curPtr->next = thisPtr->listHead;
+			thisPtr->listHead = curPtr;
 			break;
 		}
 	}
@@ -197,27 +181,15 @@ void CSfirstVertconUS (struct csVertconUS_* __This,struct csVertconUSEntry_* vcE
 	Calculate the elevation shift, the main man.  Note, result of this
 	calculation is in millimeters.
 */
-int CScalcVertconUS (struct csVertconUS_* __This,double* v88Mv29,Const double *ll83)
+int CScalcVertconUS (struct csVertconUS_* thisPtr,double* v88Mv29,Const double *ll83)
 {
 	int status;
 	struct csVertconUSEntry_* vcEntryPtr;
 
-	/* First see if using the cache works.  This works frequently. */
-	if (__This->cachePtr != NULL)
-	{
-		status = CScalcZGridCellCache (__This->cachePtr,v88Mv29,ll83);
-		if (status == 0)
-		{
-			return status;
-		}
-	}
-
-	/* Guess we'll have to do it the hard way. */
-	status = 0;
-	vcEntryPtr = CSselectVertconUS (__This,ll83);
+	vcEntryPtr = CSselectVertconUS (thisPtr,ll83);
 	if (vcEntryPtr != NULL)
 	{
-		status = CScalcVertconUSEntry (vcEntryPtr,v88Mv29,ll83,__This->cachePtr);
+		status = CScalcVertconUSEntry (vcEntryPtr,v88Mv29,ll83);
 	}
 	else
 	{
@@ -231,13 +203,13 @@ int CScalcVertconUS (struct csVertconUS_* __This,double* v88Mv29,Const double *l
 /******************************************************************************
 	Release -- Release resources, but maintain the directory status.
 */
-void CSreleaseVertconUS (struct csVertconUS_* __This)
+void CSreleaseVertconUS (struct csVertconUS_* thisPtr)
 {
 	struct csVertconUSEntry_* vcEntryPtr;
 
-	if (__This != NULL)
+	if (thisPtr != NULL)
 	{
-		for (vcEntryPtr = __This->listHead;vcEntryPtr != NULL;vcEntryPtr = vcEntryPtr->next)
+		for (vcEntryPtr = thisPtr->listHead;vcEntryPtr != NULL;vcEntryPtr = vcEntryPtr->next)
 		{
 			CSreleaseVertconUSEntry (vcEntryPtr);
 		}
@@ -255,20 +227,20 @@ struct csVertconUSEntry_* CSnewVertconUSEntry (struct csDatumCatalogEntry_* catP
 	extern char csErrnam [];
 
 	char *cp;
-	struct csVertconUSEntry_* __This;
+	struct csVertconUSEntry_* thisPtr;
 
 	/* Prepare for an error. */
-	__This = NULL;
+	thisPtr = NULL;
 
 	/* Allocate some storage. */
-	__This = (struct csVertconUSEntry_*) CS_malc (sizeof (struct csVertconUSEntry_));
-	if (__This == NULL)
+	thisPtr = (struct csVertconUSEntry_*) CS_malc (sizeof (struct csVertconUSEntry_));
+	if (thisPtr == NULL)
 	{
 		CS_erpt (cs_NO_MEM);
 		goto error;
 	}
-	__This->next = NULL;
-	__This->usGridPtr = NULL;
+	thisPtr->next = NULL;
+	thisPtr->usGridPtr = NULL;
 
 	/* Isolate the file name from the path, and the extension from the file name. */
 	cp = strrchr (catPtr->pathName,cs_DirsepC);
@@ -301,8 +273,8 @@ struct csVertconUSEntry_* CSnewVertconUSEntry (struct csDatumCatalogEntry_* catP
 	/* Do what's appropriate for this extension. */
 	if (!CS_stricmp (cp,"94"))
 	{
-		__This->usGridPtr = CSnewGridFileUS (catPtr->pathName,catPtr->bufferSize,catPtr->flags,catPtr->density);
-		if (__This->usGridPtr == NULL)
+		thisPtr->usGridPtr = CSnewNadconFile (catPtr->pathName,catPtr->bufferSize,catPtr->flags,catPtr->density);
+		if (thisPtr->usGridPtr == NULL)
 		{
 			goto error;
 		}
@@ -313,24 +285,24 @@ struct csVertconUSEntry_* CSnewVertconUSEntry (struct csDatumCatalogEntry_* catP
 		CS_erpt (cs_VCON_EXT);
 		goto error;
 	}
-	return __This;
+	return thisPtr;
 error:
-	CSdeleteVertconUSEntry (__This);
+	CSdeleteVertconUSEntry (thisPtr);
 	return NULL;
 }
 
 /******************************************************************************
 	Destructor  (for an 'Entry' sub object)
 */
-void CSdeleteVertconUSEntry (struct csVertconUSEntry_* __This)
+void CSdeleteVertconUSEntry (struct csVertconUSEntry_* thisPtr)
 {
-	if (__This != NULL)
+	if (thisPtr != NULL)
 	{
-		if (__This->usGridPtr != NULL)
+		if (thisPtr->usGridPtr != NULL)
 		{
-			CSdeleteGridFileUS (__This->usGridPtr);
+			CSdeleteNadconFile (thisPtr->usGridPtr);
 		}
-		CS_free (__This);
+		CS_free (thisPtr);
 	}
 	return;
 }
@@ -338,13 +310,13 @@ void CSdeleteVertconUSEntry (struct csVertconUSEntry_* __This)
 /******************************************************************************
 	Release resources  (for an 'Entry' sub object)
 */
-void CSreleaseVertconUSEntry (struct csVertconUSEntry_* __This)
+void CSreleaseVertconUSEntry (struct csVertconUSEntry_* thisPtr)
 {
-	if (__This != NULL)
+	if (thisPtr != NULL)
 	{
-		if (__This->usGridPtr != NULL)
+		if (thisPtr->usGridPtr != NULL)
 		{
-			CSreleaseGridFileUS (__This->usGridPtr);
+			CSreleaseNadconFile (thisPtr->usGridPtr);
 		}
 	}
 	return;
@@ -353,16 +325,16 @@ void CSreleaseVertconUSEntry (struct csVertconUSEntry_* __This)
 /******************************************************************************
 	Locate appropriate "entry' sub object  (for an 'Entry' sub object)
 */
-double CStestVertconUSEntry (struct csVertconUSEntry_* __This,Const double* ll83)
+double CStestVertconUSEntry (struct csVertconUSEntry_* thisPtr,Const double* ll83)
 {
 	double rtnValue;
 
 	rtnValue = 0.0;
-	if (__This != NULL)
+	if (thisPtr != NULL)
 	{
-		if (__This->usGridPtr != NULL)
+		if (thisPtr->usGridPtr != NULL)
 		{
-			rtnValue = CStestGridFileUS (__This->usGridPtr,ll83);
+			rtnValue = CStestNadconFile (thisPtr->usGridPtr,ll83);
 		}
 	}
 	return rtnValue;
@@ -372,7 +344,7 @@ double CStestVertconUSEntry (struct csVertconUSEntry_* __This,Const double* ll83
 	Calculate vertical datum shift, given a specific 'Entry' sub object.
 	Note, result of this calculation is in millimeters.
 */
-int CScalcVertconUSEntry (struct csVertconUSEntry_* __This,double* v88Mv29,Const double *ll83,struct csZGridCellCache_* cachePtr)
+int CScalcVertconUSEntry (struct csVertconUSEntry_* thisPtr,double* v88Mv29,Const double *ll83)
 {
 	extern double cs_Zero;
 
@@ -380,17 +352,9 @@ int CScalcVertconUSEntry (struct csVertconUSEntry_* __This,double* v88Mv29,Const
 
 	*v88Mv29 = cs_Zero;
 	status = -1;
-	if (__This != NULL && __This->usGridPtr != NULL)
+	if (thisPtr != NULL && thisPtr->usGridPtr != NULL)
 	{
-		status = CScalcGridFileUS (__This->usGridPtr,v88Mv29,ll83);
-
-		/* If cachePtr is not NULL, we add the current cell to the
-		   cache.  If we find situations where cacheing a cell is
-		   inappropriate, add that code here. */
-		if (cachePtr != NULL)
-		{
-			CSaddZGridCellCache (cachePtr,dtcTypeUSVertcon,&__This->usGridPtr->currentCell);	/*lint !e534 */
-		}
+		status = CScalcNadconFile (thisPtr->usGridPtr,v88Mv29,ll83);
 	}
 	return status;
 }

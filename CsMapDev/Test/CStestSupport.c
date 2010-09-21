@@ -41,67 +41,10 @@ extern ulong32_t cs_Doserr;
 extern char cs_Dir [];
 extern char *cs_DirP;
 
-extern struct csNad27ToNad83_* csNad27ToNad83;
-extern struct csNad83ToHarn_* csNad83ToHarn;
-extern struct csAgd66ToGda94_* csAgd66ToGda94;
-extern struct csAgd84ToGda94_* csAgd84ToGda94;
-extern struct csNzgd49ToNzgd2K_* csNzgd49ToNzgd2K;
-
-extern struct csAts77ToCsrs_* csAts77ToCsrs;
-extern struct csNad83ToCsrs_* csNad83ToCsrs;
-extern struct csVertconUS_* csVertconUS;
-extern struct cs_Osgm91_ *cs_Osgm91Ptr;
-extern struct csTokyoToJgd2k_ *csTokyoToJgd2k;
-extern struct csRgf93ToNtf_* csRgf93ToNtf;
-extern struct csEd50ToEtrf89_* csEd50ToEtrf89;
-extern struct csDhdnToEtrf89_* csDhdnToEtrf89;
-
-extern struct cs_Ostn97_ *cs_Ostn97Ptr;
-extern struct cs_Ostn02_ *cs_Ostn02Ptr;
-
 void CS_reset ()
 {
 	CS_recvr ();
-	CSdeleteNad27ToNad83 (csNad27ToNad83);
-	csNad27ToNad83 = NULL;
-	CSdeleteNad83ToHarn (csNad83ToHarn);
-	csNad83ToHarn = NULL;
-	CSdeleteAgd66ToGda94 (csAgd66ToGda94);
-	csAgd66ToGda94 = NULL;
-	CSdeleteAgd84ToGda94 (csAgd84ToGda94);
-	csAgd84ToGda94 = NULL;
-	CSdeleteNzgd49ToNzgd2K (csNzgd49ToNzgd2K);
-	csNzgd49ToNzgd2K = NULL;
-	CSdeleteAts77ToCsrs (csAts77ToCsrs);
-	csAts77ToCsrs = NULL;
-	CSdeleteNad83ToCsrs (csNad83ToCsrs);
-	csNad83ToCsrs = NULL;
-	CSdeleteVertconUS (csVertconUS);
-	csVertconUS = NULL;
-	CSdeleteOsgm91 (cs_Osgm91Ptr);
-	cs_Osgm91Ptr = NULL;
-	CSdeleteTokyoToJgd2k (csTokyoToJgd2k);
-	csTokyoToJgd2k = NULL;
-	CSdeleteRgf93ToNtf (csRgf93ToNtf);
-	csRgf93ToNtf = NULL;
-	CSdeleteOstn97 (cs_Ostn97Ptr);
-	cs_Ostn97Ptr = NULL;
-	CSdeleteOstn02 (cs_Ostn02Ptr);
-	cs_Ostn02Ptr = NULL;
-	CSdeleteEd50ToEtrf89 (csEd50ToEtrf89);
-	csEd50ToEtrf89 = NULL;
-	CSdeleteDhdnToEtrf89 (csDhdnToEtrf89);
-	csDhdnToEtrf89 = NULL;
     csReleaseNameMapper ();
-
-	CS_stcpy (cs_DirP,"Japan\\TKY2JGD._jg");
-	CS_remove (cs_Dir);
-	CS_stcpy (cs_DirP,"OSTN02._02");
-	CS_remove (cs_Dir);
-	CS_stcpy (cs_DirP,"OSTN97._nt");
-	CS_remove (cs_Dir);
-	CS_stcpy (cs_DirP,"OSGM91._gm");
-	CS_remove (cs_Dir);
 }
 
 double CStestRN (double low, double high)

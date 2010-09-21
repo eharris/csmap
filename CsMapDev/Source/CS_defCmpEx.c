@@ -32,6 +32,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 
 /* The following functions represent a rewrite of the functions originally
    appearing in CS_defCmp.c.  There is a one to one correpsondence between

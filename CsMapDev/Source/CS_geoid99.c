@@ -309,7 +309,7 @@ void CSreleaseGeoid99GridFile (struct csGeoid99GridFile_* __This)
 double CStestGeoid99GridFile (struct csGeoid99GridFile_* __This,Const double *sourceLL)
 {
 	/* Returns zero if not covered, file density if covered. */
-	return CStestCoverageUS (&(__This->coverage),sourceLL);
+	return CStestCoverage (&(__This->coverage),sourceLL);
 }
 
 /*****************************************************************************

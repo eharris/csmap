@@ -98,6 +98,86 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)bin80\$(ConfigurationName)64"
+			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)64"
+			ConfigurationType="1"
+			CharacterSet="2"
+			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="csmapd.lib"
+				OutputFile="$(OutDir)\CS_Comp.exe"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib80\$(ConfigurationName)64&quot;"
+				GenerateDebugInformation="true"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine=""
+			/>
+		</Configuration>
+		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)bin80\$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)"
@@ -176,86 +256,6 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)bin80\$(ConfigurationName)64"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)64"
-			ConfigurationType="1"
-			CharacterSet="2"
-			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="csmapd.lib"
-				OutputFile="$(OutDir)\CS_Comp.exe"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib80\$(ConfigurationName)64&quot;"
-				GenerateDebugInformation="true"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -369,6 +369,39 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+		</Filter>
+		<Filter
+			Name="DictionarySource"
+			Filter="asc"
+			>
+			<File
+				RelativePath=".\category.asc"
+				>
+			</File>
+			<File
+				RelativePath=".\coordsys.asc"
+				>
+			</File>
+			<File
+				RelativePath=".\datums.asc"
+				>
+			</File>
+			<File
+				RelativePath=".\elipsoid.asc"
+				>
+			</File>
+			<File
+				RelativePath=".\GeodeticPath.asc"
+				>
+			</File>
+			<File
+				RelativePath=".\GeodeticTransformation.asc"
+				>
+			</File>
+			<File
+				RelativePath=".\mreg.asc"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

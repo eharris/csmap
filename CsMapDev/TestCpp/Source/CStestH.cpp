@@ -601,45 +601,7 @@ int CStestH (bool verbose,long32_t duration)
 	}
 	CS_free (mgrsPtr);
 
-	/* Test the new logging functions. */
-	CSnadInit ();
-	testLatLng [0] = -105.0;
-	testLatLng [1] =   35.0;
-	ptr = CSnad27ToNad83Log (testLatLng);
-	testLatLng [1] =   55.0;
-	ptr = CSnad27ToNad83Log (testLatLng);
-	testLatLng [0] = -150.0;
-	testLatLng [1] =   65.0;
-	ptr = CSnad27ToNad83Log (testLatLng);
-	testLatLng [0] = -158.0;
-	testLatLng [1] =   21.5;
-	ptr = CSnad27ToNad83Log (testLatLng);
-	testLatLng [0] =  -66.5;
-	testLatLng [1] =   18.0;
-	ptr = CSnad27ToNad83Log (testLatLng);
-	CSnadCls ();
-
-	CSagd66Init ();
-	testLatLng [0] =  145.0;
-	testLatLng [1] =  -35.0;
-	ptr = CSagd66ToGda94Log (testLatLng);
-	testLatLng [0] =  135.0;
-	testLatLng [1] =  -20.0;
-	ptr = CSagd66ToGda94Log (testLatLng);
-	testLatLng [0] =  146.0;
-	testLatLng [1] =  -41.0;
-	ptr = CSagd66ToGda94Log (testLatLng);
-	CSagd66Cls ();
-
-	CSagd84Init ();
-	testLatLng [0] =  145.0;
-	testLatLng [1] =  -20.0;
-	ptr = CSagd84ToGda94Log (testLatLng);
-	testLatLng [0] =  125.0;
-	testLatLng [1] =  -25.0;
-	ptr = CSagd84ToGda94Log (testLatLng);
-	CSagd84Cls ();
-
+#ifdef __SKIP__
 	/* Test the Geoid height functions. */
 	testLatLng [0] = -105.123456789;
 	testLatLng [1] = 39.123456789;
@@ -682,6 +644,8 @@ int CStestH (bool verbose,long32_t duration)
 		err_cnt += 1;
 	}
 	CS_geoidCls ();
+#endif
 
 	return (err_cnt);
 }
+

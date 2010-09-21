@@ -307,7 +307,7 @@ int main (int argc,char* argv [])
 			}
 			else
 			{
-				printf ("Only one positional arguemnt is supported, currently\n");
+				printf ("Only one positional argument is supported, currently\n");
 				usage (batch);
 				break;
 			}
@@ -405,7 +405,7 @@ int main (int argc,char* argv [])
 		}
 		else
 		{
-			printf ("Cooridnate system test file (%s) open failed. (%d)\n",cs_TestDir,errno);
+			printf ("Coordinate system test file (%s) open failed. (%d)\n",cs_TestDir,errno);
 			usage (batch);
 		}
 	}
@@ -416,7 +416,7 @@ int main (int argc,char* argv [])
 	if (cp == NULL) cp = strchr (tests,'N');
 	if (cp != NULL)
 	{
-		KcsEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (csEpsgDir,L"6.18");
+		KcsEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (csEpsgDir,L"7.05");
 	}
 	
 	// Close/delete any remnants.

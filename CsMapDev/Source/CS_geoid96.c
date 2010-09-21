@@ -77,7 +77,7 @@ struct csGeoid96GridFile_* CSnewGeoid96GridFile (Const char *path,long32_t buffe
 	csFILE *fstr;
 	struct csGeoid96GridFile_* __This;
 	char cTemp [MAXPATH];
-	struct csGridHdrUS_ geoid96Hdr;
+	struct csNadconFileHdr_ nadconHdr;
 
 	/* Prepare for an error. */
 	__This = NULL;
@@ -140,8 +140,8 @@ struct csGeoid96GridFile_* CSnewGeoid96GridFile (Const char *path,long32_t buffe
 		CS_erpt (cs_DTC_FILE);
 		goto error;
 	}
-	readCount = CS_fread (&geoid96Hdr,1,sizeof (geoid96Hdr),fstr);
-	if (readCount != sizeof (geoid96Hdr))
+	readCount = CS_fread (&nadconHdr,1,sizeof (nadconHdr),fstr);
+	if (readCount != sizeof (nadconHdr))
 	{
 		CS_stncp (csErrnam,__This->filePath,MAXPATH);
 		CS_erpt (cs_INV_FILE);
@@ -174,27 +174,27 @@ struct csGeoid96GridFile_* CSnewGeoid96GridFile (Const char *path,long32_t buffe
 	fstr = NULL;
 
 	/* Swap the bytes if necessary. */
-	CS_bswap (&geoid96Hdr,cs_BSWP_GridFileHdrUS);
+	CS_bswap (&nadconHdr,cs_BSWP_NadconFileHdr);
 
 	/* The extra stuff here is required as conversions of floats to doubles
 	   does not always provide precise results.  To get the precise results we
 	   require, we assume that the value (which is in degrees) is an intergal
 	   number of seconds. */
-	lngTmp = (long)(((double)geoid96Hdr.del_lng * 3600.0) + 0.4);
+	lngTmp = (long)(((double)nadconHdr.del_lng * 3600.0) + 0.4);
 	__This->deltaLng = ((double)lngTmp / 3600.0);
-	lngTmp = (long)(((double)geoid96Hdr.del_lat * 3600.0) + 0.4);
+	lngTmp = (long)(((double)nadconHdr.del_lat * 3600.0) + 0.4);
 	__This->deltaLat = ((double)lngTmp / 3600.0);
 
 	/* Now we can do the rest of this stuff. */
-	__This->coverage.southWest [LNG] = geoid96Hdr.min_lng;
-	__This->coverage.southWest [LAT] = geoid96Hdr.min_lat;
-	__This->coverage.northEast [LNG] = geoid96Hdr.min_lng + (__This->deltaLng * (geoid96Hdr.ele_cnt - 1));
-	__This->coverage.northEast [LAT] = geoid96Hdr.min_lat + (__This->deltaLat * (geoid96Hdr.rec_cnt - 1));
+	__This->coverage.southWest [LNG] = nadconHdr.min_lng;
+	__This->coverage.southWest [LAT] = nadconHdr.min_lat;
+	__This->coverage.northEast [LNG] = nadconHdr.min_lng + (__This->deltaLng * (nadconHdr.ele_cnt - 1));
+	__This->coverage.northEast [LAT] = nadconHdr.min_lat + (__This->deltaLat * (nadconHdr.rec_cnt - 1));
 	__This->coverage.density = (__This->deltaLng < __This->deltaLat) ? __This->deltaLng : __This->deltaLat;
 	if (density != 0.0) __This->coverage.density = density;
-	__This->elementCount = geoid96Hdr.ele_cnt;
-	__This->recordCount = geoid96Hdr.rec_cnt;
-	__This->recordSize = geoid96Hdr.ele_cnt * (int)sizeof (float) + (int)sizeof (long);
+	__This->elementCount = nadconHdr.ele_cnt;
+	__This->recordCount = nadconHdr.rec_cnt;
+	__This->recordSize = nadconHdr.ele_cnt * (int)sizeof (float) + (int)sizeof (long);
 
 	/* Verify the integrity of the file. */
 	lngTmp = (__This->recordCount + 1) * __This->recordSize;
@@ -279,7 +279,7 @@ void CSreleaseGeoid96GridFile (struct csGeoid96GridFile_* __This)
 double CStestGeoid96GridFile (struct csGeoid96GridFile_* __This,Const double *sourceLL)
 {
 	/* Returns zero if not covered, file density if covered. */
-	return CStestCoverageUS (&(__This->coverage),sourceLL);
+	return CStestCoverage (&(__This->coverage),sourceLL);
 }
 
 /*****************************************************************************

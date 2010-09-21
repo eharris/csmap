@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 
 extern int (*CS_usrCsDefPtr)(struct cs_Csdef_ *ptr,Const char *keyName);
 extern int (*CS_usrDtDefPtr)(struct cs_Dtdef_ *ptr,Const char *keyName);

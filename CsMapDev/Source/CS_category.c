@@ -491,7 +491,7 @@ struct cs_Ctdef_* EXP_LVL3 CSrdCatFile ()
 		CS_erpt (cs_CS_BAD_MAGIC);
 		goto error;
 	}
-	while (TRUE)
+	for (;;)
 	{
 		cs_Error = 0;
 		ctDefPtr = CSrdCategory (stream);

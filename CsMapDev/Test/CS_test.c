@@ -25,7 +25,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*lint -esym(534,CSrgf93Init) */
 /*lint -esym(534,_filbuf) */
 /*lint -esym(534,CS_atof,CS_ftoa) */
 /*lint -esym(578,cs_TestDir) */
@@ -504,13 +503,6 @@ int main (int argc,char *argv [])
 	
 	CS_reset ();
 
-	/* We connect to this and leave active throughout the test, as the
-	   question has been raised as to if the heap memory arrays used by
-	   this 'object' are being corrupted.  Thus, we leave this active
-	   while all other tests are run, and we then check their integrity
-	   before final exit. */
-	CSrgf93Init ();
-
 	/* If the heap check feature is activated, we walk the
 	   current heap and accumulate the amount of heap memory
 	   currently in use.  This is used later on to verify
@@ -851,16 +843,6 @@ int main (int argc,char *argv [])
 	   the objects. */
 
 	CS_recvr ();
-
-	/* If CSrgf93Chk returns zero, the memory in the memory arrays
-	   has not changed since the start of this program. */
-	if (CSrgf93Chk ())
-	{
-		CS_errmsg (alt_dir,sizeof (alt_dir));
-		printf ("Memory integrity violation: %s\n",alt_dir);
-	}
-	CSrgf93Cls ();
-
 	CS_reset ();
 
 	/* See if a file open doesn't produce the same file

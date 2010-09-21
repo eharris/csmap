@@ -185,43 +185,18 @@ BOOL CmfcTest::InitInstance ()
 	return TRUE;
 }
 
-extern "C" struct csNad27ToNad83_* csNad27ToNad83;
-extern "C" struct csNad83ToHarn_* csNad83ToHarn;
-extern "C" struct csAgd66ToGda94_* csAgd66ToGda94;
-extern "C" struct csAgd84ToGda94_* csAgd84ToGda94;
-extern "C" struct csNzgd49ToNzgd2K_* csNzgd49ToNzgd2K;
-extern "C" struct csAts77ToCsrs_* csAts77ToCsrs;
-extern "C" struct csNad83ToCsrs_* csNad83ToCsrs;
 extern "C" struct csVertconUS_* csVertconUS;
 extern "C" struct cs_Ostn97_ *cs_Ostn97Ptr;
 extern "C" struct cs_Osgm91_ *cs_Osgm91Ptr;
 extern "C" struct cs_Ostn02_ *cs_Ostn02Ptr;
-extern "C" struct csTokyoToJgd2k_ *csTokyoToJgd2k;
-extern "C" struct csNad27ToAts77_ *csNad27ToAts77;
-extern "C" struct csNad27ToCsrs_* csNad27ToCsrs;
 
-extern "C" int csNad27ToNad83Cnt;
-extern "C" int csNad83ToHarnCnt;
-extern "C" int csAgd66ToGda94Cnt;
-extern "C" int csAgd84ToGda94Cnt;
-extern "C" int csNzgd49ToNzgd2KCnt;
-extern "C" int csAts77ToCsrsCnt;
-extern "C" int csNad83ToCsrsCnt;
 extern "C" int csVertconUSCnt;
-extern "C" int csTokyoToJgd2kCnt;
-extern "C" int csNad27ToAts77Cnt;
-extern "C" int csNad27ToCsrsCnt;
 
 int CmfcTest::ExitInstance ()
 {
 	// Clean up before exit.
 	CS_recvr ();
 
-	CSdeleteNad27ToNad83 (csNad27ToNad83);
-	CSdeleteNad83ToHarn (csNad83ToHarn);
-	CSdeleteAgd66ToGda94 (csAgd66ToGda94);
-	CSdeleteAgd84ToGda94 (csAgd84ToGda94);
-	CSdeleteNzgd49ToNzgd2K (csNzgd49ToNzgd2K);
 	CSdeleteVertconUS (csVertconUS);
 	return 0;
 }
@@ -311,27 +286,6 @@ void CmfcTestWnd::OnRecover ()
 {
 	CS_recvr ();
 
-	CSdeleteNad27ToNad83 (csNad27ToNad83);
-	csNad27ToNad83 = NULL;
-	csNad27ToNad83Cnt = 0;
-	CSdeleteNad83ToHarn (csNad83ToHarn);
-	csNad83ToHarn = NULL;
-	csNad83ToHarnCnt = 0;
-	CSdeleteAgd66ToGda94 (csAgd66ToGda94);
-	csAgd66ToGda94 = NULL;
-	csAgd66ToGda94Cnt = 0;
-	CSdeleteAgd84ToGda94 (csAgd84ToGda94);
-	csAgd84ToGda94 = NULL;
-	csAgd84ToGda94Cnt = 0;
-	CSdeleteNzgd49ToNzgd2K (csNzgd49ToNzgd2K);
-	csNzgd49ToNzgd2K = NULL;
-	csNzgd49ToNzgd2KCnt = 0;
-	CSdeleteAts77ToCsrs (csAts77ToCsrs);
-	csAts77ToCsrs = NULL;
-	csAts77ToCsrsCnt = 0;
-	CSdeleteNad83ToCsrs (csNad83ToCsrs);
-	csNad83ToCsrs = NULL;
-	csNad83ToCsrsCnt = 0;
 	CSdeleteVertconUS (csVertconUS);
 	csVertconUS = NULL;
 	csVertconUSCnt = 0;
@@ -341,15 +295,6 @@ void CmfcTestWnd::OnRecover ()
 	cs_Ostn97Ptr = NULL;
 	CSdeleteOstn02 (cs_Ostn02Ptr);
 	cs_Ostn02Ptr = NULL;
-	csTokyoToJgd2kCnt = 1;
-	CSdeleteTokyoToJgd2k (csTokyoToJgd2k);
-	csTokyoToJgd2k = NULL;
-	CSdeleteNad27ToAts77 (csNad27ToAts77);
-	csNad27ToAts77 = NULL;
-	csNad27ToAts77Cnt = 0;
-	CSdeleteNad27ToCsrs (csNad27ToCsrs);
-	csNad27ToCsrs = NULL;
-	csNad27ToCsrsCnt = 0;
 }
 void CmfcTestWnd::OnTestFunc ()
 {

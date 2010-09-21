@@ -598,7 +598,6 @@ int EXP_LVL3 CS_cschk (	Const struct cs_Csdef_ *cs_def,unsigned short chk_flg,
 	}
 
 	/* OK, return err_cnt to the calling module. */
-
 	return (err_cnt + 1);
 }
 

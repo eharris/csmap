@@ -33,6 +33,7 @@
 			   is not a problem, though, as bit_nbr is never negative. */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 
 #ifndef HGT
 #	define HGT 2
@@ -555,6 +556,7 @@ int CSmrcmpA (	struct csDmaMReg_ *mr_ptr,
 	return (0);
 }
 
+#ifdef __SKIP__
 int CSmrcmpC (struct csDmaMReg_ *mr_ptr,char *mr_name,int (*err_func)(char *mesg))
 {
 	extern double delt_lng;
@@ -618,6 +620,7 @@ int CSmrcmpC (struct csDmaMReg_ *mr_ptr,char *mr_name,int (*err_func)(char *mesg
 
 	return (cancel ? -err_cnt : err_cnt);
 }
+#endif
 
 int CSmrdefwr (	struct csDmaMReg_ *mr_ptr,
 				char *mr_name,
@@ -670,14 +673,15 @@ int CSmrdefwr (	struct csDmaMReg_ *mr_ptr,
 		cancel = TRUE;
 	}
 
-	/* Check the current definition. */
+	/* TODO -->
+	   Check the current definition.
 	st = CSmrcmpC (mr_ptr,mr_name,err_func);
 	if (st >= 0) err_cnt += st;
 	else
 	{
 		err_cnt += -st;
 		cancel = TRUE;
-	}
+	}  */
 
 	/* Verify that the datum dictionary has a corresponding entry. */
 	if (dtStrm != NULL)

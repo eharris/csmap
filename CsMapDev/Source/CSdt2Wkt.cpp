@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 #include "cs_wkt.h"
 #include "csNameMapperSupport.h"
 

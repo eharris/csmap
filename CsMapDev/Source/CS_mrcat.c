@@ -606,7 +606,6 @@ double EXP_LVL9 CSmrcatH (Const struct cs_Mrcat_ *mrcat,Const double ll [2])
 	double hh;
 	double lat;
 
-	double cos_lat;
 	double sin_lat;
 	double rho;				/* radius of curvature in the merional section, sans the semi-major radius */
 	double tmp1;

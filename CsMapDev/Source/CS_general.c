@@ -166,6 +166,19 @@ int EXP_LVL1 CS_altdr (Const char *alt_dir)
 
 int EXP_LVL5 CS_nampp (char *name)
 {
+	int st;
+	st = CSnampp (name,cs_KEYNM_DEF);
+	return st;
+}
+int EXP_LVL5 CS_nampp64 (char *name)
+{
+	int st;
+	st = CSnampp (name,64);
+	return st;
+}
+
+int EXP_LVL7 CSnampp (char *name,size_t nameSize)
+{
 	extern char csErrnam [];
 	extern char cs_Nmchset [];
 	extern char cs_Unique;
@@ -180,29 +193,25 @@ int EXP_LVL5 CS_nampp (char *name)
 
 	cs_Register char cc;
 
-	char ctemp [cs_KEYNM_DEF];
+	char ctemp [64];
 
 	/* Prepare for a possible error. */
-
 	CS_stncp (csErrnam,name,MAXPATH);
 
 	/* Capture the size of the original array.  If the name
 	   is OK, we will be copying back into this array a string
 	   which may be smaller, but certainly not larger than
 	   the original. */
-
 	size = strlen (name);						/*lint !e713 */
 
 	/* Remove leading and trailing white space while copying
 	   name to ctemp. */
-
 	pp = name;
 	while (*pp == ' ') pp += 1;
 	qq = CS_stncp (ctemp,pp,sizeof (ctemp));
 	if (ctemp [0] == '\0')
 	{
 		/* We were given all blanks. */
-
 		CS_erpt (cs_INV_NAME);
 		goto error;
 	}
@@ -210,30 +219,26 @@ int EXP_LVL5 CS_nampp (char *name)
 	/* We now know that there is at least one non-space
 	   character in the string.  Thus the following does
 	   not need a pointer comparison which we like to avoid. */
-
 	while (*(qq - 1) == ' ') qq -= 1;
 	*qq = '\0';
 
 	/* If the name is surrounded by either set of default
 	   characters, remove them. */
-
 	pp = ctemp;
 	qq = ctemp + strlen (pp) - 1;
 	if ((*pp == cs_DFLT_IDNTBEG && *qq == cs_DFLT_IDNTEND) ||
 		(*pp == cs_DFLT_REPLBEG && *qq == cs_DFLT_REPLEND)
 	   )
 	{
-		*qq = '\0';			/* trims trailing */
+		*qq = '\0';						/* trims trailing */
 		CS_stcpy (ctemp,&ctemp [1]);	/* trims leading */
 	}
 
 	/* Careful, ctemp could be the null string now if we were
 	   given a set of empty default wrappers. */
-
 	if (*pp == '\0')
 	{
 		/* We were given all blanks. */
-
 		CS_erpt (cs_INV_NAME);
 		goto error;
 	}
@@ -244,7 +249,6 @@ int EXP_LVL5 CS_nampp (char *name)
 	   
 	   Note, we no longer force the name to upper case. However,
 	   all comparisions remain case insensitive. */
-
 	uniqueCount = alphaCount = 0;
 	while (*pp != '\0')
 	{
@@ -266,12 +270,11 @@ int EXP_LVL5 CS_nampp (char *name)
 			goto error;
 		}
 
-		/* if cc == ' ' and we are still here, then spaces are
+		/* If cc == ' ' and we are still here, then spaces are
 		   allowed in key names (i.e. space is a member of the set
 		   defined by cs_Nmchset).  Check for a double space in the
 		   name, a condition which we don't allow in any case.  We
 		   have a specific error message for that condition. */
-
 		if (cc == ' ' && *pp == ' ')
 		{
 			CS_erpt (cs_DBL_SPACE);
@@ -282,34 +285,30 @@ int EXP_LVL5 CS_nampp (char *name)
 	{
 		/* If the cs_Unique feature is enabled, we only allow one
 		   of them. */
-
 		CS_erpt (cs_INV_NAME);
 		goto error;
 	}
 	if (alphaCount == 0)
 	{
-		/* Must have at least on alphabetic in the name. */
-
+		/* Must have at least one alphabetic in the name. */
 		CS_erpt (cs_INV_NAME);
 		goto error;
 	}
 
 	/* If the result is longer than cs_KEYNM_MAX characters we
 	   have an illegal name. */
-
 	size = strlen (ctemp);						/*lint !e713 */
-	if (size > cs_KEYNM_MAX)
+	if (size >= nameSize)
 	{
 		CS_erpt (cs_INV_NAME);
 		goto error;
 	}
 
-	/* We use to require that a key name begin with an alphabetic (prior
+	/* We used to require that a key name begin with an alphabetic (prior
 	   to release 9.01).  We now allow key names to begin with numerics
 	   providing that the first non-numeric character is indeed alphabetic.
 	   For the purposes of this particular test, the underscore character
 	   is considered alphabetic. */
-
 	pp = ctemp;
 	if (*pp == cs_Unique) pp += 1;
 	while ((cc = *pp++) != '\0') if (cc < '0' || cc > '9') break;
@@ -321,8 +320,7 @@ int EXP_LVL5 CS_nampp (char *name)
 	}
 
 	/* OK, the name has been processed, and is OK. */
-
-	CS_stncp (name,ctemp,(int)(size + 1));
+	CS_stncp (name,ctemp,(int)nameSize);
 	return (0);
 
 error:

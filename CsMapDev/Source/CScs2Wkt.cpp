@@ -672,6 +672,7 @@ int EXP_LVL3 CScs2WktEx (char *csWktBufr,size_t bufrSize,enum ErcWktFlavor flavo
 	{
 		int orgLng = (int)cs_def->org_lng;
 		kCp = 0;				// redundant, but it keeps lint happy.
+		primeMer = 0.0;
 		switch (orgLng) {
 		case 0:
 			primeMer = 0.0;

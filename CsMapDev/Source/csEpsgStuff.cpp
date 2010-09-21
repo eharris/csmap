@@ -32,8 +32,9 @@
 //lint -save -esym(613,crsTblPtr,copTblPtr)			(possible use of null pointer, actually a PC-Lint bug)		
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 #include "csCsvFileSupport.hpp"
-#include "csEpsgStuff.h"
+#include "csepsgstuff.h"
 
 extern "C" const double cs_Zero;
 extern "C" const double cs_One;
@@ -370,10 +371,10 @@ const TcsEpsgUomTypeMap KcsEpsgUomTypeMap [] =
 
 const TcsEpsgOrntTypeMap KcsEpsgOrntTypeMap [] =
 {
-	{         epsgOrntEast,     L"South along 90°E"    },
-	{        epsgOrntNorth,     L"South along 180°E"   },
-	{         epsgOrntEast,     L"North along 90°E"    },
-	{        epsgOrntNorth,     L"North along 0°E"     },
+	{         epsgOrntEast,     L"South along 90E"     },
+	{        epsgOrntNorth,     L"South along 180E"    },
+	{         epsgOrntEast,     L"North along 90E"     },
+	{        epsgOrntNorth,     L"North along 0E"      },
 	{         epsgOrntEast,     L"east"                },
 	{         epsgOrntWest,     L"west"                },
 	{        epsgOrntNorth,     L"north"               },
@@ -3649,11 +3650,11 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 	if (uomCode == 9110UL)
 	{
 		// sexagesimal DMS -> +DDD.MMSSsssssss
-		bool minus;
-		size_t fillCnt;
-		long degrees;
-		long minutes;
-		double seconds;
+		bool minus (false);
+		size_t fillCnt (0);
+		long degrees (0L);
+		long minutes (0L);
+		double seconds (0.0);
 
 		wchar_t wcDegrees [16];
 		wchar_t wcMinutes [16];
@@ -3729,10 +3730,10 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 	else if (uomCode == 9111UL)
 	{
 		// sexagesimal DM -> +DDD.MMmmmmmm
-		bool minus;
-		size_t fillCnt;
-		long degrees;
-		double minutes;
+		bool minus (false);
+		size_t fillCnt (0);
+		long degrees (0L);
+		double minutes (0.0);
 
 		wchar_t wcDegrees [16];
 		wchar_t wcMinutes [32];
@@ -3785,10 +3786,10 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 		// Degrees (int), minutes (int), seconds (real).  Not really used in
 		// the tables pre se; the tables usually use double field type for
 		// numeric values and the 9110 & 9111 types are usually used.
-		bool minus;
-		long degrees;
-		long minutes;
-		double seconds;
+		bool minus (false);
+		long degrees (0L);
+		long minutes (0L);
+		double seconds (0.0);
 
 		// Get a copy of the field we are to convert in a place where we
 		// modify same.  Not really necessary in this case, but what the heck.
@@ -3837,10 +3838,10 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 		// the tables pre se; the tables usually use double field type for
 		// numeric values and the 9110 & 9111 types are usually used.
 		// sexagesimal DMS -> +DDD.MMSSsssssss
-		bool minus;
-		long degrees;
-		long minutes;
-		double seconds;
+		bool minus (false);
+		long degrees (0L);
+		long minutes (0L);
+		double seconds (0.0);
 
 		// Get a copy of the field we are to convert in a place where we
 		// modify same.  Not really necessary, but whatthe heck.
@@ -3921,9 +3922,9 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 		// Degrees (int), minutes (real).  Not really used in the tables per se;
 		// the tables usually use double field type for numeric values and the
 		// 9110 & 9111 types are usually used.
-		bool minus;
-		long degrees;
-		double minutes;
+		bool minus (false);
+		long degrees (0L);
+		double minutes (0.0);
 
 		// Get a copy of the field we are to convert in a place where we
 		// modify same.  Not really necessary, but whatthe heck.
@@ -4028,9 +4029,9 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 		// Degrees (int), minutes (real), hemisphere.  Not really used in the
 		// tables per se; the tables usually use double field type for numeric
 		// values and the 9110 & 9111 types are usually used.
-		bool minus;
-		long degrees;
-		double minutes;
+		bool minus (false);
+		long degrees (0L);
+		double minutes (0.0);
 
 		// Get a copy of the field we are to convert in a place where we
 		// modify same.  Not really necessary, but whatthe heck.

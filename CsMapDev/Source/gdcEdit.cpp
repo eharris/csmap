@@ -28,6 +28,7 @@
 #if defined (__MFC__)
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 #include "cs_mfc.h"
 #include "cs_hlp.h"
 

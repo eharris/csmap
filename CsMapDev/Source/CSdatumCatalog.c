@@ -47,12 +47,13 @@
 /*lint -e722 */					/* Suspicious use of ';', i.e. one statement for loop searches */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 #include <ctype.h>
 
 /******************************************************************************
 	'Static' support function to replace directory separators as is appropriate.
 */
-void CSrplDirSep (char *path)
+void EXP_LVL5 CSrplDirSep (char *path)
 {
 	extern char cs_DirsepC;
 

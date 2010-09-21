@@ -31,92 +31,73 @@
 	Coverage Implementation
 */
 
-void CSinitCoverage (struct csGridCoverage_* __This)
+void CSinitCoverage (struct csGridCoverage_* thisPtr)
 {
+	extern double cs_Zero;
 	extern double cs_K90;
 	extern double cs_Km90;
 	extern double cs_K180;
 	extern double cs_Km180;
 
 	/* Set the coverage to something that won't match anything. */
-	__This->southWest [LNG] = cs_K180;
-	__This->southWest [LAT] = cs_K90;
-	__This->northEast [LNG] = cs_Km180;
-	__This->northEast [LAT] = cs_Km90;
+	thisPtr->southWest [LNG] = cs_K180;
+	thisPtr->southWest [LAT] = cs_K90;
+	thisPtr->northEast [LNG] = cs_Km180;
+	thisPtr->northEast [LAT] = cs_Km90;
+	thisPtr->density = cs_Zero;
 }
 
-double CStestCoverageUS (struct csGridCoverage_* __This,Const double point [2])
+double CStestCoverage (struct csGridCoverage_* thisPtr,Const double point [2])
 {
 	/* Return value is the density value used to select a specific source in
 	   the case of overlap which is rare, but possible.  A zero return value
 	   indicates that the current coverage window does not include the
 	   provided location.
-	
+
 	   The coverage is inclusive on the south and west, exclusive on the
-	   north and east.  This is standard for US.  The north and east edges
-	   of a US grid file are not part of the coverage of a US file. */
-
+	   north and east.  This is standard for all grid interpolation files
+	   except the Canadian National Transformation (version 1 and 2).  The
+	   north and east edges of the typical grid file are not part of the
+	   coverage of such a file. */
 	double returnValue = 0.0;
-	if (point [LNG] >= __This->southWest [LNG] &&
-	    point [LAT] >= __This->southWest [LAT] &&
-	    point [LNG] <  __This->northEast [LNG] &&
-	    point [LAT] <  __This->northEast [LAT])
+	if (point [LNG] >= thisPtr->southWest [LNG] &&
+		point [LAT] >= thisPtr->southWest [LAT] &&
+		point [LNG] <  thisPtr->northEast [LNG] &&
+		point [LAT] <  thisPtr->northEast [LAT])
 	{
-		returnValue = __This->density;
+		returnValue = thisPtr->density;
 	}
 	return returnValue;
 }
-
-double CStestCoverageCA (struct csGridCoverage_* __This,Const double point [2])
+void CSsetCoverage (struct csGridCoverage_* thisPtr,Const double* swLL,Const double* neLL)
 {
-	double myLng, myLat;
+	extern double cs_Zero;
 
-	/* Return value is the density value used to select a specific source in
-	   the case of overlap which is rare, but possible.  A zero return value
-	   indicates that the current coverage window does not include the
-	   provided location.
-
-	   The coverage is inclusive on both the south and west. In some cases,
-	   the Canadaian technique uses an inclusive boundary on the north
-	   and east.  However, we consider these to be special.  Omitting
-	   this here causes the conversion to be referred to the main
-	   conversion function which handles this properly. */
-
-	double returnValue = 0.0;
-	myLng = -point [LNG];
-	myLat =  point [LAT];
-	if (myLng >= __This->southWest [LNG] &&
-	    myLat >= __This->southWest [LAT] &&
-	    myLng <  __This->northEast [LNG] &&
-	    myLat <  __This->northEast [LAT])
-	{
-		returnValue = __This->density;
-	}
-	return returnValue;
-}
-
-void CSsetCoverage (struct csGridCoverage_* __This,Const double* swLL,Const double* neLL)
-{
-	__This->southWest [LNG] = swLL [LNG];
-	__This->southWest [LAT] = swLL [LAT];
-	__This->northEast [LNG] = neLL [LNG];
-	__This->northEast [LAT] = neLL [LAT];	
+	thisPtr->southWest [LNG] = swLL [LNG];
+	thisPtr->southWest [LAT] = swLL [LAT];
+	thisPtr->northEast [LNG] = neLL [LNG];
+	thisPtr->northEast [LAT] = neLL [LAT];
+	thisPtr->density = cs_Zero;
 }
 
 /****************************************************************************
 	Grid Cell Implementation
+
+	Again, this is an implementation of a grid cell for typical grid
+	interpolation 
 */
-void CSinitGridCell (struct csGridCell_* __This)
+void CSinitGridCell (struct csGridCell_* thisPtr)
 {
-	extern double cs_Zero;					/* 0.0 */
-	CSinitCoverage (&__This->coverage);
-	__This->deltaLng = cs_Zero;
-	__This->deltaLat = cs_Zero;
-	__This->currentAA = cs_Zero;
-	__This->currentBB = cs_Zero;
-	__This->currentCC = cs_Zero;
-	__This->currentDD = cs_Zero;
-	__This->sourceId [0] = '\0';
+	extern double cs_Zero;
+
+	CSinitCoverage (&thisPtr->coverage);
+	thisPtr->deltaLng = cs_Zero;
+	thisPtr->deltaLat = cs_Zero;
+	thisPtr->currentAA = cs_Zero;
+	thisPtr->currentBB = cs_Zero;
+	thisPtr->currentCC = cs_Zero;
+	thisPtr->currentDD = cs_Zero;
+	thisPtr->sourceId [0] = '\0';
 }
 
 double CScalcGridCellUS (struct csGridCell_* __This,Const double *sourceLL)

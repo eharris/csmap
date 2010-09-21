@@ -9,49 +9,32 @@ CPP_FLG= /nologo /I..\Include /MT /O2 /W3 /EHsc /D"WIN32" /D"NDEBUG" /D"_WINDOWS
 	cl /c $(CPP_FLG) /D_CRT_SECURE_NO_WARNINGS /DWINVER=0x0500 $<
 
 CS_SRC = \
-	CS_agd66.c \
-	CS_agd84.c \
 	CS_alber.c \
 	CS_angle.c \
 	CS_ansi.c \
-	CS_ats77.c \
-	CS_ats77Transform.c \
+	CS_ats77New.c \
 	CS_azmea.c \
 	CS_azmed.c \
+	CS_badekas.c \
 	CS_bonne.c \
 	CS_bpcnc.c \
+	CS_bursa.c \
 	CS_bynFile.c \
-	CS_caDatum.c \
 	CS_category.c \
-	CS_caV1GridFile.c \
-	CS_caV2GridFile.c \
-	CS_ch1903.c \
 	CS_csini.c \
 	CS_csio.c \
 	CS_csprm.c \
-	CS_csrs.c \
 	CS_csWktLoc.c \
 	CS_datum.c \
 	CS_defaults.c \
 	CS_defCmp.c \
-	CS_dhdn.c \
-	CS_dtAgd66ToGda94.c \
-	CS_dtAgd84ToGda94.c \
-	CS_dtAts77ToNad83.c \
-	CS_dtCalc.c \
-	CS_dtCh1903ToPlus.c \
-	CS_dtDhdnToEtrf89.c \
-	CS_dtEd50ToEtrf89.c \
+	CS_defCmpEx.c \
+	CS_dtcalc.c \
 	CS_dtio.c \
-	CS_dtNad27ToAts77.c \
-	CS_dtNad27ToNad83.c \
-	CS_dtNad83ToHarn.c \
-	CS_dtNzdg49ToNzgd2K.c \
-	CS_dtRgf93ToNtf.c \
-	CS_dtTokyoToJgd2k.c \
-	CS_ed50.c \
+	CS_dtmBridge.c \
 	CS_edcnc.c \
 	CS_edcyl.c \
+	CS_egm96.c \
 	CS_ekrt4.c \
 	CS_ekrt6.c \
 	CS_elCalc.c \
@@ -59,20 +42,27 @@ CS_SRC = \
 	CS_erpt.c \
 	CS_error.c \
 	CS_fips.c \
+	CS_frame.c \
+	CS_frnch.c \
 	CS_gauss.c \
 	CS_general.c \
+	CS_geoct.c \
 	CS_geoid96.c \
 	CS_geoid99.c \
-	CS_geoidHeight.c \
+	CS_GeoidHeight.c \
 	CS_gissupprt.c \
 	CS_gnomc.c \
+	CS_gpio.c \
+	CS_gridi.c \
 	CS_groups.c \
 	CS_guiApi.c \
+	CS_gxIndex.c \
+	CS_gxio.c \
+	CS_gxprm.c \
 	CS_hlApi.c \
 	CS_hmlsn.c \
 	CS_hpApi.c \
-	CS_hpgn.c \
-	CS_japan.c \
+	CS_japanNew.c \
 	CS_krovk.c \
 	CS_lmbrt.c \
 	CS_lmtan.c \
@@ -80,24 +70,34 @@ CS_SRC = \
 	CS_mgrs.c \
 	CS_millr.c \
 	CS_modpc.c \
+	CS_molod.c \
 	CS_molwd.c \
 	CS_mrcat.c \
 	CS_mstro.c \
+	CS_mulrg.c \
 	CS_nacyl.c \
-	CS_nad27.c \
+	CS_nadcn.c \
 	CS_nerth.c \
-	CS_nzgd49.c \
+	CS_ntv1.c \
+	CS_ntv2.c \
+	CS_nullx.c \
 	CS_nzlnd.c \
 	CS_oblqm.c \
 	CS_optional.c \
 	CS_ortho.c \
 	CS_osgm91.c \
-	CS_ostn97.c \
+	CS_ost02.c \
+	CS_ost97.c \
 	CS_ostn02.c \
+	CS_ostn97.c \
 	CS_ostro.c \
+	CS_parm3.c \
+	CS_parm4.c \
+	CS_parm6.c \
+	CS_parm7.c \
 	CS_plycn.c \
 	CS_pstro.c \
-	CS_rgf93ToNtf.c \
+	CS_rlsUpdt.c \
 	CS_robin.c \
 	CS_sinus.c \
 	CS_sstro.c \
@@ -110,36 +110,37 @@ CS_SRC = \
 	CS_trmrs.c \
 	CS_units.c \
 	CS_unity.c \
-	CS_usDatum.c \
-	CS_usGridFile.c \
 	CS_vdgrn.c \
 	CS_VertconUS.c \
 	CS_vrtcon.c \
-	CS_wellKnownText.cpp \
+	cs_wellknowntext.cpp \
+	CS_wgs72.c \
 	CS_winkelTripel.c \
 	CS_zones.c \
-	CScs2Wkt.c \
-	CScscomp.c \
+	csBrowser.cpp \
+	CScs2Wkt.cpp \
+	cscscomp.c \
 	csCsvFileSupport.cpp \
 	CSdata.c \
+	csDataDir.cpp \
+	CSdataDT.c \
 	CSdataPJ.c \
 	CSdataU.c \
 	CSdatumCatalog.c \
-	CSdatumSupport.c \
 	CSdictDiff.c \
-	CSdt2Wkt.c \
+	CSdt2Wkt.cpp \
 	CSdtcomp.c \
-	CSel2Wkt.c \
-	CSelcomp.c \
-	CSgridCellCache.c \
-	CSmrcomp.c \
-	CSnad83ToCsrs.c \
-	CSnad27ToCsrs.c \
-	csBrowser.cpp \
-	csDataDir.cpp \
 	csDualBrowse.cpp \
 	csEdit.cpp \
+	CSel2Wkt.cpp \
+	CSelcomp.c \
+	csEpsgStuff.cpp \
+	csEpsgSupport.cpp \
+	CSgeodeticSupport.c \
+	CSgpcomp.c \
+	CSgxcomp.c \
 	csKeyNm.cpp \
+	CSmrcomp.c \
 	csNameMapper.cpp \
 	csNameMapperSupport.cpp \
 	csTest.cpp \
@@ -149,76 +150,66 @@ CS_SRC = \
 	dtSelect.cpp \
 	elEdit.cpp \
 	elSelect.cpp \
-	mgTest.cpp \
 	gdcEdit.cpp \
+	mgTest.cpp \
 	rcWellKnownText.cpp \
 	rcWktKonstants.cpp
 
 CS_OBJ = \
-	CS_agd66.obj \
-	CS_agd84.obj \
 	CS_alber.obj \
 	CS_angle.obj \
 	CS_ansi.obj \
-	CS_ats77.obj \
-	CS_ats77Transform.obj \
+	CS_ats77New.obj \
 	CS_azmea.obj \
 	CS_azmed.obj \
+	CS_badekas.obj \
 	CS_bonne.obj \
 	CS_bpcnc.obj \
+	CS_bursa.obj \
 	CS_bynFile.obj \
-	CS_caDatum.obj \
 	CS_category.obj \
-	CS_caV1GridFile.obj \
-	CS_caV2GridFile.obj \
-	CS_ch1903.obj \
 	CS_csini.obj \
 	CS_csio.obj \
 	CS_csprm.obj \
-	CS_csrs.obj \
 	CS_csWktLoc.obj \
 	CS_datum.obj \
-	CS_defCmp.obj \
-	CS_dhdn.obj \
 	CS_defaults.obj \
-	CS_dtAgd66ToGda94.obj \
-	CS_dtAgd84ToGda94.obj \
-	CS_dtAts77ToNad83.obj \
-	CS_dtCalc.obj \
-	CS_dtCh1903ToPlus.obj \
-	CS_dtDhdnToEtrf89.obj \
-	CS_dtEd50ToEtrf89.obj \
+	CS_defCmp.obj \
+	CS_defCmpEx.obj \
+	CS_dtcalc.obj \
 	CS_dtio.obj \
-	CS_dtNad27ToAts77.obj \
-	CS_dtNad27ToNad83.obj \
-	CS_dtNad83ToHarn.obj \
-	CS_dtNzdg49ToNzgd2K.obj \
-	CS_dtRgf93ToNtf.obj \
-	CS_dtTokyoToJgd2k.obj \
-	CS_ed50.obj \
+	CS_dtmBridge.obj \
 	CS_edcnc.obj \
 	CS_edcyl.obj \
+	CS_egm96.obj \
 	CS_ekrt4.obj \
 	CS_ekrt6.obj \
 	CS_elCalc.obj \
 	CS_elio.obj \
 	CS_erpt.obj \
-	CS_error.obj  \
+	CS_error.obj \
 	CS_fips.obj \
+	CS_frame.obj \
+	CS_frnch.obj \
 	CS_gauss.obj \
 	CS_general.obj \
+	CS_geoct.obj \
 	CS_geoid96.obj \
 	CS_geoid99.obj \
-	CS_geoidHeight.obj \
+	CS_GeoidHeight.obj \
 	CS_gissupprt.obj \
 	CS_gnomc.obj \
+	CS_gpio.obj \
+	CS_gridi.obj \
 	CS_groups.obj \
 	CS_guiApi.obj \
+	CS_gxIndex.obj \
+	CS_gxio.obj \
+	CS_gxprm.obj \
 	CS_hlApi.obj \
 	CS_hmlsn.obj \
 	CS_hpApi.obj \
-	CS_hpgn.obj \
-	CS_japan.obj \
+	CS_japanNew.obj \
 	CS_krovk.obj \
 	CS_lmbrt.obj \
 	CS_lmtan.obj \
@@ -226,24 +217,34 @@ CS_OBJ = \
 	CS_mgrs.obj \
 	CS_millr.obj \
 	CS_modpc.obj \
+	CS_molod.obj \
 	CS_molwd.obj \
 	CS_mrcat.obj \
 	CS_mstro.obj \
+	CS_mulrg.obj \
 	CS_nacyl.obj \
-	CS_nad27.obj \
+	CS_nadcn.obj \
 	CS_nerth.obj \
-	CS_nzgd49.obj \
+	CS_ntv1.obj \
+	CS_ntv2.obj \
+	CS_nullx.obj \
 	CS_nzlnd.obj \
 	CS_oblqm.obj \
 	CS_optional.obj \
 	CS_ortho.obj \
 	CS_osgm91.obj \
-	CS_ostn97.obj \
+	CS_ost02.obj \
+	CS_ost97.obj \
 	CS_ostn02.obj \
+	CS_ostn97.obj \
 	CS_ostro.obj \
+	CS_parm3.obj \
+	CS_parm4.obj \
+	CS_parm6.obj \
+	CS_parm7.obj \
 	CS_plycn.obj \
 	CS_pstro.obj \
-	CS_rgf93ToNtf.obj \
+	CS_rlsUpdt.obj \
 	CS_robin.obj \
 	CS_sinus.obj \
 	CS_sstro.obj \
@@ -256,36 +257,37 @@ CS_OBJ = \
 	CS_trmrs.obj \
 	CS_units.obj \
 	CS_unity.obj \
-	CS_usDatum.obj \
-	CS_usGridFile.obj \
 	CS_vdgrn.obj \
 	CS_VertconUS.obj \
 	CS_vrtcon.obj \
-	CS_wellKnownText.obj \
+	cs_wellknowntext.obj \
+	CS_wgs72.obj \
 	CS_winkelTripel.obj \
 	CS_zones.obj \
+	csBrowser.obj \
 	CScs2Wkt.obj \
-	CScscomp.obj \
+	cscscomp.obj \
 	csCsvFileSupport.obj \
 	CSdata.obj \
+	csDataDir.obj \
+	CSdataDT.obj \
 	CSdataPJ.obj \
 	CSdataU.obj \
 	CSdatumCatalog.obj \
-	CSdatumSupport.obj \
 	CSdictDiff.obj \
 	CSdt2Wkt.obj \
 	CSdtcomp.obj \
-	CSel2Wkt.obj \
-	CSelcomp.obj \
-	CSgridCellCache.obj \
-	CSmrcomp.obj \
-	CSnad27ToCsrs.obj \
-	CSnad83ToCsrs.obj \
-	csBrowser.obj \
-	csDataDir.obj \
 	csDualBrowse.obj \
 	csEdit.obj \
+	CSel2Wkt.obj \
+	CSelcomp.obj \
+	csEpsgStuff.obj \
+	csEpsgSupport.obj \
+	CSgeodeticSupport.obj \
+	CSgpcomp.obj \
+	CSgxcomp.obj \
 	csKeyNm.obj \
+	CSmrcomp.obj \
 	csNameMapper.obj \
 	csNameMapperSupport.obj \
 	csTest.obj \
@@ -295,6 +297,7 @@ CS_OBJ = \
 	dtSelect.obj \
 	elEdit.obj \
 	elSelect.obj \
+	gdcEdit.obj \
 	mgTest.obj \
 	rcWellKnownText.obj \
 	rcWktKonstants.obj

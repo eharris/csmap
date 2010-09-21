@@ -113,7 +113,7 @@ struct csGeoidHeight_* CSnewGeoidHeight (Const char *catalog)
 	   extensions.  Not very good, but that's life. */
 
 	index = 0;
-	while (TRUE)												/*lint !e716 */
+	for (;;)
 	{
 		catEntryPtr = CSgetDatumCatalogEntry (catPtr,index++);
 		if (catEntryPtr == NULL) break;

@@ -763,6 +763,8 @@ void EXP_LVL1 CS_recvr (void)
 
 	/* Free up any name lists which may be present. */
 
+	CS_releaseGxIndex ();
+
 	if (cs_CsKeyNames != NULL)
 	{
 		CS_free (cs_CsKeyNames);
