@@ -1689,6 +1689,37 @@ bool TcsEpsgDataSetV6::GetFieldByCode (TcsEpsgCode& result,EcsEpsgTable tableId,
 	}
 	return ok;
 }
+bool TcsEpsgDataSetV6::GetFieldByCode (double& result,EcsEpsgTable tableId,EcsEpsgField fieldId,
+																		   const TcsEpsgCode& epsgCode) const
+{
+	bool ok (false);
+	
+	wchar_t* chkPtr;
+	const TcsEpsgTable* epsgTblPtr;
+
+	double lclResult;
+
+	std::wstring fldData;
+
+	lclResult = HUGE_VAL;
+	epsgTblPtr = GetTablePtr (tableId);
+	if (epsgTblPtr != 0)
+	{
+		ok = epsgTblPtr->GetField (fldData,epsgCode,fieldId);
+		if (ok)
+		{
+			lclResult = wcstod (fldData.c_str (),&chkPtr);
+			if ((*chkPtr != '\0') && (*chkPtr != L' '))
+			{
+				lclResult = HUGE_VAL;
+			}
+			ok = (fabs (lclResult) < HUGE_VAL);
+		}
+	}
+	result = lclResult;
+	return ok;
+}
+
 bool TcsEpsgDataSetV6::IsDeprecated (EcsEpsgTable tableId,const TcsEpsgCode& epsgCode) const
 {
 	bool deprecated (false);
