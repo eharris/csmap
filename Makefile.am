@@ -135,8 +135,6 @@ libCsmap_la_SOURCES = \
   Source/CSgxcomp.c \
   Source/csKeyNm.cpp \
   Source/CSmrcomp.c \
-  Source/CSnad27ToCsrs.c \
-  Source/CSnad83ToCsrs.c \
   Source/csNameMapper.cpp \
   Source/csNameMapperSupport.cpp \
   Source/CSsys34KMS.c \

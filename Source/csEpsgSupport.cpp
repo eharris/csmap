@@ -1172,8 +1172,8 @@ TcsEpsgCode TcsOpVariant::GetOpCodeForCsMap (void) const
 // TcsOpVariants -- a collection of TcsOpVariant
 //
 // For any given datum transformation, from datum A to datum B, there may be
-// several of what EPSG referes to as variants.  There is usually one variant
-// for a datum shift transformation, but there can be as many as one hundred.
+// several of what EPSG refers to as variants.  There is usually one variant
+// for a datum shift transformation, but there can be as many as a hundred.
 // Also, any specific variant may be of the concatenated type.  This object is
 // a collection of TcsOpVariant objects.
 //

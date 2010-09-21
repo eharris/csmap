@@ -47,6 +47,10 @@
 #define CNVRG_VAL  12
 #define ERROR_VAL  13
 #define ACCURACY   14
+#define MIN_LNG    15
+#define MAX_LNG    16
+#define MIN_LAT    17
+#define MAX_LAT    18
 
 /* Attributes related to the Geocentric Algorithms */
 #define DELTA_X   101
@@ -103,47 +107,51 @@ struct cs_GxCmpT_
 __ALIGNMENT__1		/* For some versions of Sun compiler. */
 static struct cs_GxCmpT_ cs_GxCmpT [] =
 {
-	{  "\010GX_NAME:",          GX_NAME         },
-	{  "\010SRC_DTM:",          SRC_DTM         },
-	{  "\010TRG_DTM:",          TRG_DTM         },
 	{  "\006GROUP:",            GROUP           },
-	{  "\010DESC_NM:",          DESC_NM         },
-	{  "\007SOURCE:",           SOURCE          },
-	{  "\007METHOD:",           METHOD          },
-	{  "\010EPSG_NBR:",         EPSG_NBR        },
-	{  "\010EPSG_VAR:",         EPSG_VAR        },
-	{  "\010INVERSE:",          INVERSE         },
-	{  "\010MAX_ITR:",          MAX_ITR         },
-	{  "\012CNVRG_VAL:",        CNVRG_VAL       },
-	{  "\012ERROR_VAL:",        ERROR_VAL       },
-	{  "\011ACCURACY:",         ACCURACY        },
-	{  "\010DELTA_X:",          DELTA_X         },
-	{  "\010DELTA_Y:",          DELTA_Y         },
-	{  "\010DELTA_Z:",          DELTA_Z         },
 	{  "\006ROT_X:",            ROT_X           },
 	{  "\006ROT_Y:",            ROT_Y           },
 	{  "\006ROT_Z:",            ROT_Z           },
+	{  "\007SOURCE:",           SOURCE          },
+	{  "\007METHOD:",           METHOD          },
+	{  "\010GX_NAME:",          GX_NAME         },
+	{  "\010SRC_DTM:",          SRC_DTM         },
+	{  "\010TRG_DTM:",          TRG_DTM         },
+	{  "\010DESC_NM:",          DESC_NM         },
+	{  "\010INVERSE:",          INVERSE         },
+	{  "\010MAX_ITR:",          MAX_ITR         },
+	{  "\010DELTA_X:",          DELTA_X         },
+	{  "\010DELTA_Y:",          DELTA_Y         },
+	{  "\010DELTA_Z:",          DELTA_Z         },
 	{  "\010BWSCALE:",          BWSCALE         },
 	{  "\010XLATE_X:",          XLATE_X         },
 	{  "\010XLATE_Y:",          XLATE_Y         },
 	{  "\010XLATE_Z:",          XLATE_Z         },
-	{  "\013VALIDATION:",       VALIDATION      },
+	{  "\010LAT_COEF",          LAT_COEF        },
+	{  "\010LNG_COEF",          LNG_COEF        },
+	{  "\010HGT_COEF",          HGT_COEF        },
+	{  "\010NRML_KK:",          NRML_KK         },
+	{  "\010MIN_LNG:",          MIN_LNG         },
+	{  "\010MAX_LNG:",          MAX_LNG         },
+	{  "\010MIN_LAT:",          MIN_LAT         },
+	{  "\010MAX_LAT:",          MAX_LAT         },
+	{  "\011ACCURACY:",         ACCURACY        },
+	{  "\011EPSG_NBR:",         EPSG_NBR        },
+	{  "\011EPSG_VAR:",         EPSG_VAR        },
 	{  "\011TEST_LNG:",         TEST_LNG        },
 	{  "\011TEST_LAT:",         TEST_LAT        },
-	{  "\017RSLT_DELTA_LNG:",   RSLT_DELTA_LNG  },
-	{  "\017RSLT_DELTA_LAT:",   RSLT_DELTA_LAT  },
-	{  "\017RSLT_DELTA_HGT:",   RSLT_DELTA_HGT  },
+	{  "\012GRID_FILE:",        GRID_FILE       },
+	{  "\012CNVRG_VAL:",        CNVRG_VAL       },
+	{  "\012ERROR_VAL:",        ERROR_VAL       },
+	{  "\013VALIDATION:",       VALIDATION      },
 	{  "\014SRC_LAT_OFF:",      SRC_LAT_OFF     },
 	{  "\014SRC_LNG_OFF:",      SRC_LNG_OFF     },
 	{  "\014SRC_HGT_OFF:",      SRC_HGT_OFF     },
 	{  "\014TRG_LAT_OFF:",      TRG_LAT_OFF     },
 	{  "\014TRG_LNG_OFF:",      TRG_LNG_OFF     },
 	{  "\014TRG_HGT_OFF:",      TRG_HGT_OFF     },
-	{  "\010NRML_KK:",          NRML_KK         },
-	{  "\010LAT_COEF",          LAT_COEF        },
-	{  "\010LNG_COEF",          LNG_COEF        },
-	{  "\010HGT_COEF",          HGT_COEF        },
-	{  "\012GRID_FILE:",        GRID_FILE       },
+	{  "\017RSLT_DELTA_LNG:",   RSLT_DELTA_LNG  },
+	{  "\017RSLT_DELTA_LAT:",   RSLT_DELTA_LAT  },
+	{  "\017RSLT_DELTA_HGT:",   RSLT_DELTA_HGT  },
 	{  "",                      0               }
 };
 
@@ -499,6 +507,22 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 
 		case ACCURACY:
 			gxdef.accuracy = strtod (cp,&dummy);
+			break;
+
+		case MIN_LNG:
+			gxdef.rangeMinLng = strtod (cp,&dummy);
+			break;
+
+		case MAX_LNG:
+			gxdef.rangeMaxLng = strtod (cp,&dummy);
+			break;
+
+		case MIN_LAT:
+			gxdef.rangeMinLat = strtod (cp,&dummy);
+			break;
+
+		case MAX_LAT:
+			gxdef.rangeMaxLat = strtod (cp,&dummy);
 			break;
 
 		case DELTA_X:

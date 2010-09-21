@@ -392,6 +392,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Include\csepsgstuff.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\csNameMapper.hpp"
 				>
 			</File>
