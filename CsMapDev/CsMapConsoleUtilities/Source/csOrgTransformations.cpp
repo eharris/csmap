@@ -31,6 +31,7 @@ bool csAdjustSrcAndTrg (std::wofstream& gpStrm,char *srcDatum,char *trgDatum,
 															  const char* dtmPivot);
 bool csWriteGeodeticPath (std::wofstream& gpStrm,const cs_GeodeticPath_ *gpPtr);
 bool csConvertMrtFile (std::wofstream& gtStrm,const cs_Dtdef_ *dtDefPtr,const TcsDefFile& mregAsc);
+bool csExtractMrtRange (double lng [2],double lat [2],const cs_Dtdef_ *dtDefPtr);
 
 const TcsGdcFile* gdcAgd66ToGda94 (0);
 const TcsGdcFile* gdcAgd84ToGda94 (0);
@@ -181,10 +182,11 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	bool ok (true);
 
 	short maxIteration;
-	
 
 	size_t count;
 	size_t index;
+
+	unsigned long epsgVariant;
 
 	char *cp;
 	const char* entryPath;
@@ -193,12 +195,27 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	double accuracy;
 	double cnvrgValue;
 	double errorValue;
+	double usefulRngLngW;
+	double usefulRngLngE;
+	double usefulRngLatS;
+	double usefulRngLatN;
+
+	TcsEpsgCode epsgOpCode;
+	TcsEpsgCode srcEpsgId;
+	TcsEpsgCode trgEpsgId;
+	TcsEpsgCode srcGeoCRS;
+	TcsEpsgCode trgGeoCRS;
+	TcsEpsgCode epsgAreaCode;
 
 	char srcDatum [cs_KEYNM_DEF];
 	char trgDatum [cs_KEYNM_DEF];
 	char cTemp [512];
 
 	wchar_t gxName [64];
+	wchar_t srcDatumW [cs_KEYNM_DEF];
+	wchar_t trgDatumW [cs_KEYNM_DEF];
+
+	const TcsEpsgDataSetV6* epsgPtr = GetEpsgObjectPtr ();
 
 	CS_stncp (srcDatum,dtDefPtr->key_nm,sizeof (srcDatum));
 	CS_stncp (trgDatum,dtmPivot,sizeof (trgDatum));
@@ -207,6 +224,111 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	// value, and if such adjustment is made, need to write a path to the
 	// path stream.
 	csAdjustSrcAndTrg (gpStrm,srcDatum,trgDatum,dtDefPtr,dtmPivot);
+
+	// Below, we will try to find specific values for the following.
+	// We initialize to specific default values in case it doesn't work
+	// out for this datum.
+	accuracy = cs_Zero;
+	epsgOpCode = 0UL;
+	epsgVariant = 0UL;
+	usefulRngLngW = cs_Zero;
+	usefulRngLngE = cs_Zero;
+	usefulRngLatS = cs_Zero;
+	usefulRngLatN = cs_Zero;
+
+	// See if we have EPSG numbers for both the source and target
+	// datums.
+	mbstowcs (srcDatumW,srcDatum,wcCount (srcDatumW));
+	mbstowcs (trgDatumW,trgDatum,wcCount (trgDatumW));
+	srcEpsgId = csMapNameToId (csMapDatumKeyName,csMapFlvrEpsg,csMapFlvrCsMap,srcDatumW);
+	trgEpsgId = csMapNameToId (csMapDatumKeyName,csMapFlvrEpsg,csMapFlvrCsMap,trgDatumW);
+
+	// If we have valid numbers, see what we can do with them with regards to
+	// the EPSG Parameter Dataset.
+	bool epsgOk = (srcEpsgId != KcsNmInvNumber && trgEpsgId != KcsNmInvNumber);
+	if (epsgOk)
+	{
+		// We have an EPSG ID number for both datums.  These doesn't has little
+		// value of its own.  We need to convert that to the code for the
+		// geographic CRS (usually 2D) which represents that datum.
+		TcsEpsgCode srcGeoCRS, trgGeoCRS;
+		epsgOk  = epsgPtr->LocateGeographicBase (srcGeoCRS,epsgCrsTypGeographic2D,srcEpsgId);
+		epsgOk &= epsgPtr->LocateGeographicBase (trgGeoCRS,epsgCrsTypGeographic2D,trgEpsgId);
+		if (epsgOk)
+		{
+			// Get a list of the variants which will convert from the source
+			// datum to the target datum.  This is not trivial and we have,
+			// in the past, developed a specific object for this purpose.
+			TcsOpVariants dtmOpVariants (*epsgPtr,srcGeoCRS,trgGeoCRS);
+
+			// How many did we find?  Since we'll use the first one, which
+			// should be the one with highest accuracy (lowest accuracy
+			// value) if there is more than one, we're really only interested
+			// in the case where there are more than zero variants at
+			// this point.  Maybe later on we'll get more sophisticated.
+			unsigned variantCount = dtmOpVariants.GetVariantCount ();
+			if (variantCount > 0)
+			{
+				// Get a pointer to the first variant.  Should be the
+				// most accurate.  Until we have time to locate the best
+				// match, we'll use this one.
+				const TcsOpVariant* varPtr = dtmOpVariants.GetVariantPtr (0);
+				accuracy = varPtr->GetAccuracy ();
+				epsgOpCode = varPtr->GetOpCodeForCsMap ();
+				epsgVariant = varPtr->GetVariantNbr ();
+				epsgOk = epsgOpCode.IsValid ();
+			}
+		}
+		if (epsgOk)
+		{
+			// We should have a valid EPSG Operation code.  We now use it to
+			// extracte a useful range from the EPSG database.   Essentially,
+			// we need to get the area code from the Operation table, and then
+			// get the range from the Area table.
+			epsgOk = epsgPtr->GetFieldByCode (epsgAreaCode,epsgTblCoordinateOperation,epsgFldAreaOfUseCode,epsgOpCode);
+			if (epsgOk)
+			{
+				epsgOk = epsgAreaCode.IsValid ();
+			}
+		}
+		if (epsgOk)
+		{
+			epsgOk  = epsgPtr->GetFieldByCode (usefulRngLngW,epsgTblArea,epsgFldAreaWestBoundLng,epsgAreaCode);
+			epsgOk &= epsgPtr->GetFieldByCode (usefulRngLngE,epsgTblArea,epsgFldAreaEastBoundLng,epsgAreaCode);
+			epsgOk &= epsgPtr->GetFieldByCode (usefulRngLatS,epsgTblArea,epsgFldAreaSouthBoundLat,epsgAreaCode);
+			epsgOk &= epsgPtr->GetFieldByCode (usefulRngLatN,epsgTblArea,epsgFldAreaNorthBoundLat,epsgAreaCode);
+		}
+		if (epsgOk)
+		{
+			double rngDelta = fabs (usefulRngLngE - usefulRngLngW) * 0.125;
+			usefulRngLngE += rngDelta;
+			usefulRngLngW -= rngDelta;
+			if (usefulRngLngE >  180.0) usefulRngLngE =  180.0;
+			if (usefulRngLngW < -180.0) usefulRngLngE = -180.0;
+
+			rngDelta = fabs (usefulRngLatN - usefulRngLatS) * 0.125;
+			usefulRngLatN += rngDelta;
+			usefulRngLatS -= rngDelta;
+			if (usefulRngLatN >  90.0) usefulRngLatN =  90.0;
+			if (usefulRngLatS < -90.0) usefulRngLatS = -90.0;
+		}
+	}
+
+	// If the method type is multipel regression, we get the useful range
+	// from the .MRT file.
+	if (dtDefPtr->to84_via == cs_DTCTYP_MREG)
+	{
+		double rangeLng [2];
+		double rangeLat [2];
+	
+		ok = csExtractMrtRange (rangeLng,rangeLat,dtDefPtr);
+		
+		// We don't extend the range of this defiunition.
+		usefulRngLngW = rangeLng [0];
+		usefulRngLngE = rangeLng [1];
+		usefulRngLatS = rangeLat [0];
+		usefulRngLatN = rangeLat [1];
+	}
 
 	// Set the maxIteration and convergence values per the to84_via variable.
 	// The values were hard coded in CS-MAP prior to this implementation. */
@@ -273,7 +395,6 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	}
 
 	// OK, the rest of this is pretty straight forward.
-	accuracy = cs_Zero;
 	swprintf (gxName,L"%S_to_%S",srcDatum,trgDatum);
 
 	gtStrm << std::endl;
@@ -291,13 +412,9 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	gtStrm <<   L"\t MAX_ITR: " << maxIteration                 << std::endl;
 	gtStrm << L"   CNVRG_VAL: " << cnvrgValue                   << std::endl;
 	gtStrm << L"   ERROR_VAL: " << errorValue                   << std::endl;
-	// To Do, get accuracy from EPSG if we have an EPSG number.
-	// Implies converting the Datum ID to a GEOGRAPHIC ID, to an
-	// Operation ID, and then to an accuracy value.
-	if (dtDefPtr->epsgNbr != 0)
-	{
-	}
-	else
+
+	// At this point, is accuracy is zero, we supply a default value.	
+	if (accuracy == cs_Zero)
 	{
 		switch (dtDefPtr->to84_via) {
 		case cs_DTCTYP_MOLO:
@@ -348,6 +465,26 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	{
 		// TODO, need some formatting here.
 		gtStrm <<   L"\tACCURACY: " << accuracy               << std::endl;
+	}
+
+	// To the degree we were successful in getting information out of EPSG,
+	// we write the results to the new definition.
+	if (epsgOpCode.IsValid ())
+	{
+		gtStrm <<   L"\tEPSG_NBR: " << static_cast<unsigned long>(epsgOpCode) << std::endl;
+	}
+	if (epsgVariant != 0)
+	{
+		gtStrm <<   L"\tEPSG_VAR: " << epsgVariant << std::endl;
+	}
+	if ((usefulRngLngW != cs_Zero || usefulRngLngE != cs_Zero) &&
+		(usefulRngLatS != cs_Zero || usefulRngLatN != cs_Zero))
+	{
+		// We have some meaningful useful range data.
+		gtStrm <<   L"\t  MIN_LNG: " << usefulRngLngW           << std::endl;
+		gtStrm <<   L"\t  MAX_LNG: " << usefulRngLngE           << std::endl;
+		gtStrm <<   L"\t  MIN_LAT: " << usefulRngLatS           << std::endl;
+		gtStrm <<   L"\t  MAX_LAT: " << usefulRngLatN           << std::endl;
 	}
 
 	switch (dtDefPtr->to84_via) {
@@ -583,6 +720,10 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	default:
 		ok = false;
 		break;
+	}
+	if (ok)
+	{
+		ok = gtStrm.good ();
 	}
 	return ok;		
 }
@@ -1091,7 +1232,7 @@ bool csWriteGeodeticPath (std::wofstream& gpStrm,const cs_GeodeticPath_ *gpPtr)
 }
 
 bool csConvertMrtFile (std::wofstream& gtStrm,const cs_Dtdef_ *dtDefPtr,
-											 const TcsDefFile& mregAsc)
+											  const TcsDefFile& mregAsc)
 {
 	bool ok (false);
 
@@ -1168,7 +1309,7 @@ bool csConvertMrtFile (std::wofstream& gtStrm,const cs_Dtdef_ *dtDefPtr,
 	gtStrm << L"\t   SRC_LAT_OFF: " << mrtFile.GetPhiOffset () << std::endl;
 	gtStrm << L"\t   SRC_LNG_OFF: " << mrtFile.GetLambdaOffset () << std::endl;
 	gtStrm << L"\t\t   NRML_KK: " << mrtFile.GetNormalizingScale () << std::endl;
-	gtStrm << L"\t\tVALIDATION: " << L"1.0" << std::endl;
+	gtStrm << L"\t\tVALIDATION: " << L"1.401" << std::endl;
 
 	// Add the Longitude complex element.
 	for (uuPwr = 0;uuPwr < 10;uuPwr += 1)
@@ -1213,10 +1354,29 @@ bool csConvertMrtFile (std::wofstream& gtStrm,const cs_Dtdef_ *dtDefPtr,
 	}
 	return ok;
 }
+bool csExtractMrtRange (double lng [2],double lat [2],const cs_Dtdef_ *dtDefPtr)
+{
+	bool ok (false);
 
+	// Set up the name of the file.  We rely on the host application to have
+	// properly initialized CS-MAP with a successful call to CS_altdr ();
+	CS_stncp (cs_DirP,dtDefPtr->key_nm,CSMAXPATH);
+	CS_stncat (cs_DirP,".MRT",CSMAXPATH);
+	TcsMrtFile mrtFile ((const char*)cs_Dir);
+	ok = mrtFile.IsOk ();
+	if (!ok)
+	{
+		return ok;
+	}
 
-// Given the to84_via value, need to determine the actual
-//	1> source datum
-//	2> target datum
-//	3> any geodetic path entry associated with this.
+	double kk = mrtFile.GetNormalizingScale ();
+	double lambdaOff = mrtFile.GetLambdaOffset ();
+	double phiOff = mrtFile.GetPhiOffset ();
 
+	lng [0] = (-1.0 / kk) - lambdaOff;
+	lng [1] = ( 1.0 / kk) - lambdaOff;
+	lat [0] = (-1.0 / kk) - phiOff;
+	lat [1] = ( 1.0 / kk) - phiOff;
+
+	return ok;
+}

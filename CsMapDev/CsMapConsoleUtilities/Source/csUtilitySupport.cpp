@@ -21,6 +21,31 @@ extern "C" unsigned long KcsNmInvNumber;
 extern "C" unsigned long KcsNmMapNoNumber;
 extern "C" double cs_Zero;
 
+// Returns a pointer to a TcsEpsgDataSetV6 object.  Specifically, a
+// TcsEpsgDataSetV6 object initialized with the contents of the the folder
+// pointed to by the csEpsgDir global variable defined in the
+// csConsoleUtilities main module.  The prupose of this module is to
+// elimiate the possibility of having two of these floating around as
+// it is quite time consuming to buyild one of these things.
+
+// The following should be const, by the dumb Micros??t linker can't find it if it is.
+extern wchar_t csEpsgDir [];
+TcsEpsgDataSetV6* csEpsgDataSetV6Ptr = 0;
+
+const TcsEpsgDataSetV6* GetEpsgObjectPtr ()
+{
+	if (csEpsgDataSetV6Ptr == 0)
+	{
+		csEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (csEpsgDir,L"7.05");
+	}
+	return csEpsgDataSetV6Ptr;
+}
+void ReleaseEpsgObjectPtr ()
+{
+	delete csEpsgDataSetV6Ptr;
+	csEpsgDataSetV6Ptr = 0;
+}
+
 // Replaces an occurence of the provided "find" string with the provided
 // "rplWith" string, in the provided string.  Note:
 // 1> Search is NOT case sensitive.

@@ -41,6 +41,12 @@ extern "C"
 	extern int cs_Errno;
 	extern char cs_DirsepC;
 	extern double cs_Zero;
+
+	extern double cs_ERadMin;
+	extern double cs_ERadMax;
+	extern double cs_PRadMin;
+	extern double cs_PRadMax;
+
 }
 
 // The following global variables are used to report math exceptions.
@@ -250,6 +256,15 @@ int main (int argc,char* argv [])
 			case 'v':
 			case 'V':
 				verbose = true;
+				break;
+
+			case 'e':
+			case 'E':
+				// Disable checking of ellipsoid radiii.
+				cs_ERadMin = 0.1;
+				cs_ERadMax = 1.0E+26;
+				cs_PRadMin = 0.1;
+				cs_PRadMax = 1.0E+26;
 				break;
 
 			default:

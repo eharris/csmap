@@ -627,7 +627,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 		case LAT_COEF:
 			mulregCount += 1;
 			cnt = sscanf (cp,"U%d V%d: %lf",&ii,&jj,&coef);
-			if (cnt != 3 || jj < 0 || jj >= 10  || ii < 0 || ii >= 10)
+			if (cnt != 3 || ii < 0 || ii >= 10 || jj < 0 || jj >= 10)
 			{
 				sprintf (err_msg,"At line %d, invalid coefficient specification.",line_nbr);
 				cancel = (*err_func)(err_msg);
@@ -636,8 +636,8 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			else
 			{
 				// This works for general polynomial, but not for mulreg:
-				// idx = ((ii * (ii + 1)) / 2) + jj;
-				idx = ii * 10 + jj;		// This works for MULREG
+				// idx = ((ii * (ii + 1)) / 2) + jj;	
+				idx = ii * 10 + jj;				// This works for MULREG
 				gxdef.parameters.dmaMulRegParameters.coeffPhi [idx] = coef;
 			}
 			break;
@@ -645,7 +645,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 		case LNG_COEF:
 			mulregCount += 1;
 			cnt = sscanf (cp,"U%d V%d: %lf",&ii,&jj,&coef);
-			if (cnt != 3 || jj < 0 || jj >= 10  || ii < 0 || ii >= 10)
+			if (cnt != 3 || ii < 0 || ii >= 10 || jj < 0 || jj >= 10)
 			{
 				sprintf (err_msg,"At line %d, invalid coefficient specification.",line_nbr);
 				cancel = (*err_func)(err_msg);
@@ -655,7 +655,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			{
 				// This works for general polynomial, but not for mulreg:
 				// idx = ((ii * (ii + 1)) / 2) + jj;
-				idx = ii * 10 + jj;		// This works for MULREG
+				idx = ii * 10 + jj;				// This works for MULREG
 				gxdef.parameters.dmaMulRegParameters.coeffLambda [idx] = coef;
 			}
 			break;
@@ -663,7 +663,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 		case HGT_COEF:
 			mulregCount += 1;
 			cnt = sscanf (cp,"U%d V%d: %lf",&ii,&jj,&coef);
-			if (cnt != 3 || jj < 0 || jj >= 10  || ii < 0 || ii >= 10)
+			if (cnt != 3 || ii < 0 || ii >= 10 || jj < 0 || jj >= 10)
 			{
 				sprintf (err_msg,"At line %d, invalid coefficient specification.",line_nbr);
 				cancel = (*err_func)(err_msg);
@@ -673,7 +673,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			{
 				// This works for general polynomial, but not for mulreg:
 				// idx = ((ii * (ii + 1)) / 2) + jj;
-				idx = ii * 10 + jj;		// This works for MULREG
+				idx = ii * 10 + jj;				// This works for MULREG
 				gxdef.parameters.dmaMulRegParameters.coeffHeight [idx] = coef;
 			}
 			break;

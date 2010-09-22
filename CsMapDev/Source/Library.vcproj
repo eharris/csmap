@@ -340,6 +340,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Include\cs_Frnch.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Include\cs_Geodetic.h"
 				>
 			</File>
