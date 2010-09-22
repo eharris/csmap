@@ -101,7 +101,7 @@ Const char* CSdtmBridgeGetTargetDtm (struct csDtmBridge_* thisPtr)
 	
 	if (thisPtr->trgIndex < csPATH_MAXXFRM)
 	{
-		bridgeXfrmPtr = &thisPtr->bridgeXfrms[thisPtr->srcIndex];
+		bridgeXfrmPtr = &thisPtr->bridgeXfrms[thisPtr->trgIndex];
 		if (bridgeXfrmPtr->direction == cs_DTCDIR_FWD)
 		{
 			cpTrg = bridgeXfrmPtr->xfrmPtr->trgDatum;

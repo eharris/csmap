@@ -18,6 +18,9 @@
 
 #include "csAscFixer.hpp"
 
+const TcsEpsgDataSetV6* GetEpsgObjectPtr (void);
+void ReleaseEpsgObjectPtr (void);
+
 bool CS_strrpl (char* string1,size_t strSize,const char* find,const char* rplWith);
 
 void csWriteProjectionCsv (std::wostream& oStrm);

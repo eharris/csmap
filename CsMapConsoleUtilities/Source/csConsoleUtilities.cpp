@@ -19,10 +19,10 @@
 #include "csConsoleUtilities.hpp"
 
 const wchar_t csTempDir [] = L"C:\\TEMP";
-const wchar_t csEpsgDir [] = L"C:\\Program Files\\Common Files\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
-const wchar_t csDataDir [] = L"C:\\Development\\SVN\\CsMapRfc2\\Data";
-const wchar_t csDictDir [] = L"C:\\Development\\SVN\\CsMapRfc2\\\\Dictionaries";
-const wchar_t csDictSrc [] = L"C:\\Development\\SVN\\CsMapRfc2\\\\Dictionaries";
+wchar_t csEpsgDir [] = L"C:\\Program Files\\Common Files\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
+const wchar_t csDataDir [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Data";
+const wchar_t csDictDir [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Dictionaries";
+const wchar_t csDictSrc [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Dictionaries";
 
 int main (int argc,char* argv [])
 {

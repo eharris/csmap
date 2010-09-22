@@ -792,6 +792,8 @@ struct csGridi_
 
 #include "cs_Nadcon.h"
 
+#include "cs_Frnch.h"
+
 /* ATS77 to NAD27 Datum Shift Object (aka TRANSFORM)
 
 This object enables multiple grid shift files to convert from ATS77 to
@@ -891,56 +893,6 @@ struct cs_Japan_
 	char fileName [32];			/* File name only, used for error reporting. */
 };
 
-/* French Text Format Geodetic Intyerpolation File
-
-This object is used to convert geographic coordinates from RGF93 to NTF.
-Note, this is the opposite of most other datum shifts.  Most techniques
-convert from the old to the new.  This one converts from the new to the
-old.  Of course, an inverse is provided, but the code will look strange
-as it is different from all the others in this manner.
-
-The original data file is provided in text format.  As a performance
-enhancement, this textual file is converted to a similar binary format
-lupon first access.  The dates associated with the textual and binary
-data files are used to determine when and if a regeneration of the
-binary file is necessary.
-
-The following indicates the form in which the initial header information
-in the binary file is stored in memory.
- */
-struct cs_Frnch_
-{
-	struct csGridCoverage_ coverage;	/* Carries the converage of the
-										   internal grid cells. */
-	long32_t lngCount;					/* number of nodes (not cells) in the
-										   east/west direction. */
-	long32_t latCount;					/* number of nodes (not cells) in the
-										   north/south direction. */
-	double deltaLng;
-	double deltaLat;
-	double rgf93ERad;					/* Radius of the rgf93 ellipsoid (GRS80). */
-	double rgf93ESq;					/* Eccentricity squared, RGF93 ellipsoid. */
-	double ntfERad;						/* Radius of the NTF ellipsoid (CLRK 1880). */
-	double ntfESq;						/* Eccentricity squared, NTF ellipsoid. */
-	char filePath [MAXPATH];			/* We keep this for logging and error
-										   reporting. */
-	char fileName [32];					/* For logging and error reporting. */
-	long32_t *deltaX;					/* an array of longs is malloc'ed and
-										   the pointer is stored here.  Note
-										   that the array is a lngCount x latCount
-										   two dimensional array of longs.*/ 
-	long32_t *deltaY;
-	long32_t *deltaZ;
-										/* For testing purposes only.  These three
-										   elements carry the crc16 check code for
-										   the three memory arrays which carry the
-										   transformation grid.  The idea here is
-										   to verify that CS-MAP is not hosing up
-										   the memory in these "heap" arrays. */
-	unsigned short crcX;
-	unsigned short crcY;
-	unsigned short crcZ;
-};
 
 /******************************************************************************
 *******************************************************************************

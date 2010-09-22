@@ -156,13 +156,13 @@ int EXP_LVL9 CSmulrgS (struct cs_GxXform_* gxXfrm)
 	   Note, that the target datum of WGS84 is always implied on these
 	   things. */
 	switch (mulrg->fallback) {
-	case dtcTypMolodensky:
+	case cs_DTCMTH_MOLOD:
 		CSmolodSf (&mulrg->fallbackXfrm.molod,&gxXfrm->srcDatum,&cs_Wgs84Def);
 		break;
-	case dtcTypSevenParm:
+	case cs_DTCMTH_7PARM:
 		CSparm7Sf (&mulrg->fallbackXfrm.parm7,&gxXfrm->srcDatum,&cs_Wgs84Def);
 		break;
-	case dtcTypSixParm:
+	case cs_DTCMTH_6PARM:
 		// TODO: 
 		//CSparm6Sf (&mulrg->fallbackXfrm.parm6,&gxXfrm->srcDatum,&cs_Wgs84Def);
 		//break;
@@ -235,13 +235,13 @@ int EXP_LVL9 CSmulrgF3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 
 		CS_erpt (cs_MREG_RANGE);			/* Register warning. */
 		switch (mulrg->fallback) {
-		case dtcTypMolodensky:
+		case cs_DTCMTH_MOLOD:
 			status = CSmolodF3 (&mulrg->fallbackXfrm.molod,trgLl,srcLl);
 			break;
-		case dtcTypSixParm:
+		case cs_DTCMTH_6PARM:
 			status = CSparm6F3 (&mulrg->fallbackXfrm.parm6,trgLl,srcLl);
 			break;
-		case dtcTypSevenParm:
+		case cs_DTCMTH_7PARM:
 			status = CSparm7F3 (&mulrg->fallbackXfrm.parm7,trgLl,srcLl);
 			break;
 		case dtcTypNone:
@@ -260,28 +260,28 @@ int EXP_LVL9 CSmulrgF3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 	lngSum = latSum = hgtSum = 0.0;
 
 	/* Start the loops necessary to perform the calculation. */
-	for (ii = 0;ii < mulrg->max_vv;ii++)
+	for (ii = 0;ii <= mulrg->max_uu;ii++)
 	{
 		/* Compute the necessary uu power term for this
 		   iteration of the loop. */
-		if (ii == 0) vv_pwr  = cs_One;
-		else	     vv_pwr *= vv;						/*lint !e644 */
-		for (jj = 0;jj < mulrg->max_uu;jj++)
+		if (ii == 0) uu_pwr  = cs_One;
+		else	     uu_pwr *= uu;						/*lint !e644 */
+		for (jj = 0;jj <= mulrg->max_vv;jj++)
 		{
 			/* Compute the necessary vv power term for this
 			   iteration of the loop. */
-			if (jj == 0) uu_pwr  = cs_One;
-			else	     uu_pwr *= uu;					/*lint !e644 */
+			if (jj == 0) vv_pwr  = cs_One;
+			else	     vv_pwr *= vv;					/*lint !e644 */
 
 			/* Compute the bit map bit number for this
 			   iteration for both loops. */
-			idx = ((ii * (ii + 1)) / 2) + jj;
+			idx = ii * 10 + jj;		// This works for MULREG
 			bitNbr = (idx & 0x1F);
 			wrdIdx = idx >> 5;
 			mask = (ulong32_t)0x80000000L >> bitNbr;
 
 			/* See if this term is in the longitude calculation. */
-			if ((mulrg->phiMap [wrdIdx] & mask) != 0)
+			if ((mulrg->lambdaMap [wrdIdx] & mask) != 0)
 			{
 				/* Yes it is, compute the value. */
 				lngSum += mulrg->lambdaCoefs [idx] * uu_pwr * vv_pwr;
