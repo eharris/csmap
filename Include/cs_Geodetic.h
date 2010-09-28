@@ -790,61 +790,28 @@ struct csGridi_
 ******************************************************************************/
 #include "cs_NTv1.h"
 
+/******************************************************************************
+*******************************************************************************
+**      US National Geodetic Service "NADCON" File (i.e. .las / .los )       **
+*******************************************************************************
+******************************************************************************/
 #include "cs_Nadcon.h"
 
+/******************************************************************************
+*******************************************************************************
+**             French Text Format Geodetic Interpolation File                **
+*******************************************************************************
+******************************************************************************/
 #include "cs_Frnch.h"
 
-/* ATS77 to NAD27 Datum Shift Object (aka TRANSFORM)
-
-This object enables multiple grid shift files to convert from ATS77 to
-NAD27 and vice versa.  There are six files, two for each province.  One
-file provides for the forward (NAD27 --> ATS77) conversion, and the
-other implements the inverse.
-
-This object is, essentially, an implementation of the TRANSFORM
-program used in the Maritime provinces for many years now.
-*/
-enum cs_Ats77Prov_ {	ats77PrvNone = 0,
-						ats77PrvNB,
-						ats77PrvNS,
-						ats77PrvPE
-				   };
-enum cs_Ats77Dir_  {	ats77DirNone = 0,
-						ats77DirToAts77,
-						ats77DirToNad27
-				   };
-struct cs_Ats77_
-{
-	/* Most of this comes from the header of the data file.  Note that the
-	   the numbers in the file are in little endian byte order.  Since this
-	   complies with the CS-MAP standard, we can simply run all binary
-	   values extracted through CS_bswap. */
-	struct csGridCoverage_ coverage;
-	enum cs_Ats77Prov_ province;
-	enum cs_Ats77Dir_ direction;
-	long32_t iMax;
-	long32_t jMax;
-	long32_t nf;
-	long32_t polynomialDegree;
-	long32_t controlStations;
-	long32_t coefficientCount;
-	double oprue;
-	double rui2;						/* don't really know what this is;
-									       but it's pretty important. */
-	double localOrigin [2];
-	double dataScale [2];
-	double UO;
-	double VO;
-	double SU;
-	double SV;
-	double *coeffs;					/* An array of the complex coefficients which
-									   are read from the file.  The number is
-									   variable, depending upon the dgree of the
-									   polynomial, and the number of coefficients. */
-	struct cs_Cmplx_ ccc [10];
-	char filePath [MAXPATH];		/* Complete path to the data file. */
-	char fileName [32];				/* File name of the data file. */
-};
+/******************************************************************************
+*******************************************************************************
+**          ATS77 to NAD27 Datum Shift Object (aka TRANSFORM)                **
+**                                                                           **
+**   NAD27 <--> ATS77 Transformation for the Maritime Provinces of Canada    **
+*******************************************************************************
+******************************************************************************/
+#include "cs_Ats77.h"
 
 /* Japanese .PAR Grid Shift File
 
@@ -917,7 +884,7 @@ struct cs_GridFile_
 
 	short maxIterations;
 
-	double (*test)(void *gridFile,double *ll_src);
+	double (*test)(void *gridFile,double *ll_src,short direction);
 	int (*frwrd2D)(void *gridFile,double *ll_src,double *ll_trg);
 	int (*frwrd3D)(void *gridFile,double *ll_src,double *ll_trg);
 	int (*invrs2D)(void *gridFile,double *ll_src,double *ll_trg);
@@ -1376,7 +1343,7 @@ struct cs_Dtcprm_
 #	define cs_RELEASE_CAST int(*)(void *)
 #	define cs_DESTROY_CAST int(*)(void *)
 #else
-#	define cs_TEST_CAST double(*)(Const void *,double *)
+#	define cs_TEST_CAST double(*)(Const void *,double *,short)
 #	define cs_FRWRD2D_CAST int(*)(Const void *,double *,Const double *)
 #	define cs_FRWRD3D_CAST int(*)(Const void *,double *,Const double *)
 #	define cs_INVRS2D_CAST int(*)(Const void *,double *,Const double *)
@@ -1567,7 +1534,7 @@ int			EXP_LVL9	  CSgridiL  (struct csGridi_ *gridi,int cnt,Const double pnts [][
 int			EXP_LVL9	  CSgridiQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSgridiR  (struct csGridi_ *gridi);
 int			EXP_LVL9	  CSgridiS  (struct cs_GxXform_ *gridi);
-int			EXP_LVL9	  CSgridiT  (struct csGridi_ *gridi,double* ll_src);
+int			EXP_LVL9	  CSgridiT  (struct csGridi_ *gridi,double* ll_src,short direction);
 
 /********   DEPRECATED,  LEGACY USE ONLY  ******************/
 int			EXP_LVL9	  CSparm3D  (struct csParm3_ *parm3);
@@ -1590,7 +1557,7 @@ int			EXP_LVL9	  CScntv1L  (struct cs_NTv1_ *cntv1,int cnt,Const double pnts [][
 int			EXP_LVL9	  CScntv1Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CScntv1R  (struct cs_NTv1_ *cntv1);
 int			EXP_LVL9	  CScntv1S  (struct cs_GridFile_ *cntv1);
-double		EXP_LVL9	  CScntv1T  (struct cs_NTv1_ *cntv1,double *ll_src);
+double		EXP_LVL9	  CScntv1T  (struct cs_NTv1_ *cntv1,double *ll_src,short direction);
 
 int			EXP_LVL9	  CScntv2D  (struct cs_NTv2_ *cntv2);
 int			EXP_LVL9	  CScntv2F2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src);
@@ -1601,7 +1568,7 @@ int			EXP_LVL9	  CScntv2L  (struct cs_NTv2_ *cntv2,int cnt,Const double pnts [][
 int			EXP_LVL9	  CScntv2Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CScntv2R  (struct cs_NTv2_ *cntv2);
 int			EXP_LVL9	  CScntv2S  (struct cs_GridFile_ *cntv2);
-double		EXP_LVL9	  CScntv2T  (struct cs_NTv2_ *cntv2,double ll_src [2]);
+double		EXP_LVL9	  CScntv2T  (struct cs_NTv2_ *cntv2,double ll_src [2],short direction);
 
 int			EXP_LVL9	  CSnadcnD  (struct cs_Nadcn_ *nadcn);
 int			EXP_LVL9	  CSnadcnF2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src);
@@ -1612,7 +1579,7 @@ int			EXP_LVL9	  CSnadcnL  (struct cs_Nadcn_ *nadcn,int cnt,Const double pnts []
 int			EXP_LVL9	  CSnadcnQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSnadcnR  (struct cs_Nadcn_ *nadcn);
 int			EXP_LVL9	  CSnadcnS  (struct cs_GridFile_ *nadcn);
-double		EXP_LVL9	  CSnadcnT  (struct cs_Nadcn_ *nadcn,double *ll_src);
+double		EXP_LVL9	  CSnadcnT  (struct cs_Nadcn_ *nadcn,double *ll_src,short direction);
 
 int			EXP_LVL9	  CSfrnchD  (struct cs_Frnch_ *frnch);
 int			EXP_LVL9	  CSfrnchF2 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src);
@@ -1623,8 +1590,7 @@ int			EXP_LVL9	  CSfrnchL  (struct cs_Frnch_ *frnch,int cnt,Const double pnts []
 int			EXP_LVL9	  CSfrnchQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSfrnchR  (struct cs_Frnch_ *frnch);
 int			EXP_LVL9	  CSfrnchS  (struct cs_GridFile_ *frnch);
-double		EXP_LVL9	  CSfrnchT  (struct cs_Frnch_ *frnch,double *ll_src);
-
+double		EXP_LVL9	  CSfrnchT  (struct cs_Frnch_ *frnch,double *ll_src,short direction);
 
 int			EXP_LVL9	  CSjapanD  (struct cs_Japan_ *japan);
 int			EXP_LVL9	  CSjapanF2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src);
@@ -1635,7 +1601,7 @@ int			EXP_LVL9	  CSjapanL  (struct cs_Japan_ *japan,int cnt,Const double pnts []
 int			EXP_LVL9	  CSjapanQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSjapanR  (struct cs_Japan_ *japan);
 int			EXP_LVL9	  CSjapanS  (struct cs_GridFile_ *japan);
-double		EXP_LVL9	  CSjapanT  (struct cs_Japan_ *japan,double *ll_src);
+double		EXP_LVL9	  CSjapanT  (struct cs_Japan_ *japan,double *ll_src,short direction);
 
 int			EXP_LVL9	  CSats77D  (struct cs_Ats77_ *ats77);
 int			EXP_LVL9	  CSats77F2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src);
@@ -1646,7 +1612,7 @@ int			EXP_LVL9	  CSats77L  (struct cs_Ats77_ *ats77,int cnt,Const double pnts []
 int			EXP_LVL9	  CSats77Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSats77R  (struct cs_Ats77_ *ats77);
 int			EXP_LVL9	  CSats77S  (struct cs_GridFile_ *ats77);
-double		EXP_LVL9	  CSats77T  (struct cs_Ats77_ *ats77,double *ll_src);
+double		EXP_LVL9	  CSats77T  (struct cs_Ats77_ *ats77,double *ll_src,short direction);
 
 int			EXP_LVL9	  CSost97D  (struct cs_Ost97_ *ost97);
 int			EXP_LVL9	  CSost97F2 (struct cs_Ost97_ *ost97,double *ll_trg,Const double *ll_src);
@@ -1657,7 +1623,7 @@ int			EXP_LVL9	  CSost97L  (struct cs_Ost97_ *ost97,int cnt,Const double pnts []
 int			EXP_LVL9	  CSost97Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSost97R  (struct cs_Ost97_ *ost97);
 int			EXP_LVL9	  CSost97S  (struct cs_GridFile_ *ost97);
-double		EXP_LVL9	  CSost97T  (struct cs_Ost97_ *ost97,double *ll_src);
+double		EXP_LVL9	  CSost97T  (struct cs_Ost97_ *ost97,double *ll_src,short direction);
 
 int			EXP_LVL9	  CSost02D  (struct cs_Ost02_ *ost02);
 int			EXP_LVL9	  CSost02F2 (struct cs_Ost02_ *ost02,double *ll_trg,Const double *ll_src);
@@ -1668,5 +1634,5 @@ int			EXP_LVL9	  CSost02L  (struct cs_Ost02_ *ost02,int cnt,Const double pnts []
 int			EXP_LVL9	  CSost02Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSost02R  (struct cs_Ost02_ *ost02);
 int			EXP_LVL9	  CSost02S  (struct cs_GridFile_ *ost02);
-double		EXP_LVL9	  CSost02T  (struct cs_Ost02_ *ost02,double *ll_src);
+double		EXP_LVL9	  CSost02T  (struct cs_Ost02_ *ost02,double *ll_src,short direction);
 

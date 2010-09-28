@@ -79,9 +79,11 @@ int CScntv2S (struct cs_GridFile_ *gridFile)
 	return status;
 }
 /* Returns a hard zero in the case of no coverage. */
-double CScntv2T (struct cs_NTv2_ *cntv2,double ll_src [2])
+double CScntv2T (struct cs_NTv2_ *cntv2,double ll_src [2],short direction)
 {
 	double density;			/* actually, grid cell size */
+
+	/* For this fiule format, we don't care about the direction. */
 	
 	density = CStestNTv2 (cntv2,ll_src);
 	return density;
@@ -565,7 +567,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 		   
 		   In the case of the Spanish variation, parent grids overlap, and
 		   therefore none of the sub-grids are cacheable. */
-//		subPtr->Cacheable = (short)((thisPtr->IntType == csNTv2TypeCanada) && (thisPtr->SubOverlap == 0));
+//???? 	subPtr->Cacheable = (short)((thisPtr->IntType == csNTv2TypeCanada) && (thisPtr->SubOverlap == 0));
 		subPtr->Cacheable = FALSE;
 
 		/* Skip over the data records in the file. */
@@ -704,7 +706,7 @@ void CSdeleteNTv2 (struct cs_NTv2_* thisPtr)
 }
 
 /* Release allocated resources without losing existence information.
-	Pbject can still be used. */
+	object can still be used. */
 void CSreleaseNTv2 (struct cs_NTv2_* thisPtr)
 {
 	if (thisPtr != NULL)
@@ -1338,7 +1340,6 @@ void CSinitNTv2GridCell (struct csNTv2GridCell_* thisPtr)
 	thisPtr->currentDD = cs_Zero;
 	thisPtr->sourceId [0] = '\0';
 }
-
 double CScalcNTv2GridCell (Const struct csNTv2GridCell_* thisPtr,Const double sourceLL [2])
 {
 	double myLng, myLat;

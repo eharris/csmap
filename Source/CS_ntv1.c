@@ -32,7 +32,7 @@ int CScntv1S  (struct cs_GridFile_ *cntv1)
 	CS_erpt (cs_DTC_DAT_F);
 	return -1;
 }
-double CScntv1T (struct cs_NTv1_ *cntv1,double *ll_src)
+double CScntv1T (struct cs_NTv1_ *cntv1,double *ll_src,short direction)
 {
 	return 0.0;
 }

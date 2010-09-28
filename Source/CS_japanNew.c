@@ -32,7 +32,7 @@ int CSjapanS  (struct cs_GridFile_ *japan)
 	CS_erpt (cs_DTC_DAT_F);
 	return -1;
 }
-double CSjapanT (struct cs_Japan_ *japan,double *ll_src)
+double CSjapanT (struct cs_Japan_ *japan,double *ll_src,short direction)
 {
 	return 0.0;
 }

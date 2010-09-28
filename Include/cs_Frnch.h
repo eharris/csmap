@@ -28,7 +28,7 @@
 /******************************************************************************
 *******************************************************************************
 **                                                                           **
-**           French Text Format Geodetic Intyerpolation File                 **
+**           French Text Format Geodetic Interpolation File                  **
 **                                                                           **
 *******************************************************************************
 ******************************************************************************/
@@ -83,10 +83,13 @@ struct cs_Frnch_
 struct cs_Frnch_* CSnewFrnch (Const char *filePath,long32_t bufferSize,ulong32_t flags,double density);
 void CSinitializeFrnchObj (struct cs_Frnch_ *thisPtr);
 int CSinitFrnch (struct cs_Frnch_* thisPtr,Const char *filePath,long32_t bufferSize,ulong32_t flags,double density);
-void CSreleaseNTv2 (struct cs_NTv2_* thisPtr);
+void CSreleaseFrnch (struct cs_Frnch_* thisPtr);
 void CSdeleteFrnch (struct cs_Frnch_* thisPtr);
 Const char* CSpathFrnch (Const struct cs_Frnch_* thisPtr);
 double CStestFrnch (struct cs_Frnch_* thisPtr,Const double location [2]);
+int CScalcRgf2NtfDeltas (struct cs_Frnch_* thisPtr,double* deltaX,double* deltaY,double* deltaZ,Const double* ll_rgf93);
+int CScalcRgfToNtf (struct cs_Frnch_* thisPtr,double* llNtf,Const double* llRgf93);
+int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf93,Const double* llNtf);
 
 
 
