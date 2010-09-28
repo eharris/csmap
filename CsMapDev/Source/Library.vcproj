@@ -332,6 +332,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\Include\cs_Ats77.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\cs_clientBeg.h"
 				>
 			</File>

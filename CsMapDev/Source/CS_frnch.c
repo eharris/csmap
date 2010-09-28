@@ -27,15 +27,18 @@
 
 #include "cs_map.h"
 
+int CSfrnchQ (struct cs_GridFile_* gridFile,unsigned short frmt_code,int err_list [],int list_sz)
+{
+	/* Verify that the file exists and that the format appears to be correct. */
+	return 0;
+}
 int CSfrnchS  (struct cs_GridFile_ *gridFile)
 {
 	int status;
 
 	struct cs_Frnch_ *frnchPtr;
 
-	CS_erpt (cs_DTC_DAT_F);
-	return -1;
-
+	status = -1;
 	frnchPtr = CSnewFrnch (gridFile->filePath,gridFile->bufferSize,gridFile->flags,gridFile->density);
 	if (frnchPtr != NULL)
 	{
@@ -53,40 +56,98 @@ int CSfrnchS  (struct cs_GridFile_ *gridFile)
 		gridFile->inRange = (cs_INRANGE_CAST)CSfrnchL;
 		gridFile->release = (cs_RELEASE_CAST)CSfrnchR;
 		gridFile->destroy = (cs_DESTROY_CAST)CSfrnchD;
-
+		
 		status = 0;
-	}
-	else
-	{
-		status = -1;
 	}
 	return status;
 }
-double CSfrnchT (struct cs_Frnch_ *frnch,double *ll_src)
+double CSfrnchT (struct cs_Frnch_ *frnch,double *ll_src,short direction)
 {
-	return 0.0;
+	double density;
+
+	/* For this fiule format, we don't care about the direction. */
+	density = CStestFrnch (frnch,ll_src);
+	return density;
 }
 int CSfrnchF2 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src)
 {
-	return 0;
+	extern double cs_Zero;
+
+	int status;
+
+	double myRgf [3];
+	double myNtf [3];
+
+	myRgf [LNG] = ll_src [LNG];
+	myRgf [LAT] = ll_src [LAT];
+	myRgf [HGT] = cs_Zero;
+	status = CScalcRgfToNtf (frnch,myNtf,myRgf);
+	if (status >= 0)
+	{
+		ll_trg [LNG] = myNtf [LNG];
+		ll_trg [LAT] = myNtf [LAT];
+		ll_trg [HGT] = ll_src [HGT];
+	}
+	return status;
 }
 int CSfrnchF3 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src)
 {
-	return 0;
+	int status;
+
+	double myNtf [3];
+
+	status = CScalcRgfToNtf (frnch,myNtf,ll_src);
+	if (status >= 0)
+	{
+		ll_trg [LNG] = myNtf [LNG];
+		ll_trg [LAT] = myNtf [LAT];
+		ll_trg [HGT] = myNtf [HGT];
+	}
+	return status;
 }
 int CSfrnchI2 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src)
 {
-	return 0;
+	extern double cs_Zero;
+
+	int status;
+
+	double myNtf [3];
+	double myRgf [3];
+
+	myNtf [LNG] = ll_src [LNG];
+	myNtf [LAT] = ll_src [LAT];
+	myNtf [HGT] = cs_Zero;
+	status = CScalcNtfToRgf (frnch,myRgf,myNtf);
+	if (status >= 0)
+	{
+		ll_trg [LNG] = myRgf [LNG];
+		ll_trg [LAT] = myRgf [LAT];
+		ll_trg [HGT] = ll_src [HGT];
+	}
+	return status;
 }
 int CSfrnchI3 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src)
 {
-	return 0;
+	extern double cs_Zero;
+
+	int status;
+
+	double myNtf [3];
+	double myRgf [3];
+
+	myNtf [LNG] = ll_src [LNG];
+	myNtf [LAT] = ll_src [LAT];
+	myNtf [HGT] = ll_src [HGT];
+	status = CScalcNtfToRgf (frnch,myRgf,myNtf);
+	if (status >= 0)
+	{
+		ll_trg [LNG] = myRgf [LNG];
+		ll_trg [LAT] = myRgf [LAT];
+		ll_trg [HGT] = myRgf [HGT];
+	}
+	return status;
 }
 int CSfrnchL  (struct cs_Frnch_ *frnch,int cnt,Const double pnts [][3])
-{
-	return 0;
-}
-int CSfrnchQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz)
 {
 	return 0;
 }
@@ -96,10 +157,9 @@ int CSfrnchR  (struct cs_Frnch_ *frnch)
 }
 int CSfrnchD  (struct cs_Frnch_ *frnch)
 {
+	CSdeleteFrnch (frnch);
 	return 0;
 }
-
-
 struct cs_Frnch_* CSnewFrnch (Const char *filePath,long32_t bufferSize,ulong32_t flags,double density)
 {
 	int status;
@@ -148,8 +208,8 @@ void CSinitializeFrnchObj (struct cs_Frnch_ *thisPtr)
 	thisPtr->filePath [0] = '\0';
 	thisPtr->fileName [0] = '\0';
 	thisPtr->deltaX = NULL;
-	thisPtr->deltaX = NULL;
-	thisPtr->deltaX = NULL;
+	thisPtr->deltaY = NULL;
+	thisPtr->deltaZ = NULL;
 	thisPtr->crcX = 0U;
 	thisPtr->crcY = 0U;
 	thisPtr->crcZ = 0U;
@@ -187,7 +247,6 @@ int CSinitFrnch (struct cs_Frnch_* thisPtr,Const char *filePath,long32_t bufferS
 
 	/* Prepare for an error. */
 	fstrm = NULL;
-	thisPtr = NULL;
 	elPtr = NULL;
 	status = -1;
 
@@ -436,8 +495,12 @@ error:
 		CS_fclose (fstrm);
 		fstrm = NULL;
 	}
-	CSdeleteFrnch (thisPtr);
 	return -1;
+}
+/* Release allocated resources without losing existence information.
+	object can still be used. */
+void CSreleaseFrnch (struct cs_Frnch_* thisPtr)
+{
 }
 void CSdeleteFrnch (struct cs_Frnch_* thisPtr)
 {
@@ -461,3 +524,313 @@ void CSdeleteFrnch (struct cs_Frnch_* thisPtr)
 		CS_free (thisPtr);
 	}
 }
+/* Returns the name of the specific grid file which would be used if the
+   provided point was to be converted. */
+Const char* CSpathFrnch (Const struct cs_Frnch_* thisPtr)
+{
+	return (Const char *)thisPtr->filePath;
+}
+double CStestFrnch (struct cs_Frnch_* thisPtr,Const double location [2])
+{
+ 	extern double cs_Zero;
+
+	double density;
+
+	density = CStestCoverage (&thisPtr->coverage,location);
+	return density;
+}
+
+/* Given a RGF93 lat/long in degreess relative to Greenwich, this function
+   extracts the appropaite delta X, Y, and Z from the grid file.  Returns +1
+   if the provided lat/long are not covered by the grid file, in which case,
+   the average geocentric translation values are returned.  These default
+   values are hard coded. */
+int CScalcRgf2NtfDeltas (struct cs_Frnch_* thisPtr,double *deltaX,double *deltaY,double *deltaZ,Const double ll_rgf93 [3])
+{
+	short westEdg, northEdg, eastEdg, southEdg;
+
+	int rtnVal;
+
+	unsigned swIdx, nwIdx, neIdx, seIdx;
+
+	long32_t lngIdx, latIdx;
+
+	double density;
+	double cellLng, cellLat;
+	double x1, x2, x3, x4;
+	double y1, y2, y3, y4;										/*lint !e578 */
+	double z1, z2, z3, z4;
+
+	double sw [3];
+
+	rtnVal = 0;
+
+	/* In the case of a +1 return, we return the standard values. */
+	*deltaX = -168.0;
+	*deltaY =  -60.0;
+	*deltaZ =  320.0;
+
+	/* Check and make sure we have proper coverage. */
+	density = CStestCoverage (&thisPtr->coverage,ll_rgf93);
+	if (density == 0.0) return 1;
+
+	/* Here if we have coverage.  Calculate the indices to the appropriate cell. */
+	lngIdx = (long32_t)((ll_rgf93 [0] - thisPtr->coverage.southWest [0]) / thisPtr->deltaLng);
+	latIdx = (long32_t)((ll_rgf93 [1] - thisPtr->coverage.southWest [1]) / thisPtr->deltaLat);
+
+	/* The coverage test should have caught any coordinate which would cause
+	   us a problem.  But to be extra safe: */
+	westEdg  = (short)(lngIdx < 0);
+	northEdg = (short)(latIdx >= thisPtr->latCount);
+	eastEdg  = (short)(lngIdx >= thisPtr->lngCount);
+	southEdg = (short)(latIdx < 0);
+	if (westEdg || northEdg || eastEdg || southEdg) return 1;
+
+	/* We calculate the geographic coordinates of the southwest corner of the
+	   appropriate grid cell. */
+	sw [0] = thisPtr->coverage.southWest [0] + (lngIdx * thisPtr->deltaLng);
+	sw [1] = thisPtr->coverage.southWest [1] + (latIdx * thisPtr->deltaLat);
+
+	/* Now, deltaLng and deltaLat are the normalized distances into the
+	   grid cell of the provided point. */
+	cellLng = (ll_rgf93 [0] - sw [0]) / thisPtr->deltaLng;
+	cellLat = (ll_rgf93 [1] - sw [1]) / thisPtr->deltaLat;
+
+	/* Compute the indices into the delta arrays.  Due to the above checking,
+	   these indices should be safe to use for memory access. */
+	swIdx = (unsigned)(( latIdx      * thisPtr->lngCount) + lngIdx);
+	nwIdx = (unsigned)(((latIdx + 1) * thisPtr->lngCount) + lngIdx);
+	neIdx = (unsigned)(((latIdx + 1) * thisPtr->lngCount) + lngIdx + 1);
+	seIdx = (unsigned)(( latIdx      * thisPtr->lngCount) + lngIdx + 1);
+
+	/* Now we can do the bilinear calculation.  The nomenclature here jives
+	   with the reference document. */
+	x1 = (double)(*(thisPtr->deltaX + swIdx)) * 0.001;
+	x2 = (double)(*(thisPtr->deltaX + nwIdx)) * 0.001;
+	x3 = (double)(*(thisPtr->deltaX + seIdx)) * 0.001;
+	x4 = (double)(*(thisPtr->deltaX + neIdx)) * 0.001;
+
+	y1 = (double)(*(thisPtr->deltaY + swIdx)) * 0.001;
+	y2 = (double)(*(thisPtr->deltaY + nwIdx)) * 0.001;
+	y3 = (double)(*(thisPtr->deltaY + seIdx)) * 0.001;
+	y4 = (double)(*(thisPtr->deltaY + neIdx)) * 0.001;
+
+	z1 = (double)(*(thisPtr->deltaZ + swIdx)) * 0.001;
+	z2 = (double)(*(thisPtr->deltaZ + nwIdx)) * 0.001;
+	z3 = (double)(*(thisPtr->deltaZ + seIdx)) * 0.001;
+	z4 = (double)(*(thisPtr->deltaZ + neIdx)) * 0.001;
+
+	*deltaX = x1 + (x3 - x1) * cellLng + (x2 - x1) * cellLat +
+				   (x1 - x2 - x3 + x4) * cellLng * cellLat;
+	*deltaY = y1 + (y3 - y1) * cellLng + (y2 - y1) * cellLat +
+				   (y1 - y2 - y3 + y4) * cellLng * cellLat;
+	*deltaZ = z1 + (z3 - z1) * cellLng + (z2 - z1) * cellLat +
+				   (z1 - z2 - z3 + z4) * cellLng * cellLat;
+
+	/* If we are still here, the return value is zero. */
+	return rtnVal;
+}
+
+int CScalcRgfToNtf (struct cs_Frnch_* thisPtr,double* llNtf,Const double *llRgf93)
+{
+	int rtnVal, xyzSt;
+
+	double deltaX, deltaY, deltaZ;
+
+	double xyz [3];
+
+	/* Until we know different */
+	rtnVal = 0;
+	llNtf [0] = llRgf93 [0];
+	llNtf [1] = llRgf93 [1];
+	llNtf [2] = llRgf93 [2];
+
+	/* Determine the delta shift values. */
+	rtnVal = CScalcRgf2NtfDeltas (thisPtr,&deltaX,&deltaY,&deltaZ,llRgf93);
+
+	/* TO DO: The CScalcNtfToRfg93Deltas function will return the average
+	   geocentric translation values for France whenever presented a geographic
+	   coordinate outside the coverage of the grid data file.  These values are
+	   hardcoded.  These values should, perhaps, be obtained from the fallback
+	   or some means other than hardcoded.  Since the ellipsoids in use are also
+	   harcoded (as there are no ellipsoid numbers in the data file format) this
+	   is probably not a big deal. */
+
+	/* A status value of +1 says that the given point is not covered by the grid file.
+	   However, in this case, CScalcNtf2RfgDeltas returns delta X, Y, & Z set
+	   to average values.  Thus, we do the following regardless of the value
+	   of rtnVal. */
+	if (rtnVal >= 0)
+	{
+		/* OK, we have the appropriate delta values.  We need to do a three parameter
+		   transformation using these values.  Before we can do this, we need to convert
+		   the source geographic coordinates to geocentric form. */
+		CS_llhToXyz (xyz,llRgf93,thisPtr->rgf93ERad,thisPtr->rgf93ESq);
+		xyz [0] -= deltaX;
+		xyz [1] -= deltaY;
+		xyz [2] -= deltaZ;
+		xyzSt = CS_xyzToLlh (llNtf,xyz,thisPtr->ntfERad,thisPtr->ntfESq);
+		if (xyzSt != 0)
+		{
+			CS_erpt ( cs_XYZ_ITR);
+			rtnVal = -1;
+		}
+	}
+	return rtnVal;
+}
+#if !defined (__SKIP__)
+/* Since the following code has been tested, we leave it in here.  Easier to
+   delete than it is to create.
+   
+   It is important to note that while this algorithm will produce the exact
+   (i.e. within .1 millimeters) inverse, it does not take the height of the
+   NTF source point into consideration.  Thus, while the horizontal inverse
+   is rather precise, the effect of the height on this calculation has not
+   been evaluated as yet. */
+int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf,Const double* llNtf)
+{
+	int ii;
+	int lngOk;
+	int latOk;
+	int rtnVal;
+
+	double guess [3];
+	double newLl [3];
+	double epsilon [3];
+
+	/* Assume everything goes OK until we know different. */
+	rtnVal = 0;
+
+	/* First, we copy the source lat/longs to the local array.
+	   This is the default result which the user may want in
+	   the event of an error.  Note, we assume such has been
+	   done below, even if there has not been an error. */
+	llRgf [LNG] = guess [LNG] = llNtf [LNG];
+	llRgf [LAT] = guess [LAT] = llNtf [LAT];
+	llRgf [HGT] = guess [HGT] = llNtf [HGT];
+
+	/* Start a loop which will iterate as many as maxIteration times. */
+	for (ii = 0;ii < thisPtr->maxIterations;ii++)
+	{
+		/* Assume we are done until we know different. */
+		lngOk = latOk = TRUE;
+
+		/* Compute the WGS-84 lat/long for our current guess. */
+		rtnVal = CScalcRgfToNtf (thisPtr,newLl,guess);
+		if (rtnVal != 0)
+		{
+			/* Oopps!! We must have been given some pretty strange
+			   coordinate values. */
+			break;
+		}
+
+		/* See how far we are off. */
+		epsilon [LNG] = llNtf [LNG] - newLl [LNG];
+		epsilon [LAT] = llNtf [LAT] - newLl [LAT];
+
+		/* If our guess at the longitude is off by more than
+		   small, we adjust our guess by the amount we are off. */
+		if (fabs (epsilon [LNG]) > thisPtr->cnvrgValue)
+		{
+			lngOk = FALSE;
+			guess [LNG] += epsilon [LNG];
+		}
+		/* If our guess longitude is off by more than
+		   small, we adjust our guess by the amount we are off. */
+		if (fabs (epsilon [LAT]) > thisPtr->cnvrgValue)
+		{
+			latOk = FALSE;
+			guess [LAT] += epsilon [LAT];
+		}
+
+		/* If our current guess produces a newLl that is within
+		   samllValue of srcLl, we are done. */
+		if (lngOk && latOk) break;
+	}
+
+	/* If we didn't resolve in maxIteration tries, we issue a warning
+	   message.  Usually, three or four iterations does the trick. */
+	if (ii >= thisPtr->maxIterations)
+	{
+		CS_erpt (cs_RGF93_ICNT);
+
+		/* Issue a warning if we're close, a fatal if we are still way off.
+		   In any case, we return the last computed value.  We could have
+		   gotten very fancy with this stuff, but it would have had serious
+		   affects on the performance.  So we just check epsilon here as
+		   we know we have an error and this doesn't happen very often. */
+		rtnVal = 1;
+		if (fabs (epsilon [LNG]) > thisPtr->errorValue ||
+		    fabs (epsilon [LAT]) > thisPtr->errorValue)
+		{
+			rtnVal = -1;
+		}
+	}
+
+	/* Return the resuls if everything converged. */
+	if (rtnVal >= 0)
+	{
+		llRgf [LNG] = guess [LNG];
+		llRgf [LAT] = guess [LAT];
+	}
+	return rtnVal;
+}
+#else
+/* The following calculation is the calculation as described in the
+   source document from the IGN.  It produces values which are within
+   1.5 millimeters of the original  coordinate.  So while the above is
+   more accurate (accurate to 0.1 millimeters), this is the algorithm
+   used as it is believed to be the officially sanctioned technique. */
+int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf,Const double* llNtf)
+{
+	int rtnVal = 0;
+
+	double deltaX, deltaY, deltaZ;
+
+	double xyz [3];
+
+	/* We start with the basic, default, average, values. */
+	deltaX = -168.0;
+	deltaY =  -60.0;
+	deltaZ =  320.0;
+
+	/* The grid file is indexed by RGF93 lat/longs, even though the delta values
+	   in the grid file are the values which convert from NTF to RGF93.  We only
+	   have ntf lat/longs.  So, first thing we do is to do an approximate
+	   calculation, converting the provided NTF lat/longs to RGF93 lat/longs using
+	   standard, average, delta X, Y, & Z values.  Note that in the event
+	   of an error below, these approximate results are allowed to remain in
+	   the target array. */
+	CS_llhToXyz (xyz,llNtf,thisPtr->ntfERad,thisPtr->ntfESq);
+	xyz [0] += deltaX;
+	xyz [1] += deltaY;
+	xyz [2] += deltaZ;
+	rtnVal = CS_xyzToLlh (llRgf,xyz,thisPtr->rgf93ERad,thisPtr->rgf93ESq);
+	if (rtnVal != 0)
+	{
+		CS_erpt ( cs_XYZ_ITR);
+	}
+	else
+	{
+		/* Now we use this approximate RGF93 lat/long to access the grid file to get
+		   the Delta X, Y, & Z.  Obviously, not perfectly exact, but very close. */
+		rtnVal = CScalcRgf2NtfDeltas (thisPtr,&deltaX,&deltaY,&deltaZ,llRgf);
+
+		/* A status value of +1 says that the given point is not covered by the grid file.
+		   In this case, since we have already calculated an approximation, we are done. */
+		if (rtnVal == 0)
+		{
+			CS_llhToXyz (xyz,llNtf,thisPtr->ntfERad,thisPtr->ntfESq);
+			xyz [0] += deltaX;
+			xyz [1] += deltaY;
+			xyz [2] += deltaZ;
+			rtnVal = CS_xyzToLlh (llRgf,xyz,thisPtr->rgf93ERad,thisPtr->rgf93ESq);
+			if (rtnVal != 0)
+			{
+				CS_erpt ( cs_XYZ_ITR);
+			}
+		}
+	}
+	return rtnVal;
+}
+#endif

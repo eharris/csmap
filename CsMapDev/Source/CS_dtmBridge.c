@@ -71,11 +71,11 @@ Const char* CSdtmBridgeGetSourceDtm (struct csDtmBridge_* thisPtr)
 		bridgeXfrmPtr = &thisPtr->bridgeXfrms[thisPtr->srcIndex];
 		if (bridgeXfrmPtr->direction == cs_DTCDIR_FWD)
 		{
-			cpSrc = bridgeXfrmPtr->xfrmPtr->srcDatum;
+			cpSrc = bridgeXfrmPtr->xfrmPtr->trgDatum;
 		}
 		else if (bridgeXfrmPtr->direction == cs_DTCDIR_INV)
 		{
-			cpSrc = bridgeXfrmPtr->xfrmPtr->trgDatum;
+			cpSrc = bridgeXfrmPtr->xfrmPtr->srcDatum;
 		}
 		else
 		{
@@ -104,11 +104,11 @@ Const char* CSdtmBridgeGetTargetDtm (struct csDtmBridge_* thisPtr)
 		bridgeXfrmPtr = &thisPtr->bridgeXfrms[thisPtr->trgIndex];
 		if (bridgeXfrmPtr->direction == cs_DTCDIR_FWD)
 		{
-			cpTrg = bridgeXfrmPtr->xfrmPtr->trgDatum;
+			cpTrg = bridgeXfrmPtr->xfrmPtr->srcDatum;
 		}
 		else if (bridgeXfrmPtr->direction == cs_DTCDIR_INV)
 		{
-			cpTrg = bridgeXfrmPtr->xfrmPtr->srcDatum;
+			cpTrg = bridgeXfrmPtr->xfrmPtr->trgDatum;
 		}
 		else
 		{

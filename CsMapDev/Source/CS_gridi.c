@@ -198,7 +198,7 @@ int EXP_LVL9 CSgridiF3 (struct csGridi_ *gridi,double trgLl [3],Const double src
 	
 	struct cs_GridFile_* gridFilePtr;
 
-	selectedIdx = CSgridiT (gridi,srcLl);
+	selectedIdx = CSgridiT (gridi,srcLl,cs_DTCDIR_FWD);
 	if (selectedIdx >= 0)
 	{
 		gridFilePtr = gridi->gridFiles [selectedIdx];
@@ -228,7 +228,7 @@ int EXP_LVL9 CSgridiF2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	
 	struct cs_GridFile_* gridFilePtr;
 
-	selectedIdx = CSgridiT (gridi,srcLl);
+	selectedIdx = CSgridiT (gridi,srcLl,cs_DTCDIR_FWD);
 	if (selectedIdx >= 0)
 	{
 		gridFilePtr = gridi->gridFiles [selectedIdx];
@@ -258,7 +258,7 @@ int EXP_LVL9 CSgridiI3 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	
 	struct cs_GridFile_* gridFilePtr;
 
-	selectedIdx = CSgridiT (gridi,srcLl);
+	selectedIdx = CSgridiT (gridi,srcLl,cs_DTCDIR_INV);
 	if (selectedIdx >= 0)
 	{
 		gridFilePtr = gridi->gridFiles [selectedIdx];
@@ -288,7 +288,7 @@ int EXP_LVL9 CSgridiI2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	
 	struct cs_GridFile_* gridFilePtr;
 
-	selectedIdx = CSgridiT (gridi,srcLl);
+	selectedIdx = CSgridiT (gridi,srcLl,cs_DTCDIR_INV);
 	if (selectedIdx >= 0)
 	{
 		gridFilePtr = gridi->gridFiles [selectedIdx];
@@ -351,7 +351,7 @@ int EXP_LVL9 CSgridiD (struct csGridi_ *gridi)
 	}
 	return status;
 }
-int CSgridiT (struct csGridi_ *gridi,double* ll_src)
+int CSgridiT (struct csGridi_ *gridi,double* ll_src,short direction)
 {
 	short idx;
 	short selectedIdx;
@@ -370,7 +370,7 @@ int CSgridiT (struct csGridi_ *gridi,double* ll_src)
 			gridFilePtr = gridi->gridFiles [idx];
 			if (gridFilePtr != NULL)
 			{
-				density = (*gridFilePtr->test)(gridFilePtr->fileObject.genericPtr,ll_src);
+				density = (*gridFilePtr->test)(gridFilePtr->fileObject.genericPtr,ll_src,direction);
 				if (density != 0.0)
 				{
 					selectedIdx = idx;
@@ -389,7 +389,7 @@ int CSgridiT (struct csGridi_ *gridi,double* ll_src)
 			gridFilePtr = gridi->gridFiles [idx];
 			if (gridFilePtr != NULL)
 			{
-				density = (*gridFilePtr->test)(gridFilePtr->fileObject.genericPtr,ll_src);
+				density = (*gridFilePtr->test)(gridFilePtr->fileObject.genericPtr,ll_src,direction);
 				if (density == 0.0)
 				{
 					continue;

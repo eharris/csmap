@@ -234,7 +234,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 23400,4319,4319,4319,0,0,0,,KuwaitUtility.LL,KuwaitUtility.LL,KuwaitUtility.LL,KUDAMS,GCS_KUDAMS,KUDAMS,,,KUDAMS,,,,,,,,,0,0,0
 23500,4322,4322,4322,0,0,8306,,LL72,WGS72.LL,LL72,WGS 72,GCS_WGS_1972,WGS 72,,,WGS 72,,,,Longitude / Latitude (WGS 72),,,,,0,0,0
 23600,4324,4324,4324,0,0,0,,WGS72-TBE.LL,WGS72/be.LL,WGS72-TBE.LL,WGS 72BE,GCS_WGS_1972_BE,WGS 72BE,,,WGS 72BE,,,,,,,,,0,0,0
-23700,4326,4326,2000002,0,0,8192,,LL84,WGS84.LL,LL84,WGS 84,GCS_WGS_1984,WGS 84|TWD97,,,WGS 84,,,,WGS 84|Longitude / Latitude (WGS 84),"WGS84 Lat/Long's, Degrees, -180 ==> +180",,,,0,0,0
+23700,4326,4326,2000002,0,0,8192,,LL84,WGS84.LL,LL84|CRS:84,WGS 84,GCS_WGS_1984,WGS 84|TWD97,,,WGS 84,,CRS:84,,WGS 84|Longitude / Latitude (WGS 84),"WGS84 Lat/Long's, Degrees, -180 ==> +180",,,,0,0,0
 23800,4600,4600,4600,0,0,0,,Anguilla57.LL,Anguilla57.LL,,Anguilla 1957,GCS_Anguilla_1957,Anguilla 1957,,,Anguilla 1957,,,,,,,,,0,0,0
 23900,4601,4601,4601,0,0,0,,Antigua43.LL,Antigua43.LL,Antigua1943.LL,Antigua 1943,GCS_Antigua_1943,Antigua 1943,,,Antigua 1943,,,,,,,,,0,0,0
 24000,4602,4602,4602,0,0,0,,Dominica45.LL,Dominica45.LL,Dominica1945.LL,Dominica 1945,GCS_Dominica_1945,Dominica 1945,,,Dominica 1945,,,,,,,,,0,0,0

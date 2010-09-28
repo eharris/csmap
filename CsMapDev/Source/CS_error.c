@@ -772,7 +772,7 @@ struct csErrtab_ csErrtab [] =
  {cs_GRD_RNG_WRN,  csET_LOC,cs_ERSUP_RNG,
 						   "Coordinate (approx) %s outside grid file coverage; no transformation applied."},
  { cs_GX_TOOMANY,   csET_NM,cs_ERSUP_OPR,
-						   "Transformation from %s required to many separate transformations."},
+						   "Transformation from %s required too many separate transformations."},
  { cs_GEOXFRM_DUP,  csET_NM,cs_ERSUP_OPR,
 						   "Duplicate geodetic transformation dictionary entries for converting from %s exist."},
  { cs_DT_NOPATH,   csET_NM,cs_ERSUP_DATA,

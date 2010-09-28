@@ -32,7 +32,7 @@ int CSost02S  (struct cs_GridFile_ *ost02)
 	CS_erpt (cs_DTC_DAT_F);
 	return -1;
 }
-double CSost02T (struct cs_Ost02_ *ost02,double *ll_src)
+double CSost02T (struct cs_Ost02_ *ost02,double *ll_src,short direction)
 {
 	return 0.0;
 }

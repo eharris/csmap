@@ -143,10 +143,11 @@ error:
 	}
 	return -1;
 }
-double CSnadcnT (struct cs_Nadcn_ *nadcn,double *ll_src)
+double CSnadcnT (struct cs_Nadcn_ *nadcn,double *ll_src,short direction)
 {
 	double density;
-	
+
+	/* For this file format, we don't care about the direction. */
 	density = CStestNadconFile (nadcn->lngShift,ll_src);
 	return density;
 }
