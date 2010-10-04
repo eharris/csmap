@@ -78,6 +78,7 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 
 	gridi = &gxXfrm->xforms.gridi;
 
+	gridi->userDirection = gxXfrm->userDirection;
 	gridi->errorValue    = gxXfrm->errorValue;
 	gridi->cnvrgValue    = gxXfrm->cnvrgValue;
 	gridi->maxIterations = gxXfrm->maxIterations;
@@ -116,7 +117,9 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 			CS_erpt (cs_NO_MEM);
 			goto error;
 		}
-		gridFilePtr->direction = fileDefPtr->direction;
+		gridFilePtr->direction = cs_DTCDIR_NONE;
+		if (fileDefPtr->direction == 'F' || fileDefPtr->direction == 'f') gridFilePtr->direction = cs_DTCDIR_FWD;
+		if (fileDefPtr->direction == 'I' || fileDefPtr->direction == 'i') gridFilePtr->direction = cs_DTCDIR_INV;
 		gridFilePtr->format = fileDefPtr->fileFormat;
 		cp = fileDefPtr->fileName;
 		cc1 = *cp;
@@ -203,12 +206,25 @@ int EXP_LVL9 CSgridiF3 (struct csGridi_ *gridi,double trgLl [3],Const double src
 	{
 		gridFilePtr = gridi->gridFiles [selectedIdx];
 		if (gridFilePtr != NULL)
-		{	
-			status = (*gridFilePtr->frwrd3D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+		{
+			if (gridFilePtr->direction == cs_DTCDIR_FWD)
+			{
+				status = (*gridFilePtr->frwrd3D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+			}
+			else if (gridFilePtr->direction == cs_DTCDIR_INV)
+			{
+				status = (*gridFilePtr->invrs3D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+			}
+			else
+			{
+				CS_stncp (csErrnam,"CS_gridi::1",MAXPATH);
+				CS_erpt (cs_ISER);
+				status = -1;
+			}
 		}
 		else
 		{
-			CS_stncp (csErrnam,"CS_gridi::1",MAXPATH);
+			CS_stncp (csErrnam,"CS_gridi::2",MAXPATH);
 			CS_erpt (cs_ISER);
 			status = -1;
 		}
@@ -233,12 +249,25 @@ int EXP_LVL9 CSgridiF2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	{
 		gridFilePtr = gridi->gridFiles [selectedIdx];
 		if (gridFilePtr != NULL)
-		{	
-			status = (*gridFilePtr->frwrd2D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+		{
+			if (gridFilePtr->direction == cs_DTCDIR_FWD)
+			{	
+				status = (*gridFilePtr->frwrd2D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+			}
+			else if (gridFilePtr->direction == cs_DTCDIR_INV)
+			{
+				status = (*gridFilePtr->invrs2D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+			}
+			else
+			{
+				CS_stncp (csErrnam,"CS_gridi::3",MAXPATH);
+				CS_erpt (cs_ISER);
+				status = -1;
+			}
 		}
 		else
 		{
-			CS_stncp (csErrnam,"CS_gridi::2",MAXPATH);
+			CS_stncp (csErrnam,"CS_gridi::4",MAXPATH);
 			CS_erpt (cs_ISER);
 			status = -1;
 		}
@@ -263,12 +292,25 @@ int EXP_LVL9 CSgridiI3 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	{
 		gridFilePtr = gridi->gridFiles [selectedIdx];
 		if (gridFilePtr != NULL)
-		{	
-			status = (*gridFilePtr->invrs3D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+		{
+			if (gridFilePtr->direction == cs_DTCDIR_FWD)
+			{	
+				status = (*gridFilePtr->invrs3D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+			}
+			else if (gridFilePtr->direction == cs_DTCDIR_INV)
+			{	
+				status = (*gridFilePtr->frwrd3D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+			}
+			else
+			{
+				CS_stncp (csErrnam,"CS_gridi::5",MAXPATH);
+				CS_erpt (cs_ISER);
+				status = -1;
+			}
 		}
 		else
 		{
-			CS_stncp (csErrnam,"CS_gridi::3",MAXPATH);
+			CS_stncp (csErrnam,"CS_gridi::6",MAXPATH);
 			CS_erpt (cs_ISER);
 			status = -1;
 		}
@@ -293,12 +335,25 @@ int EXP_LVL9 CSgridiI2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	{
 		gridFilePtr = gridi->gridFiles [selectedIdx];
 		if (gridFilePtr != NULL)
-		{	
-			status = (*gridFilePtr->invrs2D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+		{
+			if (gridFilePtr->direction == cs_DTCDIR_FWD)
+			{
+				status = (*gridFilePtr->invrs2D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+			}
+			else if (gridFilePtr->direction == cs_DTCDIR_INV)
+			{
+				status = (*gridFilePtr->frwrd2D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
+			}
+			else
+			{
+				CS_stncp (csErrnam,"CS_gridi::7",MAXPATH);
+				CS_erpt (cs_ISER);
+				status = -1;
+			}
 		}
 		else
 		{
-			CS_stncp (csErrnam,"CS_gridi::4",MAXPATH);
+			CS_stncp (csErrnam,"CS_gridi::8",MAXPATH);
 			CS_erpt (cs_ISER);
 			status = -1;
 		}

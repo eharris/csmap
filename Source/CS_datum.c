@@ -518,7 +518,7 @@ int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr)
 			CS_erpt (cs_ISER);
 			goto error;
 		}
-		
+
 		if (direction == cs_DTCDIR_FWD)
 		{
 			for (idx = 0;idx < idxCount;idx += 1)

@@ -100,14 +100,7 @@ double CSats77T (struct cs_Ats77_ *ats77,double *ll_src,short direction)
 	double density;
 	
 	density = 0.0;
-	if (direction == cs_DTCDIR_FWD && ats77->direction == ats77DirToAts77)
-	{
-		density = CStestAts77 (ats77,ats77DirToAts77,ll_src);
-	}
-	else if (direction == cs_DTCDIR_INV && ats77->direction == ats77DirToNad27)
-	{
-		density = CStestAts77 (ats77,ats77DirToNad27,ll_src);
-	}
+	density = CStestCoverage (&ats77->coverage,ll_src);
 	return density;
 }
 int CSats77F2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
@@ -124,20 +117,11 @@ int CSats77F2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 		ll_trg [LAT] = ll_src [LAT]; 
 		ll_trg [HGT] = ll_src [HGT]; 
 	}
-	if (ats77->direction != ats77DirToAts77)
+	status = CScalcAts77 (ats77,ll_lcl,ll_src);
+	if (status >= 0)
 	{
-		CS_stncp (csErrnam,"CS_ats77::1",MAXPATH);
-		CS_erpt (cs_ISER);
-		status = -1;
-	}
-	else
-	{
-		status = CScalcAts77 (ats77,ll_lcl,ll_src);
-		if (status >= 0)
-		{
-			ll_trg [LNG] = ll_lcl [LNG]; 
-			ll_trg [LAT] = ll_lcl [LAT]; 
-		}
+		ll_trg [LNG] = ll_lcl [LNG]; 
+		ll_trg [LAT] = ll_lcl [LAT]; 
 	}
 	return status;
 }
@@ -149,98 +133,39 @@ int CSats77F3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 	int status;
 	double lcl_ll [3];
 
-	if (ats77->direction != ats77DirToAts77)
+	if (ll_trg != ll_src)
 	{
-		CS_stncp (csErrnam,"CS_ats77::2",MAXPATH);
-		CS_erpt (cs_ISER);
-		status = -1;
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
+		ll_trg [HGT] = ll_src [HGT];
 	}
-	else
-	{
-		if (ll_trg != ll_src)
-		{
-			ll_trg [LNG] = ll_src [LNG];
-			ll_trg [LAT] = ll_src [LAT];
-			ll_trg [HGT] = ll_src [HGT];
-		}
-		lcl_ll [LNG] = ll_src [LNG]; 
-		lcl_ll [LAT] = ll_src [LAT]; 
-		lcl_ll [HGT] = cs_Zero;
+	lcl_ll [LNG] = ll_src [LNG]; 
+	lcl_ll [LAT] = ll_src [LAT]; 
+	lcl_ll [HGT] = cs_Zero;
 
-		status = CSats77F2 (ats77,lcl_ll,lcl_ll);
-		if (status >= 0)
-		{
-			ll_trg [LNG] = lcl_ll [LNG];
-			ll_trg [LAT] = lcl_ll [LAT];
-		}
+	status = CSats77F2 (ats77,lcl_ll,lcl_ll);
+	if (status >= 0)
+	{
+		ll_trg [LNG] = lcl_ll [LNG];
+		ll_trg [LAT] = lcl_ll [LAT];
 	}
 	return status;	
 }
 int CSats77I2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 {
-	extern double cs_Zero;				/* 0.0 */
-	extern char csErrnam [MAXPATH];
-
 	int status;
-	double ll_lcl [3];
 
-	if (ll_trg != ll_src)
-	{
-		ll_trg [LNG] = ll_src [LNG]; 
-		ll_trg [LAT] = ll_src [LAT]; 
-		ll_trg [HGT] = ll_src [HGT]; 
-	}
-	if (ats77->direction != ats77DirToNad27)
-	{
-		CS_stncp (csErrnam,"CS_ats77::3",MAXPATH);
-		CS_erpt (cs_ISER);
-		status = -1;
-	}
-	else
-	{
-		status = CScalcAts77 (ats77,ll_lcl,ll_src);
-		if (status >= 0)
-		{
-			ll_trg [LNG] = ll_lcl [LNG]; 
-			ll_trg [LAT] = ll_lcl [LAT]; 
-		}
-	}
+	CS_erpt (cs_ATS77_INV);
+	status = -1;
 	return status;
 }
 int CSats77I3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 {
-	extern double cs_Zero;				/* 0.0 */
-	extern char csErrnam [MAXPATH];
-
 	int status;
-	double lcl_ll [3];
 
-	if (ats77->direction != ats77DirToNad27)
-	{
-		CS_stncp (csErrnam,"CS_ats77::4",MAXPATH);
-		CS_erpt (cs_ISER);
-		status = -1;
-	}
-	else
-	{
-		if (ll_trg != ll_src)
-		{
-			ll_trg [LNG] = ll_src [LNG];
-			ll_trg [LAT] = ll_src [LAT];
-			ll_trg [HGT] = ll_src [HGT];
-		}
-		lcl_ll [LNG] = ll_src [LNG]; 
-		lcl_ll [LAT] = ll_src [LAT]; 
-		lcl_ll [HGT] = cs_Zero;
-
-		status = CSats77F2 (ats77,lcl_ll,lcl_ll);
-		if (status >= 0)
-		{
-			ll_trg [LNG] = lcl_ll [LNG];
-			ll_trg [LAT] = lcl_ll [LAT];
-		}
-	}
-	return status;	
+	CS_erpt (cs_ATS77_INV);
+	status = -1;
+	return status;
 }
 int CSats77L  (struct cs_Ats77_ *ats77,int cnt,Const double pnts [][3])
 {

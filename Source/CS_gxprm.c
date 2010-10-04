@@ -79,7 +79,7 @@ struct cs_GxXform_ *CS_gxloc (Const char* gxDefName,short userDirection)
 	{
 		CS_erpt (err_list [0]);
 		goto error;
-	}	
+	}
 
 	/* Transfer the method independent stuff from the definition to the
 	   implementation structure. */
