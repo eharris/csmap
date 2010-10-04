@@ -61,7 +61,7 @@
 #		not been located.
 #
 #  The following tests were verified using CORPSCON. Note, that CS_MAP
-#  uses a more accurate meridinal arc calculation then does the version
+#  uses a more accurate meridional arc calculation then does the version
 #  of CORPSCON used in generating these tests. Therefore, variations as much
 #  as a millimeter can be expected in the higher latitudes.
 #

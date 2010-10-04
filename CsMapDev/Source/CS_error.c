@@ -777,6 +777,8 @@ struct csErrtab_ csErrtab [] =
 						   "Duplicate geodetic transformation dictionary entries for converting from %s exist."},
  { cs_DT_NOPATH,   csET_NM,cs_ERSUP_DATA,
 						   "No path could be found or automatically constructed to convert from %s."},
+ { cs_ATS77_INV,         0,cs_ERSUP_SOFT,
+						   "An attempt to perform an inverse calculation using an ATS77 'TRANSFORM' file was detected.  Cannot comply."},
  {              0,       0,0,""}
 };
 

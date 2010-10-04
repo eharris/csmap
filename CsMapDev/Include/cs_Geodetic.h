@@ -813,53 +813,14 @@ struct csGridi_
 ******************************************************************************/
 #include "cs_Ats77.h"
 
-/* Japanese .PAR Grid Shift File
-
-The original Japanese data file is provided in text formm.  As a performance
-enhancement, we convert the ASCII text file to binary form upon the first
-access.  This conversion process uses the dates on the file to determine
-if a new binary version needs to be built.
-
-The following object is used to create, manage, and use a binary version
-of the Jgd2k data file.  We need a binary version to insulate ourselves
-from ths possibility of a variable length text file.  Also, it enables us
-to sort the data file.  There is no reason to believe that the text files
-will always be properly sorted for rapid access.
-
-Note, that unlike all the other grid data files, there is no guarantee that
-the coverage of any such file is rectangular.  Therefore, there is no way that
-the coverage scheme will work.  So, we are therefore limited to handling a
-single file at a time.  The coverage is determined by the coverage of that
-file.
-
-The binary file that we make consists of a number of the following records,
-with two doubles on the front.  The two doubles represent the
-southwesternmost meshcode in the file.  After the rather trivial header, the
-records appear in ascending order by mesh code.
-*/
-struct csJgd2kGridRecord_
-{
-	ulong32_t meshCode;
-	long32_t deltaLat;				/* seconds * 100,000 */
-	long32_t deltaLng;				/* seconds * 100,000 */
-};
-struct cs_Japan_
-{
-	double ewDelta;				/* Grid cell size */
-	double nsDelta;				/* Grid cell size */
-	csFILE* strm;				/* file is not opened until required,
-								   may be closed if entire contents
-								   have been buffered. */
-	long32_t bufferSize;			/* Size of the I/O buffer in use. */
-	void *dataBuffer;			/* not allocated until required, i.e.
-								   file is actually opened. */
-	struct csGridCell_ lngCell;
-	struct csGridCell_ latCell;
-	char filePath [MAXPATH];	/* Full path to data source file, used for
-								   reporting purposes. */
-	char fileName [32];			/* File name only, used for error reporting. */
-};
-
+/******************************************************************************
+*******************************************************************************
+**             Japanese .PAR Grid Interpolation Data File                    **
+**                                                                           **
+**     Tokyo Datum to Japanese Geodetic Datum of 2000 Transformation         **
+*******************************************************************************
+******************************************************************************/
+#include "cs_Japan.h"
 
 /******************************************************************************
 *******************************************************************************

@@ -6727,6 +6727,7 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_GX_TOOMANY     480		/* Too many transformations required to do datum transformation. */
 #define cs_GEOXFRM_DUP    481		/* Duplicate geodetic transformation definitions. */
 #define cs_DT_NOPATH      482       /* Couldn't locate or construct a path between datums. */
+#define cs_ATS77_INV      483       /* Attempt to perform an inverse calculation on the ATS77 datum. */
 
 /*
 	The following casts are used to eliminate warnings from

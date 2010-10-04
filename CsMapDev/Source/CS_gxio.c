@@ -664,9 +664,9 @@ error:
 **	char *trgDatum;				key name of the target datum of the path
 **								definition which is to be fetched.
 **	struct cs_GeodeticTransform_ *gx_ptr;
-**								returns a pointer to a malloc'ed ellipsoid definition
+**								returns a pointer to a malloc'ed ellipsoid
+**								definition geodetic transformation
 **								structure.
-**
 **********************************************************************/
 struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 													Const char *trgDatum)
@@ -700,11 +700,11 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 	st = CS_nampp (tmpKeyName);
 	if (st != 0) goto error;
 
-	/* Open up the geodetic path dictionary file. */
+	/* Open up the geodetic transformation dictionary file. */
 	strm = CS_gxopn (_STRM_BINRD);
 	if (strm == NULL) goto error;
 
-	/* Search the file for the requested ellipsoid definition. */
+	/* Search the file for the requested transformation definition. */
 	fwdFpos = 0L;
 	invFpos = 0L;
 	for (;;)
@@ -739,9 +739,10 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 				goto error;
 			}
 		}
-		/* See if we have a match in the forward direction. */
-		if (!CS_stricmp (gx_rec.srcDatum,trgDatum) &&
-		    !CS_stricmp (gx_rec.trgDatum,srcDatum))
+		/* See if we have a match in the inverse direction. */
+		if (gx_rec.inverseSupported != 0 &&
+			!CS_stricmp (gx_rec.srcDatum,trgDatum) &&
+			!CS_stricmp (gx_rec.trgDatum,srcDatum))
 		{
 			direction = cs_PATHDIR_INV;
 			if (invFpos == 0L)
@@ -848,7 +849,6 @@ void EXP_LVL1 CS_gxfnm (Const char *new_name)
 	(void)CS_stncp (cs_Gxname,new_name,cs_FNM_MAXLEN);
 	return;
 }
-
 
 int EXP_LVL1 CS_gxswp (struct cs_GeodeticTransform_* gx_def)
 {
