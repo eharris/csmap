@@ -7253,6 +7253,7 @@ int			EXP_LVL9	CSdtcomp (Const char *inpt,Const char *outp,
 												   int (*err_func)(char *mesg));
 struct cs_Dtcprm_* EXP_LVL3	CSdtcsu (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt,int dat_erf,int blk_erf);
 struct cs_Dtcprm_* EXP_LVL3	CSdtcsu1 (Const char* gxName,short direction,int blk_erf);
+struct cs_Dtcprm_* EXP_LVL3	CSdtcsu2 (Const struct cs_GeodeticTransform_ *xfrmDefPtr, short direction, int blk_erf);
 
 char*		EXP_LVL9	CSdtKeyNames (void);
 struct cs_Datum_* EXP_LVL5	CSdtloc1 (Const struct cs_Dtdef_ *dtdef_p);

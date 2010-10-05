@@ -401,14 +401,34 @@ error:
 
 struct cs_Dtcprm_* EXP_LVL3	CSdtcsu1 (Const char* gxName,short direction /* cs_DTCDIR_FWD or cs_DTCDIR_INV */,int blk_erf)
 {
-    struct cs_Dtcprm_ *dtcPtr;
-    struct cs_GxXform_ *transform;
+    struct cs_GeodeticTransform_ *xfrmDefPtr = NULL;
+    struct cs_Dtcprm_ *dtcPtr = NULL;
 
     if (NULL == gxName)
     {
         CS_erpt (cs_ERSUP_SOFT);
         return NULL;
     }
+
+    xfrmDefPtr = CS_gxdef (gxName);
+	if (xfrmDefPtr == NULL)
+	{
+        CS_erpt (cs_GX_NOT_FND);
+        return NULL;
+	}
+
+    dtcPtr = CSdtcsu2(xfrmDefPtr, direction, blk_erf);
+
+    if (NULL != xfrmDefPtr)
+        CS_free(xfrmDefPtr); //[dtcPtr] has its own copy
+
+    return dtcPtr; //can be null
+}
+
+struct cs_Dtcprm_* EXP_LVL3	CSdtcsu2 (Const struct cs_GeodeticTransform_ *xfrmDefPtr, short direction, int blk_erf)
+{
+    struct cs_Dtcprm_ *dtcPtr;
+    struct cs_GxXform_ *transform;
 
     dtcPtr = CS_malc (sizeof (struct cs_Dtcprm_));
 	if (dtcPtr == NULL)
@@ -417,7 +437,7 @@ struct cs_Dtcprm_* EXP_LVL3	CSdtcsu1 (Const char* gxName,short direction /* cs_D
 		return NULL;
 	}
 
-    transform = CS_gxloc (gxName, direction);
+    transform = CS_gxloc1 (xfrmDefPtr, direction);
     if (NULL == transform)
         goto error;
 

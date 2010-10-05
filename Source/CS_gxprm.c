@@ -31,7 +31,27 @@
    Transformation from the dictionary and then use that definition to
    create a fully initialized cs_GxXform_ structure which can actually
    be used to perform Geodetic Transformations in a generic way. */
-struct cs_GxXform_ *CS_gxloc (Const char* gxDefName,short userDirection)
+struct cs_GxXform_ *CS_gxloc (Const char* gxDefName, short userDirection)
+{
+    struct cs_GeodeticTransform_* xfrmDefPtr;
+    struct cs_GxXform_* transform;
+
+    /* Get the datum definition. */
+	xfrmDefPtr = CS_gxdef (gxDefName);
+	if (xfrmDefPtr == NULL)
+	{
+        //error has already been reported; we don't know here anyway whether we got NULL
+        //due to an OOM situation or due to an incorrect definition name
+        return NULL;
+	}
+
+    transform = CS_gxloc1(xfrmDefPtr, userDirection);
+    CS_free(xfrmDefPtr); //[xfrmDefPtr] is not NULL at this point
+
+    return transform; //can be NULL
+}
+
+struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrmDefPtr,short userDirection)
 {
 	extern char csErrnam [];
 	extern struct cs_XfrmTab_ cs_XfrmTab [];
@@ -42,24 +62,21 @@ struct cs_GxXform_ *CS_gxloc (Const char* gxDefName,short userDirection)
 	struct cs_GxXform_ *xfrmPtr;
 	struct cs_Datum_ *srcDtPtr;
 	struct cs_Datum_ *trgDtPtr;
-	struct cs_GeodeticTransform_ *xfrmDefPtr;
 	struct cs_XfrmTab_* xfrmTabPtr;
 
 	int err_list [4];
 
-	/* Prepare for any type of error. */
+	if (NULL == xfrmDefPtr)
+    {
+        CS_erpt (cs_ERSUP_SOFT);
+        return NULL;
+    }
+
+    /* Prepare for any type of error. */
 
 	xfrmPtr = NULL;
 	srcDtPtr = NULL;
 	trgDtPtr = NULL;
-	xfrmDefPtr = NULL;				/* Redundant */
-
-	/* Get the datum definition. */
-	xfrmDefPtr = CS_gxdef (gxDefName);
-	if (xfrmDefPtr == NULL)
-	{
-		goto error;
-	}
 
 	xfrmPtr = (struct cs_GxXform_*)CS_malc (sizeof (struct cs_GxXform_));
 	if (xfrmPtr == NULL)
@@ -139,10 +156,6 @@ struct cs_GxXform_ *CS_gxloc (Const char* gxDefName,short userDirection)
 		goto error;
 	}
 
-	/* That should be it. */	
-	CS_free (xfrmDefPtr);
-	xfrmDefPtr = NULL;
-
 	return xfrmPtr;
 
 error:
@@ -161,11 +174,9 @@ error:
 		CS_free (trgDtPtr);
 		trgDtPtr = NULL;
 	}
-	if (xfrmDefPtr != NULL)
-	{
-		CS_free (xfrmDefPtr);
-		xfrmDefPtr = NULL;
-	}
+
+    //don't free [xfrmDefPtr] - owned by the caller
+	
 	return NULL;
 }
 int CS_gxFrwrd3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])

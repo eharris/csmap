@@ -1325,6 +1325,7 @@ int EXP_LVL3 CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const ch
 void EXP_LVL9 CSgenerateGxIndex (void);
 
 struct cs_GxXform_* EXP_LVL1 CS_gxloc (Const char* gxDefName,short userDirection);
+struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *gxXform,short userDirection);
 int EXP_LVL1 CS_gxFrwrd3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);
 int EXP_LVL1 CS_gxFrwrd2D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);
 int EXP_LVL1 CS_gxInvrs3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);
