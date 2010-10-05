@@ -17,11 +17,13 @@
 //
 
 #include "csConsoleUtilities.hpp"
+#include <iomanip>
 
 extern "C" unsigned long KcsNmInvNumber;
 extern "C" unsigned long KcsNmMapNoNumber;
 extern "C" double cs_Zero;
 
+const wchar_t* dbl2wcs (double dblVal);
 bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 													  const cs_Dtdef_* dtDefPtr,
 													  const TcsDefFile& mregAsc,
@@ -481,69 +483,71 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 		(usefulRngLatS != cs_Zero || usefulRngLatN != cs_Zero))
 	{
 		// We have some meaningful useful range data.
-		gtStrm <<   L"\t  MIN_LNG: " << usefulRngLngW           << std::endl;
-		gtStrm <<   L"\t  MAX_LNG: " << usefulRngLngE           << std::endl;
-		gtStrm <<   L"\t  MIN_LAT: " << usefulRngLatS           << std::endl;
-		gtStrm <<   L"\t  MAX_LAT: " << usefulRngLatN           << std::endl;
+		gtStrm <<   L"\t  MIN_LNG: " << dbl2wcs (usefulRngLngW) << std::endl;
+		gtStrm <<   L"\t  MAX_LNG: " << dbl2wcs (usefulRngLngE) << std::endl;
+		gtStrm <<   L"\t  MIN_LAT: " << dbl2wcs (usefulRngLatS) << std::endl;
+		gtStrm <<   L"\t  MAX_LAT: " << dbl2wcs (usefulRngLatN) << std::endl;
 	}
 
+	// Set the fixed format, we don't want, and shouldn't need, any
+	// scientific notation here.
 	switch (dtDefPtr->to84_via) {
 	case cs_DTCTYP_MOLO:
-		gtStrm <<   L"\t  METHOD: " << L"MOLODENSKY"            << std::endl;
-		gtStrm <<   L"\t DELTA_X: " << dtDefPtr->delta_X        << std::endl;
-		gtStrm <<   L"\t DELTA_Y: " << dtDefPtr->delta_Y        << std::endl;
-		gtStrm <<   L"\t DELTA_Z: " << dtDefPtr->delta_Z        << std::endl;
+		gtStrm <<   L"\t  METHOD: " << L"MOLODENSKY"                << std::endl;
+		gtStrm <<   L"\t DELTA_X: " << dbl2wcs (dtDefPtr->delta_X)  << std::endl;
+		gtStrm <<   L"\t DELTA_Y: " << dbl2wcs (dtDefPtr->delta_Y)  << std::endl;
+		gtStrm <<   L"\t DELTA_Z: " << dbl2wcs (dtDefPtr->delta_Z)  << std::endl;
 		break;
 	case cs_DTCTYP_3PARM:
-		gtStrm <<   L"\t  METHOD: " << L"3PARAMETER"            << std::endl;
-		gtStrm <<   L"\t DELTA_X: " << dtDefPtr->delta_X        << std::endl;
-		gtStrm <<   L"\t DELTA_Y: " << dtDefPtr->delta_Y        << std::endl;
-		gtStrm <<   L"\t DELTA_Z: " << dtDefPtr->delta_Z        << std::endl;
+		gtStrm <<   L"\t  METHOD: " << L"3PARAMETER"                << std::endl;
+		gtStrm <<   L"\t DELTA_X: " << dbl2wcs (dtDefPtr->delta_X)  << std::endl;
+		gtStrm <<   L"\t DELTA_Y: " << dbl2wcs (dtDefPtr->delta_Y)  << std::endl;
+		gtStrm <<   L"\t DELTA_Z: " << dbl2wcs (dtDefPtr->delta_Z)  << std::endl;
 		break;
 	case cs_DTCTYP_GEOCTR:
-		gtStrm <<   L"\t  METHOD: " << L"GEOCENTRIC"            << std::endl;
-		gtStrm <<   L"\t DELTA_X: " << dtDefPtr->delta_X        << std::endl;
-		gtStrm <<   L"\t DELTA_Y: " << dtDefPtr->delta_Y        << std::endl;
-		gtStrm <<   L"\t DELTA_Z: " << dtDefPtr->delta_Z        << std::endl;
+		gtStrm <<   L"\t  METHOD: " << L"GEOCENTRIC"                << std::endl;
+		gtStrm <<   L"\t DELTA_X: " << dbl2wcs (dtDefPtr->delta_X)  << std::endl;
+		gtStrm <<   L"\t DELTA_Y: " << dbl2wcs (dtDefPtr->delta_Y)  << std::endl;
+		gtStrm <<   L"\t DELTA_Z: " << dbl2wcs (dtDefPtr->delta_Z)  << std::endl;
 		break;
 	case cs_DTCTYP_4PARM:
-		gtStrm <<   L"\t  METHOD: " << L"4PARAMETER"            << std::endl;
-		gtStrm <<   L"\t DELTA_X: " << dtDefPtr->delta_X        << std::endl;
-		gtStrm <<   L"\t DELTA_Y: " << dtDefPtr->delta_Y        << std::endl;
-		gtStrm <<   L"\t DELTA_Z: " << dtDefPtr->delta_Z        << std::endl;
-		gtStrm <<   L"\t BWSCALE: " << dtDefPtr->bwscale        << std::endl;
+		gtStrm <<   L"\t  METHOD: " << L"4PARAMETER"                << std::endl;
+		gtStrm <<   L"\t DELTA_X: " << dbl2wcs (dtDefPtr->delta_X)  << std::endl;
+		gtStrm <<   L"\t DELTA_Y: " << dbl2wcs (dtDefPtr->delta_Y)  << std::endl;
+		gtStrm <<   L"\t DELTA_Z: " << dbl2wcs (dtDefPtr->delta_Z)  << std::endl;
+		gtStrm <<   L"\t BWSCALE: " << dbl2wcs (dtDefPtr->bwscale)  << std::endl;
 		break;
 	case cs_DTCTYP_6PARM:
-		gtStrm <<   L"\t  METHOD: " << L"6PARAMETER"            << std::endl;
-		gtStrm <<   L"\t DELTA_X: " << dtDefPtr->delta_X        << std::endl;
-		gtStrm <<   L"\t DELTA_Y: " << dtDefPtr->delta_Y        << std::endl;
-		gtStrm <<   L"\t DELTA_Z: " << dtDefPtr->delta_Z        << std::endl;
-		gtStrm <<   L"\t   ROT_X: " << dtDefPtr->rot_X          << std::endl;
-		gtStrm <<   L"\t   ROT_Y: " << dtDefPtr->rot_Y          << std::endl;
-		gtStrm <<   L"\t   ROT_Z: " << dtDefPtr->rot_Z          << std::endl;
+		gtStrm <<   L"\t  METHOD: " << L"6PARAMETER"                << std::endl;
+		gtStrm <<   L"\t DELTA_X: " << dbl2wcs (dtDefPtr->delta_X)  << std::endl;
+		gtStrm <<   L"\t DELTA_Y: " << dbl2wcs (dtDefPtr->delta_Y)  << std::endl;
+		gtStrm <<   L"\t DELTA_Z: " << dbl2wcs (dtDefPtr->delta_Z)  << std::endl;
+		gtStrm <<   L"\t   ROT_X: " << dbl2wcs (dtDefPtr->rot_X)    << std::endl;
+		gtStrm <<   L"\t   ROT_Y: " << dbl2wcs (dtDefPtr->rot_Y)    << std::endl;
+		gtStrm <<   L"\t   ROT_Z: " << dbl2wcs (dtDefPtr->rot_Z)    << std::endl;
 		break;
 	case cs_DTCTYP_BURS:
-		gtStrm <<   L"\t  METHOD: " << L"BURSAWOLF"             << std::endl;
-		gtStrm <<   L"\t DELTA_X: " << dtDefPtr->delta_X        << std::endl;
-		gtStrm <<   L"\t DELTA_Y: " << dtDefPtr->delta_Y        << std::endl;
-		gtStrm <<   L"\t DELTA_Z: " << dtDefPtr->delta_Z        << std::endl;
-		gtStrm <<   L"\t   ROT_X: " << dtDefPtr->rot_X          << std::endl;
-		gtStrm <<   L"\t   ROT_Y: " << dtDefPtr->rot_Y          << std::endl;
-		gtStrm <<   L"\t   ROT_Z: " << dtDefPtr->rot_Z          << std::endl;
-		gtStrm <<   L"\t BWSCALE: " << dtDefPtr->bwscale        << std::endl;
+		gtStrm <<   L"\t  METHOD: " << L"BURSAWOLF"                 << std::endl;
+		gtStrm <<   L"\t DELTA_X: " << dbl2wcs (dtDefPtr->delta_X)  << std::endl;
+		gtStrm <<   L"\t DELTA_Y: " << dbl2wcs (dtDefPtr->delta_Y)  << std::endl;
+		gtStrm <<   L"\t DELTA_Z: " << dbl2wcs (dtDefPtr->delta_Z)  << std::endl;
+		gtStrm <<   L"\t   ROT_X: " << dbl2wcs (dtDefPtr->rot_X)    << std::endl;
+		gtStrm <<   L"\t   ROT_Y: " << dbl2wcs (dtDefPtr->rot_Y)    << std::endl;
+		gtStrm <<   L"\t   ROT_Z: " << dbl2wcs (dtDefPtr->rot_Z)    << std::endl;
+		gtStrm <<   L"\t BWSCALE: " << dbl2wcs (dtDefPtr->bwscale)  << std::endl;
 		break;
 	case cs_DTCTYP_7PARM:
-		gtStrm <<   L"\t  METHOD: " << L"7PARAMETER"            << std::endl;
-		gtStrm <<   L"\t DELTA_X: " << dtDefPtr->delta_X        << std::endl;
-		gtStrm <<   L"\t DELTA_Y: " << dtDefPtr->delta_Y        << std::endl;
-		gtStrm <<   L"\t DELTA_Z: " << dtDefPtr->delta_Z        << std::endl;
-		gtStrm <<   L"\t   ROT_X: " << dtDefPtr->rot_X          << std::endl;
-		gtStrm <<   L"\t   ROT_Y: " << dtDefPtr->rot_Y          << std::endl;
-		gtStrm <<   L"\t   ROT_Z: " << dtDefPtr->rot_Z          << std::endl;
-		gtStrm <<   L"\t BWSCALE: " << dtDefPtr->bwscale        << std::endl;
+		gtStrm <<   L"\t  METHOD: " << L"7PARAMETER"                << std::endl;
+		gtStrm <<   L"\t DELTA_X: " << dbl2wcs (dtDefPtr->delta_X)  << std::endl;
+		gtStrm <<   L"\t DELTA_Y: " << dbl2wcs (dtDefPtr->delta_Y)  << std::endl;
+		gtStrm <<   L"\t DELTA_Z: " << dbl2wcs (dtDefPtr->delta_Z)  << std::endl;
+		gtStrm <<   L"\t   ROT_X: " << dbl2wcs (dtDefPtr->rot_X)    << std::endl;
+		gtStrm <<   L"\t   ROT_Y: " << dbl2wcs (dtDefPtr->rot_Y)    << std::endl;
+		gtStrm <<   L"\t   ROT_Z: " << dbl2wcs (dtDefPtr->rot_Z)    << std::endl;
+		gtStrm <<   L"\t BWSCALE: " << dbl2wcs (dtDefPtr->bwscale)  << std::endl;
 		break;
 	case cs_DTCTYP_MREG:
-		gtStrm <<   L"\t  METHOD: " << L"MULREG"                << std::endl;
+		gtStrm <<   L"\t  METHOD: " << L"MULREG"                    << std::endl;
 		ok = csConvertMrtFile (gtStrm,dtDefPtr,mregAsc);
 		break;
 	case cs_DTCTYP_NAD27:
@@ -670,11 +674,11 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			cp = strrchr (cTemp,'.');
 			if (!(CS_strnicmp (cp,".gsb",4)))
 			{
-				gtStrm << L"   GRID_FILE: " << L"NTv2,FWD," << cTemp  << std::endl;
+				gtStrm << L"   GRID_FILE: " << L"NTv2,INV," << cTemp  << std::endl;
 			}
 			else
 			{
-				gtStrm << L"   GRID_FILE: " << L"FRRGF,INV," << cTemp  << std::endl;
+				gtStrm << L"   GRID_FILE: " << L"FRRGF,FWD," << cTemp  << std::endl;
 			}
 		}
 		break;
@@ -725,7 +729,7 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	{
 		ok = gtStrm.good ();
 	}
-	return ok;		
+	return ok;
 }
 // The following uses the old CS-MAP to84_via element of the datum
 // definition to determine the appropriate source and target datum
@@ -1306,9 +1310,9 @@ bool csConvertMrtFile (std::wofstream& gtStrm,const cs_Dtdef_ *dtDefPtr,
 
 	// OK, now from the MRT file.
 
-	gtStrm << L"\t   SRC_LAT_OFF: " << mrtFile.GetPhiOffset () << std::endl;
-	gtStrm << L"\t   SRC_LNG_OFF: " << mrtFile.GetLambdaOffset () << std::endl;
-	gtStrm << L"\t\t   NRML_KK: " << mrtFile.GetNormalizingScale () << std::endl;
+	gtStrm << L"\t   SRC_LAT_OFF: " << dbl2wcs (mrtFile.GetPhiOffset ()) << std::endl;
+	gtStrm << L"\t   SRC_LNG_OFF: " << dbl2wcs (mrtFile.GetLambdaOffset ()) << std::endl;
+	gtStrm << L"\t\t   NRML_KK: " << dbl2wcs (mrtFile.GetNormalizingScale ()) << std::endl;
 	gtStrm << L"\t\tVALIDATION: " << L"1.401" << std::endl;
 
 	// Add the Longitude complex element.
@@ -1320,7 +1324,7 @@ bool csConvertMrtFile (std::wofstream& gtStrm,const cs_Dtdef_ *dtDefPtr,
 			if (coefficient != 0.0)
 			{
 				swprintf (wcTemp,128,L"\tLNG_COEF U%d V%d: ",uuPwr,vvPwr);
-				gtStrm << wcTemp << coefficient << std::endl;
+				gtStrm << wcTemp << dbl2wcs (coefficient) << std::endl;
 			}
 		}
 	}
@@ -1334,7 +1338,7 @@ bool csConvertMrtFile (std::wofstream& gtStrm,const cs_Dtdef_ *dtDefPtr,
 			if (coefficient != 0.0)
 			{
 				swprintf (wcTemp,128,L"\tLAT_COEF U%d V%d: ",uuPwr,vvPwr);
-				gtStrm << wcTemp << coefficient << std::endl;
+				gtStrm << wcTemp << dbl2wcs (coefficient) << std::endl;
 			}
 		}
 	}
@@ -1348,7 +1352,7 @@ bool csConvertMrtFile (std::wofstream& gtStrm,const cs_Dtdef_ *dtDefPtr,
 			if (coefficient != 0.0)
 			{
 				swprintf (wcTemp,128,L"\tHGT_COEF U%d V%d: ",uuPwr,vvPwr);
-				gtStrm << wcTemp << coefficient << std::endl;
+				gtStrm << wcTemp << dbl2wcs (coefficient) << std::endl;
 			}
 		}
 	}
@@ -1379,4 +1383,30 @@ bool csExtractMrtRange (double lng [2],double lat [2],const cs_Dtdef_ *dtDefPtr)
 	lat [1] = ( 1.0 / kk) - phiOff;
 
 	return ok;
+}
+const wchar_t* dbl2wcs (double dblVal)
+{
+	static wchar_t wcBufr [128];
+
+	wchar_t* wcPtr;
+
+	swprintf (wcBufr,128,L"%.12f",dblVal);
+	wcPtr = wcschr (wcBufr,L'.');
+	if (wcPtr != 0)	
+	{
+		// We have a high precision number and it has a decimal point.
+		wcPtr = wcBufr + wcslen (wcBufr) - 1;
+		while (*wcPtr == L'0')
+		{
+			*wcPtr = L'\0';
+			wcPtr -= 1;
+		}
+		if (*wcPtr == L'.')
+		{
+			wcPtr += 1;
+			*wcPtr++ = L'0';
+			*wcPtr = L'\0';
+		}
+	}
+	return wcBufr;
 }

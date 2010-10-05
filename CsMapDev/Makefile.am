@@ -131,7 +131,6 @@ libCsmap_la_SOURCES = \
   Source/csEpsgSupport.cpp \
   Source/CSgeodeticSupport.c \
   Source/CSgpcomp.c \
-  Source/CSgridCellCache.c \
   Source/CSgxcomp.c \
   Source/csKeyNm.cpp \
   Source/CSmrcomp.c \
