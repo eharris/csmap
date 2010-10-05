@@ -57,11 +57,54 @@
    forward if only the inverse file is present.  So, things get a little
    screwy here. */
  
-int CSats77Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz)
+int CSats77Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
-	/* Need to verify that the file exists.  Could also verify the format of
-	   the file if we want to pay the performance price of a file open. */
-	return 0;
+	extern char cs_DirsepC;
+
+	int err_cnt;
+	size_t rdCnt;
+
+	char *cp;
+	csFILE* strm;
+
+	char chrBuffer [8];
+	char pathBuffer [MAXPATH];
+
+	cp = fileParms->fileName;
+	if (*cp == '.' && *(cp + 1) == cs_DirsepC)
+	{
+		CS_stncp (pathBuffer,dictDir,sizeof (pathBuffer));
+		CS_stncat (pathBuffer,cp,MAXPATH);
+	}
+	else
+	{
+		CS_stncp (pathBuffer,cp,MAXPATH);
+	}
+
+	/* We will return (err_cnt + 1) below. */
+	err_cnt = -1;
+	if (err_list == NULL) list_sz = 0;
+
+	/* Verify that the file exists and that the format appears to be correct. */
+	strm = CS_fopen (pathBuffer,_STRM_BINRD);
+	if (strm != NULL)
+	{
+		rdCnt = CS_fread (chrBuffer,1,sizeof (chrBuffer),strm);
+		CS_fclose (strm);
+		strm = NULL;
+
+		if (rdCnt != sizeof (chrBuffer) ||
+		    chrBuffer [0] != 'T' ||
+		    chrBuffer [1] != '\0')
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FORMAT;
+		}
+	}
+	else
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FILE;
+	}
+	return (err_cnt + 1);
 }
 int CSats77S  (struct cs_GridFile_ *gridFile)
 {

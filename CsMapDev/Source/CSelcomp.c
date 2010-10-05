@@ -369,7 +369,7 @@ int CSeldefwr (	csFILE *outStrm,
 	}
 	else if (warn && ((eldef->e_rad < 6000000.0) || (eldef->e_rad > 7000000.0)))
 	{
-		sprintf (err_msg,"Warning: Equatorial raidus of ellipsoid named %s is suspicious.",eldef->key_nm);
+		sprintf (err_msg,"Warning: Equatorial radius of ellipsoid named %s is suspicious.",eldef->key_nm);
 		cancel = (*err_func)(err_msg);
 	}
 	if (err_cnt == 0)

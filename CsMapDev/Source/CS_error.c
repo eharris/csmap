@@ -492,6 +492,16 @@ struct csErrtab_ csErrtab [] =
 						   "%s :: OSTN02.TXT grid shift file could not be located or opened with read access." },
  {  cs_CSQ_TMKRG0, csET_NM,cs_ERSUP_OPR,
 						   "%s :: Transverse Mercator Kruger formulation requested with non-zero origin latitude." },
+ {  cs_DTQ_FILE,   csET_NM,cs_ERSUP_OPR,
+						   "%s :: Referenced grid file does not exist or cannot be opened for reading." },
+ {  cs_DTQ_FORMAT, csET_NM,cs_ERSUP_OPR,
+						   "%s :: Referenced grid file exists, but appears to be of a format other than that specified." },
+ {  cs_DTQ_FLSPEC, csET_NM,cs_ERSUP_OPR,
+						   "%s :: Grid file specification inappropriate for the format type indicated." },
+ {  cs_DTQ_INVDIR, csET_NM,cs_ERSUP_OPR,
+						   "%s :: Grid file direction specification is unrecognized." },
+
+
  {     cs_MGRS_LL,csET_LOC,cs_ERSUP_OPR,
 						   "Invalid Lat/Long (%s) presented for MGRS conversion." },
  {   cs_MGRS_ZONE,       0,cs_ERSUP_SOFT,

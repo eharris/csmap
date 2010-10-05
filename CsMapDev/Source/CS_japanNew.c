@@ -27,9 +27,60 @@
 
 #include "cs_map.h"
 
-int CSjapanQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz)
+int CSjapanQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
-	return 0;
+	extern char cs_DirsepC;
+
+	int err_cnt;
+
+	char *cp;
+	csFILE* strm;
+
+	char meshCode [] = "Meshcode";
+	char line1Buffer [256];
+	char line2Buffer [256];
+	char line3Buffer [256];
+	char pathBuffer [MAXPATH];
+
+	cp = fileParms->fileName;
+	if (*cp == '.' && *(cp + 1) == cs_DirsepC)
+	{
+		CS_stncp (pathBuffer,dictDir,sizeof (pathBuffer));
+		CS_stncat (pathBuffer,cp,MAXPATH);
+	}
+	else
+	{
+		CS_stncp (pathBuffer,cp,MAXPATH);
+	}
+
+	/* We will return (err_cnt + 1) below. */
+	err_cnt = -1;
+	if (err_list == NULL) list_sz = 0;
+
+	/* Verify that the file exists and that the format appears to be correct. */
+	strm = CS_fopen (pathBuffer,_STRM_TXTRD);
+	if (strm != NULL)
+	{
+		CS_fgets (line1Buffer,sizeof (line1Buffer),strm);	
+		CS_fgets (line2Buffer,sizeof (line2Buffer),strm);	
+		CS_fgets (line3Buffer,sizeof (line3Buffer),strm);	
+		CS_fclose (strm);
+		strm = NULL;
+
+		if (!CS_stristr (line1Buffer,meshCode) &&
+		    !CS_stristr (line2Buffer,meshCode) &&
+		    !CS_stristr (line3Buffer,meshCode))
+		{
+			/* The pohrase meshcode was not found anywhjere on the first three
+			   lines, we assume this is not a ".par" file. */
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FORMAT;
+		}
+	}
+	else
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FILE;
+	}
+	return (err_cnt + 1);
 }
 int CSjapanS  (struct cs_GridFile_ *gridFile)
 {
