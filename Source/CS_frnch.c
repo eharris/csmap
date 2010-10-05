@@ -27,10 +27,52 @@
 
 #include "cs_map.h"
 
-int CSfrnchQ (struct cs_GridFile_* gridFile,unsigned short frmt_code,int err_list [],int list_sz)
+int CSfrnchQ (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
+	extern char cs_DirsepC;
+
+	int err_cnt;
+	size_t rdCnt;
+
+	char *cp;
+	csFILE* strm;
+
+	char chrBuffer [8];
+	char pathBuffer [MAXPATH];
+
+	cp = fileParms->fileName;
+	if (*cp == '.' && *(cp + 1) == cs_DirsepC)
+	{
+		CS_stncp (pathBuffer,dictDir,sizeof (pathBuffer));
+		CS_stncat (pathBuffer,cp,MAXPATH);
+	}
+	else
+	{
+		CS_stncp (pathBuffer,cp,MAXPATH);
+	}
+
+	/* We will return (err_cnt + 1) below. */
+	err_cnt = -1;
+	if (err_list == NULL) list_sz = 0;
+
 	/* Verify that the file exists and that the format appears to be correct. */
-	return 0;
+	strm = CS_fopen (pathBuffer,_STRM_TXTRD);
+	if (strm != NULL)
+	{
+		rdCnt = CS_fread (chrBuffer,1,sizeof (chrBuffer),strm);
+		CS_fclose (strm);
+		strm = NULL;
+
+		if (rdCnt != sizeof (chrBuffer) || CS_strnicmp (chrBuffer," GR3D",5))
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FORMAT;
+		}
+	}
+	else
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FILE;
+	}
+	return (err_cnt + 1);
 }
 int CSfrnchS  (struct cs_GridFile_ *gridFile)
 {

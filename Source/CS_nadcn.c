@@ -32,9 +32,79 @@ long32_t csNadconBufrSize = 16384;			/* This buffer size ensures that any
 											   memory and stored in the internal
 											   buffer. */
 
-int CSnadcnQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz)
+int CSnadcnQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
-	return 0;
+	extern char cs_DirsepC;
+
+	int err_cnt;
+	size_t rdCnt;
+
+	char *cp;
+	csFILE* strm;
+
+	char chrBuffer [8];
+	char pathBuffer [MAXPATH];
+
+	cp = fileParms->fileName;
+	if (*cp == '.' && *(cp + 1) == cs_DirsepC)
+	{
+		CS_stncp (pathBuffer,dictDir,sizeof (pathBuffer));
+		CS_stncat (pathBuffer,cp,MAXPATH);
+	}
+	else
+	{
+		CS_stncp (pathBuffer,cp,MAXPATH);
+	}
+
+	/* We will return (err_cnt + 1) below. */
+	err_cnt = -1;
+	if (err_list == NULL) list_sz = 0;
+
+	/* Verify that both files exist and that the format appears to be correct.
+	   We'll need a copy of the path which we can modify. */
+	cp = pathBuffer + strlen (pathBuffer) - 2;
+	if (*cp != '?')
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FLSPEC;
+	}
+	else
+	{
+		*cp = 'o';
+		strm = CS_fopen (pathBuffer,_STRM_BINRD);
+		if (strm != NULL)
+		{
+			rdCnt = CS_fread (chrBuffer,1,sizeof (chrBuffer),strm);
+			CS_fclose (strm);
+			strm = NULL;
+
+			if (rdCnt != sizeof (chrBuffer) || CS_strnicmp (chrBuffer,"NADCON",6))
+			{
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FORMAT;
+			}
+		}
+		else
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FILE;
+		}
+		*cp = 'a';
+		strm = CS_fopen (pathBuffer,_STRM_BINRD);
+		if (strm != NULL)
+		{
+			rdCnt = CS_fread (chrBuffer,1,sizeof (chrBuffer),strm);
+			CS_fclose (strm);
+			strm = NULL;
+
+			if (rdCnt != sizeof (chrBuffer) || CS_strnicmp (chrBuffer,"NADCON",6))
+			{
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FORMAT;
+			}
+		}
+		else
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FILE;
+		}
+	}
+	return (err_cnt + 1);
 }
 int CSnadcnS (struct cs_GridFile_ *gridFile)
 {

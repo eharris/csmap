@@ -1195,10 +1195,9 @@ struct cs_GridFormatTab_
 {
 	char key_nm [64];
 	int (EXP_LVL9 * initialize)(struct cs_GridFile_* gxFile);
-	int (EXP_LVL9 * check)     (struct cs_GridFile_* gridFile,
-								unsigned short frntCode,
-								int err_list [],
-								int list_sz);
+	int (EXP_LVL9 * check)     (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,
+																			int err_list [],
+																			int list_sz);
 	unsigned short formatCode;
 	ulong32_t formatFlags;
 	ulong32_t epsgMethodCode;
@@ -1515,7 +1514,7 @@ int			EXP_LVL9	  CScntv1F3 (struct cs_NTv1_ *cntv1,double *ll_trg,Const double *
 int			EXP_LVL9	  CScntv1I2 (struct cs_NTv1_ *cntv1,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CScntv1I3 (struct cs_NTv1_ *cntv1,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CScntv1L  (struct cs_NTv1_ *cntv1,int cnt,Const double pnts [][3]);
-int			EXP_LVL9	  CScntv1Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CScntv1Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
 int			EXP_LVL9	  CScntv1R  (struct cs_NTv1_ *cntv1);
 int			EXP_LVL9	  CScntv1S  (struct cs_GridFile_ *cntv1);
 double		EXP_LVL9	  CScntv1T  (struct cs_NTv1_ *cntv1,double *ll_src,short direction);
@@ -1526,7 +1525,7 @@ int			EXP_LVL9	  CScntv2F3 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *
 int			EXP_LVL9	  CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CScntv2I3 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CScntv2L  (struct cs_NTv2_ *cntv2,int cnt,Const double pnts [][3]);
-int			EXP_LVL9	  CScntv2Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CScntv2Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
 int			EXP_LVL9	  CScntv2R  (struct cs_NTv2_ *cntv2);
 int			EXP_LVL9	  CScntv2S  (struct cs_GridFile_ *cntv2);
 double		EXP_LVL9	  CScntv2T  (struct cs_NTv2_ *cntv2,double ll_src [2],short direction);
@@ -1537,7 +1536,7 @@ int			EXP_LVL9	  CSnadcnF3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double 
 int			EXP_LVL9	  CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSnadcnI3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSnadcnL  (struct cs_Nadcn_ *nadcn,int cnt,Const double pnts [][3]);
-int			EXP_LVL9	  CSnadcnQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CSnadcnQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
 int			EXP_LVL9	  CSnadcnR  (struct cs_Nadcn_ *nadcn);
 int			EXP_LVL9	  CSnadcnS  (struct cs_GridFile_ *nadcn);
 double		EXP_LVL9	  CSnadcnT  (struct cs_Nadcn_ *nadcn,double *ll_src,short direction);
@@ -1548,7 +1547,7 @@ int			EXP_LVL9	  CSfrnchF3 (struct cs_Frnch_ *frnch,double *ll_trg,Const double 
 int			EXP_LVL9	  CSfrnchI2 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSfrnchI3 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSfrnchL  (struct cs_Frnch_ *frnch,int cnt,Const double pnts [][3]);
-int			EXP_LVL9	  CSfrnchQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CSfrnchQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
 int			EXP_LVL9	  CSfrnchR  (struct cs_Frnch_ *frnch);
 int			EXP_LVL9	  CSfrnchS  (struct cs_GridFile_ *frnch);
 double		EXP_LVL9	  CSfrnchT  (struct cs_Frnch_ *frnch,double *ll_src,short direction);
@@ -1559,7 +1558,7 @@ int			EXP_LVL9	  CSjapanF3 (struct cs_Japan_ *japan,double *ll_trg,Const double 
 int			EXP_LVL9	  CSjapanI2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSjapanI3 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSjapanL  (struct cs_Japan_ *japan,int cnt,Const double pnts [][3]);
-int			EXP_LVL9	  CSjapanQ  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CSjapanQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
 int			EXP_LVL9	  CSjapanR  (struct cs_Japan_ *japan);
 int			EXP_LVL9	  CSjapanS  (struct cs_GridFile_ *japan);
 double		EXP_LVL9	  CSjapanT  (struct cs_Japan_ *japan,double *ll_src,short direction);
@@ -1570,7 +1569,7 @@ int			EXP_LVL9	  CSats77F3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double 
 int			EXP_LVL9	  CSats77I2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSats77I3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSats77L  (struct cs_Ats77_ *ats77,int cnt,Const double pnts [][3]);
-int			EXP_LVL9	  CSats77Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CSats77Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
 int			EXP_LVL9	  CSats77R  (struct cs_Ats77_ *ats77);
 int			EXP_LVL9	  CSats77S  (struct cs_GridFile_ *ats77);
 double		EXP_LVL9	  CSats77T  (struct cs_Ats77_ *ats77,double *ll_src,short direction);
@@ -1581,7 +1580,7 @@ int			EXP_LVL9	  CSost97F3 (struct cs_Ost97_ *ost97,double *ll_trg,Const double 
 int			EXP_LVL9	  CSost97I2 (struct cs_Ost97_ *ost97,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSost97I3 (struct cs_Ost97_ *ost97,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSost97L  (struct cs_Ost97_ *ost97,int cnt,Const double pnts [][3]);
-int			EXP_LVL9	  CSost97Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CSost97Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
 int			EXP_LVL9	  CSost97R  (struct cs_Ost97_ *ost97);
 int			EXP_LVL9	  CSost97S  (struct cs_GridFile_ *ost97);
 double		EXP_LVL9	  CSost97T  (struct cs_Ost97_ *ost97,double *ll_src,short direction);
@@ -1592,7 +1591,7 @@ int			EXP_LVL9	  CSost02F3 (struct cs_Ost02_ *ost02,double *ll_trg,Const double 
 int			EXP_LVL9	  CSost02I2 (struct cs_Ost02_ *ost02,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSost02I3 (struct cs_Ost02_ *ost02,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSost02L  (struct cs_Ost02_ *ost02,int cnt,Const double pnts [][3]);
-int			EXP_LVL9	  CSost02Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CSost02Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
 int			EXP_LVL9	  CSost02R  (struct cs_Ost02_ *ost02);
 int			EXP_LVL9	  CSost02S  (struct cs_GridFile_ *ost02);
 double		EXP_LVL9	  CSost02T  (struct cs_Ost02_ *ost02,double *ll_src,short direction);

@@ -31,22 +31,87 @@ int EXP_LVL9 CSgridiQ (struct cs_GeodeticTransform_ *gxDef,unsigned short xfrmCo
 														   int err_list [],
 														   int list_sz)
 {
+	extern char cs_Dir [];
+	extern char* cs_DirP;
+	extern struct cs_GridFormatTab_ cs_GridFormatTab [];
+
+	short idx;
+	short idxF;
+	short fileCount;
+
 	int err_cnt;
+	int fErrCnt;
+	int fErrList [4];
+	int fListSz;
+
+	struct cs_GridFile_* gridFilePtr;
+	struct cs_GridFormatTab_* frmtTblPtr;
+	struct csGeodeticXfromParmsFile_* fileDefPtr;
+	struct csGeodeticXformParmsGridFiles_* filesPtr;
 
 	/* We will return (err_cnt + 1) below. */
 	err_cnt = -1;
 	if (err_list == NULL) list_sz = 0;
+	fListSz = 4;
 
-	/* Locate the file format in the list table and call the file specific
-	   quality checker. */
-
-
-	/* Check the definition stuff specific to all grid interpolation types
-	   as a group.  
-	if (fabs (gxDef->parameters.geocentricParameters.deltaX) > cs_DelMax)
+	/* Need to perform a check on each file specification. */
+	filesPtr = &gxDef->parameters.fileParameters;
+	fileCount = filesPtr->fileReferenceCount;
+	for (idx = 0;idx < fileCount;idx += 1)
 	{
-		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_DELTAX;
-	} */
+		fileDefPtr = &filesPtr->fileNames [idx];
+
+		/* Locate the file format in the list table and call the file specific
+		   quality checker. */
+		for (frmtTblPtr = cs_GridFormatTab;frmtTblPtr->formatCode != cs_DTCFRMT_NONE;frmtTblPtr += 1)
+		{
+			if (frmtTblPtr->formatCode == fileDefPtr->fileFormat)
+			{
+				break;
+			}
+		}
+		if (frmtTblPtr->formatCode == cs_DTCFRMT_NONE)
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_INVDIR;
+		}
+		else
+		{
+			/* OK, we have a file specification and a valid format, thus we have
+			   a setup function. */
+			*cs_DirP = '\0';
+			fErrCnt = (*frmtTblPtr->check)(fileDefPtr,cs_Dir,fErrList,fListSz);
+			for (idxF = 0;idxF < fErrCnt;idxF += 1)
+			{
+				if (idxF < fListSz)
+				{
+					if (++err_cnt < list_sz) err_list [err_cnt] = fErrList [idxF];
+				}
+			}
+		}
+
+		/* Verify that the direction specification is valid. */
+		fileDefPtr = &filesPtr->fileNames [idx];
+		if (fileDefPtr->direction != 'F' && fileDefPtr->direction != 'f' &&
+		    fileDefPtr->direction != 'I' && fileDefPtr->direction != 'i')
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_INVDIR;
+		}
+	}
+
+	/* Verify maxIterations, convergence value, error value, and accuracy. */
+	if (gxDef->maxIterations < 0 || gxDef->maxIterations >= 40)
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_MAXITR;
+	}
+	if (gxDef->cnvrgValue <= 1.0E-16 || gxDef->cnvrgValue >= 1.0E-02)
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_CNVRGV;
+	}
+	if (gxDef->errorValue <= 1.0E-14 || gxDef->cnvrgValue >= 1.0 ||
+	    gxDef->errorValue <= gxDef->cnvrgValue)
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_ERRORV;
+	}
 
 	/* That's it for Grid Interpolation transformation. */
 	return (err_cnt + 1);

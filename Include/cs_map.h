@@ -6489,10 +6489,33 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_CSQ_AFFZERO	251		/* Denominator of affine is zero. */
 #define cs_CSQ_NRDATUM	252		/* Non-earth referecned to a datum. */
 #define cs_CSQ_OSTN97	253		/* OSTN97 grid shift file not present. */
-#define cs_CSQ_ELEVEL   254     /* Elevated ellipsoid value is questionable */
+#define cs_CSQ_ELEVEL	254		/* Elevated ellipsoid value is questionable */
 #define cs_CSQ_OSTN02	255		/* OSTN02 grid shift file not present. */
 #define cs_CSQ_TMKRG0	256		/* Kruger Formulation, non-zero origin latitude */
 #define cs_CSQ_DENRGN	257		/* Invalid region code for Danish 34/45 */
+
+#define cs_DTQ_FILE		258		/* Grid file not found. */
+#define cs_DTQ_FORMAT	259		/* Grid file of a format different from that specified. */
+#define cs_DTQ_FLSPEC	260		/* Grid file specification inappropriate for the indicated format. */
+#define cs_DTQ_INVDIR	261		/* Invalid direction specififation in geodetic transformation definition. */
+
+#define cs_DTQ_DELTAX   262	 	/* Delta X transformation parameter is suspiciously large. */
+#define cs_DTQ_DELTAY   263		/* Delta Y transformation parameter is suspiciously large. */
+#define cs_DTQ_DELTAZ   264		/* Delta Z transformation parameter is suspiciously large. */
+#define cs_DTQ_ROTATEX  265		/* X Rotate transformation parameter is suspiciously large. */
+#define cs_DTQ_ROTATEY  266		/* Y Rotate transformation parameter is suspiciously large. */
+#define cs_DTQ_ROTATEZ  267		/* Z Rotate transformation parameter is suspiciously large. */
+#define cs_DTQ_BWSCALE  268		/* Datum transformation scale parameter is suspiciously large. */
+#define cs_DTQ_WGS72SRC 269		/* Source datum to the WGS72 transformation method is not WGS72. */
+#define cs_DTQ_WGS72TRG 270		/* Target datum to the WGS72 transformation method is not WGS84. */
+#define cs_DTQ_MTHCODE  271		/* Geodetic transformation method code is not recognized. */
+#define cs_DTQ_XFRMNM   272		/* Geodetic transformation name is not valid. */
+#define cs_DTQ_SRCDTNM  273		/* Geodetic transformation source datum name is invalid. */
+#define cs_DTQ_TRGDTNM  274		/* Geodetic transformation target datum name is invalid. */
+#define cs_DTQ_MAXITR   275		/* Geodetic transformation max iterations value is suspicious. */
+#define cs_DTQ_CNVRGV   276		/* Geodetic transformation convergence value is suspicious. */
+#define cs_DTQ_ERRORV   277		/* Geodetic transformation convergence error value is suspicious. */
+#define cs_DTQ_ACCRCY   278		/* Geodetic transformation accuracy value is suspicious. */
 
 	/* End coordinate system definition checker specific stuff. */
 
@@ -6695,39 +6718,20 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_GX_PROT        453		/* Attempt to change a distribution Geodetic Transformation dictionary entry. */
 #define cs_GX_UPROT       454		/* Attempt to change a protected user Geodetic Transformation dictionary entry. */
 #define cs_GX_NOT_FND     455		/* Geodetic transformation not found. */
-
-#define cs_DTQ_DELTAX     456		/* Delta X transformation parameter is suspiciously large. */
-#define cs_DTQ_DELTAY     457		/* Delta Y transformation parameter is suspiciously large. */
-#define cs_DTQ_DELTAZ     458		/* Delta Z transformation parameter is suspiciously large. */
-#define cs_DTQ_ROTATEX    459		/* X Rotate transformation parameter is suspiciously large. */
-#define cs_DTQ_ROTATEY    461		/* Y Rotate transformation parameter is suspiciously large. */
-#define cs_DTQ_ROTATEZ    462		/* Z Rotate transformation parameter is suspiciously large. */
-#define cs_DTQ_BWSCALE    463		/* Datum transformation scale parameter is suspiciously large. */
-#define cs_DTQ_WGS72SRC   464		/* Source datum to the WGS72 transformation method is not WGS72. */
-#define cs_DTQ_WGS72TRG   465		/* Target datum to the WGS72 transformation method is not WGS84. */
-#define cs_DTQ_MTHCODE    466       /* Geodetic transformation method code is not recognized. */
-#define cs_DTQ_XFRMNM     467       /* Geodetic transformation name is not valid. */
-#define cs_DTQ_SRCDTNM    468       /* Geodetic transformation source datum name is invalid. */
-#define cs_DTQ_TRGDTNM    469       /* Geodetic transformation target datum name is invalid. */
-#define cs_DTQ_MAXITR     470       /* Geodetic transformation max iterations value is suspicious. */
-#define cs_DTQ_CNVRGV     471       /* Geodetic transformation convergence value is suspicious. */
-#define cs_DTQ_ERRORV     472       /* Geodetic transformation convergence error value is suspicious. */
-#define cs_DTQ_ACCRCY     473       /* Geodetic transformation accuracy value is suspicious. */
-
-#define cs_NULLX_CNVRG	  474		/* The iterative inverse Null Transformation
+#define cs_NULLX_CNVRG	  456		/* The iterative inverse Null Transformation
 									   calculation failed to converge. */
-#define cs_GEOCT_CNVRG	  475		/* The iterative inverse Geocentric Transformation
+#define cs_GEOCT_CNVRG	  457		/* The iterative inverse Geocentric Transformation
 									   calculation failed to converge. */
-#define cs_MULRG_CNVRG	  476		/* The iterative inverse multiple regression
+#define cs_MULRG_CNVRG	  458		/* The iterative inverse multiple regression
 									   calculations failed to converge. */
-#define cs_UNKWN_DTCMTH   477		/* Unknown datum transformation method encountered in the
+#define cs_UNKWN_DTCMTH   459		/* Unknown datum transformation method encountered in the
 									   Geodetic Transformation dictionary. */
-#define cs_GRD_RNG_FLBK   478		/* Out of coverage of grid files, fallback used. */
-#define cs_GRD_RNG_WRN    479		/* Out of coverage of grid files, warning only. */
-#define cs_GX_TOOMANY     480		/* Too many transformations required to do datum transformation. */
-#define cs_GEOXFRM_DUP    481		/* Duplicate geodetic transformation definitions. */
-#define cs_DT_NOPATH      482       /* Couldn't locate or construct a path between datums. */
-#define cs_ATS77_INV      483       /* Attempt to perform an inverse calculation on the ATS77 datum. */
+#define cs_GRD_RNG_FLBK	  460		/* Out of coverage of grid files, fallback used. */
+#define cs_GRD_RNG_WRN	  461		/* Out of coverage of grid files, warning only. */
+#define cs_GX_TOOMANY	  462		/* Too many transformations required to do datum transformation. */
+#define cs_GEOXFRM_DUP	  463		/* Duplicate geodetic transformation definitions. */
+#define cs_DT_NOPATH	  464		/* Couldn't locate or construct a path between datums. */
+#define cs_ATS77_INV	  465		/* Attempt to perform an inverse calculation on the ATS77 datum. */
 
 /*
 	The following casts are used to eliminate warnings from

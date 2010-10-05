@@ -56,7 +56,7 @@ int CScntv1L  (struct cs_NTv1_ *cntv1,int cnt,Const double pnts [][3])
 {
 	return 0;
 }
-int CScntv1Q  (struct cs_GridFile_* gridFile,unsigned short frmt_code,int err_list [],int list_sz)
+int CScntv1Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
 	return 0;
 }

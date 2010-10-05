@@ -56,7 +56,7 @@ int CSost02L  (struct cs_Ost02_ *ost02,int cnt,Const double pnts [][3])
 {
 	return 0;
 }
-int CSost02Q  (struct cs_GridFile_* gridFile,unsigned short prj_code,int err_list [],int list_sz)
+int CSost02Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
 	return 0;
 }
