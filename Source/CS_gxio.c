@@ -123,6 +123,9 @@ int EXP_LVL3 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
 
 	/* Swap the bytes if necessary. */
 	CS_gxswp (gx_def);
+	
+	/* Replace the directory sepoarator characters if/as appropriate. */
+	CS_gxsep (gx_def);
 
 	/* Check the result. The name must always meet the criteria
 	   set by the CS_nmpp64 function.  At least so far, the criteria
@@ -154,6 +157,7 @@ int EXP_LVL3 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
 		CS_erpt (cs_INV_FILE);
 		return (-1);
 	}
+
 	return (1);
 }
 /**********************************************************************
@@ -883,4 +887,23 @@ int EXP_LVL1 CS_gxswp (struct cs_GeodeticTransform_* gx_def)
 		}
 	}
 	return swap;
+}
+/* Normalize the path name with the current platform.  Specifically,
+   switch the directory separator character to what is appropriate
+   for the current platform. */
+int EXP_LVL1 CS_gxsep (struct cs_GeodeticTransform_* gx_def)
+{
+	short idx;
+	short pathCount;
+	struct csGeodeticXfromParmsFile_* fileParmsPtr;
+
+	if (gx_def->methodCode == cs_DTCMTH_GFILE)
+	{
+		pathCount = gx_def->parameters.fileParameters.fileReferenceCount;
+		for (idx = 0;idx < pathCount;idx += 1)
+		{
+			fileParmsPtr = &gx_def->parameters.fileParameters.fileNames [idx];
+			CSrplDirSep (fileParmsPtr->fileName);
+		}
+	}
 }
