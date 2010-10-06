@@ -411,6 +411,10 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			if (gxdef.xfrmName [0] != '\0' &&
 				(test || CS_stricmp (gxdef.group,"TEST")))
 			{
+				/* Replace directory separators in grid file paths as appropriate. */
+				CS_gxsep (&gxdef);
+				
+				/* Write it to the dictionary. */
 				st = CSgxdefwr (outStrm,&gxdef,warn,dtmStrm,err_func);
 				if (st >= 0) err_cnt += st;
 				else
@@ -824,18 +828,26 @@ int CSgxdefwr (	csFILE *outStrm,
 	/* Check all the other stuff other than the existence of the datums.  We'll
 	   do that below.  This is done as we want to check the datum dictionary
 	   which we just compiled for the names, not the currently active
-	   dictionary. */
+	   dictionary.
+	   
+	   We skip the CS_gxchk function if the method code is Grid Interpolation.
+	   We do this as there is no requirement that the compiler operate in the
+	   operational environment which includes all the grid interpolation data
+	   files. */
 	list_sz = sizeof (err_list) / sizeof (int);
-	chk_cnt = CS_gxchk (gxdef,0,err_list,list_sz);
-	if (chk_cnt != 0)
+	if (gxdef->methodCode != cs_DTCMTH_GFILE)
 	{
-		CS_stncp (csErrnam,gxdef->xfrmName,MAXPATH);
-		for (ii = 0;ii < chk_cnt && ii < list_sz;ii++)
+		chk_cnt = CS_gxchk (gxdef,0,err_list,list_sz);
+		if (chk_cnt != 0)
 		{
-			CSerpt (err_msg,sizeof (err_msg),err_list [ii]);
-			cancel = (*err_func)(err_msg);
+			CS_stncp (csErrnam,gxdef->xfrmName,MAXPATH);
+			for (ii = 0;ii < chk_cnt && ii < list_sz;ii++)
+			{
+				CSerpt (err_msg,sizeof (err_msg),err_list [ii]);
+				cancel = (*err_func)(err_msg);
+			}
+			err_cnt += chk_cnt;
 		}
-		err_cnt += chk_cnt;
 	}
 
 	/* Use the dtmStrm variable provided to verify that the source datum
