@@ -1361,7 +1361,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 135600,3395,0,0,0,0,0,,,,WORLD-MERCATOR,WGS 84 / World Mercator,,,,,,,,,,,,,,0,0,0
 135700,3396,0,0,0,0,0,,,,DHDN/BeTA.Gauss3d-3,PD/83 / 3-degree Gauss-Kruger zone 3,,,,,,,,,,,,,,0,0,0
 135800,3397,0,0,0,0,0,,,,DHDN/BeTA.Gauss3d-4,PD/83 / 3-degree Gauss-Kruger zone 4,,,,,,,,,,,,,,0,0,0
-135900,3398,0,0,0,0,0,,,,DHDN/BeTA.Gauss3d-4,RD/83 / 3-degree Gauss-Kruger zone 4,,,,,,,,,,,,,,0,0,0
+135900,3398,0,0,0,0,0,,,,RD83/BeTA.Gauss3d-4|RD83.Gauss3d-4,RD/83 / 3-degree Gauss-Kruger zone 4,,,,,,,,,,,,,,0,0,0
 136000,3399,0,0,0,0,0,,,,DHDN/BeTA.Gauss3d-5,RD/83 / 3-degree Gauss-Kruger zone 5,,,,,,,,,,,,,,0,0,0
 136100,3400,0,0,0,0,0,,,,,NAD83 / Alberta 10-TM (Forest),,,,,,,,,,,,,,0,0,0
 136200,3401,0,0,0,0,0,,,,CANA83-10TM115,NAD83 / Alberta 10-TM (Resource),,,,,,,,,,,,,,0,0,0
