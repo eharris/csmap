@@ -98,15 +98,20 @@ bool TcsNameMap::CsvSort (const TcsNameMap& lhs,const TcsNameMap& rhs)
 		lessThan = (lhs.GenericId < rhs.GenericId);
 		if (lhs.GenericId == rhs.GenericId)
 		{
-		    lessThan = (lhs.Flavor < rhs.Flavor);
-		    if (lhs.Flavor == rhs.Flavor)
-		    {
-				lessThan = (lhs.DupSort < rhs.DupSort);
-				if (lhs.DupSort == rhs.DupSort)
+			lessThan = (lhs.Flavor < rhs.Flavor);
+			if (lhs.Flavor == rhs.Flavor)
+			{
+				lessThan = (lhs.AliasFlag < rhs.AliasFlag);
+				if (lhs.AliasFlag == rhs.AliasFlag)
 				{
-					lessThan = (lhs.AliasFlag < rhs.AliasFlag);
+					int cmpVal = CS_wcsicmp (lhs.Name.c_str (),rhs.Name.c_str ());
+					lessThan = (cmpVal < 0);
+					if (cmpVal == 0)
+					{
+						lessThan = (lhs.DupSort < rhs.DupSort);
+					}
 				}
-		    }
+			}
 		}
 	}
 	return lessThan;
