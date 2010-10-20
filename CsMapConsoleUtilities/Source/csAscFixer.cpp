@@ -1082,6 +1082,18 @@ const char* TcsDefFile::GetDefinitionName (size_t index) const
 	}
 	return defName;
 }
+const TcsAscDefinition* TcsDefFile::GetDefinition (size_t index) const
+{
+	const TcsAscDefinition* defPtr;
+
+	defPtr = 0;
+	if (index < Definitions.size ())
+	{
+		defPtr = &Definitions [index];
+	}
+	return defPtr;
+}
+
 TcsAscDefinition* TcsDefFile::GetDefinition (const char* defName)
 {
 	const char* defNamePtr;
@@ -1111,6 +1123,42 @@ const TcsAscDefinition* TcsDefFile::GetDefinition (const char* defName) const
 		if (!stricmp (defNamePtr,defName))
 		{
 			rtnValue = &(*itr);
+			break;
+		}
+	}
+	return rtnValue;
+}
+std::vector<TcsAscDefinition>::iterator TcsDefFile::Locate (const char* defName)
+{
+	const char* defNamePtr;
+	std::vector<TcsAscDefinition>::iterator itr;
+	std::vector<TcsAscDefinition>::iterator rtnValue;
+
+	rtnValue = Definitions.end ();
+	for (itr = Definitions.begin ();itr != Definitions.end ();itr++)
+	{
+		defNamePtr = itr->GetDefinitionName ();
+		if (!stricmp (defNamePtr,defName))
+		{
+			rtnValue = itr;
+			break;
+		}
+	}
+	return rtnValue;
+}
+std::vector<TcsAscDefinition>::const_iterator TcsDefFile::Locate (const char* defName) const
+{
+	const char* defNamePtr;
+	std::vector<TcsAscDefinition>::const_iterator itr;
+	std::vector<TcsAscDefinition>::const_iterator rtnValue;
+
+	rtnValue = Definitions.end ();
+	for (itr = Definitions.begin ();itr != Definitions.end ();itr++)
+	{
+		defNamePtr = itr->GetDefinitionName ();
+		if (!stricmp (defNamePtr,defName))
+		{
+			rtnValue = itr;
 			break;
 		}
 	}
@@ -1175,9 +1223,31 @@ bool TcsDefFile::DeprecateDef (const char* defName,const char* description,const
 	defPtr = GetDefinition (defName);
 	if (defPtr != 0)
 	{
-		defPtr->SetValue ("GROUP",legacyValue);
-		defPtr->SetValue ("DESC_NM",description);
-		defPtr->SetValue ("SOURCE",source);
+		defPtr->SetValue ("GROUP:",legacyValue);
+		if (description != 0)
+		{
+			defPtr->SetValue ("DESC_NM:",description);
+		}
+		if (source != 0)
+		{
+			defPtr->SetValue ("SOURCE:",source);
+		}
+		ok = true;
+	}
+	return ok;
+}
+bool TcsDefFile::InsertBefore (const char* defName,const TcsAscDefinition& newDef)
+{
+	bool ok (false);
+	std::vector<TcsAscDefinition>::iterator itr;
+	std::vector<TcsAscDefinition>::iterator newItr;
+	
+	itr = Locate (defName);
+	if (itr != Definitions.end ())
+	{
+		// Don't know that there is any possible indication of failure.  I
+		// suppose an exception of some sort is thrown.
+		Definitions.insert (itr,newDef);
 		ok = true;
 	}
 	return ok;
@@ -1186,6 +1256,26 @@ bool TcsDefFile::Append (const TcsAscDefinition& newDef)
 {
 	Definitions.push_back (newDef);
 	return true;
+}
+bool TcsDefFile::MakeLast (const char* defName)
+{
+	bool ok (false);
+	const char* defNamePtr;
+	std::vector<TcsAscDefinition>::const_iterator itr;
+
+	for (itr = Definitions.begin ();itr != Definitions.end ();itr++)
+	{
+		defNamePtr = itr->GetDefinitionName ();
+		if (!stricmp (defNamePtr,defName))
+		{
+			TcsAscDefinition moveBuffer (*itr);
+			Definitions.erase (itr);
+			Definitions.push_back (moveBuffer);
+			ok = true;
+			break;
+		}
+	}
+	return ok;
 }
 // Write the possibly modified content to the provided stream.
 bool TcsDefFile::WriteToStream (std::ostream& outStrm) const
@@ -1202,241 +1292,3 @@ bool TcsDefFile::WriteToStream (std::ostream& outStrm) const
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
 // Private Support Functions
-
-
-
-//newPage//
-#ifdef __SKIP__
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  OLD STUFF --> Should be deleted after testing.                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-// Construction,  Destruction,  Assignment  
-TcsDefIdxEntry::TcsDefIdxEntry (void) : First (0U), Last (0U)
-{
-	memset (DefName,'\0',sizeof (DefName));
-}
-TcsDefIdxEntry::TcsDefIdxEntry (const char* defName,unsigned first,unsigned last)
-																	:
-																   First    (first),
-																   Last     (last)
-{
-	memset (DefName,'\0',sizeof (DefName));
-	CS_stncp (DefName,defName,sizeof (DefName));
-}
-TcsDefIdxEntry::TcsDefIdxEntry (const TcsDefIdxEntry& source) : First (source.First),
-																Last  (source.Last)
-{
-	memset (DefName,'\0',sizeof (DefName));
-	CS_stncp (DefName,source.DefName,sizeof (DefName));
-}
-TcsDefIdxEntry::~TcsDefIdxEntry (void)
-{
-}
-TcsDefIdxEntry& TcsDefIdxEntry::operator= (const TcsDefIdxEntry& rhs)
-{
-	if (&rhs != this)
-	{
-		First = rhs.First;
-		Last  = rhs.Last;
-		memset (DefName,'\0',sizeof (DefName));
-		CS_stncp (DefName,rhs.DefName,sizeof (DefName));
-	}
-	return *this;	
-}
-///////////////////////////////////////////////////////////////////////////////
-// Operator Overloads
-bool TcsDefIdxEntry::operator== (const TcsDefIdxEntry& rhs) const
-{
-	bool equal = (CS_stricmp (DefName,rhs.DefName) == 0);
-	return equal;
-}
-bool TcsDefIdxEntry::operator<  (const TcsDefIdxEntry& rhs) const
-{
-	bool lessThan = (CS_stricmp (DefName,rhs.DefName) < 0);
-	return lessThan;
-}
-bool TcsDefIdxEntry::operator== (const char* defName) const
-{
-	bool equal = (CS_stricmp (DefName,defName) == 0);
-	return equal;
-}
-bool TcsDefIdxEntry::operator<  (const char* defName) const
-{
-	bool lessThan = (CS_stricmp (DefName,defName) < 0);
-	return lessThan;
-}
-///////////////////////////////////////////////////////////////////////////////
-// Public Named Member Functions
-const char* TcsDefIdxEntry::GetDefName (void) const
-{
-	return DefName;
-}
-unsigned TcsDefIdxEntry::GetFirst (void) const
-{
-	return First;
-}
-unsigned TcsDefIdxEntry::GetLast (void) const
-{
-	return Last;
-}
-void TcsDefIdxEntry::SetLast (unsigned newLast)
-{
-	Last = newLast;
-}
-void TcsDefIdxEntry::ReConstruct (const char* defName,unsigned first,unsigned last)
-{
-	CS_stncp (DefName,defName,sizeof (DefName));
-	First = first;
-	Last = last;
-}
-//newPage//
-///////////////////////////////////////////////////////////////////////////////
-// Construction,  Destruction,  Assignment  
-TcsDefIndex::TcsDefIndex (EcsDictType dictType) : DictType (dictType),
-												  Index  ()
-{
-}
-TcsDefIndex::TcsDefIndex (EcsDictType dictType,const TcsDefVector& defFile)
-												: 
-											   DictType (dictType),
-											   Index  ()
-{
-	ConstructFromFile (dictType,defFile);
-}
-TcsDefIndex::TcsDefIndex (const TcsDefIndex& source) : DictType (source.DictType),
-													   Index    (source.Index)
-{
-}
-TcsDefIndex::~TcsDefIndex (void)
-{
-}
-TcsDefIndex& TcsDefIndex::operator= (const TcsDefIndex& rhs)
-{
-	if (&rhs != this)
-	{
-		DictType = rhs.DictType;
-		Index    = rhs.Index;
-	}
-	return *this;
-}
-///////////////////////////////////////////////////////////////////////////////
-// Operator Overloads
-///////////////////////////////////////////////////////////////////////////////
-// Public Named Member Functions
-bool TcsDefIndex::ConstructFromFile (EcsDictType dictType,const TcsDefVector& defFile)
-{
-	bool ok (true);
-
-	TcsDefVector::const_iterator lineItr;
-	TcsDefVector::const_iterator lineItrFirst;
-	TcsDefVector::const_iterator lineItrBkup;
-	TcsDefVector::const_iterator begin;
-	TcsDefIdxEntry newEntry;
-
-	begin = defFile.begin ();
-	lineItrFirst = begin;
-	newEntry.ReConstruct ("",0U,0U);		// Default constructor should do this, but what the heck.
-	for (lineItr = defFile.begin ();ok && lineItr != defFile.end ();lineItr++)
-	{
-		if (lineItr->GetType () == ascTypLblVal)
-		{
-			if (lineItr->IsNameDef ())
-			{
-				if (newEntry.GetFirst () != 0)
-				{
-					// Clean up a bit.  First, note that lineItr is pointing
-					// to tge beginning of the next entry.  So we must back it
-					// up by one to point at the last line of the previous entry.
-					// Second, the immediate precious entry is normally a blank
-					// line, could also be a cooment or something like that.
-					// Thus, we back up further so that Last points to the last
-					// line which is a Label/Value pair type associated with the
-					// previous entry.
-					lineItrBkup = lineItr - 1;
-					while (lineItrBkup != lineItrFirst && lineItrBkup->GetType () != ascTypLblVal)
-					{
-						--lineItrBkup;
-					}
-					
-					// Finish off this entry.  Calculate the Last value and insert
-					// the result into the index.
-					unsigned last = static_cast<unsigned>(lineItrBkup - begin);
-					newEntry.SetLast (last);
-					ok = Append (newEntry);
-				}
-
-				// Reset the new entry to the building state, i.e.
-				// First is non-zero and Last is zero.
-				lineItrFirst = lineItr;
-				unsigned first = static_cast<unsigned>(lineItr - begin);
-				const char* nxtName = lineItr->GetValue ();
-				newEntry.ReConstruct (nxtName,first,0U);
-			}
-		}
-	}
-
-	// If we have an entry under construction, we finish it off now.
-	if (newEntry.GetFirst () != 0 && newEntry.GetLast () == 0)
-	{
-		// Note: lineItr should be pointing to DefLines.end () now.
-		lineItrBkup = lineItr - 1;
-		while (lineItrBkup != lineItrFirst && lineItrBkup->GetType () != ascTypLblVal)
-		{
-			--lineItrBkup;
-		}
-		
-		// Finish off this entry.  Calculate the Last value and insert
-		// the result into the index.
-		unsigned last = static_cast<unsigned>(lineItrBkup - begin);
-		newEntry.SetLast (last);
-		ok = Append (newEntry);
-	}
-	return ok;
-}
-unsigned TcsDefIndex::GetDefinitionCount (void) const
-{
-	return static_cast<unsigned>(Index.size ());
-}
-bool TcsDefIndex::GetIdxEntry (TcsDefIdxEntry& result,unsigned index) const
-{
-	bool ok (false);
-	idxItrK itr;
-
-	for (itr = Index.begin ();index > 0 && itr != Index.end ();index--,itr++);
-	if (itr != Index.end ())
-	{
-		result = *itr;
-		ok = true;
-	}
-	return ok;
-}
-bool TcsDefIndex::GetIdxEntry (TcsDefIdxEntry& result,const char* defName) const
-{
-	bool ok;
-	idxItrK indexItr;
-	TcsDefIdxEntry srchEntry (defName,0U,0U);
-	
-	indexItr = Index.find (srchEntry);
-	ok = (indexItr != Index.end ());
-	if (ok)
-	{
-		result = *indexItr;
-	}
-	return ok;
-}
-bool TcsDefIndex::Append (const TcsDefIdxEntry& newEntry)
-{
-	bool ok (false);
-	std::pair<idxItr,bool> insertRtn;
-	
-	insertRtn = Index.insert (newEntry);
-	ok = insertRtn.second;
-	return ok;
-}
-#endif

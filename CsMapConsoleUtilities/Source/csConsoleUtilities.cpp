@@ -19,7 +19,7 @@
 #include "csConsoleUtilities.hpp"
 
 const wchar_t csTempDir [] = L"C:\\TEMP";
-wchar_t csEpsgDir [] = L"C:\\Program Files\\Common Files\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
+wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
 const wchar_t csDataDir [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Data";
 const wchar_t csDictDir [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Dictionaries";
 const wchar_t csDictSrc [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Dictionaries";
@@ -29,7 +29,9 @@ int main (int argc,char* argv [])
 	bool ok;
 	char pathName [512];
 
-	ok = csOrgTransformations (csDictDir,csDictDir);
+	//ok = csGenerateHpgnTable (csTempDir,csDictDir);
+
+	ok = csOrgTransformations (csDictSrc,csDictDir);
 
 	// ok = csAddEpsgCodes (csDictSrc,csEpsgDir,csTempDir);
 

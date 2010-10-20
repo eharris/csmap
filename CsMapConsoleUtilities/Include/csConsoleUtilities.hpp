@@ -17,6 +17,7 @@
 //
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <vector>
 #pragma warning(disable:4702)
@@ -48,6 +49,7 @@ bool ListUnmappedEpsgCodes (const wchar_t* epsgDir,const wchar_t* dictDir);
 bool ListDuplicateDefinitions (const wchar_t* listPath,const wchar_t* dictDir);
 bool DeprecateDupliateDefs (const wchar_t* srcDictDir,const wchar_t* trgDictDir);
 bool csAddEpsgCodes (const wchar_t* csDictSrcDir,const wchar_t* epsgDir,const wchar_t* csDictTrgDir);
+//bool csGenerateHpgnTable (const wchar_t* tablePath,const wchar_t* dictDir);
 bool csOrgTransformations (const wchar_t* csDictDir,const wchar_t* csDictTrgDir);
 
 // Various structures used in the various utilities.  Again, the

@@ -21,6 +21,33 @@ extern "C" unsigned long KcsNmInvNumber;
 extern "C" unsigned long KcsNmMapNoNumber;
 extern "C" double cs_Zero;
 
+const wchar_t* dbl2wcs (double dblVal)
+{
+	static wchar_t wcBufr [128];
+
+	wchar_t* wcPtr;
+
+	swprintf (wcBufr,128,L"%.12f",dblVal);
+	wcPtr = wcschr (wcBufr,L'.');
+	if (wcPtr != 0)	
+	{
+		// We have a high precision number and it has a decimal point.
+		wcPtr = wcBufr + wcslen (wcBufr) - 1;
+		while (*wcPtr == L'0')
+		{
+			*wcPtr = L'\0';
+			wcPtr -= 1;
+		}
+		if (*wcPtr == L'.')
+		{
+			wcPtr += 1;
+			*wcPtr++ = L'0';
+			*wcPtr = L'\0';
+		}
+	}
+	return wcBufr;
+}
+
 // Returns a pointer to a TcsEpsgDataSetV6 object.  Specifically, a
 // TcsEpsgDataSetV6 object initialized with the contents of the the folder
 // pointed to by the csEpsgDir global variable defined in the
@@ -1386,6 +1413,33 @@ bool TcsKeyNameList::operator== (const TcsKeyNameList& rhs)
 	const char* rightSide = rhs.KeyNameList.front ();
 	int result = CS_stricmp (leftSide,rightSide);
 	return (result == 0);
+}
+TcsKeyName* TcsKeyNameList::GetFirst (void)
+{
+	TcsKeyName* rtnValue (0);
+	
+	Rewind ();
+	if (currentPos != KeyNameList.end ())
+	{
+		rtnValue = &(*currentPos);
+		currentPos++;
+	}
+	return rtnValue;
+}
+TcsKeyName* TcsKeyNameList::GetNext (void)
+{
+	TcsKeyName* rtnValue (0);
+	
+	if (currentPos != KeyNameList.end ())
+	{
+		rtnValue = &(*currentPos);
+		currentPos++;
+	}
+	return rtnValue;
+}
+void TcsKeyNameList::Rewind (void)
+{
+	currentPos = KeyNameList.begin ();
 }
 void TcsKeyNameList::Arrange ()
 {
