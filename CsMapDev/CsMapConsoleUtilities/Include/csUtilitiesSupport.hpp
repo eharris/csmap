@@ -18,6 +18,8 @@
 
 #include "csAscFixer.hpp"
 
+const wchar_t* dbl2wcs (double dblVal);
+
 const TcsEpsgDataSetV6* GetEpsgObjectPtr (void);
 void ReleaseEpsgObjectPtr (void);
 
@@ -340,9 +342,13 @@ public:
 	TcsKeyNameList& operator= (const TcsKeyNameList& rhs);
 	bool operator< (const TcsKeyNameList& rhs);
 	bool operator== (const TcsKeyNameList& rhs);
+	TcsKeyName* GetFirst (void);
+	TcsKeyName* GetNext (void);
+	void Rewind (void);
 	void Arrange (void);
 	void WriteToStream (std::wostream& listStream);
 private:
+	std::list<TcsKeyName>::iterator currentPos;
 	std::list<TcsKeyName> KeyNameList;
 };
 std::wostream& operator<< (std::wostream& outStrm,const TcsKeyNameList& keyNameList);

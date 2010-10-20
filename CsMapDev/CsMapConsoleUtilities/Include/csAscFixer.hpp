@@ -143,8 +143,8 @@ private:
 typedef std::vector<TcsDefLine> TcsDefLineVctr;
 typedef TcsDefLineVctr::iterator TcsDefLnItr;
 typedef TcsDefLineVctr::const_iterator TcsDefLnItrK;
+
 //newPage//
-#ifndef __SKIP__
 ///////////////////////////////////////////////////////////////////////////////
 // TcsAscDefinition -- A named collection of TcsDefLine objects which
 //                     represents in its entirity a single definition.
@@ -207,8 +207,6 @@ private:
 	char DefName [64];
 	TcsDefLineVctr Definition;
 };
-#endif
-
 
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
@@ -216,7 +214,7 @@ private:
 //
 // This object represents a collection of lines from a .asc file provided to
 // the constructor.  Each line is parsed to isolate the label from the
-// associated value, and son in such a way that upon output, the resulting
+// associated value, and so on in such a way that upon output, the resulting
 // text will exactly match the original line (unless changed of course).  This
 // is done so that a file produced by creating this object and writing the
 // modifed contents will produce an approriate "diff" result showing only
@@ -241,15 +239,20 @@ public:
 	EcsDictType GetDictType (void);
 	size_t GetDefinitionCount (void) const;
 	const char* GetDefinitionName (size_t index) const;
+	const TcsAscDefinition* GetDefinition (size_t index) const;
 	const TcsAscDefinition* GetDefinition (const char* defName) const;
 	TcsAscDefinition* GetDefinition (const char* defName);
+	std::vector<TcsAscDefinition>::iterator Locate (const char* defName);
+	std::vector<TcsAscDefinition>::const_iterator Locate (const char* defName) const;
 	bool RenameDef (const char* oldName,const char* newName);
-	bool CopyDef (const char* oldname,const char* newName,const char* insertBefore = 0);
+//	bool CopyDef (const char* oldname,const char* newName,const char* insertBefore = 0);
 	const char* GetValue (const char* defName,const char* label) const;
 	double GetValueAsDouble (const char* defName,const char* label,long32_t& format) const;
 	bool SetValue (const char* defName,const char* label,const char* newValue);
 	bool DeprecateDef (const char* defName,const char* description,const char* source);
+	bool InsertBefore (const char* defName,const TcsAscDefinition& newDef);
 	bool Append (const TcsAscDefinition& newDef);
+	bool MakeLast (const char* defName);
 	bool WriteToStream (std::ostream& outStrm) const;
 private:
 	///////////////////////////////////////////////////////////////////////////
@@ -258,97 +261,6 @@ private:
 	///////////////////////////////////////////////////////////////////////////
 	// Private Data Members
 	EcsDictType DictType;
+	// Probably should use std::list<>, rather than a std::vector<>, here.
 	std::vector<TcsAscDefinition> Definitions;
 };
-//newPage//
-
-#ifdef __SKIP__
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  OLD STUFF --> Should be deleted after testing.                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-// TcsDefIdxEntry represents an entire definition.  It carries the name of the
-// definition and beginning and end sequencs numbers of the definition in
-// the TcsDefFile object given below.  This is poor as it means this object
-// is totally dependent upon a completely different object.
-class TcsDefIdxEntry
-{
-public:
-	///////////////////////////////////////////////////////////////////////////
-	// Construction,  Destruction,  Assignment  
-	TcsDefIdxEntry (void);
-	TcsDefIdxEntry (const char* defName,unsigned first,unsigned last);
-	TcsDefIdxEntry (const TcsDefIdxEntry& source);
-	~TcsDefIdxEntry (void);
-	TcsDefIdxEntry& operator= (const TcsDefIdxEntry& rhs);
-	///////////////////////////////////////////////////////////////////////////
-	// Operator Overloads
-	bool operator== (const TcsDefIdxEntry& rhs) const;
-	bool operator<  (const TcsDefIdxEntry& rhs) const;
-	bool operator== (const char* defName) const;
-	bool operator<  (const char* defName) const;
-	///////////////////////////////////////////////////////////////////////////
-	// Public Named Member Functions
-	void Reset (void);
-	const char* GetDefName (void) const;
-	unsigned GetFirst (void) const;
-	unsigned GetLast (void) const;
-	void SetLast (unsigned newLast);
-	void ReConstruct (const char* defName,unsigned first,unsigned last);
-private:
-	///////////////////////////////////////////////////////////////////////////
-	// Private Support Functions
-	///////////////////////////////////////////////////////////////////////////
-	// Private Data Members
-	unsigned First;					// this should always be the name entry
-	unsigned Last;
-	char DefName [64];
-};
-
-
-///////////////////////////////////////////////////////////////////////////////
-// TcsDefIndex carries a set of TcsIdxEntry objects.  The set is keyed on the
-// name within the TcsIdxEntry object, thus precluding duplicate names.  This
-// is rather poor design as the TcsIdxEntry objects contain index references
- to the totally unrelated TcsDefFile object.
-class TcsDefIndex
-{
-	typedef std::set<TcsDefIdxEntry>::const_iterator idxItrK;
-	typedef std::set<TcsDefIdxEntry>::const_iterator idxItr;
-public:
-	///////////////////////////////////////////////////////////////////////////
-	// Construction,  Destruction,  Assignment  
-	TcsDefIndex (EcsDictType dictType);
-	TcsDefIndex (EcsDictType dictType,const TcsDefVector& defFile);
-	TcsDefIndex (const TcsDefIndex& source);
-	~TcsDefIndex (void);
-	TcsDefIndex& operator= (const TcsDefIndex& rhs);
-	///////////////////////////////////////////////////////////////////////////
-	// Operator Overloads
-	// The operator< function is defined specifically for the std::set
-	// collection which essentially works on definition names only.
-	bool operator== (const TcsDefIdxEntry& rhs) const;
-	bool operator<  (const TcsDefIdxEntry& rhs) const;
-	bool operator== (const char* defName) const;
-	bool operator<  (const char* defName) const;
-	///////////////////////////////////////////////////////////////////////////
-	// Public Named Member Functions
-	bool ConstructFromFile (EcsDictType dictType,const TcsDefVector& defFile);
-	unsigned GetDefinitionCount (void) const;
-	bool GetIdxEntry (TcsDefIdxEntry& result,unsigned index) const;
-	bool GetIdxEntry (TcsDefIdxEntry& result,const char* defName) const;
-	bool Append (const TcsDefIdxEntry& newEntry);
-private:
-	///////////////////////////////////////////////////////////////////////////
-	// Private Support Functions
-	///////////////////////////////////////////////////////////////////////////
-	// Private Data Members
-	EcsDictType DictType;
-	std::set<TcsDefIdxEntry> Index;
-};
-#endif
