@@ -109,7 +109,7 @@
 #define cs_DTCMTH_PLYNM       (cs_DTCPRMTYP_PWRSRS + 0x0002)
 
 /* Grid File interpolation methods are: */
-#define cs_DTCMTH_GFILE		  (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_NONE)
+#define cs_DTCMTH_GFILE       (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_NONE)
 #define cs_DTCMTH_CNTv1       (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_CNTv1)
 #define cs_DTCMTH_CNTv2       (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_CNTv2)
 #define cs_DTCMTH_NADCN       (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_NADCN)
@@ -183,8 +183,8 @@
 							   errors to CS_erpt. */
 
 
-#define csGRIDI1_FILEMAX 57
-#define csGRIDI1_FLNMSZ  62
+#define csGRIDI1_FILEMAX 50
+#define csGRIDI1_FLNMSZ  238
 
 /* TODO I don't think we really need this. */
 
@@ -886,13 +886,12 @@ Essentially, the CS_dtcsu function (DaTum Conversion Set Up) turns this
 thing into a cs_GxXform which enables the actual mathemagics of the
 desired operation.  Probably should have been called cs_Gxdef_ */
 
-
 struct csGeodeticXfromParmsFile_
 {
 	unsigned char fileFormat;
 	unsigned char direction;
-	char fileName [csGRIDI1_FLNMSZ];
-};
+	char fileName [csGRIDI1_FLNMSZ];	
+};											/* 240 */
 
 struct cs_GeodeticTransform_
 {
@@ -901,20 +900,27 @@ struct cs_GeodeticTransform_
 	char trgDatum [cs_KEYNM_DEF];
 	char group [24];
 	char description [128];
-	char source [64];
+	char source [64];			/* 280 */
 	short methodCode;
 	short epsgCode;
 	short epsgVariation;
 	short inverseSupported;
 	short maxIterations;
 	short protect;
+	short fill01;
+	short fill02;				/* 296 */
+	long32_t fill03;
+	long32_t fill04;			/* 304 */
 	double cnvrgValue;
 	double errorValue;
 	double accuracy;
 	double rangeMinLng;
 	double rangeMaxLng;
 	double rangeMinLat;
-	double rangeMaxLat;
+	double rangeMaxLat;			/* 360 */
+	double fill05;
+	double fill06;
+	double fill07;				/* 384 */
 	/* The active member of the following union is a function of
 	   the method type. */
 	union csGeodeticXformParameters
@@ -935,7 +941,7 @@ struct cs_GeodeticTransform_
 			double translateY;
 			double translateZ; /* Complete: 10 * 8 */
 
-			char fill [3652]; /* 4096 - (364 + 10 * 8) = 3652 */
+			char fill [11844]; /* 4096 - (364 + 10 * 8) = 3652 */
 		} geocentricParameters;
 
 		/* An EPSG power series is generaly a 2D thing; but we 
@@ -962,7 +968,7 @@ struct cs_GeodeticTransform_
 			double coeffA [cs_PLYNM_MAXCOEF];			/* max order is 13 */
 			double coeffB [cs_PLYNM_MAXCOEF];			/* max order is 13 */
 			double coeffC [cs_PLYNM_MAXCOEF];			/* max order is 13 */
-			char fill [1060];
+			char fill [8292];
 		} pwrSeriesParameters;			/* 364 + 152 + 2520 + 1060 = 4096 */
 		struct csGeodeticXformParmsDmaMulReg_
 		{
@@ -981,18 +987,18 @@ struct cs_GeodeticTransform_
 			double coeffPhi [cs_MULRG_MAXCOEF];		/* max order is 10 */
 			double coeffLambda [cs_MULRG_MAXCOEF];	/* max order is 10 */
 			double coeffHeight [cs_MULRG_MAXCOEF];	/* max order is 10 */
-			char fill [1092];
+			char fill [9284];
 		} dmaMulRegParameters;			/*  364 + 120 + 2520 + 1092  = 4096  */
 		struct csGeodeticXformParmsGridFiles_
 		{
 			short fileReferenceCount;
 			struct csGeodeticXfromParmsFile_ fileNames [csGRIDI1_FILEMAX];
 			char fallback [64];
-			char fill01 [18];
-		} fileParameters;
+			char fill01 [222];
+		} fileParameters;				/* 240 * 50 + 2 + 64 = 12066 */
 		struct csGeodeticXfromParmsSize_
 		{
-			char unionSize [3732];
+			char unionSize [12288];
 		} sizeDetermination;
 	} parameters;
 };

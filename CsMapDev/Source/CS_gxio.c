@@ -396,6 +396,7 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 	int st;
 	int flag;
 	int sort;
+	int allowChange;
 
 	long32_t fpos;
 
@@ -409,6 +410,7 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 	strm = NULL;
 	sort = FALSE;
 	fpos = 0L;
+	allowChange = FALSE;
 
 	/* Compute the time, as we use it internally.  This is
 	   days since January 1, 1990. If this record does get
@@ -438,7 +440,7 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 		goto error;
 	}
 
-	/* See if we have a geodetic path with this name already. */
+	/* See if we have a geodetic transform with this name already. */
 	flag = CS_bins (strm,(long32_t)sizeof (cs_magic_t),(long32_t)0,sizeof (*gx_def),(char *)gx_def,(CMPFUNC_CAST)CS_gxcmp);
 	if (flag < 0) goto error;
 	if (flag)
@@ -463,7 +465,32 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 			{
 				goto error;
 			}
-			if (my_gxdef.protect == 1)
+
+			/* We need to determine what may have changed.  If the changes are
+			   limited to the csGeodeticXformParmsGridFiles_ structure of the
+			   csGeodeticXformParameters union; we allow the update even if
+			   the definition would otherwise be "protected".  We know that
+			   name of the transformation is the same (or we wouldn't be
+			   here). */
+			allowChange  = (gx_def->methodCode == cs_DTCMTH_GFILE);
+			allowChange &= (CS_stricmp (my_gxdef.srcDatum,gx_def->srcDatum) == 0);
+			allowChange &= (CS_stricmp (my_gxdef.trgDatum,gx_def->trgDatum) == 0);
+			allowChange &= (CS_stricmp (my_gxdef.group,gx_def->group) == 0);
+			allowChange &= (CS_stricmp (my_gxdef.description,gx_def->description) == 0);
+			allowChange &= (CS_stricmp (my_gxdef.source,gx_def->source) == 0);
+			allowChange &= (my_gxdef.epsgCode == gx_def->epsgCode);
+			allowChange &= (my_gxdef.epsgVariation == gx_def->epsgVariation);
+			allowChange &= (my_gxdef.inverseSupported == gx_def->inverseSupported);
+			allowChange &= (my_gxdef.maxIterations == gx_def->maxIterations);
+			allowChange &= (fabs (my_gxdef.cnvrgValue - gx_def->cnvrgValue) < 1.0E-12);
+			allowChange &= (fabs (my_gxdef.errorValue - gx_def->errorValue) < 1.0E-12);
+			allowChange &= (fabs (my_gxdef.accuracy - gx_def->accuracy) < 1.0E-04);
+			allowChange &= (fabs (my_gxdef.rangeMinLng - gx_def->rangeMinLng) < 1.0E-12);
+			allowChange &= (fabs (my_gxdef.rangeMaxLng - gx_def->rangeMaxLng) < 1.0E-12);
+			allowChange &= (fabs (my_gxdef.rangeMinLat - gx_def->rangeMinLat) < 1.0E-12);
+			allowChange &= (fabs (my_gxdef.rangeMaxLat - gx_def->rangeMaxLat) < 1.0E-12);
+
+			if (my_gxdef.protect == 1 && !allowChange)
 			{
 				/* We don't allow distribution geodetic path definitions
 				   to be overwritten, period. */
@@ -471,7 +498,7 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 				CS_erpt (cs_GX_PROT);
 				goto error;
 			}
-			if (cs_Protect > 0 && my_gxdef.protect > 0)
+			if (cs_Protect > 0 && my_gxdef.protect > 0 && !allowChange)
 			{
 				/* We protect user defined geodetic paths only if cs_Protect is greater
 				   than zero. */
