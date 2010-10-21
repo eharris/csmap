@@ -1448,6 +1448,15 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 143512,3799,,,,,,,,,CSRS.MTQ/Lambert,NAD83(CSRS) / MTQ Lambert,,,,,,,,,,,,,,,,
 143600,3847,,,,,,,,,RT90_2.5V_SWEREF99/01,SWEREF99 / RT90 2.5 gon V emulation,,,,,,,,,,,,,,,,
 143650,3857,,,,,,,,,WGS84.PseudoMercator,WGS 84 / Pseudo-Mercator,,,,,,,,,,,,,,,,
+143661,3942,,,,,,,RGF93.CC42,,RGF93.CC42,RGF93 / CC42,,,,,,,,,,,,,,,,
+143662,3943,,,,,,,RGF93.CC43,,RGF93.CC43,RGF93 / CC43,,,,,,,,,,,,,,,,
+143663,3944,,,,,,,RGF93.CC44,,RGF93.CC44,RGF93 / CC44,,,,,,,,,,,,,,,,
+143664,3945,,,,,,,RGF93.CC45,,RGF93.CC45,RGF93 / CC45,,,,,,,,,,,,,,,,
+143665,3946,,,,,,,RGF93.CC46,,RGF93.CC46,RGF93 / CC46,,,,,,,,,,,,,,,,
+143666,3947,,,,,,,RGF93.CC47,,RGF93.CC47,RGF93 / CC47,,,,,,,,,,,,,,,,
+143667,3948,,,,,,,RGF93.CC48,,RGF93.CC48,RGF93 / CC48,,,,,,,,,,,,,,,,
+143668,3949,,,,,,,RGF93.CC49,,RGF93.CC49,RGF93 / CC49,,,,,,,,,,,,,,,,
+143669,3950,,,,,,,RGF93.CC50,,RGF93.CC50,RGF93 / CC50,,,,,,,,,,,,,,,,
 143700,3920,3920,3920,0,0,0,,PRVI.UTM-20N,PRVI.UTM-20N,PRVI.UTM-20N,Puerto Rico / UTM zone 20N,Puerto_Rico_UTM_Zone_20N,Puerto Rico / UTM zone 20N,,,Puerto Rico / UTM zone 20N,,,,,,,,,0,0,0
 143800,3991,3991,3991,0,0,0,,PRVI.PR-1,PRVI.PR-1,PRVI.PR-1,Puerto Rico State Plane CS of 1927,Puerto_Rico_StatePlane_Puerto_Rico_FIPS_5201,Puerto Rico State Plane CS of 1927,,,Puerto Rico State Plane CS of 1927,,,,,,,,,0,0,0
 143900,3992,3992,3992,0,0,0,,PRVI.PR-2,PRVI.PR-2,PRVI.PR-2,Puerto Rico / St. Croix,Puerto_Rico_StatePlane_Virgin_Islands_St_Croix_FIPS_5202,Puerto Rico / St. Croix,,,Puerto Rico / St. Croix,,,,,,,,,0,0,0
