@@ -520,7 +520,7 @@ int EXP_LVL3 CS_cschk (	Const struct cs_Csdef_ *cs_def,unsigned short chk_flg,
 	else
 	{
 		/* Must have one or the other (except for NERTH). */
-        if (pp->code != cs_PRJCOD_NERTH)
+        if (pp->code != cs_PRJCOD_NERTH && pp->code != cs_PRJCOD_NRTHSRT)
         {
     		if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_NOREF;
         }
