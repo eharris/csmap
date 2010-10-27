@@ -184,7 +184,8 @@ int CStestB (int verbose,long32_t duration)
 					csprm->prj_code == cs_PRJCOD_NZLND ||
 					csprm->prj_code == cs_PRJCOD_SYS34 ||
 					csprm->prj_code == cs_PRJCOD_SYS34_99 ||
-					csprm->prj_code == cs_PRJCOD_NERTH
+					csprm->prj_code == cs_PRJCOD_NERTH ||
+					csprm->prj_code == cs_PRJCOD_NRTHSRT
 				   )
 				{
 					goto skip_KH;

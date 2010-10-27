@@ -798,6 +798,9 @@ void EXP_LVL1 CS_recvr (void)
 		cs_MgrsPtr = NULL;
 	}
 
+	/* Release all resources used by the NameMapper. */
+	csReleaseNameMapper ();
+
 	return;
 }
 

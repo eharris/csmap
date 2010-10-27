@@ -24,9 +24,9 @@
 #include "cs_wkt.h"
 #include "csTestCpp.hpp"
 
-extern const wchar_t csDataDir [] = L"C:\\Perforce\\caldiesel\\MgDev\\OS\\Oem\\CsMap\\Data";
-extern const char csDictDir [] = "C:\\Perforce\\caldiesel\\MgDev\\OS\\Oem\\CsMap\\dictionaries";
-extern const wchar_t csEpsgDir [] = L"C:\\Program Files\\Common Files\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
+extern const wchar_t csDataDir [] = L"C:\\Developement\\SVN\\MgDev\\OS\\Oem\\CsMap\\Data";
+extern const char csDictDir [] = "C:\\Developement\\SVN\\MgDev\\OS\\Oem\\CsMap\\dictionaries";
+extern const wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
 extern const TcsEpsgDataSetV6* KcsEpsgDataSetV6Ptr = 0;
 
 extern "C"
@@ -108,8 +108,8 @@ int main (int argc,char* argv [])
 	// I uncomment the following, every once in a while, to verify that the
 	// leak detection feature is working properly since we rarely have seen
 	// a memory leak report.
-		// leakTest = malloc (139);
-		// strcpy (leakTest,"Leak detector working");
+	leakTest = (char *)malloc (139);
+	strcpy (leakTest,"Leak detector working");
 #endif
 
 	// Capture the time and date of the start of this test.
@@ -707,6 +707,12 @@ int main (int argc,char* argv [])
 	// resources, but doesn't actually delete the objects.
 	CS_recvr ();
 	CS_reset ();
+
+	if (KcsEpsgDataSetV6Ptr != NULL)
+	{
+		delete KcsEpsgDataSetV6Ptr;
+		KcsEpsgDataSetV6Ptr = NULL;
+	}
 
 	// See if a file open doesn't produce the same file descriptor that we got
 	// the first time we did this.
