@@ -190,6 +190,7 @@ int CStestJ (bool verbose,long32_t duration)
 			    prjPtr->code == cs_PRJCOD_TRMRKRG ||
 			    prjPtr->code == cs_PRJCOD_MRCATPV)
 			{
+				CS_free (csDefPtr);
 				continue;
 			}
 			CS_free (csDefPtr);

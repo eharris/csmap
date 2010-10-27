@@ -60,7 +60,7 @@ struct csTestKIgnores_
 	char* comment [128];
 } csTestKIgnores [] =
 {
-	// The ESRI WKT data we have been using fro testing is more than a decade old.  It is unlikely
+	// The ESRI WKT data we have been using for testing is more than a decade old.  It is unlikely
 	// that the discrepancies listed in the following table still exist in any ESRI product.  But
 	// the discrepancies do still exist in the ancient test data file we are using.
 	{ wktFlvrEsri,        "Carthage.TM-11NE", "ESRI GCS unit is grad, should be degree?  Affects interpretation of central meridian."                           },
@@ -280,6 +280,7 @@ int CStestK (bool verbose,long32_t duration)
 						{
 							printf ("Skipping test of %s;; reason %s\n",dictName,tblPtr->comment);
 						}
+						CS_free (wktCS);
 						continue;
 					}
 					
@@ -348,11 +349,18 @@ int CStestK (bool verbose,long32_t duration)
 				}
 			}
 		}
+
+		if (parseReport != 0) { fclose (parseReport); parseReport = 0; }
+		if (mapReport   != 0) { fclose (mapReport); mapReport = 0; }
+		if (csMapReport != 0) { fclose (csMapReport); csMapReport = 0; }
+		if (cmpReport   != 0) { fclose (cmpReport); cmpReport = 0; }
+
 		fclose (wktStream);
 		CS_usrCsDefPtr = 0;
 		CS_usrDtDefPtr = 0;
 		CS_usrElDefPtr = 0;
 	}
+
 	csReleaseNameMapper ();
 	if (localePtr != 0)
 	{
