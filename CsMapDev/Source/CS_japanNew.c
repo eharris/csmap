@@ -723,6 +723,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 {
 	extern char cs_ExtsepC;
 	extern char csErrnam [];
+	extern double cs_Zero;
 
 	int st;
 	cs_Time_ aTime, bTime;
@@ -765,6 +766,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 
 	/* Prepare for an error of some sort. */
 	aStrm = bStrm = NULL;
+	lngTmp = latTmp = cs_Zero;
 
 	/* Manufacture the name of the binary file. */
 	CS_stncp (binaryPath,thisPtr->filePath,sizeof (binaryPath));

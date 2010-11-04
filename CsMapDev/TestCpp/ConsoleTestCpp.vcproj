@@ -429,6 +429,10 @@
 				RelativePath=".\Source\CStestT.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Source\CStestZ.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

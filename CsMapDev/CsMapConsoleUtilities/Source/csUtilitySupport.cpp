@@ -25,24 +25,44 @@ const wchar_t* dbl2wcs (double dblVal)
 {
 	static wchar_t wcBufr [128];
 
+	double logOfVal;
 	wchar_t* wcPtr;
 
-	swprintf (wcBufr,128,L"%.12f",dblVal);
-	wcPtr = wcschr (wcBufr,L'.');
-	if (wcPtr != 0)	
+	// We handle very small numbers, and very large numbers differently from
+	// you rnormal type number.
+	logOfVal = log10 (dblVal);
+	if (logOfVal >= 9.0)
 	{
-		// We have a high precision number and it has a decimal point.
-		wcPtr = wcBufr + wcslen (wcBufr) - 1;
-		while (*wcPtr == L'0')
+		// A very large number.
+		swprintf (wcBufr,128,L"%.10E",dblVal);
+	}
+	else if (logOfVal <= -6.0)
+	{
+		// A very small number.  
+		swprintf (wcBufr,128,L"%G",dblVal);
+	}
+	else
+	{
+		// A normal number.  COnvert at high precision, but trim trailing
+		// zeros.  Always leave one zero after the decimal point for
+		// integer values.
+		swprintf (wcBufr,128,L"%.12f",dblVal);
+		wcPtr = wcschr (wcBufr,L'.');
+		if (wcPtr != 0)	
 		{
-			*wcPtr = L'\0';
-			wcPtr -= 1;
-		}
-		if (*wcPtr == L'.')
-		{
-			wcPtr += 1;
-			*wcPtr++ = L'0';
-			*wcPtr = L'\0';
+			// We have a high precision number and it has a decimal point.
+			wcPtr = wcBufr + wcslen (wcBufr) - 1;
+			while (*wcPtr == L'0')
+			{
+				*wcPtr = L'\0';
+				wcPtr -= 1;
+			}
+			if (*wcPtr == L'.')
+			{
+				wcPtr += 1;
+				*wcPtr++ = L'0';
+				*wcPtr = L'\0';
+			}
 		}
 	}
 	return wcBufr;

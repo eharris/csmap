@@ -51,6 +51,7 @@ bool DeprecateDupliateDefs (const wchar_t* srcDictDir,const wchar_t* trgDictDir)
 bool csAddEpsgCodes (const wchar_t* csDictSrcDir,const wchar_t* epsgDir,const wchar_t* csDictTrgDir);
 //bool csGenerateHpgnTable (const wchar_t* tablePath,const wchar_t* dictDir);
 bool csOrgTransformations (const wchar_t* csDictDir,const wchar_t* csDictTrgDir);
+bool csGenerateRegressTestFile (const wchar_t* csFileName,const wchar_t* csDataDir,const wchar_t* csDictDir);
 
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be
