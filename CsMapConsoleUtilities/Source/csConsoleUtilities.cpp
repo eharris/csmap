@@ -29,6 +29,16 @@ int main (int argc,char* argv [])
 	bool ok;
 	char pathName [512];
 
+#if defined (_MSC_VER) && _MSC_VER >= 1400
+	// This is a Microsoft specific function call.  It forces the exponential
+	// printf format to two digits, which I prefer.  Maybe there is a more
+	// generic form of this, but I don't know about it.
+	_set_output_format(_TWO_DIGIT_EXPONENT);
+#endif
+
+    // Generate a regression test file in the OsGeo Test File format.
+    // ok = csGenerateRegressTestFile (L"CsMap-12.02.csv",csDataDir,csDictDir);
+
 	//ok = csGenerateHpgnTable (csTempDir,csDictDir);
 
 	ok = csOrgTransformations (csDictSrc,csDictDir);

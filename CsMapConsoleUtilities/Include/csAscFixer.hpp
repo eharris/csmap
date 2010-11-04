@@ -250,6 +250,7 @@ public:
 	double GetValueAsDouble (const char* defName,const char* label,long32_t& format) const;
 	bool SetValue (const char* defName,const char* label,const char* newValue);
 	bool DeprecateDef (const char* defName,const char* description,const char* source);
+	bool Replace (const TcsAscDefinition& newDef);
 	bool InsertBefore (const char* defName,const TcsAscDefinition& newDef);
 	bool Append (const TcsAscDefinition& newDef);
 	bool MakeLast (const char* defName);

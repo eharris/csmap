@@ -51,6 +51,7 @@
 #define MAX_LNG    16
 #define MIN_LAT    17
 #define MAX_LAT    18
+#define FALLBACK   19
 
 /* Attributes related to the Geocentric Algorithms */
 #define DELTA_X   101
@@ -135,6 +136,7 @@ static struct cs_GxCmpT_ cs_GxCmpT [] =
 	{  "\010MIN_LAT:",          MIN_LAT         },
 	{  "\010MAX_LAT:",          MAX_LAT         },
 	{  "\011ACCURACY:",         ACCURACY        },
+	{  "\011FALLBACK:",         FALLBACK        },
 	{  "\011EPSG_NBR:",         EPSG_NBR        },
 	{  "\011EPSG_VAR:",         EPSG_VAR        },
 	{  "\011TEST_LNG:",         TEST_LNG        },
@@ -683,19 +685,30 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			break;
 
 		case GRID_FILE:
+			/* GridFileCount variable is a count of the specifications
+			   encountered which imply that the transformation is of the grid
+			   file interpolation type.  This is used to verify that the
+			   transformation type and the parameters supplied are consistent. */
 			gridFileCount += 1;
+
 			/* Isolate the format, the direction, and then the file specification. */
 			cpDir = strchr (cp,',');
 			if (cpDir == NULL)
 			{
-				/* error */
+				CS_stncp (err_seg,cp,sizeof (err_seg));
+				sprintf (err_msg,"Grid file direction not provided at line %d.",err_seg,line_nbr);
+				cancel = (*err_func)(err_msg);
+				gxdef.xfrmName [0] = '\0';
 				continue;
 			}
 			*cpDir++ = '\0';
 			cpFile = strchr (cpDir,',');
 			if (cpFile == NULL)
 			{
-				/* error */
+				CS_stncp (err_seg,cp,sizeof (err_seg));
+				sprintf (err_msg,"Grid file format not provided at line %d.",err_seg,line_nbr);
+				cancel = (*err_func)(err_msg);
+				gxdef.xfrmName [0] = '\0';
 				continue;
 			}
 			*cpFile++ = '\0';
@@ -730,6 +743,15 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			gxdef.parameters.fileParameters.fileNames [idx].direction = *cpDir;
 			CS_stncp (gxdef.parameters.fileParameters.fileNames [idx].fileName,cpFile,sizeof (gxdef.parameters.fileParameters.fileNames[0].fileName));
 			gxdef.parameters.fileParameters.fileReferenceCount += 1;
+			break;
+
+		case FALLBACK:
+			/* GridFileCount variable is a count of the specifications
+			   encountered which imply that the transformation is of the grid
+			   file interpolation type.  This is used to verify that the
+			   transformation type and the parameters supplied are consistent. */
+			gridFileCount += 1;
+			CS_stncp (gxdef.parameters.fileParameters.fallback,cp,sizeof (gxdef.parameters.fileParameters.fallback));
 			break;
 
 		default:

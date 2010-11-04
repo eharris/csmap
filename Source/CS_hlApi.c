@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "csNameMapperSupport.h"
 
 void EXP_LVL1 CS_fast (int mode)
 {

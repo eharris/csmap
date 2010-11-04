@@ -61,7 +61,26 @@ extern "C"
 int CStestT (bool verbose,long32_t duration)
 {
     int err_cnt = 0;
-#ifndef __SKIP__
+
+#ifdef __SKIP__
+	int st;
+	printf ("Running temporary test code module.\n");
+
+
+	struct cs_GeodeticTransform_* gx_def1;
+	struct cs_GeodeticTransform_* gx_def2;
+
+
+	gx_def1 = CS_gxdef ("NAD27_to_NAD83");
+	gx_def2 = CS_gxdef ("ABIDJAN-87_to_WGS84");
+	
+	st = CS_gxupd (gx_def1);
+	st = CS_gxupd (gx_def2);
+
+	gx_def1 = CS_gxdef ("NAD27_to_NAD83");
+	gx_def2 = CS_gxdef ("ABIDJAN-87_to_WGS84");
+#endif
+#ifdef __SKIP__
 	int st;
 
     const char* csOneName = "LL27";
@@ -100,7 +119,8 @@ int CStestT (bool verbose,long32_t duration)
 	}
 	
 	CS_dtcls (dtcPrm);
-#else
+#endif
+#ifdef __SKIP__
     int st;
     int counter;
     FILE* tstStrm;

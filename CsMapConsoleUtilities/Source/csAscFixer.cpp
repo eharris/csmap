@@ -1236,6 +1236,32 @@ bool TcsDefFile::DeprecateDef (const char* defName,const char* description,const
 	}
 	return ok;
 }
+bool TcsDefFile::Replace (const TcsAscDefinition& newDef)
+{
+	bool ok (false);
+	const char* newNamePtr;
+	const char* itrNamePtr;
+	std::vector<TcsAscDefinition>::iterator rplItr;
+	std::vector<TcsAscDefinition>::iterator loopItr;
+
+	rplItr = Definitions.end ();
+	newNamePtr = newDef.GetDefinitionName ();
+	for (loopItr = Definitions.begin ();loopItr != Definitions.end ();loopItr++)
+	{
+		itrNamePtr = loopItr->GetDefinitionName ();
+		if (!stricmp (newNamePtr,itrNamePtr))
+		{
+			rplItr = loopItr;
+			break;
+		}
+	}
+	if (rplItr != Definitions.end ())
+	{
+		*rplItr = newDef;
+		ok = true;
+	}
+	return ok;
+}
 bool TcsDefFile::InsertBefore (const char* defName,const TcsAscDefinition& newDef)
 {
 	bool ok (false);

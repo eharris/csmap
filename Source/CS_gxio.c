@@ -124,7 +124,7 @@ int EXP_LVL3 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
 	/* Swap the bytes if necessary. */
 	CS_gxswp (gx_def);
 	
-	/* Replace the directory sepoarator characters if/as appropriate. */
+	/* Replace the directory separator characters if/as appropriate. */
 	CS_gxsep (gx_def);
 
 	/* Check the result. The name must always meet the criteria
@@ -370,19 +370,20 @@ error:
 }
 
 /******************************************************************************
-**	flag = CS_gxupd (eldef,crypt);
+**	flag = CS_gxupd (gxdef,crypt);
 **
-**	struct cs_GeodeticTransform_ *gpdef;
-**								a pointer to the ellipsoid definition
-**								structure which is to be written to the
-**								Geodetic Path Dictionary.
+**	struct cs_GeodeticTransform_ *gxdef;
+**								a pointer to the geodetic transformation
+**								definition structure which is to be written to
+**								the Geodetic Transformation Dictionary.
 **	int flag;					returns TRUE (+1) if the indicated geodetic
 **								path previously existed and was simply
 **								updated, returns FALSE (0) if the geodetic
-**								path had to be added as a new path, returns
+**								transformation had to be added as a new
+**								geodetic transformation, returns
 **								-1 if the update process failed.
 **
-**	If the Geodetic Path Dictionary does not already contain an entry
+**	If the Geodetic Transformation Dictionary does not already contain an entry
 **	with the indicated key name, the entry is added.
 *******************************************************************************/
 int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
@@ -392,16 +393,22 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 	extern char cs_Unique;
 
 	short cs_time = 0;
+	short fileIdx;
+	short fileReferenceCount;
 
 	int st;
 	int flag;
 	int sort;
-	int allowChange;
+
+	int isProtected;
 
 	long32_t fpos;
 
 	char *cp;
 	csFILE *strm;
+	struct csGeodeticXfromParmsFile_* usrFileParmsPtr;
+	struct csGeodeticXfromParmsFile_* myFileParmsPtr;
+
 
 	__ALIGNMENT__1		/* For some versions of Sun compiler. */
 	struct cs_GeodeticTransform_ my_gxdef;
@@ -410,7 +417,6 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 	strm = NULL;
 	sort = FALSE;
 	fpos = 0L;
-	allowChange = FALSE;
 
 	/* Compute the time, as we use it internally.  This is
 	   days since January 1, 1990. If this record does get
@@ -445,11 +451,19 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 	if (flag < 0) goto error;
 	if (flag)
 	{
-		/* Here when the geodetic path already exists.  See if it is OK to
-		   write it. If cs_Protect is less than zero, all protection has
-		   been turned off. */
+		/* Here when the geodetic transformation already exists.  The case of
+		   geodetic transformatsions is special.  In this special case,
+		   "protected" means that if the transformation is of the grid file
+		   interpolation type, we allow an update of the grid file and
+		   fallback information.  Otherwise, an attempt to update a
+		   "protected" geodetic transformation definition will produce an error
+		   condition. */
+		isProtected = FALSE;
 		if (cs_Protect >= 0)
 		{
+			/* The protection system is active.  Thus the definition could
+			   concievabley be protected.  We need to get the actual definition
+			   to determine this. */
 			fpos = CS_ftell (strm);
 			if (fpos < 0L)
 			{
@@ -465,63 +479,101 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 			{
 				goto error;
 			}
-
-			/* We need to determine what may have changed.  If the changes are
-			   limited to the csGeodeticXformParmsGridFiles_ structure of the
-			   csGeodeticXformParameters union; we allow the update even if
-			   the definition would otherwise be "protected".  We know that
-			   name of the transformation is the same (or we wouldn't be
-			   here). */
-			allowChange  = (gx_def->methodCode == cs_DTCMTH_GFILE);
-			allowChange &= (CS_stricmp (my_gxdef.srcDatum,gx_def->srcDatum) == 0);
-			allowChange &= (CS_stricmp (my_gxdef.trgDatum,gx_def->trgDatum) == 0);
-			allowChange &= (CS_stricmp (my_gxdef.group,gx_def->group) == 0);
-			allowChange &= (CS_stricmp (my_gxdef.description,gx_def->description) == 0);
-			allowChange &= (CS_stricmp (my_gxdef.source,gx_def->source) == 0);
-			allowChange &= (my_gxdef.epsgCode == gx_def->epsgCode);
-			allowChange &= (my_gxdef.epsgVariation == gx_def->epsgVariation);
-			allowChange &= (my_gxdef.inverseSupported == gx_def->inverseSupported);
-			allowChange &= (my_gxdef.maxIterations == gx_def->maxIterations);
-			allowChange &= (fabs (my_gxdef.cnvrgValue - gx_def->cnvrgValue) < 1.0E-12);
-			allowChange &= (fabs (my_gxdef.errorValue - gx_def->errorValue) < 1.0E-12);
-			allowChange &= (fabs (my_gxdef.accuracy - gx_def->accuracy) < 1.0E-04);
-			allowChange &= (fabs (my_gxdef.rangeMinLng - gx_def->rangeMinLng) < 1.0E-12);
-			allowChange &= (fabs (my_gxdef.rangeMaxLng - gx_def->rangeMaxLng) < 1.0E-12);
-			allowChange &= (fabs (my_gxdef.rangeMinLat - gx_def->rangeMinLat) < 1.0E-12);
-			allowChange &= (fabs (my_gxdef.rangeMaxLat - gx_def->rangeMaxLat) < 1.0E-12);
-
-			if (my_gxdef.protect == 1 && !allowChange)
-			{
-				/* We don't allow distribution geodetic path definitions
-				   to be overwritten, period. */
-				CS_stncp (csErrnam,my_gxdef.xfrmName,MAXPATH);
-				CS_erpt (cs_GX_PROT);
-				goto error;
-			}
-			if (cs_Protect > 0 && my_gxdef.protect > 0 && !allowChange)
-			{
-				/* We protect user defined geodetic paths only if cs_Protect is greater
-				   than zero. */
-				if (my_gxdef.protect < (cs_time - cs_Protect))		/*lint !e644 */
-				{
-					/* It has been more than cs_Protect days since this geodetic
-					   path has been twiddled, we consider it to be protected. */
-					CS_stncp (csErrnam,gx_def->xfrmName,MAXPATH);
-					CS_erpt (cs_GX_UPROT);
-					goto error;
-				}
-			}
+			
+			/* Return the file to the position located by the binary search. */
 			st = CS_fseek (strm,fpos,SEEK_SET);
 			if (st != 0)
 			{
 				CS_erpt (cs_IOERR);
 				goto error;
 			}
-		}
 
-		/* OK, if we're still here, it's OK to overwrite the existing
-		   definition. */
-		st = CS_gxwr (strm,gx_def);
+			/* OK, see if this definition is protected.  In the following, the
+			   isProtected variable is zero if the definition is NOT protected.
+			   If the definition is protected, isProtected is non-zero and the
+			   value is the error code indicating the type of protection. */
+			if (my_gxdef.protect == 1)
+			{
+				isProtected = cs_GX_PROT;
+			}
+			else if (cs_Protect > 0 && my_gxdef.protect > 0 &&
+					 (my_gxdef.protect < (cs_time - cs_Protect))
+					)
+			{
+				isProtected = cs_GX_UPROT;
+			}
+
+			/* Now there are now three possibilities.
+				1> consider the definition protected and issur the error.
+				2> update only the grid file and fallback information.
+				3> update the entire definition.
+				
+				Let's do the easiest first. */
+			if (isProtected && my_gxdef.methodCode != cs_DTCMTH_GFILE)
+			{
+				/* The method type is not grid file interpolation.  Therefore,
+				   we honor the protection completely and issue an error
+				   condition. */
+				CS_stncp (csErrnam,gx_def->xfrmName,MAXPATH);
+				CS_erpt (isProtected);
+				goto error;
+			}
+			else if (!isProtected)
+			{
+				/* The definition is not protected, we comply with the calling
+				   module's request and update the entire definition without
+				   any restrictions.  Note that we returned the file position
+				   to the correct spot above. */
+				st = CS_gxwr (strm,gx_def);
+				if (st != 0)
+				{
+					goto error;
+				}
+			}
+			else 
+			{
+				/* The definition is protected and the transformation method
+				   type is grid interpolation.  We copy all of the grid file
+				   information to the instance of the definition we just
+				   read from the disk, and then write that out as our
+				   "update".  We'll return a +2 in this case so that the
+				   calling module will know that this is what happened, if
+				   it cares to know. */
+				memset (&my_gxdef.parameters.fileParameters,'\0',sizeof (my_gxdef.parameters.fileParameters));
+				fileReferenceCount = gx_def->parameters.fileParameters.fileReferenceCount;
+				my_gxdef.parameters.fileParameters.fileReferenceCount = 0;
+				for (fileIdx = 0;fileIdx < fileReferenceCount;fileIdx += 1)
+				{
+					usrFileParmsPtr = &gx_def->parameters.fileParameters.fileNames [fileIdx];
+					myFileParmsPtr  = &my_gxdef.parameters.fileParameters.fileNames [fileIdx];
+
+					myFileParmsPtr->fileFormat = usrFileParmsPtr->fileFormat;
+					myFileParmsPtr->direction  = usrFileParmsPtr->direction;
+					CS_stncp (myFileParmsPtr->fileName,usrFileParmsPtr->fileName,sizeof (myFileParmsPtr->fileName));
+					my_gxdef.parameters.fileParameters.fileReferenceCount += 1;
+				}
+				
+				/* The fallback information used to reside in the .gdc file
+				   which was user editable.  So, we continue to consider the
+				   fallback information as "user editable". */
+				CS_stncp (my_gxdef.parameters.fileParameters.fallback,gx_def->parameters.fileParameters.fallback,sizeof (my_gxdef.parameters.fileParameters.fallback));
+				
+				/* Write the updated copy of the original to the dictionary.
+				   We are replaceing is "in place" so no sort should be
+				   necessary. */
+				st = CS_gxwr (strm,&my_gxdef);
+				if (st != 0)
+				{
+					goto error;
+				}
+				
+				/* It would be nice to set the return value to 2 for this special
+				   stituation.  However, there are several known calling modules
+				   that will break if the return value is not -1, 0, or +1.
+				flag = 2;
+				*/
+			}
+		}
 	}
 	else
 	{
@@ -544,14 +596,22 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 		/* If we're still here, we append the new geodetic path definition
 		   to the end of the file and then sort the file. */
 		st = CS_fseek (strm,fpos,SEEK_END);
-		CS_gxwr (strm,gx_def);
+		if (st != 0)
+		{
+			CS_erpt (cs_IOERR);
+			goto error;
+		}
+		st = CS_gxwr (strm,gx_def);
+		if (st != 0)
+		{
+			goto error;
+		}
 		sort = TRUE;
 	}
 	if (sort)
 	{
-		/* Sort the file into proper order, thereby
-		   moving the new ellipsoid to its proper place
-		   in the dictionary. */
+		/* Sort the file into proper order, thereby moving the new
+		   transformation to its proper place in the dictionary. */
 		st = CS_fseek (strm,(long)sizeof (cs_magic_t),SEEK_SET);
 		if (st != 0)
 		{
@@ -754,7 +814,7 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 		if (!CS_stricmp (gx_rec.srcDatum,srcDatum) &&
 		    !CS_stricmp (gx_rec.trgDatum,trgDatum))
 		{
-			direction = cs_PATHDIR_FWD;
+			direction = cs_DTCDIR_FWD;
 			if (fwdFpos == 0L)
 			{
 				fwdFpos = CS_ftell (strm);
@@ -775,7 +835,7 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 			!CS_stricmp (gx_rec.srcDatum,trgDatum) &&
 			!CS_stricmp (gx_rec.trgDatum,srcDatum))
 		{
-			direction = cs_PATHDIR_INV;
+			direction = cs_DTCDIR_INV;
 			if (invFpos == 0L)
 			{
 				invFpos = CS_ftell (strm);
@@ -918,7 +978,7 @@ int EXP_LVL1 CS_gxswp (struct cs_GeodeticTransform_* gx_def)
 /* Normalize the path name with the current platform.  Specifically,
    switch the directory separator character to what is appropriate
    for the current platform. */
-int EXP_LVL1 CS_gxsep (struct cs_GeodeticTransform_* gx_def)
+void EXP_LVL1 CS_gxsep (struct cs_GeodeticTransform_* gx_def)
 {
 	short idx;
 	short pathCount;

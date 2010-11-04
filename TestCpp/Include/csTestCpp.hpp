@@ -60,3 +60,50 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration);
 int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration);
 int CStestS (bool verbose);
 int CStestT (bool verbose,long32_t duration);
+int CStestZ (bool verbose,char *test_file);
+
+enum EcsTestMethod {    testMthNone = 0,
+                        testMthCrs2D, 
+                        testMthCrs3D,
+                        testMthGeoid,
+                        testMthUnknown = 999
+                    };
+enum EcsCrsAuthority {  crsAuthNone = 0,
+                        crsAuthCsMap, 
+                        crsAuthEpsg, 
+                        crsAuthProj4, 
+                        crsAuthSrid, 
+                        crsAuthUnknown = 999
+                    };
+
+class TcsOsGeoTestFile : public TcsCsvFileBase
+{
+public:
+	//=========================================================================
+	// Construction, Destruction, and Assignment
+	TcsOsGeoTestFile (const wchar_t* dataFilePath);
+	TcsOsGeoTestFile (const char* dataFilePath);
+	TcsOsGeoTestFile (const TcsOsGeoTestFile& source);
+	~TcsOsGeoTestFile (void);
+	TcsOsGeoTestFile& operator= (const TcsOsGeoTestFile& rhs);
+	//=========================================================================
+	// Operator Overrides
+	//=========================================================================
+	// Public Named Member Functions
+	bool IsOk (void) const {return Ok; }
+	bool IsComment (unsigned recordNbr);
+	bool GetTestName (std::wstring& testName,unsigned recordNbr);
+	EcsTestMethod GetTestMethod (unsigned recordNbr);
+	EcsCrsAuthority TcsOsGeoTestFile::GetCrsKey (unsigned recordNbr,bool target);
+	EcsCrsAuthority GetSrcCrsKey (std::wstring& srcKey,unsigned recordNbr);
+	EcsCrsAuthority GetTrgCrsKey (std::wstring& srcKey,unsigned recordNbr);
+    bool GetSourceCoordinates (double sourceCoord [3],unsigned recordNbr);
+    bool GetTargetCoordinates (double targetCoord [3],unsigned recordNbr);
+    bool GetTolerances (double tolerance [3],unsigned recordNbr);
+	bool GetDataSource (std::wstring& dataSource,unsigned recordNbr);
+	bool GetDataComment (std::wstring& dataComment,unsigned recordNbr);
+    bool CompareResults (double results [3],unsigned recordNbr);
+private:
+    bool Ok;
+    TcsCsvStatus Status;
+};

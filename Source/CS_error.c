@@ -500,6 +500,14 @@ struct csErrtab_ csErrtab [] =
 						   "%s :: Grid file specification inappropriate for the format type indicated." },
  {  cs_DTQ_INVDIR, csET_NM,cs_ERSUP_OPR,
 						   "%s :: Grid file direction specification is unrecognized." },
+ {  cs_DTQ_FBKDIR, csET_NM,cs_ERSUP_OPR,
+						   "%s :: Fallback direction specification is unrecognized." },
+ {  cs_DTQ_FBKNAME,csET_NM,cs_ERSUP_OPR,
+						   "%s :: Fallback specification not that of an existing geodetic transformation." },
+ {  cs_DTQ_FBKMTH, csET_NM,cs_ERSUP_OPR,
+						   "%s :: Type of specified fallback transformation is not acceptable for a fallback." },
+ {  cs_DTQ_ISERFBK,csET_NM,cs_ERSUP_OPR,
+						   "%s :: Internal software error in the geodetic transformation check function" },
 
 
  {     cs_MGRS_LL,csET_LOC,cs_ERSUP_OPR,

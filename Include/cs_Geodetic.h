@@ -763,6 +763,7 @@ struct csGridi_
 	short maxIterations;
 	short userDirection;
 	short useBest;
+	struct cs_GxXform_ *fallback;
 
 	short fileCount;			/* Number of files */
 	struct cs_GridFile_* gridFiles [csGRIDI1_FILEMAX];

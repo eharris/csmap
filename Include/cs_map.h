@@ -6516,6 +6516,10 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_DTQ_CNVRGV   276		/* Geodetic transformation convergence value is suspicious. */
 #define cs_DTQ_ERRORV   277		/* Geodetic transformation convergence error value is suspicious. */
 #define cs_DTQ_ACCRCY   278		/* Geodetic transformation accuracy value is suspicious. */
+#define cs_DTQ_FBKDIR   279		/* Fallback direction is invalid */
+#define cs_DTQ_FBKNAME  280		/* Fallback name is invalid. */
+#define cs_DTQ_FBKMTH   281		/* Fallback name is invalid. */
+#define cs_DTQ_ISERFBK  282     /* Internal software error in the check function. */
 
 	/* End coordinate system definition checker specific stuff. */
 
@@ -6952,7 +6956,7 @@ int			EXP_LVL3	CS_gxdel (struct cs_GeodeticTransform_ *gpdef);
 void		EXP_LVL1	CS_gxfnm (Const char *new_name);
 csFILE *	EXP_LVL3	CS_gxopn (Const char *mode);
 int			EXP_LVL3	CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gp_def);
-int			EXP_LVL3	CS_gxsep (struct cs_GeodeticTransform_* gx_def);
+void		EXP_LVL3	CS_gxsep (struct cs_GeodeticTransform_* gx_def);
 int			EXP_LVL5	CS_gxswp (struct cs_GeodeticTransform_* gx_def);
 int			EXP_LVL3	CS_gxupd (struct cs_GeodeticTransform_ *gp_def);
 int			EXP_LVL3	CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gp_def);

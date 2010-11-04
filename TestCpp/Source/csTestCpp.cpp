@@ -672,6 +672,10 @@ int main (int argc,char* argv [])
 			verbose = !verbose;
 			break;
 
+		case 'Z':
+			test_st = CStestZ (verbose,cs_TestFile);
+			break;
+
 		default:
 			test_st = 1;
 			printf ("Test case %c not known.\n",*cp);

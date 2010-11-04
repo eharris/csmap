@@ -842,7 +842,8 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 
 	unsigned long epsgVariant;
 
-	char *cp;
+	char* cp;
+	const char* kCp;
 	const char* entryPath;
 	const TcsGdcEntry* gdcEntryPtr;
 	csGeodeticXfromParmsFile_* fileParmPtr;
@@ -1037,34 +1038,32 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	// Set the maxIteration and convergence values per the to84_via variable.
 	// The values were hard coded in CS-MAP prior to this implementation. */
 	switch (dtDefPtr->to84_via) {
+	// The following values were chosen to match identically to those hard
+	// coded into CS-MAP prior to the RFC #2 implementation.
 	case cs_DTCTYP_MOLO:
 	case cs_DTCTYP_GEOCTR:
-	case cs_DTCTYP_3PARM:
+	case cs_DTCTYP_BURS:
 	case cs_DTCTYP_4PARM:
 	case cs_DTCTYP_6PARM:
-	case cs_DTCTYP_7PARM:
-	case cs_DTCTYP_BURS:
-	case cs_DTCTYP_WGS72:
 	case cs_DTCTYP_MREG:
-		xform.maxIterations = 9;
-		xform.cnvrgValue    = 5.0E-12;
-		xform.errorValue    = 5.0E-07;
+	case cs_DTCTYP_3PARM:		// Deprecated, legacy use only.
+		xform.maxIterations = 8;
+		xform.cnvrgValue    = 1.0E-09;
+		xform.errorValue    = 1.0E-06;
 		break;
 
-	case cs_DTCTYP_GDA94:
-	case cs_DTCTYP_NZGD2K:
-	case cs_DTCTYP_ETRF89:
-	case cs_DTCTYP_NAD83:
-	case cs_DTCTYP_WGS84:
-		xform.maxIterations = 9;
-		xform.cnvrgValue    = 5.0E-12;
-		xform.errorValue    = 5.0E-08;
+	case cs_DTCTYP_7PARM:
+		xform.maxIterations = 20;
+		xform.cnvrgValue    = 1.0E-09;
+		xform.errorValue    = 1.0E-06;
 		break;
+
 	case cs_DTCTYP_NAD27:
 		xform.maxIterations = 10;
 		xform.cnvrgValue    = 1.0E-11;
 		xform.errorValue    = 5.0E-08;
 		break;
+
 	case cs_DTCTYP_AGD66:
 	case cs_DTCTYP_AGD84:
 	case cs_DTCTYP_NZGD49:
@@ -1077,21 +1076,31 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 		xform.cnvrgValue    = 1.0E-09;
 		xform.errorValue    = 5.0E-08;
 		break;
+
 	case cs_DTCTYP_RGF93:
 		xform.maxIterations = 20;
 		xform.cnvrgValue    = 1.0E-09;
 		xform.errorValue    = 1.0E-06;
 		break;
+
 	case cs_DTCTYP_TOKYO:
 		xform.maxIterations = 10;
 		xform.cnvrgValue    = 1.0E-09;
 		xform.errorValue    = 1.0E-06;
 		break;
+
 	case cs_DTCTYP_HPGN:
 		xform.maxIterations = 10;
 		xform.cnvrgValue    = 1.0E-09;
 		xform.errorValue    = 5.0E-08;
 		break;
+
+	case cs_DTCTYP_WGS72:		// Not used in this method, assign basic defaults.
+	case cs_DTCTYP_GDA94:		// Not used in this method, assign basic defaults.
+	case cs_DTCTYP_NZGD2K:		// Not used in this method, assign basic defaults.
+	case cs_DTCTYP_ETRF89:		// Not used in this method, assign basic defaults.
+	case cs_DTCTYP_NAD83:		// Not used in this method, assign basic defaults.
+	case cs_DTCTYP_WGS84:		// Not used in this method, assign basic defaults.
 	default:
 		xform.maxIterations = 10;
 		xform.cnvrgValue    = 1.0E-11;
@@ -1130,24 +1139,28 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 	}
 
 	switch (dtDefPtr->to84_via) {
+
 	case cs_DTCTYP_MOLO:
 		xform.methodCode = cs_DTCMTH_MOLOD;
 		xform.parameters.geocentricParameters.deltaX = dtDefPtr->delta_X;
 		xform.parameters.geocentricParameters.deltaY = dtDefPtr->delta_Y;
 		xform.parameters.geocentricParameters.deltaZ = dtDefPtr->delta_Z;
 		break;
+
 	case cs_DTCTYP_3PARM:
 		xform.methodCode = cs_DTCMTH_3PARM;
 		xform.parameters.geocentricParameters.deltaX = dtDefPtr->delta_X;
 		xform.parameters.geocentricParameters.deltaY = dtDefPtr->delta_Y;
 		xform.parameters.geocentricParameters.deltaZ = dtDefPtr->delta_Z;
 		break;
+
 	case cs_DTCTYP_GEOCTR:
 		xform.methodCode = cs_DTCMTH_GEOCT;
 		xform.parameters.geocentricParameters.deltaX = dtDefPtr->delta_X;
 		xform.parameters.geocentricParameters.deltaY = dtDefPtr->delta_Y;
 		xform.parameters.geocentricParameters.deltaZ = dtDefPtr->delta_Z;
 		break;
+
 	case cs_DTCTYP_4PARM:
 		xform.methodCode = cs_DTCMTH_4PARM;
 		xform.parameters.geocentricParameters.deltaX = dtDefPtr->delta_X;
@@ -1155,6 +1168,7 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 		xform.parameters.geocentricParameters.deltaZ = dtDefPtr->delta_Z;
 		xform.parameters.geocentricParameters.scale  = dtDefPtr->bwscale;
 		break;
+
 	case cs_DTCTYP_6PARM:
 		xform.methodCode = cs_DTCMTH_6PARM;
 		xform.parameters.geocentricParameters.deltaX  = dtDefPtr->delta_X;
@@ -1164,6 +1178,7 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 		xform.parameters.geocentricParameters.rotateY = dtDefPtr->rot_Y;
 		xform.parameters.geocentricParameters.rotateZ = dtDefPtr->rot_Z;
 		break;
+
 	case cs_DTCTYP_BURS:
 		xform.methodCode = cs_DTCMTH_BURSA;
 		xform.parameters.geocentricParameters.deltaX  = dtDefPtr->delta_X;
@@ -1174,6 +1189,7 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 		xform.parameters.geocentricParameters.rotateZ = dtDefPtr->rot_Z;
 		xform.parameters.geocentricParameters.scale  = dtDefPtr->bwscale;
 		break;
+
 	case cs_DTCTYP_7PARM:
 		xform.methodCode = cs_DTCMTH_7PARM;
 		xform.parameters.geocentricParameters.deltaX  = dtDefPtr->delta_X;
@@ -1184,10 +1200,12 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 		xform.parameters.geocentricParameters.rotateZ = dtDefPtr->rot_Z;
 		xform.parameters.geocentricParameters.scale  = dtDefPtr->bwscale;
 		break;
+
 	case cs_DTCTYP_MREG:
 		xform.methodCode = cs_DTCMTH_MULRG;
 		ok = csConvertMrtFile (&xform.parameters.dmaMulRegParameters,dtDefPtr,mregAsc);
 		break;
+
 	case cs_DTCTYP_NAD27:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcNad27ToNad83->GetEntryCount ();
@@ -1203,17 +1221,26 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
-		// ODO --> Copy and extract fallback????
+		kCp = gdcNad27ToNad83->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_NAD83:
 		xform.methodCode = cs_DTCMTH_NULLX;
 		break;
+
 	case cs_DTCTYP_WGS84:
 		xform.methodCode = cs_DTCMTH_NULLX;
 		break;
+
 	case cs_DTCTYP_WGS72:
 		xform.methodCode = cs_DTCMTH_WGS72;
 		break;
+
 	case cs_DTCTYP_HPGN:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcNad83ToHarn->GetEntryCount ();
@@ -1229,7 +1256,14 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcNad83ToHarn->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_AGD66:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcAgd66ToGda94->GetEntryCount ();
@@ -1245,7 +1279,14 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcAgd66ToGda94->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_AGD84:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcAgd84ToGda94->GetEntryCount ();
@@ -1261,7 +1302,14 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcAgd84ToGda94->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_NZGD49:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcNzgd49ToNzgd2K->GetEntryCount ();
@@ -1277,7 +1325,14 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcNzgd49ToNzgd2K->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_ATS77:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcAts77ToCsrs->GetEntryCount ();
@@ -1293,13 +1348,22 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcAts77ToCsrs->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_GDA94:
 		xform.methodCode = cs_DTCMTH_NULLX;
 		break;
+
 	case cs_DTCTYP_NZGD2K:
 		xform.methodCode = cs_DTCMTH_NULLX;
 		break;
+
 	case cs_DTCTYP_CSRS:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcNad83ToCsrs->GetEntryCount ();
@@ -1315,7 +1379,14 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcNad83ToCsrs->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_TOKYO:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcTokyoToJgd2k->GetEntryCount ();
@@ -1331,7 +1402,14 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcTokyoToJgd2k->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_RGF93:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcRgf93ToNtf->GetEntryCount ();
@@ -1357,8 +1435,16 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			}
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
+
+			kCp = gdcRgf93ToNtf->GetFallbackDatum ();
+			if (kCp != 0 && *kCp != '\0')
+			{
+				sprintf (cTemp,"WGS84_to_%s",kCp);
+				CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+			}
 		}
 		break;
+
 	case cs_DTCTYP_ED50:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcEd50ToEtrf89->GetEntryCount ();
@@ -1374,7 +1460,14 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcEd50ToEtrf89->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_DHDN:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcDhdnToEtrf89->GetEntryCount ();
@@ -1390,10 +1483,18 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		kCp = gdcDhdnToEtrf89->GetFallbackDatum ();
+		if (kCp != 0 && *kCp != '\0')
+		{
+			sprintf (cTemp,"%s_to_WGS84",kCp);
+			CS_stncp (xform.parameters.fileParameters.fallback,cTemp,sizeof (xform.parameters.fileParameters.fallback));
+		}
 		break;
+
 	case cs_DTCTYP_ETRF89:
 		xform.methodCode = cs_DTCMTH_NULLX;
 		break;
+
 	case cs_DTCTYP_CHENYX:
 		xform.methodCode = cs_DTCMTH_GFILE;
 		count = gdcCh1903ToPlus->GetEntryCount ();
@@ -1409,7 +1510,11 @@ bool csWriteTransformationAsc (std::wofstream& gtStrm,std::wofstream& gpStrm,
 			CS_stncp (fileParmPtr->fileName,cTemp,sizeof (fileParmPtr->fileName));
 			xform.parameters.fileParameters.fileReferenceCount += 1;
 		}
+		// The original fallback specification was wrong, so we ignore it here.  The
+		// null transformation is a better approximation than the originally specified
+		// CH1903.
 		break;
+
 	default:
 		ok = false;
 		break;
@@ -1718,6 +1823,13 @@ bool csXformToStream (std::wofstream& gtStrm,cs_GeodeticTransform_* xfrmPtr)
 				   << L','
 				   << dirPtr
 				   << L','
+				   << wcTemp
+				   << std::endl;
+		}
+		if (gridFilesPtr->fallback [0] != '\0')
+		{
+			mbstowcs (wcTemp,gridFilesPtr->fallback,wcCount (wcTemp));		
+			gtStrm << L"\t    FALLBACK: "
 				   << wcTemp
 				   << std::endl;
 		}
@@ -2550,7 +2662,11 @@ bool csNewHpgnDatumsPhaseOne (TcsDefFile& datumsAsc)
 		// Insert the new definition definition immediately before the existing HARN entry.
 		if (ok)
 		{
-			ok = datumsAsc.InsertBefore ("HPGN",workDef);
+			ok = datumsAsc.Replace (workDef);
+			if (!ok)
+			{
+				ok = datumsAsc.InsertBefore ("HPGN",workDef);
+			}
 		}
 	}
 	
@@ -2771,7 +2887,11 @@ bool csNewHpgnDatumsPhaseFour (TcsDefFile& coordsysAsc)
 		sprintf (workBuffer,"HARN (aka HPGN) geographic system for region %s",tblPtr->datumCode);
 		nextDef.SetValue ("DESC_NM:",workBuffer);
 		nextDef.SetValue ("DT_NAME:",tblPtr->datumName);
-		coordsysAsc.InsertBefore ("LL-HPGN",nextDef);
+		ok = coordsysAsc.Replace (nextDef);
+		if (!ok)
+		{
+			ok = coordsysAsc.InsertBefore ("LL-HPGN",nextDef);
+		}
 	}
 	coordsysAsc.DeprecateDef ("LL-HPGN","Replaced with 42 region specific LL systems/datums.","");
 	coordsysAsc.MakeLast ("LL-HPGN");

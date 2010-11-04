@@ -43,8 +43,9 @@ int EXP_LVL9 CSgridiQ (struct cs_GeodeticTransform_ *gxDef,unsigned short xfrmCo
 	int fErrCnt;
 	int fErrList [4];
 	int fListSz;
+	int gxIndex;
 
-	struct cs_GridFile_* gridFilePtr;
+	Const struct cs_GxIndex_* gxIdxPtr;
 	struct cs_GridFormatTab_* frmtTblPtr;
 	struct csGeodeticXfromParmsFile_* fileDefPtr;
 	struct csGeodeticXformParmsGridFiles_* filesPtr;
@@ -98,6 +99,35 @@ int EXP_LVL9 CSgridiQ (struct cs_GeodeticTransform_ *gxDef,unsigned short xfrmCo
 		}
 	}
 
+	/* Verify the fallback specification. */
+	if (filesPtr->fallback [0] != '\0')
+	{
+		/* Verify that the provided name is indeed an existing transformation
+		   and that the type of the transformation is valid. */
+		gxIndex = CS_locateGxByName (filesPtr->fallback);
+		if (gxIndex < 0)
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FBKNAME;
+		}
+		else
+		{
+			gxIdxPtr = CS_getGxIndexEntry ((unsigned)gxIndex);
+			if (gxIdxPtr == 0)
+			{
+				/* This is really an internal software error, but this is a
+				   "check" function which should not issue any standard
+				   error conditions, only report them. */
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_ISERFBK;
+			}
+			if (((gxIdxPtr->methodCode & cs_DTCPRMTYP_MASK) != cs_DTCPRMTYP_STANDALONE) &&
+			    ((gxIdxPtr->methodCode & cs_DTCPRMTYP_MASK) != cs_DTCPRMTYP_GEOCTR) &&
+			    ((gxIdxPtr->methodCode & cs_DTCPRMTYP_MASK) != cs_DTCPRMTYP_PWRSRS))
+			{
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FBKMTH;
+			}
+		}
+	}
+
 	/* Verify maxIterations, convergence value, error value, and accuracy. */
 	if (gxDef->maxIterations < 0 || gxDef->maxIterations >= 40)
 	{
@@ -122,6 +152,7 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 {
 	extern char *cs_DirP;
 	extern char cs_Dir [];
+	extern char csErrnam [MAXPATH];
 	extern struct cs_GridFormatTab_ cs_GridFormatTab [];
 
 	char cc1;
@@ -236,6 +267,20 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 		gridi->gridFiles [gridi->fileCount++] = gridFilePtr;
 		gridFilePtr = NULL;
 	}
+	
+	/* Deal with the fallback situation. */
+	if (filesPtr->fallback [0] != '\0')
+	{
+		/* Get a transformation from the fallback specification. */
+		gridi->fallback = CS_gxloc (filesPtr->fallback,cs_DTCDIR_FWD);
+		if (gridi->fallback == 0)
+		{
+			/* This can happen if a transformation gets deleted. */
+			CS_stncp (csErrnam,filesPtr->fallback,MAXPATH);
+			CS_erpt (cs_FLBK_NTFND);
+			goto error;
+		}
+	}
 	return 0;
 
 error:
@@ -294,6 +339,12 @@ int EXP_LVL9 CSgridiF3 (struct csGridi_ *gridi,double trgLl [3],Const double src
 			status = -1;
 		}
 	}
+	else if (gridi->fallback != 0)
+	{
+		status = CS_gxFrwrd3D (gridi->fallback,trgLl,srcLl);
+		if (status == 0) status = 2;
+		else status = 1;
+	}
 	else
 	{
 		status = 1;
@@ -305,6 +356,7 @@ int EXP_LVL9 CSgridiF2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	extern char csErrnam [MAXPATH];
 
 	int status;
+	int fbStatus;
 	int selectedIdx;
 	
 	struct cs_GridFile_* gridFilePtr;
@@ -336,6 +388,11 @@ int EXP_LVL9 CSgridiF2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 			CS_erpt (cs_ISER);
 			status = -1;
 		}
+	}
+	else if (gridi->fallback != 0)
+	{
+		fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+		status = (fbStatus == 0) ? 2 : 1;
 	}
 	else
 	{
@@ -380,6 +437,12 @@ int EXP_LVL9 CSgridiI3 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 			status = -1;
 		}
 	}
+	else if (gridi->fallback != 0)
+	{
+		status = CS_gxInvrs3D (gridi->fallback,trgLl,srcLl);
+		if (status == 0) status = 2;
+		else status = 1;
+	}
 	else
 	{
 		status = 1;
@@ -422,6 +485,12 @@ int EXP_LVL9 CSgridiI2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 			CS_erpt (cs_ISER);
 			status = -1;
 		}
+	}
+	else if (gridi->fallback != 0)
+	{
+		status = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+		if (status == 0) status = 2;
+		else status = 1;
 	}
 	else
 	{
