@@ -668,7 +668,7 @@ error:
 **								structure.
 **
 **********************************************************************/
-struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (short* direction,
+struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 											   Const char *srcDatum,
 											   Const char *trgDatum)
 {
@@ -832,7 +832,84 @@ error:
 	}
 	return (gp_def);
 }
+int CS_gpchk (Const struct cs_GeodeticPath_ *gpPath,unsigned short gpChkFlg,int err_list [],int list_sz)
+{
+	short gpIdx;
+	
+	int st;
+	int gxIndex;
+	int err_cnt;
 
+	struct cs_GeodeticPathElement_* gpPtr;
+
+	err_cnt = -1;
+
+	if (CS_nampp64 (gpPath->pathName))
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_GPQ_NAME;
+	}
+
+	/* Checking the datum names is optional as this code will always check
+	   agains the datum dictionary in the standard location.  This may not
+	   be appropriate in certain environments such as the dictionary
+	   compiler. */
+	if ((gpChkFlg & cs_GPCHK_DATUM) != 0)
+	{
+		/* Check the datums. */
+		if (!CS_dtIsValid (gpPath->srcDatum))
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_GPQ_GPDTM;
+		}
+		if (!CS_dtIsValid (gpPath->trgDatum))
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_GPQ_GPDTM;
+		}
+	}
+
+	/* Make sure the elementCount is sane before we go producing a memory
+	   exception. */
+	if (gpPath->elementCount <= 0 || gpPath->elementCount > csPATH_MAXXFRM)
+	{
+		if (++err_cnt < list_sz) err_list [err_cnt] = cs_GPQ_COUNT;
+	}
+	else
+	{
+		for (gpIdx = 0;gpIdx < gpPath->elementCount;gpIdx += 1)
+		{
+			gpPtr = &gpPath->geodeticPathElements [gpIdx];
+			
+			/* Check for a valid direction indication. */
+			if (gpPtr->direction != cs_DTCDIR_FWD && gpPtr->direction != cs_DTCDIR_INV)
+			{
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_GPQ_GXDIR;
+			}
+
+			/* Check for a valid transformation name. */
+			st = CS_nampp64 (gpPtr->geodeticXformName);
+			if (st != 0)
+			{
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_GPQ_INVNM;
+			}
+
+			/* The following flag check enables us to use this function in the
+			   dictionary compiler.  In the compiler, it may be, or may not be,
+			   appropriate to check the transformation dictionary for a valid
+			   name as the dictionaries being generated may not be the smae ones
+			   that standard CS_gx??? functions will access. */
+			if ((gpChkFlg & cs_GPCHK_XFORM) != 0)
+			{
+				/* OK, we have been instructed to check the dictionary for the
+				   existence of the transformation name. */
+				gxIndex = CS_locateGxByName (gpPtr->geodeticXformName);
+				if (gxIndex < 0)
+				{
+					if (++err_cnt < list_sz) err_list [err_cnt] = cs_GPQ_NOXFRM;
+				}
+			}
+		}
+	}
+	return (err_cnt + 1);
+}
 /**********************************************************************
 **	CS_gpfnm (new_name);
 **
