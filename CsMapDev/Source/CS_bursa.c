@@ -323,6 +323,20 @@ int EXP_LVL9 CSbursaL (struct csBursa_ *bursa,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
 }
+int EXP_LVL9 CSbursaN (struct csBursa_ *bursa)
+{
+	extern double cs_One;		/* 1.0 */
+	int isNull;
+	
+	isNull = (fabs (bursa->deltaX) < 1.0E-03) &&
+			 (fabs (bursa->deltaY) < 1.0E-03) &&
+			 (fabs (bursa->deltaZ) < 1.0E-03) &&
+			 (fabs (bursa->rotX)   < 1.0E-06) &&
+			 (fabs (bursa->rotY)   < 1.0E-06) &&
+			 (fabs (bursa->rotZ)   < 1.0E-06) &&
+			 (fabs (bursa->scale)  < 1.0E-08);
+	return isNull;
+}
 int EXP_LVL9 CSbursaR (struct csBursa_ *bursa)
 {
 	return 0;

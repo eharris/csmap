@@ -460,6 +460,10 @@ int EXP_LVL9 CSmulrgL (struct csMulrg_ *mulrg,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
 }
+int EXP_LVL9 CSmulrgN  (struct csMulrg_ *mulrg)
+{
+	return FALSE;
+}
 int EXP_LVL9 CSmulrgR (struct csMulrg_ *mulrg)
 {
 	return 0;

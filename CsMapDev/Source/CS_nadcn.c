@@ -111,6 +111,8 @@ int CSnadcnS (struct cs_GridFile_ *gridFile)
 	extern char cs_DirsepC;
 	extern char cs_ExtsepC;
 
+	int status;
+
 	char *cpFront;
 	char *cpBack;
 	struct cs_Nadcn_ *nadcnPtr = NULL;
@@ -187,6 +189,20 @@ int CSnadcnS (struct cs_GridFile_ *gridFile)
 		goto error;
 	}
 
+	/* Finally, in case a 3D call is made, and the collection of data files
+	   includes the 48 states (i.e. conus.las and conus,los), we active the
+	   Vertcon feature.  WOuld like to rewrite this Vertcon stuff, but time
+	   for that wasn't in (by mistake, not purpose) the project schedule. */
+	status = CSvrtconInit ();
+	if (status != 0)
+	{
+		goto error;
+	}
+	else
+	{
+		nadcnPtr->usingVertcon = TRUE;
+	}
+
 	/* OK.  If we are still here all is well.  Return the results of our
 	   setup in the provided cs_GridFile_ structure. */
 	nadcnPtr->cnvrgValue = gridFile->cnvrgValue;
@@ -215,62 +231,143 @@ error:
 }
 double CSnadcnT (struct cs_Nadcn_ *nadcn,double *ll_src,short direction)
 {
+	extern double cs_K360;
+
 	double density;
+	
+	double lclSrcLl [3];
+
+	/* The Alaska kludge again. */
+	lclSrcLl [LNG] = ll_src [LNG];
+	lclSrcLl [LAT] = ll_src [LAT];
+	if (lclSrcLl [LNG] >= 166.0)
+	{
+		lclSrcLl [LNG] -= cs_K360;
+	}
 
 	/* For this file format, we don't care about the direction. */
-	density = CStestNadconFile (nadcn->lngShift,ll_src);
+	density = CStestNadconFile (nadcn->lngShift,lclSrcLl);
 	return density;
 }
 int CSnadcnF2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 {
 	extern double cs_Zero;
+	extern double cs_Km180;
+	extern double cs_K360;
 	extern double cs_Sec2Deg;
 
 	int status;
+	int flag180;
 
 	double deltaLng;
 	double deltaLat;
+	
+	double lclSrcLl [3];
+
+	flag180 = FALSE;
+	lclSrcLl [LNG] = ll_src [LNG];
+	lclSrcLl [LAT] = ll_src [LAT];
+	lclSrcLl [HGT] = ll_src [HGT];
+	
+	/* Within the NADCON data files for Alaska, the coverage is given as
+	   -194.0 to -128.0.  Internally, CS-MAP normalizes longitude to the
+	   +/- 180 range.  Thus, if we see a longitude which is greater than
+	   or equal to +166.0, we assume it is a longitude for ALaskan geography
+	   and make the change here.  This code is particular to the NADCON
+	   file format, and the 'NA' in NADCON refers to North America.  So
+	   this rather simple test is considered sufficient. */
+	if (lclSrcLl [LNG] >= 166.0)
+	{
+		flag180 = TRUE;
+		lclSrcLl [LNG] -= cs_K360;
+	}
 
 	deltaLng = deltaLat = cs_Zero;
-	status = CScalcNadconFile (nadcn->lngShift,&deltaLng,ll_src);
+	status = CScalcNadconFile (nadcn->lngShift,&deltaLng,lclSrcLl);
 	if (status == 0)
 	{
-		status = CScalcNadconFile (nadcn->latShift,&deltaLat,ll_src);
+		status = CScalcNadconFile (nadcn->latShift,&deltaLat,lclSrcLl);
 	}
 	if (status != 0)
 	{
 		deltaLng = cs_Zero;
 		deltaLat = cs_Zero;
 	}
-	ll_trg [LNG] = ll_src [LNG] - deltaLng * cs_Sec2Deg;
-	ll_trg [LAT] = ll_src [LAT] + deltaLat * cs_Sec2Deg;
-	ll_trg [HGT] = ll_src [HGT];
+	ll_trg [LNG] = lclSrcLl [LNG] - deltaLng * cs_Sec2Deg;
+	ll_trg [LAT] = lclSrcLl [LAT] + deltaLat * cs_Sec2Deg;
+	ll_trg [HGT] = lclSrcLl [HGT];
+
+	/* Undo the Alaska kludge. */
+	if (status >= 0 && flag180 && (ll_trg [LNG] < cs_Km180))
+	{
+		ll_trg [LNG] += cs_K360;
+	}
+
 	return status;
 }
 int CSnadcnF3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 {
 	extern double cs_Zero;
+	extern double cs_Km180;
+	extern double cs_K360;
 	extern double cs_Sec2Deg;
 
 	int status;
+	int flag180;
+	int vcStatus;
 
 	double deltaLng;
 	double deltaLat;
+	double deltaHgt;
 
-	deltaLng = deltaLat = cs_Zero;
-	status = CScalcNadconFile (nadcn->lngShift,&deltaLng,ll_src);
+	double lclSrcLl [3];
+
+	flag180 = FALSE;
+	lclSrcLl [LNG] = ll_src [LNG];
+	lclSrcLl [LAT] = ll_src [LAT];
+	lclSrcLl [HGT] = ll_src [HGT];
+	
+	/* Within the NADCON data files for Alaska, the coverage is given as
+	   -194.0 to -128.0.  Internally, CS-MAP normalizes longitude to the
+	   +/- 180 range.  Thus, if we see a longitude which is greater than
+	   or equal to +166.0, we assume it is a longitude for Alaskan geography
+	   and make the change here.  This code is particular to the NADCON
+	   file format, and the 'NA' in NADCON refers to North America.  So
+	   this rather simple test is considered sufficient. */
+	if (lclSrcLl [LNG] >= 166.0)
+	{
+		flag180 = TRUE;
+		lclSrcLl [LNG] -= cs_K360;
+	}
+
+	deltaLng = deltaLat = deltaHgt = cs_Zero;
+	status = CScalcNadconFile (nadcn->lngShift,&deltaLng,lclSrcLl);
 	if (status == 0)
 	{
-		status = CScalcNadconFile (nadcn->latShift,&deltaLat,ll_src);
+		status = CScalcNadconFile (nadcn->latShift,&deltaLat,lclSrcLl);
+		if (status != 0)
+		{
+			deltaLng = cs_Zero;
+			deltaLat = cs_Zero;
+		}
 	}
-	if (status != 0)
+	ll_trg [LNG] = lclSrcLl [LNG] - deltaLng * cs_Sec2Deg;
+	ll_trg [LAT] = lclSrcLl [LAT] + deltaLat * cs_Sec2Deg;
+	if (status == 0 && nadcn->type == nadconNAD27Shift)
 	{
-		deltaLng = cs_Zero;
-		deltaLat = cs_Zero;
+		vcStatus = CSvrtcon29To88 (&deltaHgt,ll_trg);
+		if (vcStatus == 0)
+		{
+			ll_trg [HGT] = lclSrcLl [HGT] + deltaHgt;
+		}
 	}
-	ll_trg [LNG] = ll_src [LNG] - deltaLng * cs_Sec2Deg;
-	ll_trg [LAT] = ll_src [LAT] + deltaLat * cs_Sec2Deg;
-	ll_trg [HGT] = ll_src [HGT];
+
+	/* Undo the Alaska kludge. */
+	if (status >= 0 && flag180 && (ll_trg [LNG] < cs_Km180))
+	{
+		ll_trg [LNG] += cs_K360;
+	}
+
 	return status;
 }
 int CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
@@ -287,7 +384,6 @@ int CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 
 	guess [LNG] = ll_src [LNG];
 	guess [LAT] = ll_src [LAT];
-	guess [HGT] = ll_src [HGT];
 
 	/* Start a loop which will iterate up to 10 times. The Canadians and
 	   the Aussies max out at 4.  We would duplicate theirs, but since
@@ -347,10 +443,39 @@ int CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 }
 int CSnadcnI3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 {
+	extern double cs_Zero;
+
 	int status;
-	
+	double deltaHgt;
+
+	/* We use the NAD83 (i.e. ll_src in this case) to determine the elevation
+	   shift.  Cine ll_src and ll_trg are often pointers to the same array, we
+	   get the elevation shift calculation done while the NAD83 lat/longs are
+	   still available.
+	   
+	   NOTE:  This relies on the fact thatat currently, CAnadcnI2 does not
+	   modify in any weay the elevation portion of the target point.  We
+	   would add some defensive code here for that, but this is a performance
+	   sensitive function. */
+	deltaHgt = cs_Zero;
+	if (nadcn->type == nadconNAD27Shift)
+	{
+		/* Here we rely on the fact that CSvrtcon29To88 sets deltaHgt to zero
+		   if the return status is not zero.  We would do some defensive
+		   programming to avoid this reliance, but this module is performance
+		   sensitive. */
+		CSvrtcon29To88 (&deltaHgt,ll_src);
+	}
+
+	/* Use the 2D inverse to move the horizontal potion of the cooridnate.
+	   In the case of the NADCON grid file interpolation method, we have
+	   no choice in the matter. */
 	status = CSnadcnI2 (nadcn,ll_trg,ll_src);
-	return 0;
+	if (status == 0)
+	{
+		ll_trg [2] = ll_src [2] - deltaHgt;
+	}
+	return status;
 }
 int CSnadcnL  (struct cs_Nadcn_ *nadcn,int cnt,Const double pnts [][3])
 {
@@ -364,6 +489,11 @@ int CSnadcnR  (struct cs_Nadcn_ *nadcn)
 }
 int CSnadcnD  (struct cs_Nadcn_ *nadcn)
 {
+	if (nadcn->usingVertcon)
+	{
+		CSvrtconCls ();
+		nadcn->usingVertcon = FALSE;
+	}
 	CSdeleteNadconFile (nadcn->lngShift);
 	CSdeleteNadconFile (nadcn->latShift);
 	CS_free (nadcn);
@@ -381,7 +511,7 @@ int CSnadcnD  (struct cs_Nadcn_ *nadcn)
 **                                                                           **
 *******************************************************************************
 ******************************************************************************/
-long csNadconFileBufrSize = 4094;
+long csNadconFileBufrSize = 10240;
 struct cs_NadconFile_* CSnewNadconFile (Const char* filePath,long32_t bufferSize,
 															 ulong32_t flags,
 															 double density)
@@ -598,11 +728,13 @@ void CSinitNadconFile (struct cs_NadconFile_ *thisPtr)
 	thisPtr->recordSize = 0;
 	thisPtr->deltaLng = 0.0;
 	thisPtr->deltaLat = 0.0;
+	thisPtr->fileSize = 0L;
 	thisPtr->strm = NULL;
 	thisPtr->bufferSize = 0L;
-	thisPtr->bufferBeginPosition = 0;
-	thisPtr->bufferEndPosition = 0;
+	thisPtr->bufferBeginPosition = 0L;
+	thisPtr->bufferEndPosition = 0L;
 	thisPtr->dataBuffer = NULL;
+	thisPtr->cellIsValid = FALSE;
 	CSinitGridCell (&thisPtr->currentCell);
 	thisPtr->filePath [0] = '\0';
 	thisPtr->fileName [0] = '\0';

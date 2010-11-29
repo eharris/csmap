@@ -275,6 +275,16 @@ int EXP_LVL9 CSparm4L (struct csParm4_ *parm4,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
 }
+int EXP_LVL9 CSparm4N (struct csParm4_ *parm4)
+{
+	int isNull;
+	
+	isNull = (fabs (parm4->deltaX) < 1.0E-03) &&
+			 (fabs (parm4->deltaY) < 1.0E-03) &&
+			 (fabs (parm4->deltaZ) < 1.0E-03) &&
+			 (fabs (parm4->scale)  < 1.0E-08);
+	return isNull;
+}
 int EXP_LVL9 CSparm4R (struct csParm4_ *parm4)
 {
 	return 0;

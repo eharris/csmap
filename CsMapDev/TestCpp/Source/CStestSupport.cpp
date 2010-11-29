@@ -784,12 +784,14 @@ bool TcsOsGeoTestFile::GetDataComment (std::wstring& dataComment,unsigned record
 	bool ok = GetField (dataComment,recordNbr,13,Status);
 	return ok;
 }
-bool TcsOsGeoTestFile::CompareResults (double results [3],unsigned recordNbr)
+bool TcsOsGeoTestFile::CompareResults (double results [3],unsigned recordNbr,double& dd)
 {
 	bool ok;
 	double delta [3];
 	double targetCoords [3];
 	double tolerances [3];
+
+	dd = 0.0;
 
 	EcsTestMethod testMethod = GetTestMethod (recordNbr);
 	ok = testMethod != testMthUnknown;
@@ -808,21 +810,32 @@ bool TcsOsGeoTestFile::CompareResults (double results [3],unsigned recordNbr)
 		
 		ok  = (fabs (delta [0]) <= tolerances [0]);
 		ok &= (fabs (delta [1]) <= tolerances [1]);
+
+		delta [0] *= 111300000.0;
+		delta [1] *= 111300000.0;
+		dd = sqrt (delta [0] * delta [0] + delta [1] * delta [1]);
 	}
 	else if (ok && testMethod == testMthCrs3D)
 	{
 		delta [0] = results [0] - targetCoords [0];
 		delta [1] = results [1] - targetCoords [1];
-		delta [2] = results [2] - targetCoords [3];
+		delta [2] = results [2] - targetCoords [2];
 		
 		ok  = (fabs (delta [0]) <= tolerances [0]);
 		ok &= (fabs (delta [1]) <= tolerances [1]);
 		ok &= (fabs (delta [2]) <= tolerances [2]);
+
+		delta [0] *= 111300000.0;
+		delta [1] *= 111300000.0;
+		delta [2] *= 1000.0;
+		dd = sqrt (delta [0] * delta [0] + delta [1] * delta [1]);
 	}
 	else if (ok && testMethod == testMthGeoid)
 	{
 		delta [0] = results [0] - targetCoords [0];
 		ok  = (fabs (delta [0]) <= tolerances [0]);
+		
+		dd = delta [0];
 	}
 	return ok;
 }

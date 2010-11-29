@@ -10,7 +10,7 @@
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
  *     * Neither the name of the Autodesk, Inc. nor the names of its
- *       contributors may be used to endorse or promote products derived
+ *       contr butors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY Autodesk, Inc. ``AS IS'' AND ANY
@@ -6521,6 +6521,13 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_DTQ_FBKMTH   281		/* Fallback name is invalid. */
 #define cs_DTQ_ISERFBK  282     /* Internal software error in the check function. */
 
+#define cs_GPQ_NAME     283     /* Invalid path definition name. */
+#define cs_GPQ_GPDTM    284     /* Invalid source or target datum name. */
+#define cs_GPQ_COUNT    285     /* Invalid path element count. */
+#define cs_GPQ_GXDIR    286     /* Invalid path element direction */
+#define cs_GPQ_INVNM    287     /* Invalid transformation name */
+#define cs_GPQ_NOXFRM   288     /* Transformation name is not that of an existing transformation */
+
 	/* End coordinate system definition checker specific stuff. */
 
 #define cs_DLM_CSIDX_FULL 301		/* Coordindate System index is full. */
@@ -6935,11 +6942,12 @@ int			EXP_LVL1	CS_getSourceOf (Const char *csKeyName,char *source,int size);
 int			EXP_LVL3	CS_getStateFips (Const char* stateName);
 int			EXP_LVL1	CS_getUnitsOf (Const char *csKeyName,char *unitName,int size);
 
+int			EXP_LVL1	CS_gpchk (Const struct cs_GeodeticPath_ *gpPath,unsigned short gpChkFlg,int err_list [],int list_sz);
 int			EXP_LVL7	CS_gpcmp (Const struct cs_GeodeticPath_ *pp,Const struct cs_GeodeticPath_ *qq);
 struct cs_GeodeticPath_*
 			EXP_LVL3	CS_gpdef (Const char *pathName);
 struct cs_GeodeticPath_*
-			EXP_LVL3	CS_gpdefEx (short *direction,Const char *srcDatum,Const char *trgDatum);
+			EXP_LVL3	CS_gpdefEx (int *direction,Const char *srcDatum,Const char *trgDatum);
 int			EXP_LVL3	CS_gpdel (struct cs_GeodeticPath_ *gpdef);
 void		EXP_LVL1	CS_gpfnm (Const char *new_name);
 csFILE *	EXP_LVL3	CS_gpopn (Const char *mode);
@@ -6947,6 +6955,7 @@ int			EXP_LVL3	CS_gprd (csFILE *strm,struct cs_GeodeticPath_ *gp_def);
 int			EXP_LVL3	CS_gpupd (struct cs_GeodeticPath_ *gp_def);
 int			EXP_LVL3	CS_gpwr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def);
 
+int			EXP_LVL1	CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFlg,int err_list [],int list_sz);
 int			EXP_LVL7	CS_gxcmp (Const struct cs_GeodeticTransform_ *pp,Const struct cs_GeodeticTransform_ *qq);
 struct cs_GeodeticTransform_*
 			EXP_LVL3	CS_gxdef (Const char *pathName);
@@ -8373,3 +8382,4 @@ int CS_ftw (const char *path, int (*fn) (const char *,const struct stat *, int),
 #include "cs_clientEnd.h"
 
 #endif	/*__CS_MAPH__ */
+ 

@@ -389,10 +389,13 @@ int main (int argc,char* argv [])
 	srand (seed);
 	cs_InitialRandomValue = rand ();
 
-	// Force all test values to upper case.
+	// Force all test values to upper case, except for 'Z'
 	for (cp = tests;*cp != '\0';cp += 1)
 	{
-		*cp = static_cast<char>(toupper (*cp));
+		if (*cp != 'z' && *cp != 'Z')
+		{
+			*cp = static_cast<char>(toupper (*cp));
+		}
 	}
 
 	// Open a file and save the file descriptor.  This is used to see if any of
@@ -482,7 +485,7 @@ int main (int argc,char* argv [])
 	for (cp = tests;*cp != '\0';cp += 1)
 	{
 		// Restart the entire sequence if we encounter a 'Z'
-		if (*cp == 'Z')
+		if (*cp == 'z')
 		{
 			printf ("Recyling through test sequence.\n");
 			seed = (unsigned)clock () & 0x3FFF;

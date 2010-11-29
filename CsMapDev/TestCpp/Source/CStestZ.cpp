@@ -64,6 +64,8 @@ int CStestZ (bool verbose,char *test_file)
 	struct cs_Csprm_*  trgCsPrm;
 	struct cs_Dtcprm_* dtcParms;
 
+	double delta;
+
 	double llhWrk [3];
 	double sourceCoords [3];
 	double resultCoords [3];
@@ -90,7 +92,7 @@ int CStestZ (bool verbose,char *test_file)
 			continue;
 		}
 		testMethod = osGeoTestFile.GetTestMethod (idx);
-		if (testMethod != testMthCrs2D && testMethod != testMthCrs2D)
+		if (testMethod != testMthCrs2D && testMethod != testMthCrs3D)
 		{
 			continue;
 		}
@@ -103,13 +105,6 @@ int CStestZ (bool verbose,char *test_file)
 			continue;
 		}
 		ok = osGeoTestFile.GetSourceCoordinates (sourceCoords,idx);
-
-		if (!CS_stricmp (srcKeyNm,"CH1903/GSB.LL") || !CS_stricmp (trgKeyNm,"CH1903/GSB.LL") ||
-			!CS_stricmp (srcKeyNm,"LL-NTF-Grid")   || !CS_stricmp (trgKeyNm,"LL-NTF-Grid")
-		   )
-		{
-			continue;
-		}
 
 		dtcParms = 0;
 		srcCsPrm = CS_csloc (srcKeyNm);
@@ -134,9 +129,10 @@ int CStestZ (bool verbose,char *test_file)
 			{
 				CS_dtcls (dtcParms);
 				dtcParms = 0;
+				
 			}
 			osGeoTestFile.GetTestName (fieldData,idx);
-			printf ("%S: Set up failed.\n",fieldData.c_str ());
+			printf ("%S: Set up failed.  [%s <--> %s]\n",fieldData.c_str (),srcKeyNm,trgKeyNm);
 			errCount += 1;
 			continue;
 		}
@@ -152,11 +148,11 @@ int CStestZ (bool verbose,char *test_file)
 			stDtc = CS_dtcvt3D (dtcParms,llhWrk,llhWrk);
 			stFwd = CS_ll3cs (trgCsPrm,resultCoords,llhWrk);
 		}
-		bool testOk = osGeoTestFile.CompareResults (resultCoords,idx);
+		bool testOk = osGeoTestFile.CompareResults (resultCoords,idx,delta);
 		if (!testOk)
 		{
 			osGeoTestFile.GetTestName (fieldData,idx);
-			printf ("%S: Calculation failed.\n",fieldData.c_str ());
+			printf ("%S: Calculation failed.  [%s -> %s; %.2fmm]\n",fieldData.c_str (),srcKeyNm,trgKeyNm,delta);
 			errCount += 1;
 			continue;
 		}

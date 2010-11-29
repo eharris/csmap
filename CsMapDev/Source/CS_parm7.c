@@ -373,6 +373,30 @@ int EXP_LVL9 CSparm7L (struct csParm7_ *parm7,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
 }
+int EXP_LVL9 CSparm7N (struct csParm7_ *parm7)
+{
+	extern double cs_One;		/* 1.0 */
+	int isNull;
+	
+	isNull = (fabs (parm7->deltaX) < 1.0E-03) &&
+			 (fabs (parm7->deltaY) < 1.0E-03) &&
+			 (fabs (parm7->deltaZ) < 1.0E-03) &&
+
+			 (fabs (parm7->scale)  < 1.0E-08) &&
+
+			 (fabs (parm7->rt11 - cs_One) < 1.0E-08) &&
+			 (fabs (parm7->rt12)          < 1.0E-08) &&
+			 (fabs (parm7->rt13)          < 1.0E-08) &&
+
+			 (fabs (parm7->rt21)          < 1.0E-08) &&
+			 (fabs (parm7->rt22 - cs_One) < 1.0E-08) &&
+			 (fabs (parm7->rt23)          < 1.0E-08) &&
+
+			 (fabs (parm7->rt31)          < 1.0E-08) &&
+			 (fabs (parm7->rt32)          < 1.0E-08) &&
+			 (fabs (parm7->rt33 - cs_One) < 1.0E-08);
+	return isNull;
+}
 int EXP_LVL9 CSparm7R (struct csParm7_ *parm7)
 {
 	return 0;

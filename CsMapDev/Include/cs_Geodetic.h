@@ -130,8 +130,9 @@
 #define cs_DTCDIR_ERR         999
 
 #define cs_DTCBRG_NONE        0
-#define cs_DTCBRG_BUIILDING   1
+#define cs_DTCBRG_BUILDING    1
 #define cs_DTCBRG_COMPLETE    2
+#define cs_DTCBRG_NOTUNIQUE   998
 #define cs_DTCBRG_ERROR       999
 
 #define cs_PATHDIR_FWD 0
@@ -168,7 +169,7 @@
 
 /*
 	The following defines define possible values of the bit mapped
-	argument to the CS_cschk function.  These options make it
+	argument to the CS_gxchk function.  These options make it
 	possible to use this function in a variety of different
 	ways.  The Coordinate System compiler environment, where the
 	datums and ellipsoids need to be checked against the dictionaries
@@ -179,7 +180,26 @@
 #define cs_GXCHK_DATUM	1	/* Turns on checking of the datum key
 							   name against the currently active
 							   datum dictionary. */
-#define cs_GXCHK_REPORT 2	/* Instructs CS_cschk to report all
+#define cs_GXCHK_REPORT 2	/* Instructs CS_gxchk to report all
+							   errors to CS_erpt. */
+
+/*
+	The following defines define possible values of the bit mapped
+	argument to the CS_gpchk function.  These options make it
+	possible to use this function in a variety of different
+	ways.  The Coordinate System compiler environment, where the
+	geodetic transforms and geodetic paths need to be checked against
+	the dictionaries being generated (not necessarily the currently
+	active ones) is the	primary reason for all of this.
+*/
+
+#define cs_GPCHK_DATUM	1	/* Turns on checking of the source and target
+							   datum key names against the currently active
+							   datum dictionary. */
+#define cs_GPCHK_XFORM	2	/* Turns on checking of each transformation key
+							   name against the currently active geodetic
+							   transformation dictionary. */
+#define cs_GPCHK_REPORT 4	/* Instructs CS_gpchk to report all
 							   errors to CS_erpt. */
 
 
@@ -763,6 +783,7 @@ struct csGridi_
 	short maxIterations;
 	short userDirection;
 	short useBest;
+	short fallbackDir;
 	struct cs_GxXform_ *fallback;
 
 	short fileCount;			/* Number of files */
@@ -1133,6 +1154,7 @@ struct cs_GxXform_
 	struct csGridCoverage_ xfrmCoverage;	/* Useful extent of the transformation */
 
 	short methodCode;
+	short isNullXfrm;
 	short maxItr;
 	short epsgVar;
 	short inverseSupported;
@@ -1149,6 +1171,7 @@ struct cs_GxXform_
 	int (*invrs2D)(void *gxXform,double *ll_src,double *ll_trg);
 	int (*invrs3D)(void *gxXform,double *ll_src,double *ll_trg);
 	int (*inRange)(void *gxXform,int cnt,Const double pnts [][3]);
+	int (*isNull) (void *gxXform);
 	int (*release)(void *gxXform);
 	int (*destroy)(void *gxXform);
 
@@ -1188,6 +1211,7 @@ struct cs_XfrmTab_
 {
 	char key_nm [64];
 	int (EXP_LVL9 * initialize)(struct cs_GxXform_ *gxXform);
+	int (EXP_LVL9 * isNull)    (void* gxXformParms);
 	int (EXP_LVL9 * check)     (struct cs_GeodeticTransform_ *xfrmDef,
 								unsigned short prj_code,
 								int err_list [],
@@ -1307,6 +1331,7 @@ struct cs_Dtcprm_
 #	define cs_INVRS2D_CAST int(*)(void *,double *,double *)
 #	define cs_INVRS3D_CAST int(*)(void *,double *,double *)
 #	define cs_INRANGE_CAST int(*)(void *,int,double [][3])
+#	define cs_ISNULL_CAST  int(*)(void *)
 #	define cs_RELEASE_CAST int(*)(void *)
 #	define cs_DESTROY_CAST int(*)(void *)
 #else
@@ -1316,6 +1341,7 @@ struct cs_Dtcprm_
 #	define cs_INVRS2D_CAST int(*)(Const void *,double *,Const double *)
 #	define cs_INVRS3D_CAST int(*)(Const void *,double *,Const double *)
 #	define cs_INRANGE_CAST int(*)(Const void *,int,Const double [][3])
+#	define cs_ISNULL_CAST  int(*)(Const void *)
 #	define cs_RELEASE_CAST int(*)(Const void *)
 #	define cs_DESTROY_CAST int(*)(Const void *)
 #endif
@@ -1333,11 +1359,14 @@ void EXP_LVL9 CSgenerateGxIndex (void);
 
 struct cs_GxXform_* EXP_LVL1 CS_gxloc (Const char* gxDefName,short userDirection);
 struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *gxXform,short userDirection);
+struct cs_GxXform_*	EXP_LVL3 CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt);
+
 int EXP_LVL1 CS_gxFrwrd3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);
 int EXP_LVL1 CS_gxFrwrd2D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);
 int EXP_LVL1 CS_gxInvrs3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);
 int EXP_LVL1 CS_gxInvrs2D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);
-int EXP_LVL1 CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFlg,int err_list [],int list_sz);
+int EXP_LVL1 CS_gxIsNull  (struct cs_GxXform_ *xform);
+void EXP_LVL1 CS_gxDisable (struct cs_GxXform_ *xform);
 
 int CSdtcsuPhaseOne   (struct csDtmBridge_* bridgePtr);
 int CSdtcsuPhaseTwo   (struct csDtmBridge_* bridgePtr);
@@ -1351,13 +1380,14 @@ Const char* CSdtmBridgeGetTargetDtm (struct csDtmBridge_* thisPtr);
 
 int CSdtmBridgeIsComplete (struct csDtmBridge_* thisPtr);
 int CSdtmBridgeIsFull (Const struct csDtmBridge_* thisPtr);
-int CSdtmBridgeAddSrcTransformation (struct csDtmBridge_* thisPtr,
-									 Const struct cs_GxIndex_* xfrmPtr,
-									 short direction);
-int CSdtmBridgeAddTrgTransformation (struct csDtmBridge_* thisPtr,
-									 Const struct cs_GxIndex_* xfrmPtr,
-									 short direction);
-
+int CSdtmBridgeAddSrcPath (struct csDtmBridge_* thisPtr,Const struct cs_GeodeticPath_* pathPtr,
+													    short direction);
+int CSdtmBridgeAddSrcTransformation (struct csDtmBridge_* thisPtr,Const struct cs_GxIndex_* xfrmPtr,
+																  short direction);
+int CSdtmBridgeAddTrgPath (struct csDtmBridge_* thisPtr,Const struct cs_GeodeticPath_* pathPtr,
+													    short direction);
+int CSdtmBridgeAddTrgTransformation (struct csDtmBridge_* thisPtr,Const struct cs_GxIndex_* xfrmPtr,
+																  short direction);
 
 int			EXP_LVL9	  CSnullxD  (struct csNullx_ *nullx);
 int			EXP_LVL9	  CSnullxF2 (struct csNullx_ *nullx,double *ll_trg,Const double *ll_src);
@@ -1365,6 +1395,7 @@ int			EXP_LVL9	  CSnullxF3 (struct csNullx_ *nullx,double *ll_trg,Const double *
 int			EXP_LVL9	  CSnullxI2 (struct csNullx_ *nullx,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSnullxI3 (struct csNullx_ *nullx,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSnullxL  (struct csNullx_ *nullx,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSnullxN  (struct csNullx_ *nullx);
 int			EXP_LVL9	  CSnullxQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSnullxR  (struct csNullx_ *nullx);
 int			EXP_LVL9	  CSnullxS  (struct cs_GxXform_ *nullx);
@@ -1375,6 +1406,7 @@ int			EXP_LVL9	  CSwgs72F3 (struct csWgs72_ *wgs72,double *ll_trg,Const double *
 int			EXP_LVL9	  CSwgs72I2 (struct csWgs72_ *wgs72,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSwgs72I3 (struct csWgs72_ *wgs72,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSwgs72L  (struct csWgs72_ *wgs72,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSwgs72N  (struct csWgs72_ *wgs72);
 int			EXP_LVL9	  CSwgs72Q  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSwgs72R  (struct csWgs72_ *wgs72);
 int			EXP_LVL9	  CSwgs72S  (struct cs_GxXform_ *wgs72);
@@ -1385,6 +1417,7 @@ int			EXP_LVL9	  CSmolodF3 (struct csMolod_ *molod,double *ll_trg,Const double *
 int			EXP_LVL9	  CSmolodI2 (struct csMolod_ *molod,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSmolodI3 (struct csMolod_ *molod,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSmolodL  (struct csMolod_ *molod,int cnt,Const double pnts [][3]);
+int 		EXP_LVL9	  CSmolodN  (struct csMolod_ *molod);
 int			EXP_LVL9	  CSmolodQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSmolodR  (struct csMolod_ *molod);
 int 		EXP_LVL9	  CSmolodS  (struct cs_GxXform_ *molod);
@@ -1397,9 +1430,10 @@ int			EXP_LVL9	  CSmolodSf (struct csMolod_* molod,Const struct cs_Datum_ *srcDa
 //int			EXP_LVL9	  CSamoloI2 (struct csAmolo_ *amolo,double *ll_trg,Const double *ll_src);
 //int			EXP_LVL9	  CSamoloI3 (struct csAmolo_ *amolo,double *ll_trg,Const double *ll_src);
 //int			EXP_LVL9	  CSamoloL  (struct csAmolo_ *amolo,int cnt,Const double pnts [][3]);
+//int			EXP_LVL9	  CSamoloN  (struct csAmolo_ *amolo);
 //int			EXP_LVL9	  CSamoloQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 //int			EXP_LVL9	  CSamoloR  (struct csAmolo_ *amolo);
-//void		EXP_LVL9	  CSamoloS  (struct cs_GxXform_ *amolo);
+//int			EXP_LVL9	  CSamoloS  (struct cs_GxXform_ *amolo);
 
 int			EXP_LVL9	  CSgeoctD  (struct csGeoct_ *geoct);
 int			EXP_LVL9	  CSgeoctF2 (struct csGeoct_ *geoct,double *ll_trg,Const double *ll_src);
@@ -1407,6 +1441,7 @@ int			EXP_LVL9	  CSgeoctF3 (struct csGeoct_ *geoct,double *ll_trg,Const double *
 int			EXP_LVL9	  CSgeoctI2 (struct csGeoct_ *geoct,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSgeoctI3 (struct csGeoct_ *geoct,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSgeoctL  (struct csGeoct_ *geoct,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSgeoctN  (struct csGeoct_ *geoct);
 int			EXP_LVL9	  CSgeoctQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSgeoctR  (struct csGeoct_ *geoct);
 int			EXP_LVL9	  CSgeoctS  (struct cs_GxXform_ *geoct);
@@ -1417,6 +1452,7 @@ int			EXP_LVL9	  CSparm4F3 (struct csParm4_ *parm4,double *ll_trg,Const double *
 int			EXP_LVL9	  CSparm4I2 (struct csParm4_ *parm4,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSparm4I3 (struct csParm4_ *parm4,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSparm4L  (struct csParm4_ *parm4,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSparm4N  (struct csParm4_ *parm4);
 int			EXP_LVL9	  CSparm4Q  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSparm4R  (struct csParm4_ *parm4);
 int			EXP_LVL9	  CSparm4S  (struct cs_GxXform_ *parm4);
@@ -1427,6 +1463,7 @@ int			EXP_LVL9	  CSparm6F3 (struct csParm6_ *parm6,double *ll_trg,Const double *
 int			EXP_LVL9	  CSparm6I2 (struct csParm6_ *parm6,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSparm6I3 (struct csParm6_ *parm6,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSparm6L  (struct csParm6_ *parm6,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSparm6N  (struct csParm6_ *parm6);
 int			EXP_LVL9	  CSparm6Q  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSparm6R  (struct csParm6_ *parm6);
 int			EXP_LVL9	  CSparm6S  (struct cs_GxXform_ *parm6);
@@ -1437,6 +1474,7 @@ int			EXP_LVL9	  CSbursaF3 (struct csBursa_ *bursa,double *ll_trg,Const double *
 int			EXP_LVL9	  CSbursaI2 (struct csBursa_ *bursa,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSbursaI3 (struct csBursa_ *bursa,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSbursaL  (struct csBursa_ *bursa,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSbursaN  (struct csBursa_ *gxXfrm);
 int			EXP_LVL9	  CSbursaQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSbursaR  (struct csBursa_ *bursa);
 int			EXP_LVL9	  CSbursaS  (struct cs_GxXform_ *gxXfrm);
@@ -1447,6 +1485,7 @@ int			EXP_LVL9	  CSframeF3 (struct csFrame_ *frame,double *ll_trg,Const double *
 int			EXP_LVL9	  CSframeI2 (struct csFrame_ *frame,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSframeI3 (struct csFrame_ *frame,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSframeL  (struct csFrame_ *frame,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSframeN  (struct csFrame_ *frame);
 int			EXP_LVL9	  CSframeQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSframeR  (struct csFrame_ *frame);
 int			EXP_LVL9	  CSframeS  (struct cs_GxXform_ *frame);
@@ -1457,6 +1496,7 @@ int			EXP_LVL9	  CSparm7F3 (struct csParm7_ *parm7,double *ll_trg,Const double *
 int			EXP_LVL9	  CSparm7I2 (struct csParm7_ *parm7,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSparm7I3 (struct csParm7_ *parm7,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSparm7L  (struct csParm7_ *parm7,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSparm7N  (struct csParm7_ *parm7);
 int			EXP_LVL9	  CSparm7Q  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSparm7R  (struct csParm7_ *parm7);
 int			EXP_LVL9	  CSparm7S  (struct cs_GxXform_ *parm7);
@@ -1469,6 +1509,7 @@ int			EXP_LVL9	  CSbdkasF3 (struct csBdkas_ *bdkas,double *ll_trg,Const double *
 int			EXP_LVL9	  CSbdkasI2 (struct csBdkas_ *bdkas,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSbdkasI3 (struct csBdkas_ *bdkas,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSbdkasL  (struct csBdkas_ *bdkas,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSbdkasN  (struct csBdkas_ *bdkas);
 int			EXP_LVL9	  CSbdkasQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSbdkasR  (struct csBdkas_ *bdkas);
 int			EXP_LVL9	  CSbdkasS  (struct cs_GxXform_ *bdkas);
@@ -1479,6 +1520,7 @@ int			EXP_LVL9	  CSmulrgF3 (struct csMulrg_ *mulrg,double *ll_trg,Const double *
 int			EXP_LVL9	  CSmulrgI2 (struct csMulrg_ *mulrg,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSmulrgI3 (struct csMulrg_ *mulrg,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSmulrgL  (struct csMulrg_ *mulrg,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSmulrgN  (struct csMulrg_ *mulrg);
 int			EXP_LVL9	  CSmulrgQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSmulrgR  (struct csMulrg_ *mulrg);
 int			EXP_LVL9	  CSmulrgS  (struct cs_GxXform_ *mulrg);
@@ -1489,9 +1531,10 @@ int			EXP_LVL9	  CSmulrgS  (struct cs_GxXform_ *mulrg);
 //int			EXP_LVL9	  CSplynmI2 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
 //int			EXP_LVL9	  CSplynmI3 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
 //int			EXP_LVL9	  CSplynmL  (struct csPlynm_ *plynm,int cnt,Const double pnts [][3]);
+//int			EXP_LVL9	  CSplynmN  (struct csPlynm_ *plynm);
 //int			EXP_LVL9	  CSplynmQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 //int			EXP_LVL9	  CSplynmR  (struct csPlynm_ *plynm);
-//void		EXP_LVL9	  CSplynmS  (struct cs_GxXform_ *plynm);
+//int			EXP_LVL9	  CSplynmS  (struct cs_GxXform_ *plynm);
 
 int			EXP_LVL9	  CSgridiD  (struct csGridi_ *gridi);
 int			EXP_LVL9	  CSgridiF2 (struct csGridi_ *gridi,double *ll_trg,Const double *ll_src);
@@ -1499,6 +1542,7 @@ int			EXP_LVL9	  CSgridiF3 (struct csGridi_ *gridi,double *ll_trg,Const double *
 int			EXP_LVL9	  CSgridiI2 (struct csGridi_ *gridi,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSgridiI3 (struct csGridi_ *gridi,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSgridiL  (struct csGridi_ *gridi,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSgridiN  (struct csGridi_ *gridi);
 int			EXP_LVL9	  CSgridiQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSgridiR  (struct csGridi_ *gridi);
 int			EXP_LVL9	  CSgridiS  (struct cs_GxXform_ *gridi);
@@ -1511,6 +1555,7 @@ int			EXP_LVL9	  CSparm3F3 (struct csParm3_ *parm3,double *ll_trg,Const double *
 int			EXP_LVL9	  CSparm3I2 (struct csParm3_ *parm3,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSparm3I3 (struct csParm3_ *parm3,double *ll_trg,Const double *ll_src);
 int			EXP_LVL9	  CSparm3L  (struct csParm3_ *parm3,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSparm3N  (struct csParm3_ *parm3);
 int			EXP_LVL9	  CSparm3Q  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
 int			EXP_LVL9	  CSparm3R  (struct csParm3_ *parm3);
 int			EXP_LVL9	  CSparm3S  (struct cs_GxXform_ *parm3);
@@ -1603,4 +1648,3 @@ int			EXP_LVL9	  CSost02Q  (struct csGeodeticXfromParmsFile_* fileParms,Const ch
 int			EXP_LVL9	  CSost02R  (struct cs_Ost02_ *ost02);
 int			EXP_LVL9	  CSost02S  (struct cs_GridFile_ *ost02);
 double		EXP_LVL9	  CSost02T  (struct cs_Ost02_ *ost02,double *ll_src,short direction);
-

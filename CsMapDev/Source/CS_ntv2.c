@@ -36,7 +36,7 @@
 
 #include "cs_map.h"
 
-long32_t csNTv2BufrSz = 4096;
+long32_t csNTv2BufrSz = 32768L;
 
 int CScntv2Q (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {

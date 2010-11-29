@@ -203,6 +203,10 @@ int EXP_LVL9 CSwgs72L (struct csWgs72_ *wgs72,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
 }
+int EXP_LVL9 CSwgs72N  (struct csWgs72_ *wgs72)
+{
+	return FALSE;
+}
 int EXP_LVL9 CSwgs72R (struct csWgs72_ *wgs72)
 {
 	return 0;

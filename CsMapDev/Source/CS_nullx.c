@@ -60,6 +60,7 @@ int EXP_LVL9 CSnullxS (struct cs_GxXform_* gxXfrm)
 	gxXfrm->invrs2D = (cs_INVRS2D_CAST)CSnullxI2;
 	gxXfrm->invrs3D = (cs_INVRS3D_CAST)CSnullxI3;
 	gxXfrm->inRange = (cs_INRANGE_CAST)CSnullxL;
+	gxXfrm->isNull  = (cs_ISNULL_CAST) CSnullxN;
 	gxXfrm->release = (cs_RELEASE_CAST)CSnullxR;
 	gxXfrm->destroy = (cs_DESTROY_CAST)CSnullxD;
 	
@@ -118,6 +119,10 @@ int EXP_LVL9 CSnullxI2 (struct csNullx_ *nullx,double* trgLl,Const double* srcLl
 int EXP_LVL9 CSnullxL (struct csNullx_ *nullx,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
+}
+int EXP_LVL9 CSnullxN (struct csNullx_ *nullx)
+{
+	return TRUE;
 }
 int EXP_LVL9 CSnullxR (struct csNullx_ *nullx)
 {

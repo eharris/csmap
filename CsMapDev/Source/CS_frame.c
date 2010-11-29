@@ -322,6 +322,20 @@ int EXP_LVL9 CSframeL (struct csFrame_ *frame,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
 }
+int EXP_LVL9 CSframeN (struct csFrame_ *frame)
+{
+	extern double cs_One;		/* 1.0 */
+	int isNull;
+	
+	isNull = (fabs (frame->deltaX) < 1.0E-03) &&
+			 (fabs (frame->deltaY) < 1.0E-03) &&
+			 (fabs (frame->deltaZ) < 1.0E-03) &&
+			 (fabs (frame->rotX)   < 1.0E-06) &&
+			 (fabs (frame->rotY)   < 1.0E-06) &&
+			 (fabs (frame->rotZ)   < 1.0E-06) &&
+			 (fabs (frame->scale)  < 1.0E-08);
+	return isNull;
+}
 int EXP_LVL9 CSframeR (struct csFrame_ *frame)
 {
 	return 0;
