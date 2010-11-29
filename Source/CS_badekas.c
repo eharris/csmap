@@ -360,6 +360,20 @@ int EXP_LVL9 CSbdkasI2 (struct csBdkas_ *badekas, double* trgLl, Const double* s
 	}
 	return rtnVal;
 }
+int EXP_LVL9 CSbdkasN (struct csBdkas_ *bdkas)
+{
+	extern double cs_One;		/* 1.0 */
+	int isNull;
+
+	isNull = (fabs (bdkas->deltaX) < 1.0E-03) &&
+			 (fabs (bdkas->deltaY) < 1.0E-03) &&
+			 (fabs (bdkas->deltaZ) < 1.0E-03) &&
+			 (fabs (bdkas->rotX)   < 1.0E-06) &&
+			 (fabs (bdkas->rotY)   < 1.0E-06) &&
+			 (fabs (bdkas->rotZ)   < 1.0E-06) &&
+			 (fabs (bdkas->scale)  < 1.0E-08);
+	return isNull;
+}
 int EXP_LVL9 CSbdkasL (struct csBdkas_ *badekas, int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;

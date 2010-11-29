@@ -409,6 +409,15 @@ int EXP_LVL9 CSmolodL (struct csMolod_ *molod,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
 }
+int EXP_LVL9 CSmolodN (struct csMolod_ *molod)
+{
+	int isNull;
+	
+	isNull = (fabs (molod->deltaX) < 1.0e-03) &&
+			 (fabs (molod->deltaY) < 1.0e-03) &&
+			 (fabs (molod->deltaZ) < 1.0e-03);
+	return isNull;
+}
 int EXP_LVL9 CSmolodR (struct csMolod_ *molod)
 {
 	return 0;

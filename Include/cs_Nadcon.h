@@ -218,13 +218,16 @@ enum csNadcnShiftType	{	nadconNone = 0,
 struct cs_Nadcn_
 {
 	enum csNadcnShiftType type;
-	
+
+	short usingVertcon;
+
 	double errorValue;
 	double cnvrgValue;
 	short maxIterations;
 
 	struct cs_NadconFile_* lngShift;
 	struct cs_NadconFile_* latShift;
+	
 };
 
 struct cs_NadconFile_* CSnewNadconFile (Const char* filePath,long32_t bufferSize,

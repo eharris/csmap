@@ -35,22 +35,22 @@ unsigned cs_GxIndexCount = 0;
 struct cs_XfrmTab_ cs_XfrmTab [] =
 {
 	//  Key Name    , initi  , check  , methodCode    , method flags    , epsg , description
-    {         "NULL",CSnullxS,CSnullxQ,cs_DTCMTH_NULLX,cs_XFRMFLGS_NULLX,   0UL,"Null Transformation, produces no change in coordinates"},
-	{        "WGS72",CSwgs72S,CSwgs72Q,cs_DTCMTH_WGS72,cs_XFRMFLGS_WGS72,   0UL,"WGS72 Transformation ala DMA"},
-	{   "MOLODENSKY",CSmolodS,CSmolodQ,cs_DTCMTH_MOLOD,cs_XFRMFLGS_MOLOD,9604UL,"Molodensky Transformation"},
-//	{ "ABMOLODENSKY",CSamoloS,CSamoloQ,cs_DTCMTH_AMOLO,cs_XFRMFLGS_AMOLO,9605UL,"Abridged Molodensky Transformation"},
-	{   "GEOCENTRIC",CSgeoctS,CSgeoctQ,cs_DTCMTH_GEOCT,cs_XFRMFLGS_GEOCT,9603UL,"Geocentric Translation Transformation"},
-	{   "4PARAMETER",CSparm4S,CSparm4Q,cs_DTCMTH_4PARM,cs_XFRMFLGS_4PARM,   0UL,"Four Parameter Transformation"},
-	{   "6PARAMETER",CSparm4S,CSparm6Q,cs_DTCMTH_6PARM,cs_XFRMFLGS_6PARM,   0UL,"Six Parameter Transformation"},
-	{    "BURSAWOLF",CSbursaS,CSbursaQ,cs_DTCMTH_BURSA,cs_XFRMFLGS_BURSA,9606UL,"Bursa Wolf Transformation (aka Position Vector)"},
-	{   "BURSAFRAME",CSframeS,CSframeQ,cs_DTCMTH_FRAME,cs_XFRMFLGS_FRAME,9607UL,"Coordinate Frame Rotation Transformation"},
-	{   "7PARAMETER",CSparm7S,CSparm7Q,cs_DTCMTH_7PARM,cs_XFRMFLGS_7PARM,   0UL,"Seven Parameter Transformation"},
-	{  "MOLOBADEKAS",CSbdkasS,CSbdkasQ,cs_DTCMTH_BDKAS,cs_XFRMFLGS_BDKAS,9636UL,"Molodensky Badekas Transformation"},
-	{       "MULREG",CSmulrgS,CSmulrgQ,cs_DTCMTH_MULRG,cs_XFRMFLGS_MULRG,9802UL,"Multiple Regression Transformation ala DMA"},
-//	{       "POLYNM",CSplynmS,CSplynmQ,cs_DTCMTH_PLYNM,cs_XFRMFLGS_PLYNM,   0UL,"General Polynomial Transformation"},
-	{  "GRID_INTERP",CSgridiS,CSgridiQ,cs_DTCMTH_GFILE,cs_XFRMFLGS_GFILE,9654UL,"Grid File Interpolation"},
-	{   "3PARAMETER",CSparm3S,CSparm3Q,cs_DTCMTH_3PARM,cs_XFRMFLGS_3PARM,   0UL,"Three Parameter Transformation -- DEPRECATED"},
-	{             "",NULL,    NULL,    cs_DTCMTH_NONE, 0,                   0UL,"End of table marker"}
+    {         "NULL",CSnullxS,CSnullxN,CSnullxQ,cs_DTCMTH_NULLX,cs_XFRMFLGS_NULLX,   0UL,"Null Transformation, produces no change in coordinates"},
+	{        "WGS72",CSwgs72S,CSwgs72N,CSwgs72Q,cs_DTCMTH_WGS72,cs_XFRMFLGS_WGS72,   0UL,"WGS72 Transformation ala DMA"},
+	{   "MOLODENSKY",CSmolodS,CSmolodN,CSmolodQ,cs_DTCMTH_MOLOD,cs_XFRMFLGS_MOLOD,9604UL,"Molodensky Transformation"},
+//	{ "ABMOLODENSKY",CSamoloS,CSamoloN,CSamoloQ,cs_DTCMTH_AMOLO,cs_XFRMFLGS_AMOLO,9605UL,"Abridged Molodensky Transformation"},
+	{   "GEOCENTRIC",CSgeoctS,CSgeoctN,CSgeoctQ,cs_DTCMTH_GEOCT,cs_XFRMFLGS_GEOCT,9603UL,"Geocentric Translation Transformation"},
+	{   "4PARAMETER",CSparm4S,CSparm4N,CSparm4Q,cs_DTCMTH_4PARM,cs_XFRMFLGS_4PARM,   0UL,"Four Parameter Transformation"},
+	{   "6PARAMETER",CSparm6S,CSparm6N,CSparm6Q,cs_DTCMTH_6PARM,cs_XFRMFLGS_6PARM,   0UL,"Six Parameter Transformation"},
+	{    "BURSAWOLF",CSbursaS,CSbursaN,CSbursaQ,cs_DTCMTH_BURSA,cs_XFRMFLGS_BURSA,9606UL,"Bursa Wolf Transformation (aka Position Vector)"},
+	{   "BURSAFRAME",CSframeS,CSframeN,CSframeQ,cs_DTCMTH_FRAME,cs_XFRMFLGS_FRAME,9607UL,"Coordinate Frame Rotation Transformation"},
+	{   "7PARAMETER",CSparm7S,CSparm7N,CSparm7Q,cs_DTCMTH_7PARM,cs_XFRMFLGS_7PARM,   0UL,"Seven Parameter Transformation"},
+	{  "MOLOBADEKAS",CSbdkasS,CSbdkasN,CSbdkasQ,cs_DTCMTH_BDKAS,cs_XFRMFLGS_BDKAS,9636UL,"Molodensky Badekas Transformation"},
+	{       "MULREG",CSmulrgS,CSmulrgN,CSmulrgQ,cs_DTCMTH_MULRG,cs_XFRMFLGS_MULRG,9802UL,"Multiple Regression Transformation ala DMA"},
+//	{       "POLYNM",CSplynmS,CSplynmN,CSplynmQ,cs_DTCMTH_PLYNM,cs_XFRMFLGS_PLYNM,   0UL,"General Polynomial Transformation"},
+	{  "GRID_INTERP",CSgridiS,CSgridiN,CSgridiQ,cs_DTCMTH_GFILE,cs_XFRMFLGS_GFILE,9654UL,"Grid File Interpolation"},
+	{   "3PARAMETER",CSparm3S,CSparm3N,CSparm3Q,cs_DTCMTH_3PARM,cs_XFRMFLGS_3PARM,   0UL,"Three Parameter Transformation -- DEPRECATED"},
+	{             "",NULL,    NULL,    NULL,    cs_DTCMTH_NONE, 0,                   0UL,"End of table marker"}
 };
 
 struct cs_GridFormatTab_ cs_GridFormatTab [] =

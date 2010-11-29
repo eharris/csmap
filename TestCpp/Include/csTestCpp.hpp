@@ -102,7 +102,7 @@ public:
     bool GetTolerances (double tolerance [3],unsigned recordNbr);
 	bool GetDataSource (std::wstring& dataSource,unsigned recordNbr);
 	bool GetDataComment (std::wstring& dataComment,unsigned recordNbr);
-    bool CompareResults (double results [3],unsigned recordNbr);
+    bool CompareResults (double results [3],unsigned recordNbr,double& dd);
 private:
     bool Ok;
     TcsCsvStatus Status;

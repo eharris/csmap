@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_Legacy.h"
 
 /* This function will extract the definition of the named Geodetic
    Transformation from the dictionary and then use that definition to
@@ -59,24 +60,162 @@ struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrm
 	int status;
 	int errorCount;
 
+		struct cs_GxXform_ *xfrmPtr;
+		struct cs_Datum_ *srcDtPtr;
+		struct cs_Datum_ *trgDtPtr;
+		struct cs_XfrmTab_* xfrmTabPtr;
+
+		int err_list [4];
+
+		if (NULL == xfrmDefPtr)
+		{
+			CS_erpt (cs_ERSUP_SOFT);
+			return NULL;
+		}
+
+		/* Prepare for any type of error. */
+
+		xfrmPtr = NULL;
+		srcDtPtr = NULL;
+		trgDtPtr = NULL;
+
+		xfrmPtr = (struct cs_GxXform_*)CS_malc (sizeof (struct cs_GxXform_));
+		if (xfrmPtr == NULL)
+		{
+			CS_erpt (cs_NO_MEM);
+			goto error;
+		}
+		memset (xfrmPtr,0,sizeof (struct cs_GxXform_));
+		xfrmPtr->isNullXfrm = FALSE;
+		xfrmPtr->userDirection = userDirection;
+
+		/* Check the definition for validity.  The dictionary compiler
+		   also performs this test, but we do it everytime here in case
+		   a program somewhere adjusted the dictionary outside of the
+		   "official" compiler. */
+		errorCount = CS_gxchk (xfrmDefPtr,0,err_list,sizeof (err_list) / sizeof (int));
+		if (errorCount)
+		{
+			CS_erpt (err_list [0]);
+			goto error;
+		}
+
+		/* Transfer the method independent stuff from the definition to the
+		   implementation structure. */
+		memcpy (&xfrmPtr->gxDef,xfrmDefPtr,sizeof (struct cs_GeodeticTransform_));
+
+		srcDtPtr = CS_dtloc (xfrmDefPtr->srcDatum);
+		if (srcDtPtr == NULL)
+		{
+			goto error;
+		}
+
+		memcpy (&xfrmPtr->srcDatum,srcDtPtr,sizeof (struct cs_Datum_));
+		CS_free (srcDtPtr);
+		srcDtPtr = NULL;
+
+		trgDtPtr = CS_dtloc (xfrmDefPtr->trgDatum);
+		if (trgDtPtr == NULL)
+		{
+			goto error;
+		}
+		memcpy (&xfrmPtr->trgDatum,trgDtPtr,sizeof (struct cs_Datum_));
+		CS_free (trgDtPtr);
+		trgDtPtr = NULL;
+
+		CS_stncp (xfrmPtr->xfrmName,xfrmDefPtr->xfrmName,sizeof (xfrmPtr->xfrmName));
+		CS_stncp (xfrmPtr->group,xfrmDefPtr->group,sizeof (xfrmPtr->group));
+		CS_stncp (xfrmPtr->description,xfrmDefPtr->description,sizeof (xfrmPtr->description));
+		CS_stncp (xfrmPtr->source,xfrmDefPtr->source,sizeof (xfrmPtr->source));
+
+		xfrmPtr->methodCode = xfrmDefPtr->methodCode;
+		xfrmPtr->epsgNbr = xfrmDefPtr->epsgCode;
+		xfrmPtr->epsgVar = xfrmDefPtr->epsgVariation;
+		xfrmPtr->inverseSupported = xfrmDefPtr->inverseSupported;
+		xfrmPtr->maxIterations = xfrmDefPtr->maxIterations;
+		xfrmPtr->protect = xfrmDefPtr->protect;
+		xfrmPtr->cnvrgValue = xfrmDefPtr->cnvrgValue;
+		xfrmPtr->errorValue = xfrmDefPtr->errorValue;
+		xfrmPtr->accuracy = xfrmDefPtr->accuracy;
+
+		/* Initialize this transformation. */
+		for (xfrmTabPtr = cs_XfrmTab;xfrmTabPtr->methodCode != cs_DTCMTH_NONE;xfrmTabPtr++)
+		{
+			if (xfrmTabPtr->methodCode == xfrmPtr->methodCode)
+			{
+				break;
+			}
+		}
+		if (xfrmTabPtr->methodCode == cs_DTCMTH_NONE)
+		{
+			CS_stncp (csErrnam,"<unknown>",MAXPATH);
+			CS_erpt (cs_UNKWN_DTCMTH);
+			goto error;
+		}
+		status = (*xfrmTabPtr->initialize)(xfrmPtr);
+		if (status != 0)
+		{
+			goto error;
+		}
+
+		return xfrmPtr;
+
+	error:
+		if (xfrmPtr != NULL)
+		{
+			CS_free (xfrmPtr);
+			xfrmPtr = NULL;
+		}
+		if (srcDtPtr != NULL)
+		{
+			CS_free (srcDtPtr);
+			srcDtPtr = NULL;
+		}
+		if (trgDtPtr != NULL)
+		{
+			CS_free (trgDtPtr);
+			trgDtPtr = NULL;
+		}
+
+		//don't free [xfrmDefPtr] - owned by the caller
+
+		return NULL;
+}
+
+/* A fallback for strange situations. */
+struct cs_GxXform_*	CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt)
+{
+	extern double cs_Zero;
+	extern double cs_Three;
+	
+	extern double cs_Five;
+	extern double cs_Eight;
+
+	extern short cs_Protect;
+	extern char csErrnam [];
+	extern struct cs_XfrmTab_ cs_XfrmTab [];
+
+	int status;
+
 	struct cs_GxXform_ *xfrmPtr;
-	struct cs_Datum_ *srcDtPtr;
-	struct cs_Datum_ *trgDtPtr;
 	struct cs_XfrmTab_* xfrmTabPtr;
 
-	int err_list [4];
-
-	if (NULL == xfrmDefPtr)
-    {
-        CS_erpt (cs_ERSUP_SOFT);
-        return NULL;
-    }
+	char chrTemp [256];
 
     /* Prepare for any type of error. */
-
 	xfrmPtr = NULL;
-	srcDtPtr = NULL;
-	trgDtPtr = NULL;
+
+	/* Before we get too far into this, verify that this will actually work. */
+	if (src_dt->to84_via != cs_DTCTYP_MOLO && src_dt->to84_via != cs_DTCTYP_BURS &&
+											  src_dt->to84_via != cs_DTCTYP_7PARM)
+	{
+		goto error;
+	}
+	if (dst_dt->to84_via != cs_DTCTYP_WGS84)
+	{
+		goto error;
+	}
+	/* OK, this should work just fine. */
 
 	xfrmPtr = (struct cs_GxXform_*)CS_malc (sizeof (struct cs_GxXform_));
 	if (xfrmPtr == NULL)
@@ -85,56 +224,67 @@ struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrm
 		goto error;
 	}
 	memset (xfrmPtr,0,sizeof (struct cs_GxXform_));
-	xfrmPtr->userDirection = userDirection;
 
-	/* Check the definition for validity.  The dictionary compiler
-	   also performs this test, but we do it everytime here in case
-	   a program somewhere adjusted the dictionary outside of the
-	   "official" compiler. */
-	errorCount = CS_gxchk (xfrmDefPtr,0,err_list,sizeof (err_list) / sizeof (int));
-	if (errorCount)
+	memcpy (&xfrmPtr->srcDatum,src_dt,sizeof (xfrmPtr->srcDatum));
+	memcpy (&xfrmPtr->trgDatum,dst_dt,sizeof (xfrmPtr->trgDatum));
+
+	xfrmPtr->isNullXfrm = FALSE;
+	xfrmPtr->epsgVar = 0;
+	xfrmPtr->inverseSupported = TRUE;
+	xfrmPtr->maxIterations = 8;
+	xfrmPtr->protect = 0;
+	xfrmPtr->userDirection = cs_DTCDIR_FWD;
+	xfrmPtr->epsgNbr = 0UL;
+	xfrmPtr->cnvrgValue = 1.0E-09;
+	xfrmPtr->errorValue = 1.0E-06;
+	xfrmPtr->accuracy = cs_Eight;
+
+	sprintf (chrTemp,"%s_to_%s",src_dt->key_nm,dst_dt->key_nm);
+	CS_stncp (xfrmPtr->xfrmName,chrTemp,sizeof (xfrmPtr->xfrmName));
+	CS_stncp (xfrmPtr->group,"USER",sizeof (xfrmPtr->group));
+	CS_stncp (xfrmPtr->description,src_dt->dt_name,sizeof (xfrmPtr->description));
+	CS_stncp (xfrmPtr->source,"Automatic conversion from CS-MAP 12.02 or earlier",sizeof (xfrmPtr->source));
+
+	CS_stncp (xfrmPtr->gxDef.xfrmName,chrTemp,sizeof (xfrmPtr->gxDef.xfrmName));
+	CS_stncp (xfrmPtr->gxDef.srcDatum,src_dt->key_nm,sizeof (xfrmPtr->gxDef.srcDatum));
+	CS_stncp (xfrmPtr->gxDef.trgDatum,dst_dt->key_nm,sizeof (xfrmPtr->gxDef.trgDatum));
+	CS_stncp (xfrmPtr->gxDef.group,"USER",sizeof (xfrmPtr->gxDef.group));
+	CS_stncp (xfrmPtr->gxDef.description,src_dt->dt_name,sizeof (xfrmPtr->gxDef.description));
+	CS_stncp (xfrmPtr->gxDef.source,"Automatic conversion from CS-MAP 12.02 or earlier",sizeof (xfrmPtr->gxDef.source));
+	xfrmPtr->gxDef.epsgCode = 0;
+	xfrmPtr->gxDef.epsgVariation = 0;
+	xfrmPtr->gxDef.inverseSupported = 0;
+	xfrmPtr->gxDef.maxIterations = xfrmPtr->maxIterations;
+	xfrmPtr->gxDef.cnvrgValue = xfrmPtr->cnvrgValue;
+	xfrmPtr->gxDef.errorValue = xfrmPtr->errorValue;
+	xfrmPtr->gxDef.rangeMinLng = cs_Zero;
+	xfrmPtr->gxDef.rangeMaxLng = cs_Zero;
+	xfrmPtr->gxDef.rangeMinLat = cs_Zero;
+	xfrmPtr->gxDef.rangeMaxLat = cs_Zero;
+
+	xfrmPtr->gxDef.parameters.geocentricParameters.deltaX  = src_dt->delta_X;
+	xfrmPtr->gxDef.parameters.geocentricParameters.deltaY  = src_dt->delta_Y;
+	xfrmPtr->gxDef.parameters.geocentricParameters.deltaZ  = src_dt->delta_Z;
+	xfrmPtr->gxDef.parameters.geocentricParameters.rotateX = src_dt->rot_X;
+	xfrmPtr->gxDef.parameters.geocentricParameters.rotateY = src_dt->rot_Y;
+	xfrmPtr->gxDef.parameters.geocentricParameters.rotateZ = src_dt->rot_Z;
+	xfrmPtr->gxDef.parameters.geocentricParameters.scale   = src_dt->bwscale;
+
+	if (src_dt->to84_via == cs_DTCTYP_MOLO)
 	{
-		CS_erpt (err_list [0]);
-		goto error;
+		xfrmPtr->methodCode = cs_DTCMTH_MOLOD;
+		xfrmPtr->accuracy = cs_Eight;
 	}
-
-	/* Transfer the method independent stuff from the definition to the
-	   implementation structure. */
-	memcpy (&xfrmPtr->gxDef,xfrmDefPtr,sizeof (struct cs_GeodeticTransform_));
-
-	srcDtPtr = CS_dtloc (xfrmDefPtr->srcDatum);
-	if (srcDtPtr == NULL)
+	else if (src_dt->to84_via == cs_DTCTYP_BURS)
 	{
-		goto error;
+		xfrmPtr->methodCode = cs_DTCMTH_BURSA;
+		xfrmPtr->accuracy = cs_Five;
 	}
-
-	memcpy (&xfrmPtr->srcDatum,srcDtPtr,sizeof (struct cs_Datum_));
-	CS_free (srcDtPtr);
-	srcDtPtr = NULL;
-
-	trgDtPtr = CS_dtloc (xfrmDefPtr->trgDatum);
-	if (trgDtPtr == NULL)
+	else if (src_dt->to84_via == cs_DTCTYP_7PARM)
 	{
-		goto error;
+		xfrmPtr->methodCode = cs_DTCMTH_7PARM;
+		xfrmPtr->accuracy = cs_Three;
 	}
-	memcpy (&xfrmPtr->trgDatum,trgDtPtr,sizeof (struct cs_Datum_));
-	CS_free (trgDtPtr);
-	trgDtPtr = NULL;
-
-	CS_stncp (xfrmPtr->xfrmName,xfrmDefPtr->xfrmName,sizeof (xfrmPtr->xfrmName));
-	CS_stncp (xfrmPtr->group,xfrmDefPtr->group,sizeof (xfrmPtr->group));
-	CS_stncp (xfrmPtr->description,xfrmDefPtr->description,sizeof (xfrmPtr->description));
-	CS_stncp (xfrmPtr->source,xfrmDefPtr->source,sizeof (xfrmPtr->source));
-
-	xfrmPtr->methodCode = xfrmDefPtr->methodCode;
-	xfrmPtr->epsgNbr = xfrmDefPtr->epsgCode;
-//	xfrmPtr->epsgVariation = xfrmDefPtr->????;
-	xfrmPtr->inverseSupported = xfrmDefPtr->inverseSupported;
-	xfrmPtr->maxIterations = xfrmDefPtr->maxIterations;
-	xfrmPtr->protect = xfrmDefPtr->protect;
-	xfrmPtr->cnvrgValue = xfrmDefPtr->cnvrgValue;
-	xfrmPtr->errorValue = xfrmDefPtr->errorValue;
-	xfrmPtr->accuracy = xfrmDefPtr->accuracy;
 
 	/* Initialize this transformation. */
 	for (xfrmTabPtr = cs_XfrmTab;xfrmTabPtr->methodCode != cs_DTCMTH_NONE;xfrmTabPtr++)
@@ -155,7 +305,6 @@ struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrm
 	{
 		goto error;
 	}
-
 	return xfrmPtr;
 
 error:
@@ -164,19 +313,6 @@ error:
 		CS_free (xfrmPtr);
 		xfrmPtr = NULL;
 	}
-	if (srcDtPtr != NULL)
-	{
-		CS_free (srcDtPtr);
-		srcDtPtr = NULL;
-	}
-	if (trgDtPtr != NULL)
-	{
-		CS_free (trgDtPtr);
-		trgDtPtr = NULL;
-	}
-
-    //don't free [xfrmDefPtr] - owned by the caller
-	
 	return NULL;
 }
 int CS_gxFrwrd3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
@@ -307,4 +443,32 @@ int CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFl
 		}
 	}
 	return (err_cnt + 1);
+}
+int CS_gxIsNull (struct cs_GxXform_ *xfrmPtr)
+{
+	extern struct cs_XfrmTab_ cs_XfrmTab[];
+
+	int isNull;
+	struct cs_XfrmTab_* tblPtr;
+
+	/* Locate the geodetic transform method in the table, and thus
+	   verify the validity of the method code. */
+	for (tblPtr = cs_XfrmTab;tblPtr->methodCode != cs_DTCMTH_NONE;tblPtr += 1)
+	{
+		if (tblPtr->methodCode == xfrmPtr->methodCode)
+		{
+			break;
+		}
+	}
+	isNull = FALSE;
+	if (tblPtr->methodCode != cs_DTCMTH_NONE)
+	{
+		/* Call the "isNull" function for the indicated method code. */
+		isNull = (*tblPtr->isNull)(&xfrmPtr->xforms);
+	}
+	return isNull;
+}
+void CS_gxDisable (struct cs_GxXform_ *xfrmPtr)
+{
+	xfrmPtr->isNullXfrm = TRUE;
 }

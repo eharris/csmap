@@ -172,6 +172,7 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 
 	char wrkBufr [MAXPATH + MAXPATH];
 
+	gridFilePtr = NULL;
 	gridi = &gxXfrm->xforms.gridi;
 
 	gridi->userDirection = gxXfrm->userDirection;
@@ -179,6 +180,7 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 	gridi->cnvrgValue    = gxXfrm->cnvrgValue;
 	gridi->maxIterations = gxXfrm->maxIterations;
 	gridi->useBest = FALSE;
+	gridi->fallbackDir = cs_DTCDIR_FWD;
 
 	gxXfrm->frwrd2D = (cs_FRWRD2D_CAST)CSgridiF2;
 	gxXfrm->frwrd3D = (cs_FRWRD3D_CAST)CSgridiF3;
@@ -280,6 +282,12 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 			CS_erpt (cs_FLBK_NTFND);
 			goto error;
 		}
+if (!CS_stricmp (filesPtr->fallback,"NTF-G_to_WGS84") &&
+    !CS_stricmp (gxXfrm->gxDef.srcDatum,"RGF93") &&
+    !CS_stricmp (gxXfrm->gxDef.trgDatum,"NTF-G-Grid"))
+{
+	gridi->fallbackDir = cs_DTCDIR_INV;
+}
 	}
 	return 0;
 
@@ -307,6 +315,7 @@ int EXP_LVL9 CSgridiF3 (struct csGridi_ *gridi,double trgLl [3],Const double src
 	extern char csErrnam [MAXPATH];
 
 	int status;
+	int fbStatus;
 	int selectedIdx;
 	
 	struct cs_GridFile_* gridFilePtr;
@@ -341,9 +350,28 @@ int EXP_LVL9 CSgridiF3 (struct csGridi_ *gridi,double trgLl [3],Const double src
 	}
 	else if (gridi->fallback != 0)
 	{
-		status = CS_gxFrwrd3D (gridi->fallback,trgLl,srcLl);
-		if (status == 0) status = 2;
-		else status = 1;
+		/* These function calls probably should be calls to the 3D versions,
+		   but this is what was in the pre-RFC 2 code.  Thus we duplicate that
+		   code here in order to get all regression tests to pass.  This is
+		   probably a problem in pre-RFC 2 CS-MAP, but we'll fix it only after
+		   all regression tests have been passed and acceptance by QA has been
+		   made.
+		   
+		   Note: Most all grid interpolation file methods are 2D, but the
+		   French method is different.  That's the likely cause of the bug. */
+		if (gridi->fallbackDir == cs_DTCDIR_FWD)
+		{
+			fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+		}
+		else if (gridi->fallbackDir == cs_DTCDIR_INV)
+		{
+			fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+		}
+		else
+		{
+			fbStatus = 1;
+		}
+		status = (fbStatus == 0) ? 2 : 1;
 	}
 	else
 	{
@@ -391,7 +419,18 @@ int EXP_LVL9 CSgridiF2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	}
 	else if (gridi->fallback != 0)
 	{
-		fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+		if (gridi->fallbackDir == cs_DTCDIR_FWD)
+		{
+			fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+		}
+		else if (gridi->fallbackDir == cs_DTCDIR_INV)
+		{
+			fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+		}
+		else
+		{
+			fbStatus = 1;
+		}
 		status = (fbStatus == 0) ? 2 : 1;
 	}
 	else
@@ -405,6 +444,7 @@ int EXP_LVL9 CSgridiI3 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	extern char csErrnam [MAXPATH];
 
 	int status;
+	int fbStatus;
 	int selectedIdx;
 	
 	struct cs_GridFile_* gridFilePtr;
@@ -439,9 +479,32 @@ int EXP_LVL9 CSgridiI3 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	}
 	else if (gridi->fallback != 0)
 	{
-		status = CS_gxInvrs3D (gridi->fallback,trgLl,srcLl);
-		if (status == 0) status = 2;
-		else status = 1;
+		if (gridi->fallbackDir == cs_DTCDIR_FWD)
+		{
+			/* One might think this should be a call to CS_gxInvrs3d.  In
+			   releases of CS-MAP, prior to RFC 2, it was the equivalent of
+			   CS_gxInvrs2D, so that's what we have here in order to preclude
+			   regression test failures.  Thinking about this sime more, I
+			   believe this is correct, as this is a grid file interpolation
+			   method, and most all of these, except the French, is a two
+			   dimensional operation.  Thus, when a fall back function is
+			   used, the two dimensional version should also be used. */
+			/* TODO:  See if this needs to get special treatment for the
+			   French variation of grid file interpolation. */
+			fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+		}
+		else if (gridi->fallbackDir == cs_DTCDIR_INV)
+		{
+			/* TODO: See commant above; some special treatment for the French
+			   grid file interpolation method may be needed here as the
+			   French method is indeed three dimensional. */
+			fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+		}
+		else
+		{
+			fbStatus = 1;
+		}
+		status = (fbStatus == 0) ? 2 : 1;
 	}
 	else
 	{
@@ -454,6 +517,7 @@ int EXP_LVL9 CSgridiI2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	extern char csErrnam [MAXPATH];
 
 	int status;
+	int fbStatus;
 	int selectedIdx;
 	
 	struct cs_GridFile_* gridFilePtr;
@@ -488,9 +552,19 @@ int EXP_LVL9 CSgridiI2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	}
 	else if (gridi->fallback != 0)
 	{
-		status = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
-		if (status == 0) status = 2;
-		else status = 1;
+		if (gridi->fallbackDir == cs_DTCDIR_FWD)
+		{
+			fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+		}
+		else if (gridi->fallbackDir == cs_DTCDIR_INV)
+		{
+			fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+		}
+		else
+		{
+			fbStatus = 1;
+		}
+		status = (fbStatus == 0) ? 2 : 1;
 	}
 	else
 	{
@@ -503,6 +577,13 @@ int EXP_LVL9 CSgridiL (struct csGridi_ *gridi,int cnt,Const double pnts [][3])
 	int status;
 	status = 0;
 	return status;
+}
+int EXP_LVL9 CSgridiN  (struct csGridi_ *gridi)
+{
+	int isNull;
+	
+	isNull = (gridi->fileCount == 0);
+	return isNull;
 }
 int EXP_LVL9 CSgridiR (struct csGridi_ *gridi)
 {

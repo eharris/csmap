@@ -278,6 +278,28 @@ int EXP_LVL9 CSparm6L (struct csParm6_ *parm6,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
 }
+int EXP_LVL9 CSparm6N (struct csParm6_ *parm6)
+{
+	extern double cs_One;		/* 1.0 */
+	int isNull;
+	
+	isNull = (fabs (parm6->deltaX) < 1.0E-03) &&
+			 (fabs (parm6->deltaY) < 1.0E-03) &&
+			 (fabs (parm6->deltaZ) < 1.0E-03) &&
+
+			 (fabs (parm6->rt11 - cs_One) < 1.0E-08) &&
+			 (fabs (parm6->rt12)          < 1.0E-08) &&
+			 (fabs (parm6->rt13)          < 1.0E-08) &&
+
+			 (fabs (parm6->rt21)          < 1.0E-08) &&
+			 (fabs (parm6->rt22 - cs_One) < 1.0E-08) &&
+			 (fabs (parm6->rt23)          < 1.0E-08) &&
+
+			 (fabs (parm6->rt31)          < 1.0E-08) &&
+			 (fabs (parm6->rt32)          < 1.0E-08) &&
+			 (fabs (parm6->rt33 - cs_One) < 1.0E-08);
+	return isNull;
+}
 int EXP_LVL9 CSparm6R (struct csParm6_ *parm6)
 {
 	return 0;
