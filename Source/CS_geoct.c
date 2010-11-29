@@ -138,10 +138,10 @@ int EXP_LVL9 CSgeoctI3 (struct csGeoct_ *geoct,double* trgLl,Const double* srcLl
 	/* Convert the geographic coordinates to geocentric XYZ coordinates. */
 	CS_llhToXyz (xyz,srcLl,geoct->trgERad,geoct->trgESqr);
 
-	/* Invert the scaling and translation. */
-	xx = xyz [XX] - geoct->deltaX;
-	yy = xyz [YY] - geoct->deltaY;
-	zz = xyz [ZZ] - geoct->deltaZ;
+	/* Invert the translation. */
+	xyz [XX] -= geoct->deltaX;
+	xyz [YY] -= geoct->deltaY;
+	xyz [ZZ] -= geoct->deltaZ;
 
 	/* Convert the new X, Y, and Z back to latitude and longitude. */
 	status = CS_xyzToLlh (trgLl,xyz,geoct->srcERad,geoct->srcESqr);
@@ -256,6 +256,15 @@ int EXP_LVL9 CSgeoctI2 (struct csGeoct_ *geoct,double* trgLl,Const double* srcLl
 int EXP_LVL9 CSgeoctL (struct csGeoct_ *geoct,int cnt,Const double pnts [][3])
 {
 	return cs_CNVRT_OK;
+}
+int EXP_LVL9 CSgeoctN (struct csGeoct_ *geoct)
+{
+	int isNull;
+	
+	isNull = (fabs (geoct->deltaX) < 1.0E-03) &&
+			 (fabs (geoct->deltaY) < 1.0E-03) &&
+			 (fabs (geoct->deltaZ) < 1.0E-03);
+	return isNull;
 }
 int EXP_LVL9 CSgeoctR (struct csGeoct_ *geoct)
 {
