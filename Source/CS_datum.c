@@ -61,36 +61,7 @@
 
 *******************************************************************************/
 
-#define csDTCMAP_SIZE 4
-
 static char modl_name [] = "CS_datum";
-
-
-/* The following is, in hard coded form, the result that one would expect
-   should one do a CS_dtloc ("CH1903Plus_1") function call.  This definition
-   is hardcoded to insulate this code module from changes made in the
-   dictionary.  Thus this module will return the same (and correct) results
-   regardless of what the user might do to a datum dictionary.
-*/
-struct cs_Datum_ cs_Chrts95Dt =
-{
-	"ChPlusToChrts95",
-	"BESSEL",
-	6377397.155,
-	6356078.962822,
-	0.0033427731816160992517306360336969,
-	0.081696831215255833813584066738272,
-	674.374,
-	15.056,
-	405.346,
-	0.0,
-	0.0,
-	0.0,
-	0.0,
-	cs_DTCTYP_GEOCTR,
-	"CH1903+ to CHTRS95 (Swiss Terrestrial Reference System 1995)",
-	"Bessel, 1841"
-};
 
 /**********************************************************************
 **	dtc_ptr = CS_dtcsu (src_cs,dst_cs,dat_erf,blk_erf);
@@ -199,7 +170,11 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 	short direction;
 
 	int idx;
+	int gxIndex;
 	int bridgeStatus;
+	int idxDirection;
+
+	unsigned gxIdxCnt;
 
 	char errMsg [256];
 
@@ -251,10 +226,41 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 		return (dtcPtr);
 	}
 
+	/* We need to see if this is a special case.  This is largely related to
+	   installation process where a custom datum may exist in the end user's
+	   datum dictionary and (of course) there is no equivalent entry in the
+	   distribution Geodetic Transformation Dictionary.  It turns out to be
+	   advantageous to installers and such to be able to generate a properly
+	   populated cs_Dtcprm_ structure so that the installer can address this
+	   situation properly.  Therefore, IF:
+	   1> there is no geodetic transformation dictionary, OR
+	   2> the geodetic transformation dictionary exists but does not have more
+	      than one entry, OR
+	   3> a normal geodetic dictionary appears to exist, but the is not a
+	      single entry listing the provided source datum as a source datum
+	      for a defined geodetic transformation, AND
+	   4> the source datum we have been provided has a method code of
+	      Molodensky, Bursa/Wolf, or Seven Parameter, AND
+	   5> The target datum provided to us has the method code of "Is WGS84
+	      Already, no transofmrtaion is necessary"; THEN
+	   We build a full blown cs_Dtcprm_ structure with one transformation,
+	   that transformation being populated (including the cs_GeodeticTransform_
+	   structure) with information from the two cs_Datum_ structures provided
+	   to us. */ 
+	gxIndex = cs_GXIDX_NOXFRM;
 	gxIdxPtr = CS_getGxIndexPtr ();
-	if (gxIdxPtr == NULL)
+	gxIdxCnt = CS_getGxIndexCount ();
+	if (gxIdxPtr != NULL && gxIdxCnt > 1)
 	{
-		/* It appears that there is no Geodetic Transformation Dictionary.
+		gxIndex = CS_locateGxFromDatum (&idxDirection,src_dt->key_nm);
+	}
+	if (gxIndex == cs_GXIDX_NOXFRM)
+	{
+		/* It appears that there is no Geodetic Transformation Dictionary,
+		   or at least there is no definition in an existing Geodetic
+		   Transformation Dictionary which has a source datum equivalent to
+		   the source datum we have been given.  Thus, we enter a special mode.
+		   
 		   For various reasons related primarily to the installation
 		   environment it is desirable to support the generation of a
 		   transformation in this case, provided the transformation is of
@@ -262,7 +268,7 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 		CS_stncp (dtcPtr->description,src_dt->dt_name,sizeof (dtcPtr->srcKeyName));
 		CS_stncp (dtcPtr->source,"Converted by automated process from CS-MAP 12.02 or earlier.",sizeof (dtcPtr->source));
 		CS_stncp (dtcPtr->group,"USER",sizeof (dtcPtr->group));
-		xfrmPtr = CS_gxlocDtm (src_dt,dst_dt);
+		xfrmPtr = CS_gxlocDtm (src_dt,dst_dt);		/* special function just for this situation */
 		if (xfrmPtr != NULL)
 		{
 			dtcPtr->xforms [0] = xfrmPtr;
@@ -649,14 +655,14 @@ int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr)
 				gxIndex = CS_locateGxByName (pathElePtr->geodeticXformName);
 				if (gxIndex < 0)
 				{
-					CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
+					CS_stncp (csErrnam,"CS_datum::4",MAXPATH);
 					CS_erpt (cs_ISER);
 					goto error;
 				}
 				xfrmPtr = CS_getGxIndexEntry (gxIndex); 
 				if (xfrmPtr == NULL)
 				{
-					CS_stncp (csErrnam,"CS_datum::3",MAXPATH);
+					CS_stncp (csErrnam,"CS_datum::5",MAXPATH);
 					CS_erpt (cs_ISER);
 					goto error;
 				}
@@ -665,7 +671,7 @@ int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr)
 		}
 		else
 		{
-			CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
+			CS_stncp (csErrnam,"CS_datum::6",MAXPATH);
 			CS_erpt (cs_ISER);
 			goto error;
 		}
@@ -827,7 +833,7 @@ int CSdtcsuPhaseThree (struct csDtmBridge_* bridgePtr)
 		pivotDatum = CS_dtloc (pivotTblPtr->datumName);
 		if (pivotDatum == NULL)
 		{
-			CS_stncp (csErrnam,"CS_datum::6",MAXPATH);
+			CS_stncp (csErrnam,"CS_datum::7",MAXPATH);
 			CS_erpt (cs_ISER);
 			goto error;
 		}
@@ -937,7 +943,7 @@ int CSdtcsuPhaseThree (struct csDtmBridge_* bridgePtr)
 		else
 		{
 			/* Defensivce programming; should never happen. */
-			CS_stncp (csErrnam,"CS_datum::6a",MAXPATH);
+			CS_stncp (csErrnam,"CS_datum::8",MAXPATH);
 			CS_erpt (cs_ISER);
 			goto error;
 		}
@@ -953,7 +959,7 @@ int CSdtcsuPhaseThree (struct csDtmBridge_* bridgePtr)
 		}
 		else
 		{
-			CS_stncp (csErrnam,"CS_datum::6b",MAXPATH);
+			CS_stncp (csErrnam,"CS_datum::9",MAXPATH);
 			CS_erpt (cs_ISER);
 			goto error;
 		}
@@ -1245,7 +1251,7 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 			if (xfrmPtr == NULL)
 			{
 				gxStatus = -1;
-				CS_stncp (csErrnam,"CS_datum:5",sizeof (csErrnam));
+				CS_stncp (csErrnam,"CS_datum::A",sizeof (csErrnam));
 				CS_erpt (cs_ISER);
 				goto error;
 			}
@@ -1277,7 +1283,7 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 				else
 				{
 					/* We should never get here. */
-					CS_stncp (csErrnam,"CS_datum:2",MAXPATH);
+					CS_stncp (csErrnam,"CS_datum::B",MAXPATH);
 					CS_erpt (cs_ISER);
 					gxStatus = -1;
 				}
@@ -1297,7 +1303,7 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 				else
 				{
 					/* We should never get here. */
-					CS_stncp (csErrnam,"CS_datum:3",MAXPATH);
+					CS_stncp (csErrnam,"CS_datum::C",MAXPATH);
 					CS_erpt (cs_ISER);
 					gxStatus = -1;
 				}
@@ -1443,7 +1449,7 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 			case cs_DTCFLG_BLK_F:
 			default:
 				/* We should have already dealt with this situation. */
-				CS_stncp (csErrnam,"CS_datum:10",MAXPATH);
+				CS_stncp (csErrnam,"CS_datum::D",MAXPATH);
 				CS_erpt (cs_ISER);
 				status = -1;
 				break;
@@ -1462,22 +1468,3 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 error:
 	return -1;	
 }
-
-//if ((fwdCount + invCount) > 0)
-//{
-//	/* We'll be returning something.  Dummy up a path object. */
-//	CS_stncp (gpDef->pathName,"<Internally generated>",sizeof (gpDef->pathName));
-//	CS_stncp (gpDef->srcDatum,src_dt->key_nm,sizeof (gpDef->srcDatum));
-//	CS_stncp (gpDef->trgDatum,dst_dt->key_nm,sizeof (gpDef->srcDatum));
-//	gpDef->protect = 0;
-//	gpDef->reversible = 0;
-//	gpDef->elementCount = 1;
-//	gpDef->epsgCode = 0;
-//	gpDef->variant = 0;
-//	CS_stncp (gpDef->description,"Internally generated from the Geodetic Transformation Dictionary",sizeof (gpDef->description));
-//	CS_stncp (gpDef->source,"Internally generated",sizeof (gpDef->source));
-//	gpDef->group [0] = '\0';
-//	pathElePtr = &(gpDef->geodeticPathElements [0]);
-//	CS_stncp (pathElePtr->geodeticXformName,gxXfrmName,sizeof (pathElePtr->geodeticXformName));
-//	pathElePtr->direction = (fwdCount == 0);
-//}
