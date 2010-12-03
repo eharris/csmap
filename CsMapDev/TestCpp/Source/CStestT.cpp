@@ -62,6 +62,45 @@ int CStestT (bool verbose,long32_t duration)
 {
     int err_cnt = 0;
 
+#ifndef __SKIP__
+    int st;
+
+    unsigned idx;
+    unsigned gxIdxCnt;
+
+    Const struct cs_GxIndex_* gxIdxPtr;
+    struct cs_GeodeticTransform_ *gxDefPtr;
+
+    int err_list [8];
+
+    gxIdxCnt = CS_getGxIndexCount ();
+    for (idx = 0;idx < gxIdxCnt;idx++)
+    {
+        gxIdxPtr = CS_getGxIndexEntry (idx);
+        if (gxIdxPtr == NULL)
+        {
+            err_cnt += 1;
+        }
+        else
+        {
+            gxDefPtr = CS_gxdef (gxIdxPtr->xfrmName);
+            if (gxDefPtr == NULL)
+            {
+                err_cnt += 1;
+            }
+            else
+            {
+                st = CS_gxchk (gxDefPtr,cs_GXCHK_DATUM | cs_GXCHK_REPORT,err_list,sizeof (err_list) / sizeof (int));
+                if (st != 0)
+                {
+                    printf ("CS_gxchk failed on geodetic transformation named %s.\n",gxDefPtr->xfrmName);
+                    err_cnt += 1;
+                }
+                CS_free (gxDefPtr);
+            }
+        }
+    }
+#endif
 #ifdef __SKIP__
 	int st;
 	printf ("Running temporary test code module.\n");
@@ -191,7 +230,7 @@ int CStestT (bool verbose,long32_t duration)
     }
     fclose (tstStrm);
 #endif
-#ifndef __SKIP__
+#ifdef __SKIP__
 	int st;
 
     const char* dtOneName = "AFGOOYE";

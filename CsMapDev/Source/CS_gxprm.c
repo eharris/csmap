@@ -394,7 +394,7 @@ int CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFl
 	else if ((gxChkFlg & cs_GXCHK_DATUM) != 0)
 	{
 		st = CS_dtIsValid (gxXform->srcDatum);
-		if (st != 0)
+		if (st == 0)
 		{
 			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_SRCDTNM;
 		}
@@ -408,7 +408,7 @@ int CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFl
 	else if ((gxChkFlg & cs_GXCHK_DATUM) != 0)
 	{
 		st = CS_dtIsValid (gxXform->trgDatum);
-		if (st != 0)
+		if (st == 0)
 		{
 			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_TRGDTNM;
 		}

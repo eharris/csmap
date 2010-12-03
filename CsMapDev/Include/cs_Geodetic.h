@@ -1346,6 +1346,10 @@ struct cs_Dtcprm_
 #	define cs_DESTROY_CAST int(*)(Const void *)
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct cs_GxIndex_* EXP_LVL3 CS_getGxIndexPtr (void);
 unsigned EXP_LVL3 CS_getGxIndexCount ();
 Const struct cs_GxIndex_* EXP_LVL3 CS_getGxIndexEntry (unsigned index);
@@ -1648,3 +1652,7 @@ int			EXP_LVL9	  CSost02Q  (struct csGeodeticXfromParmsFile_* fileParms,Const ch
 int			EXP_LVL9	  CSost02R  (struct cs_Ost02_ *ost02);
 int			EXP_LVL9	  CSost02S  (struct cs_GridFile_ *ost02);
 double		EXP_LVL9	  CSost02T  (struct cs_Ost02_ *ost02,double *ll_src,short direction);
+
+#ifdef __cplusplus
+}
+#endif
