@@ -264,8 +264,11 @@ int EXP_LVL9 CScscomp (	Const char *inpt,
 
 	size_t rdCnt;
 	size_t wrCnt;
+	
+	long tmpLong;
 
 	char *cp;
+	char *trmPtr;
 	csFILE *inStrm;
 	csFILE *outStrm;
 	csFILE *dtStrm;
@@ -273,6 +276,7 @@ int EXP_LVL9 CScscomp (	Const char *inpt,
 	struct cs_Prjtab_ *pp;
 	struct cs_CscmpT_ *tp;
 	struct cs_Grptbl_ *gp;
+	unsigned short* usPtr;
 
 	cs_magic_t magic;
 	
@@ -789,10 +793,23 @@ int EXP_LVL9 CScscomp (	Const char *inpt,
 
 		case EPSG_NBR:
 			cs_def.epsgNbr = (short)atoi (cp);
+			cs_def.epsgNbr = 0;
+			tmpLong = strtol (cp,&trmPtr,10);
+			if (tmpLong > 0 && tmpLong < 65536)
+			{
+				usPtr = (unsigned short*)(&cs_def.epsgNbr);
+				*usPtr = (unsigned short)tmpLong;
+			}
 			break;
 
 		case SRID_NBR:
-			cs_def.srid = (short)atoi (cp);
+			cs_def.srid = 0;
+			tmpLong = strtol (cp,&trmPtr,10);
+			if (tmpLong > 0 && tmpLong < 65536)
+			{
+				usPtr = (unsigned short*)(&cs_def.srid);
+				*usPtr = (unsigned short)tmpLong;
+			}
 			break;
 
 		case EPSG_QD:
