@@ -347,6 +347,7 @@ int EXP_LVL3 CS_elwr (csFILE *strm,Const struct cs_Eldef_ *el_def,int crypt)
 
 int EXP_LVL3 CS_eldel (struct cs_Eldef_ *eldef)
 {
+    extern char *cs_ElKeyNames;
 	extern char csErrnam [];
 	extern char cs_Dir [];
 	extern short cs_Protect;
@@ -419,6 +420,18 @@ int EXP_LVL3 CS_eldel (struct cs_Eldef_ *eldef)
 	/* Make sure the entry we have been provided is marked as
 	   unencrypted so that the compariosn functions will work. */
 	eldef->fill [0] = '\0';
+
+    /* Looks like we will be deleting this ellipsoid definition.  cs_ElKeyNames
+       is a memory array which contains all of the existing ellipsoid key names.
+       Since we're going to change this, we free up the in memory list to
+       force a regeneration of same next time its use is required.  This
+       regeneration will not have this name in it if our addition completes
+       successfully. */
+    if (cs_ElKeyNames != NULL)
+    {
+        CS_free (cs_ElKeyNames);
+        cs_ElKeyNames = NULL;
+    }
 
 	/* Open up the ellipsoid dictionary file and verify its
 	   magic number. */
@@ -518,6 +531,7 @@ error:
 **********************************************************************/
 int EXP_LVL3 CS_elupd (struct cs_Eldef_ *eldef,int crypt)
 {
+    extern char *cs_ElKeyNames;
 	extern double cs_Zero;			/* 0.0 */
 	extern double cs_One;			/* 1.0 */
 	extern double cs_Two;			/* 2.0 */
@@ -689,6 +703,18 @@ int EXP_LVL3 CS_elupd (struct cs_Eldef_ *eldef,int crypt)
 	}
 	else
 	{
+        /* We're going to attempt writing this definition to the dictionary.
+           cs_ElKeyNames is a memory array which contains all of the existing
+           ellipsoid key names.  Since we're going to change this, we free up
+           the in memory list to force a regeneration of same next time its use
+           is required.  This regeneration will have the new name in it if our
+           addition completes successfully. */
+        if (cs_ElKeyNames != NULL)
+        {
+            CS_free (cs_ElKeyNames);
+            cs_ElKeyNames = NULL;
+        }
+
 		/* Here if the ellipsoid definition doesn't exist.  We
 		   have to add it. If cs_Unique is not zero, we
 		   require that a cs_Unique character be present

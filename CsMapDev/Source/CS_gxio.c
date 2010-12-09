@@ -289,6 +289,12 @@ int EXP_LVL3 CS_gxdel (struct cs_GeodeticTransform_ *gx_def)
 	CS_free (my_ptr);
 	my_ptr = NULL;
 
+    /* Looks like we'll be deleting a Geodetic Transformation definition.
+       We delete any existiung Geodetic Transformation Index so that the
+       nest time it is needed, it will be regenerated and the result will
+       not have this entry in it any longer. */
+    CS_releaseGxIndex ();
+
 	/* Open up the geodetic path dictionary file and verify its
 	   magic number. */
 	old_strm = CS_gxopn (_STRM_BINRD);
@@ -577,6 +583,12 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 	}
 	else
 	{
+        /* Looks like we'll be adding a Geodetic Transformation definition.
+           We delete any existiung Geodetic Transformation Index so that the
+           next time it is needed, it will be regenerated and the result will
+           have this new entry in it. */
+        CS_releaseGxIndex ();
+
 		/* Here if the geodetic path definition doesn't exist.  We
 		   have to add it. If cs_Unique is not zero, we require that
 		   a cs_Unique character be present in the key name of the path
