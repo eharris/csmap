@@ -352,6 +352,7 @@ int EXP_LVL3 CS_cswr (csFILE *strm,Const struct cs_Csdef_ *cs_def,int crypt)
 
 int EXP_LVL3 CS_csdel (struct cs_Csdef_ *csdef)
 {
+    extern char *cs_CsKeyNames;
 	extern char csErrnam [];
 	extern char cs_Dir [];
 	extern short cs_Protect;
@@ -434,6 +435,17 @@ int EXP_LVL3 CS_csdel (struct cs_Csdef_ *csdef)
 	   NOT encrypted so that the comparison function will
 	   work properly. */
 	csdef->fill [0] = '\0';
+
+	/* cs_CsKeyNames is a list of coordinate system key names maintained in
+	   memory to facilitate the rapid validation of a coordinate system key
+	   name.  Once our deletion of this coordinate system has been completed,
+	   thatlist will not longer be valid.  Thus, we invalidate that list,
+	   forcing a regeneration next time it is needed. */
+    if (cs_CsKeyNames != NULL)
+    {
+        CS_free (cs_CsKeyNames);
+        cs_CsKeyNames = NULL;
+    }
 
 	/* Open up the coordinate system dictionary file and
 	   verify its magic number. */
@@ -546,6 +558,7 @@ error:
 
 int EXP_LVL3 CS_csupd (struct cs_Csdef_ *csdef,int crypt)
 {
+    extern char *cs_CsKeyNames;
 	extern struct cs_Prjtab_ cs_Prjtab [];	/* Projection Table */
 	extern char csErrnam [];
 	extern double cs_Two_pi;				/* 6.28..... */
@@ -794,11 +807,20 @@ int EXP_LVL3 CS_csupd (struct cs_Csdef_ *csdef,int crypt)
 	}
 	else
 	{
-		/* Here if the coordinate system doesn't exist.  We
-		   have to add it. If cs_Unique is not zero, we
-		   require that a cs_Unique character be present
-		   in the key name before we'll allow it to be
-		   written. */
+		/* Here if the coordinate system doesn't exist.  We have to add it.
+		   This will invalidate the list of coordinate system key names that
+		   is often generated to enable rapid verification of a coordinate
+		   system name.  Thus, before we do anything, we invalidate that list,
+		   forcing a regeneration next time it is needed. */
+        if (cs_CsKeyNames != NULL)
+        {
+            CS_free (cs_CsKeyNames);
+            cs_CsKeyNames = NULL;
+        }
+		   
+		/* If cs_Unique is not zero, we require that a cs_Unique
+		   character be present in the key name before we'll allow
+		   it to be written. */
 		if (cs_Unique != '\0')
 		{
 			cp = strchr (csdef->key_nm,cs_Unique);

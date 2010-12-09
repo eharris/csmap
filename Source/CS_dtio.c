@@ -355,6 +355,7 @@ int EXP_LVL3 CS_dtwr (csFILE *strm,Const struct cs_Dtdef_ *dt_def,int crypt)
 
 int EXP_LVL3 CS_dtdel (struct cs_Dtdef_ *dtdef)
 {
+    extern char *cs_DtKeyNames;
 	extern char csErrnam [];
 	extern char cs_Dir [];
 	extern short cs_Protect;
@@ -424,6 +425,18 @@ int EXP_LVL3 CS_dtdel (struct cs_Dtdef_ *dtdef)
 	}
 	CS_free (my_ptr);
 	my_ptr = NULL;
+
+    /* Looks like we will be deleting this datum definition.  cs_DtKeyNames
+       is a memory array which contains all of the existing datum key names.
+       Since we're going to change this, we free up the in memory list to
+       force a regeneration of same next time its use is required.  This
+       regeneration will not have this name in it if our addition completes
+       successfully. */
+    if (cs_DtKeyNames != NULL)
+    {
+        CS_free (cs_DtKeyNames);
+        cs_DtKeyNames = NULL;
+    }
 
 	/* Make sure the entry that we have been provided is marked as
 	   unencrypted so that the comparison function will work. */
@@ -536,6 +549,7 @@ error:
 
 int EXP_LVL3 CS_dtupd (struct cs_Dtdef_ *dtdef,int crypt)
 {
+    extern char *cs_DtKeyNames;
 	extern char csErrnam [];
 	extern short cs_Protect;
 	extern char cs_Unique;
@@ -640,6 +654,18 @@ int EXP_LVL3 CS_dtupd (struct cs_Dtdef_ *dtdef,int crypt)
 	}
 	else
 	{
+        /* We're going to attempt writing this definition to the dictionary.
+           cs_DtKeyNames is a memory array which contains all of the existing
+           datum key names.  Since we're going to change this, we free up the
+           in memory list to force a regeneration of same next time its use is
+           required.  This regeneration will have the new name in it if our
+           addition completes successfully. */
+        if (cs_DtKeyNames != NULL)
+        {
+            CS_free (cs_DtKeyNames);
+            cs_DtKeyNames = NULL;
+        }
+
 		/* Here if the datum definition doesn't exist.  We
 		   have to add it. If cs_Unique is not zero, we
 		   require that a cs_Unique character be present
