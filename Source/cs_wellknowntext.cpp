@@ -997,6 +997,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 																											pCsDefTarget->key_nm);
 									}
 									CS_stncp (csDef->key_nm,pCsDefTarget->key_nm,cs_KEYNM_DEF);
+                                    CS_stncp (csMapCsName,pCsDefTarget->key_nm,cs_KEYNM_DEF);
 									CS_free(pCsDefTarget);
 									break;
 								}
