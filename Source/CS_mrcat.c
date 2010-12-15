@@ -30,6 +30,9 @@
 /*lint -esym(613,err_list) */
 /*lint -esym(715,prj_code) */
 
+#define cs_MRCATPV_MAXLAT  1.4839134260634313982384914804048 /* 85.02 degrees in radians */
+#define cs_MRCATPV_MINLAT -1.4839134260634313982384914804048 /* 85.02 degrees in radians */
+
 /**********************************************************************
 **	err_cnt = CSmrcatQ (cs_def,prj_code,err_list,list_sz);
 **
@@ -45,8 +48,8 @@
 **	a yea or nay status of the definition (i.e. err_cnt != 0).
 **
 **	All lat/longs in definitions must be referenced to Greennwich,
-**	and in the range of greater than -180/-90, and less than or
-**	equal to +180/+90.
+**	and in the range of greater than or equal to -180/-90, and less
+**  than or equal to +180/+90.
 **********************************************************************/
 
 int EXP_LVL9 CSmrcatQ (	Const struct cs_Csdef_ *cs_def,unsigned short prj_code,int err_list [],int list_sz)
@@ -308,6 +311,7 @@ int EXP_LVL9 CSmrcatF (Const struct cs_Mrcat_ *mrcat,double xy [2],Const double 
 {
 	extern double cs_One;				/* 1.0 */
 	extern double cs_Degree;			/* 1.0 / 57.29577... */
+	extern double cs_Pi_o_2;            /* Pi / 2.0 */
 	extern double cs_Two_pi;			/* 2 pi */
 	extern double cs_Pi;				/*  Pi, i.e. 3.14159 */
 	extern double cs_NPTest;			/* 0.001 arc seconds
@@ -316,6 +320,8 @@ int EXP_LVL9 CSmrcatF (Const struct cs_Mrcat_ *mrcat,double xy [2],Const double 
 	extern double cs_SPTest;			/* 0.001 arc seconds
 										   short of the south
 										   pole in radians. */
+	extern double cs_AnglTest;          /* 4.85E-08; about 30 centimeters on
+	                                       the surface of the earth in radians */
 
 	int rtn_val;
 
@@ -334,32 +340,84 @@ int EXP_LVL9 CSmrcatF (Const struct cs_Mrcat_ *mrcat,double xy [2],Const double 
 	lat = ll [1] * cs_Degree;
 
 	/* Deal with X, it's easy. */
-
 	lng = cs_Degree * ll [LNG];
 	del_lng = lng - mrcat->cent_lng;
 	if      (del_lng >  cs_Pi) del_lng -= cs_Two_pi;
 	else if (del_lng < -cs_Pi) del_lng += cs_Two_pi;
-	if (fabs (del_lng) >= cs_Pi)
+	if (fabs (del_lng) > cs_Pi)
 	{
 		rtn_val = cs_CNVRT_RNG;
 		del_lng = CS_adj2pi (del_lng);
 	}
 	xy [XX] = mrcat->Rfact * del_lng;
 
-	/* Bogus values of latitude can cause big problems. */
-
-	if (fabs (lat) > cs_NPTest)
+	/* Bogus values of latitude can cause big problems.  We are a bit more
+	   forgiving in the case of the Pseudo Mercator.  After all, it is a
+	   "Pseudo" projection. */
+	if (mrcat->prj_code == cs_PRJCOD_MRCATPV)
 	{
-		rtn_val = cs_CNVRT_RNG;
-		lat = CS_adj1pi (lat);
-		if (lat > cs_NPTest)
-		{
-			lat = cs_NPTest;
-		}
-		if (lat < cs_SPTest)
-		{
-			lat = cs_SPTest;
-		}
+	    /* We do the following special for the Pseudo Mercator as the
+	       google and bing stuff is often used to extract a map/image
+	       of the whole world in LL84 type coordinates.  These types
+	       of things generally include latitude extents of -90 and
+	       +90.  Yet users expecty to convert this to the Pseudo
+	       Mercator even though the poles cannot be represented on
+	       a Mercator projection.
+	       
+	       Since it is a "Pseudo" projection, to do the following that
+	       users get what they expect even though it is technically
+	       incorrect. After all, when everything is said and sone, it's
+	       the users who pay for everything. */
+	    if (fabs (lat) > (cs_Pi_o_2 + cs_AnglTest))
+	    {
+	        /* We still consider this condition to indicate a bogus
+	           data point. */
+		    rtn_val = cs_CNVRT_RNG;
+		    lat = CS_adj1pi (lat);
+		    if (lat > cs_NPTest)
+		    {
+			    lat = cs_NPTest;
+		    }
+		    if (lat < cs_SPTest)
+		    {
+			    lat = cs_SPTest;
+		    }
+	    }
+        else if (lat > cs_MRCATPV_MAXLAT)
+        {
+            /* This represents a point above 85 degrees north in latitude.
+               There is nothing (land wise) north of 84, so we process
+               anything above 85 as being 85, and we do so without
+               issuing a domain error. */
+            lat = cs_MRCATPV_MAXLAT;
+        }
+        else if (lat < cs_MRCATPV_MINLAT)
+        {
+            /* This represents a point below 85 degrees south in latitude.
+               While there is land down there, chopping this off at -85
+               will enable the Pseudo Mercator to produce the normal
+               image of Antarctica that usually appears on Mercator
+               maps.  In fact, it might be more cosmetically attractive
+               to cut this off at 80 degrees south latitude.  In any
+               case, we do this without generating a domain error. */
+            lat = cs_MRCATPV_MINLAT;
+        }
+	}
+	else
+	{
+	    if (fabs (lat) > cs_NPTest)
+	    {
+		    rtn_val = cs_CNVRT_RNG;
+		    lat = CS_adj1pi (lat);
+		    if (lat > cs_NPTest)
+		    {
+			    lat = cs_NPTest;
+		    }
+		    if (lat < cs_SPTest)
+		    {
+			    lat = cs_SPTest;
+		    }
+	    }
 	}
 
 	/* We should be OK now. */

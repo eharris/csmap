@@ -258,7 +258,7 @@ int EXP_LVL9 CSekrt6F ( Const struct cs_Ekrt6_ *ekrt6,double xy [2],Const double
 	del_lng = lng - ekrt6->org_lng;
 	if      (del_lng >  cs_Pi) del_lng -= cs_Two_pi;
 	else if (del_lng < -cs_Pi) del_lng += cs_Two_pi;
-	if (fabs (del_lng) >= cs_Pi)
+	if (fabs (del_lng) > cs_Pi)
 	{
 		rtn_val = cs_CNVRT_RNG;
 		del_lng = CS_adj2pi (del_lng);
