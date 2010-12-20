@@ -52,6 +52,7 @@ bool csAddEpsgCodes (const wchar_t* csDictSrcDir,const wchar_t* epsgDir,const wc
 //bool csGenerateHpgnTable (const wchar_t* tablePath,const wchar_t* dictDir);
 bool csOrgTransformations (const wchar_t* csDictDir,const wchar_t* csDictTrgDir);
 bool csGenerateRegressTestFile (const wchar_t* csFileName,const wchar_t* csDataDir,const wchar_t* csDictDir);
+bool ReplaceOldHpgnCrsNames (const wchar_t* dataDir,const wchar_t* resultDir);
 
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be

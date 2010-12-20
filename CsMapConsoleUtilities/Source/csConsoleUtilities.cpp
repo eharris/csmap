@@ -20,9 +20,9 @@
 
 const wchar_t csTempDir [] = L"C:\\TEMP";
 wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
-const wchar_t csDataDir [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Data";
-const wchar_t csDictDir [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Dictionaries";
-const wchar_t csDictSrc [] = L"C:\\Development\\SVN\\MgDev\\Oem\\CsMap\\Dictionaries";
+const wchar_t csDataDir [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Data";
+const wchar_t csDictDir [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Dictionaries";
+const wchar_t csDictSrc [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Dictionaries";
 
 int main (int argc,char* argv [])
 {
@@ -36,12 +36,21 @@ int main (int argc,char* argv [])
 	_set_output_format(_TWO_DIGIT_EXPONENT);
 #endif
 
+	// Replaces the old HPGN CRS names (e.g. "COHP-S") with the new
+	// names (e.g. "HARN/CO.CO-S") in the .csv source files which are
+	// used to construct the name mapper file.
+	ok = ReplaceOldHpgnCrsNames (csDataDir,csDataDir);
+	if (ok)
+	{
+		ok = ManufactureNameMapperCsv (csDictDir,csDataDir);
+	}
+
     // Generate a regression test file in the OsGeo Test File format.
     // ok = csGenerateRegressTestFile (L"CsMap-12.02.csv",csDataDir,csDictDir);
 
 	//ok = csGenerateHpgnTable (csTempDir,csDictDir);
 
-	ok = csOrgTransformations (csDictSrc,csDictDir);
+	// ok = csOrgTransformations (csDictSrc,csDictDir);
 
 	// ok = csAddEpsgCodes (csDictSrc,csEpsgDir,csTempDir);
 
