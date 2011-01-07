@@ -117,7 +117,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 11300,6194,0,0,0,0,0,,Qornoq27,Qornoq27,Qornoq1927,Qornoq 1927,D_Qornoq_1927,Qornoq 1927 (EPSG ID 6194),,,Qornoq 1927,,,,,,,,"ESRI::D_Dabola may not be necessary.  Preserved for legacy, regression prevention, purposes.",0,0,0
 11400,6195,0,0,0,0,0,,Scoresbysund52,Scoresbysund52,Scoresbysund52,Scoresbysund 1952,D_Scoresbysund_1952,Scoresbysund 1952 (EPSG ID 6195),,,Scoresbysund 1952,,,,,,,,,0,0,0
 11500,6196,0,0,0,0,0,,Ammassalik58,Ammassalik58,Ammassalik58,Ammassalik 1958,D_Ammassalik_1958,Ammassalik 1958 (EPSG ID 6196),,,Ammassalik 1958,,,,,,,,,0,0,0
-11600,6197,0,0,0,0,0,,Garoua,Garoua,,Garoua,,Garoua (EPSG ID 6197),,,Garoua,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 11700,6198,0,0,0,0,0,,Kousseri,Kousseri,,Kousseri,D_Kousseri,Kousseri (EPSG ID 6198),,,Kousseri,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 11800,6199,0,0,0,0,0,,Egypt30,Egypt30,,Egypt 1930,D_Egypt_1930,Egypt 1930 (EPSG ID 6199),,,Egypt 1930,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 11900,6200,0,0,0,0,0,,Pulkovo95,Pulkovo95,,Pulkovo 1995,D_Pulkovo_1995,Pulkovo 1995 (EPSG ID 6200),,,Pulkovo 1995,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
@@ -211,7 +210,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 20700,6287,0,0,0,0,0,,Qornoq,Qornoq,Qornoq,Qornoq,D_Qornoq,,,,Qornoq,,,,Qornoq,,,"Deprecated by EPSG, replaced by Qornoq 1927.",,0,0,0
 20800,6288,0,0,0,0,0,,LomaQuintana,LomaQuintana,,Loma Quintana,D_Loma_Quintana,Loma Quintana (EPSG ID 6288),,,Loma Quintana,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 20900,6289,0,0,0,0,0,,Amersfoort,Amersfoort,Amersfoort,Amersfoort,D_Amersfoort,Amersfoort (EPSG ID 6289),,,Amersfoort,,,,,,,,,0,0,0
-21000,6291,0,0,0,0,0,,SAD69,,SAD69,,,South American Datum 1969 (EPSG ID 6291),,,,,,,,,,EPSG:6291 has been deprecated by EPSG.,,0,0,0
 21100,6292,0,0,0,0,0,,SAPPER,SapperHill43,SAPPER,Sapper Hill 1943,D_Sapper_Hill_1943,Sapper Hill 1943 (EPSG ID 6292),,,Sapper Hill 1943,,,,Sapper Hill 1943,,,,,0,0,0
 21200,6293,0,0,0,0,0,,SCHWARZK,Schwarzeck,SCHWARZK,Schwarzeck,D_Schwarzeck,Schwarzeck (EPSG ID 6293),,,Schwarzeck,,,,Schwarzeck,,,,,0,0,0
 21300,6294,0,0,0,0,0,,Segora,Segora,Segora_1,Segora,D_Segora,Segora (EPSG ID 6294),,,Segora,,,,,,,,Duplicate names by deprecation by EPSG.  Deprecation ID: 381.  Change was to change the name of the defintiion.,0,0,0
@@ -263,8 +261,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 25500,6614,0,0,0,0,0,,QatarNtl95,QatarNtl95,QatarNtl95,Qatar National Datum 1995,D_QND_1995,Qatar National Datum 1995 (EPSG ID 6614),,,Qatar National Datum 1995,,,,,,,,,0,0,0
 25600,6615,0,0,0,0,0,,MADEIRA,PortoSanto1936,MAD_SE,Porto Santo 1936,D_Porto_Santo_1936,Porto Santo 1936 (EPSG ID 6615),,,Porto Santo,,,,Southeast Base,,,,,0,0,0
 25700,6616,0,0,0,0,0,,SelvagemGrande,SelvagemGrande,Selvagem,Selvagem Grande,D_Selvagem_Grande_1938,Selvagem Grande (EPSG ID 6616),,,Selvagem Grande,,,,,,,,,0,0,0
-25800,0,0,0,0,0,0,,SAD69,,SAD69,,D_SAD69,South American Datum 1969 (EPSG ID 6291),,,,,,,,,,"The ESRI name given here is not an actual ESRI nam, a name invented to enable this legacy definition to be converted to, and from, ESRI WKT.","This entry is forlegacy purposes, and should be deleted in the future.  Widely distrubted information erroneously referenced the GRS1967 ellipsoid; thus the confusion here.  The differences are rather small, on the millimeter level.",0,0,0
-25900,6618,0,0,0,0,0,,SA1969,,SAD1969,South American Datum 1969,D_South_American_1969,South American Datum 1969 (EPSG ID 6618),,,South American Datum 1969,,,,South American 1969,,,,,0,0,0
+25900,6618,0,0,0,0,0,,SA1969|SAD69,,SAD1969|SAD69,South American Datum 1969,D_South_American_1969|D_SAD69,South American Datum 1969 (EPSG ID 6618)|South American Datum 1969 (EPSG ID 6291),,,South American Datum 1969,,,,South American 1969,,,"The ESRI name D_SAD69 given here is not an actual ESRI nam, a name invented to enable this legacy definition to be converted to, and from, ESRI WKT.",,0,0,0
 26000,6619,0,0,0,0,0,,SWEREF99,SWEREF99,SWEREF99,SWEREF99,D_SWEREF99,SWEREF99 (EPSG ID 6619),,,,,,,,,,,,0,0,0
 26100,6620,0,0,0,0,0,,Point58,Point58,Point1958,Point 58,D_Point_58,Point 58 (EPSG ID 6620),,,,,,,,,,,,0,0,0
 26200,6621,0,0,0,0,0,,FortMarigot,FortMarigot,FortMarigot_1,Fort Marigot,D_Fort_Marigot,Fort Marigot (EPSG ID 6621),,,,,,,,,,,,0,0,0
@@ -281,7 +278,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 27300,6632,0,0,0,0,0,,Combani50,Combani50,Combani1950,Combani 1950,D_Combani_1950,Combani 1950 (EPSG ID 6632),,,,,,,,,,,,0,0,0
 27400,6633,0,0,0,0,0,,IGN56Lifou,IGN56Lifou,IGN56/Lifou,IGN56 Lifou,D_IGN56_Lifou,IGN56 Lifou (EPSG ID 6633),,,,,,,,,,,,0,0,0
 27500,6634,0,0,0,0,0,,IGN72GrandeTerre,IGN72/GrandeTerre,IGN72/GrandeTerre,IGN72 Grande Terre,D_IGN72_Grande_Terre,IGN72 Grande Terre (EPSG ID 6634),,,,,,,,,,,,0,0,0
-27600,6635,0,0,0,0,0,,ST87Ouvea,ST87Ouvea,ST87Ouvea,ST87 Ouvea,D_ST87_Ouvea,ST87 Ouvea (EPSG ID 6635),,,,,,,,,,,"Duplicate name caused by deprecation by EPSG.  Deprecation ID: 1076.  Evidently, the original had an incorrect ellipsoid reference.",0,0,0
 27700,6636,0,0,0,0,0,,Petrels72,Petrels72,Petrels1972,Petrels 1972,D_Petrels_1972,Petrels 1972 (EPSG ID 6636),,,,,,,,,,,,0,0,0
 27800,6637,0,0,0,0,0,,Perroud50,Perroud50,Perroud1950,Pointe Geologie Perroud 1950,D_Pointe_Geologie_Perroud_1950,Pointe Geologie Perroud 1950 (EPSG ID 6637),,,,,,,,,,,,0,0,0
 27900,6638,0,0,0,0,0,,Miquelon50,Miquelon50,Miquelon1950,Saint Pierre et Miquelon 1950,D_Saint_Pierre_et_Miquelon_1950,Saint Pierre et Miquelon 1950 (EPSG ID 6638),,,,,,,,,,,,0,0,0
@@ -352,7 +348,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 33800,6699,0,0,0,0,0,,LePouce1934,LePouce1934,LePouce34,Le Pouce 1934,,,,,,,,,,,,,,0,65536,0
 33900,6700,0,0,0,0,0,,IGNAstro1960,IGNAstro1960,,IGN Astro 1960,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 34000,6701,0,0,0,0,0,,CongoBelge1955,CongoBelge1955,CongoBelge55,Institut Geographique du Congo Belge 1955,,,,,,,,,,,,,,0,65536,0
-34100,6702,0,0,0,0,0,,Mauritania1999,Mauritania1999,Mauritania1999,Mauritania 1999,,,,,,,,,,,,,,0,65536,0
 34200,6703,0,0,0,0,0,,SaoTome1951,SaoTome1951,,Missao Hidrografico Angola y Sao Tome 1951,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 34300,6704,0,0,0,0,0,,Mhast/OnShore,Mhast/OnShore,,Mhast (onshore),,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 34400,6705,0,0,0,0,0,,Mhast/OffShore,Mhast/OffShore,,Mhast (offshore),,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
@@ -401,7 +396,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 38600,6747,0,0,0,0,0,,GR96,GR1996,GR96,Greenland 1996,,,,,,,,,,,,,,0,65536,0
 38700,6748,0,0,0,0,0,,VanuaLv15,VanuaLevu1915,VanuaLv1915,Vanua Levu 1915,,,,,,,,,,,,,,0,65536,0
 38800,6749,0,0,0,0,0,,RGN/91-93,RGN-Caledonie/91-93,RGN/91-93,Reseau Geodesique de Nouvelle Caledonie 91-93,,,,,,,,,,,,,,0,65536,0
-38900,6750,0,0,0,0,0,,ST87/Ouvea,ST87/Ouvea,ST87/Ouvea,ST87 Ouvea,,,,,,,,,,,,,,0,65536,0
+38900,6750,0,0,0,0,0,,ST87/Ouvea,ST87/Ouvea,ST87/Ouvea,ST87 Ouvea,D_ST87_Ouvea,,,,,,,,,,,,,0,65536,0
 39000,6751,0,0,0,0,0,,Kertau/RSO,Kertau/RSO,,Kertau (RSO),,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 39100,6752,0,0,0,0,0,,VitiLevu12,VitiLevu1912,VitiLevu1912,Viti Levu 1912,,,,,,,,,,,,,,0,65536,0
 39200,6753,0,0,0,0,0,,FK1989,FK1989,,fk89,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
@@ -409,25 +404,25 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 39400,6755,0,0,0,0,0,,DGN95,DGN95,DGN95,Datum Geodesi Nasional 1995,,,,,,,,,,,,,,0,65536,0
 39500,6756,0,0,0,0,0,,Vietnam2000,Vietnam2000,,Vietnam 2000,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 39600,6801,0,0,0,0,0,,CH-1903,CH1903.Bern,CH-1903,CH1903 (Bern),D_Bern_1898,CH1903 (Bern) (EPSG ID 6801),,,CH1903 (Bern),,,,,,,"This EPSG number refers to the same Datum as CH1903, but implies a prime meridian other than Greenwich. ","While this definition is supposed to be the same as CH1903, the rotation parameters have different signs.  The old Position Vector vs Coordinate Frame problem.  The validity of this and CH1903 needs to be verified.  That is, which one is right.",0,0,0
-39700,6802,0,0,0,0,0,,,Bogota1975.Bogota,,Bogota 1975 (Bogota),D_Bogota,Bogota 1975 (Bogota) (EPSG ID 6802),,,Bogota 1975 (Bogota),,,,,,,,,0,0,0
-39800,6803,0,0,0,0,0,,,Lisbon1937.Lisbon,,Lisbon 1937 (Lisbon),D_Lisbon,Lisbon 1937 (Lisbon) (EPSG ID 6803),,,Lisbon 1937 (Lisbon),,,,,,,,,0,0,0
-39900,6804,0,0,0,0,0,,,Makassar.Jakarta,,Makassar (Jakarta),D_Makassar,Makassar (Jakarta) (EPSG ID 6804),,,Makassar (Jakarta),,,,,,,,,0,0,0
-40000,6805,0,0,0,0,0,,,MGI.Ferro,MGI-AT/F,Militar-Geographische Institut (Ferro),D_MGI,Militar-Geographische Institut (Ferro) (EPSG ID 6805),,,Militar-Geographische Institut (Ferro),,,,,,,,,0,0,0
-40100,6806,0,0,0,0,0,,,MonteMario.Rome,,Monte Mario (Rome),D_Monte_Mario,Monte Mario (Rome) (EPSG ID 6806),,,Monte Mario (Rome),,,,,,,,,0,0,0
-40200,6807,0,0,0,0,0,,,NTF.Paris,,Nouvelle Triangulation Francaise (Paris),D_NTF,Nouvelle Triangulation Francaise (Paris) (EPSG ID 6807),,,Nouvelle Triangulation Francaise (Paris),,,,,,,,,0,0,0
-40300,6808,0,0,0,0,0,,,Padang1884.Jakarta,,Padang 1884 (Jakarta),D_Padang_1884,Padang 1884 (Jakarta) (EPSG ID 6808),,,Padang 1884 (Jakarta),,,,,,,,,0,0,0
+39700,6802,0,0,0,0,0,,,Bogota1975.Bogota,,Bogota 1975 (Bogota),,Bogota 1975 (Bogota) (EPSG ID 6802),,,Bogota 1975 (Bogota),,,,,,,,,0,0,0
+39800,6803,0,0,0,0,0,,,Lisbon1937.Lisbon,,Lisbon 1937 (Lisbon),,Lisbon 1937 (Lisbon) (EPSG ID 6803),,,Lisbon 1937 (Lisbon),,,,,,,,,0,0,0
+39900,6804,0,0,0,0,0,,,Makassar.Jakarta,,Makassar (Jakarta),,Makassar (Jakarta) (EPSG ID 6804),,,Makassar (Jakarta),,,,,,,,,0,0,0
+40000,6805,0,0,0,0,0,,,MGI.Ferro,MGI-AT/F,Militar-Geographische Institut (Ferro),,Militar-Geographische Institut (Ferro) (EPSG ID 6805),,,Militar-Geographische Institut (Ferro),,,,,,,,,0,0,0
+40100,6806,0,0,0,0,0,,,MonteMario.Rome,,Monte Mario (Rome),,Monte Mario (Rome) (EPSG ID 6806),,,Monte Mario (Rome),,,,,,,,,0,0,0
+40200,6807,0,0,0,0,0,,,NTF.Paris,,Nouvelle Triangulation Francaise (Paris),,Nouvelle Triangulation Francaise (Paris) (EPSG ID 6807),,,Nouvelle Triangulation Francaise (Paris),,,,,,,,,0,0,0
+40300,6808,0,0,0,0,0,,,Padang1884.Jakarta,,Padang 1884 (Jakarta),,Padang 1884 (Jakarta) (EPSG ID 6808),,,Padang 1884 (Jakarta),,,,,,,,,0,0,0
 40400,6809,0,0,0,0,0,,,RNB1950.Brussels,,Reseau National Belge 1950 (Brussels),D_Belge_1950_Brussels,Reseau National Belge 1950 (Brussels) (EPSG ID 6809),,,Reseau National Belge 1950 (Brussels),,,,,,,,,0,0,0
-40500,6810,0,0,0,0,0,,,Tananarive1925.Paris,,Tananarive 1925 (Paris),D_Tananarive_1925,Tananarive 1925 (Paris) (EPSG ID 6810),,,Tananarive 1925 (Paris),,,,,,,,,0,0,0
-40600,6811,0,0,0,0,0,,,Voirol1875.Paris,,Voirol 1875 (Paris),D_Voirol_1875,Voirol 1875 (Paris) (EPSG ID 6811),,,Voirol 1875 (Paris),,,,,,,,,0,0,0
-40700,6813,0,0,0,0,0,,,Batavia.Jakarta,,Batavia (Jakarta),D_Batavia,Batavia (Jakarta) (EPSG ID 6813),,,Batavia (Jakarta),,,,,,,,,0,0,0
-40800,6814,0,0,0,0,0,,,Stockholm.1938,,Stockholm 1938 (Stockholm),D_Stockholm_1938,Stockholm 1938 (Stockholm) (EPSG ID 6814),,,Stockholm 1938 (Stockholm),,,,,,,,,0,0,0
-40900,6815,0,0,0,0,0,,,,,Greek (Athens),D_Greek,Greek (Athens) (EPSG ID 6815),,,Greek (Athens),,,,,,,,,0,0,0
-41000,6816,0,0,0,0,0,,,Carthage.Paris,,Carthage (Paris),D_Carthage,Carthage (Paris) (EPSG ID 6816),,,Carthage (Paris),,,,,,,,,0,0,0
-41100,6817,0,0,0,0,0,,,NGO1948.Oslo,,NGO 1948 (Oslo),D_NGO_1948,NGO 1948 (Oslo) (EPSG ID 6817),,,NGO 1948 (Oslo),,,,,,,,,0,0,0
-41200,6818,0,0,0,0,0,,,S-JTSK.Ferro,,S-JTSK (Ferro),D_S_JTSK,S-JTSK (Ferro) (EPSG ID 6818),,,S-JTSK (Ferro),,,,,,,,,0,0,0
-41300,6819,0,0,0,0,0,,,NordSahara1959.Paris,,Nord Sahara 1959 (Paris),D_Nord_Sahara_1959,Nord Sahara 1959 (Paris) (EPSG ID 6819),,,Nord Sahara 1959 (Paris),,,,,,,,,0,0,0
-41400,6820,0,0,0,0,0,,,GunungSegara.Jakarta,,Gunung Segara (Jakarta),D_Gunung_Segara,Gunung Segara (Jakarta) (EPSG ID 6820),,,Gunung Segara (Jakarta),,,,,,,,,0,0,0
-41500,6821,0,0,0,0,0,,,Voirol1879.Paris,,Voirol 1879 (Paris),D_Voirol_1879,Voirol 1879 (Paris) (EPSG ID 6821),,,,,,,,,,,,0,0,0
+40500,6810,0,0,0,0,0,,,Tananarive1925.Paris,,Tananarive 1925 (Paris),,Tananarive 1925 (Paris) (EPSG ID 6810),,,Tananarive 1925 (Paris),,,,,,,,,0,0,0
+40600,6811,0,0,0,0,0,,,Voirol1875.Paris,,Voirol 1875 (Paris),,Voirol 1875 (Paris) (EPSG ID 6811),,,Voirol 1875 (Paris),,,,,,,,,0,0,0
+40700,6813,0,0,0,0,0,,,Batavia.Jakarta,,Batavia (Jakarta),,Batavia (Jakarta) (EPSG ID 6813),,,Batavia (Jakarta),,,,,,,,,0,0,0
+40800,6814,0,0,0,0,0,,,Stockholm.1938,,Stockholm 1938 (Stockholm),,Stockholm 1938 (Stockholm) (EPSG ID 6814),,,Stockholm 1938 (Stockholm),,,,,,,,,0,0,0
+40900,6815,0,0,0,0,0,,,,,Greek (Athens),,Greek (Athens) (EPSG ID 6815),,,Greek (Athens),,,,,,,,,0,0,0
+41000,6816,0,0,0,0,0,,,Carthage.Paris,,Carthage (Paris),,Carthage (Paris) (EPSG ID 6816),,,Carthage (Paris),,,,,,,,,0,0,0
+41100,6817,0,0,0,0,0,,,NGO1948.Oslo,,NGO 1948 (Oslo),,NGO 1948 (Oslo) (EPSG ID 6817),,,NGO 1948 (Oslo),,,,,,,,,0,0,0
+41200,6818,0,0,0,0,0,,,S-JTSK.Ferro,,S-JTSK (Ferro),,S-JTSK (Ferro) (EPSG ID 6818),,,S-JTSK (Ferro),,,,,,,,,0,0,0
+41300,6819,0,0,0,0,0,,,NordSahara1959.Paris,,Nord Sahara 1959 (Paris),,Nord Sahara 1959 (Paris) (EPSG ID 6819),,,Nord Sahara 1959 (Paris),,,,,,,,,0,0,0
+41400,6820,0,0,0,0,0,,,GunungSegara.Jakarta,,Gunung Segara (Jakarta),,Gunung Segara (Jakarta) (EPSG ID 6820),,,Gunung Segara (Jakarta),,,,,,,,,0,0,0
+41500,6821,0,0,0,0,0,,,Voirol1879.Paris,,Voirol 1879 (Paris),,Voirol 1879 (Paris) (EPSG ID 6821),,,,,,,,,,,,0,0,0
 41600,6901,0,0,0,0,0,,,ATF.Paris,,Ancienne Triangulation Francaise (Paris),D_ATF|ATF,Ancienne Triangulation Francaise (Paris) (EPSG ID 6901),,,Ancienne Triangulation Francaise (Paris),,,,,,,,ESRI Aalias suggested by MapGuide developers.,0,0,0
 41700,6902,0,0,0,0,0,,,NGD.Paris,,Nord de Guerre (Paris),D_Nord_de_Guerre|Nord_de_Guerre,Nord de Guerre (Paris) (EPSG ID 6902),,,Nord de Guerre (Paris),,,,,,,,ESRI alias suggested by MapGuide developers,0,0,0
 41800,6903,0,0,0,0,0,,,Madrid1870.Madrid,,Madrid 1870 (Madrid),D_Madrid_1870,Madrid 1870 (Madrid) (EPSG ID 6903),,,Madrid 1870 (Madrid),,,,,,,,,0,0,0
@@ -490,7 +485,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 47500,0,0,0,0,0,0,,NGO-VII,NGO-VII,NGO-7,,,,,,,,,,,,,,,0,0,0
 47600,0,0,0,0,0,0,,NGO-VIII,NGO-VIII,NGO-8,,,,,,,,,,,,,,,0,0,0
 47700,0,0,0,0,0,0,,NZGD49-7P,NZGD49/7P,NZGD49-7P,,,,,,,,,,,,,,,0,0,0
-47800,0,0,0,0,0,0,,Oman,Oman,OMAN,,D_Oman,,,,,,,,,,,,,0,0,0
 47900,0,0,0,0,0,0,,PSC63,PSC63,PSC63,,,,,,,,,,,,,,,0,0,0
 48000,0,0,0,0,0,0,,Pulkovo42/2,Pulkovo42/Var2,Pulkovo42/2,,,,,,,,,,,,,,,0,0,0
 48100,0,0,0,0,0,0,,SINGAPR,Singapore,SINGAPR,,D_South_Asia_Singapore,,,,,,,,South Asia,,,,,0,0,0
@@ -531,5 +525,5 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 51600,0,0,0,0,0,0,0,,NAD27/Cuba,BAHAMAS,,,,,,,,,,NAD 27 (Bahamas),,,,,,,
 51700,0,0,0,0,0,0,0,,NAD27/Bahamas/SanSalvador,BAH-SAN,,,,,,,,,,NAD 27 (San Salvador),,,,,,,
 51800,0,0,0,0,0,0,0,,,NTF-G-Grid-ClrkIGN,,,,,,,,,,NTF (Paris meridian),,,,,,,
-51900,0,0,0,0,0,0,,OMAN,,OMAN,,D_Oman,,,,,,,,,,,,"The CS-MAP OMAN datum is slightly different from Fahud in that it uses a DMA multiple regression formula for conversion to WGS84.  Therefore, we map this name separately.  Otherwise, this is really the Fahud datum.",0,0,0
+51900,0,0,0,0,0,0,,OMAN,Oman,OMAN,,D_Oman,,,,,,,,,,,,"The CS-MAP OMAN datum is slightly different from Fahud in that it uses a DMA multiple regression formula for conversion to WGS84.  Therefore, we map this name separately.  Otherwise, this is really the Fahud datum.",0,0,0
 52000,0,0,0,0,0,0,0,,,Ocotepeque35a,,,,,,,,,,,,,,,,,

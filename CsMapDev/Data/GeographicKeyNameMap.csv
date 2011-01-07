@@ -59,7 +59,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 5800,4137,4137,4137,0,0,0,,StPaul.LL,StPaul.LL,,St. Paul Island,GCS_St_Paul_Island,St. Paul Island,,,,,,,,,,,,0,0,0
 5900,4138,4138,4138,0,0,0,,StGeorge.LL,StGeorge.LL,,St. George Island,GCS_St_George_Island,St. George Island,,,,,,,,,,,,0,0,0
 6000,4139,4139,4139,0,0,8284,,PRVI.LL,PRVI.LL,PRVI.LL,Puerto Rico,GCS_Puerto_Rico,Puerto Rico,,,Puerto Rico,,,,Longitude / Latitude (Puerto Rico),,,,,0,0,0
-6100,4617,4140,4140,0,0,0,,LLCSRS,CSRS.LL,LL-CSRS,NAD83(CSRS),GCS_North_American_1983_CSRS98,NAD83(CSRS98),,,NAD83(CSRS98),,,,,,,,,0,0,0
+6100,4617,4140,4140,0,0,0,,LLCSRS,CSRS.LL,LL-CSRS,NAD83(CSRS),GCS_North_American_1983_CSRS98,NAD83(CSRS98),,,NAD83(CSRS98)|NAD83(CSRS),,,,,,,,,0,0,0
 6200,4141,4141,4141,0,0,0,,Israel.LL,Israel.LL,Israel.LL,Israel,GCS_Israel,Israel,,,Israel,,,,,,,,,0,0,0
 6300,4142,4142,4142,0,0,0,,Locodjo65.LL,Locodjo65.LL,Locodjo1965.LL,Locodjo 1965,GCS_Locodjo_1965,Locodjo 1965,,,Locodjo 1965,,,,,,,,,0,0,0
 6400,4143,4143,4143,0,0,0,,Abidjan87.LL,Abidjan87.LL,Abidjan1987.LL,Abidjan 1987,GCS_Abidjan_1987,Abidjan 1987,,,Abidjan 1987,,,,,,,,,0,0,0

@@ -595,6 +595,7 @@ error:
 int EXP_LVL9 CSllCsFromDt (char* csKeyName,int csKeySize,Const char* dtKeyName)
 {
 	extern struct cs_Prjtab_ cs_Prjtab [];
+	extern struct cs_Datum_ cs_Wgs84Def;
 
 	int st;
 	int crypt;
@@ -605,6 +606,23 @@ int EXP_LVL9 CSllCsFromDt (char* csKeyName,int csKeySize,Const char* dtKeyName)
  	__ALIGNMENT__1		/* Required by some Sun compilers. */
 	struct cs_Csdef_ cs_def;
 
+	/* For various reasons having to do with compatibility with various Web
+	   based data sources, there needs to be several definitions of LL84
+	   with various names.  Because of these definitions, this module often
+	   returns unexpected geographic system names for the base system for
+	   anything referenced to WGS84.
+	   
+	   Soooo!!!! W have a big kludge here.  If dyKeyName is "WGS84", and
+	   LL84 proves to be a valid coordinate system name, we simply return it. */
+	if (!CS_stricmp (cs_Wgs84Def.key_nm,dtKeyName) && CS_csIsValid ("LL84"))
+	{
+		CS_stncp (csKeyName,"LL84",csKeySize);
+		return 0;
+	}
+
+	/* OK,  back to rationality.  We seach the coordinate system dictionary
+	   for a geographic system definition which is referenced to the datum
+	   provided by the user. */	
 	st = -1;
 	csKeyName [0] = '\0';
 	strm = CS_csopn (_STRM_BINRD);
