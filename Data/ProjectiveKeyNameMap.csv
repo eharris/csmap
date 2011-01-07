@@ -1,5 +1,4 @@
 SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName,CtmxName,AdskName,EpsgName,EsriName,OracleName,MapInfoName,OemName,GeoToolsName,OcrName,OgcName,GeoTiffName,Oracle9Name,LegacyName,CnvrsnName,CnvrsnComment,MaintenanceComment,Quality,UserFlag,RfcnQualifier
-100,0,0,0,0,0,98305,,,,,,,,,,,,,,Lambert Azimuthal Equal-Area (South Pole),,,,,0,0,0
 200,0,0,0,0,0,82414,,,,,,,,,,,,,,UTM Zone 57 (Tokyo),,,,,0,0,0
 300,0,0,0,0,0,82275,,,,,,,,,,,,,,"UTM Zone 20, Northern Hemisphere (Corrego Alegre)",,,,,0,0,0
 400,0,0,0,0,0,82283,,,,,,,,,,,,,,"UTM Zone 21, Northern Hemisphere (Corrego Alegre)",,,,,0,0,0
@@ -141,14 +140,14 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 14000,2135,2135,2135,0,0,0,,NZGD2K.UTM-60S,NZGD2000.UTM-60S,NZGD2K.UTM-60S,NZGD2000 / UTM zone 60S,NZGD_2000_UTM_Zone_60S,NZGD2000 / UTM zone 60S,,,NZGD2000 / UTM zone 60S,,,,,,,,,0,0,0
 14100,2136,2136,2136,0,0,0,,Accra.GhanaNational,Accra.GhanaNational,Accra1929.GhanaNational,Accra / Ghana National Grid,Accra_Ghana_Grid,Accra / Ghana National Grid,,,Accra / Ghana National Grid,,,,,,,,,0,0,0
 14200,2137,2137,2137,0,0,0,,Accra.TM-1NW,Accra.TM-1NW,Accra1929.TM-1NW,Accra / TM 1 NW,Accra_TM_1_NW,Accra / TM 1 NW,,,Accra / TM 1 NW,,,,,,,,,0,0,0
-14300,2138,2138,2138,0,0,0,,NADq77.QuebecLambert,NADq77.Quebec/Lambert,,NAD27(CGQ77) / Quebec Lambert,NAD_1927_CGQ77_Quebec_Lambert,NAD27(CGQ77) / Quebec Lambert,,,,,,,,,,,,0,0,0
-14310,2148,0,2148,0,0,0,,,,NAD83/98.UTM-21N,NAD83(CSRS98) / UTM zone 21N,,NAD83(CSRS98) / UTM zone 21N,,,,,,,,,,,,,,
-14320,2149,0,2149,0,0,0,,,,NAD83/98.UTM-18N,NAD83(CSRS98) / UTM zone 18N,,NAD83(CSRS98) / UTM zone 18N,,,,,,,,,,,,,,
-14330,2150,0,2150,0,0,0,,,,NAD83/98.UTM-17N,NAD83(CSRS98) / UTM zone 17N,,NAD83(CSRS98) / UTM zone 17N,,,,,,,,,,,,,,
-14340,2151,0,2151,0,0,0,,,,NAD83/98.UTM-13N,NAD83(CSRS98) / UTM zone 13N,,NAD83(CSRS98) / UTM zone 13N,,,,,,,,,,,,,,
-14350,2152,0,2152,0,0,0,,,,NAD83/98.UTM-12N,NAD83(CSRS98) / UTM zone 12N,,NAD83(CSRS98) / UTM zone 12N,,,,,,,,,,,,,,
-14360,2153,0,2153,0,0,0,,,,NAD83/98.UTM-11N,NAD83(CSRS98) / UTM zone 11N,,NAD83(CSRS98) / UTM zone 11N,,,,,,,,,,,,,,
-14400,2154,2154,2154,0,0,0,,IGN-RGF93,RGF93.France/IGN,Lambert93,RGF93 / Lambert-93,RGF_1993_Lambert_93,RGF93 / Lambert-93,,,RGF93 / Lambert-93,,,,,,,,,0,0,0
+14300,2138,2138,2138,0,0,0,,NADq77.QuebecLambert,NADq77.Quebec/Lambert,,NAD27(CGQ77) / Quebec Lambert,NAD_1927_CGQ77_Quebec_Lambert,NAD27(CGQ77) / Quebec Lambert,,,NAD27(CGQ77) / Quebec Lambert,,,,,,,,,0,0,0
+14310,2148,0,2148,0,0,0,,,,NAD83/98.UTM-21N,NAD83(CSRS98) / UTM zone 21N,,NAD83(CSRS98) / UTM zone 21N,,,NAD83(CSRS98) / UTM zone 21N,,,,,,,,,,,
+14320,2149,0,2149,0,0,0,,,,NAD83/98.UTM-18N,NAD83(CSRS98) / UTM zone 18N,,NAD83(CSRS98) / UTM zone 18N,,,NAD83(CSRS98) / UTM zone 18N,,,,,,,,,,,
+14330,2150,0,2150,0,0,0,,,,NAD83/98.UTM-17N,NAD83(CSRS98) / UTM zone 17N,,NAD83(CSRS98) / UTM zone 17N,,,NAD83(CSRS98) / UTM zone 17N,,,,,,,,,,,
+14340,2151,0,2151,0,0,0,,,,NAD83/98.UTM-13N,NAD83(CSRS98) / UTM zone 13N,,NAD83(CSRS98) / UTM zone 13N,,,NAD83(CSRS98) / UTM zone 13N,,,,,,,,,,,
+14350,2152,0,2152,0,0,0,,,,NAD83/98.UTM-12N,NAD83(CSRS98) / UTM zone 12N,,NAD83(CSRS98) / UTM zone 12N,,,NAD83(CSRS98) / UTM zone 12N,,,,,,,,,,,
+14360,2153,0,2153,0,0,0,,,,NAD83/98.UTM-11N,NAD83(CSRS98) / UTM zone 11N,,NAD83(CSRS98) / UTM zone 11N,,,NAD83(CSRS98) / UTM zone 11N,,,,,,,,,,,
+14400,2154,102110,2154,0,0,0,,IGN-RGF93,RGF93.France/IGN,Lambert93,RGF93 / Lambert-93,RGF_1993_Lambert_93,RGF93 / Lambert-93,,,RGF93 / Lambert-93,,,,,,,,,0,0,0
 14600,2156,0,2156,0,0,0,,HARN.UTM-59S,HARN.UTM-59S,,NAD83(HARN) / UTM zone 59S,,NAD83(HARN) / UTM zone 59S,,,NAD83(HARN) / UTM zone 59S,,,,,,,,,0,0,0
 14700,2157,2157,2157,0,0,0,,IRENET95.IrishTM,IRENET95.IrishTM,IRENET95.IrishTM,IRENET95 / Irish Transverse Mercator,IRENET95_Irish_Transverse_Mercator,IRENET95 / Irish Transverse Mercator,,,IRENET95 / Irish Transverse Mercator,,,,,,,,,0,0,0
 14800,2158,2158,2158,0,0,0,,IRENET95.UTM-29N,IRENET95.UTM-29N,IRENET95.UTM-29N,IRENET95 / UTM zone 29N,IRENET95_UTM_Zone_29N,IRENET95 / UTM zone 29N,,,IRENET95 / UTM zone 29N,,,,,,,,,0,0,0
@@ -161,7 +160,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 15500,2165,2165,2165,0,0,0,,Abidjan87.TM-5NW,Abidjan87.TM-5NW,Abidjan1987.TM-5NW,Abidjan 1987 / TM 5 NW,Abidjan_1987_TM_5_NW,Abidjan 1987 / TM 5 NW,,,Abidjan 1987 / TM 5 NW,,,,,,,,,0,0,0
 15600,2169,2169,2169,0,0,0,,Luxembourg30.Gauss,Luxembourg30.Gauss,Luxembourg30.Gauss,Luxembourg 1930 / Gauss,Luxembourg_1930_Gauss,Luxembourg 1930 / Gauss,,,Luxembourg 1930 / Gauss,,,,,,,,,0,0,0
 15700,2170,2170,2170,0,0,0,,MGI.Slovenia,MGI.Slovenia,MGI/gc.Slovenia,MGI / Slovenia Grid,MGI_Slovenia_Grid,MGI / Slovenia Grid,,,MGI / Slovenia Grid,,,,,,,,,0,0,0
-15800,3120,0,2171,0,0,0,,Pulkovo/58.Poland-I,Pulkovo/58.Poland-I,,Pulkovo 1942(58) / Poland zone I,,Pulkovo 1942(58) / Poland zone I,,,Pulkovo 1942(58) / Poland zone I,,,,,,,,,0,0,0
 15900,2172,0,2172,0,0,0,,Pulkovo/58.Poland-II,Pulkovo/58.Poland-II,Pulkovo/58.Poland-II,Pulkovo 1942(58) / Poland zone II,,Pulkovo 1942(58) / Poland zone II,,,Pulkovo 1942(58) / Poland zone II,,,,,,,,,0,0,0
 16000,2173,0,2173,0,0,0,,Pulkovo/58.Poland-III,Pulkovo/58.Poland-III,Pulkovo/58.Poland-III,Pulkovo 1942(58) / Poland zone III,,Pulkovo 1942(58) / Poland zone III,,,Pulkovo 1942(58) / Poland zone III,,,,,,,,,0,0,0
 16100,2174,0,2174,0,0,0,,Pulkovo/58.Poland-IV,Pulkovo/58.Poland-IV,Pulkovo/58.Poland-IV,Pulkovo 1942(58) / Poland zone IV,,Pulkovo 1942(58) / Poland zone IV,,,Pulkovo 1942(58) / Poland zone IV,,,,,,,,,0,0,0
@@ -177,8 +175,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 17100,2191,0,2191,0,0,0,,Madeira36.UTM-28N,Madeira36.UTM-28N,,Madeira 1936 / UTM zone 28N,,Madeira 1936 / UTM zone 28N,,,Madeira 1936 / UTM zone 28N,,,,,,,,,0,0,0
 17200,2192,2192,2192,0,0,0,,ED50.EuroLambert,ED50.EuroLambert,ED50.EuroLambert,ED50 / France EuroLambert,ED_1950_France_EuroLambert,ED50 / France EuroLambert,,,,,,,,,,,,0,0,0
 17300,2193,2193,2193,0,0,0,,NZTM,NZGD2000.NewZealand/TM,NZTM|NZ-TM,NZGD2000 / New Zealand Transverse Mercator 2000,NZGD_2000_New_Zealand_Transverse_Mercator,NZGD2000 / New Zealand Transverse Mercator,,,NZGD2000 / New Zealand Transverse Mercator,,,,,,,,,0,0,0
-17400,2194,0,0,0,0,0,,AmSamoa62.Lambert,AmSamoa62.Lambert,AmSamoa62.Lambert,American Samoa 1962 / American Samoa Lambert,,,,,,,,,,,,,"Duplicate names caused by EPSG depcrecation, ID: 943.",0,0,0
-17500,2195,2195,2195,0,0,0,,HARN.UTM-2S,HARN.UTM-2S,HARN/02.UTM-2S|SAMOA-HARN,NAD83(HARN) / UTM zone 2S,NAD_1983_HARN_UTM_Zone_2S,NAD83(HARN) / UTM zone 2S,,,NAD83(HARN) / UTM zone 2S,,,,,,,,,0,0,0
+17500,2195,102200,2195,0,0,0,,HARN.UTM-2S,HARN.UTM-2S,HARN/02.UTM-2S|SAMOA-HARN,NAD83(HARN) / UTM zone 2S,NAD_1983_HARN_UTM_Zone_2S,NAD83(HARN) / UTM zone 2S,,,NAD83(HARN) / UTM zone 2S,,,,,,,,,0,0,0
 17600,2196,2196,2196,0,0,0,,ETRS89.Kp2K-Jutland,ETRF89.Kp2K-Jutland,ETRS89.Kp2K-Jutland,ETRS89 / Kp2000 Jutland,ETRS_1989_Kp2000_Jutland,ETRS89 / Kp2000 Jutland,,,ETRS89 / Kp2000 Jutland,,,,,,,,,0,0,0
 17700,2197,2197,2197,0,0,0,,ETRS89.Kp2K-Zealand,ETRF89.Kp2K-Zealand,ETRS89.Kp2K-Zealand,ETRS89 / Kp2000 Zealand,ETRS_1989_Kp2000_Zealand,ETRS89 / Kp2000 Zealand,,,ETRS89 / Kp2000 Zealand,,,,,,,,,0,0,0
 17800,2198,2198,2198,0,0,0,,ETRS89.Kp2K-Bornholm,ETRS89.Kp2K-Bornholm,ETRS89.Kp2K-Bornholm,ETRS89 / Kp2000 Bornholm,ETRS_1989_Kp2000_Bornholm,ETRS89 / Kp2000 Bornholm,,,ETRS89 / Kp2000 Bornholm,,,,,,,,,0,0,0
@@ -206,69 +203,69 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 20000,2222,2222,2222,0,0,81977,,AZ83-EIF,NAD83.AZ-EI.IntnlFt,AZ83-EIF,NAD83 / Arizona East (ft),NAD_1983_StatePlane_Arizona_East_FIPS_0201_Feet_Intl,NAD83 / Arizona East (ft),,,,,,,"Arizona 0201, Eastern Zone (1983, feet)",,,,,0,0,0
 20100,2223,2223,2223,0,0,81981,,AZ83-CIF,NAD83.AZ-CI.IntnlFt,AZ83-CIF,NAD83 / Arizona Central (ft),NAD_1983_StatePlane_Arizona_Central_FIPS_0202_Feet_Intl,NAD83 / Arizona Central (ft),,,,,,,"Arizona 0202, Central Zone (1983, feet)",,,,,0,0,0
 20200,2224,2224,2224,0,0,81985,,AZ83-WIF,NAD83.AZ-WI.IntnlFt,AZ83-WIF,NAD83 / Arizona West (ft),NAD_1983_StatePlane_Arizona_West_FIPS_0203_Feet_Intl,NAD83 / Arizona West (ft),,,,,,,"Arizona 0203, Western Zone (1983, feet)",,,,,0,0,0
-20300,2225,2225,2225,0,0,40971,,CA83-IF,NAD83.CA-I.USFt,CA83-IF,NAD83 / California zone 1 (ftUS),NAD_1983_StatePlane_California_I_FIPS_0401_Feet,NAD83 / California zone 1 (ftUS),,,,,,,"California 0401, Zone I (1983, US Survey feet)",,,,,0,0,0
-20400,2226,2226,2226,0,0,40974,,CA83-IIF,NAD83.CA-II.USFt,CA83-IIF,NAD83 / California zone 2 (ftUS),NAD_1983_StatePlane_California_II_FIPS_0402_Feet,NAD83 / California zone 2 (ftUS),,,,,,,"California 0402, Zone II (1983, US Survey feet)",,,,,0,0,0
-20500,2227,2227,2227,0,0,40977,,CA83IIIF,NAD83.CA-III.USFt,CA83IIIF,NAD83 / California zone 3 (ftUS),NAD_1983_StatePlane_California_III_FIPS_0403_Feet,NAD83 / California zone 3 (ftUS),,,,,,,"California 0403, Zone III (1983, US Survey feet)",,,,,0,0,0
-20600,2228,2228,2228,0,0,40980,,CA83-IVF,NAD83.CA-IV.USFt,CA83-IVF,NAD83 / California zone 4 (ftUS),NAD_1983_StatePlane_California_IV_FIPS_0404_Feet,NAD83 / California zone 4 (ftUS),,,,,,,"California 0404, Zone IV (1983, US Survey feet)",,,,,0,0,0
-20700,2229,2229,2229,0,0,40983,,CA83-VF,NAD83.CA-V.USFt,CA83-VF,NAD83 / California zone 5 (ftUS),NAD_1983_StatePlane_California_V_FIPS_0405_Feet,NAD83 / California zone 5 (ftUS),,,,,,,"California 0405, Zone V (1983, US Survey feet)",,,,,0,0,0
-20800,2230,2230,2230,0,0,40986,,CA83-VIF,NAD83.CA-VI.USFt,CA83-VIF,NAD83 / California zone 6 (ftUS),NAD_1983_StatePlane_California_VI_FIPS_0406_Feet,NAD83 / California zone 6 (ftUS),,,,,,,"California 0406, Zone VI (1983, US Survey feet)",,,,,0,0,0
-20900,2231,2231,2231,0,0,40990,,CO83-NF,NAD83.CO-N.USFt,CO83-NF,NAD83 / Colorado North (ftUS),NAD_1983_StatePlane_Colorado_North_FIPS_0501_Feet,NAD83 / Colorado North (ftUS),,,,,,,"Colorado 0501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+20300,2225,102641,2225,0,0,40971,,CA83-IF,NAD83.CA-I.USFt,CA83-IF,NAD83 / California zone 1 (ftUS),NAD_1983_StatePlane_California_I_FIPS_0401_Feet,NAD83 / California zone 1 (ftUS),,,,,,,"California 0401, Zone I (1983, US Survey feet)",,,,,0,0,0
+20400,2226,102642,2226,0,0,40974,,CA83-IIF,NAD83.CA-II.USFt,CA83-IIF,NAD83 / California zone 2 (ftUS),NAD_1983_StatePlane_California_II_FIPS_0402_Feet,NAD83 / California zone 2 (ftUS),,,,,,,"California 0402, Zone II (1983, US Survey feet)",,,,,0,0,0
+20500,2227,102643,2227,0,0,40977,,CA83IIIF,NAD83.CA-III.USFt,CA83IIIF,NAD83 / California zone 3 (ftUS),NAD_1983_StatePlane_California_III_FIPS_0403_Feet,NAD83 / California zone 3 (ftUS),,,,,,,"California 0403, Zone III (1983, US Survey feet)",,,,,0,0,0
+20600,2228,102644,2228,0,0,40980,,CA83-IVF,NAD83.CA-IV.USFt,CA83-IVF,NAD83 / California zone 4 (ftUS),NAD_1983_StatePlane_California_IV_FIPS_0404_Feet,NAD83 / California zone 4 (ftUS),,,,,,,"California 0404, Zone IV (1983, US Survey feet)",,,,,0,0,0
+20700,2229,102645,2229,0,0,40983,,CA83-VF,NAD83.CA-V.USFt,CA83-VF,NAD83 / California zone 5 (ftUS),NAD_1983_StatePlane_California_V_FIPS_0405_Feet,NAD83 / California zone 5 (ftUS),,,,,,,"California 0405, Zone V (1983, US Survey feet)",,,,,0,0,0
+20800,2230,102646,2230,0,0,40986,,CA83-VIF,NAD83.CA-VI.USFt,CA83-VIF,NAD83 / California zone 6 (ftUS),NAD_1983_StatePlane_California_VI_FIPS_0406_Feet,NAD83 / California zone 6 (ftUS),,,,,,,"California 0406, Zone VI (1983, US Survey feet)",,,,,0,0,0
+20900,2231,102653,2231,0,0,40990,,CO83-NF,NAD83.CO-N.USFt,CO83-NF,NAD83 / Colorado North (ftUS),NAD_1983_StatePlane_Colorado_North_FIPS_0501_Feet,NAD83 / Colorado North (ftUS),,,,,,,"Colorado 0501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
 21000,2232,2232,2232,0,0,40993,,CO83-CF,NAD83.CO-C.USFt,CO83-CF,NAD83 / Colorado Central (ftUS),NAD_1983_StatePlane_Colorado_Central_FIPS_0502_Feet,NAD83 / Colorado Central (ftUS),,,,,,,"Colorado 0502, Central Zone (1983, US Survey feet)",,,,,0,0,0
-21100,2233,2233,2233,0,0,40996,,CO83-SF,NAD83.CO-S.USFt,CO83-SF,NAD83 / Colorado South (ftUS),NAD_1983_StatePlane_Colorado_South_FIPS_0503_Feet,NAD83 / Colorado South (ftUS),,,,,,,"Colorado 0503, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-21200,2234,2234,2234,0,0,41006,,CT83F,NAD83.CT.USFt,CT83F,NAD83 / Connecticut (ftUS),NAD_1983_StatePlane_Connecticut_FIPS_0600_Feet,NAD83 / Connecticut (ftUS),,,,,,,"Connecticut 0600 (1983, US Survey feet)",,,,,0,0,0
-21300,2235,2235,2235,0,0,81995,,DE83F,NAD83.DE.USFt,DE83F,NAD83 / Delaware (ftUS),NAD_1983_StatePlane_Delaware_FIPS_0700_Feet,NAD83 / Delaware (ftUS),,,,,,,"Delaware 0700 (1983, US Survey feet)",,,,,0,0,0
-21400,2236,2236,2236,0,0,81998,,FL83-EF,NAD83.FL-E.USFt,FL83-EF,NAD83 / Florida East (ftUS),NAD_1983_StatePlane_Florida_East_FIPS_0901_Feet,NAD83 / Florida East (ftUS),,,,,,,"Florida 0901, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-21500,2237,2237,2237,0,0,82001,,FL83-WF,NAD83.FL-W.USFt,FL83-WF,NAD83 / Florida West (ftUS),NAD_1983_StatePlane_Florida_West_FIPS_0902_Feet,NAD83 / Florida West (ftUS),,,,,,,"Florida 0902, Western Zone (1983, US Survey feet)",,,,,0,0,0
-21600,2238,2238,2238,0,0,41010,,FL83-NF,NAD83.FL-N.USFt,FL83-NF,NAD83 / Florida North (ftUS),NAD_1983_StatePlane_Florida_North_FIPS_0903_Feet,NAD83 / Florida North (ftUS),,,,,,,"Florida 0903, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-21700,2239,2239,2239,0,0,82042,,GA83-EF,NAD83.GA-E.USFt,GA83-EF,NAD83 / Georgia East (ftUS),NAD_1983_StatePlane_Georgia_East_FIPS_1001_Feet,NAD83 / Georgia East (ftUS),,,,,,,"Georgia 1001, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-21800,2240,2240,2240,0,0,82045,,GA83-WF,NAD83.GA-W.USFt,GA83-WF,NAD83 / Georgia West (ftUS),NAD_1983_StatePlane_Georgia_West_FIPS_1002_Feet,NAD83 / Georgia West (ftUS),,,,,,,"Georgia 1002, Western Zone (1983, US Survey feet)",,,,,0,0,0
-21900,2241,2241,2241,0,0,82066,,ID83-EF,NAD83.ID-E.USFt,ID83-EF,NAD83 / Idaho East (ftUS),NAD_1983_StatePlane_Idaho_East_FIPS_1101_Feet,NAD83 / Idaho East (ftUS),,,,,,,"Idaho 1101, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-22000,2242,2242,2242,0,0,82069,,ID83-CF,NAD83.ID-C.USFt,ID83-CF,NAD83 / Idaho Central (ftUS),NAD_1983_StatePlane_Idaho_Central_FIPS_1102_Feet,NAD83 / Idaho Central (ftUS),,,,,,,"Idaho 1102, Central Zone (1983, US Survey feet)",,,,,0,0,0
-22100,2243,2243,2243,0,0,82072,,ID83-WF,NAD83.ID-W.USFt,ID83-WF,NAD83 / Idaho West (ftUS),NAD_1983_StatePlane_Idaho_West_FIPS_1103_Feet,NAD83 / Idaho West (ftUS),,,,,,,"Idaho 1103, Western Zone (1983, US Survey feet)",,,,,0,0,0
-22200,2246,2246,2246,0,0,41033,,KY83-NF,NAD83.KY-N.USFt,KY83-NF,NAD83 / Kentucky North (ftUS),NAD_1983_StatePlane_Kentucky_North_FIPS_1601_Feet,NAD83 / Kentucky North (ftUS),,,,,,,"Kentucky 1601, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-22300,2247,2247,2247,0,0,41036,,KY83-SF,NAD83.KY-S.USFt,KY83-SF,NAD83 / Kentucky South (ftUS),NAD_1983_StatePlane_Kentucky_South_FIPS_1602_Feet,NAD83 / Kentucky South (ftUS),,,,,,,"Kentucky 1602, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-22400,2248,2248,2248,0,0,41048,,MD83F,NAD83.MD.USFt,MD83F,NAD83 / Maryland (ftUS),NAD_1983_StatePlane_Maryland_FIPS_1900_Feet,NAD83 / Maryland (ftUS),,,,,,,"Maryland 1900 (1983, US Survey feet)",,,,,0,0,0
-22500,2249,2249,2249,0,0,41051,,MA83F,NAD83.MA.USFt,MA83F,NAD83 / Massachusetts Mainland (ftUS),NAD_1983_StatePlane_Massachusetts_Mainland_FIPS_2001_Feet,NAD83 / Massachusetts Mainland (ftUS),,,,,,,"Massachusetts 2001, Mainland Zone (1983, US Survey feet)",,,,,0,0,0
-22600,2250,2250,2250,0,0,41054,,MA83-ISF,NAD83.MA-IS.USFt,MA83-ISF,NAD83 / Massachusetts Island (ftUS),NAD_1983_StatePlane_Massachusetts_Island_FIPS_2002_Feet,NAD83 / Massachusetts Island (ftUS),,,,,,,"Massachusetts 2002, Island Zone (1983, US Survey feet)",,,,,0,0,0
+21100,2233,102655,2233,0,0,40996,,CO83-SF,NAD83.CO-S.USFt,CO83-SF,NAD83 / Colorado South (ftUS),NAD_1983_StatePlane_Colorado_South_FIPS_0503_Feet,NAD83 / Colorado South (ftUS),,,,,,,"Colorado 0503, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+21200,2234,102656,2234,0,0,41006,,CT83F,NAD83.CT.USFt,CT83F,NAD83 / Connecticut (ftUS),NAD_1983_StatePlane_Connecticut_FIPS_0600_Feet,NAD83 / Connecticut (ftUS),,,,,,,"Connecticut 0600 (1983, US Survey feet)",,,,,0,0,0
+21300,2235,102657,2235,0,0,81995,,DE83F,NAD83.DE.USFt,DE83F,NAD83 / Delaware (ftUS),NAD_1983_StatePlane_Delaware_FIPS_0700_Feet,NAD83 / Delaware (ftUS),,,,,,,"Delaware 0700 (1983, US Survey feet)",,,,,0,0,0
+21400,2236,102658,2236,0,0,81998,,FL83-EF,NAD83.FL-E.USFt,FL83-EF,NAD83 / Florida East (ftUS),NAD_1983_StatePlane_Florida_East_FIPS_0901_Feet,NAD83 / Florida East (ftUS),,,,,,,"Florida 0901, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+21500,2237,102659,2237,0,0,82001,,FL83-WF,NAD83.FL-W.USFt,FL83-WF,NAD83 / Florida West (ftUS),NAD_1983_StatePlane_Florida_West_FIPS_0902_Feet,NAD83 / Florida West (ftUS),,,,,,,"Florida 0902, Western Zone (1983, US Survey feet)",,,,,0,0,0
+21600,2238,102660,2238,0,0,41010,,FL83-NF,NAD83.FL-N.USFt,FL83-NF,NAD83 / Florida North (ftUS),NAD_1983_StatePlane_Florida_North_FIPS_0903_Feet,NAD83 / Florida North (ftUS),,,,,,,"Florida 0903, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+21700,2239,102666,2239,0,0,82042,,GA83-EF,NAD83.GA-E.USFt,GA83-EF,NAD83 / Georgia East (ftUS),NAD_1983_StatePlane_Georgia_East_FIPS_1001_Feet,NAD83 / Georgia East (ftUS),,,,,,,"Georgia 1001, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+21800,2240,102667,2240,0,0,82045,,GA83-WF,NAD83.GA-W.USFt,GA83-WF,NAD83 / Georgia West (ftUS),NAD_1983_StatePlane_Georgia_West_FIPS_1002_Feet,NAD83 / Georgia West (ftUS),,,,,,,"Georgia 1002, Western Zone (1983, US Survey feet)",,,,,0,0,0
+21900,2241,102668,2241,0,0,82066,,ID83-EF,NAD83.ID-E.USFt,ID83-EF,NAD83 / Idaho East (ftUS),NAD_1983_StatePlane_Idaho_East_FIPS_1101_Feet,NAD83 / Idaho East (ftUS),,,,,,,"Idaho 1101, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+22000,2242,102669,2242,0,0,82069,,ID83-CF,NAD83.ID-C.USFt,ID83-CF,NAD83 / Idaho Central (ftUS),NAD_1983_StatePlane_Idaho_Central_FIPS_1102_Feet,NAD83 / Idaho Central (ftUS),,,,,,,"Idaho 1102, Central Zone (1983, US Survey feet)",,,,,0,0,0
+22100,2243,102670,2243,0,0,82072,,ID83-WF,NAD83.ID-W.USFt,ID83-WF,NAD83 / Idaho West (ftUS),NAD_1983_StatePlane_Idaho_West_FIPS_1103_Feet,NAD83 / Idaho West (ftUS),,,,,,,"Idaho 1103, Western Zone (1983, US Survey feet)",,,,,0,0,0
+22200,2246,102679,2246,0,0,41033,,KY83-NF,NAD83.KY-N.USFt,KY83-NF,NAD83 / Kentucky North (ftUS),NAD_1983_StatePlane_Kentucky_North_FIPS_1601_Feet,NAD83 / Kentucky North (ftUS),,,,,,,"Kentucky 1601, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+22300,2247,102680,2247,0,0,41036,,KY83-SF,NAD83.KY-S.USFt,KY83-SF,NAD83 / Kentucky South (ftUS),NAD_1983_StatePlane_Kentucky_South_FIPS_1602_Feet,NAD83 / Kentucky South (ftUS),,,,,,,"Kentucky 1602, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+22400,2248,102685,2248,0,0,41048,,MD83F,NAD83.MD.USFt,MD83F,NAD83 / Maryland (ftUS),NAD_1983_StatePlane_Maryland_FIPS_1900_Feet,NAD83 / Maryland (ftUS),,,,,,,"Maryland 1900 (1983, US Survey feet)",,,,,0,0,0
+22500,2249,102686,2249,0,0,41051,,MA83F,NAD83.MA.USFt,MA83F,NAD83 / Massachusetts Mainland (ftUS),NAD_1983_StatePlane_Massachusetts_Mainland_FIPS_2001_Feet,NAD83 / Massachusetts Mainland (ftUS),,,,,,,"Massachusetts 2001, Mainland Zone (1983, US Survey feet)",,,,,0,0,0
+22600,2250,102687,2250,0,0,41054,,MA83-ISF,NAD83.MA-IS.USFt,MA83-ISF,NAD83 / Massachusetts Island (ftUS),NAD_1983_StatePlane_Massachusetts_Island_FIPS_2002_Feet,NAD83 / Massachusetts Island (ftUS),,,,,,,"Massachusetts 2002, Island Zone (1983, US Survey feet)",,,,,0,0,0
 22700,2251,2251,2251,0,0,41058,,MI83-NIF,NAD83.MI-NI.IntnlFt,MI83-NIF,NAD83 / Michigan North (ft),NAD_1983_StatePlane_Michigan_North_FIPS_2111_Feet_Intl,NAD83 / Michigan North (ft),,,,,,,"Michigan 2111, Northern Zone (1983, feet)",,,,,0,0,0
 22800,2252,2252,2252,0,0,41062,,MI83-CIF,NAD83.MI-CI.IntnlFt,MI83-CIF,NAD83 / Michigan Central (ft),NAD_1983_StatePlane_Michigan_Central_FIPS_2112_Feet_Intl,NAD83 / Michigan Central (ft),,,,,,,"Michigan 2112, Central Zone (1983, feet)",,,,,0,0,0
 22900,2253,2253,2253,0,0,41066,,MI83-SIF,NAD83.MI-SI.IntnlFt,MI83-SIF,NAD83 / Michigan South (ft),NAD_1983_StatePlane_Michigan_South_FIPS_2113_Feet_Intl,NAD83 / Michigan South (ft),,,,,,,"Michigan 2113, Southern Zone (1983, feet)",,,,,0,0,0
-23000,2254,2254,2254,0,0,82119,,MS83-EF,NAD83.MS-E.USFt,MS83-EF,NAD83 / Mississippi East (ftUS),NAD_1983_StatePlane_Mississippi_East_FIPS_2301_Feet,NAD83 / Mississippi East (ftUS),,,,,,,"Mississippi 2301, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-23100,2255,2255,2255,0,0,82122,,MS83-WF,NAD83.MS-W.USFt,MS83-WF,NAD83 / Mississippi West (ftUS),NAD_1983_StatePlane_Mississippi_West_FIPS_2302_Feet,NAD83 / Mississippi West (ftUS),,,,,,,"Mississippi 2302, Western Zone (1983, US Survey feet)",,,,,0,0,0
+23000,2254,102694,2254,0,0,82119,,MS83-EF,NAD83.MS-E.USFt,MS83-EF,NAD83 / Mississippi East (ftUS),NAD_1983_StatePlane_Mississippi_East_FIPS_2301_Feet,NAD83 / Mississippi East (ftUS),,,,,,,"Mississippi 2301, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+23100,2255,102695,2255,0,0,82122,,MS83-WF,NAD83.MS-W.USFt,MS83-WF,NAD83 / Mississippi West (ftUS),NAD_1983_StatePlane_Mississippi_West_FIPS_2302_Feet,NAD83 / Mississippi West (ftUS),,,,,,,"Mississippi 2302, Western Zone (1983, US Survey feet)",,,,,0,0,0
 23200,2256,2256,2256,0,0,41078,,MT83IF,NAD83.MTI.IntnlFt,MT83IF,NAD83 / Montana (ft),NAD_1983_StatePlane_Montana_FIPS_2500_Feet_Intl,NAD83 / Montana (ft),,,,,,,"Montana 2500 (1983, feet)",,,,,0,0,0
-23300,2257,2257,2257,0,0,82155,,NM83-EF,NAD83.NM-E.USFt,NM83-EF,NAD83 / New Mexico East (ftUS),NAD_1983_StatePlane_New_Mexico_East_FIPS_3001_Feet,NAD83 / New Mexico East (ftUS),,,,,,,"New Mexico 3001 , Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-23400,2258,2258,2258,0,0,82159,,NM83-CF,NAD83.NM-C.USFt,NM83-CF,NAD83 / New Mexico Central (ftUS),NAD_1983_StatePlane_New_Mexico_Central_FIPS_3002_Feet,NAD83 / New Mexico Central (ftUS),,,,,,,"New Mexico 3002, Central Zone (1983, US Survey feet)",,,,,0,0,0
-23500,2259,2259,2259,0,0,82162,,NM83-WF,NAD83.NM-W.USFt,NM83-WF,NAD83 / New Mexico West (ftUS),NAD_1983_StatePlane_New_Mexico_West_FIPS_3003_Feet,NAD83 / New Mexico West (ftUS),,,,,,,"New Mexico 3003, Western Zone (1983, US Survey feet)",,,,,0,0,0
-23600,2260,2260,2260,0,0,82165,,NY83-EF,NAD83.NY-E.USFt,NY83-EF,NAD83 / New York East (ftUS),NAD_1983_StatePlane_New_York_East_FIPS_3101_Feet,NAD83 / New York East (ftUS),,,,,,,"New York 3101, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-23700,2261,2261,2261,0,0,82168,,NY83-CF,NAD83.NY-C.USFt,NY83-CF,NAD83 / New York Central (ftUS),NAD_1983_StatePlane_New_York_Central_FIPS_3102_Feet,NAD83 / New York Central (ftUS),,,,,,,"New York 3102, Central Zone (1983, US Survey feet)",,,,,0,0,0
-23800,2262,2262,2262,0,0,82171,,NY83-WF,NAD83.NY-W.USFt,NY83-WF,NAD83 / New York West (ftUS),NAD_1983_StatePlane_New_York_West_FIPS_3103_Feet,NAD83 / New York West (ftUS),,,,,,,"New York 3103, Western Zone (1983, US Survey feet)",,,,,0,0,0
-23900,2263,2263,2263,0,0,41088,,NY83-LIF,NAD83.NY-LI.USFt,NY83-LIF,NAD83 / New York Long Island (ftUS),NAD_1983_StatePlane_New_York_Long_Island_FIPS_3104_Feet,NAD83 / New York Long Island (ftUS),,,,,,,"New York 3104, Long Island Zone (1983, US Survey feet)",,,,,0,0,0
-24000,2264,2264,2264,0,0,41091,,NC83F,NAD83.NC.USFt,NC83F,NAD83 / North Carolina (ftUS),NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet,NAD83 / North Carolina (ftUS),,,,,,,"North Carolina 3200 (1983, US Survey feet)",,,,,0,0,0
+23300,2257,102712,2257,0,0,82155,,NM83-EF,NAD83.NM-E.USFt,NM83-EF,NAD83 / New Mexico East (ftUS),NAD_1983_StatePlane_New_Mexico_East_FIPS_3001_Feet,NAD83 / New Mexico East (ftUS),,,,,,,"New Mexico 3001 , Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+23400,2258,102713,2258,0,0,82159,,NM83-CF,NAD83.NM-C.USFt,NM83-CF,NAD83 / New Mexico Central (ftUS),NAD_1983_StatePlane_New_Mexico_Central_FIPS_3002_Feet,NAD83 / New Mexico Central (ftUS),,,,,,,"New Mexico 3002, Central Zone (1983, US Survey feet)",,,,,0,0,0
+23500,2259,102714,2259,0,0,82162,,NM83-WF,NAD83.NM-W.USFt,NM83-WF,NAD83 / New Mexico West (ftUS),NAD_1983_StatePlane_New_Mexico_West_FIPS_3003_Feet,NAD83 / New Mexico West (ftUS),,,,,,,"New Mexico 3003, Western Zone (1983, US Survey feet)",,,,,0,0,0
+23600,2260,102715,2260,0,0,82165,,NY83-EF,NAD83.NY-E.USFt,NY83-EF,NAD83 / New York East (ftUS),NAD_1983_StatePlane_New_York_East_FIPS_3101_Feet,NAD83 / New York East (ftUS),,,,,,,"New York 3101, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+23700,2261,102716,2261,0,0,82168,,NY83-CF,NAD83.NY-C.USFt,NY83-CF,NAD83 / New York Central (ftUS),NAD_1983_StatePlane_New_York_Central_FIPS_3102_Feet,NAD83 / New York Central (ftUS),,,,,,,"New York 3102, Central Zone (1983, US Survey feet)",,,,,0,0,0
+23800,2262,102717,2262,0,0,82171,,NY83-WF,NAD83.NY-W.USFt,NY83-WF,NAD83 / New York West (ftUS),NAD_1983_StatePlane_New_York_West_FIPS_3103_Feet,NAD83 / New York West (ftUS),,,,,,,"New York 3103, Western Zone (1983, US Survey feet)",,,,,0,0,0
+23900,2263,102718,2263,0,0,41088,,NY83-LIF,NAD83.NY-LI.USFt,NY83-LIF,NAD83 / New York Long Island (ftUS),NAD_1983_StatePlane_New_York_Long_Island_FIPS_3104_Feet,NAD83 / New York Long Island (ftUS),,,,,,,"New York 3104, Long Island Zone (1983, US Survey feet)",,,,,0,0,0
+24000,2264,102719,2264,0,0,41091,,NC83F,NAD83.NC.USFt,NC83F,NAD83 / North Carolina (ftUS),NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet,NAD83 / North Carolina (ftUS),,,,,,,"North Carolina 3200 (1983, US Survey feet)",,,,,0,0,0
 24100,2265,2265,2265,0,0,0,,NAD83.ND-Nft,NAD83.ND-N.IntnlFt,NAD83.ND-Nft,NAD83 / North Dakota North (ft),NAD_1983_StatePlane_North_Dakota_North_FIPS_3301_Feet_Intl,NAD83 / North Dakota North (ft),,,,,,,,,,,,0,0,0
 24200,2266,2266,2266,0,0,0,,NAD83.ND-Sft,NAD83.ND-S.IntniFt,NAD83.ND-Sft,NAD83 / North Dakota South (ft),NAD_1983_StatePlane_North_Dakota_South_FIPS_3302_Feet_Intl,NAD83 / North Dakota South (ft),,,,,,,,,,,,0,0,0
-24300,2267,2267,2267,0,0,41106,,OK83-NF,NAD83.OK-N.USFt,OK83-NF,NAD83 / Oklahoma North (ftUS),NAD_1983_StatePlane_Oklahoma_North_FIPS_3501_Feet,NAD83 / Oklahoma North (ftUS),,,,,,,"Oklahoma 3501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-24400,2268,2268,2268,0,0,41109,,OK83-SF,NAD83.OK-S.USFt,OK83-SF,NAD83 / Oklahoma South (ftUS),NAD_1983_StatePlane_Oklahoma_South_FIPS_3502_Feet,NAD83 / Oklahoma South (ftUS),,,,,,,"Oklahoma 3502, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+24300,2267,102724,2267,0,0,41106,,OK83-NF,NAD83.OK-N.USFt,OK83-NF,NAD83 / Oklahoma North (ftUS),NAD_1983_StatePlane_Oklahoma_North_FIPS_3501_Feet,NAD83 / Oklahoma North (ftUS),,,,,,,"Oklahoma 3501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+24400,2268,102725,2268,0,0,41109,,OK83-SF,NAD83.OK-S.USFt,OK83-SF,NAD83 / Oklahoma South (ftUS),NAD_1983_StatePlane_Oklahoma_South_FIPS_3502_Feet,NAD83 / Oklahoma South (ftUS),,,,,,,"Oklahoma 3502, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 24500,2269,2269,2269,0,0,41113,,OR83-NIF,NAD83.OR-NI.IntnlFt,OR83-NIF,NAD83 / Oregon North (ft),NAD_1983_StatePlane_Oregon_North_FIPS_3601_Feet_Intl,NAD83 / Oregon North (ft),,,,,,,"Oregon 3601, Northern Zone (1983, feet)",,,,,0,0,0
 24600,2270,2270,2270,0,0,41117,,OR83-SIF,NAD83.OR-SI.IntnlFt,OR83-SIF,NAD83 / Oregon South (ft),NAD_1983_StatePlane_Oregon_South_FIPS_3602_Feet_Intl,NAD83 / Oregon South (ft),,,,,,,"Oregon 3602, Southern Zone (1983, feet)",,,,,0,0,0
-24700,2271,2271,2271,0,0,41120,,PA83-NF,NAD83.PA-N.USFt,PA83-NF,NAD83 / Pennsylvania North (ftUS),NAD_1983_StatePlane_Pennsylvania_North_FIPS_3701_Feet,NAD83 / Pennsylvania North (ftUS),,,,,,,"Pennsylvania 3701, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-24800,2272,2272,2272,0,0,41123,,PA83-SF,NAD83.PA-S.USFt,PA83-SF,NAD83 / Pennsylvania South (ftUS),NAD_1983_StatePlane_Pennsylvania_South_FIPS_3702_Feet,NAD83 / Pennsylvania South (ftUS),,,,,,,"Pennsylvania 3702, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+24700,2271,102728,2271,0,0,41120,,PA83-NF,NAD83.PA-N.USFt,PA83-NF,NAD83 / Pennsylvania North (ftUS),NAD_1983_StatePlane_Pennsylvania_North_FIPS_3701_Feet,NAD83 / Pennsylvania North (ftUS),,,,,,,"Pennsylvania 3701, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+24800,2272,102729,2272,0,0,41123,,PA83-SF,NAD83.PA-S.USFt,PA83-SF,NAD83 / Pennsylvania South (ftUS),NAD_1983_StatePlane_Pennsylvania_South_FIPS_3702_Feet,NAD83 / Pennsylvania South (ftUS),,,,,,,"Pennsylvania 3702, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 24900,2273,2273,2273,0,0,41130,,SC83IF,NAD83.SCI.IntnlFt,SC83IF,NAD83 / South Carolina (ft),NAD_1983_StatePlane_South_Carolina_FIPS_3900_Feet_Intl,NAD83 / South Carolina (ft),,,,,,,"South Carolina 3900 (1983, feet)",,,,,0,0,0
-25000,2274,2274,2274,0,0,41141,,TN83F,NAD83.TN.USFt,TN83F,NAD83 / Tennessee (ftUS),NAD_1983_StatePlane_Tennessee_FIPS_4100_Feet,NAD83 / Tennessee (ftUS),,,,,,,"Tennessee 4100 (1983, US Survey feet)",,,,,0,0,0
-25100,2275,2275,2275,0,0,41144,,TX83-NF,NAD83.TX-N.USFt,TX83-NF,NAD83 / Texas North (ftUS),NAD_1983_StatePlane_Texas_North_FIPS_4201_Feet,NAD83 / Texas North (ftUS),,,,,,,"Texas 4201, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-25200,2276,2276,2276,0,0,41147,,TX83-NCF,NAD83.TX-NC.USFt,TX83-NCF,NAD83 / Texas North Central (ftUS),NAD_1983_StatePlane_Texas_North_Central_FIPS_4202_Feet,NAD83 / Texas North Central (ftUS),,,,,,,"Texas 4202, North Central Zone (1983, US Survey feet)",,,,,0,0,0
-25300,2277,2277,2277,0,0,41150,,TX83-CF,NAD83.TX-C.USFt,TX83-CF,NAD83 / Texas Central (ftUS),NAD_1983_StatePlane_Texas_Central_FIPS_4203_Feet,NAD83 / Texas Central (ftUS),,,,,,,"Texas 4203, Central Zone (1983, US Survey feet)",,,,,0,0,0
-25400,2278,2278,2278,0,0,41153,,TX83-SCF,NAD83.TX-SC.USFt,TX83-SCF,NAD83 / Texas South Central (ftUS),NAD_1983_StatePlane_Texas_South_Central_FIPS_4204_Feet,NAD83 / Texas South Central (ftUS),,,,,,,"Texas 4204, South Central Zone (1983, US Survey feet)",,,,,0,0,0
-25500,2279,2279,2279,0,0,41156,,TX83-SF,NAD83.TX-S.USFt,TX83-SF,NAD83 / Texas South (ftUS),NAD_1983_StatePlane_Texas_South_FIPS_4205_Feet,NAD83 / Texas South (ftUS),,,,,,,"Texas 4205, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+25000,2274,102736,2274,0,0,41141,,TN83F,NAD83.TN.USFt,TN83F,NAD83 / Tennessee (ftUS),NAD_1983_StatePlane_Tennessee_FIPS_4100_Feet,NAD83 / Tennessee (ftUS),,,,,,,"Tennessee 4100 (1983, US Survey feet)",,,,,0,0,0
+25100,2275,102737,2275,0,0,41144,,TX83-NF,NAD83.TX-N.USFt,TX83-NF,NAD83 / Texas North (ftUS),NAD_1983_StatePlane_Texas_North_FIPS_4201_Feet,NAD83 / Texas North (ftUS),,,,,,,"Texas 4201, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+25200,2276,102738,2276,0,0,41147,,TX83-NCF,NAD83.TX-NC.USFt,TX83-NCF,NAD83 / Texas North Central (ftUS),NAD_1983_StatePlane_Texas_North_Central_FIPS_4202_Feet,NAD83 / Texas North Central (ftUS),,,,,,,"Texas 4202, North Central Zone (1983, US Survey feet)",,,,,0,0,0
+25300,2277,102739,2277,0,0,41150,,TX83-CF,NAD83.TX-C.USFt,TX83-CF,NAD83 / Texas Central (ftUS),NAD_1983_StatePlane_Texas_Central_FIPS_4203_Feet,NAD83 / Texas Central (ftUS),,,,,,,"Texas 4203, Central Zone (1983, US Survey feet)",,,,,0,0,0
+25400,2278,102740,2278,0,0,41153,,TX83-SCF,NAD83.TX-SC.USFt,TX83-SCF,NAD83 / Texas South Central (ftUS),NAD_1983_StatePlane_Texas_South_Central_FIPS_4204_Feet,NAD83 / Texas South Central (ftUS),,,,,,,"Texas 4204, South Central Zone (1983, US Survey feet)",,,,,0,0,0
+25500,2279,102741,2279,0,0,41156,,TX83-SF,NAD83.TX-S.USFt,TX83-SF,NAD83 / Texas South (ftUS),NAD_1983_StatePlane_Texas_South_FIPS_4205_Feet,NAD83 / Texas South (ftUS),,,,,,,"Texas 4205, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 25600,2280,2280,2280,0,0,41160,,UT83-NIF,NAD83.UT-NI.IntnlFt,UT83-NIF,NAD83 / Utah North (ft),NAD_1983_StatePlane_Utah_North_FIPS_4301_Feet_Intl,NAD83 / Utah North (ft),,,,,,,"Utah 4301, Northern Zone (1983, feet)",,,,,0,0,0
 25700,2281,2281,2281,0,0,41164,,UT83-CIF,NAD83.UT-CI.IntnlFt,UT83-CIF,NAD83 / Utah Central (ft),NAD_1983_StatePlane_Utah_Central_FIPS_4302_Feet_Intl,NAD83 / Utah Central (ft),,,,,,,"Utah 4302, Central Zone (1983, feet)",,,,,0,0,0
 25800,2282,2282,2282,0,0,41168,,UT83-SIF,NAD83.UT-SI.IntnlFt,UT83-SIF,NAD83 / Utah South (ft),NAD_1983_StatePlane_Utah_South_FIPS_4303_Feet_Intl,NAD83 / Utah South (ft),,,,,,,"Utah 4303, Southern Zone (1983, feet)",,,,,0,0,0
-25900,2283,2283,2283,0,0,41171,,VA83-NF,NAD83.VA-N.USFt,VA83-NF,NAD83 / Virginia North (ftUS),NAD_1983_StatePlane_Virginia_North_FIPS_4501_Feet,NAD83 / Virginia North (ftUS),,,,,,,"Virginia 4501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-26000,2284,2284,2284,0,0,41174,,VA83-SF,NAD83.VA-S.USFt,VA83-SF,NAD83 / Virginia South (ftUS),NAD_1983_StatePlane_Virginia_South_FIPS_4502_Feet,NAD83 / Virginia South (ftUS),,,,,,,"Virginia 4502, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-26100,2285,2285,2285,0,0,41177,,WA83-NF,NAD83.WA-N.USFt,WA83-NF,NAD83 / Washington North (ftUS),NAD_1983_StatePlane_Washington_North_FIPS_4601_Feet,NAD83 / Washington North (ftUS),,,,,,,"Washington 4601, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-26200,2286,2286,2286,0,0,41180,,WA83-SF,NAD83.WA-S.USFt,WA83-SF,NAD83 / Washington South (ftUS),NAD_1983_StatePlane_Washington_South_FIPS_4602_Feet,NAD83 / Washington South (ftUS),,,,,,,"Washington 4602, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-26300,2287,2287,2287,0,0,41189,,WI83-NF,NAD83.WI-N.USFt,WI83-NF,NAD83 / Wisconsin North (ftUS),NAD_1983_StatePlane_Wisconsin_North_FIPS_4801_Feet,NAD83 / Wisconsin North (ftUS),,,,,,,"Wisconsin 4801, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-26400,2288,2288,2288,0,0,41192,,WI83-CF,NAD83.WI-C.USFt,WI83-CF,NAD83 / Wisconsin Central (ftUS),NAD_1983_StatePlane_Wisconsin_Central_FIPS_4802_Feet,NAD83 / Wisconsin Central (ftUS),,,,,,,"Wisconsin 4802, Central Zone (1983, US Survey feet)",,,,,0,0,0
-26500,2289,2289,2289,0,0,41195,,WI83-SF,NAD83.WI-S.USFt,WI83-SF,NAD83 / Wisconsin South (ftUS),NAD_1983_StatePlane_Wisconsin_South_FIPS_4803_Feet,NAD83 / Wisconsin South (ftUS),,,,,,,"Wisconsin 4803, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+25900,2283,102746,2283,0,0,41171,,VA83-NF,NAD83.VA-N.USFt,VA83-NF,NAD83 / Virginia North (ftUS),NAD_1983_StatePlane_Virginia_North_FIPS_4501_Feet,NAD83 / Virginia North (ftUS),,,,,,,"Virginia 4501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+26000,2284,102747,2284,0,0,41174,,VA83-SF,NAD83.VA-S.USFt,VA83-SF,NAD83 / Virginia South (ftUS),NAD_1983_StatePlane_Virginia_South_FIPS_4502_Feet,NAD83 / Virginia South (ftUS),,,,,,,"Virginia 4502, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+26100,2285,102748,2285,0,0,41177,,WA83-NF,NAD83.WA-N.USFt,WA83-NF,NAD83 / Washington North (ftUS),NAD_1983_StatePlane_Washington_North_FIPS_4601_Feet,NAD83 / Washington North (ftUS),,,,,,,"Washington 4601, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+26200,2286,102749,2286,0,0,41180,,WA83-SF,NAD83.WA-S.USFt,WA83-SF,NAD83 / Washington South (ftUS),NAD_1983_StatePlane_Washington_South_FIPS_4602_Feet,NAD83 / Washington South (ftUS),,,,,,,"Washington 4602, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+26300,2287,102752,2287,0,0,41189,,WI83-NF,NAD83.WI-N.USFt,WI83-NF,NAD83 / Wisconsin North (ftUS),NAD_1983_StatePlane_Wisconsin_North_FIPS_4801_Feet,NAD83 / Wisconsin North (ftUS),,,,,,,"Wisconsin 4801, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+26400,2288,102753,2288,0,0,41192,,WI83-CF,NAD83.WI-C.USFt,WI83-CF,NAD83 / Wisconsin Central (ftUS),NAD_1983_StatePlane_Wisconsin_Central_FIPS_4802_Feet,NAD83 / Wisconsin Central (ftUS),,,,,,,"Wisconsin 4802, Central Zone (1983, US Survey feet)",,,,,0,0,0
+26500,2289,102754,2289,0,0,41195,,WI83-SF,NAD83.WI-S.USFt,WI83-SF,NAD83 / Wisconsin South (ftUS),NAD_1983_StatePlane_Wisconsin_South_FIPS_4803_Feet,NAD83 / Wisconsin South (ftUS),,,,,,,"Wisconsin 4803, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 26600,2290,2290,2290,0,0,0,,PrinceEdwardIsland77,ATS77.PrinceEdwardIs/Stereo,CANST-PEI-ATS,ATS77 / Prince Edward Isl. Stereographic (ATS77),Prince_Edward_Island_Stereographic,ATS77 / Prince Edward Isl. Stereographic (ATS77),,,,,,,,,,,,0,0,0
 26700,2954,2291,2292,0,0,0,,PrinceEdwardIslandCSRS,CSRS.PrinceEdwardIs/Stereo,CANST-PEI-CSRS,NAD83(CSRS) / Prince Edward Isl. Stereographic (NAD83),NAD_1983_CSRS98_Prince_Edward_Island,PEI Department of Transportation & Public Works,,,NAD83(CSRS) / Prince Edward Isl. Stereographic (NAD83),,,,,,,,,0,0,0
 26800,2294,2294,2294,0,0,0,,NovaScotia77-4,ATS77.NovaScotia-4,NovaScotia77-4,ATS77 / MTM Nova Scotia zone 4,ATS_1977_MTM_4_Nova_Scotia,ATS77 / MTM Nova Scotia zone 4,,,,,,,,,,,,0,0,0
@@ -289,7 +286,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 28300,2309,2309,2309,0,0,0,,WGS84.TM-116SE,WGS84.TM-116SE,WGS84.TM-116SE,WGS 84 / TM 116 SE,WGS_1984_TM_116_SE,WGS 84 / TM 116 SE,,,WGS 84 / TM 116 SE,,,,,,,,,0,0,0
 28400,2310,2310,2310,0,0,0,,WGS84.TM-132SE,WGS84.TM-132SE,WGS84.TM-132SE,WGS 84 / TM 132 SE,WGS_1984_TM_132_SE,WGS 84 / TM 132 SE,,,WGS 84 / TM 132 SE,,,,,,,,,0,0,0
 28500,2311,2311,2311,0,0,0,,WGS84.TM-6NE,WGS84.TM-6NE,WGS84.TM-6NE,WGS 84 / TM 6 NE,WGS_1984_TM_6_NE,WGS 84 / TM 6 NE,,,WGS 84 / TM 6 NE,,,,,,,,,0,0,0
-28600,2312,0,23433,0,0,0,,Garoua.UTM-33N,Garoua.UTM-33N,,Garoua / UTM zone 33N,,Garoua / UTM zone 33N,,,Garoua / UTM zone 33N,,,,,,,,,0,0,0
+28600,2312,2312,2312,0,0,0,,Garoua.UTM-33N,Garoua.UTM-33N,,Garoua / UTM zone 33N,Garoua_UTM_Zone_33N,Garoua / UTM zone 33N,,,Garoua / UTM zone 33N,,,,,,,,,0,0,0
 28700,2313,2313,2313,0,0,0,,Kousseri.UTM-33N,Kousseri.UTM-33N,,Kousseri / UTM zone 33N,Kousseri_UTM_Zone_33N,Kousseri / UTM zone 33N,,,Kousseri / UTM zone 33N,,,,,,,,,0,0,0
 28800,2314,2314,2314,0,0,0,,Trinidad03.TrinidadGrid,Trinidad03.TrinidadGrid,Trndd1903.TrinidadGrid,Trinidad 1903 / Trinidad Grid (ftCla),Trinidad_1903_Trinidad_Grid_Feet_Clarke,Trinidad 1903 / Trinidad Grid (ftCla),,,,,,,,,,,,0,0,0
 28900,2315,2315,2315,0,0,0,,CampoInchauspe.UTM-19S,CampoInchauspe.UTM-19S,CampoInchauspe.UTM-19S,Campo Inchauspe / UTM zone 19S,Campo_Inchauspe_UTM_19S,Campo Inchauspe / UTM zone 19S,,,Campo Inchauspe / UTM zone 19S,,,,,,,,,0,0,0
@@ -526,7 +523,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 52000,2547,2547,2547,0,0,0,,Pulkovo42.GK3d-31,Pulkovo42.GK3d-31,Pulkovo42.GK3d-31,Pulkovo 1942 / 3-degree Gauss-Kruger zone 31,Pulkovo_1942_3_Degree_GK_Zone_31,Pulkovo 1942 / 3-degree Gauss-Kruger zone 31,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 31,,,,,,,,,0,0,0
 52100,2548,2548,2548,0,0,0,,Pulkovo42.GK3d-32,Pulkovo42.GK3d-32,Pulkovo42.GK3d-32,Pulkovo 1942 / 3-degree Gauss-Kruger zone 32,Pulkovo_1942_3_Degree_GK_Zone_32,Pulkovo 1942 / 3-degree Gauss-Kruger zone 32,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 32,,,,,,,,,0,0,0
 52200,2549,2549,2549,0,0,0,,Pulkovo42.GK3d-33,Pulkovo42.GK3d-33,Pulkovo42.GK3d-33,Pulkovo 1942 / 3-degree Gauss-Kruger zone 33,Pulkovo_1942_3_Degree_GK_Zone_33,Pulkovo 1942 / 3-degree Gauss-Kruger zone 33,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 33,,,,,,,,,0,0,0
-52300,2550,2550,2550,0,0,0,,Samboja.UTM-50S,Samboja.UTM-50S,Samboja_1.UTM-50S,Samboja / UTM zone 50S,Samboja_UTM_Zone_50S,Samboja / UTM zone 50S,,,Samboja / UTM zone 50S,,,,,,,,,0,0,0
 52400,2551,2551,2551,0,0,0,,Pulkovo42.GK3d-34,Pulkovo42.GK3d-34,Pulkovo42.GK3d-34,Pulkovo 1942 / 3-degree Gauss-Kruger zone 34,Pulkovo_1942_3_Degree_GK_Zone_34,Pulkovo 1942 / 3-degree Gauss-Kruger zone 34,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 34,,,,,,,,,0,0,0
 52500,2552,2552,2552,0,0,0,,Pulkovo42.GK3d-35,Pulkovo42.GK3d-35,Pulkovo42.GK3d-35,Pulkovo 1942 / 3-degree Gauss-Kruger zone 35,Pulkovo_1942_3_Degree_GK_Zone_35,Pulkovo 1942 / 3-degree Gauss-Kruger zone 35,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 35,,,,,,,,,0,0,0
 52600,2553,2553,2553,0,0,0,,Pulkovo42.GK3d-36,Pulkovo42.GK3d-36,Pulkovo42.GK3d-36,Pulkovo 1942 / 3-degree Gauss-Kruger zone 36,Pulkovo_1942_3_Degree_GK_Zone_36,Pulkovo 1942 / 3-degree Gauss-Kruger zone 36,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 36,,,,,,,,,0,0,0
@@ -553,7 +549,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 54700,2574,2574,2574,0,0,0,,Pulkovo42.GK3d-57,Pulkovo42.GK3d-57,Pulkovo42.GK3d-57,Pulkovo 1942 / 3-degree Gauss-Kruger zone 57,Pulkovo_1942_3_Degree_GK_Zone_57,Pulkovo 1942 / 3-degree Gauss-Kruger zone 57,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 57,,,,,,,,,0,0,0
 54800,2575,2575,2575,0,0,0,,Pulkovo42.GK3d-58,Pulkovo42.GK3d-58,Pulkovo42.GK3d-58,Pulkovo 1942 / 3-degree Gauss-Kruger zone 58,Pulkovo_1942_3_Degree_GK_Zone_58,Pulkovo 1942 / 3-degree Gauss-Kruger zone 58,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 58,,,,,,,,,0,0,0
 54900,2576,2576,2576,0,0,0,,Pulkovo42.GK3d-59,Pulkovo42.GK3d-59,Pulkovo42.GK3d-59,Pulkovo 1942 / 3-degree Gauss-Kruger zone 59,Pulkovo_1942_3_Degree_GK_Zone_59,Pulkovo 1942 / 3-degree Gauss-Kruger zone 59,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 59,,,,,,,,,0,0,0
-55000,2577,2577,2577,0,0,0,,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,,,,,,,,,,,"Deprecated by EPSG, ID:1061",0,0,0
 55100,2578,2578,2578,0,0,0,,Pulkovo42.GK3d-61,Pulkovo42.GK3d-61,Pulkovo42.GK3d-61,Pulkovo 1942 / 3-degree Gauss-Kruger zone 61,Pulkovo_1942_3_Degree_GK_Zone_61,Pulkovo 1942 / 3-degree Gauss-Kruger zone 61,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 61,,,,,,,,,0,0,0
 55200,2579,2579,2579,0,0,0,,Pulkovo42.GK3d-62,Pulkovo42.GK3d-62,Pulkovo42.GK3d-62,Pulkovo 1942 / 3-degree Gauss-Kruger zone 62,Pulkovo_1942_3_Degree_GK_Zone_62,Pulkovo 1942 / 3-degree Gauss-Kruger zone 62,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 62,,,,,,,,,0,0,0
 55300,2580,2580,2580,0,0,0,,Pulkovo42.GK3d-63,Pulkovo42.GK3d-63,Pulkovo42.GK3d-63,Pulkovo 1942 / 3-degree Gauss-Kruger zone 63,Pulkovo_1942_3_Degree_GK_Zone_63,Pulkovo 1942 / 3-degree Gauss-Kruger zone 63,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 63,,,,,,,,,0,0,0
@@ -734,114 +729,114 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 72800,2756,2756,2756,0,0,0,,Pulkovo95.GK3d/CM-174W,Pulkovo95.GK3d/CM-174W,Pulkovo95.GK3d/CM-174W,Pulkovo 1995 / 3-degree Gauss-Kruger CM 174W,Pulkovo_1995_3_Degree_GK_CM_174W,Pulkovo 1995 / 3-degree Gauss-Kruger CM 174W,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 174W,,,,,,,,,0,0,0
 72900,2757,2757,2757,0,0,0,,Pulkovo95.GK3d/CM-171W,Pulkovo95.GK3d/CM-171W,Pulkovo95.GK3d/CM-171W,Pulkovo 1995 / 3-degree Gauss-Kruger CM 171W,Pulkovo_1995_3_Degree_GK_CM_171W,Pulkovo 1995 / 3-degree Gauss-Kruger CM 171W,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 171W,,,,,,,,,0,0,0
 73000,2758,2758,2758,0,0,0,,Pulkovo95.GK3d/CM-168W,Pulkovo95.GK3d/CM-168W,Pulkovo95.GK3d/CM-168W,Pulkovo 1995 / 3-degree Gauss-Kruger CM 168W,Pulkovo_1995_3_Degree_GK_CM_168W,Pulkovo 1995 / 3-degree Gauss-Kruger CM 168W,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 168W,,,,,,,,,0,0,0
-73100,2759,2759,2759,0,0,0,,ALHP-E,HARN.AL-E,HARN/AL.AL-E,NAD83(HARN) / Alabama East,NAD_1983_HARN_StatePlane_Alabama_East_FIPS_0101,NAD83(HARN) / Alabama East,,,NAD83(HARN) / Alabama East,,,,,,,,,0,0,0
-73200,2760,2760,2760,0,0,0,,ALHP-W,HARN.AL-W,HARN/AL.AL-W,NAD83(HARN) / Alabama West,NAD_1983_HARN_StatePlane_Alabama_West_FIPS_0102,NAD83(HARN) / Alabama West,,,NAD83(HARN) / Alabama West,,,,,,,,,0,0,0
-73300,2761,2761,2761,0,0,0,,AZHP-E,HARN.AZ-E,HARN/AZ.AZ-E,NAD83(HARN) / Arizona East,NAD_1983_HARN_StatePlane_Arizona_East_FIPS_0201,NAD83(HARN) / Arizona East,,,NAD83(HARN) / Arizona East,,,,,,,,,0,0,0
-73400,2762,2762,2762,0,0,0,,AZHP-C,HARN.AZ-C,HARN/AZ.AZ-C,NAD83(HARN) / Arizona Central,NAD_1983_HARN_StatePlane_Arizona_Central_FIPS_0202,NAD83(HARN) / Arizona Central,,,NAD83(HARN) / Arizona Central,,,,,,,,,0,0,0
-73500,2763,2763,2763,0,0,0,,AZHP-W,HARN.AZ-W,HARN/AZ.AZ-W,NAD83(HARN) / Arizona West,NAD_1983_HARN_StatePlane_Arizona_West_FIPS_0203,NAD83(HARN) / Arizona West,,,NAD83(HARN) / Arizona West,,,,,,,,,0,0,0
-73600,2764,2764,2764,0,0,0,,ARHP-N,HARN.AR-N,HARN/AR.AR-N,NAD83(HARN) / Arkansas North,NAD_1983_HARN_StatePlane_Arkansas_North_FIPS_0301,NAD83(HARN) / Arkansas North,,,NAD83(HARN) / Arkansas North,,,,,,,,,0,0,0
-73700,2765,2765,2765,0,0,0,,ARHP-S,HARN.AR-S,HARN/AR.AR-S,NAD83(HARN) / Arkansas South,NAD_1983_HARN_StatePlane_Arkansas_South_FIPS_0302,NAD83(HARN) / Arkansas South,,,NAD83(HARN) / Arkansas South,,,,,,,,,0,0,0
-73800,2766,2766,2766,0,0,0,,CAHP-I,HARN.CA-I,HARN/CA.CA-I,NAD83(HARN) / California zone 1,NAD_1983_HARN_StatePlane_California_I_FIPS_0401,NAD83(HARN) / California zone 1,,,NAD83(HARN) / California zone 1,,,,,,,,,0,0,0
-73900,2767,2767,2767,0,0,0,,CAHP-II,HARN.CA-II,HARN/CA.CA-II,NAD83(HARN) / California zone 2,NAD_1983_HARN_StatePlane_California_II_FIPS_0402,NAD83(HARN) / California zone 2,,,NAD83(HARN) / California zone 2,,,,,,,,,0,0,0
-74000,2768,2768,2768,0,0,0,,CAHP-III,HARN.CA-III,HARN/CA.CA-III,NAD83(HARN) / California zone 3,NAD_1983_HARN_StatePlane_California_III_FIPS_0403,NAD83(HARN) / California zone 3,,,NAD83(HARN) / California zone 3,,,,,,,,,0,0,0
-74100,2769,2769,2769,0,0,0,,CAHP-IV,HARN.CA-IV,HARN/CA.CA-IV,NAD83(HARN) / California zone 4,NAD_1983_HARN_StatePlane_California_IV_FIPS_0404,NAD83(HARN) / California zone 4,,,NAD83(HARN) / California zone 4,,,,,,,,,0,0,0
-74200,2770,2770,2770,0,0,0,,CAHP-V,HARN.CA-V,HARN/CA.CA-V,NAD83(HARN) / California zone 5,NAD_1983_HARN_StatePlane_California_V_FIPS_0405,NAD83(HARN) / California zone 5,,,NAD83(HARN) / California zone 5,,,,,,,,,0,0,0
-74300,2771,2771,2771,0,0,0,,CAHP-VI,HARN.CA-VI,HARN/CA.CAVI,NAD83(HARN) / California zone 6,NAD_1983_HARN_StatePlane_California_VI_FIPS_0406,NAD83(HARN) / California zone 6,,,NAD83(HARN) / California zone 6,,,,,,,,,0,0,0
-74400,2772,2772,2772,0,0,0,,COHP-N,HARN.CO-N,HARN/CO.CO-N,NAD83(HARN) / Colorado North,NAD_1983_HARN_StatePlane_Colorado_North_FIPS_0501,NAD83(HARN) / Colorado North,,,NAD83(HARN) / Colorado North,,,,,,,,,0,0,0
-74500,2773,2773,2773,0,0,0,,COHP-C,HARN.CO-C,HARN/CO.CO-C,NAD83(HARN) / Colorado Central,NAD_1983_HARN_StatePlane_Colorado_Central_FIPS_0502,NAD83(HARN) / Colorado Central,,,NAD83(HARN) / Colorado Central,,,,,,,,,0,0,0
-74600,2774,2774,2774,0,0,0,,COHP-S,HARN.CO-S,HARN/CO.CO-S,NAD83(HARN) / Colorado South,NAD_1983_HARN_StatePlane_Colorado_South_FIPS_0503,NAD83(HARN) / Colorado South,,,NAD83(HARN) / Colorado South,,,,,,,,,0,0,0
-74700,2775,2775,2775,0,0,0,,CTHP,HARN.CT,HARN/NE.CT,NAD83(HARN) / Connecticut,NAD_1983_HARN_StatePlane_Connecticut_FIPS_0600,NAD83(HARN) / Connecticut,,,NAD83(HARN) / Connecticut,,,,,,,,,0,0,0
-74800,2776,2776,2776,0,0,0,,DEHP,HARN.DE,HARN/MD.DE,NAD83(HARN) / Delaware,NAD_1983_HARN_StatePlane_Delaware_FIPS_0700,NAD83(HARN) / Delaware,,,NAD83(HARN) / Delaware,,,,,,,,,0,0,0
-74900,2777,2777,2777,0,0,0,,FLHP-E,HARN.FL-E,HARN/FL.FL-E,NAD83(HARN) / Florida East,NAD_1983_HARN_StatePlane_Florida_East_FIPS_0901,NAD83(HARN) / Florida East,,,NAD83(HARN) / Florida East,,,,,,,,,0,0,0
-75000,2778,2778,2778,0,0,0,,FLHP-W,HARN.FL-W,HARN/FL.FL-W,NAD83(HARN) / Florida West,NAD_1983_HARN_StatePlane_Florida_West_FIPS_0902,NAD83(HARN) / Florida West,,,NAD83(HARN) / Florida West,,,,,,,,,0,0,0
-75100,2779,2779,2779,0,0,0,,FLHP-N,HARN.FL-N,HARN/FL.FL-N,NAD83(HARN) / Florida North,NAD_1983_HARN_StatePlane_Florida_North_FIPS_0903,NAD83(HARN) / Florida North,,,NAD83(HARN) / Florida North,,,,,,,,,0,0,0
-75200,2780,2780,2780,0,0,0,,GAHP-E,HARN.GA-E,HARN/GA.GA-E,NAD83(HARN) / Georgia East,NAD_1983_HARN_StatePlane_Georgia_East_FIPS_1001,NAD83(HARN) / Georgia East,,,NAD83(HARN) / Georgia East,,,,,,,,,0,0,0
-75300,2781,2781,2781,0,0,0,,GAHP-W,HARN.GA-W,HARN/GA.GA-W,NAD83(HARN) / Georgia West,NAD_1983_HARN_StatePlane_Georgia_West_FIPS_1002,NAD83(HARN) / Georgia West,,,NAD83(HARN) / Georgia West,,,,,,,,,0,0,0
-75400,2782,2782,2782,0,0,0,,HIHP-1,HARN.HI-1,HARN/HI.HI-1|HIHP-1-MOD,NAD83(HARN) / Hawaii zone 1,NAD_1983_HARN_StatePlane_Hawaii_1_FIPS_5101,NAD83(HARN) / Hawaii zone 1,,,NAD83(HARN) / Hawaii zone 1,,,,,,,,,0,0,0
-75500,2783,2783,2783,0,0,0,,HIHP-2,HARN.HI-2,HARN/HI.HI-2|HIHP-2-MOD,NAD83(HARN) / Hawaii zone 2,NAD_1983_HARN_StatePlane_Hawaii_2_FIPS_5102,NAD83(HARN) / Hawaii zone 2,,,NAD83(HARN) / Hawaii zone 2,,,,,,,,,0,0,0
-75600,2784,2784,2784,0,0,0,,HIHP-3,HARN.HI-3,HARN/HI.HI-3|HIHP-3-MOD,NAD83(HARN) / Hawaii zone 3,NAD_1983_HARN_StatePlane_Hawaii_3_FIPS_5103,NAD83(HARN) / Hawaii zone 3,,,NAD83(HARN) / Hawaii zone 3,,,,,,,,,0,0,0
-75700,2785,2785,2785,0,0,0,,HIHP-4,HARN.HI-4,HARN/HI.HI-4|HIHP-4-MOD,NAD83(HARN) / Hawaii zone 4,NAD_1983_HARN_StatePlane_Hawaii_4_FIPS_5104,NAD83(HARN) / Hawaii zone 4,,,NAD83(HARN) / Hawaii zone 4,,,,,,,,,0,0,0
-75800,2786,2786,2786,0,0,0,,HIHP-5,HARN.HI-5,HARN/HI.HI-5|HIHP-5-MOD,NAD83(HARN) / Hawaii zone 5,NAD_1983_HARN_StatePlane_Hawaii_5_FIPS_5105,NAD83(HARN) / Hawaii zone 5,,,NAD83(HARN) / Hawaii zone 5,,,,,,,,,0,0,0
-75900,2787,2787,2787,0,0,0,,IDHP-E,HARN.ID-E,HARN/MT.ID-E,NAD83(HARN) / Idaho East,NAD_1983_HARN_StatePlane_Idaho_East_FIPS_1101,NAD83(HARN) / Idaho East,,,NAD83(HARN) / Idaho East,,,,,,,,,0,0,0
-76000,2788,2788,2788,0,0,0,,IDHP-C,HARN.ID-C,HARN/MT.ID-C,NAD83(HARN) / Idaho Central,NAD_1983_HARN_StatePlane_Idaho_Central_FIPS_1102,NAD83(HARN) / Idaho Central,,,NAD83(HARN) / Idaho Central,,,,,,,,,0,0,0
-76100,2789,2789,2789,0,0,0,,IDHP-W,HARN.ID-W,HARN/MT.ID-W,NAD83(HARN) / Idaho West,NAD_1983_HARN_StatePlane_Idaho_West_FIPS_1103,NAD83(HARN) / Idaho West,,,NAD83(HARN) / Idaho West,,,,,,,,,0,0,0
-76200,2790,2790,2790,0,0,0,,ILHP-E,HARN.IL-E,HARN/IL.IL-E,NAD83(HARN) / Illinois East,NAD_1983_HARN_StatePlane_Illinois_East_FIPS_1201,NAD83(HARN) / Illinois East,,,NAD83(HARN) / Illinois East,,,,,,,,,0,0,0
-76300,2791,2791,2791,0,0,0,,ILHP-W,HARN.IL-W,HARN/IL.IL-W,NAD83(HARN) / Illinois West,NAD_1983_HARN_StatePlane_Illinois_West_FIPS_1202,NAD83(HARN) / Illinois West,,,NAD83(HARN) / Illinois West,,,,,,,,,0,0,0
-76400,2792,2792,2792,0,0,0,,INHP-E,HARN.IN-E,HARN/IN.IN-E,NAD83(HARN) / Indiana East,NAD_1983_HARN_StatePlane_Indiana_East_FIPS_1301,NAD83(HARN) / Indiana East,,,NAD83(HARN) / Indiana East,,,,,,,,,0,0,0
-76500,2793,2793,2793,0,0,0,,INHP-W,HARN.IN-W,HARN/IN.IN-W,NAD83(HARN) / Indiana West,NAD_1983_HARN_StatePlane_Indiana_West_FIPS_1302,NAD83(HARN) / Indiana West,,,NAD83(HARN) / Indiana West,,,,,,,,,0,0,0
-76600,2794,2794,2794,0,0,0,,IAHP-N,HARN.IA-N,HARN/IA.IA-N,NAD83(HARN) / Iowa North,NAD_1983_HARN_StatePlane_Iowa_North_FIPS_1401,NAD83(HARN) / Iowa North,,,NAD83(HARN) / Iowa North,,,,,,,,,0,0,0
-76700,2795,2795,2795,0,0,0,,IAHP-S,HARN.IA-S,HARN/IA.IA-S,NAD83(HARN) / Iowa South,NAD_1983_HARN_StatePlane_Iowa_South_FIPS_1402,NAD83(HARN) / Iowa South,,,NAD83(HARN) / Iowa South,,,,,,,,,0,0,0
-76800,2796,2796,2796,0,0,0,,KSHP-N,HARN.KS-N,HARN/KS.KS-N,NAD83(HARN) / Kansas North,NAD_1983_HARN_StatePlane_Kansas_North_FIPS_1501,NAD83(HARN) / Kansas North,,,NAD83(HARN) / Kansas North,,,,,,,,,0,0,0
-76900,2797,2797,2797,0,0,0,,KSHP-S,HARN.KS-S,HARN/KS.KS-S,NAD83(HARN) / Kansas South,NAD_1983_HARN_StatePlane_Kansas_South_FIPS_1502,NAD83(HARN) / Kansas South,,,NAD83(HARN) / Kansas South,,,,,,,,,0,0,0
-77000,2798,2798,2798,0,0,0,,KYHP-N,HARN.KY-N,HARN/KY.KY-N,NAD83(HARN) / Kentucky North,NAD_1983_HARN_StatePlane_Kentucky_North_FIPS_1601,NAD83(HARN) / Kentucky North,,,NAD83(HARN) / Kentucky North,,,,,,,,,0,0,0
-77100,2799,2799,2799,0,0,0,,KYHP-S,HARN.KY-S,HARN/KY.KY-S,NAD83(HARN) / Kentucky South,NAD_1983_HARN_StatePlane_Kentucky_South_FIPS_1602,NAD83(HARN) / Kentucky South,,,NAD83(HARN) / Kentucky South,,,,,,,,,0,0,0
-77200,2800,2800,2800,0,0,0,,LAHP-N,HARN.LA-N,HARN/LA.LA-N,NAD83(HARN) / Louisiana North,NAD_1983_HARN_StatePlane_Louisiana_North_FIPS_1701,NAD83(HARN) / Louisiana North,,,NAD83(HARN) / Louisiana North,,,,,,,,,0,0,0
-77300,2801,2801,2801,0,0,0,,LAHP-S,HARN.LA-S,HARN/LA.LA-S,NAD83(HARN) / Louisiana South,NAD_1983_HARN_StatePlane_Louisiana_South_FIPS_1702,NAD83(HARN) / Louisiana South,,,NAD83(HARN) / Louisiana South,,,,,,,,,0,0,0
-77400,2802,2802,2802,0,0,0,,MEHP-E,HARN.ME-E,HARN/ME.ME-E,NAD83(HARN) / Maine East,NAD_1983_HARN_StatePlane_Maine_East_FIPS_1801,NAD83(HARN) / Maine East,,,NAD83(HARN) / Maine East,,,,,,,,,0,0,0
-77500,2803,2803,2803,0,0,0,,MEHP-W,HARN.ME-W,HARN/ME.ME-W,NAD83(HARN) / Maine West,NAD_1983_HARN_StatePlane_Maine_West_FIPS_1802,NAD83(HARN) / Maine West,,,NAD83(HARN) / Maine West,,,,,,,,,0,0,0
-77600,2804,2804,2804,0,0,0,,MDHP,HARN.MD,HARN/MD.MD,NAD83(HARN) / Maryland,NAD_1983_HARN_StatePlane_Maryland_FIPS_1900,NAD83(HARN) / Maryland,,,NAD83(HARN) / Maryland,,,,,,,,,0,0,0
-77700,2805,2805,2805,0,0,0,,MAHP,HARN.MA,HARN/NE.MA,NAD83(HARN) / Massachusetts Mainland,NAD_1983_HARN_StatePlane_Massachusetts_Mainland_FIPS_2001,NAD83(HARN) / Massachusetts Mainland,,,NAD83(HARN) / Massachusetts Mainland,,,,,,,,,0,0,0
-77800,2806,2806,2806,0,0,0,,MAHP-IS,HARN.MA-IS,HARN/NE.MA-IS,NAD83(HARN) / Massachusetts Island,NAD_1983_HARN_StatePlane_Massachusetts_Island_FIPS_2002,NAD83(HARN) / Massachusetts Island,,,NAD83(HARN) / Massachusetts Island,,,,,,,,,0,0,0
-77900,2807,2807,2807,0,0,0,,MIHP-N,HARN.MI-N,HARN/MI.MI-N,NAD83(HARN) / Michigan North,NAD_1983_HARN_StatePlane_Michigan_North_FIPS_2111,NAD83(HARN) / Michigan North,,,NAD83(HARN) / Michigan North,,,,,,,,,0,0,0
-78000,2808,2808,2808,0,0,0,,MIHP-C,HARN.MI-C,HARN/MI.MI-C,NAD83(HARN) / Michigan Central,NAD_1983_HARN_StatePlane_Michigan_Central_FIPS_2112,NAD83(HARN) / Michigan Central,,,NAD83(HARN) / Michigan Central,,,,,,,,,0,0,0
-78100,2809,2809,2809,0,0,0,,MIHP-S,HARN.MI-S,HARN/MI.MI-S,NAD83(HARN) / Michigan South,NAD_1983_HARN_StatePlane_Michigan_South_FIPS_2113,NAD83(HARN) / Michigan South,,,NAD83(HARN) / Michigan South,,,,,,,,,0,0,0
-78200,2810,2810,2810,0,0,0,,MNHP-N,HARN.MN-N,HARN/MN.MN-N,NAD83(HARN) / Minnesota North,NAD_1983_HARN_StatePlane_Minnesota_North_FIPS_2201,NAD83(HARN) / Minnesota North,,,NAD83(HARN) / Minnesota North,,,,,,,,,0,0,0
-78300,2811,2811,2811,0,0,0,,MNHP-C,HARN.MN-C,HARN/MN.MN-C,NAD83(HARN) / Minnesota Central,NAD_1983_HARN_StatePlane_Minnesota_Central_FIPS_2202,NAD83(HARN) / Minnesota Central,,,NAD83(HARN) / Minnesota Central,,,,,,,,,0,0,0
-78400,2812,2812,2812,0,0,0,,MNHP-S,HARN.MN-S,HARN/MN.MN-S,NAD83(HARN) / Minnesota South,NAD_1983_HARN_StatePlane_Minnesota_South_FIPS_2203,NAD83(HARN) / Minnesota South,,,NAD83(HARN) / Minnesota South,,,,,,,,,0,0,0
-78500,2813,2813,2813,0,0,0,,MSHP-E,HARN.MS-E,HARN/MS.MS-E,NAD83(HARN) / Mississippi East,NAD_1983_HARN_StatePlane_Mississippi_East_FIPS_2301,NAD83(HARN) / Mississippi East,,,NAD83(HARN) / Mississippi East,,,,,,,,,0,0,0
-78600,2814,2814,2814,0,0,0,,MSHP-W,HARN.MS-W,HARN/MS.MS-W,NAD83(HARN) / Mississippi West,NAD_1983_HARN_StatePlane_Mississippi_West_FIPS_2302,NAD83(HARN) / Mississippi West,,,NAD83(HARN) / Mississippi West,,,,,,,,,0,0,0
-78700,2815,2815,2815,0,0,0,,MOHP-E,HARN.MO-E,HARN/MO.MO-E,NAD83(HARN) / Missouri East,NAD_1983_HARN_StatePlane_Missouri_East_FIPS_2401,NAD83(HARN) / Missouri East,,,NAD83(HARN) / Missouri East,,,,,,,,,0,0,0
-78800,2816,2816,2816,0,0,0,,MOHP-C,HARN.MO-C,HARN/MO.MO-C,NAD83(HARN) / Missouri Central,NAD_1983_HARN_StatePlane_Missouri_Central_FIPS_2402,NAD83(HARN) / Missouri Central,,,NAD83(HARN) / Missouri Central,,,,,,,,,0,0,0
-78900,2817,2817,2817,0,0,0,,MOHP-W,HARN.MO-W,HARN/MO.MO-W,NAD83(HARN) / Missouri West,NAD_1983_HARN_StatePlane_Missouri_West_FIPS_2403,NAD83(HARN) / Missouri West,,,NAD83(HARN) / Missouri West,,,,,,,,,0,0,0
-79000,2818,2818,2818,0,0,0,,MTHP,HARN.MT,HARN/MT.MT,NAD83(HARN) / Montana,NAD_1983_HARN_StatePlane_Montana_FIPS_2500,NAD83(HARN) / Montana,,,NAD83(HARN) / Montana,,,,,,,,,0,0,0
-79100,2819,2819,2819,0,0,0,,NBHP,HARN.NB,HARN/NB.NB,NAD83(HARN) / Nebraska,NAD_1983_HARN_StatePlane_Nebraska_FIPS_2600,NAD83(HARN) / Nebraska,,,NAD83(HARN) / Nebraska,,,,,,,,,0,0,0
-79200,2820,2820,2820,0,0,0,,NVHP-E,HARN.NV-E,HARN/NV.NV-E,NAD83(HARN) / Nevada East,NAD_1983_HARN_StatePlane_Nevada_East_FIPS_2701,NAD83(HARN) / Nevada East,,,NAD83(HARN) / Nevada East,,,,,,,,,0,0,0
-79300,2821,2821,2821,0,0,0,,NVHP-C,HARN.NV-C,HARN/NV.NV-C,NAD83(HARN) / Nevada Central,NAD_1983_HARN_StatePlane_Nevada_Central_FIPS_2702,NAD83(HARN) / Nevada Central,,,NAD83(HARN) / Nevada Central,,,,,,,,,0,0,0
-79400,2822,2822,2822,0,0,0,,NVHP-W,HARN.NV-W,HARN/NV.NV-W,NAD83(HARN) / Nevada West,NAD_1983_HARN_StatePlane_Nevada_West_FIPS_2703,NAD83(HARN) / Nevada West,,,NAD83(HARN) / Nevada West,,,,,,,,,0,0,0
-79500,2823,2823,2823,0,0,0,,NHHP,HARN.NH,HARN/NE.NH,NAD83(HARN) / New Hampshire,NAD_1983_HARN_StatePlane_New_Hampshire_FIPS_2800,NAD83(HARN) / New Hampshire,,,NAD83(HARN) / New Hampshire,,,,,,,,,0,0,0
-79600,2824,2824,2824,0,0,0,,NJHP,HARN.NJ,HARN/NJ.NJ,NAD83(HARN) / New Jersey,NAD_1983_HARN_StatePlane_New_Jersey_FIPS_2900,NAD83(HARN) / New Jersey,,,NAD83(HARN) / New Jersey,,,,,,,,,0,0,0
-79700,2825,2825,2825,0,0,0,,NMHP-E,HARN.NM-E,HARN/NM.NM-E,NAD83(HARN) / New Mexico East,NAD_1983_HARN_StatePlane_New_Mexico_East_FIPS_3001,NAD83(HARN) / New Mexico East,,,NAD83(HARN) / New Mexico East,,,,,,,,,0,0,0
-79800,2826,2826,2826,0,0,0,,NMHP-C,HARN.NM-C,HARN/NM.NM-C,NAD83(HARN) / New Mexico Central,NAD_1983_HARN_StatePlane_New_Mexico_Central_FIPS_3002,NAD83(HARN) / New Mexico Central,,,NAD83(HARN) / New Mexico Central,,,,,,,,,0,0,0
-79900,2827,2827,2827,0,0,0,,NMHP-W,HARN.NM-W,HARN/NM.NM-W,NAD83(HARN) / New Mexico West,NAD_1983_HARN_StatePlane_New_Mexico_West_FIPS_3003,NAD83(HARN) / New Mexico West,,,NAD83(HARN) / New Mexico West,,,,,,,,,0,0,0
-80000,2828,2828,2828,0,0,0,,NYHP-E,HARN.NY-E,HARN/NY.NY-E,NAD83(HARN) / New York East,NAD_1983_HARN_StatePlane_New_York_East_FIPS_3101,NAD83(HARN) / New York East,,,NAD83(HARN) / New York East,,,,,,,,,0,0,0
-80100,2829,2829,2829,0,0,0,,NYHP-C,HARN.NY-C,HARN/NY.NY-C,NAD83(HARN) / New York Central,NAD_1983_HARN_StatePlane_New_York_Central_FIPS_3102,NAD83(HARN) / New York Central,,,NAD83(HARN) / New York Central,,,,,,,,,0,0,0
-80200,2830,2830,2830,0,0,0,,NYHP-W,HARN.NY-W,HARN/NY.NY-W,NAD83(HARN) / New York West,NAD_1983_HARN_StatePlane_New_York_West_FIPS_3103,NAD83(HARN) / New York West,,,NAD83(HARN) / New York West,,,,,,,,,0,0,0
-80300,2831,2831,2831,0,0,0,,NYHP-LI,HARN.NY-LI,HARN/NY.NY-LI,NAD83(HARN) / New York Long Island,NAD_1983_HARN_StatePlane_New_York_Long_Island_FIPS_3104,NAD83(HARN) / New York Long Island,,,NAD83(HARN) / New York Long Island,,,,,,,,,0,0,0
-80400,2832,2832,2832,0,0,0,,NDHP-N,HARN.ND-N,HARN/ND.ND-N,NAD83(HARN) / North Dakota North,NAD_1983_HARN_StatePlane_North_Dakota_North_FIPS_3301,NAD83(HARN) / North Dakota North,,,NAD83(HARN) / North Dakota North,,,,,,,,,0,0,0
-80500,2833,2833,2833,0,0,0,,NDHP-S,HARN.ND-S,HARN/ND.ND-S,NAD83(HARN) / North Dakota South,NAD_1983_HARN_StatePlane_North_Dakota_South_FIPS_3302,NAD83(HARN) / North Dakota South,,,NAD83(HARN) / North Dakota South,,,,,,,,,0,0,0
-80600,2834,2834,2834,0,0,0,,OHHP-N,HARN.OH-N,HARN/OH.OH-N,NAD83(HARN) / Ohio North,NAD_1983_HARN_StatePlane_Ohio_North_FIPS_3401,NAD83(HARN) / Ohio North,,,NAD83(HARN) / Ohio North,,,,,,,,,0,0,0
-80700,2835,2835,2835,0,0,0,,OHHP-S,HARN.OH-S,HARN/OH.OH-S,NAD83(HARN) / Ohio South,NAD_1983_HARN_StatePlane_Ohio_South_FIPS_3402,NAD83(HARN) / Ohio South,,,NAD83(HARN) / Ohio South,,,,,,,,,0,0,0
-80800,2836,2836,2836,0,0,0,,OKHP-N,HARN.OK-N,HARN/OK.OK-N,NAD83(HARN) / Oklahoma North,NAD_1983_HARN_StatePlane_Oklahoma_North_FIPS_3501,NAD83(HARN) / Oklahoma North,,,NAD83(HARN) / Oklahoma North,,,,,,,,,0,0,0
-80900,2837,2837,2837,0,0,0,,OKHP-S,HARN.OK-S,HARN/OK.OK-S,NAD83(HARN) / Oklahoma South,NAD_1983_HARN_StatePlane_Oklahoma_South_FIPS_3502,NAD83(HARN) / Oklahoma South,,,NAD83(HARN) / Oklahoma South,,,,,,,,,0,0,0
-81000,2838,2838,2838,0,0,0,,ORHP-N,HARN.OR-N,HARN/WO.OR-N,NAD83(HARN) / Oregon North,NAD_1983_HARN_StatePlane_Oregon_North_FIPS_3601,NAD83(HARN) / Oregon North,,,NAD83(HARN) / Oregon North,,,,,,,,,0,0,0
-81100,2839,2839,2839,0,0,0,,ORHP-S,HARN.OR-S,HARN/WO.OR-S,NAD83(HARN) / Oregon South,NAD_1983_HARN_StatePlane_Oregon_South_FIPS_3602,NAD83(HARN) / Oregon South,,,NAD83(HARN) / Oregon South,,,,,,,,,0,0,0
-81200,2840,2840,2840,0,0,0,,RIHP,HARN.RI,HARN/NE.RI,NAD83(HARN) / Rhode Island,NAD_1983_HARN_StatePlane_Rhode_Island_FIPS_3800,NAD83(HARN) / Rhode Island,,,NAD83(HARN) / Rhode Island,,,,,,,,,0,0,0
-81300,2841,2841,2841,0,0,0,,SDHP-N,HARN.SD-N,HARN/SD.SD-N,NAD83(HARN) / South Dakota North,NAD_1983_HARN_StatePlane_South_Dakota_North_FIPS_4001,NAD83(HARN) / South Dakota North,,,NAD83(HARN) / South Dakota North,,,,,,,,,0,0,0
-81400,2842,2842,2842,0,0,0,,SDHP-S,HARN.SD-S,HARN/SD.SD-S,NAD83(HARN) / South Dakota South,NAD_1983_HARN_StatePlane_South_Dakota_South_FIPS_4002,NAD83(HARN) / South Dakota South,,,NAD83(HARN) / South Dakota South,,,,,,,,,0,0,0
-81500,2843,2843,2843,0,0,0,,TNHP,HARN.TN,HARN/TN.TN,NAD83(HARN) / Tennessee,NAD_1983_HARN_StatePlane_Tennessee_FIPS_4100,NAD83(HARN) / Tennessee,,,NAD83(HARN) / Tennessee,,,,,,,,,0,0,0
-81600,2844,2844,2844,0,0,0,,TXHP-N,HARN.TX-N,HARN/TX.TX-N,NAD83(HARN) / Texas North,NAD_1983_HARN_StatePlane_Texas_North_FIPS_4201,NAD83(HARN) / Texas North,,,NAD83(HARN) / Texas North,,,,,,,,,0,0,0
-81700,2845,2845,2845,0,0,0,,TXHP-NC,HARN.TX-NC,HARN/TX.TX-NC,NAD83(HARN) / Texas North Central,NAD_1983_HARN_StatePlane_Texas_North_Central_FIPS_4202,NAD83(HARN) / Texas North Central,,,NAD83(HARN) / Texas North Central,,,,,,,,,0,0,0
-81800,2846,2846,2846,0,0,0,,TXHP-C,HARN.TX-C,HARN/TX.TX-C,NAD83(HARN) / Texas Central,NAD_1983_HARN_StatePlane_Texas_Central_FIPS_4203,NAD83(HARN) / Texas Central,,,NAD83(HARN) / Texas Central,,,,,,,,,0,0,0
-81900,2847,2847,2847,0,0,0,,TXHP-SC,HARN.TX-SC,HARN/TX.TX-SC,NAD83(HARN) / Texas South Central,NAD_1983_HARN_StatePlane_Texas_South_Central_FIPS_4204,NAD83(HARN) / Texas South Central,,,NAD83(HARN) / Texas South Central,,,,,,,,,0,0,0
-82000,2848,2848,2848,0,0,0,,TXHP-S,HARN.TX-S,HARN/TX.TX-S,NAD83(HARN) / Texas South,NAD_1983_HARN_StatePlane_Texas_South_FIPS_4205,NAD83(HARN) / Texas South,,,NAD83(HARN) / Texas South,,,,,,,,,0,0,0
-82100,2849,2849,2849,0,0,0,,UTHP-N,HARN.UT-N,HARN/UT.UT-N,NAD83(HARN) / Utah North,NAD_1983_HARN_StatePlane_Utah_North_FIPS_4301,NAD83(HARN) / Utah North,,,NAD83(HARN) / Utah North,,,,,,,,,0,0,0
-82200,2850,2850,2850,0,0,0,,UTHP-C,HARN.UT-C,HARN/UT.UT-C,NAD83(HARN) / Utah Central,NAD_1983_HARN_StatePlane_Utah_Central_FIPS_4302,NAD83(HARN) / Utah Central,,,NAD83(HARN) / Utah Central,,,,,,,,,0,0,0
-82300,2851,2851,2851,0,0,0,,UTHP-S,HARN.UT-S,HARN/UT.UT-S,NAD83(HARN) / Utah South,NAD_1983_HARN_StatePlane_Utah_South_FIPS_4303,NAD83(HARN) / Utah South,,,NAD83(HARN) / Utah South,,,,,,,,,0,0,0
-82400,2852,2852,2852,0,0,0,,VTHP,HARN.VT,HARN/NE.VT,NAD83(HARN) / Vermont,NAD_1983_HARN_StatePlane_Vermont_FIPS_4400,NAD83(HARN) / Vermont,,,NAD83(HARN) / Vermont,,,,,,,,,0,0,0
-82500,2853,2853,2853,0,0,0,,VAHP-N,HARN.VA-N,HARN/VA.VA-N,NAD83(HARN) / Virginia North,NAD_1983_HARN_StatePlane_Virginia_North_FIPS_4501,NAD83(HARN) / Virginia North,,,NAD83(HARN) / Virginia North,,,,,,,,,0,0,0
-82600,2854,2854,2854,0,0,0,,VAHP-S,HARN.VA-S,HARN/VA.VA-S,NAD83(HARN) / Virginia South,NAD_1983_HARN_StatePlane_Virginia_South_FIPS_4502,NAD83(HARN) / Virginia South,,,NAD83(HARN) / Virginia South,,,,,,,,,0,0,0
-82700,2855,2855,2855,0,0,0,,WAHP-N,HARN.WA-N,HARN/WO.WA-N,NAD83(HARN) / Washington North,NAD_1983_HARN_StatePlane_Washington_North_FIPS_4601,NAD83(HARN) / Washington North,,,NAD83(HARN) / Washington North,,,,,,,,,0,0,0
-82800,2856,2856,2856,0,0,0,,WAHP-S,HARN.WA-S,HARN/WO.WA-S,NAD83(HARN) / Washington South,NAD_1983_HARN_StatePlane_Washington_South_FIPS_4602,NAD83(HARN) / Washington South,,,NAD83(HARN) / Washington South,,,,,,,,,0,0,0
-82900,2857,2857,2857,0,0,0,,WVHP-N,HARN.WV-N,HARN/WV.WV-N,NAD83(HARN) / West Virginia North,NAD_1983_HARN_StatePlane_West_Virginia_North_FIPS_4701,NAD83(HARN) / West Virginia North,,,NAD83(HARN) / West Virginia North,,,,,,,,,0,0,0
-83000,2858,2858,2858,0,0,0,,WVHP-S,HARN.WV-S,HARN/WV.WV-S,NAD83(HARN) / West Virginia South,NAD_1983_HARN_StatePlane_West_Virginia_South_FIPS_4702,NAD83(HARN) / West Virginia South,,,NAD83(HARN) / West Virginia South,,,,,,,,,0,0,0
-83100,2859,2859,2859,0,0,0,,WIHP-N,HARN.WI-N,HARN/WI.WI-N,NAD83(HARN) / Wisconsin North,NAD_1983_HARN_StatePlane_Wisconsin_North_FIPS_4801,NAD83(HARN) / Wisconsin North,,,NAD83(HARN) / Wisconsin North,,,,,,,,,0,0,0
-83200,2860,2860,2860,0,0,0,,WIHP-C,HARN.WI-C,HARN/WI.WI-C,NAD83(HARN) / Wisconsin Central,NAD_1983_HARN_StatePlane_Wisconsin_Central_FIPS_4802,NAD83(HARN) / Wisconsin Central,,,NAD83(HARN) / Wisconsin Central,,,,,,,,,0,0,0
-83300,2861,2861,2861,0,0,0,,WIHP-S,HARN.WI-S,HARN/WI.WI-S,NAD83(HARN) / Wisconsin South,NAD_1983_HARN_StatePlane_Wisconsin_South_FIPS_4803,NAD83(HARN) / Wisconsin South,,,NAD83(HARN) / Wisconsin South,,,,,,,,,0,0,0
-83400,2862,2862,2862,0,0,0,,WYHP-E,HARN.WY-E,HARN/WY.WY-E,NAD83(HARN) / Wyoming East,NAD_1983_HARN_StatePlane_Wyoming_East_FIPS_4901,NAD83(HARN) / Wyoming East,,,NAD83(HARN) / Wyoming East,,,,,,,,,0,0,0
-83500,2863,2863,2863,0,0,0,,WYHP-EC,HARN.WY-EC,HARN/WY.WY-EC,NAD83(HARN) / Wyoming East Central,NAD_1983_HARN_StatePlane_Wyoming_East_Central_FIPS_4902,NAD83(HARN) / Wyoming East Central,,,NAD83(HARN) / Wyoming East Central,,,,,,,,,0,0,0
-83600,2864,2864,2864,0,0,0,,WYHP-WC,HARN.WY-WC,HARN/WY.WY-WC,NAD83(HARN) / Wyoming West Central,NAD_1983_HARN_StatePlane_Wyoming_West_Central_FIPS_4903,NAD83(HARN) / Wyoming West Central,,,NAD83(HARN) / Wyoming West Central,,,,,,,,,0,0,0
-83700,2865,2865,2865,0,0,0,,WYHP-W,HARN.WY-W,HARN/WY.WY-W,NAD83(HARN) / Wyoming West,NAD_1983_HARN_StatePlane_Wyoming_West_FIPS_4904,NAD83(HARN) / Wyoming West,,,NAD83(HARN) / Wyoming West,,,,,,,,,0,0,0
-83800,2866,2866,2866,0,0,0,,PRHP,HARN.PRVI,HARN/PV.PRHP,NAD83(HARN) / Puerto Rico and Virgin Is.,NAD_1983_HARN_StatePlane_Puerto_Rico_Virgin_Islands_FIPS_5200,NAD83(HARN) / Puerto Rico & Virgin Is.,,,NAD83(HARN) / Puerto Rico & Virgin Is.,,,,,,,,,0,0,0
+73100,2759,102229,2759,0,0,0,,ALHP-E,HARN.AL-E,HARN/AL.AL-E,NAD83(HARN) / Alabama East,NAD_1983_HARN_StatePlane_Alabama_East_FIPS_0101,NAD83(HARN) / Alabama East,,,NAD83(HARN) / Alabama East,,,,,,,,,0,0,0
+73200,2760,102230,2760,0,0,0,,ALHP-W,HARN.AL-W,HARN/AL.AL-W,NAD83(HARN) / Alabama West,NAD_1983_HARN_StatePlane_Alabama_West_FIPS_0102,NAD83(HARN) / Alabama West,,,NAD83(HARN) / Alabama West,,,,,,,,,0,0,0
+73300,2761,102248,2761,0,0,0,,AZHP-E,HARN.AZ-E,HARN/AZ.AZ-E,NAD83(HARN) / Arizona East,NAD_1983_HARN_StatePlane_Arizona_East_FIPS_0201,NAD83(HARN) / Arizona East,,,NAD83(HARN) / Arizona East,,,,,,,,,0,0,0
+73400,2762,102249,2762,0,0,0,,AZHP-C,HARN.AZ-C,HARN/AZ.AZ-C,NAD83(HARN) / Arizona Central,NAD_1983_HARN_StatePlane_Arizona_Central_FIPS_0202,NAD83(HARN) / Arizona Central,,,NAD83(HARN) / Arizona Central,,,,,,,,,0,0,0
+73500,2763,102250,2763,0,0,0,,AZHP-W,HARN.AZ-W,HARN/AZ.AZ-W,NAD83(HARN) / Arizona West,NAD_1983_HARN_StatePlane_Arizona_West_FIPS_0203,NAD83(HARN) / Arizona West,,,NAD83(HARN) / Arizona West,,,,,,,,,0,0,0
+73600,2764,102251,2764,0,0,0,,ARHP-N,HARN.AR-N,HARN/AR.AR-N,NAD83(HARN) / Arkansas North,NAD_1983_HARN_StatePlane_Arkansas_North_FIPS_0301,NAD83(HARN) / Arkansas North,,,NAD83(HARN) / Arkansas North,,,,,,,,,0,0,0
+73700,2765,102252,2765,0,0,0,,ARHP-S,HARN.AR-S,HARN/AR.AR-S,NAD83(HARN) / Arkansas South,NAD_1983_HARN_StatePlane_Arkansas_South_FIPS_0302,NAD83(HARN) / Arkansas South,,,NAD83(HARN) / Arkansas South,,,,,,,,,0,0,0
+73800,2766,102241,2766,0,0,0,,CAHP-I,HARN.CA-I,HARN/CA.CA-I,NAD83(HARN) / California zone 1,NAD_1983_HARN_StatePlane_California_I_FIPS_0401,NAD83(HARN) / California zone 1,,,NAD83(HARN) / California zone 1,,,,,,,,,0,0,0
+73900,2767,102242,2767,0,0,0,,CAHP-II,HARN.CA-II,HARN/CA.CA-II,NAD83(HARN) / California zone 2,NAD_1983_HARN_StatePlane_California_II_FIPS_0402,NAD83(HARN) / California zone 2,,,NAD83(HARN) / California zone 2,,,,,,,,,0,0,0
+74000,2768,102243,2768,0,0,0,,CAHP-III,HARN.CA-III,HARN/CA.CA-III,NAD83(HARN) / California zone 3,NAD_1983_HARN_StatePlane_California_III_FIPS_0403,NAD83(HARN) / California zone 3,,,NAD83(HARN) / California zone 3,,,,,,,,,0,0,0
+74100,2769,102244,2769,0,0,0,,CAHP-IV,HARN.CA-IV,HARN/CA.CA-IV,NAD83(HARN) / California zone 4,NAD_1983_HARN_StatePlane_California_IV_FIPS_0404,NAD83(HARN) / California zone 4,,,NAD83(HARN) / California zone 4,,,,,,,,,0,0,0
+74200,2770,102245,2770,0,0,0,,CAHP-V,HARN.CA-V,HARN/CA.CA-V,NAD83(HARN) / California zone 5,NAD_1983_HARN_StatePlane_California_V_FIPS_0405,NAD83(HARN) / California zone 5,,,NAD83(HARN) / California zone 5,,,,,,,,,0,0,0
+74300,2771,102246,2771,0,0,0,,CAHP-VI,HARN.CA-VI,HARN/CA.CAVI,NAD83(HARN) / California zone 6,NAD_1983_HARN_StatePlane_California_VI_FIPS_0406,NAD83(HARN) / California zone 6,,,NAD83(HARN) / California zone 6,,,,,,,,,0,0,0
+74400,2772,102253,2772,0,0,0,,COHP-N,HARN.CO-N,HARN/CO.CO-N,NAD83(HARN) / Colorado North,NAD_1983_HARN_StatePlane_Colorado_North_FIPS_0501,NAD83(HARN) / Colorado North,,,NAD83(HARN) / Colorado North,,,,,,,,,0,0,0
+74500,2773,102254,2773,0,0,0,,COHP-C,HARN.CO-C,HARN/CO.CO-C,NAD83(HARN) / Colorado Central,NAD_1983_HARN_StatePlane_Colorado_Central_FIPS_0502,NAD83(HARN) / Colorado Central,,,NAD83(HARN) / Colorado Central,,,,,,,,,0,0,0
+74600,2774,102255,2774,0,0,0,,COHP-S,HARN.CO-S,HARN/CO.CO-S,NAD83(HARN) / Colorado South,NAD_1983_HARN_StatePlane_Colorado_South_FIPS_0503,NAD83(HARN) / Colorado South,,,NAD83(HARN) / Colorado South,,,,,,,,,0,0,0
+74700,2775,102256,2775,0,0,0,,CTHP,HARN.CT,HARN/NE.CT,NAD83(HARN) / Connecticut,NAD_1983_HARN_StatePlane_Connecticut_FIPS_0600,NAD83(HARN) / Connecticut,,,NAD83(HARN) / Connecticut,,,,,,,,,0,0,0
+74800,2776,102257,2776,0,0,0,,DEHP,HARN.DE,HARN/MD.DE,NAD83(HARN) / Delaware,NAD_1983_HARN_StatePlane_Delaware_FIPS_0700,NAD83(HARN) / Delaware,,,NAD83(HARN) / Delaware,,,,,,,,,0,0,0
+74900,2777,102258,2777,0,0,0,,FLHP-E,HARN.FL-E,HARN/FL.FL-E,NAD83(HARN) / Florida East,NAD_1983_HARN_StatePlane_Florida_East_FIPS_0901,NAD83(HARN) / Florida East,,,NAD83(HARN) / Florida East,,,,,,,,,0,0,0
+75000,2778,102259,2778,0,0,0,,FLHP-W,HARN.FL-W,HARN/FL.FL-W,NAD83(HARN) / Florida West,NAD_1983_HARN_StatePlane_Florida_West_FIPS_0902,NAD83(HARN) / Florida West,,,NAD83(HARN) / Florida West,,,,,,,,,0,0,0
+75100,2779,102260,2779,0,0,0,,FLHP-N,HARN.FL-N,HARN/FL.FL-N,NAD83(HARN) / Florida North,NAD_1983_HARN_StatePlane_Florida_North_FIPS_0903,NAD83(HARN) / Florida North,,,NAD83(HARN) / Florida North,,,,,,,,,0,0,0
+75200,2780,102266,2780,0,0,0,,GAHP-E,HARN.GA-E,HARN/GA.GA-E,NAD83(HARN) / Georgia East,NAD_1983_HARN_StatePlane_Georgia_East_FIPS_1001,NAD83(HARN) / Georgia East,,,NAD83(HARN) / Georgia East,,,,,,,,,0,0,0
+75300,2781,102267,2781,0,0,0,,GAHP-W,HARN.GA-W,HARN/GA.GA-W,NAD83(HARN) / Georgia West,NAD_1983_HARN_StatePlane_Georgia_West_FIPS_1002,NAD83(HARN) / Georgia West,,,NAD83(HARN) / Georgia West,,,,,,,,,0,0,0
+75400,2782,102261,2782,0,0,0,,HIHP-1,HARN.HI-1,HARN/HI.HI-1|HIHP-1-MOD,NAD83(HARN) / Hawaii zone 1,NAD_1983_HARN_StatePlane_Hawaii_1_FIPS_5101,NAD83(HARN) / Hawaii zone 1,,,NAD83(HARN) / Hawaii zone 1,,,,,,,,,0,0,0
+75500,2783,102262,2783,0,0,0,,HIHP-2,HARN.HI-2,HARN/HI.HI-2|HIHP-2-MOD,NAD83(HARN) / Hawaii zone 2,NAD_1983_HARN_StatePlane_Hawaii_2_FIPS_5102,NAD83(HARN) / Hawaii zone 2,,,NAD83(HARN) / Hawaii zone 2,,,,,,,,,0,0,0
+75600,2784,102263,2784,0,0,0,,HIHP-3,HARN.HI-3,HARN/HI.HI-3|HIHP-3-MOD,NAD83(HARN) / Hawaii zone 3,NAD_1983_HARN_StatePlane_Hawaii_3_FIPS_5103,NAD83(HARN) / Hawaii zone 3,,,NAD83(HARN) / Hawaii zone 3,,,,,,,,,0,0,0
+75700,2785,102264,2785,0,0,0,,HIHP-4,HARN.HI-4,HARN/HI.HI-4|HIHP-4-MOD,NAD83(HARN) / Hawaii zone 4,NAD_1983_HARN_StatePlane_Hawaii_4_FIPS_5104,NAD83(HARN) / Hawaii zone 4,,,NAD83(HARN) / Hawaii zone 4,,,,,,,,,0,0,0
+75800,2786,102265,2786,0,0,0,,HIHP-5,HARN.HI-5,HARN/HI.HI-5|HIHP-5-MOD,NAD83(HARN) / Hawaii zone 5,NAD_1983_HARN_StatePlane_Hawaii_5_FIPS_5105,NAD83(HARN) / Hawaii zone 5,,,NAD83(HARN) / Hawaii zone 5,,,,,,,,,0,0,0
+75900,2787,102268,2787,0,0,0,,IDHP-E,HARN.ID-E,HARN/MT.ID-E,NAD83(HARN) / Idaho East,NAD_1983_HARN_StatePlane_Idaho_East_FIPS_1101,NAD83(HARN) / Idaho East,,,NAD83(HARN) / Idaho East,,,,,,,,,0,0,0
+76000,2788,102269,2788,0,0,0,,IDHP-C,HARN.ID-C,HARN/MT.ID-C,NAD83(HARN) / Idaho Central,NAD_1983_HARN_StatePlane_Idaho_Central_FIPS_1102,NAD83(HARN) / Idaho Central,,,NAD83(HARN) / Idaho Central,,,,,,,,,0,0,0
+76100,2789,102270,2789,0,0,0,,IDHP-W,HARN.ID-W,HARN/MT.ID-W,NAD83(HARN) / Idaho West,NAD_1983_HARN_StatePlane_Idaho_West_FIPS_1103,NAD83(HARN) / Idaho West,,,NAD83(HARN) / Idaho West,,,,,,,,,0,0,0
+76200,2790,102271,2790,0,0,0,,ILHP-E,HARN.IL-E,HARN/IL.IL-E,NAD83(HARN) / Illinois East,NAD_1983_HARN_StatePlane_Illinois_East_FIPS_1201,NAD83(HARN) / Illinois East,,,NAD83(HARN) / Illinois East,,,,,,,,,0,0,0
+76300,2791,102272,2791,0,0,0,,ILHP-W,HARN.IL-W,HARN/IL.IL-W,NAD83(HARN) / Illinois West,NAD_1983_HARN_StatePlane_Illinois_West_FIPS_1202,NAD83(HARN) / Illinois West,,,NAD83(HARN) / Illinois West,,,,,,,,,0,0,0
+76400,2792,102273,2792,0,0,0,,INHP-E,HARN.IN-E,HARN/IN.IN-E,NAD83(HARN) / Indiana East,NAD_1983_HARN_StatePlane_Indiana_East_FIPS_1301,NAD83(HARN) / Indiana East,,,NAD83(HARN) / Indiana East,,,,,,,,,0,0,0
+76500,2793,102274,2793,0,0,0,,INHP-W,HARN.IN-W,HARN/IN.IN-W,NAD83(HARN) / Indiana West,NAD_1983_HARN_StatePlane_Indiana_West_FIPS_1302,NAD83(HARN) / Indiana West,,,NAD83(HARN) / Indiana West,,,,,,,,,0,0,0
+76600,2794,102275,2794,0,0,0,,IAHP-N,HARN.IA-N,HARN/IA.IA-N,NAD83(HARN) / Iowa North,NAD_1983_HARN_StatePlane_Iowa_North_FIPS_1401,NAD83(HARN) / Iowa North,,,NAD83(HARN) / Iowa North,,,,,,,,,0,0,0
+76700,2795,102276,2795,0,0,0,,IAHP-S,HARN.IA-S,HARN/IA.IA-S,NAD83(HARN) / Iowa South,NAD_1983_HARN_StatePlane_Iowa_South_FIPS_1402,NAD83(HARN) / Iowa South,,,NAD83(HARN) / Iowa South,,,,,,,,,0,0,0
+76800,2796,102277,2796,0,0,0,,KSHP-N,HARN.KS-N,HARN/KS.KS-N,NAD83(HARN) / Kansas North,NAD_1983_HARN_StatePlane_Kansas_North_FIPS_1501,NAD83(HARN) / Kansas North,,,NAD83(HARN) / Kansas North,,,,,,,,,0,0,0
+76900,2797,102278,2797,0,0,0,,KSHP-S,HARN.KS-S,HARN/KS.KS-S,NAD83(HARN) / Kansas South,NAD_1983_HARN_StatePlane_Kansas_South_FIPS_1502,NAD83(HARN) / Kansas South,,,NAD83(HARN) / Kansas South,,,,,,,,,0,0,0
+77000,2798,102279,2798,0,0,0,,KYHP-N,HARN.KY-N,HARN/KY.KY-N,NAD83(HARN) / Kentucky North,NAD_1983_HARN_StatePlane_Kentucky_North_FIPS_1601,NAD83(HARN) / Kentucky North,,,NAD83(HARN) / Kentucky North,,,,,,,,,0,0,0
+77100,2799,102280,2799,0,0,0,,KYHP-S,HARN.KY-S,HARN/KY.KY-S,NAD83(HARN) / Kentucky South,NAD_1983_HARN_StatePlane_Kentucky_South_FIPS_1602,NAD83(HARN) / Kentucky South,,,NAD83(HARN) / Kentucky South,,,,,,,,,0,0,0
+77200,2800,102281,2800,0,0,0,,LAHP-N,HARN.LA-N,HARN/LA.LA-N,NAD83(HARN) / Louisiana North,NAD_1983_HARN_StatePlane_Louisiana_North_FIPS_1701,NAD83(HARN) / Louisiana North,,,NAD83(HARN) / Louisiana North,,,,,,,,,0,0,0
+77300,2801,102282,2801,0,0,0,,LAHP-S,HARN.LA-S,HARN/LA.LA-S,NAD83(HARN) / Louisiana South,NAD_1983_HARN_StatePlane_Louisiana_South_FIPS_1702,NAD83(HARN) / Louisiana South,,,NAD83(HARN) / Louisiana South,,,,,,,,,0,0,0
+77400,2802,102283,2802,0,0,0,,MEHP-E,HARN.ME-E,HARN/ME.ME-E,NAD83(HARN) / Maine East,NAD_1983_HARN_StatePlane_Maine_East_FIPS_1801,NAD83(HARN) / Maine East,,,NAD83(HARN) / Maine East,,,,,,,,,0,0,0
+77500,2803,102284,2803,0,0,0,,MEHP-W,HARN.ME-W,HARN/ME.ME-W,NAD83(HARN) / Maine West,NAD_1983_HARN_StatePlane_Maine_West_FIPS_1802,NAD83(HARN) / Maine West,,,NAD83(HARN) / Maine West,,,,,,,,,0,0,0
+77600,2804,102285,2804,0,0,0,,MDHP,HARN.MD,HARN/MD.MD,NAD83(HARN) / Maryland,NAD_1983_HARN_StatePlane_Maryland_FIPS_1900,NAD83(HARN) / Maryland,,,NAD83(HARN) / Maryland,,,,,,,,,0,0,0
+77700,2805,102286,2805,0,0,0,,MAHP,HARN.MA,HARN/NE.MA,NAD83(HARN) / Massachusetts Mainland,NAD_1983_HARN_StatePlane_Massachusetts_Mainland_FIPS_2001,NAD83(HARN) / Massachusetts Mainland,,,NAD83(HARN) / Massachusetts Mainland,,,,,,,,,0,0,0
+77800,2806,102287,2806,0,0,0,,MAHP-IS,HARN.MA-IS,HARN/NE.MA-IS,NAD83(HARN) / Massachusetts Island,NAD_1983_HARN_StatePlane_Massachusetts_Island_FIPS_2002,NAD83(HARN) / Massachusetts Island,,,NAD83(HARN) / Massachusetts Island,,,,,,,,,0,0,0
+77900,2807,102288,2807,0,0,0,,MIHP-N,HARN.MI-N,HARN/MI.MI-N,NAD83(HARN) / Michigan North,NAD_1983_HARN_StatePlane_Michigan_North_FIPS_2111,NAD83(HARN) / Michigan North,,,NAD83(HARN) / Michigan North,,,,,,,,,0,0,0
+78000,2808,102289,2808,0,0,0,,MIHP-C,HARN.MI-C,HARN/MI.MI-C,NAD83(HARN) / Michigan Central,NAD_1983_HARN_StatePlane_Michigan_Central_FIPS_2112,NAD83(HARN) / Michigan Central,,,NAD83(HARN) / Michigan Central,,,,,,,,,0,0,0
+78100,2809,102290,2809,0,0,0,,MIHP-S,HARN.MI-S,HARN/MI.MI-S,NAD83(HARN) / Michigan South,NAD_1983_HARN_StatePlane_Michigan_South_FIPS_2113,NAD83(HARN) / Michigan South,,,NAD83(HARN) / Michigan South,,,,,,,,,0,0,0
+78200,2810,102291,2810,0,0,0,,MNHP-N,HARN.MN-N,HARN/MN.MN-N,NAD83(HARN) / Minnesota North,NAD_1983_HARN_StatePlane_Minnesota_North_FIPS_2201,NAD83(HARN) / Minnesota North,,,NAD83(HARN) / Minnesota North,,,,,,,,,0,0,0
+78300,2811,102292,2811,0,0,0,,MNHP-C,HARN.MN-C,HARN/MN.MN-C,NAD83(HARN) / Minnesota Central,NAD_1983_HARN_StatePlane_Minnesota_Central_FIPS_2202,NAD83(HARN) / Minnesota Central,,,NAD83(HARN) / Minnesota Central,,,,,,,,,0,0,0
+78400,2812,102293,2812,0,0,0,,MNHP-S,HARN.MN-S,HARN/MN.MN-S,NAD83(HARN) / Minnesota South,NAD_1983_HARN_StatePlane_Minnesota_South_FIPS_2203,NAD83(HARN) / Minnesota South,,,NAD83(HARN) / Minnesota South,,,,,,,,,0,0,0
+78500,2813,102294,2813,0,0,0,,MSHP-E,HARN.MS-E,HARN/MS.MS-E,NAD83(HARN) / Mississippi East,NAD_1983_HARN_StatePlane_Mississippi_East_FIPS_2301,NAD83(HARN) / Mississippi East,,,NAD83(HARN) / Mississippi East,,,,,,,,,0,0,0
+78600,2814,102295,2814,0,0,0,,MSHP-W,HARN.MS-W,HARN/MS.MS-W,NAD83(HARN) / Mississippi West,NAD_1983_HARN_StatePlane_Mississippi_West_FIPS_2302,NAD83(HARN) / Mississippi West,,,NAD83(HARN) / Mississippi West,,,,,,,,,0,0,0
+78700,2815,102296,2815,0,0,0,,MOHP-E,HARN.MO-E,HARN/MO.MO-E,NAD83(HARN) / Missouri East,NAD_1983_HARN_StatePlane_Missouri_East_FIPS_2401,NAD83(HARN) / Missouri East,,,NAD83(HARN) / Missouri East,,,,,,,,,0,0,0
+78800,2816,102297,2816,0,0,0,,MOHP-C,HARN.MO-C,HARN/MO.MO-C,NAD83(HARN) / Missouri Central,NAD_1983_HARN_StatePlane_Missouri_Central_FIPS_2402,NAD83(HARN) / Missouri Central,,,NAD83(HARN) / Missouri Central,,,,,,,,,0,0,0
+78900,2817,102298,2817,0,0,0,,MOHP-W,HARN.MO-W,HARN/MO.MO-W,NAD83(HARN) / Missouri West,NAD_1983_HARN_StatePlane_Missouri_West_FIPS_2403,NAD83(HARN) / Missouri West,,,NAD83(HARN) / Missouri West,,,,,,,,,0,0,0
+79000,2818,102300,2818,0,0,0,,MTHP,HARN.MT,HARN/MT.MT,NAD83(HARN) / Montana,NAD_1983_HARN_StatePlane_Montana_FIPS_2500,NAD83(HARN) / Montana,,,NAD83(HARN) / Montana,,,,,,,,,0,0,0
+79100,2819,102304,2819,0,0,0,,NBHP,HARN.NB,HARN/NB.NB,NAD83(HARN) / Nebraska,NAD_1983_HARN_StatePlane_Nebraska_FIPS_2600,NAD83(HARN) / Nebraska,,,NAD83(HARN) / Nebraska,,,,,,,,,0,0,0
+79200,2820,102307,2820,0,0,0,,NVHP-E,HARN.NV-E,HARN/NV.NV-E,NAD83(HARN) / Nevada East,NAD_1983_HARN_StatePlane_Nevada_East_FIPS_2701,NAD83(HARN) / Nevada East,,,NAD83(HARN) / Nevada East,,,,,,,,,0,0,0
+79300,2821,102308,2821,0,0,0,,NVHP-C,HARN.NV-C,HARN/NV.NV-C,NAD83(HARN) / Nevada Central,NAD_1983_HARN_StatePlane_Nevada_Central_FIPS_2702,NAD83(HARN) / Nevada Central,,,NAD83(HARN) / Nevada Central,,,,,,,,,0,0,0
+79400,2822,102309,2822,0,0,0,,NVHP-W,HARN.NV-W,HARN/NV.NV-W,NAD83(HARN) / Nevada West,NAD_1983_HARN_StatePlane_Nevada_West_FIPS_2703,NAD83(HARN) / Nevada West,,,NAD83(HARN) / Nevada West,,,,,,,,,0,0,0
+79500,2823,102310,2823,0,0,0,,NHHP,HARN.NH,HARN/NE.NH,NAD83(HARN) / New Hampshire,NAD_1983_HARN_StatePlane_New_Hampshire_FIPS_2800,NAD83(HARN) / New Hampshire,,,NAD83(HARN) / New Hampshire,,,,,,,,,0,0,0
+79600,2824,102311,2824,0,0,0,,NJHP,HARN.NJ,HARN/NJ.NJ,NAD83(HARN) / New Jersey,NAD_1983_HARN_StatePlane_New_Jersey_FIPS_2900,NAD83(HARN) / New Jersey,,,NAD83(HARN) / New Jersey,,,,,,,,,0,0,0
+79700,2825,102312,2825,0,0,0,,NMHP-E,HARN.NM-E,HARN/NM.NM-E,NAD83(HARN) / New Mexico East,NAD_1983_HARN_StatePlane_New_Mexico_East_FIPS_3001,NAD83(HARN) / New Mexico East,,,NAD83(HARN) / New Mexico East,,,,,,,,,0,0,0
+79800,2826,102313,2826,0,0,0,,NMHP-C,HARN.NM-C,HARN/NM.NM-C,NAD83(HARN) / New Mexico Central,NAD_1983_HARN_StatePlane_New_Mexico_Central_FIPS_3002,NAD83(HARN) / New Mexico Central,,,NAD83(HARN) / New Mexico Central,,,,,,,,,0,0,0
+79900,2827,102314,2827,0,0,0,,NMHP-W,HARN.NM-W,HARN/NM.NM-W,NAD83(HARN) / New Mexico West,NAD_1983_HARN_StatePlane_New_Mexico_West_FIPS_3003,NAD83(HARN) / New Mexico West,,,NAD83(HARN) / New Mexico West,,,,,,,,,0,0,0
+80000,2828,102315,2828,0,0,0,,NYHP-E,HARN.NY-E,HARN/NY.NY-E,NAD83(HARN) / New York East,NAD_1983_HARN_StatePlane_New_York_East_FIPS_3101,NAD83(HARN) / New York East,,,NAD83(HARN) / New York East,,,,,,,,,0,0,0
+80100,2829,102316,2829,0,0,0,,NYHP-C,HARN.NY-C,HARN/NY.NY-C,NAD83(HARN) / New York Central,NAD_1983_HARN_StatePlane_New_York_Central_FIPS_3102,NAD83(HARN) / New York Central,,,NAD83(HARN) / New York Central,,,,,,,,,0,0,0
+80200,2830,102317,2830,0,0,0,,NYHP-W,HARN.NY-W,HARN/NY.NY-W,NAD83(HARN) / New York West,NAD_1983_HARN_StatePlane_New_York_West_FIPS_3103,NAD83(HARN) / New York West,,,NAD83(HARN) / New York West,,,,,,,,,0,0,0
+80300,2831,102318,2831,0,0,0,,NYHP-LI,HARN.NY-LI,HARN/NY.NY-LI,NAD83(HARN) / New York Long Island,NAD_1983_HARN_StatePlane_New_York_Long_Island_FIPS_3104,NAD83(HARN) / New York Long Island,,,NAD83(HARN) / New York Long Island,,,,,,,,,0,0,0
+80400,2832,102320,2832,0,0,0,,NDHP-N,HARN.ND-N,HARN/ND.ND-N,NAD83(HARN) / North Dakota North,NAD_1983_HARN_StatePlane_North_Dakota_North_FIPS_3301,NAD83(HARN) / North Dakota North,,,NAD83(HARN) / North Dakota North,,,,,,,,,0,0,0
+80500,2833,102321,2833,0,0,0,,NDHP-S,HARN.ND-S,HARN/ND.ND-S,NAD83(HARN) / North Dakota South,NAD_1983_HARN_StatePlane_North_Dakota_South_FIPS_3302,NAD83(HARN) / North Dakota South,,,NAD83(HARN) / North Dakota South,,,,,,,,,0,0,0
+80600,2834,102322,2834,0,0,0,,OHHP-N,HARN.OH-N,HARN/OH.OH-N,NAD83(HARN) / Ohio North,NAD_1983_HARN_StatePlane_Ohio_North_FIPS_3401,NAD83(HARN) / Ohio North,,,NAD83(HARN) / Ohio North,,,,,,,,,0,0,0
+80700,2835,102323,2835,0,0,0,,OHHP-S,HARN.OH-S,HARN/OH.OH-S,NAD83(HARN) / Ohio South,NAD_1983_HARN_StatePlane_Ohio_South_FIPS_3402,NAD83(HARN) / Ohio South,,,NAD83(HARN) / Ohio South,,,,,,,,,0,0,0
+80800,2836,102324,2836,0,0,0,,OKHP-N,HARN.OK-N,HARN/OK.OK-N,NAD83(HARN) / Oklahoma North,NAD_1983_HARN_StatePlane_Oklahoma_North_FIPS_3501,NAD83(HARN) / Oklahoma North,,,NAD83(HARN) / Oklahoma North,,,,,,,,,0,0,0
+80900,2837,102325,2837,0,0,0,,OKHP-S,HARN.OK-S,HARN/OK.OK-S,NAD83(HARN) / Oklahoma South,NAD_1983_HARN_StatePlane_Oklahoma_South_FIPS_3502,NAD83(HARN) / Oklahoma South,,,NAD83(HARN) / Oklahoma South,,,,,,,,,0,0,0
+81000,2838,102326,2838,0,0,0,,ORHP-N,HARN.OR-N,HARN/WO.OR-N,NAD83(HARN) / Oregon North,NAD_1983_HARN_StatePlane_Oregon_North_FIPS_3601,NAD83(HARN) / Oregon North,,,NAD83(HARN) / Oregon North,,,,,,,,,0,0,0
+81100,2839,102327,2839,0,0,0,,ORHP-S,HARN.OR-S,HARN/WO.OR-S,NAD83(HARN) / Oregon South,NAD_1983_HARN_StatePlane_Oregon_South_FIPS_3602,NAD83(HARN) / Oregon South,,,NAD83(HARN) / Oregon South,,,,,,,,,0,0,0
+81200,2840,102330,2840,0,0,0,,RIHP,HARN.RI,HARN/NE.RI,NAD83(HARN) / Rhode Island,NAD_1983_HARN_StatePlane_Rhode_Island_FIPS_3800,NAD83(HARN) / Rhode Island,,,NAD83(HARN) / Rhode Island,,,,,,,,,0,0,0
+81300,2841,102334,2841,0,0,0,,SDHP-N,HARN.SD-N,HARN/SD.SD-N,NAD83(HARN) / South Dakota North,NAD_1983_HARN_StatePlane_South_Dakota_North_FIPS_4001,NAD83(HARN) / South Dakota North,,,NAD83(HARN) / South Dakota North,,,,,,,,,0,0,0
+81400,2842,102335,2842,0,0,0,,SDHP-S,HARN.SD-S,HARN/SD.SD-S,NAD83(HARN) / South Dakota South,NAD_1983_HARN_StatePlane_South_Dakota_South_FIPS_4002,NAD83(HARN) / South Dakota South,,,NAD83(HARN) / South Dakota South,,,,,,,,,0,0,0
+81500,2843,102336,2843,0,0,0,,TNHP,HARN.TN,HARN/TN.TN,NAD83(HARN) / Tennessee,NAD_1983_HARN_StatePlane_Tennessee_FIPS_4100,NAD83(HARN) / Tennessee,,,NAD83(HARN) / Tennessee,,,,,,,,,0,0,0
+81600,2844,102337,2844,0,0,0,,TXHP-N,HARN.TX-N,HARN/TX.TX-N,NAD83(HARN) / Texas North,NAD_1983_HARN_StatePlane_Texas_North_FIPS_4201,NAD83(HARN) / Texas North,,,NAD83(HARN) / Texas North,,,,,,,,,0,0,0
+81700,2845,102338,2845,0,0,0,,TXHP-NC,HARN.TX-NC,HARN/TX.TX-NC,NAD83(HARN) / Texas North Central,NAD_1983_HARN_StatePlane_Texas_North_Central_FIPS_4202,NAD83(HARN) / Texas North Central,,,NAD83(HARN) / Texas North Central,,,,,,,,,0,0,0
+81800,2846,102339,2846,0,0,0,,TXHP-C,HARN.TX-C,HARN/TX.TX-C,NAD83(HARN) / Texas Central,NAD_1983_HARN_StatePlane_Texas_Central_FIPS_4203,NAD83(HARN) / Texas Central,,,NAD83(HARN) / Texas Central,,,,,,,,,0,0,0
+81900,2847,102340,2847,0,0,0,,TXHP-SC,HARN.TX-SC,HARN/TX.TX-SC,NAD83(HARN) / Texas South Central,NAD_1983_HARN_StatePlane_Texas_South_Central_FIPS_4204,NAD83(HARN) / Texas South Central,,,NAD83(HARN) / Texas South Central,,,,,,,,,0,0,0
+82000,2848,102341,2848,0,0,0,,TXHP-S,HARN.TX-S,HARN/TX.TX-S,NAD83(HARN) / Texas South,NAD_1983_HARN_StatePlane_Texas_South_FIPS_4205,NAD83(HARN) / Texas South,,,NAD83(HARN) / Texas South,,,,,,,,,0,0,0
+82100,2849,102342,2849,0,0,0,,UTHP-N,HARN.UT-N,HARN/UT.UT-N,NAD83(HARN) / Utah North,NAD_1983_HARN_StatePlane_Utah_North_FIPS_4301,NAD83(HARN) / Utah North,,,NAD83(HARN) / Utah North,,,,,,,,,0,0,0
+82200,2850,102343,2850,0,0,0,,UTHP-C,HARN.UT-C,HARN/UT.UT-C,NAD83(HARN) / Utah Central,NAD_1983_HARN_StatePlane_Utah_Central_FIPS_4302,NAD83(HARN) / Utah Central,,,NAD83(HARN) / Utah Central,,,,,,,,,0,0,0
+82300,2851,102344,2851,0,0,0,,UTHP-S,HARN.UT-S,HARN/UT.UT-S,NAD83(HARN) / Utah South,NAD_1983_HARN_StatePlane_Utah_South_FIPS_4303,NAD83(HARN) / Utah South,,,NAD83(HARN) / Utah South,,,,,,,,,0,0,0
+82400,2852,102345,2852,0,0,0,,VTHP,HARN.VT,HARN/NE.VT,NAD83(HARN) / Vermont,NAD_1983_HARN_StatePlane_Vermont_FIPS_4400,NAD83(HARN) / Vermont,,,NAD83(HARN) / Vermont,,,,,,,,,0,0,0
+82500,2853,102346,2853,0,0,0,,VAHP-N,HARN.VA-N,HARN/VA.VA-N,NAD83(HARN) / Virginia North,NAD_1983_HARN_StatePlane_Virginia_North_FIPS_4501,NAD83(HARN) / Virginia North,,,NAD83(HARN) / Virginia North,,,,,,,,,0,0,0
+82600,2854,102347,2854,0,0,0,,VAHP-S,HARN.VA-S,HARN/VA.VA-S,NAD83(HARN) / Virginia South,NAD_1983_HARN_StatePlane_Virginia_South_FIPS_4502,NAD83(HARN) / Virginia South,,,NAD83(HARN) / Virginia South,,,,,,,,,0,0,0
+82700,2855,102348,2855,0,0,0,,WAHP-N,HARN.WA-N,HARN/WO.WA-N,NAD83(HARN) / Washington North,NAD_1983_HARN_StatePlane_Washington_North_FIPS_4601,NAD83(HARN) / Washington North,,,NAD83(HARN) / Washington North,,,,,,,,,0,0,0
+82800,2856,102349,2856,0,0,0,,WAHP-S,HARN.WA-S,HARN/WO.WA-S,NAD83(HARN) / Washington South,NAD_1983_HARN_StatePlane_Washington_South_FIPS_4602,NAD83(HARN) / Washington South,,,NAD83(HARN) / Washington South,,,,,,,,,0,0,0
+82900,2857,102350,2857,0,0,0,,WVHP-N,HARN.WV-N,HARN/WV.WV-N,NAD83(HARN) / West Virginia North,NAD_1983_HARN_StatePlane_West_Virginia_North_FIPS_4701,NAD83(HARN) / West Virginia North,,,NAD83(HARN) / West Virginia North,,,,,,,,,0,0,0
+83000,2858,102351,2858,0,0,0,,WVHP-S,HARN.WV-S,HARN/WV.WV-S,NAD83(HARN) / West Virginia South,NAD_1983_HARN_StatePlane_West_Virginia_South_FIPS_4702,NAD83(HARN) / West Virginia South,,,NAD83(HARN) / West Virginia South,,,,,,,,,0,0,0
+83100,2859,102352,2859,0,0,0,,WIHP-N,HARN.WI-N,HARN/WI.WI-N,NAD83(HARN) / Wisconsin North,NAD_1983_HARN_StatePlane_Wisconsin_North_FIPS_4801,NAD83(HARN) / Wisconsin North,,,NAD83(HARN) / Wisconsin North,,,,,,,,,0,0,0
+83200,2860,102353,2860,0,0,0,,WIHP-C,HARN.WI-C,HARN/WI.WI-C,NAD83(HARN) / Wisconsin Central,NAD_1983_HARN_StatePlane_Wisconsin_Central_FIPS_4802,NAD83(HARN) / Wisconsin Central,,,NAD83(HARN) / Wisconsin Central,,,,,,,,,0,0,0
+83300,2861,102354,2861,0,0,0,,WIHP-S,HARN.WI-S,HARN/WI.WI-S,NAD83(HARN) / Wisconsin South,NAD_1983_HARN_StatePlane_Wisconsin_South_FIPS_4803,NAD83(HARN) / Wisconsin South,,,NAD83(HARN) / Wisconsin South,,,,,,,,,0,0,0
+83400,2862,102355,2862,0,0,0,,WYHP-E,HARN.WY-E,HARN/WY.WY-E,NAD83(HARN) / Wyoming East,NAD_1983_HARN_StatePlane_Wyoming_East_FIPS_4901,NAD83(HARN) / Wyoming East,,,NAD83(HARN) / Wyoming East,,,,,,,,,0,0,0
+83500,2863,102356,2863,0,0,0,,WYHP-EC,HARN.WY-EC,HARN/WY.WY-EC,NAD83(HARN) / Wyoming East Central,NAD_1983_HARN_StatePlane_Wyoming_East_Central_FIPS_4902,NAD83(HARN) / Wyoming East Central,,,NAD83(HARN) / Wyoming East Central,,,,,,,,,0,0,0
+83600,2864,102357,2864,0,0,0,,WYHP-WC,HARN.WY-WC,HARN/WY.WY-WC,NAD83(HARN) / Wyoming West Central,NAD_1983_HARN_StatePlane_Wyoming_West_Central_FIPS_4903,NAD83(HARN) / Wyoming West Central,,,NAD83(HARN) / Wyoming West Central,,,,,,,,,0,0,0
+83700,2865,102358,2865,0,0,0,,WYHP-W,HARN.WY-W,HARN/WY.WY-W,NAD83(HARN) / Wyoming West,NAD_1983_HARN_StatePlane_Wyoming_West_FIPS_4904,NAD83(HARN) / Wyoming West,,,NAD83(HARN) / Wyoming West,,,,,,,,,0,0,0
+83800,2866,102361,2866,0,0,0,,PRHP,HARN.PRVI,HARN/PV.PRHP,NAD83(HARN) / Puerto Rico and Virgin Is.,NAD_1983_HARN_StatePlane_Puerto_Rico_Virgin_Islands_FIPS_5200,NAD83(HARN) / Puerto Rico & Virgin Is.,,,NAD83(HARN) / Puerto Rico & Virgin Is.,,,,,,,,,0,0,0
 83900,2867,2867,2867,0,0,0,,AZHP-EIF,HARN.AZ-EI.IntnlFt,HARN/AZ.AZ-EIF,NAD83(HARN) / Arizona East (ft),NAD_1983_HARN_StatePlane_Arizona_East_FIPS_0201_Feet_Intl,NAD83(HARN) / Arizona East (ft),,,NAD83(HARN) / Arizona East (ft),,,,,,,,,0,0,0
 84000,2868,2868,2868,0,0,0,,AZHP-CIF,HARN.AZ-CI.IntnlFt,HARN/AZ.AZ-CIF,NAD83(HARN) / Arizona Central (ft),NAD_1983_HARN_StatePlane_Arizona_Central_FIPS_0202_Feet_Intl,NAD83(HARN) / Arizona Central (ft),,,NAD83(HARN) / Arizona Central (ft),,,,,,,,,0,0,0
 84100,2869,2869,2869,0,0,0,,AZHP-WIF,HARN.AZ-WI.IntnlFt,HARN/AZ.AZ-WIF,NAD83(HARN) / Arizona West (ft),NAD_1983_HARN_StatePlane_Arizona_West_FIPS_0203_Feet_Intl,NAD83(HARN) / Arizona West (ft),,,NAD83(HARN) / Arizona West (ft),,,,,,,,,0,0,0
@@ -917,28 +912,28 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 91100,2941,2941,2941,0,0,0,,Pulkovo42.CS63-K4,Pulkovo42.CS63-K4,Pulkovo42.CS63-K4|CS63-K4,Pulkovo 1942 / CS63 zone K4,Pulkovo_1942_CS63_Zone_K4,Pulkovo 1942 / CS63 zone K4,,,Pulkovo 1942 / CS63 zone K4,,,,,,,,,0,0,0
 91200,2942,2942,2942,0,0,0,,PortoSanto.UTM-28N,PortoSanto.UTM-28N,PortoSanto36.UTM-28N,Porto Santo / UTM zone 28N,Porto_Santo_1936_UTM_Zone_28N,Porto Santo / UTM zone 28N,,,Porto Santo / UTM zone 28N,,,,,,,,,0,0,0
 91300,2943,0,2943,0,0,0,,SelvagemGrande.UTM-28N,SelvagemGrande.UTM-28N,Selvagem.UTM-28N,Selvagem Grande / UTM zone 28N,,Selvagem Grande / UTM zone 28N,,,Selvagem Grande / UTM zone 28N,,,,,,,,,0,0,0
-91400,2944,2139,2944,0,0,0,,CSRS.SCoPQ-2,CSRS.SCoPQ-2,CSRS.SCoPQ-2|NAD83/98.SCoPQ-2,NAD83(CSRS) / SCoPQ zone 2,NAD_1983_CSRS98_MTM_2_SCoPQ,NAD83(CSRS) / SCoPQ zone 2,,,NAD83(CSRS) / SCoPQ zone 2,,,,,,,,,0,0,0
-91500,2945,2140,2945,0,0,0,,CSRS.MTM-3,CSRS.MTM-3,CSRS.MTM-3|NAD83/98.MTM-3,NAD83(CSRS) / MTM zone 3,NAD_1983_CRS98_MTM_3,NAD83(CSRS) / MTM zone 3,,,NAD83(CSRS) / MTM zone 3,,,,,,,,,0,0,0
-91600,2946,2141,2946,0,0,0,,CSRS.MTM-4,CSRS.MTM-4,CSRS.MTM-4|NAD83/98.MTM-4,NAD83(CSRS) / MTM zone 4,NAD_1983_CRS98_MTM_4,NAD83(CSRS) / MTM zone 4,,,NAD83(CSRS) / MTM zone 4,,,,,,,,,0,0,0
-91700,2947,2142,2947,0,0,0,,CSRS.MTM-5,CSRS.MTM-5,CSRS.MTM-5|NAD83/98.MTM-5,NAD83(CSRS) / MTM zone 5,NAD_1983_CRS98_MTM_5,NAD83(CSRS) / MTM zone 5,,,NAD83(CSRS) / MTM zone 5,,,,,,,,,0,0,0
-91800,2948,2143,2948,0,0,0,,CSRS.MTM-6,CSRS.MTM-6,CSRS.MTM-6|NAD83/98.MTM-6,NAD83(CSRS) / MTM zone 6,NAD_1983_CRS98_MTM_6,NAD83(CSRS) / MTM zone 6,,,NAD83(CSRS) / MTM zone 6,,,,,,,,,0,0,0
-91900,2949,2144,2949,0,0,0,,CSRS.MTM-7,CSRS.MTM-7,CSRS.MTM-7|NAD83/98.MTM-7,NAD83(CSRS) / MTM zone 7,NAD_1983_CRS98_MTM_7,NAD83(CSRS) / MTM zone 7,,,NAD83(CSRS) / MTM zone 7,,,,,,,,,0,0,0
-92000,2950,2145,2950,0,0,0,,CSRS.MTM-8,CSRS.MTM-8,CSRS.MTM-8|NAD83/98.MTM-8,NAD83(CSRS) / MTM zone 8,NAD_1983_CRS98_MTM_8,NAD83(CSRS) / MTM zone 8,,,NAD83(CSRS) / MTM zone 8,,,,,,,,,0,0,0
-92100,2951,2146,2951,0,0,0,,CSRS.MTM-9,CSRS.MTM-9,CSRS.MTM-9|NAD83/98.MTM-9,NAD83(CSRS) / MTM zone 9,NAD_1983_CRS98_MTM_9,NAD83(CSRS) / MTM zone 9,,,NAD83(CSRS) / MTM zone 9,,,,,,,,,0,0,0
-92200,2952,2147,2952,0,0,0,,CSRS.MTM-10,CSRS.MTM-10,CSRS.MTM-10|NAD83/98.MTM-10,NAD83(CSRS) / MTM zone 10,NAD_1983_CRS98_MTM_10,NAD83(CSRS) / MTM zone 10,,,NAD83(CSRS) / MTM zone 10,,,,,,,,,0,0,0
+91400,2944,2139,2944,0,0,0,,CSRS.SCoPQ-2,CSRS.SCoPQ-2,CSRS.SCoPQ-2|NAD83/98.SCoPQ-2,NAD83(CSRS) / SCoPQ zone 2,NAD_1983_CSRS98_MTM_2_SCoPQ,NAD83(CSRS) / SCoPQ zone 2,,,NAD83(CSRS) / SCoPQ zone 2|NAD83(CSRS98) / SCoPQ zone 2,,,,,,,,,0,0,0
+91500,2945,2140,2945,0,0,0,,CSRS.MTM-3,CSRS.MTM-3,CSRS.MTM-3|NAD83/98.MTM-3,NAD83(CSRS) / MTM zone 3,NAD_1983_CRS98_MTM_3,NAD83(CSRS) / MTM zone 3,,,NAD83(CSRS) / MTM zone 3|NAD83(CSRS98) / MTM zone 3,,,,,,,,,0,0,0
+91600,2946,2141,2946,0,0,0,,CSRS.MTM-4,CSRS.MTM-4,CSRS.MTM-4|NAD83/98.MTM-4,NAD83(CSRS) / MTM zone 4,NAD_1983_CRS98_MTM_4,NAD83(CSRS) / MTM zone 4,,,NAD83(CSRS) / MTM zone 4|NAD83(CSRS98) / MTM zone 4,,,,,,,,,0,0,0
+91700,2947,2142,0,0,0,0,,CSRS.MTM-5,CSRS.MTM-5,CSRS.MTM-5|NAD83/98.MTM-5,NAD83(CSRS) / MTM zone 5,NAD_1983_CRS98_MTM_5,NAD83(CSRS) / MTM zone 5,,,NAD83(CSRS) / MTM zone 5|NAD83(CSRS98) / MTM zone 5,,,,,,,,,0,0,0
+91800,2948,2143,2948,0,0,0,,CSRS.MTM-6,CSRS.MTM-6,CSRS.MTM-6|NAD83/98.MTM-6,NAD83(CSRS) / MTM zone 6,NAD_1983_CRS98_MTM_6,NAD83(CSRS) / MTM zone 6,,,NAD83(CSRS) / MTM zone 6|NAD83(CSRS98) / MTM zone 6,,,,,,,,,0,0,0
+91900,2949,2144,2949,0,0,0,,CSRS.MTM-7,CSRS.MTM-7,CSRS.MTM-7|NAD83/98.MTM-7,NAD83(CSRS) / MTM zone 7,NAD_1983_CRS98_MTM_7,NAD83(CSRS) / MTM zone 7,,,NAD83(CSRS) / MTM zone 7|NAD83(CSRS98) / MTM zone 7,,,,,,,,,0,0,0
+92000,2950,2145,2950,0,0,0,,CSRS.MTM-8,CSRS.MTM-8,CSRS.MTM-8|NAD83/98.MTM-8,NAD83(CSRS) / MTM zone 8,NAD_1983_CRS98_MTM_8,NAD83(CSRS) / MTM zone 8,,,NAD83(CSRS) / MTM zone 8|NAD83(CSRS98) / MTM zone 8,,,,,,,,,0,0,0
+92100,2951,2146,2951,0,0,0,,CSRS.MTM-9,CSRS.MTM-9,CSRS.MTM-9|NAD83/98.MTM-9,NAD83(CSRS) / MTM zone 9,NAD_1983_CRS98_MTM_9,NAD83(CSRS) / MTM zone 9,,,NAD83(CSRS) / MTM zone 9|NAD83(CSRS98) / MTM zone 9,,,,,,,,,0,0,0
+92200,2952,2147,2952,0,0,0,,CSRS.MTM-10,CSRS.MTM-10,CSRS.MTM-10|NAD83/98.MTM-10,NAD83(CSRS) / MTM zone 10,NAD_1983_CRS98_MTM_10,NAD83(CSRS) / MTM zone 10,,,NAD83(CSRS) / MTM zone 10|NAD83(CSRS98) / MTM zone 10,,,,,,,,,0,0,0
 92300,2953,2036,2953,0,0,0,,NewBrunswickCSRS,CSRS.NewBrunswick/Stereo,CANST-NB83-CSRS,NAD83(CSRS) / New Brunswick Stereographic,NAD_1983_CSRS98_New_Brunswick_Stereographic,,,,NAD83(CSRS) / New Brunswick Stereo,,,,,,,,,0,0,0
-92500,2955,2153,2955,0,0,0,,CSRS.UTM-11N,CSRS.UTM-11N,CSRS.UTM-11N|NAD83/98.UTM-11N,NAD83(CSRS) / UTM zone 11N,NAD83(CSRS98) / UTM zone 11N,NAD83(CSRS) / UTM zone 11N,,,NAD83(CSRS) / UTM zone 11N,,,,,,,,,0,0,0
-92600,2956,2152,2956,0,0,0,,CSRS.UTM-12N,CSRS.UTM-12N,CSRS.UTM-12N|NAD83/98.UTM-12N,NAD83(CSRS) / UTM zone 12N,NAD83(CSRS98) / UTM zone 12N,NAD83(CSRS) / UTM zone 12N,,,NAD83(CSRS) / UTM zone 12N,,,,,,,,,0,0,0
-92700,2957,2151,2957,0,0,0,,CSRS.UTM-13N,CSRS.UTM-13N,CSRS.UTM-13N|NAD83/98.UTM-13N,NAD83(CSRS) / UTM zone 13N,NAD83(CSRS98) / UTM zone 13N,NAD83(CSRS) / UTM zone 13N,,,NAD83(CSRS) / UTM zone 13N,,,,,,,,,0,0,0
-92800,2958,2150,2958,0,0,0,,CSRS.UTM-17N,CSRS.UTM-17N,CSRS.UTM-17N|NAD83/98.UTM-17N,NAD83(CSRS) / UTM zone 17N,NAD83(CSRS98) / UTM zone 17N,NAD83(CSRS) / UTM zone 17N,,,NAD83(CSRS) / UTM zone 17N,,,,,,,,,0,0,0
-92900,2959,2149,2959,0,0,0,,CSRS.UTM-18N,CSRS.UTM-18N,CSRS.UTM-18N|NAD83/98.UTM-18N,NAD83(CSRS) / UTM zone 18N,NAD83(CSRS98) / UTM zone 18N,NAD83(CSRS) / UTM zone 18N,,,NAD83(CSRS) / UTM zone 18N,,,,,,,,,0,0,0
-93000,2960,2037,2960,0,0,0,,CSRS.UTM-19N,CSRS.UTM-19N,CSRS.UTM-19N|NAD83/98.UTM-19N,NAD83(CSRS) / UTM zone 19N,NAD_1983_CSRS98_UTM_Zone_19N,NAD83(CSRS) / UTM zone 19N,,,NAD83(CSRS) / UTM zone 19N,,,,,,,,,0,0,0
-93100,2961,0,2961,0,0,0,,CSRS.UTM-20N,CSRS.UTM-20N,CSRS.UTM-20N|NAD83/98.UTM-20N,NAD83(CSRS) / UTM zone 20N,NAD_1983_CSRS98_UTM_Zone_20N,NAD83(CSRS) / UTM zone 20N,,,NAD83(CSRS) / UTM zone 20N,,,,,,,,,0,0,0
-93200,2962,2148,2962,0,0,0,,CSRS.UTM-21N,CSRS.UTM-21N,CSRS.UTM-21N|NAD83/98.UTM-21N,NAD83(CSRS) / UTM zone 21N,NAD83(CSRS98) / UTM zone 21N,NAD83(CSRS) / UTM zone 21N,,,NAD83(CSRS) / UTM zone 21N,,,,,,,,,0,0,0
+92500,2955,2153,2955,0,0,0,,CSRS.UTM-11N,CSRS.UTM-11N,CSRS.UTM-11N|NAD83/98.UTM-11N,NAD83(CSRS) / UTM zone 11N,NAD83(CSRS98) / UTM zone 11N,NAD83(CSRS) / UTM zone 11N,,,NAD83(CSRS) / UTM zone 11N|NAD83(CSRS98) / UTM zone 11N,,,,,,,,,0,0,0
+92600,2956,2152,2956,0,0,0,,CSRS.UTM-12N,CSRS.UTM-12N,CSRS.UTM-12N|NAD83/98.UTM-12N,NAD83(CSRS) / UTM zone 12N,NAD83(CSRS98) / UTM zone 12N,NAD83(CSRS) / UTM zone 12N,,,NAD83(CSRS) / UTM zone 12N|NAD83(CSRS98) / UTM zone 12N,,,,,,,,,0,0,0
+92700,2957,2151,2957,0,0,0,,CSRS.UTM-13N,CSRS.UTM-13N,CSRS.UTM-13N|NAD83/98.UTM-13N,NAD83(CSRS) / UTM zone 13N,NAD83(CSRS98) / UTM zone 13N,NAD83(CSRS) / UTM zone 13N,,,NAD83(CSRS) / UTM zone 13N|NAD83(CSRS98) / UTM zone 13N,,,,,,,,,0,0,0
+92800,2958,2150,2958,0,0,0,,CSRS.UTM-17N,CSRS.UTM-17N,CSRS.UTM-17N|NAD83/98.UTM-17N,NAD83(CSRS) / UTM zone 17N,NAD83(CSRS98) / UTM zone 17N,NAD83(CSRS) / UTM zone 17N,,,NAD83(CSRS) / UTM zone 17N|NAD83(CSRS98) / UTM zone 17N,,,,,,,,,0,0,0
+92900,2959,2149,2959,0,0,0,,CSRS.UTM-18N,CSRS.UTM-18N,CSRS.UTM-18N|NAD83/98.UTM-18N,NAD83(CSRS) / UTM zone 18N,NAD83(CSRS98) / UTM zone 18N,NAD83(CSRS) / UTM zone 18N,,,NAD83(CSRS) / UTM zone 18N|NAD83(CSRS98) / UTM zone 18N,,,,,,,,,0,0,0
+93000,2960,2037,2960,0,0,0,,CSRS.UTM-19N,CSRS.UTM-19N,CSRS.UTM-19N|NAD83/98.UTM-19N,NAD83(CSRS) / UTM zone 19N,NAD_1983_CSRS98_UTM_Zone_19N,NAD83(CSRS) / UTM zone 19N,,,NAD83(CSRS) / UTM zone 19N|NAD83(CSRS98) / UTM zone 19N,,,,,,,,,0,0,0
+93100,2961,0,2961,0,0,0,,CSRS.UTM-20N,CSRS.UTM-20N,CSRS.UTM-20N|NAD83/98.UTM-20N,NAD83(CSRS) / UTM zone 20N,NAD_1983_CSRS98_UTM_Zone_20N,NAD83(CSRS) / UTM zone 20N,,,NAD83(CSRS) / UTM zone 20N|NAD83(CSRS98) / UTM zone 20N,,,,,,,,,0,0,0
+93200,2962,2148,2962,0,0,0,,CSRS.UTM-21N,CSRS.UTM-21N,CSRS.UTM-21N|NAD83/98.UTM-21N,NAD83(CSRS) / UTM zone 21N,NAD83(CSRS98) / UTM zone 21N,NAD83(CSRS) / UTM zone 21N,,,NAD83(CSRS) / UTM zone 21N|NAD83(CSRS98) / UTM zone 21N,,,,,,,,,0,0,0
 93300,2963,0,2963,0,0,0,,Lisbon1890.Portugal,Lisbon1890.Portugal/Bonne,,Lisbon 1890 (Lisbon) / Portugal Bonne,,Lisbon 1890 (Lisbon) / Portugal Bonne,,,Lisbon 1890 (Lisbon) / Portugal Bonne,,,,,,,,,0,0,0
 93400,2964,2964,2964,0,0,0,,,NAD27.Alaska/Albers.USFt,,NAD27 / Alaska Albers,NAD_1927_Alaska_Albers_Feet,'NAD27 / Alaska Albers,,,,,,,,,,,,0,0,0
-93500,2965,2965,2965,0,0,82081,,IN83-EF,NAD83.IN-E.USFt,IN83-EF,NAD83 / Indiana East (ftUS),NAD_1983_StatePlane_Indiana_East_FIPS_1301_Feet,NAD83 / Indiana East (ftUS),,,,,,,"Indiana 1301, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-93600,2966,2966,2966,0,0,82084,,IN83-WF,NAD83.IN-W.USFt,IN83-WF,NAD83 / Indiana West (ftUS),NAD_1983_StatePlane_Indiana_West_FIPS_1302_Feet,NAD83 / Indiana West (ftUS),,,,,,,"Indiana 1302, Western Zone (1983, US Survey feet)",,,,,0,0,0
+93500,2965,102673,2965,0,0,82081,,IN83-EF,NAD83.IN-E.USFt,IN83-EF,NAD83 / Indiana East (ftUS),NAD_1983_StatePlane_Indiana_East_FIPS_1301_Feet,NAD83 / Indiana East (ftUS),,,,,,,"Indiana 1301, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+93600,2966,102674,2966,0,0,82084,,IN83-WF,NAD83.IN-W.USFt,IN83-WF,NAD83 / Indiana West (ftUS),NAD_1983_StatePlane_Indiana_West_FIPS_1302_Feet,NAD83 / Indiana West (ftUS),,,,,,,"Indiana 1302, Western Zone (1983, US Survey feet)",,,,,0,0,0
 93700,2967,2967,2967,0,0,0,,INHP-EF,HARN.IN-E.USFt,HARN/IN.IN-EF,NAD83(HARN) / Indiana East (ftUS),NAD_1983_HARN_StatePlane_Indiana_East_FIPS_1301_Feet,NAD83(HARN) / Indiana East (ftUS),,,,,,,,,,,,0,0,0
 93800,2968,2968,2968,0,0,0,,INHP-WF,HARN.IN-W. USFt,HARN/IN.IN-WF,NAD83(HARN) / Indiana West (ftUS),NAD_1983_HARN_StatePlane_Indiana_West_FIPS_1302_Feet,NAD83(HARN) / Indiana West (ftUS),,,,,,,,,,,,0,0,0
 93900,2969,2969,2969,0,0,0,,FortMarigot.UTM-20N,FortMarigot.UTM-20N,FortMarigot_1.UTM-20N,Fort Marigot / UTM zone 20N,Fort_Marigot_UTM_20N,Fort Marigot / UTM zone 20N,,,,,,,,,,,,0,0,0
@@ -973,9 +968,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 96800,3000,3000,3000,0,0,0,,Segara.NEIEZ,Segara.NEIEZ,GunungSegara.NEIEZ/01,Segara / NEIEZ,Gunung_Segara_NEIEZ,Segara / NEIEZ,,,,,,,,,,,,0,0,0
 96900,3001,3001,3001,0,0,0,,Batavia.NEIEZ,Batavia.NEIEZ,Batavia_1.NEIEZ/01,Batavia / NEIEZ,Batavia_NEIEZ,Batavia / NEIEZ,,,,,,,,,,,,0,0,0
 97000,3002,3002,3002,0,0,0,,Makassar.NEIEZ,Makassar.NEIEZ,Makassar/E.NEIEZ,Makassar / NEIEZ,Makassar_NEIEZ,Makassar / NEIEZ,,,,,,,,,,,,0,0,0
-97100,3003,3003,3003,0,0,0,,MonteMario.Italy-1,MonteMario.Italy-1,MonteMario_1.Italy-1,Monte Mario / Italy zone 1,Monte_Mario_Italy_1,Monte Mario / Italy zone 1,,,,,,,,,,,,0,0,0
-97200,3004,3004,3004,0,0,0,,MonteMario.Italy-2,MonteMario.Italy-2,MonteMario_1.Italy-2,Monte Mario / Italy zone 2,Monte_Mario_Italy_2,Monte Mario / Italy zone 2,,,,,,,,,,,,0,0,0
-97300,3005,3005,0,0,0,0,,NAD83.BC/Abers,NAD83.BC/Abers,NAD83.BC/Abers,NAD83 / BC Albers,NAD_1983_BC_Environment_Albers,NAD83 / BC Albers,,,,,,,,,,,,0,0,0
+97100,3003,102091,3003,0,0,0,,MonteMario.Italy-1,MonteMario.Italy-1,MonteMario_1.Italy-1,Monte Mario / Italy zone 1,Monte_Mario_Italy_1,Monte Mario / Italy zone 1,,,,,,,,,,,,0,0,0
+97200,3004,102092,3004,0,0,0,,MonteMario.Italy-2,MonteMario.Italy-2,MonteMario_1.Italy-2,Monte Mario / Italy zone 2,Monte_Mario_Italy_2,Monte Mario / Italy zone 2,,,,,,,,,,,,0,0,0
+97300,3005,102190,0,0,0,0,,NAD83.BC/Abers,NAD83.BC/Abers,NAD83.BC/Abers,NAD83 / BC Albers,NAD_1983_BC_Environment_Albers,NAD83 / BC Albers,,,,,,,,,,,,0,0,0
 97400,3006,3006,3006,0,0,0,,SWEREF 99 TM,SWEREF99.TM,SWEREF-99-TM,SWEREF99 TM,SWEREF99_TM,SWEREF99 TM,,,,,,,,,,,,0,0,0
 97500,3007,3007,3007,0,0,0,,SWEREF 99 12 00,SWEREF99.12 00,SWEREF-99-12-00,SWEREF99 12 00,SWEREF99_12_00,SWEREF99 12 00,,,,,,,,,,,,0,0,0
 97600,3008,3008,3008,0,0,0,,SWEREF 99 13 30,SWEREF99.13 30,SWEREF-99-13-30,SWEREF99 13 30,SWEREF99_13_30,SWEREF99 13 30,,,,,,,,,,,,0,0,0
@@ -997,7 +992,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 99200,3024,3024,3024,0,0,0,,RT90-5O,RT90.RT-50O,SW-5GONO,RT90 5 gon O,RT90_5_gon_O,RT90 5 gon O,,,,,,,,,,,,0,0,0
 99300,3025,3025,3025,0,0,0,,Stockholm38.RT-75V,Stockholm38.RT-75V,,RT38 7.5 gon V,RT38_75_gon_V,RT38 7.5 gon V,,,,,,,,,,,,0,0,0
 99400,3026,3026,3026,0,0,0,,Stockholm38.RT-50V,Stockholm38.RT-50V,,RT38 5 gon V,RT38_5_gon_V,RT38 5 gon V,,,,,,,,,,,,0,0,0
-99500,3027,3027,3027,0,0,0,,Stockholm38.RT-25V,Stockholm38.RT-25V,,RT38 2.5 gon V,RT38_25_gon_V,RT38 2.5 gon V,,,RT38 2.5 gon W,,,,,,,,,0,0,0
+99500,3027,3027,3027,0,0,0,,Stockholm38.RT-25V,Stockholm38.RT-25V,,RT38 2.5 gon V,RT38_25_gon_V,RT38 2.5 gon V,,,RT38 2.5 gon V,,,,,,,,,0,0,0
 99600,3028,3028,3028,0,0,0,,Stockholm38.RT-00,Stockholm38.RT-00,,RT38 0 gon,RT38_0_gon,RT38 0 gon,,,,,,,,,,,,0,0,0
 99700,3029,3029,3029,0,0,0,,Stockholm38.RT-25O,Stockholm38.RT-25O,,RT38 2.5 gon O,RT38_25_gon_O,RT38 2.5 gon O,,,,,,,,,,,,0,0,0
 99800,3030,3030,3030,0,0,0,,Stockholm38.RT-50O,Stockholm38.RT-50O,,RT38 5 gon O,RT38_5_gon_O,RT38 5 gon O,,,,,,,,,,,,0,0,0
@@ -1042,40 +1037,37 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 103700,3069,3069,0,0,0,0,,WisconsinTM-27,NAD27.Wisconsin/TM,WI27-TM,NAD27 / Wisconsin Transverse Mercator,NAD_1927_Wisconsin_TM,,,,,,,,,,,,,0,0,0
 103800,3070,3070,0,0,0,0,,WisconsinTM-83,NAD83.Wisconsin/TM,WI83-TM,NAD83 / Wisconsin Transverse Mercator,NAD_1983_Wisconsin_TM,,,,,,,,,,,,,0,0,0
 103900,3071,3071,0,0,0,0,,WisconsinTM-HP,HARN.Wisconsin/TM,HARN/WI.WisconsinTM,NAD83(HARN) / Wisconsin Transverse Mercator,NAD_1983_HARN_Wisconsin_TM,,,,,,,,,,,,,0,0,0
-104000,3072,102607,0,0,0,0,,ME2K-E,NAD83.Maine2000-E,ME2K-E,NAD83 / Maine CS2000 East,NAD_1983_Maine_2000_East_Zone,,,,,,,,,,,,,0,0,0
-104100,3463,102608,0,0,0,0,,ME2K-C,NAD83.Maine2000-C,ME2K-C,NAD83 / Maine CS2000 Central,NAD_1983_Maine_2000_Central_Zone,,,,,,,,,,,,,0,0,0
-104200,3074,102609,0,0,0,0,,ME2K-W,NAD83.Maine2000-W,ME2K-W,NAD83 / Maine CS2000 West,NAD_1983_Maine_2000_West_Zone,,,,,,,,,,,,,0,0,0
+104000,3072,102606,0,0,0,0,,ME2K-E,NAD83.Maine2000-E,ME2K-E,NAD83 / Maine CS2000 East,NAD_1983_Maine_2000_East_Zone,,,,,,,,,,,,,0,0,0
+104100,3463,102607,0,0,0,0,,ME2K-C,NAD83.Maine2000-C,ME2K-C,NAD83 / Maine CS2000 Central,NAD_1983_Maine_2000_Central_Zone,,,,,,,,,,,,,0,0,0
+104200,3074,102608,0,0,0,0,,ME2K-W,NAD83.Maine2000-W,ME2K-W,NAD83 / Maine CS2000 West,NAD_1983_Maine_2000_West_Zone,,,,,,,,,,,,,0,0,0
 104300,3075,102208,0,0,0,0,,HARN.ME2K-E,HARN.Maine2000-E,HARN/ME.ME2K-E,NAD83(HARN) / Maine CS2000 East,NAD_1983_HARN_Maine_2000_East_Zone,,,,,,,,,,,,,0,0,0
 104400,3464,102209,0,0,0,0,,HARN.ME2K-C,HARN.Maine2000-C,HARN/ME.ME2K-C/a,NAD83(HARN) / Maine CS2000 Central,NAD_1983_HARN_Maine_2000_Central_Zone,,,,,,,,,,,,,0,0,0
 104500,3077,102210,0,0,0,0,,HARN.ME2K-W,HARN.Maine2000-W,HARN/ME.ME2K-W,NAD83(HARN) / Maine CS2000 West,NAD_1983_HARN_Maine_2000_West_Zone,,,,,,,,,,,,,0,0,0
-104600,3078,3078,0,0,0,0,,MichiganGeoRef83,NAD83.MichiganGeoRef,MI83-OB,NAD83 / Michigan Oblique Mercator,NAD_1983_Michigan_GeoRef_Meters,,,,,,,,,,,,,0,0,0
+104600,3078,102123,0,0,0,0,,MichiganGeoRef83,NAD83.MichiganGeoRef,MI83-OB,NAD83 / Michigan Oblique Mercator,NAD_1983_Michigan_GeoRef_Meters,,,,,,,,,,,,,0,0,0
 104700,3079,3079,0,0,0,0,,MichiganGeoRefHP,NAD83.MichiganGeoRef,HARN/MI.MichiganGeoRef,NAD83(HARN) / Michigan Oblique Mercator,NAD_1983_HARN_Michigan_GeoRef_Meters,,,,,,,,,,,,,0,0,0
-104800,3080,3080,0,0,0,0,,TX27-DOT,NAD27.Texas/DOT.IntnlFt,TX-DOT27,NAD27 / Shackleford,NAD_1927_Texas_Statewide_Mapping_System,,,,,,,,,,,,,0,0,0
-104900,3081,3081,0,0,0,0,,,,,NAD83 / Texas State Mapping System,NAD_1983_Texas_Statewide_Mapping_System,,,,,,,,,,,,,0,0,0
-105000,3082,3082,0,0,0,0,,NAD83.Texas/Lambert,NAD83.Texas/Lambert,NAD83.Texas/Lambert,NAD83 / Texas Centric Lambert Conformal,NAD_1983_Texas_Centric_Mapping_System_Lambert,,,,,,,,,,,,,0,0,0
-105100,3083,3083,0,0,0,0,,NAD83.Texas/EqArea,NAD83.Texas/EqArea,NAD83.Texas/EqArea,NAD83 / Texas Centric Albers Equal Area,NAD_1983_Texas_Centric_Mapping_System_Albers,,,,,,,,,,,,,0,0,0
+104800,3080,102119,0,0,0,0,,TX27-DOT,NAD27.Texas/DOT.IntnlFt,TX-DOT27,NAD27 / Shackleford,NAD_1927_Texas_Statewide_Mapping_System,,,,,,,,,,,,,0,0,0
+104900,3081,102603,0,0,0,0,,,,,NAD83 / Texas State Mapping System,NAD_1983_Texas_Statewide_Mapping_System,,,,,,,,,,,,,0,0,0
+105000,3082,102602,0,0,0,0,,NAD83.Texas/Lambert,NAD83.Texas/Lambert,NAD83.Texas/Lambert,NAD83 / Texas Centric Lambert Conformal,NAD_1983_Texas_Centric_Mapping_System_Lambert,,,,,,,,,,,,,0,0,0
+105100,3083,102601,0,0,0,0,,NAD83.Texas/EqArea,NAD83.Texas/EqArea,NAD83.Texas/EqArea,NAD83 / Texas Centric Albers Equal Area,NAD_1983_Texas_Centric_Mapping_System_Albers,,,,,,,,,,,,,0,0,0
 105200,3084,3084,0,0,0,0,,HARN.Texas/Lambert,HARN.Texas/Lambert,HARN/TX.Texas/Lambert,NAD83(HARN) / Texas Centric Lambert Conformal,NAD_1983_HARN_Texas_Centric_Mapping_System_Lambert,,,,,,,,,,,,,0,0,0
 105300,3085,3085,0,0,0,0,,HARN.Texas/Albers,HARN.Texas/Albers,HARN/TX.Texas/Albers,NAD83(HARN) / Texas Centric Albers Equal Area,NAD_1983_HARN_Texas_Centric_Mapping_System_Albers,,,,,,,,,,,,,0,0,0
 105400,3086,3086,0,0,0,0,,NAD83.FloridaGDL/Albers,NAD83.FloridaGDL/Albers,NAD83.FloridaGDL/Albers,NAD83 / Florida GDL Albers,NAD_1983_Florida_GDL_Albers,,,,,,,,,,,,,0,0,0
 105500,3087,3087,0,0,0,0,,HARN.FloridaGDL/Albers,HARN.FloridaGDL/Albers,HARN/FL.FloridaGDL/Albr|FLHP,NAD83(HARN) / Florida GDL Albers,NAD_1983_HARN_Florida_GDL_Albers,,,,,,,,,,,,,0,0,0
-105600,3088,3088,0,0,0,0,,KY83,NAD83.KY,KY83|KY1Z-M,NAD83 / Kentucky Single Zone,NAD_1983_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
-105700,3089,3089,0,0,0,0,,KY83F,NAD83.KY.USFt,KY83F|KY1Z-FT,NAD83 / Kentucky Single Zone (ftUS),NAD_1983_StatePlane_Kentucky_FIPS_1600_Feet,,,,,,,,,,,,,0,0,0
-105800,3090,3090,0,0,0,0,,KYHP,HARN.KY,HARN/KY.KY,NAD83(HARN) / Kentucky Single Zone,NAD_1983_HARN_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
+105600,3088,65163,0,0,0,0,,KY83,NAD83.KY,KY83|KY1Z-M,NAD83 / Kentucky Single Zone,NAD_1983_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
+105700,3089,102763,0,0,0,0,,KY83F,NAD83.KY.USFt,KY83F|KY1Z-FT,NAD83 / Kentucky Single Zone (ftUS),NAD_1983_StatePlane_Kentucky_FIPS_1600_Feet,,,,,,,,,,,,,0,0,0
+105800,3090,102363,0,0,0,0,,KYHP,HARN.KY,HARN/KY.KY,NAD83(HARN) / Kentucky Single Zone,NAD_1983_HARN_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
 105900,3091,3091,0,0,0,0,,KYHPF,HARN.KY.USFt,HARN/KY.KYF,NAD83(HARN) / Kentucky Single Zone (ftUS),NAD_1983_HARN_StatePlane_Kentucky_FIPS_1600_Feet,,,,,,,,,,,,,0,0,0
-106000,3092,3092,0,0,0,82396,,TOKYO.UTM-51N,Tokyo.UTM-51N,TOKYO.UTM-51N,Tokyo / UTM zone 51N,Tokyo_UTM_Zone_51N,,,,,,,,UTM Zone 51 (Tokyo),,,,,0,0,0
-106100,3093,3093,0,0,0,82399,,TOKYO.UTM-52N,Tokyo.UTM-52N,TOKYO.UTM-52N,Tokyo / UTM zone 52N,Tokyo_UTM_Zone_52N,,,,,,,,UTM Zone 52 (Tokyo),,,,,0,0,0
-106200,3094,3094,0,0,0,82402,,TOKYO.UTM-53N,Tokyo.UTM-53N,TOKYO.UTM-53N,Tokyo / UTM zone 53N,Tokyo_UTM_Zone_53N,,,,,,,,UTM Zone 53 (Tokyo),,,,,0,0,0
-106300,3095,3095,0,0,0,82405,,TOKYO.UTM-54N,Tokyo.UTM-54N,TOKYO.UTM-54N,Tokyo / UTM zone 54N,Tokyo_UTM_Zone_54N,,,,,,,,UTM Zone 54 (Tokyo),,,,,0,0,0
-106400,3096,3096,0,0,0,82408,,TOKYO.UTM-55N,Tokyo.UTM-55N,TOKYO.UTM-55N,Tokyo / UTM zone 55N,Tokyo_UTM_Zone_55N,,,,,,,,UTM Zone 55 (Tokyo),,,,,0,0,0
-106500,3097,3097,0,0,0,0,,JGD2000.UTM-51N,JGD2000.UTM-51N,JGD2000.UTM-51N,JGD2000 / UTM zone 51N,JGD_2000_UTM_Zone_51N,,,,,,,,,,,,,0,0,0
-106600,3098,3098,0,0,0,0,,JGD2000.UTM-52N,JGD2000.UTM-52N,JGD2000.UTM-52N,JGD2000 / UTM zone 52N,JGD_2000_UTM_Zone_52N,,,,,,,,,,,,,0,0,0
-106700,3099,3099,0,0,0,0,,JGD2000.UTM-53N,JGD2000.UTM-53N,JGD2000.UTM-53N,JGD2000 / UTM zone 53N,JGD_2000_UTM_Zone_53N,,,,,,,,,,,,,0,0,0
-106800,3100,3100,0,0,0,0,,JGD2000.UTM-54N,JGD2000.UTM-54N,JGD2000.UTM-54N,JGD2000 / UTM zone 54N,JGD_2000_UTM_Zone_54N,,,,,,,,,,,,,0,0,0
-106900,3101,3101,0,0,0,0,,JGD2000.UTM-55N,JGD2000.UTM-55N,JGD2000.UTM-55N,JGD2000 / UTM zone 55N,JGD_2000_UTM_Zone_55N,,,,,,,,,,,,,0,0,0
-107000,3102,65062,2194,0,0,0,,AmSamoa62.Samoa/Lambert,AmSamoa62.Samoa/Lambert,Samoa1962.Samoa/Lambert,American Samoa 1962 / American Samoa Lambert,Samoa_1962_Samoa_Lambert|American_Samoa_1962_StatePlane_American_Samoa_FIPS_5300,American Samoa 1962 / American Samoa Lambert,,,,,,,,,,,,0,0,0
-107100,3103,3103,0,0,0,0,,Mauritania1999.UTM-28N,Mauritania1999.UTM-28N,,Mauritania 1999 / UTM zone 28N,Mauritania_1999_UTM_Zone_28N,,,,,,,,,,,,,0,0,0
-107200,3104,3104,0,0,0,0,,Mauritania1999.UTM-29N,Mauritania1999.UTM-29N,,Mauritania 1999 / UTM zone 29N,Mauritania_1999_UTM_Zone_29N,,,,,,,,,,,,,0,0,0
-107300,3105,3105,0,0,0,0,,Mauritania1999.UTM-30N,Mauritania1999.UTM-30N,,Mauritania 1999 / UTM zone 30N,Mauritania_1999_UTM_Zone_30N,,,,,,,,,,,,,0,0,0
+106000,3092,102151,0,0,0,82396,,TOKYO.UTM-51N,Tokyo.UTM-51N,TOKYO.UTM-51N,Tokyo / UTM zone 51N,Tokyo_UTM_Zone_51N,,,,,,,,UTM Zone 51 (Tokyo),,,,,0,0,0
+106100,3093,102152,0,0,0,82399,,TOKYO.UTM-52N,Tokyo.UTM-52N,TOKYO.UTM-52N,Tokyo / UTM zone 52N,Tokyo_UTM_Zone_52N,,,,,,,,UTM Zone 52 (Tokyo),,,,,0,0,0
+106200,3094,102153,0,0,0,82402,,TOKYO.UTM-53N,Tokyo.UTM-53N,TOKYO.UTM-53N,Tokyo / UTM zone 53N,Tokyo_UTM_Zone_53N,,,,,,,,UTM Zone 53 (Tokyo),,,,,0,0,0
+106300,3095,102154,0,0,0,82405,,TOKYO.UTM-54N,Tokyo.UTM-54N,TOKYO.UTM-54N,Tokyo / UTM zone 54N,Tokyo_UTM_Zone_54N,,,,,,,,UTM Zone 54 (Tokyo),,,,,0,0,0
+106400,3096,102155,0,0,0,82408,,TOKYO.UTM-55N,Tokyo.UTM-55N,TOKYO.UTM-55N,Tokyo / UTM zone 55N,Tokyo_UTM_Zone_55N,,,,,,,,UTM Zone 55 (Tokyo),,,,,0,0,0
+106500,3097,102145,0,0,0,0,,JGD2000.UTM-51N,JGD2000.UTM-51N,JGD2000.UTM-51N,JGD2000 / UTM zone 51N,JGD_2000_UTM_Zone_51N,,,,,,,,,,,,,0,0,0
+106600,3098,102146,0,0,0,0,,JGD2000.UTM-52N,JGD2000.UTM-52N,JGD2000.UTM-52N,JGD2000 / UTM zone 52N,JGD_2000_UTM_Zone_52N,,,,,,,,,,,,,0,0,0
+106700,3099,102147,0,0,0,0,,JGD2000.UTM-53N,JGD2000.UTM-53N,JGD2000.UTM-53N,JGD2000 / UTM zone 53N,JGD_2000_UTM_Zone_53N,,,,,,,,,,,,,0,0,0
+106800,3100,102148,0,0,0,0,,JGD2000.UTM-54N,JGD2000.UTM-54N,JGD2000.UTM-54N,JGD2000 / UTM zone 54N,JGD_2000_UTM_Zone_54N,,,,,,,,,,,,,0,0,0
+106900,3101,102149,0,0,0,0,,JGD2000.UTM-55N,JGD2000.UTM-55N,JGD2000.UTM-55N,JGD2000 / UTM zone 55N,JGD_2000_UTM_Zone_55N,,,,,,,,,,,,,0,0,0
+107000,3102,65062,3102,0,0,0,,AmSamoa62.Samoa/Lambert,Samoa1962.Samoa/Lambert,Samoa1962.Samoa/Lambert,American Samoa 1962 / American Samoa Lambert,Samoa_1962_Samoa_Lambert|American_Samoa_1962_StatePlane_American_Samoa_FIPS_5300,American Samoa 1962 / American Samoa Lambert,,,,,,,,,,,,0,0,0
 107400,3106,3106,0,0,0,0,,Gulshan.Bangladesh/TM,Gulshan-303.Bangladesh/TM,Glshn303.Bangladesh/TM,Gulshan 303 / Bangladesh Transverse Mercator,Gulshan_303_Bangladesh_TM,,,,,,,,,,,,,0,0,0
 107500,3107,3107,0,0,0,0,,GDA94.SA/Lambert,GDA94.SA/Lambert,GDA94.SA/Lambert,GDA94 / SA Lambert,GDA_1994_South_Australia_Lambert,,,,,,,,,,,,,0,0,0
 107600,3108,102070,0,0,0,0,,ETRF89.GuernseyGrid,ETRF89.GuernseyGrid,ETRF89.GuernseyGrid,ETRS89 / Guernsey Grid,Guernsey_Grid,,,,,,,,,,,,,0,0,0
@@ -1090,7 +1082,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 108500,3117,0,0,0,0,0,,MAGNA.Columbia-EastCtrl,MAGNA.Columbia-EastCentral,MAGNA.Columbia-EastCtrl,MAGNA-SIRGAS / Colombia East Central zone,,,,,,,,,,,,,,0,0,0
 108600,3118,0,0,0,0,0,,MAGNA.Columbia-East,MAGNA.Columbia-East,MAGNA.Columbia-East,MAGNA-SIRGAS / Colombia East zone,,,,,,,,,,,,,,0,0,0
 108700,3119,0,0,0,0,0,,Douala48.AEF-West,Douala1948.AEF-West,Douala1948.AEF-West,Douala 1948 / AEF west,Douala_1948_AOF_West,Douala 1948 / AOF west,,,Douala 1948 / AOF west,,,,,,,,,0,0,0
-108800,3120,0,0,0,0,0,,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1|Pulkovo/58.Poland-I/a,Pulkovo 1942(58) / Poland zone I,,,,,,,,,,,,,,0,0,0
+108800,3120,0,2171,0,0,0,,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1|Pulkovo/58.Poland-I/a,Pulkovo 1942(58) / Poland zone I,,Pulkovo 1942(58) / Poland zone I,,,Pulkovo 1942(58) / Poland zone I,,,,,,,,,0,0,0
 108900,3121,0,0,0,0,0,,PRS92.Philippines-1,PRS92.Philippines-1,PRS92.Philippines-1,PRS92 / Philippines zone 1,,,,,,,,,,,,,,0,0,0
 109000,3122,0,0,0,0,0,,PRS92.Philippines-2,PRS92.Philippines-2,PRS92.Philippines-2,PRS92 / Philippines zone 2,,,,,,,,,,,,,,0,0,0
 109100,3123,0,0,0,0,0,,PRS92.Philippines-3,PRS92.Philippines-3,PRS92.Philippines-3,PRS92 / Philippines zone 3,,,,,,,,,,,,,,0,0,0
@@ -1308,9 +1300,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 130300,3340,0,0,0,0,0,,,,,IGCB 1955 / Congo TM zone 14,,,,,,,,,,,,,,0,0,0
 130400,3341,0,0,0,0,0,,,,,IGCB 1955 / Congo TM zone 16,,,,,,,,,,,,,,0,0,0
 130500,3342,0,0,0,0,0,,,,,IGCB 1955 / UTM zone 33S,,,,,,,,,,,,,,0,0,0
-130600,3343,0,0,0,0,0,,,,,Mauritania 1999 / UTM zone 28N,,,,,,,,,,,,,,0,0,0
-130700,3344,0,0,0,0,0,,,,,Mauritania 1999 / UTM zone 29N,,,,,,,,,,,,,,0,0,0
-130800,3345,0,0,0,0,0,,,,,Mauritania 1999 / UTM zone 30N,,,,,,,,,,,,,,0,0,0
+130600,3343,3343,,0,0,0,,Mauritania1999.UTM-28N,Mauritania1999.UTM-28N,,Mauritania 1999 / UTM zone 28N,Mauritania_1999_UTM_Zone_28N,,,,,,,,,,,,,0,0,0
+130700,3344,3344,,0,0,0,,Mauritania1999.UTM-29N,Mauritania1999.UTM-29N,,Mauritania 1999 / UTM zone 29N,Mauritania_1999_UTM_Zone_29N,,,,,,,,,,,,,0,0,0
+130800,3345,3345,,0,0,0,,Mauritania1999.UTM-30N,Mauritania1999.UTM-30N,,Mauritania 1999 / UTM zone 30N,Mauritania_1999_UTM_Zone_30N,,,,,,,,,,,,,0,0,0
 130900,3346,2600,2600,0,0,0,,Lietuvos1994,Lietuvos1994,Lietuvos1994,LKS94 / Lithuania TM,Lietuvos_Koordinaciu_Sistema,Lietuvos Koordinoei Sistema 1994,,,Lietuvos Koordinoei Sistema 1994,,,,,,,,,0,0,0
 131000,3347,0,0,0,0,0,,,,,NAD83 / Statistics Canada Lambert,,,,,,,,,,,,,,0,0,0
 131100,3348,0,0,0,0,0,,,,,NAD83(CSRS) / Statistics Canada Lambert,,,,,,,,,,,,,,0,0,0
@@ -1353,7 +1345,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 134800,3386,0,0,0,0,0,,,,,KKJ / Finland zone 0,,,,,,,,,,,,,,0,0,0
 134900,3387,0,0,0,0,0,,,,,KKJ / Finland zone 5,,,,,,,,,,,,,,0,0,0
 135000,3388,0,0,0,0,0,,CaspianSea,,CaspianSea,Pulkovo 1942 / Caspian Sea Mercator,,,,,,,,,,,,,,0,0,0
-135100,3389,2577,0,0,0,0,,Pulkovo42.GK3d-60/1,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60/1,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,Pulkovo_1942_3_Degree_GK_Zone_60,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,,,,,,,0,0,0
+135100,3389,2577,2577,0,0,0,,Pulkovo42.GK3d-60/1,Pulkovo42.GK3d-60,Pulkovo42.GK3d-60/1,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,Pulkovo_1942_3_Degree_GK_Zone_60,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,Pulkovo 1942 / 3-degree Gauss-Kruger zone 60,,,,,,,,,0,0,0
 135200,3391,0,0,0,0,0,,,,,Karbala 1979 (Polservice) / UTM zone 37N,,,,,,,,,,,,,,0,0,0
 135300,3392,0,0,0,0,0,,,,,Karbala 1979 (Polservice) / UTM zone 38N,,,,,,,,,,,,,,0,0,0
 135400,3393,0,0,0,0,0,,,,,Karbala 1979 (Polservice) / UTM zone 39N,,,,,,,,,,,,,,0,0,0
@@ -1370,15 +1362,14 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 136500,3404,0,0,0,0,0,,NCHPF,,HARN/NC.NCF,NAD83(HARN) / North Carolina (ftUS),,,,,,,,,,,,,,0,0,0
 136600,3405,0,0,0,0,0,,,,,VN-2000 / UTM zone 48N,,,,,,,,,,,,,,0,0,0
 136700,3406,0,0,0,0,0,,,,,VN-2000 / UTM zone 49N,,,,,,,,,,,,,,0,0,0
-136800,3407,0,0,0,0,0,,,,,Hong Kong 1963 Grid System,,,,,,,,,,,,,,0,0,0
-136900,3417,102675,0,0,0,0,,,,IA83-NF,NAD83 / Iowa North (ft US),NAD_1983_StatePlane_Iowa_North_FIPS_1401_Feet,,,,,,,,,,,,,0,0,0
-137000,3418,102676,0,0,0,0,,,,IA83-SF,NAD83 / Iowa South (ft US),NAD_1983_StatePlane_Iowa_South_FIPS_1401_Feet,,,,,,,,,,,,,0,0,0
-137100,3419,102677,0,0,0,41027,,,,KS83-NF,NAD83 / Kansas North (ft US),NAD_1983_StatePlane_Kansas_North_FIPS_1501_Feet,,,,,,,,"Kansas 1501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-137200,3420,102678,0,0,0,41030,,,,KS83-SF,NAD83 / Kansas South (ft US),NAD_1983_StatePlane_Kansas_South_FIPS_1502_Feet,,,,,,,,"Kansas 1502, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-137300,3421,102707,0,0,0,82142,,,,NV83-EF,NAD83 / Nevada East (ft US),NAD_1983_StatePlane_Nevada_East_FIPS_2701_Feet,,,,,,,,"Nevada 2701, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-137400,3422,102708,0,0,0,82144,,,,NV83-CF,NAD83 / Nevada Central (ft US),NAD_1983_StatePlane_Nevada_Central_FIPS_2701_Feet,,,,,,,,"Nevada 2702, Central Zone (1983, US Survey feet)",,,,,0,0,0
-137500,3423,102709,0,0,0,82147,,,,NV83-WF,NAD83 / Nevada West (ft US),NAD_1983_StatePlane_Nevada_East_FIPS_2701_Feet,,,,,,,,"Nevada 2703, Western Zone (1983, US Survey feet)",,,,,0,0,0
-137600,3424,102711,0,0,0,82153,,,,NJ83F,NAD83 / New Jersey (ft US),NAD_1983_StatePlane_New_Jersey_FIPS_2900_Feet,,,,,,,,"New Jersey 2900 (1983, US Survey feet)",,,,,0,0,0
+136900,3417,102675,0,0,0,41021,,IA83-NF,NAD83.IA-N.USFt,IA83-NF,NAD83 / Iowa North (ft US),NAD_1983_StatePlane_Iowa_North_FIPS_1401_Feet,,,,,,,,"Iowa 1401, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+137000,3418,102676,0,0,0,41024,,IA83-SF,NAD83.IA-S.USFt,IA83-SF,NAD83 / Iowa South (ft US),NAD_1983_StatePlane_Iowa_South_FIPS_1402_Feet,,,,,,,,"Iowa 1402, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+137100,3419,102677,0,0,0,41027,,KS83-NF,NAD83.KS-N.USFt,KS83-NF,NAD83 / Kansas North (ft US),NAD_1983_StatePlane_Kansas_North_FIPS_1501_Feet,,,,,,,,"Kansas 1501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+137200,3420,102678,0,0,0,41030,,KS83-SF,NAD83.KS-S.USFt,KS83-SF,NAD83 / Kansas South (ft US),NAD_1983_StatePlane_Kansas_South_FIPS_1502_Feet,,,,,,,,"Kansas 1502, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+137300,3421,102707,0,0,0,82142,,NV83-EF,NAD83.NV-E.USFt,NV83-EF,NAD83 / Nevada East (ft US),NAD_1983_StatePlane_Nevada_East_FIPS_2701_Feet,,,,,,,,"Nevada 2701, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+137400,3422,102708,0,0,0,82144,,NV83-CF,NAD83.NV-C.USFt,NV83-CF,NAD83 / Nevada Central (ft US),NAD_1983_StatePlane_Nevada_Central_FIPS_2702_Feet,,,,,,,,"Nevada 2702, Central Zone (1983, US Survey feet)",,,,,0,0,0
+137500,3423,102709,0,0,0,82147,,NV83-WF,NAD83.NV-W.USFt,NV83-WF,NAD83 / Nevada West (ft US),NAD_1983_StatePlane_Nevada_West_FIPS_2703_Feet,,,,,,,,"Nevada 2703, Western Zone (1983, US Survey feet)",,,,,0,0,0
+137600,3424,102711,0,0,0,82153,,NJ83F,NAD83.NJ.USFt,NJ83F,NAD83 / New Jersey (ft US),NAD_1983_StatePlane_New_Jersey_FIPS_2900_Feet,,,,,,,,"New Jersey 2900 (1983, US Survey feet)",,,,,0,0,0
 137700,3425,0,0,0,0,0,,,,HARN/IA.IA-NF,NAD83(HARN) / Iowa North (ft US),,,,,,,,,,,,,,0,0,0
 137800,3426,0,0,0,0,0,,,,HARN/IA.IA-SF,NAD83(HARN) / Iowa South (ft US),,,,,,,,,,,,,,0,0,0
 137900,3427,0,0,0,0,0,,,,HARN/KS.KS-NF,NAD83(HARN) / Kansas North (ft US),,,,,,,,,,,,,,0,0,0
@@ -1387,12 +1378,12 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 138200,3430,0,0,0,0,0,,,,HARN/NV.NV-CF,NAD83(HARN) / Nevada Central (ft US),,,,,,,,,,,,,,0,0,0
 138300,3431,0,0,0,0,0,,,,HARN/NV.NV-WF,NAD83(HARN) / Nevada West (ft US),,,,,,,,,,,,,,0,0,0
 138400,3432,0,0,0,0,0,,,,HARN/NJ.NJF,NAD83(HARN) / New Jersey (ft US),,,,,,,,,,,,,,0,0,0
-138500,3433,102651,0,0,0,40964,,,,AR83-NF,NAD83 / Arkansas North (ftUS),NAD_1983_StatePlane_Arkansas_North_FIPS_0301_Feet,,,,,,,,"Arkansas 0301, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-138600,3434,102652,0,0,0,40967,,,,AR83-SF,NAD83 / Arkansas South (ftUS),NAD_1983_StatePlane_Arkansas_South_FIPS_0302_Feet,,,,,,,,"Arkansas 0302, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-138700,3435,102671,0,0,0,82075,,,,IL83-EF,NAD83 / Illinois East (ftUS),NAD_1983_StatePlane_Illinois_East_FIPS_1201_Feet,,,,,,,,"Illinois 1201, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-138800,3436,102672,0,0,0,82078,,,,IL83-WF,NAD83 / Illinois West (ftUS),NAD_1983_StatePlane_Illinois_West_FIPS_1202_Feet,,,,,,,,"Illinois 1202, Western Zone (1983, US Survey feet)",,,,,0,0,0
-138900,3437,102710,0,0,0,82150,,,,NH83F,NAD83 / New Hampshire (ftUS),NAD_1983_StatePlane_New_Hampshire_FIPS_2800_Feet,,,,,,,,"New Hampshire 2800 (1983, US Survey feet)",,,,,0,0,0
-139000,3438,102730,0,0,0,82200,,,,RI83F,NAD83 / Rhode Island (ftUS),NAD_1983_StatePlane_Rhode_Island_FIPS_3800_Feet,,,,,,,,"Rhode Island 3800 (1983, US Survey feet)",,,,,0,0,0
+138500,3433,102651,0,0,0,40964,,AR83-NF,NAD83.AR-N.USFt,AR83-NF,NAD83 / Arkansas North (ftUS),NAD_1983_StatePlane_Arkansas_North_FIPS_0301_Feet,,,,,,,,"Arkansas 0301, Northern Zone (1983, US Survey feet)",,,,,0,0,0
+138600,3434,102652,0,0,0,40967,,AR83-SF,NAD83.AR-S.USFt,AR83-SF,NAD83 / Arkansas South (ftUS),NAD_1983_StatePlane_Arkansas_South_FIPS_0302_Feet,,,,,,,,"Arkansas 0302, Southern Zone (1983, US Survey feet)",,,,,0,0,0
+138700,3435,102671,0,0,0,82075,,IL83-EF,NAD83.IL-E.USFt,IL83-EF,NAD83 / Illinois East (ftUS),NAD_1983_StatePlane_Illinois_East_FIPS_1201_Feet,,,,,,,,"Illinois 1201, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
+138800,3436,102672,0,0,0,82078,,IL83-WF,NAD83.IL-W.USFt,IL83-WF,NAD83 / Illinois West (ftUS),NAD_1983_StatePlane_Illinois_West_FIPS_1202_Feet,,,,,,,,"Illinois 1202, Western Zone (1983, US Survey feet)",,,,,0,0,0
+138900,3437,102710,0,0,0,82150,,NH83F,NAD83.NH.USFt,NH83F,NAD83 / New Hampshire (ftUS),NAD_1983_StatePlane_New_Hampshire_FIPS_2800_Feet,,,,,,,,"New Hampshire 2800 (1983, US Survey feet)",,,,,0,0,0
+139000,3438,102730,0,0,0,82200,,RI83F,NAD83.RI.USFt,RI83F,NAD83 / Rhode Island (ftUS),NAD_1983_StatePlane_Rhode_Island_FIPS_3800_Feet,,,,,,,,"Rhode Island 3800 (1983, US Survey feet)",,,,,0,0,0
 139100,3439,3439,3439,0,0,0,,PSD93.UTM-39N,PSD93.UTM-39N,PSD93.UTM-39N,PSD93 / UTM zone 39N,PDO_1993_UTM_Zone_39N,PSD93 / UTM zone 39N,,,PSD93 / UTM zone 39N,,,,,,,,,0,0,0
 139200,3440,3440,3440,0,0,0,,PSD93.UTM-40N,PSD93.UTM-40N,PSD93.UTM-40N,PSD93 / UTM zone 40N,PDO_1993_UTM_Zone_40N,PSD93 / UTM zone 40N,,,PSD93 / UTM zone 40N,,,,,,,,,0,0,0
 139250,3441,0,0,0,0,0,0,ARHP-NF,,HARN/AR.AR-NF,NAD83(HARN) / Arkansas North (ftUS),,,,,,,,,,,,,,,,
@@ -1401,24 +1392,23 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 139253,3444,0,0,0,0,0,0,ILHP-WF,,HARN/IL.IL-WF,NAD83(HARN) / Illinois West (ftUS),,,,,,,,,,,,,,,,
 139254,3445,0,0,0,0,0,0,NHHPF,,HARN/NE.NHF,NAD83(HARN) / New Hampshire (ftUS),,,,,,,,,,,,,,,,
 139255,3446,0,0,0,0,0,0,RIHPF,,HARN/NE.RIF,NAD83(HARN) / Rhode Island (ftUS),,,,,,,,,,,,,,,,
-139300,3451,102681,0,0,0,41039,,LA83-NF,,LA83-NF,NAD83 / Louisiana North (ftUS),NAD_1983_StatePlane_Louisiana_North_FIPS_1701_Feet,,,,,,,,"Louisiana 1701, Northern Zone (1983, US Survey feet)",,,,,,,
-139400,3452,102682,,,,41042,,LA83-SF,,LA83-SF-MOD,NAD83 / Louisiana South (ftUS),NAD_1983_StatePlane_Louisiana_South_FIPS_1701_Feet,,,,,,,,"Louisiana 1702, Southern Zone (1983, US Survey feet)",,,,Can't see any difference between LA83-SF and LA83-SF-MOD,,,
+139300,3451,102681,0,0,0,41039,,LA83-NF,NAD83.LA-N.USFt,LA83-NF,NAD83 / Louisiana North (ftUS),NAD_1983_StatePlane_Louisiana_North_FIPS_1701_Feet,,,,,,,,"Louisiana 1701, Northern Zone (1983, US Survey feet)",,,,,,,
+139400,3452,102682,0,,,41042,,LA83-SF,NAD83.LA-S.USFt,LA83-SF-MOD,NAD83 / Louisiana South (ftUS),NAD_1983_StatePlane_Louisiana_South_FIPS_1702_Feet,,,,,,,,"Louisiana 1702, Southern Zone (1983, US Survey feet)",,,,Can't see any difference between LA83-SF and LA83-SF-MOD,,,
 139500,3453,,,,,41045,,LA83-OF,,LA83-OF,NAD83 / Louisiana Offshore (ftUS),,,,,,,,,"Louisiana 1703, Offshore Zone (1983, US Survey feet)",,,,,,,
-139600,3454,102734,,,,41135,,SD83-NF,,SD83-NF,NAD83 / South Dakota North (ftUS),NAD_1983_StatePlane_South_Dakota_North_FIPS_4001_Feet,,,,,,,,"South Dakota 4001, Northern Zone (1983, US Survey feet)",,,,,,,
-139700,3455,102735,,,,41138,,SD83-SF,,SD83-SF,NAD83 / South Dakota South (ftUS),NAD_1983_StatePlane_South_Dakota_South_FIPS_4001_Feet,,,,,,,,"South Dakota 4002, Southern Zone (1983, US Survey feet)",,,,,,,
+139600,3454,102734,,,,41135,,SD83-NF,NAD83.SD-N.USFt,SD83-NF,NAD83 / South Dakota North (ftUS),NAD_1983_StatePlane_South_Dakota_North_FIPS_4001_Feet,,,,,,,,"South Dakota 4001, Northern Zone (1983, US Survey feet)",,,,,,,
+139700,3455,102735,0,0,0,41138,,SD83-SF,NAD83.SD-S.USFt,SD83-SF,NAD83 / South Dakota South (ftUS),NAD_1983_StatePlane_South_Dakota_South_FIPS_4002_Feet,,,,,,,,"South Dakota 4002, Southern Zone (1983, US Survey feet)",,,,,,,
 139800,3456,,,,,,,LAHP-NF,,HARN/LA.LA-NF,NAD83(HARN) / Louisiana North (ftUS),,,,,,,,,,,,,,,,
 139900,3457,,,,,,,LAHP-SF,,HARN/LA.LA-SF,NAD83(HARN) / Louisiana South (ftUS),,,,,,,,,,,,,,,,
 140000,3458,,,,,,,SDHP-NF,,HARN/SD.SD-NF,NAD83(HARN) / South Dakota North (ftUS),,,,,,,,,,,,,,,,
 140100,3459,,,,,,,SDHP-SF,,HARN/SD.SD-SF,NAD83(HARN) / South Dakota South (ftUS),,,,,,,,,,,,,,,,
-140200,3460,,,,,,,FIJI-MG,,FIJI-MG,Fiji 1986 / Fiji Map Grid,,,,,,,,,,,,,,,,
-140300,3560,102742,,,,,,UT83-NF,,UT83-NF,NAD83 / Utah North (ftUS),NAD_1983_StatePlane_Utah_North_FIPS_4301_Feet,,,,,,,,,,,,,,,
+140300,3560,102742,,,,41159,,UT83-NF,NAD83.UT-N.USFt,UT83-NF,NAD83 / Utah North (ftUS),NAD_1983_StatePlane_Utah_North_FIPS_4301_Feet,,,,,,,,"Utah 4301, Northern Zone (1983, US Survey feet)",,,,,,,
 140400,3561,3561,3561,0,0,0,,OLDHI.Hawaii-1,OldHawaiian.HI-1,OLDHI.Hawaii-1,Old Hawaiian / Hawaii zone 1,Old_Hawaiian_StatePlane_Hawaii_1_FIPS_5101,Old Hawaiian / Hawaii zone 1,,,Old Hawaiian / Hawaii zone 1,,,,,,,,,0,0,0
 140500,3562,3562,3562,0,0,0,,OLDHI.Hawaii-2,OldHawaiian.HI-2,OLDHI.Hawaii-2,Old Hawaiian / Hawaii zone 2,Old_Hawaiian_StatePlane_Hawaii_2_FIPS_5102,Old Hawaiian / Hawaii zone 2,,,Old Hawaiian / Hawaii zone 2,,,,,,,,,0,0,0
 140600,3563,3563,3563,0,0,0,,OLDHI.Hawaii-3,OldHawaiian.HI-3,OLDHI.Hawaii-3,Old Hawaiian / Hawaii zone 3,Old_Hawaiian_StatePlane_Hawaii_3_FIPS_5103,Old Hawaiian / Hawaii zone 3,,,Old Hawaiian / Hawaii zone 3,,,,,,,,,0,0,0
 140700,3564,3564,3564,0,0,0,,OLDHI.Hawaii-4,OldHawaiian.HI-4,OLDHI.Hawaii-4,Old Hawaiian / Hawaii zone 4,Old_Hawaiian_StatePlane_Hawaii_4_FIPS_5104,Old Hawaiian / Hawaii zone 4,,,Old Hawaiian / Hawaii zone 4,,,,,,,,,0,0,0
 140800,3565,3565,3565,0,0,0,,OLDHI.Hawaii-5,OldHawaiian.HI-5,OLDHI.Hawaii-5,Old Hawaiian / Hawaii zone 5,Old_Hawaiian_StatePlane_Hawaii_5_FIPS_5105,Old Hawaiian / Hawaii zone 5,,,Old Hawaiian / Hawaii zone 5,,,,,,,,,0,0,0
-140900,3566,102743,,,,,,UT83-CF,,UT83-CF,NAD83 / Utah Central (ftUS),NAD_1983_StatePlane_Utah_Central_FIPS_4302_Feet,,,,,,,,,,,,,,,
-141000,3567,102744,,,,,,UT83-SF,,UT83-SF,NAD83 / Utah South (ftUS),NAD_1983_StatePlane_Utah_South_FIPS_4303_Feet,,,,,,,,,,,,,,,
+140900,3566,102743,,,,41163,,UT83-CF,NAD83.UT-C.USFt,UT83-CF,NAD83 / Utah Central (ftUS),NAD_1983_StatePlane_Utah_Central_FIPS_4302_Feet,,,,,,,,"Utah 4302, Central Zone (1983, US Survey feet)",,,,,,,
+141000,3567,102744,,,,41167,,UT83-SF,NAD83.UT-S.USFt,UT83-SF,NAD83 / Utah South (ftUS),NAD_1983_StatePlane_Utah_South_FIPS_4303_Feet,,,,,,,,"Utah 4303, Southern Zone (1983, US Survey feet)",,,,,,,
 141100,3568,,,,,,,UTHP-NF,,HARN/UT.UT-NF,NAD83(HARN) / Utah North (ftUS),,,,,,,,,,,,,,,,
 141200,3569,,,,,,,UTHP-CF,,HARN/UT.UT-CF,NAD83(HARN) / Utah Central (ftUS),,,,,,,,,,,,,,,,
 141300,3570,,,,,,,UTHP-SF,,HARN/UT.UT-SF,NAD83(HARN) / Utah South (ftUS),,,,,,,,,,,,,,,,
@@ -1440,7 +1430,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 142900,3756,,,,,,,WYHP-ECF,,HARN/WY.WY-ECF,NAD83(HARN) / Wyoming East Central (ftUS),,,,,,,,,,,,,,,,
 143000,3757,,,,,,,WYHP-WCF,,HARN/WY.WY-WCF,NAD83(HARN) / Wyoming West Central (ftUS),,,,,,,,,,,,,,,,
 143100,3758,,,,,,,WYHP-WF,,HARN/WY.WY-WF,NAD83(HARN) / Wyoming West (ftUS),,,,,,,,,,,,,,,,
-143200,3759,,,,,,,HI83-3F,,HI83-3F,NAD83 / Hawaii zone 3 (ftUS),,,,,,,,,,,,,,,,
+143200,3759,102663,,,,82055,,HI83-3F,NAD83.HI-3.USFt,HI83-3F,NAD83 / Hawaii zone 3 (ftUS),NAD_1983_StatePlane_Hawaii_3_FIPS_5103_Feet,,,,,,,,,,,,,,,
 143300,3760,,,,,,,HIHP-3F,,HARN/HI.HI-3F,NAD83(HARN) / Hawaii zone 3 (ftUS),,,,,,,,,,,,,,,,
 143400,3770,102090,,,,,,,,BNG2000,BDA2000 / Bermuda 2000 National Grid,Bermuda_2000_National_Grid,,,,,,,,,,,,,,,
 143510,3797,,,,,,,,,NAD27.MTQ/Lambert,NAD27 / MTQ Lambert,,,,,,,,,,,,,,,,
@@ -1613,7 +1603,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 158600,21500,21500,21500,0,0,0,,Belge50.Lambert50,Belge50.BelgeLambert50,BELGE-50/a,Belge 1950 (Brussels) / Belge Lambert 50,Belge_Lambert_1950,Belge 1950 (Brussels) / Belge Lambert 50,,,Belge 1950 (Brussels) / Belge Lambert 50,,,,,,,,,0,0,0
 158700,21780,21780,0,0,0,352256,,CH1903.LV03C,Bern1938.LV03C,CH1903.LV03C/01,Bern 1898 (Bern) / LV03C,Bern_1898_Bern_LV03C,,,,Bern 1898 (Bern) / LV03C,,,,Liechtenstein National System,,,,,0,0,0
 158800,21781,21781,0,0,0,352257,,CH1903.LV03,CH1903.LV03,CH1903/GSB.LV03-M|CH1903.LV03/01,CH1903 / LV03,CH1903_LV03,,,,CH1903 / LV03,,,,Swiss National System,,,,,0,0,0
-158810,21782,21782,0,0,0,0,,,,CH1903/GSB.LV03-C,CH1903 / LV03C-G,,,,,,,,,Swiss National System,,,,,0,0,0
+158810,21782,21782,0,0,0,0,,,,CH1903/GSB.LV03-C,CH1903 / LV03C-G,,,,,,,,,,,,,,0,0,0
 158900,0,21817,21817,0,0,0,,BOGOTA.UTM-17N,Bogota.UTM-17N,Bogota.UTM-17N,,Bogota_UTM_Zone_17N,Bogota 1975 / UTM zone 17N,,,Bogota 1975 / UTM zone 17N,,,,,,,,,0,0,0
 159000,21818,21818,21818,0,0,0,,BOGOTA.UTM-18N,Bogota75.UTM-18N,Bogota.UTM-18N,Bogota 1975 / UTM zone 18N,Bogota_UTM_Zone_18N,Bogota 1975 / UTM zone 18N,,,Bogota 1975 / UTM zone 18N,,,,,,,,,0,0,0
 159100,21896,21891,21891,0,0,0,,BOGOTA.Colombia-W,Bogota75.Colombia-West,BOGOTA.Colombia-W|COL-O-B,Bogota 1975 / Colombia West zone,Colombia_West_Zone,Bogota 1975 / Colombia West zone,,,Bogota 1975 / Colombia West zone,,,,,,,,"Duplicate names caused by EPSG deprecation, ID: 969.  Axis direction was given as the reason.",0,0,0
@@ -1690,7 +1680,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 166200,23095,23095,23095,0,0,0,,Europ50.TM-5NE,ED50.TM-5NE,Europ50.TM-5NE,ED50 / TM 5 NE,ED_1950_TM_5_NE,ED50 / TM 5 NE,,,,,,,,,,,,0,0,0
 166300,23239,23239,23239,0,0,0,,Fahud.UTM-39N,Fahud.UTM-39N,Fahud_1.UTM-39N,Fahud / UTM zone 39N,Fahud_UTM_Zone_39N,Fahud / UTM zone 39N,,,Fahud / UTM zone 39N,,,,,,,,,0,0,0
 166400,23240,23240,23240,0,0,0,,Fahud.UTM-40N,Fahud.UTM-40N,Fahud_1.UTM-40N,Fahud / UTM zone 40N,Fahud_UTM_Zone_40N,Fahud / UTM zone 40N,,,Fahud / UTM zone 40N,,,,,,,,,0,0,0
-166500,23433,23433,0,0,0,0,,GarouaIgn.UTM-33N,GarouaIgn.UTM-33N,,Garoua / UTM zone 33N,Garoua_UTM_Zone_33N,,,,Garoua / UTM zone 33N,,,,,,,,,0,0,0
 166600,23700,23700,23700,0,0,0,,HUN-EOV72-7P,Hungarian72.EOV,HUN-EOV72-7P,HD72 / EOV,Hungarian_1972_Egyseges_Orszagos_Vetuleti,HD72 / EOV,,,HD72 / EOV,,,,,,,,,0,0,0
 166700,23846,23846,23846,0,0,0,,Indonesian74.UTM-46N,Indonesian74.UTM-46N,Indonesian1974.UTM-46N,ID74 / UTM zone 46N,Indonesian_1974_UTM_Zone_46N,ID74 / UTM zone 46N,,,ID74 / UTM zone 46N,,,,,,,,,0,0,0
 166800,23847,23847,23847,0,0,0,,Indonesian74.UTM-47N,Indonesian74.UTM-47N,Indonesian1974.UTM-47N,ID74 / UTM zone 47N,Indonesian_1974_UTM_Zone_47N,ID74 / UTM zone 47N,,,ID74 / UTM zone 47N,,,,,,,,,0,0,0
@@ -1810,8 +1799,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 178200,26392,26392,26392,0,0,0,,Minna.NigeriaMid,Minna.NigeriaMid,Minna.NigeriaMid|NGRA-M,Minna / Nigeria Mid Belt,Nigeria_Mid_Belt,Minna / Nigeria Mid Belt,,,Minna / Nigeria Mid Belt,,,,,,,,,0,0,0
 178300,26393,26393,26393,0,0,0,,Minna.NigeriaEast,Minna.NigeriaEast,Minna.NigeriaEast|NGRA-E,Minna / Nigeria East Belt,Nigeria_East_Belt,Minna / Nigeria East Belt,,,Minna / Nigeria East Belt,,,,,,,,,0,0,0
 178400,26432,26432,26432,0,0,0,,Mhast.UTM-32S,Mhast.UTM-32S,Mhast/gc.UTM-32S,Mhast / UTM zone 32S,Mhast_UTM_Zone_32S,Mhast / UTM zone 32S,,,Mhast / UTM zone 32S,,,,,,,,,0,0,0
-178500,26591,26591,26591,0,0,0,,MonteMario.Italy-1,MonteMario.Italy-1,MonteMario_1.Italy-1,Monte Mario (Rome) / Italy zone 1,Monte_Mario_Rome_Italy_1,Monte Mario (Rome) / Italy zone 1,,,Monte Mario (Rome) / Italy zone 1,,,,,,,,,0,0,0
-178600,26592,26592,26592,0,0,0,,MonteMario.Italy-2,MonteMario.Italy-2,MonteMario_1.Italy-2,Monte Mario (Rome) / Italy zone 2,Monte_Mario_Rome_Italy_2,Monte Mario (Rome) / Italy zone 2,,,Monte Mario (Rome) / Italy zone 2,,,,,,,,,0,0,0
 178700,26632,26632,26632,0,0,0,,Mporaloko.UTM-32N,Mporaloko.UTM-32N,Mporaloko_1.UTM-32N,M'poraloko / UTM zone 32N,Mporaloko_UTM_Zone_32N,M'poraloko / UTM zone 32N,,,M'poraloko / UTM zone 32N,,,,,,,,,0,0,0
 178800,26692,26692,26692,0,0,0,,Mporaloko.UTM-32S,Mporaloko.UTM-32S,Mporaloko_1.UTM-32S,M'poraloko / UTM zone 32S,Mporaloko_UTM_Zone_32S,M'poraloko / UTM zone 32S,,,M'poraloko / UTM zone 32S,,,,,,,,,0,0,0
 178900,26701,102124,0,0,0,0,,UTM27-1N,NAD27.UTM-1N,UTM27-1|UTM27-1N,NAD27 / UTM zone 1N,NAD_1927_UTM_Zone_1N,,,,,,,,,,,,,0,0,0
@@ -2052,7 +2039,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 201600,27397,27397,27397,0,0,0,,NGO48.Norway-VII,NGO48.Norway-VII,NGO-VII-MOD,NGO 1948 (Oslo) / NGO zone VII,NGO_1948_Oslo_Norway_Zone_7,NGO 1948 (Oslo) / NGO zone VII,,,NGO 1948 (Oslo) / NGO zone VII,,,,,,,,,0,0,0
 201700,27398,27398,27398,0,0,0,,NGO48.Norway-VIII,NGO48.Norway-VIII,NGO-VIII,NGO 1948 (Oslo) / NGO zone VIII,NGO_1948_Oslo_Norway_Zone_8,NGO 1948 (Oslo) / NGO zone VIII,,,NGO 1948 (Oslo) / NGO zone VIII,,,,,,,,,0,0,0
 201800,27429,27429,27429,0,0,0,,Datum73.UTM-29N,Datum73.UTM-29N,Datum73.UTM-29N,Datum 73 / UTM zone 29N,Datum_73_UTM_Zone_29N,Datum 73 / UTM zone 29N,,,Datum 73 / UTM zone 29N,,,,,,,,,0,0,0
-201900,27493,0,27492,0,0,82176,,Datum73.ModPortgGrd,Datum73.ModPortgGrd,Datum73.ModPortgGrd,Datum 73 / Modified Portuguese Grid,,Datum 73 / Modified Portuguese Grid,,,Datum 73 / Modified Portuguese Grid,,,,Portuguese National System (D73),,,,,0,0,0
+201900,27493,102161,27492,0,0,82176,,Datum73.ModPortgGrd,Datum73.ModPortgGrd,Datum73.ModPortgGrd,Datum 73 / Modified Portuguese Grid,Datum_73_Hayford_Gauss_IPCC,Datum 73 / Modified Portuguese Grid,,,Datum 73 / Modified Portuguese Grid,,,,Portuguese National System (D73),,,,,0,0,0
 202000,27500,27500,0,0,0,0,,ATF.NordDeGuerre,ATF.NordDeDuerre,,ATF (Paris) / Nord de Guerre,Nord_de_Guerre,,,,ATF (Paris) / Nord de Guerre,,,,,,,,,0,0,0
 202100,27561,0,0,0,0,41013,,NTF.Lambert-1,NTF.Lambert-1,NTF.Lambert-1-ClrkIGN,NTF (Paris) / Lambert Nord France,,,,,NTF (Paris) / Lambert Nord France,,,,French Lambert I Nord,,,,,0,0,0
 202200,27562,0,0,0,0,41015,,NTF.Lambert-2,NTF.Lambert-2,NTF.Lambert-2-ClrkIGN,NTF (Paris) / Lambert Centre France,,,,,NTF (Paris) / Lambert Centre France,,,,French Lambert II Centre,,,,,0,0,0
@@ -2186,14 +2173,13 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 215000,30491,30491,30491,0,0,0,,Voirol1875.NordAlgerie,Voirol1875.NordAlgerie,V1875.NordAlgerie,Voirol 1875 / Nord Algerie (ancienne),Nord_Algerie_Ancienne,Voirol 1875 / Nord Algerie (ancienne),,,Voirol 1875 / Nord Algerie (ancienne),,,,,,,,,0,0,0
 215100,30492,30492,30492,0,0,0,,Voirol1875.Sud Algerie,Voirol1875.Sud Algerie,Voirol1875_1.SudAlgerie,Voirol 1875 / Sud Algerie (ancienne),Sud_Algerie_Ancienne,Voirol 1875 / Sud Algerie (ancienne),,,Voirol 1875 / Sud Algerie (ancienne),,,,,,,,,0,0,0
 215200,30493,30493,0,0,0,0,,Voirol1879.NordAlgerie,Voirol1879.NordAlgerie,,Voirol 1879 / Nord Algerie (ancienne),Voirol_1879_Nord_Algerie_Ancienne,,,,,,,,,,,,,0,0,0
-215300,30494,30494,0,0,0,0,,Voirol1875.NordAlgerie,Voirol1875.NordAlgerie,V1875.NordAlgerie,Voirol 1879 / Sud Algerie (ancienne),Voirol_1879_Sud_Algerie_Ancienne,,,,,,,,,,,,,0,0,0
 215400,30729,30729,30729,0,0,0,,NordSahara59.UTM-29N,NordSahara59.UTM-29N,NordSahara1959.UTM-29N,Nord Sahara 1959 / UTM zone 29N,Nord_Sahara_1959_UTM_Zone_29N,Nord Sahara 1959 / UTM zone 29N,,,Nord Sahara 1959 / UTM zone 29N,,,,,,,,,0,0,0
 215500,30730,30730,30730,0,0,0,,NordSahara59.UTM-30N,NordSahara59.UTM-30N,NordSahara1959.UTM-30N,Nord Sahara 1959 / UTM zone 30N,Nord_Sahara_1959_UTM_Zone_30N,Nord Sahara 1959 / UTM zone 30N,,,Nord Sahara 1959 / UTM zone 30N,,,,,,,,,0,0,0
 215600,30731,30731,30731,0,0,0,,NordSahara59.UTM-31N,NordSahara59.UTM-31N,NordSahara1959.UTM-31N,Nord Sahara 1959 / UTM zone 31N,Nord_Sahara_1959_UTM_Zone_31N,Nord Sahara 1959 / UTM zone 31N,,,Nord Sahara 1959 / UTM zone 31N,,,,,,,,,0,0,0
 215700,30732,30732,30732,0,0,0,,NordSahara59.UTM-32N,NordSahara59.UTM-32N,NordSahara1959.UTM-32N,Nord Sahara 1959 / UTM zone 32N,Nord_Sahara_1959_UTM_Zone_32N,Nord Sahara 1959 / UTM zone 32N,,,Nord Sahara 1959 / UTM zone 32N,,,,,,,,,0,0,0
 215800,30791,0,30791,0,0,0,,NordSahara59.UnifieN,NordSahara59.UnifieN,NordSahara1959.UnifieN,Nord Sahara 1959 / Voirol Unifie Nord,,Nord Sahara 1959 / Voirol Unifie Nord,,,Nord Sahara 1959 / Voirol Unifie Nord,,,,,,,,,0,0,0
 215900,30792,0,30792,0,0,0,,NordSahara59.UnifieS,NordSahara59.UnifieS,NordSahara1959.UnifieS,Nord Sahara 1959 / Voirol Unifie Sud,,Nord Sahara 1959 / Voirol Unifie Sud,,,Nord Sahara 1959 / Voirol Unifie Sud,,,,,,,,,0,0,0
-216000,30800,30800,30800,0,0,0,,Stockholm38.RT-25V,Stockholm38.RT-25V,,RT38 2.5 gon W,Swedish_National_Grid,RT38 2.5 gon W,,,RT38 2.5 gon W,,,,,,,,"Deprecated by EPSG, ID: 513",0,0,0
+216000,30800,30800,30800,0,0,0,,Stockholm38.RT-25V,Stockholm38.RT-25W,,RT38 2.5 gon W,Swedish_National_Grid,RT38 2.5 gon W,,,RT38 2.5 gon W,,,,,,,,"Deprecated by EPSG, ID: 513",0,0,0
 216100,31028,31028,31028,0,0,0,,Yoff.UTM-28N,Yoff.UTM-28N,,Yoff / UTM zone 28N,Yoff_1972_UTM_Zone_28N,Yoff / UTM zone 28N,,,Yoff / UTM zone 28N,,,,,,,,,0,0,0
 216200,31121,31121,31121,0,0,0,,Zanderij.UTM-21N,Zanderij.UTM-21N,Zanderij.UTM-21N|SUR,Zanderij / UTM zone 21N,Zanderij_1972_UTM_Zone_21N,Zanderij / UTM zone 21N,,,Zanderij / UTM zone 21N,,,,,,,,,0,0,0
 216300,31154,31154,31154,0,0,0,,Zanderij.TM-54NW,Zanderij.TM-54NW,Zanderij.TM-54NW,Zanderij / TM 54 NW,Zanderij_TM_54_NW,Zanderij / TM 54 NW,,,Zanderij / TM 54 NW,,,,,,,,,0,0,0
@@ -2216,20 +2202,16 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 217600,31276,31276,31276,0,0,0,,MGI.Balkans-6,MGI.Balkans-6,MGI/gc.Balkans-6,MGI / Balkans zone 6,MGI_Balkans_6,MGI / Balkans zone 6,,,MGI / Balkans zone 6,,,,,,,,,0,0,0
 217700,31277,31277,31277,0,0,0,,MGI.Balkans-7,MGI.Balkans-7,MGI/gc.Balkans-7,MGI / Balkans zone 7,MGI_Balkans_7,MGI / Balkans zone 7,,,MGI / Balkans zone 7,,,,,,,,,0,0,0
 217800,31279,31278,31278,0,0,0,,MGI.Balkans-8,MGI.Balkans-8,MGI/gc.Balkans-8,MGI / Balkans zone 8,MGI_Balkans_8,MGI / Balkans zone 8,,,MGI / Balkans zone 8,,,,,,,,,0,0,0
-217900,31281,31281,31291,0,0,0,,,MGI.AustriaWest,MGI-AT/F.AUT-West,MGI (Ferro) / Austria West Zone,Austria_West_Zone,MGI (Ferro) / Austria West Zone,,,MGI (Ferro) / Austria West Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
-218000,31282,31282,31292,0,0,0,,,MGI.AustriaCentral,MGI-AT/F.AUT-Central,MGI (Ferro) / Austria Central Zone,Austria_Central_Zone,MGI (Ferro) / Austria Central Zone,,,MGI (Ferro) / Austria Central Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
-218100,31283,31283,31293,0,0,0,,,MGI.AustriaEast,MGI-AT/F.AUT-East,MGI (Ferro) / Austria East Zone,Austria_East_Zone,MGI (Ferro) / Austria East Zone,,,MGI (Ferro) / Austria East Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
+217900,31281,31281,31281,0,0,0,,MGI.AustriaWest,MGI.AustriaWest,MGI-AT/F.AUT-West,MGI (Ferro) / Austria West Zone,Austria_West_Zone,MGI (Ferro) / Austria West Zone,,,MGI (Ferro) / Austria West Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
+218000,31282,31282,31282,0,0,0,,MGI.AustriaCentral,MGI.AustriaCentral,MGI-AT/F.AUT-Central,MGI (Ferro) / Austria Central Zone,Austria_Central_Zone,MGI (Ferro) / Austria Central Zone,,,MGI (Ferro) / Austria Central Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
+218100,31283,31283,31283,0,0,0,,MGI.AustriaEast,MGI.AustriaEast,MGI-AT/F.AUT-East,MGI (Ferro) / Austria East Zone,Austria_East_Zone,MGI (Ferro) / Austria East Zone,,,MGI (Ferro) / Austria East Zone,,,,,,,Oracle names purposely left out; Oracle WKT uses the same name for two different systems.,,0,0,0
 218200,31284,31284,31294,0,0,0,,MGI.M28,MGI.M28,MGI-AT.M28,MGI / Austria M28,MGI_M28,MGI / M28,,,MGI / M28,,,,,,,,,0,0,0
 218300,31285,31285,31295,0,0,0,,MGI.M31,MGI.M31,MGI-AT.M31,MGI / Austria M31,MGI_M31,MGI / M31,,,MGI / M31,,,,,,,,,0,0,0
 218400,31286,31286,31296,0,0,0,,MGI.M34,MGI.M34,MGI-AT.M34,MGI / Austria M34,MGI_M34,MGI / M34,,,MGI / M34,,,,,,,,,0,0,0
-218500,31287,31287,31297,0,0,0,,,,MGI/gc.AustriaLambert,MGI / Austria Lambert,MGI_Austria_Lambert,MGI / Austria Lambert,,,MGI / Austria Lambert,,,,,,,,,0,0,0
 218600,31288,0,31288,0,0,0,,,,MGI-AT/F.M28,MGI (Ferro) / M28,,MGI (Ferro) / M28,,,,,,,,,,,,0,0,0
 218700,31289,0,31289,0,0,0,,,,MGI-AT/F.M31,MGI (Ferro) / M31,,MGI (Ferro) / M31,,,,,,,,,,,,0,0,0
 218800,31290,0,31290,0,0,0,,,,MGI-AT/F.M34,MGI (Ferro) / M34,,MGI (Ferro) / M34,,,,,,,,,,,,0,0,0
-218900,31291,31291,0,0,0,0,,MGI.AustriaWest,MGI.AustriaWest,,MGI (Ferro) / Austria West Zone,Austria_West_Zone,,,,MGI (Ferro) / Austria West Zone,,,,,,,,Depracted ID:74,0,0,0
-219000,31292,31292,0,0,0,0,,MGI.AustriaCentral,MGI.AustriaCentral,,MGI (Ferro) / Austria Central Zone,Austria_Central_Zone,,,,MGI (Ferro) / Austria Central Zone,,,,,,,,Depracted ID:75,0,0,0
-219100,31293,31293,0,0,0,0,,MGI.AustriaEast,MGI.AustriaEast,,MGI (Ferro) / Austria East Zone,Austria_East_Zone,,,,MGI (Ferro) / Austria East Zone,,,,,,,,Depracted ID:76,0,0,0
-219200,31297,31297,0,0,0,0,,MGI.AustriaLambert,MGI.AustriaLambert,MGI/gc.AustriaLambert,MGI / Austria Lambert,MGI_Austria_Lambert,,,,MGI / Austria Lambert,,,,,,,,Deprecated,0,0,0
+219200,31297,31297,31297,0,0,0,,MGI.AustriaLambert,MGI.AustriaLambert,MGI/gc.AustriaLambert,MGI / Austria Lambert,MGI_Austria_Lambert,MGI / Austria Lambert,,,MGI / Austria Lambert,,,,,,,,Deprecated,0,0,0
 219300,31300,0,31300,0,0,0,,Belge72.Lambert72,Belge72.Lambert72,Belge72.Lambert72,Belge 1972 / Belge Lambert 72,,Belge 1972 / Belge Lambert 72,,,Belge 1972 / Belge Lambert 72,,,,,,,,,0,0,0
 219400,31370,31370,31370,0,0,0,,Belge72.Lambert72A,Belge72.Lambert72A,Belge72.Lambert72A,Belge 1972 / Belgian Lambert 72,Belge_Lambert_1972,Belge 1972 / Belgian Lambert 72,,,Belge 1972 / Belgian Lambert 72,,,,,,,,,0,0,0
 219500,0,31461,31461,0,0,0,,,,DHDN.Gauss3d-1,,DHDN_3_Degree_Gauss_Zone_1,DHDN / 3-degree Gauss zone 1,,,DHDN / 3-degree Gauss zone 1,,,,,,,,Deprecated by EPSG as the zone is not used.,0,0,0
@@ -2243,8 +2225,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 220300,3844,31700,31700,0,0,0,,DealulPiscului70.Stero,DealulPiscului70.Stereo70,Pulkovo42/58.Stereo70,Pulkovo 1942(58) / Stereo70,Stereo_70,Dealul Piscului 1970/ Stereo 70,,,Dealul Piscului 1970/ Stereo 70,,,,,,,,,0,0,0
 220400,31838,31838,31838,0,0,0,,NGN.UTM-38N,NGN.UTM-38N,NGN.UTM-38N,NGN / UTM zone 38N,NGN_UTM_Zone_38N,NGN / UTM zone 38N,,,NGN / UTM zone 38N,,,,,,,,,0,0,0
 220500,31839,31839,31839,0,0,0,,NGN.UTM-39N,NGN.UTM-39N,NGN.UTM-39N,NGN / UTM zone 39N,NGN_UTM_Zone_39N,NGN / UTM zone 39N,,,NGN / UTM zone 39N,,,,,,,,,0,0,0
-220600,31900,31900,31900,0,0,0,,,,,KUDAMS / KTM,,KUDAMS / KTM,,,KUDAMS / KTM,,,,,,,,"Depreacted by EPSG, error in scale factor parameter/",0,0,0
-220700,31901,31901,0,0,0,0,,KuwaitUtility.KTM,KuwaitUtility.KTM,KuwaitUtility.KTM,KUDAMS / KTM,KUDAMS_KTM,,,,,,,,,,,,,0,0,0
+220700,31901,31901,31901,0,0,0,,KuwaitUtility.KTM,KuwaitUtility.KTM,KuwaitUtility.KTM,KUDAMS / KTM,KUDAMS_KTM,KUDAMS / KTM,,,,,,,,,,,,0,0,0
 220800,31965,0,0,0,0,0,,SIRGAS2000.UTM-11N,SIRGAS2000.UTM-11N,SIRGAS2000.UTM-11N,SIRGAS 2000 / UTM zone 11N,,,,,,,,,,,,,,0,0,0
 220900,31966,0,0,0,0,0,,SIRGAS2000.UTM-12N,SIRGAS2000.UTM-12N,SIRGAS2000.UTM-12N,SIRGAS 2000 / UTM zone 12N,,,,,,,,,,,,,,0,0,0
 221000,31967,0,0,0,0,0,,SIRGAS2000.UTM-13N,SIRGAS2000.UTM-13N,SIRGAS2000.UTM-13N,SIRGAS 2000 / UTM zone 13N,,,,,,,,,,,,,,0,0,0
@@ -2906,11 +2887,10 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 286600,0,54051,0,0,0,0,,,,,,World_Cube,,,,,,,,,,,,,0,0,0
 286700,0,65061,0,0,0,0,,,NAD27.Guam/Polyconic,,,NAD_1927_StatePlane_Guam_FIPS_5400,,,,,,,,,,,,,0,0,0
 286800,0,65161,0,0,0,0,,,NAD83.Gaum/Polyconic,,,NAD_1983_StatePlane_Guam_FIPS_5400,,,,,,,,,,,,,0,0,0
-286900,0,65163,0,0,0,0,,,,,,NAD_1983_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
 287000,0,102001,0,0,0,0,,,NAD83.Canada/Albers,,,Canada_Albers_Equal_Area_Conic,,,,,,,,,,,,,0,0,0
 287100,0,102002,0,0,0,0,,,NAD83.Canada/Conformal,,,Canada_Lambert_Conformal_Conic,,,,,,,,,,,,,0,0,0
 287200,0,0,0,0,0,32775,,US48,NAD27.US48/Albers,US48,,,,,,,,,,Equal-Area Projection (United States),,,,,0,0,0
-287250,0,0,0,0,0,,,,,,,USA_Contiguous_Albers_Equal_Area_Conic,,,,,,,,,,,,,0,0,0
+287250,0,102003,0,0,0,,,,,,,USA_Contiguous_Albers_Equal_Area_Conic,,,,,,,,,,,,ESRI definition is referenced to NAD83.,0,0,0
 287300,0,102004,0,0,0,0,,,NAD83.US48/Conformal,,,USA_Contiguous_Lambert_Conformal_Conic,,,,,,,,,,,,,0,0,0
 287400,0,102005,0,0,0,0,,,NAD83.US48/SmplConic,,,USA_Contiguous_Equidistant_Conic,,,,,,,,,,,,,0,0,0
 287500,0,102006,0,0,0,0,,,,,,Alaska_Albers_Equal_Area_Conic,,,,,,,,,,,,,0,0,0
@@ -2966,9 +2946,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 292500,0,102077,0,0,0,0,,ISG66-56.1,AGD66.ISG-56/1,ISG_56-1-Grid,,AGD_1966_ISG_56_1,,,,,,,,,,,,,0,0,0
 292600,0,102078,0,0,0,0,,ISG66-56.2,AGD66.ISG-56/2,ISG_56-2-Grid,,AGD_1966_ISG_56_2,,,,,,,,,,,,,0,0,0
 292700,0,102079,0,0,0,0,,ISG66-56.3,AGD66.ISG-56/3,ISG66-56.3,,AGD_1966_ISG_56_3,,,,,,,,,,,,,0,0,0
-292800,0,102090,0,0,0,0,,,,,,Bermuda_2000_National_Grid,,,,,,,,,,,,,0,0,0
-292900,0,102091,0,0,0,0,,,,,,Monte_Mario_Italy_1,,,,,,,,,,,,,0,0,0
-293000,0,102092,0,0,0,0,,,,,,Monte_Mario_Italy_2,,,,,,,,,,,,,0,0,0
 293100,0,102093,0,0,0,0,,,,,,Roma_1940_Gauss_Boaga_Est,,,,,,,,,,,,,0,0,0
 293200,0,102094,0,0,0,0,,,,,,Roma_1940_Gauss_Boaga_Ovest,,,,,,,,,,,,,0,0,0
 293300,0,102095,0,0,0,0,,,,,,JAD_2001_Jamaica_Grid,,,,,,,,,,,,,0,0,0
@@ -2984,7 +2961,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 294300,0,102106,0,0,0,0,,NGO48.Norway-VI,NGO48.Norway-VI,,,NGO_1948_Norway_Zone_6,,,,,,,,,,,,,0,0,0
 294400,0,102107,0,0,0,0,,NGO48.Norway-VII,NGO48.Norway-VII,,,NGO_1948_Norway_Zone_7,,,,,,,,,,,,,0,0,0
 294500,0,102108,0,0,0,0,,NGO48.Norway-VIII,NGO48.Norway-VIII,,,NGO_1948_Norway_Zone_8,,,,,,,,,,,,,0,0,0
-294600,0,102110,0,0,0,0,,,,,,RGF_1993_Lambert_93,,,,,,,,,,,,,0,0,0
 294700,0,102111,0,0,0,0,,,,,,Chatham_Islands_1979_Map_Grid,,,,,,,,,,,,,0,0,0
 294800,0,102112,0,0,0,0,,,,,,NZGD_2000_Chatham_Island_Circuit,,,,,,,,,,,,,0,0,0
 294900,0,102114,0,0,0,0,,,OldHawaiian.UTM-4N,,,Old_Hawaiian_UTM_Zone_4N,,,,,,,,,,,,,0,0,0
@@ -2992,15 +2968,11 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 295100,0,102116,0,0,0,0,,,,,,American_Samoa_1962_UTM_Zone_2S,,,,,,,,,,,,,0,0,0
 295200,0,102117,0,0,0,0,,USAK,,USAK,,NAD_1927_Alaska_Albers_Meters,,,,,,,,,,,,,0,0,0
 295300,0,102118,0,0,0,0,,,,,,NAD_1927_Georgia_Statewide_Albers,,,,,,,,,,,,,0,0,0
-295400,0,102119,0,0,0,0,,,,,,NAD_1927_Texas_Statewide_Mapping_System,,,,,,,,,,,,,0,0,0
 295500,0,102120,0,0,0,0,,,NAD27.MichiganGeoRef.USFt,,,NAD_1927_Michigan_GeoRef_Feet_US,,,,,,,,,,,,,0,0,0
 295600,0,102121,0,0,0,0,,,NAD83.MichiganGeoRef.USFt,,,NAD_1983_Michigan_GeoRef_Feet_US,,,,,,,,,,,,,0,0,0
 295700,0,102122,0,0,0,0,,MichiganGeoRef27,NAD27.MichiganGeoRef,MI27-OB,,NAD_1927_Michigan_GeoRef_Meters,,,,,,,,,,,,,0,0,0
-295800,0,102123,0,0,0,0,,MichiganGeoRef83,NAD83.MichiganGeoRef,MI83-OB,,NAD_1983_Michigan_GeoRef_Meters,,,,,,,,,,,,,0,0,0
 295900,0,102126,0,0,0,0,,,,,,NAD_1927_UTM_Zone_59N,,,,,,,,,,,,,0,0,0
 296000,0,102127,0,0,0,0,,,,,,NAD_1927_UTM_Zone_60N,,,,,,,,,,,,,0,0,0
-296100,0,102128,0,0,0,0,,,,,,NAD_1983_UTM_Zone_1N,,,,,,,,,,,,,0,0,0
-296200,0,102129,0,0,0,0,,,,,,NAD_1983_UTM_Zone_2N,,,,,,,,,,,,,0,0,0
 296300,0,102130,0,0,0,0,,,,,,NAD_1983_UTM_Zone_59N,,,,,,,,,,,,,0,0,0
 296400,0,102131,0,0,0,0,,,,,,NAD_1983_UTM_Zone_60N,,,,,,,,,,,,,0,0,0
 296500,0,102132,0,0,0,0,,,,,,NGO_1948_UTM_Zone_32N,,,,,,,,,,,,,0,0,0
@@ -3010,31 +2982,18 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 296900,0,102136,0,0,0,0,,,,,,NGO_1948_Baerum_Kommune,,,,,,,,,,,,,0,0,0
 297000,0,102137,0,0,0,0,,,,,,NGO_1948_Bergenhalvoen,,,,,,,,,,,,,0,0,0
 297100,0,102138,0,0,0,0,,,,,,NGO_1948_Oslo_Kommune,,,,,,,,,,,,,0,0,0
-297200,0,102140,0,0,0,0,,,,,,Hong_Kong_1980_Grid,,,,,,,,,,,,,0,0,0
 297300,0,102141,0,0,0,0,,,HongKong80.UTM-49N,,,Hong_Kong_1980_UTM_Zone_49N,,,,,,,,,,,,,0,0,0
 297400,0,102142,0,0,0,0,,,HongKong80.UTM-50N,,,Hong_Kong_1980_UTM_Zone_50N,,,,,,,,,,,,,0,0,0
-297500,0,102145,0,0,0,0,,,,,,JGD_2000_UTM_Zone_51N,,,,,,,,,,,,,0,0,0
-297600,0,102146,0,0,0,0,,,,,,JGD_2000_UTM_Zone_52N,,,,,,,,,,,,,0,0,0
-297700,0,102147,0,0,0,0,,,,,,JGD_2000_UTM_Zone_53N,,,,,,,,,,,,,0,0,0
-297800,0,102148,0,0,0,0,,,,,,JGD_2000_UTM_Zone_54N,,,,,,,,,,,,,0,0,0
-297900,0,102149,0,0,0,0,,,,,,JGD_2000_UTM_Zone_55N,,,,,,,,,,,,,0,0,0
 298000,0,102150,0,0,0,0,,,,,,JGD_2000_UTM_Zone_56N,,,,,,,,,,,,,0,0,0
-298100,0,102151,0,0,0,0,,,,,,Tokyo_UTM_Zone_51N,,,,,,,,,,,,,0,0,0
-298200,0,102152,0,0,0,0,,,,,,Tokyo_UTM_Zone_52N,,,,,,,,,,,,,0,0,0
-298300,0,102153,0,0,0,0,,,,,,Tokyo_UTM_Zone_53N,,,,,,,,,,,,,0,0,0
-298400,0,102154,0,0,0,0,,,,,,Tokyo_UTM_Zone_54N,,,,,,,,,,,,,0,0,0
-298500,0,102155,0,0,0,0,,,,,,Tokyo_UTM_Zone_55N,,,,,,,,,,,,,0,0,0
 298600,0,102156,0,0,0,0,,,,,,Tokyo_UTM_Zone_56N,,,,,,,,,,,,,0,0,0
 298700,0,102158,0,0,0,0,,,,,,Jordan_JTM,,,,,,,,,,,,,0,0,0
 298800,0,102159,0,0,0,0,,,,,,Observatorio_Meteorologico_1965_Macau_Grid,,,,,,,,,,,,,0,0,0
 298900,0,102160,0,0,0,0,,,Datum73.HayfordGauss/IGeoE,,,Datum_73_Hayford_Gauss_IGeoE,,,,,,,,,,,,,0,0,0
-299000,0,102161,0,0,0,0,,,Datum73.HayfordGauss/IPCC,Datum73.ModPortgGrd,,Datum_73_Hayford_Gauss_IPCC,,,,,,,,,,,,,0,0,0
 299100,0,102162,0,0,0,0,,,,,,Graciosa_Base_SW_1948_UTM_Zone_26N,,,,,,,,,,,,,0,0,0
 299200,0,102163,0,0,0,0,,,Lisboa/Bessel.LisbonBonne,,,Lisboa_Bessel_Bonne,,,,,,,,,,,,,0,0,0
 299300,0,102164,0,0,0,0,,,Lisboa/Hayford.Gauss/IGeoE,,,Lisboa_Hayford_Gauss_IGeoE,,,,,,,,,,,,,0,0,0
 299400,0,102165,0,0,0,0,,,Lisboa/Hayford.Gauss/IPCC,,,Lisboa_Hayford_Gauss_IPCC,,,,,,,,,,,,,0,0,0
 299500,0,102166,0,0,0,0,,,,,,Observ_Meteorologico_1939_UTM_Zone_25N,,,,,,,,,,,,,0,0,0
-299600,0,102167,0,0,0,0,,,,,,Porto_Santo_1936_UTM_Zone_28N,,,,,,,,,,,,,0,0,0
 299700,0,102168,0,0,0,0,,,,,,Sao_Braz_UTM_Zone_26N,,,,,,,,,,,,,0,0,0
 299800,0,102169,0,0,0,0,,,,,,Selvagem_Grande_1938_UTM_Zone_28N,,,,,,,,,,,,,0,0,0
 299900,0,102173,0,0,0,0,,,,,,ETRS_1989_UWPP_1992,,,,,,,,,,,,,0,0,0
@@ -3054,7 +3013,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 301300,0,102187,0,0,0,0,,,,,,NAD_1983_3TM_114,,,,,,,,,,,,,0,0,0
 301400,0,102188,0,0,0,0,,,,,,NAD_1983_3TM_117,,,,,,,,,,,,,0,0,0
 301500,0,102189,0,0,0,0,,,,,,NAD_1983_3TM_120,,,,,,,,,,,,,0,0,0
-301600,0,102190,0,0,0,0,,,,,,NAD_1983_BC_Environment_Albers,,,,,,,,,,,,,0,0,0
 301700,0,102191,0,0,0,0,,,,,,Nord_Maroc_Degree,,,,,,,,,,,,,0,0,0
 301800,0,102192,0,0,0,0,,,,,,Sud_Maroc_Degree,,,,,,,,,,,,,0,0,0
 301900,0,102193,0,0,0,0,,,,,,Sahara_Degree,,,,,,,,,,,,,0,0,0
@@ -3063,16 +3021,12 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 302200,0,102196,0,0,0,0,,,,,,UWPP_2000_PAS_6,,,,,,,,,,,,,0,0,0
 302300,0,102197,0,0,0,0,,,,,,UWPP_2000_PAS_7,,,,,,,,,,,,,0,0,0
 302400,0,102198,0,0,0,0,,,,,,UWPP_2000_PAS_8,,,,,,,,,,,,,0,0,0
-302500,0,102200,0,0,0,0,,,,,,NAD_1983_HARN_UTM_Zone_2S,,,,,,,,,,,,,0,0,0
 302600,0,102201,0,0,0,0,,,,,,NAD_1983_HARN_Guam_Map_Grid,,,,,,,,,,,,,0,0,0
 302700,0,102202,0,0,0,0,,,,,,NAD_1983_HARN_UTM_Zone_4N,,,,,,,,,,,,,0,0,0
 302800,0,102203,0,0,0,0,,,,,,NAD_1983_HARN_UTM_Zone_5N,,,,,,,,,,,,,0,0,0
 302900,0,102205,0,0,0,0,,,,,,NAD_1983_HARN_UTM_Zone_11N,,,,,,,,,,,,,0,0,0
 303000,0,102206,0,0,0,0,,,,,,NAD_1983_HARN_UTM_Zone_12N,,,,,,,,,,,,,0,0,0
 303100,0,102207,0,0,0,0,,,,,,NAD_1983_HARN_UTM_Zone_13N,,,,,,,,,,,,,0,0,0
-303200,0,102208,0,0,0,0,,,,,,NAD_1983_HARN_Maine_2000_East_Zone,,,,,,,,,,,,,0,0,0
-303300,0,102209,0,0,0,0,,,,,,NAD_1983_HARN_Maine_2000_Central_Zone,,,,,,,,,,,,,0,0,0
-303400,0,102210,0,0,0,0,,,,,,NAD_1983_HARN_Maine_2000_West_Zone,,,,,,,,,,,,,0,0,0
 303500,0,102211,0,0,0,0,,,,,,NAD_1983_HARN_UTM_Zone_18N,,,,,,,,,,,,,0,0,0
 303600,0,102221,0,0,0,0,,,,,,Ocotepeque_1935_Costa_Rica_Lambert_Norte,,,,,,,,,,,,,0,0,0
 303700,0,102222,0,0,0,0,,,,,,Ocotepeque_1935_Costa_Rica_Lambert_Sur,,,,,,,,,,,,,0,0,0
@@ -3082,8 +3036,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 304100,0,102226,0,0,0,0,,,,,,MONREF_1997_UTM_Zone_48N,,,,,,,,,,,,,0,0,0
 304200,0,102227,0,0,0,0,,,,,,MONREF_1997_UTM_Zone_49N,,,,,,,,,,,,,0,0,0
 304300,0,102228,0,0,0,0,,,,,,MONREF_1997_UTM_Zone_50N,,,,,,,,,,,,,0,0,0
-304400,0,102229,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Alabama_East_FIPS_0101,,,,,,,,,,,,,0,0,0
-304500,0,102230,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Alabama_West_FIPS_0102,,,,,,,,,,,,,0,0,0
 304600,0,102231,0,0,0,0,,,,,,Colombia_West_West_Zone,,,,,,,,,,,,,0,0,0
 304700,0,102232,0,0,0,0,,,,,,Bogota_Ciudad_Bogota,,,,,,,,,,,,,0,0,0
 304800,0,102233,0,0,0,0,,,,,,MAGNA_Ciudad_Bogota,,,,,,,,,,,,,0,0,0
@@ -3096,111 +3048,6 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 305500,0,102240,0,0,0,0,,,,,,Guam_Geodetic_Network_1993,,,,,,,,,,,,,0,0,0
 305600,0,102241,0,0,0,0,,,,,,Pohnpei_Az_Eq_1971,,,,,,,,,,,,,0,0,0
 305700,0,102242,0,0,0,0,,,,,,Saipan_Az_Eq_1969,,,,,,,,,,,,,0,0,0
-305800,0,102243,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_California_III_FIPS_0403,,,,,,,,,,,,,0,0,0
-305900,0,102244,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_California_IV_FIPS_0404,,,,,,,,,,,,,0,0,0
-306000,0,102245,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_California_V_FIPS_0405,,,,,,,,,,,,,0,0,0
-306100,0,102246,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_California_VI_FIPS_0406,,,,,,,,,,,,,0,0,0
-306200,0,102248,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Arizona_East_FIPS_0201,,,,,,,,,,,,,0,0,0
-306300,0,102249,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Arizona_Central_FIPS_0202,,,,,,,,,,,,,0,0,0
-306400,0,102250,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Arizona_West_FIPS_0203,,,,,,,,,,,,,0,0,0
-306500,0,102251,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Arkansas_North_FIPS_0301,,,,,,,,,,,,,0,0,0
-306600,0,102252,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Arkansas_South_FIPS_0302,,,,,,,,,,,,,0,0,0
-306700,0,102253,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Colorado_North_FIPS_0501,,,,,,,,,,,,,0,0,0
-306800,0,102254,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Colorado_Central_FIPS_0502,,,,,,,,,,,,,0,0,0
-306900,0,102255,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Colorado_South_FIPS_0503,,,,,,,,,,,,,0,0,0
-307000,0,102256,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Connecticut_FIPS_0600,,,,,,,,,,,,,0,0,0
-307100,0,102257,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Delaware_FIPS_0700,,,,,,,,,,,,,0,0,0
-307200,0,102258,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Florida_East_FIPS_0901,,,,,,,,,,,,,0,0,0
-307300,0,102259,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Florida_West_FIPS_0902,,,,,,,,,,,,,0,0,0
-307400,0,102260,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Florida_North_FIPS_0903,,,,,,,,,,,,,0,0,0
-307500,0,102261,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Hawaii_1_FIPS_5101,,,,,,,,,,,,,0,0,0
-307600,0,102262,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Hawaii_2_FIPS_5102,,,,,,,,,,,,,0,0,0
-307700,0,102263,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Hawaii_3_FIPS_5103,,,,,,,,,,,,,0,0,0
-307800,0,102264,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Hawaii_4_FIPS_5104,,,,,,,,,,,,,0,0,0
-307900,0,102265,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Hawaii_5_FIPS_5105,,,,,,,,,,,,,0,0,0
-308000,0,102266,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Georgia_East_FIPS_1001,,,,,,,,,,,,,0,0,0
-308100,0,102267,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Georgia_West_FIPS_1002,,,,,,,,,,,,,0,0,0
-308200,0,102268,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Idaho_East_FIPS_1101,,,,,,,,,,,,,0,0,0
-308300,0,102269,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Idaho_Central_FIPS_1102,,,,,,,,,,,,,0,0,0
-308400,0,102270,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Idaho_West_FIPS_1103,,,,,,,,,,,,,0,0,0
-308500,0,102271,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Illinois_East_FIPS_1201,,,,,,,,,,,,,0,0,0
-308600,0,102272,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Illinois_West_FIPS_1202,,,,,,,,,,,,,0,0,0
-308700,0,102273,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Indiana_East_FIPS_1301,,,,,,,,,,,,,0,0,0
-308800,0,102274,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Indiana_West_FIPS_1302,,,,,,,,,,,,,0,0,0
-308900,0,102275,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Iowa_North_FIPS_1401,,,,,,,,,,,,,0,0,0
-309000,0,102276,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Iowa_South_FIPS_1402,,,,,,,,,,,,,0,0,0
-309100,0,102277,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Kansas_North_FIPS_1501,,,,,,,,,,,,,0,0,0
-309200,0,102278,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Kansas_South_FIPS_1502,,,,,,,,,,,,,0,0,0
-309300,0,102279,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Kentucky_North_FIPS_1601,,,,,,,,,,,,,0,0,0
-309400,0,102280,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Kentucky_South_FIPS_1602,,,,,,,,,,,,,0,0,0
-309500,0,102281,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Louisiana_North_FIPS_1701,,,,,,,,,,,,,0,0,0
-309600,0,102282,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Louisiana_South_FIPS_1702,,,,,,,,,,,,,0,0,0
-309700,0,102283,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Maine_East_FIPS_1801,,,,,,,,,,,,,0,0,0
-309800,0,102284,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Maine_West_FIPS_1802,,,,,,,,,,,,,0,0,0
-309900,0,102285,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Maryland_FIPS_1900,,,,,,,,,,,,,0,0,0
-310000,0,102286,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Massachusetts_Mainland_FIPS_2001,,,,,,,,,,,,,0,0,0
-310100,0,102287,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Massachusetts_Island_FIPS_2002,,,,,,,,,,,,,0,0,0
-310200,0,102288,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Michigan_North_FIPS_2111,,,,,,,,,,,,,0,0,0
-310300,0,102289,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Michigan_Central_FIPS_2112,,,,,,,,,,,,,0,0,0
-310400,0,102290,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Michigan_South_FIPS_2113,,,,,,,,,,,,,0,0,0
-310500,0,102291,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Minnesota_North_FIPS_2201,,,,,,,,,,,,,0,0,0
-310600,0,102292,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Minnesota_Central_FIPS_2202,,,,,,,,,,,,,0,0,0
-310700,0,102293,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Minnesota_South_FIPS_2203,,,,,,,,,,,,,0,0,0
-310800,0,102294,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Mississippi_East_FIPS_2301,,,,,,,,,,,,,0,0,0
-310900,0,102295,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Mississippi_West_FIPS_2302,,,,,,,,,,,,,0,0,0
-311000,0,102296,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Missouri_East_FIPS_2401,,,,,,,,,,,,,0,0,0
-311100,0,102297,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Missouri_Central_FIPS_2402,,,,,,,,,,,,,0,0,0
-311200,0,102298,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Missouri_West_FIPS_2403,,,,,,,,,,,,,0,0,0
-311300,0,102300,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Montana_FIPS_2500,,,,,,,,,,,,,0,0,0
-311400,0,102304,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Nebraska_FIPS_2600,,,,,,,,,,,,,0,0,0
-311500,0,102307,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Nevada_East_FIPS_2701,,,,,,,,,,,,,0,0,0
-311600,0,102308,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Nevada_Central_FIPS_2702,,,,,,,,,,,,,0,0,0
-311700,0,102309,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Nevada_West_FIPS_2703,,,,,,,,,,,,,0,0,0
-311800,0,102310,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_Hampshire_FIPS_2800,,,,,,,,,,,,,0,0,0
-311900,0,102311,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_Jersey_FIPS_2900,,,,,,,,,,,,,0,0,0
-312000,0,102312,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_Mexico_East_FIPS_3001,,,,,,,,,,,,,0,0,0
-312100,0,102313,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_Mexico_Central_FIPS_3002,,,,,,,,,,,,,0,0,0
-312200,0,102314,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_Mexico_West_FIPS_3003,,,,,,,,,,,,,0,0,0
-312300,0,102315,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_York_East_FIPS_3101,,,,,,,,,,,,,0,0,0
-312400,0,102316,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_York_Central_FIPS_3102,,,,,,,,,,,,,0,0,0
-312500,0,102317,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_York_West_FIPS_3103,,,,,,,,,,,,,0,0,0
-312600,0,102318,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_New_York_Long_Island_FIPS_3104,,,,,,,,,,,,,0,0,0
-312700,0,102320,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_North_Dakota_North_FIPS_3301,,,,,,,,,,,,,0,0,0
-312800,0,102321,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_North_Dakota_South_FIPS_3302,,,,,,,,,,,,,0,0,0
-312900,0,102322,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Ohio_North_FIPS_3401,,,,,,,,,,,,,0,0,0
-313000,0,102323,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Ohio_South_FIPS_3402,,,,,,,,,,,,,0,0,0
-313100,0,102324,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Oklahoma_North_FIPS_3501,,,,,,,,,,,,,0,0,0
-313200,0,102325,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Oklahoma_South_FIPS_3502,,,,,,,,,,,,,0,0,0
-313300,0,102326,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Oregon_North_FIPS_3601,,,,,,,,,,,,,0,0,0
-313400,0,102327,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Oregon_South_FIPS_3602,,,,,,,,,,,,,0,0,0
-313500,0,102330,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Rhode_Island_FIPS_3800,,,,,,,,,,,,,0,0,0
-313600,0,102334,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_South_Dakota_North_FIPS_4001,,,,,,,,,,,,,0,0,0
-313700,0,102335,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_South_Dakota_South_FIPS_4002,,,,,,,,,,,,,0,0,0
-313800,0,102336,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Tennessee_FIPS_4100,,,,,,,,,,,,,0,0,0
-313900,0,102337,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Texas_North_FIPS_4201,,,,,,,,,,,,,0,0,0
-314000,0,102338,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Texas_North_Central_FIPS_4202,,,,,,,,,,,,,0,0,0
-314100,0,102339,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Texas_Central_FIPS_4203,,,,,,,,,,,,,0,0,0
-314200,0,102340,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Texas_South_Central_FIPS_4204,,,,,,,,,,,,,0,0,0
-314300,0,102341,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Texas_South_FIPS_4205,,,,,,,,,,,,,0,0,0
-314400,0,102342,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Utah_North_FIPS_4301,,,,,,,,,,,,,0,0,0
-314500,0,102343,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Utah_Central_FIPS_4302,,,,,,,,,,,,,0,0,0
-314600,0,102344,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Utah_South_FIPS_4303,,,,,,,,,,,,,0,0,0
-314700,0,102345,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Vermont_FIPS_4400,,,,,,,,,,,,,0,0,0
-314800,0,102346,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Virginia_North_FIPS_4501,,,,,,,,,,,,,0,0,0
-314900,0,102347,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Virginia_South_FIPS_4502,,,,,,,,,,,,,0,0,0
-315000,0,102348,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Washington_North_FIPS_4601,,,,,,,,,,,,,0,0,0
-315100,0,102349,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Washington_South_FIPS_4602,,,,,,,,,,,,,0,0,0
-315200,0,102350,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_West_Virginia_North_FIPS_4701,,,,,,,,,,,,,0,0,0
-315300,0,102351,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_West_Virginia_South_FIPS_4702,,,,,,,,,,,,,0,0,0
-315400,0,102352,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Wisconsin_North_FIPS_4801,,,,,,,,,,,,,0,0,0
-315500,0,102353,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Wisconsin_Central_FIPS_4802,,,,,,,,,,,,,0,0,0
-315600,0,102354,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Wisconsin_South_FIPS_4803,,,,,,,,,,,,,0,0,0
-315700,0,102355,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Wyoming_East_FIPS_4901,,,,,,,,,,,,,0,0,0
-315800,0,102356,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Wyoming_East_Central_FIPS_4902,,,,,,,,,,,,,0,0,0
-315900,0,102357,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Wyoming_West_Central_FIPS_4903,,,,,,,,,,,,,0,0,0
-316000,0,102358,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Wyoming_West_FIPS_4904,,,,,,,,,,,,,0,0,0
-316100,0,102361,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Puerto_Rico_Virgin_Islands_FIPS_5200,,,,,,,,,,,,,0,0,0
-316200,0,102363,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Kentucky_FIPS_1600,,,,,,,,,,,,,0,0,0
 316300,0,102461,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Hawaii_1_FIPS_5101_Feet,,,,,,,,,,,,,0,0,0
 316400,0,102462,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Hawaii_2_FIPS_5102_Feet,,,,,,,,,,,,,0,0,0
 316500,0,102463,0,0,0,0,,,,,,NAD_1983_HARN_StatePlane_Hawaii_3_FIPS_5103_Feet,,,,,,,,,,,,,0,0,0
@@ -3228,14 +3075,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 318700,0,102584,0,0,0,0,,,,,,NTF_France_IV_degrees,,,,,,,,,,,,,0,0,0
 318800,0,102591,0,0,0,0,,,,,,Nord_Algerie_Degree,,,,,,,,,,,,,0,0,0
 318900,0,102592,0,0,0,0,,,,,,Sud_Algerie_Degree,,,,,,,,,,,,,0,0,0
-319000,0,102601,0,0,0,0,,,,,,NAD_1983_Texas_Centric_Mapping_System_Albers,,,,,,,,,,,,,0,0,0
-319100,0,102602,0,0,0,0,,,,,,NAD_1983_Texas_Centric_Mapping_System_Lambert,,,,,,,,,,,,,0,0,0
-319200,0,102603,0,0,0,0,,,,,,NAD_1983_Texas_Statewide_Mapping_System,,,,,,,,,,,,,0,0,0
 319300,0,102604,0,0,0,0,,,,,,NAD_1983_Georgia_Statewide_Lambert,,,,,,,,,,,,,0,0,0
 319400,0,102605,0,0,0,0,,,,,,NAD_1983_Idaho_TM,,,,,,,,,,,,,0,0,0
-319500,0,102606,0,0,0,0,,,,,,NAD_1983_Maine_2000_East_Zone,,,,,,,,,,,,,0,0,0
-319600,0,102607,0,0,0,0,,,,,,NAD_1983_Maine_2000_Central_Zone,,,,,,,,,,,,,0,0,0
-319700,0,102608,0,0,0,0,,,,,,NAD_1983_Maine_2000_West_Zone,,,,,,,,,,,,,0,0,0
 319800,0,102629,0,0,0,81945,,AL83-EF,NAD83.AL-E.USFt,AL83-EF,,NAD_1983_StatePlane_Alabama_East_FIPS_0101_Feet,,,,,,,,"Alabama 0101, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
 319900,0,102630,0,0,0,81948,,AL83-WF,NAD83.AL-W.USFt,AL83-WF,,NAD_1983_StatePlane_Alabama_West_FIPS_0102_Feet,,,,,,,,"Alabama 0102, Western Zone (1983, US Survey feet)",,,,,0,0,0
 320000,0,102631,0,0,0,172033,,AK83-1F,NAD83.AK-1.USFt,AK83-1F,,NAD_1983_StatePlane_Alaska_1_FIPS_5001_Feet,,,,,,,,"Alaska 5001, Zone 1 (1983, US Survey feet)",,,,,0,0,0
@@ -3248,117 +3089,41 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 320700,0,102638,0,0,0,81969,,AK83-8F,NAD83.AK-8.USFt,AK83-8F,,NAD_1983_StatePlane_Alaska_8_FIPS_5008_Feet,,,,,,,,"Alaska 5008, Zone 8 (1983, US Survey feet)",,,,,0,0,0
 320800,0,102639,0,0,0,81972,,AK83-9F,NAD83.AK-9.USFt,AK83-9F,,NAD_1983_StatePlane_Alaska_9_FIPS_5009_Feet,,,,,,,,"Alaska 5009, Zone 9 (1983, US Survey feet)",,,,,0,0,0
 320900,0,102640,0,0,0,40961,,AK83-10F,NAD83.AK-10.USFt,AK83-10F,,NAD_1983_StatePlane_Alaska_10_FIPS_5010_Feet,,,,,,,,"Alaska 5010, Zone 10 (1983, US Survey feet)",,,,,0,0,0
-321000,0,102641,0,0,0,0,,,,,,NAD_1983_StatePlane_California_I_FIPS_0401_Feet,,,,,,,,,,,,,0,0,0
-321100,0,102642,0,0,0,0,,,,,,NAD_1983_StatePlane_California_II_FIPS_0402_Feet,,,,,,,,,,,,,0,0,0
-321200,0,102643,0,0,0,0,,,,,,NAD_1983_StatePlane_California_III_FIPS_0403_Feet,,,,,,,,,,,,,0,0,0
-321300,0,102644,0,0,0,0,,,,,,NAD_1983_StatePlane_California_IV_FIPS_0404_Feet,,,,,,,,,,,,,0,0,0
-321400,0,102645,0,0,0,0,,,,,,NAD_1983_StatePlane_California_V_FIPS_0405_Feet,,,,,,,,,,,,,0,0,0
-321500,0,102646,0,0,0,0,,,,,,NAD_1983_StatePlane_California_VI_FIPS_0406_Feet,,,,,,,,,,,,,0,0,0
 321600,0,102648,0,0,0,81976,,AZ83-EF,NAD83.AZ-E.USFt,AZ83-EF,,NAD_1983_StatePlane_Arizona_East_FIPS_0201_Feet,,,,,,,,"Arizona 0201, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
 321700,0,102649,0,0,0,81980,,AZ83-CF,NAD83.AZ-C.USFt,AZ83-CF,,NAD_1983_StatePlane_Arizona_Central_FIPS_0202_Feet,,,,,,,,"Arizona 0202, Central Zone (1983, US Survey feet)",,,,,0,0,0
 321800,0,102650,0,0,0,81984,,AZ83-WF,NAD83.AZ-W.USFt,AZ83-WF,,NAD_1983_StatePlane_Arizona_West_FIPS_0203_Feet,,,,,,,,"Arizona 0203, Western Zone (1983, US Survey feet)",,,,,0,0,0
-321900,0,102651,0,0,0,40964,,AR83-NF,NAD83.AR-N.USFt,AR83-NF,,NAD_1983_StatePlane_Arkansas_North_FIPS_0301_Feet,,,,,,,,"Arkansas 0301, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-322000,0,102652,0,0,0,40967,,AR83-SF,NAD83.AR-S.USFt,AR83-SF,,NAD_1983_StatePlane_Arkansas_South_FIPS_0302_Feet,,,,,,,,"Arkansas 0302, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-322100,0,102653,0,0,0,0,,,,,,NAD_1983_StatePlane_Colorado_North_FIPS_0501_Feet,,,,,,,,,,,,,0,0,0
-322200,0,102654,0,0,0,0,,,,,,NAD_1983_StatePlane_Colorado_Central_FIPS_0502_Feet,,,,,,,,,,,,,0,0,0
-322300,0,102655,0,0,0,0,,,,,,NAD_1983_StatePlane_Colorado_South_FIPS_0503_Feet,,,,,,,,,,,,,0,0,0
-322400,0,102656,0,0,0,0,,,,,,NAD_1983_StatePlane_Connecticut_FIPS_0600_Feet,,,,,,,,,,,,,0,0,0
-322500,0,102657,0,0,0,0,,,,,,NAD_1983_StatePlane_Delaware_FIPS_0700_Feet,,,,,,,,,,,,,0,0,0
-322600,0,102658,0,0,0,0,,,,,,NAD_1983_StatePlane_Florida_East_FIPS_0901_Feet,,,,,,,,,,,,,0,0,0
-322700,0,102659,0,0,0,0,,,,,,NAD_1983_StatePlane_Florida_West_FIPS_0902_Feet,,,,,,,,,,,,,0,0,0
-322800,0,102660,0,0,0,0,,,,,,NAD_1983_StatePlane_Florida_North_FIPS_0903_Feet,,,,,,,,,,,,,0,0,0
 322900,0,102661,0,0,0,82049,,HI83-1F,NAD83.HI-1.USFt,HI83-1F,,NAD_1983_StatePlane_Hawaii_1_FIPS_5101_Feet,,,,,,,,"Hawaii 5101, Zone 1 (1983, US Survey feet)",,,,,0,0,0
 323000,0,102662,0,0,0,82052,,HI83-2F,NAD83.HI-2.USFt,HI83-2F,,NAD_1983_StatePlane_Hawaii_2_FIPS_5102_Feet,,,,,,,,"Hawaii 5102, Zone 2 (1983, US Survey feet)",,,,,0,0,0
-323100,0,102663,0,0,0,82055,,HI83-3F,NAD83.HI-3.USFt,HI83-3F,,NAD_1983_StatePlane_Hawaii_3_FIPS_5103_Feet,,,,,,,,"Hawaii 5103, Zone 3 (1983, US Survey feet)",,,,,0,0,0
 323200,0,102664,0,0,0,82058,,HI83-4F,NAD83.HI-4.USFt,HI83-4F,,NAD_1983_StatePlane_Hawaii_4_FIPS_5104_Feet,,,,,,,,"Hawaii 5104, Zone 4 (1983, US Survey feet)",,,,,0,0,0
 323300,0,102665,0,0,0,82061,,HI83-5F,NAD83.HI-5.USFt,HI83-5F,,NAD_1983_StatePlane_Hawaii_5_FIPS_5105_Feet,,,,,,,,"Hawaii 5105, Zone 5 (1983, US Survey feet)",,,,,0,0,0
-323400,0,102666,0,0,0,0,,,,,,NAD_1983_StatePlane_Georgia_East_FIPS_1001_Feet,,,,,,,,,,,,,0,0,0
-323500,0,102667,0,0,0,0,,,,,,NAD_1983_StatePlane_Georgia_West_FIPS_1002_Feet,,,,,,,,,,,,,0,0,0
-323600,0,102668,0,0,0,0,,,,,,NAD_1983_StatePlane_Idaho_East_FIPS_1101_Feet,,,,,,,,,,,,,0,0,0
-323700,0,102669,0,0,0,0,,,,,,NAD_1983_StatePlane_Idaho_Central_FIPS_1102_Feet,,,,,,,,,,,,,0,0,0
-323800,0,102670,0,0,0,0,,,,,,NAD_1983_StatePlane_Idaho_West_FIPS_1103_Feet,,,,,,,,,,,,,0,0,0
-323900,0,102671,0,0,0,82075,,IL83-EF,NAD83.IL-E.USFt,IL83-EF,,NAD_1983_StatePlane_Illinois_East_FIPS_1201_Feet,,,,,,,,"Illinois 1201, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-324000,0,102672,0,0,0,82078,,IL83-WF,NAD83.IL-W.USFt,IL83-WF,,NAD_1983_StatePlane_Illinois_West_FIPS_1202_Feet,,,,,,,,"Illinois 1202, Western Zone (1983, US Survey feet)",,,,,0,0,0
-324100,0,102673,0,0,0,0,,,,,,NAD_1983_StatePlane_Indiana_East_FIPS_1301_Feet,,,,,,,,,,,,,0,0,0
-324200,0,102674,0,0,0,0,,,,,,NAD_1983_StatePlane_Indiana_West_FIPS_1302_Feet,,,,,,,,,,,,,0,0,0
-324300,0,102675,0,0,0,41021,,IA83-NF,NAD83.IA-N.USFt,IA83-NF,,NAD_1983_StatePlane_Iowa_North_FIPS_1401_Feet,,,,,,,,"Iowa 1401, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-324400,0,102676,0,0,0,41024,,IA83-SF,NAD83.IA-S.USFt,IA83-SF,,NAD_1983_StatePlane_Iowa_South_FIPS_1402_Feet,,,,,,,,"Iowa 1402, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-324500,0,102677,0,0,0,41027,,KS83-NF,NAD83.KS-N.USFt,KS83-NF,,NAD_1983_StatePlane_Kansas_North_FIPS_1501_Feet,,,,,,,,"Kansas 1501, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-324600,0,102678,0,0,0,41030,,KS83-SF,NAD83.KS-S.USFt,KS83-SF,,NAD_1983_StatePlane_Kansas_South_FIPS_1502_Feet,,,,,,,,"Kansas 1502, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-324700,0,102679,0,0,0,0,,,,,,NAD_1983_StatePlane_Kentucky_North_FIPS_1601_Feet,,,,,,,,,,,,,0,0,0
-324800,0,102680,0,0,0,0,,,,,,NAD_1983_StatePlane_Kentucky_South_FIPS_1602_Feet,,,,,,,,,,,,,0,0,0
-324900,0,102681,0,0,0,41039,,LA83-NF,NAD83.LA-N.USFt,LA83-NF,,NAD_1983_StatePlane_Louisiana_North_FIPS_1701_Feet,,,,,,,,"Louisiana 1701, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-325000,0,102682,0,0,0,41042,,LA83-SF,NAD83.LA-S.USFt,LA83-SF,,NAD_1983_StatePlane_Louisiana_South_FIPS_1702_Feet,,,,,,,,"Louisiana 1702, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 325100,26847,102683,0,0,0,82113,,ME83-EF,NAD83.ME-E.USFt,ME83-EF,NAD83 / Maine East (ftUS),NAD_1983_StatePlane_Maine_East_FIPS_1801_Feet,,,,,,,,"Maine 1801, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
 325200,26848,102684,0,0,0,82111,,ME83-WF,NAD83.ME-W.USFt,ME83-WF,NAD83 / Maine West (ftUS),NAD_1983_StatePlane_Maine_West_FIPS_1802_Feet,,,,,,,,"Maine 102, Western Zone (1983, US Survey feet)",,,,,0,0,0
-325300,0,102685,0,0,0,0,,,,,,NAD_1983_StatePlane_Maryland_FIPS_1900_Feet,,,,,,,,,,,,,0,0,0
-325400,0,102686,0,0,0,0,,,,,,NAD_1983_StatePlane_Massachusetts_Mainland_FIPS_2001_Feet,,,,,,,,,,,,,0,0,0
-325500,0,102687,0,0,0,0,,,,,,NAD_1983_StatePlane_Massachusetts_Island_FIPS_2002_Feet,,,,,,,,,,,,,0,0,0
 325600,0,102688,0,0,0,41057,,MI83-NF,NAD83.MI-N.USFt,MI83-NF,,NAD_1983_StatePlane_Michigan_North_FIPS_2111_Feet,,,,,,,,"Michigan 2111, Northern Zone (1983, US Survey feet)",,,,,0,0,0
 325700,0,102689,0,0,0,41061,,MI83-CF,NAD83.MI-C.USFt,MI83-CF,,NAD_1983_StatePlane_Michigan_Central_FIPS_2112_Feet,,,,,,,,"Michigan 2112, Central Zone (1983, US Survey feet)",,,,,0,0,0
 325800,0,102690,0,0,0,41065,,MI83-SF,NAD83.MI-S.USFt,MI83-SF,,NAD_1983_StatePlane_Michigan_South_FIPS_2113_Feet,,,,,,,,"Michigan 2113, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 325900,26849,102691,0,0,0,41069,,MN83-NF,NAD83.MN-N.USFt,MN83-NF,NAD83 / Minnesota North (ftUS),NAD_1983_StatePlane_Minnesota_North_FIPS_2201_Feet,,,,,,,,"Minnesota 2201, Northern Zone (1983, US Survey feet)",,,,,0,0,0
 326000,26850,102692,0,0,0,41072,,MN83-CF,NAD83.MN-C.USFt,MN83-CF,NAD83 / Minnesota Central (ftUS),NAD_1983_StatePlane_Minnesota_Central_FIPS_2202_Feet,,,,,,,,"Minnesota 2202, Central Zone (1983, US Survey feet)",,,,,0,0,0
 326100,26851,102693,0,0,0,41075,,MN83-SF,NAD83.MN-S.USFt,MN83-SF,NAD83 / Minnesota South (ftUS),NAD_1983_StatePlane_Minnesota_South_FIPS_2203_Feet,,,,,,,,"Minnesota 2203, South Zone (1983, US Survey feet)",,,,,0,0,0
-326200,0,102694,0,0,0,0,,,,,,NAD_1983_StatePlane_Mississippi_East_FIPS_2301_Feet,,,,,,,,,,,,,0,0,0
-326300,0,102695,0,0,0,0,,,,,,NAD_1983_StatePlane_Mississippi_West_FIPS_2302_Feet,,,,,,,,,,,,,0,0,0
 326400,0,102696,0,0,0,82125,,MO83-EF,NAD83.MO-E.USFt,MO83-EF,,NAD_1983_StatePlane_Missouri_East_FIPS_2401_Feet,,,,,,,,"Missouri 2401, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
 326500,0,102697,0,0,0,82128,,MO83-CF,NAD83.MO-C.USFt,MO83-CF,,NAD_1983_StatePlane_Missouri_Central_FIPS_2402_Feet,,,,,,,,"Missouri 2402, Central Zone (1983, US Survey feet)",,,,,0,0,0
 326600,0,102698,0,0,0,82131,,MO83-WF,NAD83.MO-W.USFt,MO83-WF,,NAD_1983_StatePlane_Missouri_West_FIPS_2403_Feet,,,,,,,,"Missouri 2403, Western Zone (1983, US Survey feet)",,,,,0,0,0
 326700,0,102700,0,0,0,41077,,MT83F,NAD83.MT.USFt,MT83F,,NAD_1983_StatePlane_Montana_FIPS_2500_Feet,,,,,,,,"Montana 2500 (1983, US Survey feet)",,,,,0,0,0
 326800,26852,102704,0,0,0,41083,,NB83F,NAD83.NB.USFt,NE83F,NAD83 / Nebraska (ftUS),NAD_1983_StatePlane_Nebraska_FIPS_2600_Feet,,,,,,,,"Nebraska 2600 (1983, US Survey feet)",,,,,0,0,0
-326900,0,102707,0,0,0,82142,,NV83-EF,NAD83.NV-E.USFt,NV83-EF,,NAD_1983_StatePlane_Nevada_East_FIPS_2701_Feet,,,,,,,,"Nevada 2701, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
-327000,0,102708,0,0,0,82144,,NV83-CF,NAD83.NV-C.USFt,NV83-CF,,NAD_1983_StatePlane_Nevada_Central_FIPS_2702_Feet,,,,,,,,"Nevada 2702, Central Zone (1983, US Survey feet)",,,,,0,0,0
-327100,0,102709,0,0,0,82147,,NV83-WF,NAD83.NV-W.USFt,NV83-WF,,NAD_1983_StatePlane_Nevada_West_FIPS_2703_Feet,,,,,,,,"Nevada 2703, Western Zone (1983, US Survey feet)",,,,,0,0,0
-327200,0,102710,0,0,0,82150,,NH83F,NAD83.NH.USFt,NH83F,,NAD_1983_StatePlane_New_Hampshire_FIPS_2800_Feet,,,,,,,,"New Hampshire 2800 (1983, US Survey feet)",,,,,0,0,0
-327300,0,102711,0,0,0,82153,,NJ83F,NAD83.NJ.USFt,NJ83F,,NAD_1983_StatePlane_New_Jersey_FIPS_2900_Feet,,,,,,,,"New Jersey 2900 (1983, US Survey feet)",,,,,0,0,0
-327400,0,102712,0,0,0,0,,,,,,NAD_1983_StatePlane_New_Mexico_East_FIPS_3001_Feet,,,,,,,,,,,,,0,0,0
-327500,0,102713,0,0,0,0,,,,,,NAD_1983_StatePlane_New_Mexico_Central_FIPS_3002_Feet,,,,,,,,,,,,,0,0,0
-327600,0,102714,0,0,0,0,,,,,,NAD_1983_StatePlane_New_Mexico_West_FIPS_3003_Feet,,,,,,,,,,,,,0,0,0
-327700,0,102715,0,0,0,0,,,,,,NAD_1983_StatePlane_New_York_East_FIPS_3101_Feet,,,,,,,,,,,,,0,0,0
-327800,0,102716,0,0,0,0,,,,,,NAD_1983_StatePlane_New_York_Central_FIPS_3102_Feet,,,,,,,,,,,,,0,0,0
-327900,0,102717,0,0,0,0,,,,,,NAD_1983_StatePlane_New_York_West_FIPS_3103_Feet,,,,,,,,,,,,,0,0,0
-328000,0,102718,0,0,0,0,,,,,,NAD_1983_StatePlane_New_York_Long_Island_FIPS_3104_Feet,,,,,,,,,,,,,0,0,0
-328100,0,102719,0,0,0,0,,,,,,NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet,,,,,,,,,,,,,0,0,0
 328200,0,102720,0,0,0,41094,,ND83-NF,NAD83.ND-N.USFt,ND83-NF,,NAD_1983_StatePlane_North_Dakota_North_FIPS_3301_Feet,,,,,,,,"North Dakota 3301, Northern Zone (1983, US Survey feet)",,,,,0,0,0
 328300,0,102721,0,0,0,41097,,ND83-SF,NAD83.ND-S.USFt,ND83-SF,,NAD_1983_StatePlane_North_Dakota_South_FIPS_3302_Feet,,,,,,,,"North Dakota 3302, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 328400,3734,102722,0,0,0,41100,,OH83-NF,NAD83.OH-N.USFt,OH83-NF,NAD83 / Ohio North (ftUS),NAD_1983_StatePlane_Ohio_North_FIPS_3401_Feet,,,,,,,,"Ohio 3401, Northern Zone (1983, US Survey feet)",,,,,0,0,0
 328500,3735,102723,0,0,0,41103,,OH83-SF,NAD83.OH-S.USFt,OH83-SF,NAD83 / Ohio South (ftUS),NAD_1983_StatePlane_Ohio_South_FIPS_3402_Feet,,,,,,,,"Ohio 3402, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-328600,0,102724,0,0,0,0,,,,,,NAD_1983_StatePlane_Oklahoma_North_FIPS_3501_Feet,,,,,,,,,,,,,0,0,0
-328700,0,102725,0,0,0,0,,,,,,NAD_1983_StatePlane_Oklahoma_South_FIPS_3502_Feet,,,,,,,,,,,,,0,0,0
 328800,0,102726,0,0,0,41112,,OR83-NF,NAD83.OR-N.USFt,OR83-NF,,NAD_1983_StatePlane_Oregon_North_FIPS_3601_Feet,,,,,,,,"Oregon 3601, Northern Zone (1983, US Survey feet)",,,,,0,0,0
 328900,0,102727,0,0,0,41116,,OR83-SF,NAD83.OR-S.USFt,OR83-SF,,NAD_1983_StatePlane_Oregon_South_FIPS_3602_Feet,,,,,,,,"Oregon 3602, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-329000,0,102728,0,0,0,0,,,,,,NAD_1983_StatePlane_Pennsylvania_North_FIPS_3701_Feet,,,,,,,,,,,,,0,0,0
-329100,0,102729,0,0,0,0,,,,,,NAD_1983_StatePlane_Pennsylvania_South_FIPS_3702_Feet,,,,,,,,,,,,,0,0,0
-329200,0,102730,0,0,0,82200,,RI83F,NAD83.RI.USFt,RI83F,,NAD_1983_StatePlane_Rhode_Island_FIPS_3800_Feet,,,,,,,,"Rhode Island 3800 (1983, US Survey feet)",,,,,0,0,0
 329300,0,102733,0,0,0,41129,,SC83F,NAD83.SC.USFt,SC83F,,NAD_1983_StatePlane_South_Carolina_FIPS_3900_Feet,,,,,,,,"South Carolina 3900 (1983, US Survey feet)",,,,,0,0,0
-329400,0,102734,0,0,0,41135,,SD83-NF,NAD83.SD-N.USFt,SD83-NF,,NAD_1983_StatePlane_South_Dakota_North_FIPS_4001_Feet,,,,,,,,"South Dakota 4001, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-329500,0,102735,0,0,0,41138,,SD83-SF,NAD83.SD-S.USFt,SD83-SF,,NAD_1983_StatePlane_South_Dakota_South_FIPS_4002_Feet,,,,,,,,"South Dakota 4002, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-329600,0,102736,0,0,0,0,,,,,,NAD_1983_StatePlane_Tennessee_FIPS_4100_Feet,,,,,,,,,,,,,0,0,0
-329700,0,102737,0,0,0,0,,,,,,NAD_1983_StatePlane_Texas_North_FIPS_4201_Feet,,,,,,,,,,,,,0,0,0
-329800,0,102738,0,0,0,0,,,,,,NAD_1983_StatePlane_Texas_North_Central_FIPS_4202_Feet,,,,,,,,,,,,,0,0,0
-329900,0,102739,0,0,0,0,,,,,,NAD_1983_StatePlane_Texas_Central_FIPS_4203_Feet,,,,,,,,,,,,,0,0,0
-330000,0,102740,0,0,0,0,,,,,,NAD_1983_StatePlane_Texas_South_Central_FIPS_4204_Feet,,,,,,,,,,,,,0,0,0
-330100,0,102741,0,0,0,0,,,,,,NAD_1983_StatePlane_Texas_South_FIPS_4205_Feet,,,,,,,,,,,,,0,0,0
-330200,0,102742,0,0,0,41159,,UT83-NF,NAD83.UT-N.USFt,UT83-NF,,NAD_1983_StatePlane_Utah_North_FIPS_4301_Feet,,,,,,,,"Utah 4301, Northern Zone (1983, US Survey feet)",,,,,0,0,0
-330300,0,102743,0,0,0,41163,,UT83-CF,NAD83.UT-C.USFt,UT83-CF,,NAD_1983_StatePlane_Utah_Central_FIPS_4302_Feet,,,,,,,,"Utah 4302, Central Zone (1983, US Survey feet)",,,,,0,0,0
-330400,0,102744,0,0,0,41167,,UT83-SF,NAD83.UT-S.USFt,UT83-SF,,NAD_1983_StatePlane_Utah_South_FIPS_4303_Feet,,,,,,,,"Utah 4303, Southern Zone (1983, US Survey feet)",,,,,0,0,0
 330500,0,102745,0,0,0,82443,,VT83F,NAD83.VT.USFt,VT83F,,NAD_1983_StatePlane_Vermont_FIPS_4400_Feet,,,,,,,,"Vermont 4400 (1983, US Survey feet)",,,,,0,0,0
-330600,0,102746,0,0,0,0,,,,,,NAD_1983_StatePlane_Virginia_North_FIPS_4501_Feet,,,,,,,,,,,,,0,0,0
-330700,0,102747,0,0,0,0,,,,,,NAD_1983_StatePlane_Virginia_South_FIPS_4502_Feet,,,,,,,,,,,,,0,0,0
-330800,0,102748,0,0,0,0,,,,,,NAD_1983_StatePlane_Washington_North_FIPS_4601_Feet,,,,,,,,,,,,,0,0,0
-330900,0,102749,0,0,0,0,,,,,,NAD_1983_StatePlane_Washington_South_FIPS_4602_Feet,,,,,,,,,,,,,0,0,0
 331000,26853,102750,0,0,0,41183,,WV83-NF,NAD83.WV-N.USFt,WV83-NF,NAD83 / West Virginia North (ftUS),NAD_1983_StatePlane_West_Virginia_North_FIPS_4701_Feet,,,,,,,,"West Virginia 4701, Northern Zone (1983, US Survey feet)",,,,,0,0,0
 331100,26854,102751,0,0,0,41186,,WV83-SF,NAD83.WV-S.USFt,WV83-SF,NAD83 / West Virginia South (ftUS),NAD_1983_StatePlane_West_Virginia_South_FIPS_4702_Feet,,,,,,,,"West Virginia 4702, Southern Zone (1983, US Survey feet)",,,,,0,0,0
-331200,0,102752,0,0,0,0,,,,,,NAD_1983_StatePlane_Wisconsin_North_FIPS_4801_Feet,,,,,,,,,,,,,0,0,0
-331300,0,102753,0,0,0,0,,,,,,NAD_1983_StatePlane_Wisconsin_Central_FIPS_4802_Feet,,,,,,,,,,,,,0,0,0
-331400,0,102754,0,0,0,0,,,,,,NAD_1983_StatePlane_Wisconsin_South_FIPS_4803_Feet,,,,,,,,,,,,,0,0,0
 331500,3736,102755,0,0,0,82449,,WY83-EF,NAD83.WY-E.USFt,WY83-EF,NAD83 / Wyoming East (ftUS),NAD_1983_StatePlane_Wyoming_East_FIPS_4901_Feet,,,,,,,,"Wyoming 4901, Eastern Zone (1983, US Survey feet)",,,,,0,0,0
 331600,3737,102756,0,0,0,82452,,WY83-ECF,NAD83.WY-EC.USFt,WY83-ECF,NAD83 / Wyoming East Central (ftUS),NAD_1983_StatePlane_Wyoming_East_Central_FIPS_4902_Feet,,,,,,,,"Wyoming 4902, East Central Zone (1983, US Survey feet)",,,,,0,0,0
 331700,3738,102757,0,0,0,82455,,WY83-WCF,NAD83.WY-WC.USFt,WY83-WCF,NAD83 / Wyoming West Central (ftUS),NAD_1983_StatePlane_Wyoming_West_Central_FIPS_4903_Feet,,,,,,,,"Wyoming 4903, West Central Zone (1983, US Survey feet)",,,,,0,0,0
 331800,3739,102758,0,0,0,82458,,WY83-WF,NAD83.WY-W.USFt,WY83-WF,NAD83 / Wyoming West (ftUS),NAD_1983_StatePlane_Wyoming_West_FIPS_4904_Feet,,,,,,,,"Wyoming 4904, Western Zone (1983, US Survey feet)",,,,,0,0,0
 331900,0,102761,0,0,0,41125,,PR83F,NAD83.PR.USFt,PR83F,,NAD_1983_StatePlane_Puerto_Rico_Virgin_Islands_FIPS_5200_Feet,,,,,,,,"Puerto Rico and Virgin Islands 5200 (1983, US Survey feet)",,,,,0,0,0
-332000,0,102763,0,0,0,0,,,,,,NAD_1983_StatePlane_Kentucky_FIPS_1600_Feet,,,,,,,,,,,,,0,0,0
 332100,0,102766,0,0,0,0,,,NAD83.Guam/Polyconic.USFt,,,NAD_1983_StatePlane_Guam_FIPS_5400_Feet,,,,,,,,,,,,,0,0,0
 332200,0,103584,0,0,0,0,,,,,,ETRF_1989_TM_Baltic_1993,,,,,,,,,,,,,0,0,0
 332300,0,103600,0,0,0,0,,AitkinMN-M,HARN.MN-Aitkin,AitkinMN-M,,NAD_1983_HARN_Adj_MN_Aitkin_Meters,,,,,,,,,,,,,0,0,0
