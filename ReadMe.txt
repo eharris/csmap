@@ -19,14 +19,19 @@ Building the entire product is a series of five steps:
 	4> Build the console test program.
 	5> Execute the console test program.
 
-After installation, and before building, it will be best to obtain a copy of the Canadian National Transformation file (NTV2_0.gsb) and copy it to the Dictionaries/Canada directory.  This data file may not be distributed!!! Geomatics Canada reserves the right to distribute this file and maintain a list of those using it.  Part of an ISO 9000 consideration.  Therefore, since we do not distribute the file as part of this open source distribution, we recommend strongly that you simply obtain a copy, even if for testing purposes only.
+After installation, and before building, it will be best to obtain a copy of the Canadian National Transformation file (NTV2_0.gsb) and copy it to the Dictionaries/Canada directory.  This data file may not be distributed!!!  Geomatics Canada reserves the right to distribute this file and maintain a list of those using it.  Part of an ISO 9000 consideration.  Therefore, since we do not distribute the file as part of this open source distribution, we recommend strongly that you simply obtain a copy, even if only for testing purposes.
 
 Chances are very good you already have a copy of this file on your system already.  If not, you can obtain one (no fee) at:
 
 	http://www.geod.nrcan.gc.ca
 
-The TEST.DAT data file in the Test directory contains several hundred test points which are directly related to the above mentioned grid shift data file.  To prevent confusion and unecessary technical support, these test are commented out in the distribution.  After obtaining a copy of the above mentioned data file, these test should be uncommented back in, so that the test program will test this feature.
+You will need to inform the CS-MAP library of the existence of this file and where it is located.  In release 12 or earlier, this information is passed to the CS-MAP library via the "Nad27ToNad83.gdc" data file.  This is a simple text file which can be edited with any text editor.  Comments in the distribution version of this file are verbose and describe exactly what needs to be accomplished to activate access to the new data file.
 
+In release 13 and thereafter, the existence and location of the NTV2_0.gsb file is conveyed to the CS-MAP library through one or more definitions in the Geodetic Transformation Dictionary.  Thus, you must modify the source file for this dictionary (GeodeticTransform.asc) and then recompile it using the dictionary compiler.  As of this writing, there is no UI or alternative means of modifying this information.
+
+The TEST.DAT data file in the Test directory contains several hundred test points which are directly related to the above mentioned grid shift data file.  To prevent confusion and unnecessary technical support, these test points are commented out in the distribution.  After obtaining a copy of the above mentioned data file, these test should be uncommented back in, so that the test program will test this feature.
+
+The situation described above concerning the Canadian National Transformation also applies to other sources of geodetic transformation data.  In these cases, it is not so much that we know we are not permitted to distribute the file, it is more that we are unable to determine that we are permitted to distribute the data file.  Thus, to be safe the files are not distributed.  At this writing, this situation applies to other CSRS related Canadian files and the Japanese Geodetic Datum of 2000 data file.  Check the appropriate locations in the distribution folder hierarchy for readme files which describe the situation for these locations and provides suggestions on how to obtain a copy of the file.
 
 OK. Now for building on your system:
 
