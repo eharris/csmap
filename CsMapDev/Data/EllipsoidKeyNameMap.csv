@@ -20,7 +20,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 1900,7021,0,0,0,0,0,,IndonesianNtl,IndonesianNtl,IndonesianNtl,Indonesian National Spheroid,Indonesian,Indonesian National Spheroid (EPSG ID 7021),,,Indonesian National Spheroid,,,,,,,,,0,0,0
 2000,7022,0,0,0,0,0,,INTNL|HAYFORD|NZGD49,International24|NewZealand49|Hayford09,INTNL|HAYFORD,International 1924,International_1924,International 1924 (EPSG ID 7022),,,International 1924,,,,International 1924,,,,,0,0,0
 2100,7024,0,0,0,0,0,,KRASOV,Krassovskiy40,KRASOV,Krassowsky 1940,Krasovsky_1940,Krassowsky 1940 (EPSG ID 7024),,,Krassowsky 1940,,,,Krassovsky,,,,,0,0,0
-2200,7025,0,0,0,0,0,,NWL-9D,NWL-9D,NWL-9D,NWL 9D,NWL_9D,NWL 9D (EPSG ID 7025),,,NWL 9D,,,,WGS 66,,,,,0,0,0
+2200,7025,0,0,0,0,0,,NWL-9D,NWL-9D,NWL-9D/1,NWL 9D,NWL_9D,NWL 9D (EPSG ID 7025),,,NWL 9D,,,,WGS 66,,,,,0,0,0
 2300,7027,0,0,0,0,0,,PLESSIS,Plessis1817,PLESSIS,Plessis 1817,Plessis_1817,Plessis 1817 (EPSG ID 7027),,,Plessis 1817,,,,,,,,,0,0,0
 2400,7028,0,0,0,0,0,,STRU1860,Struve1860,STRU1860,Struve 1860,Struve_1860,Struve 1860 (EPSG ID 7028),,,Struve 1860,,,,,,,,,0,0,0
 2500,7029,0,0,0,0,0,,WarOffice,WarOffice,WarOffice,War Office,War_Office,War Office (EPSG ID 7029),,,War Office,,,,,,,,,0,0,0

@@ -2100,7 +2100,7 @@ bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& 
 	std::wstring dtmName;
 	std::wstring fldData;
 
-	// The basic scheme her is to find the transformation from the provided
+	// The basic scheme here is to find the transformation from the provided
 	// datum code to WGS84 (i.e. 6326/4326).  When provided with a datum code
 	// value of 6326, obviously, this will fail.  So we intercept this now
 	// and provide the canned result declared in CSdata.c.
@@ -2300,7 +2300,6 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 		case 9633:				// OSNT
 		default:
 			csPrmCount = 0;
-			to84_via = cs_DTCTYP_NONE;
 			break;
 		}
 	}
@@ -2567,6 +2566,7 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 		if (ok)
 		{
 			coordsys.quad = (crsType == epsgCrsTypGeographic2D) ? -quad : quad;
+			coordsys.epsg_qd = coordsys.quad;
 		}
 
 		// Determine the units by extracting a CS-MAP unit name which produces
@@ -2689,7 +2689,7 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 			}
 		}
 	}
-
+	
 	// Do the stuff specific to the type.
 	if (ok && crsType == epsgCrsTypGeographic2D)
 	{
@@ -2956,7 +2956,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 		}
 	}
 
-	// Extract the Coordinate Operation code and the Coordinate operation
+	// Extract the Coordinate Operation code and the Coordinate Operation
 	// Method code.
 	if (ok)
 	{
@@ -2985,7 +2985,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 		ok = (prjTblPtr->code != cs_PRJCOD_END);
 	}
 
-	if (ok && mthEpsgCode == 9807UL)
+	if (ok && mthEpsgCode == 9807UL)	// Transverse Mercator
 	{
 		double orgLat;
 		double sclRed;
@@ -3017,7 +3017,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 					int utmZone = static_cast<int>(prjPrm1 + 183.00001) / 6;
 					if (utmZone >= 1 && utmZone <= 60)
 					{
-						// OK, I'm satisified that er have a UTM zone.
+						// OK, I'm satisfied that we have a UTM zone.
 						for (prjTblPtr = cs_Prjtab;prjTblPtr->code != cs_PRJCOD_END;prjTblPtr += 1)
 						{
 							if (prjTblPtr->code == cs_PRJCOD_UTM)
@@ -3033,7 +3033,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 	}
 	// For the remainder of this execution, mthEpsgCode has the EPSG Operation
 	// Method code, and prjTblPtr points to the corresponding CS-MAP projection
-	// table entry.  these are heavily relied upon below.
+	// table entry.  These are heavily relied upon below.
 						
 	// Deal with the projection and parameters.
 	if (ok)
@@ -3045,20 +3045,20 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 		TcsEpsgCode epsgPrmCode;
 
 		// Capture the stuff that applies to most every projection or can be
-		// determined from the flag's work in the projection table.  Some of
+		// determined from the flag's word in the projection table.  Some of
 		// this may be overwritten below where we deal with special situations.
 		// (There always has to be some special situations, don't you know;
 		// else a whole bunch of us would be out of a job.)
 		//
-		// Set uyp some default values to keep the logic below clean.
+		// Set up some default values to keep the logic below clean.
 		coordsys.org_lng = cs_Zero;
 		coordsys.org_lat = cs_Zero;
 		coordsys.scl_red = cs_One;
-		coordsys.x_off = cs_Zero;
-		coordsys.y_off = cs_Zero;
+		coordsys.x_off   = cs_Zero;
+		coordsys.y_off   = cs_Zero;
 
-		// Populate coordsys with what we cna having a pointer to the appropriate
-		// entry of the projection table.		
+		// Populate coordsys with what we can having a pointer to the appropriate
+		// entry of the projection table.
 		prjCode = prjTblPtr->code;
 		prjFlags = prjTblPtr->flags;
 		CS_stncp (coordsys.prj_knm,prjTblPtr->key_nm,sizeof (coordsys.prj_knm));
@@ -3066,16 +3066,18 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 		{
 			// The projection requires an origin longitude which is not carried
 			// as projection parameter 1.
-			if (mthEpsgCode == 9819UL)
+			if (mthEpsgCode == 9819UL)		// Krovak
 			{
 				coordsys.org_lng = cs_Zero;
 			}
 			else
 			{
-				epsgPrmCode = 8802UL;
-				if (mthEpsgCode == 9802UL || mthEpsgCode == 9803UL || mthEpsgCode == 9822UL)
+				epsgPrmCode = 8802UL;				// Longitude of Natural Origin
+				if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic 2SP
+					mthEpsgCode == 9803UL ||		// Lambert Conformal Conic; Belgium (2SP)
+					mthEpsgCode == 9822UL)			// Albers Equal Area Conic
 				{
-					epsgPrmCode = 8822UL;
+					epsgPrmCode = 8822UL;			// Longitude of False Origin 
 				}
 				ok &= GetParameterValue (coordsys.org_lng,copEpsgCode,mthEpsgCode,epsgPrmCode,9102UL);
 			}
@@ -3084,55 +3086,63 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 		if ((prjFlags & cs_PRJFLG_ORGLAT) == 0UL)
 		{
 			// The projection requires an origin latitude.
-			epsgPrmCode = 8801UL;
-			if (mthEpsgCode == 9802UL || mthEpsgCode == 9803UL || mthEpsgCode == 9822UL)
+			epsgPrmCode = 8801UL;				// Latitude of Natural Origin
+			if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic 2SP
+			    mthEpsgCode == 9803UL ||		// Lambert Conformal Conic; Belgium (2SP)
+			    mthEpsgCode == 9822UL)			// Albers Equal Area Conic
 			{
-				epsgPrmCode = 8821UL;
+				epsgPrmCode = 8821UL;			// Latitude of False Origin
 			}
-			else if (mthEpsgCode == 9819UL)
+			else if (mthEpsgCode == 9819UL)		// Krovak Oblique Conic
 			{
-				// Krovak Oblique Conic
-				epsgPrmCode = 8811UL;
+				epsgPrmCode = 8811UL;			// Latitude of Projection Center
 			}
 			ok &= GetParameterValue (coordsys.org_lat,copEpsgCode,mthEpsgCode,epsgPrmCode,9102UL);
 		}
 		if ((prjFlags & cs_PRJFLG_SCLRED) != 0UL)
 		{
-			epsgPrmCode = 8805UL;
-			if (mthEpsgCode == 9819UL)
+			epsgPrmCode = 8805UL;				// Scale Factor at Natural Origin
+			if (mthEpsgCode == 9819UL)			// Krovak Oblique Conic
 			{
-				// Krovak Oblique Conic
-				epsgPrmCode = 8819UL;
+				epsgPrmCode = 8819UL;			// Latitude of Pseudo Standard Parallel			
 			}
-			else if (mthEpsgCode == 9812UL ||
-					 mthEpsgCode == 9813UL ||
-					 mthEpsgCode == 9815UL)
+			else if (mthEpsgCode == 9812UL ||	// Hotine Oblique Mercator (Variant A)
+					 mthEpsgCode == 9813UL ||	// Laborde Oblique Mercator
+					 mthEpsgCode == 9815UL)		// Hotine Oblique Mercator (Variant B)
 			{
-				// Hotine Oblique Mercator, Laborde Oblique Mercator, Oblkique Mercator
-				epsgPrmCode = 8815UL;
+				epsgPrmCode = 8815UL;			// Scale Factor on Initial Line
 			}
 			ok &= GetParameterValue (coordsys.scl_red,copEpsgCode,mthEpsgCode,epsgPrmCode,9201UL);
 		}
 		if ((prjFlags & cs_PRJFLG_ORGFLS) == 0UL)
 		{
-			epsgPrmCode = 8806UL;
+			epsgPrmCode = 8806UL;				// False Easting
 			if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic - 2SP
 			    mthEpsgCode == 9803UL ||		// Lambert Conformal Conic - 2SP Belgium
 			    mthEpsgCode == 9816UL ||		// Tunisia Mining Grid
 			    mthEpsgCode == 9822UL ||		// Albers Equal Area
 			    mthEpsgCode == 9830UL)			// Polar Stereographic - Variant C
 			{
-				epsgPrmCode = 8826UL;
+				epsgPrmCode = 8826UL;			// Easting at False Origin
 			}
+			else if (mthEpsgCode == 9815UL)		// Hotine Oblique Mercator (Variant B)
+			{
+				epsgPrmCode = 8816UL;			// Easting at Projection Centre
+			}
+
 			ok &= GetParameterValue (coordsys.x_off,copEpsgCode,mthEpsgCode,epsgPrmCode,horzUomCode);
-			epsgPrmCode = 8807UL;
+			epsgPrmCode = 8807UL;				// False Northing
 			if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic - 2SP
 			    mthEpsgCode == 9803UL ||		// Lambert Conformal Conic - 2SP Belgium
 			    mthEpsgCode == 9816UL ||		// Tunisia Mining Grid
 			    mthEpsgCode == 9822UL ||		// Albers Equal Area
 			    mthEpsgCode == 9830UL)			// Polar Stereographic - Variant C
 			{
-				epsgPrmCode = 8827UL;
+				epsgPrmCode = 8827UL;			// Northing at False Origin
+			}
+			else if (mthEpsgCode == 9815UL)		// Hotine Oblique Mercator (Variant B)
+			{
+				epsgPrmCode = 8817UL;			// Northing at Projection Centre
 			}
 			ok &= GetParameterValue (coordsys.y_off,copEpsgCode,mthEpsgCode,epsgPrmCode,horzUomCode);
 		}
@@ -3174,14 +3184,16 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 					continue;
 				}
 				
-				// Some kludges to adjust to EPSG idosyncrasies.
-				if (mthEpsgCode == 9805UL && epsgPrmCode == 8832UL)
+				// Some kludges to adjust to EPSG idosyncrasies.  Of course
+				// there are no such things as CS-MAP idosyncrasies :>)
+				if (mthEpsgCode == 9805UL &&		// Mercator (Variant B)
+				    epsgPrmCode == 8832UL)			// Latitude of Standard Parallel
 				{
 					// For the Mercator 2SP projection, there really is only
 					// one standard parallel, but the EPSG parameterization
 					// uses the 1st standard parallel parameter for THE
 					// standard parallel.
-					epsgPrmCode = 8823UL;
+					epsgPrmCode = 8823UL;			// Latitude of First Standard Parallel
 				}
 
 				// Get the parameter value.
@@ -3202,7 +3214,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 				case cs_PRMLTYP_AZM:
 				case cs_PRMLTYP_ANGD:
 					// Same as latitude, with the exception that we adjust the
-					// value to be between -180 and +180.  Epsg likes to use
+					// value to be between -180 and +180.  EPSG likes to use
 					// the 0 to +360 range.
 					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9102UL);
 					if (prmTemp > 180.0)
@@ -3217,8 +3229,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 				case cs_PRMLTYP_ZNBR:
 					// I don't think there are any of these in EPSG yet.  At
 					// least not for the set of operation methods currently
-					// supported by CS-MAP.  We simply set ok to true as there
-					// is special code below to compute this value.
+					// supported by CS-MAP.
 					ok  = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,8802UL,9102UL);
 					if (ok)
 					{
@@ -3247,8 +3258,8 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 					break;
 				case cs_PRMLTYP_AFCOEF:
 					// These parameter types exist in EPSG and CS-MAP, but the
-					// methods that use them  in EPSG are not supported by
-					// CS-MAP and vice versa.  SO, for now anyway, this code
+					// methods that use them in EPSG are not supported by
+					// CS-MAP and vice versa.  So, for now anyway, this code
 					// should never be executed.
 					ok = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,epsgPrmCode,9203UL);
 					break;
@@ -3272,7 +3283,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 					prmTemp = cs_Zero;
 					break;
 				}
-				
+
 				// Stuff the parameter into the definition structure.
 				if (ok)
 				{
@@ -3306,15 +3317,15 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 				}
 			}
 		}
-		else if (mthEpsgCode == 9808UL)
+		else if (mthEpsgCode == 9808UL)			// South oriented Transverse Mercator.
 		{
-			// South oriented Transverse Mercator.
 			coordsys.quad = 1;
 		}
-		else if (mthEpsgCode == 9812UL)
+		else if (mthEpsgCode == 9812UL ||		// Hotine Oblique Mercator (variant A)
+				 mthEpsgCode == 9815UL)			// Hotine Oblique Mercator (variant B)
 		{
-			double alpha;
-			double gamma;
+			double alpha;						// azimuth of geodesic at projection center
+			double gamma;						// azimuth of geodesic at natural origin
 
 			// Hotine Oblique Mercator/Rectified Skew Orthomorphic.  EPSG has
 			// only one projection variation, while CS-MAP has two.  This is
@@ -3351,12 +3362,11 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 				coordsys.prj_prm3 = alpha;
 			}
 		}
-		else if (mthEpsgCode == 9819UL)
+		else if (mthEpsgCode == 9819UL)			// Krovak Conformal Conic.
 		{
 			double oblqPoleCoLat;
-			// Krovak Conformal Conic.
-			//
-			// This gets strange.  The parameterization of the this projection
+
+			// This gets strange.  The parameterization of this projection
 			// outside of CS-MAP is weird.  The parameter is called:
 			//
 			// 8813: Azimuth of initial line
@@ -3368,15 +3378,15 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			// This value is obvisouly not a real parameter that someone
 			// would choose.  What it really is is the co-latitude of the
 			// oblique pole on the gaussian surface.  This is calculatable
-			// if tiy are given a real parameter, such as the latitude of
+			// if you are given a real parameter, such as the latitude of
 			// the oblique pole on the basic ellipsoid.  That is the
 			// parameter CS-MAP expects.
 			//
-			// Since there is only one basoc coordinate system which uses
-			// this projection, the following code works real fine, last a
-			// long time.
+			// Since there is only one basic coordinate system which uses
+			// this projection, the following code works real fine and will
+			// last a long time.
 			//
-			// The standard code above should have properly place most of
+			// The standard code above should have properly placed most of
 			// the correct values.
 			ok  = GetParameterValue (oblqPoleCoLat,copEpsgCode,mthEpsgCode,8813UL,9102UL);
 			if (ok && (fabs (coordsys.org_lat - 49.5) < 1.0E-03) &&
@@ -3386,12 +3396,13 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 				// This is indeed the Krovak, actually the only CRS which
 				// uses this projection.  So, we can now do this, rather
 				// confidently.
-				coordsys.org_lng  = 17.66666666667;		// Actually, meridian of Ferro.
-				coordsys.org_lat  = 49.5;				// Latitude at which the gaussian radius is computed.
-				coordsys.prj_prm1 = 42.5;				// Longitude of the oblique pole relative to ther Ferro meridian)
+				coordsys.org_lng  = -17.66666666667;		// Actually, meridian of Ferro.
+				coordsys.org_lat  = 49.5;					// Latitude at which the gaussian radius is computed.
+				coordsys.prj_prm1 = 42.5;					// Longitude of the oblique pole relative to ther Ferro meridian)
 				coordsys.prj_prm2 = 59.75759855555555555;	// Latitude of the oblique pole (Riga, Estonia).
-				coordsys.prj_prm3 = 78.5;				// Standard parallel on the oblique code.
-				coordsys.scl_red  = 0.9999;				// 1:10,000
+				coordsys.prj_prm3 = 78.5;					// Standard parallel on the oblique code.
+				coordsys.scl_red  = 0.9999;					// 1:10,000
+				coordsys.quad     = 1;						// X increases to the east, Y increases to the north
 			}
 			else
 			{
@@ -3408,7 +3419,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			double prmTemp;
 
 			// For conics of the two standard parallel variety, we make sure
-			// that the northern most of the two parallels is in pri_prm1.
+			// that the northern most of the two parallels is in prj_prm1.
 			// That is a CS-MAP convention.  It doesn't make much difference
 			// to the mathmatics, but it makes comparing two definitions a
 			// bit problematical.
@@ -3522,8 +3533,21 @@ EcsUomType TcsEpsgDataSetV6::GetUomFactor (double& uomFactor,const TcsEpsgCode& 
 				uomType = GetEpsgUomType (unitType.c_str ());
 				if (uomType != epsgUomTypUnknown)
 				{
-					ok  = uomTblPtr->GetAsReal (factorB,uomCode,epsgFldFactorB);
-					ok &= uomTblPtr->GetAsReal (factorC,uomCode,epsgFldFactorC);
+					if ((uomCode >= 9107UL && uomCode <= 9108) ||
+						(uomCode >= 9110UL && uomCode <= 9111) ||
+						(uomCode >= 9115UL && uomCode <= 9112)
+					   )
+					{
+						// EPSG does not provide factor values for these codes.
+						factorB = PI;
+						factorC = 180.0;
+						ok = true;
+					}
+					else
+					{
+						ok  = uomTblPtr->GetAsReal (factorB,uomCode,epsgFldFactorB);
+						ok &= uomTblPtr->GetAsReal (factorC,uomCode,epsgFldFactorC);
+					}
 					if (ok)
 					{
 						ok = (fabs (factorC) > 1.0E-12);
@@ -3634,7 +3658,6 @@ bool TcsEpsgDataSetV6::FieldToReal (double& result,const TcsEpsgCode& trgUomCode
 	srcType = GetUomFactor (srcFactor,srcUomCode);
 	trgType = GetUomFactor (trgFactor,trgUomCode);
 	ok = (srcType != epsgUomTypUnknown && srcType == trgType);
-
 	if (ok)
 	{
 		if (srcType == epsgUomTypAngular)
@@ -3699,7 +3722,7 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 		
 		// It is common for values to not have a decimal point, which makes
 		// the deciphering of values in formats other than straight decimal
-		// notation difficult.  We try to fox this problem here.
+		// notation difficult.  We try to fix this problem here.
 		wcPtr = wcschr (wrkBufr,L'.');
 		if (wcPtr == 0)
 		{
@@ -3924,7 +3947,7 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 	}
 	else if ((uomCode >= 9101UL && uomCode <= 9106UL) ||
 			 (uomCode == 9109UL) ||
-	         (uomCode >= 9112UL && uomCode <= 9114UL))
+			 (uomCode >= 9112UL && uomCode <= 9114UL))
 	{
 		// 9101 -> radians
 		// 9102 -> degrees
