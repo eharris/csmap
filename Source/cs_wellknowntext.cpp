@@ -6,7 +6,7 @@
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
+ *     * Redistributions in binary form must reproduce the above copyright 
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
  *     * Neither the name of the Autodesk, Inc. nor the names of its
@@ -435,15 +435,15 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		}
 	}
 	// Preserve the flavor which was successful in parsing the WKT string.
-    nmFlavor = csWktFlvrToCsMapFlvr (flavor);
+	nmFlavor = csWktFlvrToCsMapFlvr (flavor);
 
-    // Some flavors, Oracle in particular, like to have WKT definitions without
-    // any parameters.  In this situation, the remainder of this process is
-    // doomed to fail.  Therefore, as we have determined a flavor (hopefully),
-    // in this situation we simply see if we can map the name to a dictionary
-    // name.  If so, we simply extract the named definitions from the
-    // dictionary and return a valid status.
-    if ((wktElement.GetElementType () == rcWktProjCS) &&
+	// Some flavors, Oracle in particular, like to have WKT definitions without
+	// any parameters.  In this situation, the remainder of this process is
+	// doomed to fail.  Therefore, as we have determined a flavor (hopefully),
+	// in this situation we simply see if we can map the name to a dictionary
+	// name.  If so, we simply extract the named definitions from the
+	// dictionary and return a valid status.
+	if ((wktElement.GetElementType () == rcWktProjCS) &&
 		(wktElement.GetParameterCount () == 0)
 	   )
 	{
@@ -513,22 +513,41 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 	// the same as a CS-MAP name, but maps to a different ellipsoid.
 	csMapSt = csMapNameToNameC (csMapEllipsoidKeyName,wrkBufr,sizeof (wrkBufr),
 															  csMapFlvrAutodesk,
-												              nmFlavor,
-														      elDef->name);
+															  nmFlavor,
+															  elDef->name);
 	if (csMapSt == csMapOk)
 	{
 		// The name mapping was successful.  The proposed name is saved for
 		// possible replacement.
 		CS_stncp (csMapElName,wrkBufr,cs_KEYNM_DEF);
+		CS_stncp (elDef->key_nm,csMapElName,cs_KEYNM_DEF);
+		CS_stncp (dtDef->ell_knm,csMapElName,cs_KEYNM_DEF);
 
-	    CS_stncp (elDef->key_nm,csMapElName,cs_KEYNM_DEF);
-	    CS_stncp (dtDef->ell_knm,csMapElName,cs_KEYNM_DEF);
+		// If ellipsoid name was truncated, it is not anymore
+		st &= ~cs_EL2WKT_NMTRUNC;
+	}
+	if (csMapSt != csMapOk && elDef->epsgNbr != 0)
+	{
+		csMapSt = csMapIdToNameC (csMapEllipsoidKeyName,wrkBufr,sizeof (wrkBufr),
+																csMapFlvrAutodesk,
+																csMapFlvrEpsg,
+																(unsigned long)elDef->epsgNbr);
+		if (csMapSt == csMapOk)
+		{
+			// The name mapping was successful.  The proposed name is saved for
+			// possible replacement.
+			CS_stncp (csMapElName,wrkBufr,cs_KEYNM_DEF);
+			CS_stncp (elDef->key_nm,csMapElName,cs_KEYNM_DEF);
+			CS_stncp (dtDef->ell_knm,csMapElName,cs_KEYNM_DEF);
 
-        // If ellipsoid name was truncated, it is not anymore
-        st &= ~cs_EL2WKT_NMTRUNC;
-    }
-    else
-    {
+			// If ellipsoid name was truncated, it is not anymore
+			st &= ~cs_EL2WKT_NMTRUNC;
+		}
+	}
+	if (csMapSt != csMapOk)
+	{
+		// If neither of those worked, we start pulling at straws.
+		// If the WKT name was a valid CS-MAP name, we use it.
 		if (CS_elIsValid (elDef->name))
 		{
 			CS_stncp (csMapElName,elDef->name,cs_KEYNM_DEF);
@@ -538,11 +557,13 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		}
 		else if (CS_elIsValid (elDef->key_nm))
 		{
+			// If the key name ended up being a valid CS-MAP name (rare)
+			// we'll use it.
 			CS_stncp (csMapElName,elDef->key_nm,cs_KEYNM_DEF);
 			CS_stncp (dtDef->ell_knm,csMapElName,cs_KEYNM_DEF);
 			st &= ~cs_EL2WKT_NMTRUNC;
 		}
-    }
+	}
 
 	if ((st & cs_EL2WKT_NMTRUNC) != 0)
 	{
@@ -553,32 +574,14 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		if (epsgNbr != 0)
 		{
 			sprintf (wrkBufr,"EPSG::%d",(int)epsgNbr);
-		    CS_stncp (elDef->key_nm,wrkBufr,cs_KEYNM_DEF);
+			CS_stncp (elDef->key_nm,wrkBufr,cs_KEYNM_DEF);
 				
 			// Replace the ellipsoid key name in the dtDef structure with
 			// the new name as well. We leave the source name alone.
-		    CS_stncp (dtDef->ell_knm,wrkBufr,cs_KEYNM_DEF);
-		    
-	        // If ellipsoid name was truncated, it is not anymore
-	        st &= ~cs_EL2WKT_NMTRUNC;
-		}
-		else
-		{
-			// It didn't have an EPSG number assigned.  If it has an
-			// equivalent MSI name, we'll stick that in there.
-			csMapSt = csMapNameToNameC (csMapEllipsoidKeyName,wrkBufr,sizeof (wrkBufr),
-																	  csMapFlvrAutodesk,
-																	  nmFlavor,
-																	  elDef->name);
-			if (csMapSt == csMapOk)
-			{
-				CS_stncp (elDef->key_nm,wrkBufr,cs_KEYNM_DEF);
-				CS_stncp (dtDef->ell_knm,wrkBufr,cs_KEYNM_DEF);
+			CS_stncp (dtDef->ell_knm,wrkBufr,cs_KEYNM_DEF);
 
-		        // If ellipsoid name was truncated, it is not anymore
-		        st &= ~cs_EL2WKT_NMTRUNC;
-			}
-			// Otherwise, we just leave the truncated name there.
+			// If ellipsoid name was truncated, it is not anymore
+			st &= ~cs_EL2WKT_NMTRUNC;
 		}
 	}
 
@@ -608,13 +611,28 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 															  csMapFlvrAutodesk,
 															  nmFlavor,
 															  dtDef->name);
-        if (csMapSt == csMapOk)
-        {
+		if (csMapSt == csMapOk)
+		{
 			// Yup!!! We'll go with this result.
 			CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));			
-        }
-        else
-        {
+		}
+		if (csMapSt != csMapOk && dtDef->epsgNbr != 0)
+		{
+			// If the WKT had an AUTHORITY element, and the authroity was EPSG,
+			// we'll have an EPSG number we can deal with.
+			csMapSt = csMapIdToNameC (csMapDatumKeyName,wrkBufr,sizeof (wrkBufr),
+																  csMapFlvrAutodesk,
+																  csMapFlvrEpsg,
+																  (unsigned long)dtDef->epsgNbr);
+			if (csMapSt == csMapOk)
+			{
+				// Yup!!! We'll go with this result.
+				CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));
+			}
+		}
+		if (csMapSt != csMapOk)
+		{
+			// Still no luck; we start grasping at straws now.
 			// See if the provided datum name is already a CS-MAP name.
 			// If so, we use it.  We do this after the mapping in the
 			// unlikely event that a flavored name is the same as a
@@ -628,45 +646,29 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			{
 				CS_stncp (csMapDtName,dtDef->key_nm,sizeof (csMapDtName));
 			}
-        }
-		if (csMapDtName [0] == '\0' && dtDef->epsgNbr != 0)
-		{
-			// We still do not have a definition (actually a name that we can
-			// use to get a definition).  In many flavors, an EPSG code value
-			// is provided in an AUTHORITY element.  If such was provided and
-			// properly parsed, it should have ended up in the epsgNbr element
-			// of cs_Dtdef_ structure.
-			csMapSt = csMapIdToNameC (csMapDatumKeyName,wrkBufr,sizeof (wrkBufr),
-															    csMapFlvrAutodesk,
-																csMapFlvrEpsg,
-																dtDef->epsgNbr);
-			if (csMapSt == csMapOk)
-			{
-				CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));			
-			}
 		}
 		if (csMapDtName [0] == '\0')
 		{
 			// Some flavors of WKT include an EPSG ID in the name.  Let's use
 			// that if its there.
-            const char* pszEpsgId=strstr(dtDef->name, "EPSG ID ");
-            if (pszEpsgId!=NULL)
-            {
-                long lEpsgNbr=0;
-                long lResult=sscanf(pszEpsgId, "EPSG ID %ld", &lEpsgNbr);
-                if (lResult!=0 && lResult!=EOF)
-                {
+			const char* pszEpsgId=strstr(dtDef->name, "EPSG ID ");
+			if (pszEpsgId!=NULL)
+			{
+				long lEpsgNbr=0;
+				long lResult=sscanf(pszEpsgId, "EPSG ID %ld", &lEpsgNbr);
+				if (lResult!=0 && lResult!=EOF)
+				{
 					csMapSt = csMapIdToNameC (csMapDatumKeyName,wrkBufr,
 																sizeof (wrkBufr),
 																csMapFlvrAutodesk,
 																csMapFlvrEpsg,
-																lEpsgNbr);
+																(unsigned long)lEpsgNbr);
 					if (csMapSt == csMapOk)
 					{
-						CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));			
+						CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));
 					}
-                }
-            }
+				}
+			}
 		}
 
 		if (csMapDtName [0] != '\0')
@@ -674,22 +676,21 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			// dtDefPtr is a pointer to the definition we obtain from the
 			// CS-MAP dictionary in response to the fact that there is
 			// no datum definition in the WKT that we can use.  Note that
-			// this pointer must be deleted.  Since this is now C++,
-			// perhaps we should use a std::auto_ptr.
+			// this pointer must be deleted.  Since this is now C++, perhaps
+			// we should use a std::auto_ptr.
 			dtDefPtr = CS_dtdef (csMapDtName);
 		}
+		else
+		{
+			// Create an empty datum
+			dtDefPtr = (struct cs_Dtdef_ *)CS_malc (sizeof (struct cs_Dtdef_));
+			memset(dtDefPtr, 0, sizeof(cs_Dtdef_));
 
-        if(csDef->dat_knm[0] == '\0')
-        {
-            // Create an empty datum
-    	    dtDefPtr = (struct cs_Dtdef_ *)CS_malc (sizeof (struct cs_Dtdef_));
-            memset(dtDefPtr, 0, sizeof(cs_Dtdef_));
+			// Set the ellipsoid name 
+			CS_stncp (csDef->elp_knm,elDef->key_nm,cs_KEYNM_DEF);
+		}
 
-            // Set the ellipsoid name 
-    		CS_stncp (csDef->elp_knm,elDef->key_nm,cs_KEYNM_DEF);
-        }
-
-        if (dtDefPtr != 0 && csDef->dat_knm[0] != '\0')
+		if (dtDefPtr != 0 && csDef->dat_knm[0] != '\0')
 		{
 			// Here when:
 			// 1> there was no complete datum definition in the WKT string, AND
@@ -702,13 +703,13 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			// datum name in the cs_Dtdef_ key name field, and also in the
 			// cs_Csdef_ field that references it.
 
-			// Below, we will copy the MSI dictionary datum definition which
+			// Below, we will copy the CS-MAP dictionary datum definition which
 			// the name mapping process indicates what the the WKT datum should
 			// be.  It is entirely possible that the ellipsoid referenced in
-			// the MSI dictionary entry is not the same as the ellipsoid
+			// the CS-MAP dictionary entry is not the same as the ellipsoid
 			// definition which was obtained from the WKT string.  Since the
 			// WKT rendition of ellipsoids is complete and usable, we replace
-			// the ellipsoid key name with that obtained from the MSI
+			// the ellipsoid key name with that obtained from the CS-MAP
 			// dictionary only after we verify that the ellipsoids are indeed
 			// the same.
 			//
@@ -720,14 +721,13 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			int same = CSelDictWktCompare (dtDefPtr->ell_knm,elDef);
 			if (same != 0)
 			{
-				// The ellipsoid referenced by the MSI datum dictionary
+				// The ellipsoid referenced by the CS-MAP datum dictionary
 				// definition is the same (numerically) as the ellipsoid
 				// definition extracted from the WKT string.  We choose
-				// to use the MSI key name of the MSI dictionary definition
-				// of the ellipsoid.
+				// to use the CS-MAP key name.
 				CS_stncp (dtDef->ell_knm,dtDefPtr->ell_knm,sizeof (dtDef->ell_knm));
 				
-				// Since we will be using the CS-MAP definition with its CS_MAP key
+				// Since we will be using the CS-MAP definition with its CS-MAP key
 				// name, we activate the datum key name replacement.
 				CS_stncp (csMapDtName,dtDefPtr->key_nm,cs_KEYNM_DEF);
 			}
@@ -738,7 +738,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 				mapNames = false;
 			}
 
-			// Copy the rest of the MSI definition to the dtDef structure.
+			// Copy the rest of the CS-MAP definition to the dtDef structure.
 			// Preserve the 'source', 'descriptive name', and WKT flavor from
 			// the WKT parse.
 			CS_stncp (dtDef->group,dtDefPtr->group,sizeof (dtDef->group));
@@ -768,7 +768,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 	}
 	else
 	{
-		csMapDtName [0] = '\0';			// Redundant, but I'll sleep better tobight.
+		csMapDtName [0] = '\0';			// Redundant, but I'll sleep better tonight.
 
 		// There was a complete datum definition in the WKT string.  Rare, but
 		// it happens, depending upon the flavor.  See if the WKT name maps
@@ -780,14 +780,63 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		if (csMapSt == csMapOk)
 		{
 			CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));
-	        CS_stncp (csDef->dat_knm,csMapDtName,cs_KEYNM_DEF);
-	        CS_stncp (dtDef->key_nm,csMapDtName,cs_KEYNM_DEF);
-	        
-            // If datum name was truncated, it is not anymore.
-            st&= ~cs_DT2WKT_NMTRUNC;
+			CS_stncp (csDef->dat_knm,csMapDtName,cs_KEYNM_DEF);
+			CS_stncp (dtDef->key_nm,csMapDtName,cs_KEYNM_DEF);
+
+			// If datum name was truncated, it is not anymore.
+			st&= ~cs_DT2WKT_NMTRUNC;
 		}
-        else
-        {
+		if (csMapSt != csMapOk && dtDef->epsgNbr != 0)
+		{
+			// The thing has an EPSG number; see if that maps to something
+			// useful.
+			csMapSt = csMapIdToNameC (csMapDatumKeyName,wrkBufr,sizeof (wrkBufr),
+																  csMapFlvrAutodesk,
+																  csMapFlvrEpsg,
+																  (unsigned long)dtDef->epsgNbr);
+			if (csMapSt == csMapOk)
+			{
+				// YUP!!! We'll accept the EPSG reference as being more useful
+				// and accurate than any of the other stuff.
+				CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));
+				CS_stncp (csDef->dat_knm,csMapDtName,cs_KEYNM_DEF);
+				CS_stncp (dtDef->key_nm,csMapDtName,cs_KEYNM_DEF);
+
+				// If datum name was truncated, it is not anymore.
+				st&= ~cs_DT2WKT_NMTRUNC;
+			}
+		}
+		if (csMapSt != csMapOk)
+		{
+			// Some flavors of WKT include an EPSG ID in the name.  Let's use
+			// that if its there.
+			const char* pszEpsgId=strstr(dtDef->name, "EPSG ID ");
+			if (pszEpsgId!=NULL)
+			{
+				long lEpsgNbr=0;
+				long lResult=sscanf (pszEpsgId,"EPSG ID %ld",&lEpsgNbr);
+				if (lResult!=0 && lResult!=EOF)
+				{
+					csMapSt = csMapIdToNameC (csMapDatumKeyName,wrkBufr,sizeof (wrkBufr),
+																		  csMapFlvrAutodesk,
+																		  csMapFlvrEpsg,
+																		  (unsigned long)dtDef->epsgNbr);
+					if (csMapSt == csMapOk)
+					{
+						// YUP!!! We'll accept the EPSG reference as being more useful
+						// and accurate than any of the other stuff.
+						CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));
+						CS_stncp (csDef->dat_knm,csMapDtName,cs_KEYNM_DEF);
+						CS_stncp (dtDef->key_nm,csMapDtName,cs_KEYNM_DEF);
+
+						// If datum name was truncated, it is not anymore.
+						st&= ~cs_DT2WKT_NMTRUNC;
+					}
+				}
+			}
+		}
+		if (csMapSt != csMapOk)
+		{
 			// See if the provided datum name is already a CS-MAP name.
 			// If so, we use it.  We do this after the mapping in the
 			// unlikely event that a flavored name is the same as a
@@ -803,19 +852,19 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			}
 			if (csMapDtName [0] != '\0')
 			{
-		        CS_stncp (csDef->dat_knm,csMapDtName,cs_KEYNM_DEF);
-		        CS_stncp (dtDef->key_nm,csMapDtName,cs_KEYNM_DEF);
+				CS_stncp (csDef->dat_knm,csMapDtName,cs_KEYNM_DEF);
+				CS_stncp (dtDef->key_nm,csMapDtName,cs_KEYNM_DEF);
 
-                // If datum name was truncated, it is not anymore.
-	            st&= ~cs_DT2WKT_NMTRUNC;
-		    }
-        }
+				// If datum name was truncated, it is not anymore.
+				st&= ~cs_DT2WKT_NMTRUNC;
+			}
+		}
  
 		// See if we can produce an untruncated name for this datum which is
 		// meaningful.
 		if ((st & cs_DT2WKT_NMTRUNC) != 0)
 		{
-            epsgNbr = csMapNameToIdC (csMapDatumKeyName,csMapFlvrEpsg,nmFlavor,dtDef->name); 
+			epsgNbr = csMapNameToIdC (csMapDatumKeyName,csMapFlvrEpsg,nmFlavor,dtDef->name); 
 			if (epsgNbr > 0 && static_cast<unsigned long>(epsgNbr) != KcsNmInvNumber)
 			{
 				sprintf (wrkBufr,"EPSG::%d",(int)epsgNbr);
@@ -825,21 +874,21 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 				// the new name as well.
 				CS_stncp (csDef->dat_knm,wrkBufr,cs_KEYNM_DEF);
 
-		        // If the datum name was truncated, it is not anymore.
-			    st &= ~cs_DT2WKT_NMTRUNC;
+				// If the datum name was truncated, it is not anymore.
+				st &= ~cs_DT2WKT_NMTRUNC;
 			}
 		}
 		if ((st & cs_DT2WKT_NMTRUNC) != 0)
 		{
 			// Some flavors of WKT include an EPSG ID in the name.  Let's use
 			// that if its there.
-            const char* pszEpsgId=strstr(dtDef->name, "EPSG ID ");
-            if (pszEpsgId!=NULL)
-            {
-                long lEpsgNbr=0;
-                long lResult=sscanf (pszEpsgId,"EPSG ID %ld",&lEpsgNbr);
-                if (lResult!=0 && lResult!=EOF)
-                {
+			const char* pszEpsgId=strstr(dtDef->name, "EPSG ID ");
+			if (pszEpsgId!=NULL)
+			{
+				long lEpsgNbr=0;
+				long lResult=sscanf (pszEpsgId,"EPSG ID %ld",&lEpsgNbr);
+				if (lResult!=0 && lResult!=EOF)
+				{
 					sprintf (wrkBufr,"EPSG::%u",(unsigned)lEpsgNbr);
 					CS_stncp (dtDef->key_nm,wrkBufr,cs_KEYNM_DEF);
 
@@ -850,13 +899,14 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 					// If the datum name was truncated, it is not anymore.
 					st &= ~cs_DT2WKT_NMTRUNC;
 				}
-            }
-        }
+			}
+		}
 	}
 
 	// All done with the datum and ellipsoid definitions.  Concentrate now on
 	// the coordinate system definition.  See if we can map the WKT coordinate
 	// system name into a CS-MAP name.
+
 	// Get a pointer to the CS-MAP projection table entry for the indicated
 	// projection.  We can do some more general stuff once we have that.
 	csMapCsName [0] = '\0';
@@ -872,8 +922,22 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		CS_stncp (csMapCsName,wrkBufr,cs_KEYNM_DEF);
 		st &= ~cs_CS2WKT_NMTRUNC;
 	}
-	else
+	else if (csDef->epsgNbr != 0)
 	{
+		// The WKT had aan EPSG code for the CRS definition.  See if that maps
+		// to something useful.
+		csMapSt = csMapIdToNameC (mapType,wrkBufr,sizeof (wrkBufr),csMapFlvrAutodesk,
+																   csMapFlvrEpsg,
+																   (unsigned long)csDef->epsgNbr);
+		if (csMapSt == csMapOk)
+		{
+			CS_stncp (csMapCsName,wrkBufr,cs_KEYNM_DEF);
+			st &= ~cs_CS2WKT_NMTRUNC;
+		}
+	}
+	if (csMapSt != csMapOk)
+	{
+		// Still no luck, we start graspiong for straws.
 		// If the name mapper couldn't produce a CS-MAP name, we see if the
 		// name is a CS-MAP name already.  We do this after the name
 		// mapper check in the unlikely event of a flavored name that is
@@ -895,7 +959,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 	// fallback business is so slow, it is nice to be able to turn it
 	// off and still be able to see the conditions under which it is
 	// invoked if it were active.
-  	if (csMapCsName [0] == '\0'  || (csMapElName [0] == '\0' && csMapDtName [0] == '\0'))
+	if (csMapCsName [0] == '\0'  || (csMapElName [0] == '\0' && csMapDtName [0] == '\0'))
 	{
 		// The above code which attempts to map the WKT to a CS-MAP coordinate system
 		// failed.  The following is a rather effective, though very painful, means of
@@ -2164,6 +2228,8 @@ int CS_wktEleToDt (struct cs_Dtdef_ *dtDef,struct cs_Eldef_ *elDef,
 	const TrcWktElement* toWgs84;
 	const TrcWktElement* authority;
 
+	double scaleDelta;
+
 	struct cs_Eldef_ myElDef;
 	memset (&myElDef,0,sizeof (myElDef));
 
@@ -2219,7 +2285,7 @@ int CS_wktEleToDt (struct cs_Dtdef_ *dtDef,struct cs_Eldef_ *elDef,
 	dtDef->protect = 0;
 	dtDef->epsgNbr = 0;
 	dtDef->wktFlvr = static_cast<short>(flavor);
-	
+
 	// Process the TOWGS84 element if its there.  For Oracle flavor,
 	// the datum shift parameters may be tacked on to the DATUM
 	// element.
@@ -2248,15 +2314,28 @@ int CS_wktEleToDt (struct cs_Dtdef_ *dtDef,struct cs_Eldef_ *elDef,
 		dtDef->rot_Y   = toWgs84->GetFieldDouble (4);
 		dtDef->rot_Z   = toWgs84->GetFieldDouble (5);
 		dtDef->bwscale = toWgs84->GetFieldDouble (6);
-		
+
 		if (flavor == wktFlvrOracle && dtDef->bwscale != 0.0)
 		{
-		    // Our experience with Oracle suggests that they actually put
-		    // the actual scale factor in the parameter string, rather
-		    // than the "signed parts per million" value that is required
-		    // by the cs_Dtdef_ structure and used in the samples of
-		    // WKT that have TOWGS84 elements.
-		    dtDef->bwscale = (dtDef->bwscale - 1.0) * 1.0E+06;
+			// Our experience with Oracle prior to release 11 suggests that
+			// they actually put the actual scale factor in the parameter
+			// string, rather than the "signed parts per million" value that
+			// is required by the cs_Dtdef_ structure and used in the samples
+			// of WKT that have TOWGS84 elements.  APpears to be OK in
+			// Oracle 11.  So what's a poor WKT reader supposed to do???
+			
+			// Generally, elsewhere in the WKT processor, we ignore these
+			// TOPWGS84 numbers anyway; so here we'll make a guess as to
+			// how to deal with this number.
+			scaleDelta = fabs (dtDef->bwscale - cs_One);
+			if (scaleDelta < 1.0E-03)
+			{
+				// We presume that the actual scale value was provided.
+				scaleDelta = (dtDef->bwscale - cs_One) * 1.0E+06;
+			}
+			// Otherwise, we assume the correct parts per million value was supplied.
+			// This is usualy the case for Oracle 11; all bets are off for
+			// Oracle 9 & 10.
 		}
 
 		// Set the appropriate method value.
@@ -2272,7 +2351,7 @@ int CS_wktEleToDt (struct cs_Dtdef_ *dtDef,struct cs_Eldef_ *elDef,
 
 		if (rotCnt != 0)
 		{
-		    dtDef->to84_via = cs_DTCTYP_7PARM;
+		    dtDef->to84_via = cs_DTCTYP_BURS;
 		}
 		else if (deltaCnt != 0)
 		{
@@ -2309,11 +2388,18 @@ int CS_wktEleToDt (struct cs_Dtdef_ *dtDef,struct cs_Eldef_ *elDef,
 		long32_t epsgCode;
 
 		cp = authority->GetElementNameC ();
+		// If there is no Autority specified, we'll assume EPSG as that's the
+		// only AUTHORITY we've ever seen used.
 		if (cp == 0 || *cp == '\0') cp = "EPSG";
-		epsgCode = authority->GetFieldLong (0);
-		dtDef->epsgNbr = static_cast<short>(epsgCode);
-		sprintf (datumName,"%s:%d",cp,(int)epsgCode);
-		CS_stncp (dtDef->key_nm,datumName,sizeof (dtDef->key_nm));
+		if (!CS_stricmp (cp,"EPSG"))
+		{
+			// We've only seen EPSG used as an authority.  Wouldn't know what
+			// to do with any other.
+			epsgCode = authority->GetFieldLong (0);
+			dtDef->epsgNbr = static_cast<short>(epsgCode);
+			sprintf (datumName,"%s:%d",cp,(int)epsgCode);
+			CS_stncp (dtDef->key_nm,datumName,sizeof (dtDef->key_nm));
+		}
 	}
 
 	// Hopefully, that's it.
@@ -2374,29 +2460,29 @@ int CS_wktEleToEl (struct cs_Eldef_ *elDef,ErcWktFlavor flavor,const TrcWktEleme
 		// Set the ellipsoid key name to the first 23 characters of the WKT
 		// spheroid name.  It is likely that this will be adjusted below.
 		cp = wktPtr->GetElementNameC ();
-		
+
 		// Save the entire WKT ellipsoid name in the descriptive name field
 		// of the ellipsoid definition structure.  We will want to have this
 		// available to us later on.
 		CS_stncp (elDef->name,cp,sizeof (elDef->name));
-		
+
 		// Use some standard trickery to reduce the size of the ellipsoid
 		// name to the 23 character maximum supported by CS-MAP.
 		CS_wktElNameFix (ellipsoidName,sizeof (ellipsoidName),cp);
 		CS_stncp (elDef->key_nm,ellipsoidName,sizeof (elDef->key_nm));
-		
+
 		// Extract the numeric values from the WKT element.  tempValue
 		// is the reciprocal of the flattening.
 		elDef->e_rad = wktPtr->GetFieldDouble (0);
 		tempValue  = wktPtr->GetFieldDouble (1);
-		
+
 		if (elDef->e_rad < cs_One)
 		{
 			// Something is very wrong.
 			CS_erpt (cs_WKT_NOELLIP);
 			goto error;
 		}
-	
+
 		// Some flavors of WKT use a huge value for the reciprocal of
 		// flattening to indicate a sphere instead of an ellipsoid.  We
 		// try to honor that here.
@@ -2406,6 +2492,7 @@ int CS_wktEleToEl (struct cs_Eldef_ *elDef,ErcWktFlavor flavor,const TrcWktEleme
 			elDef->ecent = cs_Zero;
 			elDef->flat = cs_Zero;
 		}
+
 		// Since tempValue is the reciprocal of the flattening, we need to
 		// divide by it.  Make sure we don't divide by zero.
 		else if (tempValue > 0.1)
@@ -2419,7 +2506,7 @@ int CS_wktEleToEl (struct cs_Eldef_ *elDef,ErcWktFlavor flavor,const TrcWktEleme
 		else
 		{
 			// Here if the reciprocal of flattening value is absurd, like
-			// sero or negative.  We essentially assume a sphere.  Maybe we
+			// zero or negative.  We essentially assume a sphere.  Maybe we
 			// should produce a fatal error.
 			elDef->p_rad = elDef->e_rad;
 			elDef->ecent = cs_Zero;
@@ -2428,8 +2515,10 @@ int CS_wktEleToEl (struct cs_Eldef_ *elDef,ErcWktFlavor flavor,const TrcWktEleme
 		elDef->protect = 0;
 		elDef->wktFlvr = static_cast<short>(flavor);
 
-		// If there is an AUTHORITY specification, we us it to name
-		// this ellipsoid.
+		// If there is an AUTHORITY specification, we use it to name this
+		// ellipsoid.  The full WKT name will always be in the "name"
+		// element, so we don't lose much by overwriting the "key_nm"
+		// element.
 		authority = wktPtr->ChildLocate (rcWktAuthority);
 		if (authority != 0)
 		{
@@ -2437,10 +2526,13 @@ int CS_wktEleToEl (struct cs_Eldef_ *elDef,ErcWktFlavor flavor,const TrcWktEleme
 
 			cp = authority->GetElementNameC ();
 			if (cp == 0 || *cp == '\0') cp = "EPSG";
-			epsgCode = authority->GetFieldLong (0);
-			elDef->epsgNbr = static_cast<short>(epsgCode);
-			sprintf (ellipsoidName,"%s:%d",cp,(int)epsgCode);
-			CS_stncp (elDef->key_nm,ellipsoidName,sizeof (elDef->key_nm));
+			if (!CS_stricmp (cp,"EPSG"))
+			{
+				epsgCode = authority->GetFieldLong (0);
+				elDef->epsgNbr = static_cast<short>(epsgCode);
+				sprintf (ellipsoidName,"%s:%d",cp,(int)epsgCode);
+				CS_stncp (elDef->key_nm,ellipsoidName,sizeof (elDef->key_nm));
+			}
 		}
 		CS_stncp (elDef->source,"Extracted from WKT string; 'Description' is full WKT name.",sizeof (elDef->source));
 		if (strlen (ellipsoidName) > cs_KEYNM_MAX) status |= cs_EL2WKT_NMTRUNC;
@@ -2528,7 +2620,7 @@ int CS_wktToDt (struct cs_Dtdef_ *dtDef,struct cs_Eldef_ *elDef,ErcWktFlavor fla
 		goto error;
 	}
 	cp = trgGeogCS->GetElementNameC ();
-	
+
 	// Verify that the target is WGS84.  "GCS_WGS_1984" is what will
 	// be there in an ESRI GEOTRAN.  Currently, we don't know what would be
 	// present in any other flavor (as we've never seen a GEOTRAN from any

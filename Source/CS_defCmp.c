@@ -55,7 +55,9 @@ int EXP_LVL3 CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef
 	char errMsg [512];
 
 	const struct cs_Csdef_ *lclOrgPtr;
+	const struct cs_Csdef_ *lclRevPtr;
 	struct cs_Csdef_ lclOriginal;
+	struct cs_Csdef_ lclRevised;
 
 	/* Before we get onto this to heavy; we check the projection code of the
 	   original and the revised.  If the original is UTM, and the revised is
@@ -76,20 +78,35 @@ int EXP_LVL3 CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef
 		lclOriginal.quad = 1;
 		lclOrgPtr = &lclOriginal;
 	}
+	lclRevPtr = revised;
+	if (!CS_stricmp (revised->prj_knm,"UTM") && !CS_stricmp (original->prj_knm,"TM"))
+	{
+		/* Convert revised to the TM form. */
+		memcpy (&lclRevised,revised,sizeof (lclRevised));
+		strcpy (lclRevised.prj_knm,"TM");
+		lclRevised.prj_prm1 = cs_Six * lclRevised.prj_prm1 - 183.0;
+		lclRevised.org_lat = cs_Zero;
+		unitsFactor = CS_unitlu (cs_UTYP_LEN,lclRevised.unit);
+		lclRevised.x_off = 500000.0 / unitsFactor;
+		lclRevised.y_off = (lclRevPtr->prj_prm2 >= 0.0) ? cs_Zero : 10000000.0 / unitsFactor;
+		lclRevised.scl_red = 0.9996;
+		lclRevised.quad = 1;
+		lclRevPtr = &lclRevised;
+	}
 
-	if (CS_stricmp (lclOrgPtr->prj_knm,revised->prj_knm))
+	if (CS_stricmp (lclOrgPtr->prj_knm,lclRevPtr->prj_knm))
 	{
 		if (errCnt == 0)
 		{
-			sprintf (errMsg,"Projection key name was %s, is now %s",lclOrgPtr->prj_knm,revised->prj_knm);
+			sprintf (errMsg,"Projection key name was %s, is now %s",lclOrgPtr->prj_knm,lclRevPtr->prj_knm);
 		}
 		errCnt += 1;
 	}
-	if (CS_stricmp (lclOrgPtr->unit,revised->unit))
+	if (CS_stricmp (lclOrgPtr->unit,lclRevPtr->unit))
 	{
 		if (errCnt == 0)
 		{
-			sprintf (errMsg,"Unit name was %s, is now %s",lclOrgPtr->unit,revised->unit);
+			sprintf (errMsg,"Unit name was %s, is now %s",lclOrgPtr->unit,lclRevPtr->unit);
 		}
 		errCnt += 1;
 	}
@@ -118,7 +135,7 @@ int EXP_LVL3 CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef
 	{
 		if (errCnt == 0)
 		{
-			sprintf (errMsg,"Projection key name is now %s which is invalid.",revised->prj_knm);
+			sprintf (errMsg,"Projection key name is now %s which is invalid.",lclRevPtr->prj_knm);
 		}
 		errCnt += 1;
 	}
@@ -154,103 +171,103 @@ int EXP_LVL3 CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef
 				pp->code == cs_PRJCOD_LMBRTAF)
 			{
 				errCntCnc = 0;
-				errCntCnc += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,revised->prj_prm1,errMsg,sizeof (errMsg));
-				errCntCnc += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,revised->prj_prm2,errMsg,sizeof (errMsg));
+				errCntCnc += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,lclRevPtr->prj_prm1,errMsg,sizeof (errMsg));
+				errCntCnc += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,lclRevPtr->prj_prm2,errMsg,sizeof (errMsg));
 				if (errCntCnc == 2)
 				{
-					errCnt += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,revised->prj_prm2,errMsg,sizeof (errMsg));
-					errCnt += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,revised->prj_prm1,errMsg,sizeof (errMsg));
+					errCnt += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,lclRevPtr->prj_prm2,errMsg,sizeof (errMsg));
+					errCnt += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,lclRevPtr->prj_prm1,errMsg,sizeof (errMsg));
 				}
 			}
 			else
 			{
 				/* Not a conic nor geographic, so we just compare the two
 				   parameter values. */
-				errCnt += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,revised->prj_prm1,errMsg,sizeof (errMsg));
-				errCnt += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,revised->prj_prm2,errMsg,sizeof (errMsg));
+				errCnt += CS_defCmpPrjPrm (pp, 1,lclOrgPtr->prj_prm1 ,lclRevPtr->prj_prm1,errMsg,sizeof (errMsg));
+				errCnt += CS_defCmpPrjPrm (pp, 2,lclOrgPtr->prj_prm2 ,lclRevPtr->prj_prm2,errMsg,sizeof (errMsg));
 			}
 		}
-		errCnt += CS_defCmpPrjPrm (pp, 3,lclOrgPtr->prj_prm3 ,revised->prj_prm3,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp, 4,lclOrgPtr->prj_prm4 ,revised->prj_prm4,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp, 5,lclOrgPtr->prj_prm5 ,revised->prj_prm5,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp, 6,lclOrgPtr->prj_prm6 ,revised->prj_prm6,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp, 7,lclOrgPtr->prj_prm7 ,revised->prj_prm7,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp, 8,lclOrgPtr->prj_prm8 ,revised->prj_prm8,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp, 9,lclOrgPtr->prj_prm9 ,revised->prj_prm9,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,10,lclOrgPtr->prj_prm10,revised->prj_prm10,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,11,lclOrgPtr->prj_prm11,revised->prj_prm11,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,12,lclOrgPtr->prj_prm12,revised->prj_prm12,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,13,lclOrgPtr->prj_prm13,revised->prj_prm13,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,14,lclOrgPtr->prj_prm14,revised->prj_prm14,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,15,lclOrgPtr->prj_prm15,revised->prj_prm15,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,16,lclOrgPtr->prj_prm16,revised->prj_prm16,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,17,lclOrgPtr->prj_prm17,revised->prj_prm17,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,18,lclOrgPtr->prj_prm18,revised->prj_prm18,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,19,lclOrgPtr->prj_prm19,revised->prj_prm19,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,20,lclOrgPtr->prj_prm20,revised->prj_prm20,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,21,lclOrgPtr->prj_prm21,revised->prj_prm21,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,22,lclOrgPtr->prj_prm22,revised->prj_prm22,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,23,lclOrgPtr->prj_prm23,revised->prj_prm23,errMsg,sizeof (errMsg));
-		errCnt += CS_defCmpPrjPrm (pp,24,lclOrgPtr->prj_prm24,revised->prj_prm24,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp, 3,lclOrgPtr->prj_prm3 ,lclRevPtr->prj_prm3,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp, 4,lclOrgPtr->prj_prm4 ,lclRevPtr->prj_prm4,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp, 5,lclOrgPtr->prj_prm5 ,lclRevPtr->prj_prm5,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp, 6,lclOrgPtr->prj_prm6 ,lclRevPtr->prj_prm6,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp, 7,lclOrgPtr->prj_prm7 ,lclRevPtr->prj_prm7,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp, 8,lclOrgPtr->prj_prm8 ,lclRevPtr->prj_prm8,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp, 9,lclOrgPtr->prj_prm9 ,lclRevPtr->prj_prm9,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,10,lclOrgPtr->prj_prm10,lclRevPtr->prj_prm10,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,11,lclOrgPtr->prj_prm11,lclRevPtr->prj_prm11,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,12,lclOrgPtr->prj_prm12,lclRevPtr->prj_prm12,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,13,lclOrgPtr->prj_prm13,lclRevPtr->prj_prm13,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,14,lclOrgPtr->prj_prm14,lclRevPtr->prj_prm14,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,15,lclOrgPtr->prj_prm15,lclRevPtr->prj_prm15,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,16,lclOrgPtr->prj_prm16,lclRevPtr->prj_prm16,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,17,lclOrgPtr->prj_prm17,lclRevPtr->prj_prm17,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,18,lclOrgPtr->prj_prm18,lclRevPtr->prj_prm18,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,19,lclOrgPtr->prj_prm19,lclRevPtr->prj_prm19,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,20,lclOrgPtr->prj_prm20,lclRevPtr->prj_prm20,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,21,lclOrgPtr->prj_prm21,lclRevPtr->prj_prm21,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,22,lclOrgPtr->prj_prm22,lclRevPtr->prj_prm22,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,23,lclOrgPtr->prj_prm23,lclRevPtr->prj_prm23,errMsg,sizeof (errMsg));
+		errCnt += CS_defCmpPrjPrm (pp,24,lclOrgPtr->prj_prm24,lclRevPtr->prj_prm24,errMsg,sizeof (errMsg));
 	}
 
 	if ((pp->flags & cs_PRJFLG_ORGLAT) == 0)
 	{
-		if (CS_cmpDbls (lclOrgPtr->org_lat,revised->org_lat) == 0)
+		if (CS_cmpDbls (lclOrgPtr->org_lat,lclRevPtr->org_lat) == 0)
 		{
 			if (errCnt == 0)
 			{
-				sprintf (errMsg,"Origin Latitude was %14.8f, is now %14.8f",lclOrgPtr->org_lat,revised->org_lat);
+				sprintf (errMsg,"Origin Latitude was %14.8f, is now %14.8f",lclOrgPtr->org_lat,lclRevPtr->org_lat);
 			}
 			errCnt += 1;
 		}
 	}
 	if ((pp->flags & cs_PRJFLG_ORGLNG) == 0)
 	{
-		if (CS_cmpDbls (lclOrgPtr->org_lng,revised->org_lng) == 0)
+		if (CS_cmpDbls (lclOrgPtr->org_lng,lclRevPtr->org_lng) == 0)
 		{
 			if (errCnt == 0)
 			{
-				sprintf (errMsg,"Origin Longitude was %14.8f, is now %14.8f",lclOrgPtr->org_lng,revised->org_lng);
+				sprintf (errMsg,"Origin Longitude was %14.8f, is now %14.8f",lclOrgPtr->org_lng,lclRevPtr->org_lng);
 			}
 			errCnt += 1;
 		}
 	}
 	if ((pp->flags & cs_PRJFLG_ORGFLS) == 0)
 	{
-		if (fabs (lclOrgPtr->x_off - revised->x_off) > 0.001)
+		if (fabs (lclOrgPtr->x_off - lclRevPtr->x_off) > 0.001)
 		{
 			if (errCnt == 0)
 			{
-				sprintf (errMsg,"False easting was %14.3f, is now %14.3f",lclOrgPtr->x_off,revised->x_off);
+				sprintf (errMsg,"False easting was %14.3f, is now %14.3f",lclOrgPtr->x_off,lclRevPtr->x_off);
 			}
 			errCnt += 1;
 		}
-		if (fabs (lclOrgPtr->y_off - revised->y_off) > 0.001)
+		if (fabs (lclOrgPtr->y_off - lclRevPtr->y_off) > 0.001)
 		{
 			if (errCnt == 0)
 			{
-				sprintf (errMsg,"False northing was %14.3f, is now %14.3f",lclOrgPtr->y_off,revised->y_off);
+				sprintf (errMsg,"False northing was %14.3f, is now %14.3f",lclOrgPtr->y_off,lclRevPtr->y_off);
 			}
 			errCnt += 1;
 		}
 	}
 	if ((pp->flags & cs_PRJFLG_SCLRED) != 0)
 	{
-		if (CS_cmpDbls (lclOrgPtr->scl_red,revised->scl_red) == 0)
+		if (CS_cmpDbls (lclOrgPtr->scl_red,lclRevPtr->scl_red) == 0)
 		{
 			if (errCnt == 0)
 			{
-				sprintf (errMsg,"Scale reduction was %12.10f, is now %12.10f",lclOrgPtr->scl_red,revised->scl_red);
+				sprintf (errMsg,"Scale reduction was %12.10f, is now %12.10f",lclOrgPtr->scl_red,lclRevPtr->scl_red);
 			}
 			errCnt += 1;
 		}
 	}
-	if (lclOrgPtr->quad != revised->quad)
+	if (lclOrgPtr->quad != lclRevPtr->quad)
 	{
 		if (errCnt == 0)
 		{
-			sprintf (errMsg,"Quad was %d, is now %d",lclOrgPtr->quad,revised->quad);
+			sprintf (errMsg,"Quad was %d, is now %d",lclOrgPtr->quad,lclRevPtr->quad);
 		}
 		errCnt += 1;
 	}

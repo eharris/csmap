@@ -117,7 +117,7 @@ int EXP_LVL3 CS_elDefCmpEx (double* qValuePtr,Const struct cs_Eldef_ *original,
 		}
 		errCnt += 1;
 	}
-	if (errCnt != 0 && message != 0 && msgSize > 1 && *message != '\0')
+	if (errCnt != 0 && message != 0 && msgSize > 1 && *errMsg != '\0')
 	{
 		CS_stncp (message,errMsg,(int)msgSize);
 	}
@@ -400,7 +400,7 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 	}
 
 	/* OK, we're done.  Return results of comparison to the calling module. */
-	if (errCnt != 0 && message != 0 && msgSize > 1 && *message != '\0')
+	if (errCnt != 0 && message != 0 && msgSize > 1 && *errMsg != '\0')
 	{
 		CS_stncp (message,errMsg,(int)msgSize);
 	}
@@ -491,7 +491,7 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 	}
 	if (errCnt != 0)
 	{
-		/* The calling mosule has not supplied use with useful definitions.
+		/* The calling module has not supplied use with useful definitions.
 		   Bag it now. */
 		goto error;
 	}
@@ -523,7 +523,7 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 		csDefPtr->quad = 1;
 	}
 
-	/* If either definition is a conic with two stanrard parallels, make the
+	/* If either definition is a conic with two standard parallels, make the
 	   northern most parallel orj_prm1 in either or both cases. */
 	if (ppOrg->code == cs_PRJCOD_LM2SP   ||
 		ppOrg->code == cs_PRJCOD_LMBLG   ||
@@ -554,6 +554,8 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 		}
 	}
 
+	/* We consider the two different formulations of the Gauss Kruger to
+	   be the same. */
 	if (ppOrg->code == cs_PRJCOD_TRMER && ppRev->code == cs_PRJCOD_TRMRKRG)
 	{
 		CS_stncp (lclRevised.prj_knm,lclOriginal.prj_knm,sizeof (lclRevised.prj_knm));
@@ -563,12 +565,13 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 		CS_stncp (lclOriginal.prj_knm,lclRevised.prj_knm,sizeof (lclRevised.prj_knm));
 	}
 
+	/* Gauss Kruger is essentially a Transverse Mercator with a scale
+	   reduction factor of 1.0. */
 	if (ppOrg->code == cs_PRJCOD_TRMER && lclOriginal.scl_red == cs_One && ppRev->code == cs_PRJCOD_GAUSSK)
 	{
 		CS_stncp (lclRevised.prj_knm,lclOriginal.prj_knm,sizeof (lclRevised.prj_knm));
 		lclRevised.scl_red = cs_One;
 	}
-
 	if (ppRev->code == cs_PRJCOD_TRMER && lclRevised.scl_red == cs_One && ppOrg->code == cs_PRJCOD_GAUSSK)
 	{
 		CS_stncp (lclOriginal.prj_knm,lclRevised.prj_knm,sizeof (lclOriginal.prj_knm));
@@ -591,7 +594,64 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 		CS_stncp (lclRevised.prj_knm,lclOriginal.prj_knm,sizeof (lclRevised.prj_knm));
 		lclRevised.quad = lclOriginal.quad;
 	}
+	
+	/* The MRCAT and MRCATK are often simply different parameterizations of the
+	   same thing. */
+	if ((ppOrg->code == cs_PRJCOD_MRCAT && ppRev->code == cs_PRJCOD_MRCATK) ||
+	    (ppRev->code == cs_PRJCOD_MRCAT && ppOrg->code == cs_PRJCOD_MRCATK))
+	{
+		/* TODO: We should use the CSmrcatPhiFromK function to compare the
+		   standard latitude of the MRCAT variation with the scale factor
+		   of the MRCATK variation.
+		   
+		   For now, we assume them to be the same. */
+		CS_stncp (lclRevised.prj_knm,lclOriginal.prj_knm,sizeof (lclRevised.prj_knm));
+		lclRevised.scl_red = lclOriginal.scl_red;
+		lclRevised.prj_prm1 = lclOriginal.prj_prm1;
+	}
+	
+	/* The Swiss Cylindircal and the Oblique Cylindrical are often
+	   approximated by the Oblique Mercator.  We deal with this here. */
+	if ((ppOrg->code == cs_PRJCOD_HOM1XY && fabs (lclOriginal.prj_prm3) > 89.9) &&
+		(ppRev->code == cs_PRJCOD_SWISS || ppRev->code == cs_PRJCOD_OBQCYL))
+	{
+		/* Convert the original to the same type as the revised, keeping all the
+		   parameters of the original for comparison purposes. */
+		CS_stncp (lclOriginal.prj_knm,lclRevised.prj_knm,sizeof (lclOriginal.prj_knm));
+		lclOriginal.org_lng = lclOriginal.prj_prm1;
+		lclOriginal.org_lat = lclOriginal.prj_prm2;
+		if (ppRev->code == cs_PRJCOD_SWISS)
+		{
+			lclOriginal.prj_prm1 = cs_Zero;
+		}
+		else if (ppRev->code == cs_PRJCOD_OBQCYL)
+		{
+			lclOriginal.prj_prm1 = lclRevised.prj_prm1;
+		}
+		lclOriginal.prj_prm2 = cs_Zero;
+		lclOriginal.prj_prm3 = cs_Zero;
+	}
+	if ((ppRev->code == cs_PRJCOD_HOM1XY && fabs (lclRevised.prj_prm3) > 89.9) &&
+		(ppOrg->code == cs_PRJCOD_SWISS || ppOrg->code == cs_PRJCOD_OBQCYL))
+	{
+		/* Convert the original to the same type as the revised, keeping all the
+		   parameters of the original for comparison purposes. */
+		CS_stncp (lclRevised.prj_knm,lclOriginal.prj_knm,sizeof (lclRevised.prj_knm));
+		lclRevised.org_lng = lclRevised.prj_prm1;
+		lclRevised.org_lat = lclRevised.prj_prm2;
+		if (ppOrg->code == cs_PRJCOD_SWISS)
+		{
+			lclRevised.prj_prm1 = cs_Zero;
+		}
+		else if (ppOrg->code == cs_PRJCOD_OBQCYL)
+		{
+			lclRevised.prj_prm1 = lclOriginal.prj_prm1;		// This is an approximation!!!!!
+		}
+		lclRevised.prj_prm2 = cs_Zero;
+		lclRevised.prj_prm3 = cs_Zero;
+	}
 
+	/* Adjust for any changes to the projection code we may have made above. */
 	for (ppOrg = cs_Prjtab;ppOrg->key_nm [0] != '\0';ppOrg += 1)
 	{
 		if (!CS_stricmp (lclOriginal.prj_knm,ppOrg->key_nm))
@@ -673,7 +733,7 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 	/* Check all of the parameters. */
 	if (errCnt == 0) errMsg[0] = '\0';
 
-	/* Compare allof the projection parameters. */
+	/* Compare all of the projection parameters. */
 	for (prmNbr = 1;prmNbr <= 24;prmNbr += 1)
 	{
 		if (ppOrg->code == cs_PRJCOD_UNITY && prmNbr <= 2)
