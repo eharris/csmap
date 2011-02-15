@@ -698,6 +698,7 @@ public:
 	TcsEpsgCode GetOpCodeForCsMap (void) const;
 private:
 	EcsOpType Type;						// May be Concatenated.
+	TcsEpsgCode EpsgOpCode;				// OpCode of the primary operation.
 	unsigned VariantNbr;				// EPSG variant number.  There is
 										// no requirement about how variants
 										// are numbered, only that they should be

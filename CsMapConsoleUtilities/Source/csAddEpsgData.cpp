@@ -168,7 +168,7 @@ bool csAddEpsgCodes (TcsDefFile& dictionaryAsc)
 
 	ok = true;
 	size_t defCount = dictionaryAsc.GetDefinitionCount () - 1;
-	for (size_t index = 0;ok && index < defCount;index += 1)
+	for (unsigned index = 0;ok && index < defCount;index += 1)
 	{
 		ascDefPtr = &(*dictionaryAsc [index]);
 		if (ascDefPtr == 0)
@@ -287,7 +287,7 @@ bool csAddSridCodes (TcsDefFile& dictionaryAsc)
 
 	ok = true;
 	size_t defCount = dictionaryAsc.GetDefinitionCount () - 1;
-	for (size_t index = 0;ok && index < defCount;index += 1)
+	for (unsigned index = 0;ok && index < defCount;index += 1)
 	{
 		ascDefPtr = &(*dictionaryAsc [index]);
 		if (ascDefPtr == 0)
@@ -395,7 +395,7 @@ bool csAddEpsgQuadrant (TcsDefFile& dictionaryAsc,const TcsEpsgDataSetV6& epsgDa
 	ok = true;
 	dictType = dictionaryAsc.GetDictType ();
 	size_t defCount = dictionaryAsc.GetDefinitionCount () - 1;
-	for (size_t index = 0;ok && index < defCount;index += 1)
+	for (unsigned index = 0;ok && index < defCount;index += 1)
 	{
 		ascDefPtr = &(*dictionaryAsc [index]);
 		if (ascDefPtr == 0)
