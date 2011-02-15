@@ -146,6 +146,8 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 {
 	extern double cs_Zero;
 	extern double cs_One;
+	extern double cs_Six;
+	extern double cs_K15;
 
 	static const double deltaEpsilon = 2.0E-03;
 	static const double rotEpsilon = 1.0E-03;
@@ -251,8 +253,8 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 			   not that significant.  We boost the qValue a bit to account
 			   for this, and we mark this as a single error as opposed to what
 			   we do below. */
-			qValue = cs_One;
-			errCnt += 1;
+			revVia = orgVia;
+			qValue += cs_One;
 			if (errCnt == 0)
 			{
 				sprintf (errMsg,"Datum transformation method on datum named %s does not match.  Method was %d, is now %d",
@@ -260,8 +262,57 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 								original->to84_via,
 								revised->to84_via);
 			}
+			errCnt += 1;
 		}
-		else if (orgVia != revVia)
+		// Convert a "MULREG" on either side to be the same as other side,
+		// unless of course, they are both MULREGs.  If they are both MULREG's,
+		// the code below will work.  It will compare the parameters associated
+		// with the definition and report if they are the same or not.  There's
+		// not much else we can do with MULREG's.
+		if (orgVia == cs_DTCTYP_MREG && (revVia == cs_DTCTYP_GEOCTR ||
+										 revVia == cs_DTCTYP_3PARM  ||
+										 revVia == cs_DTCTYP_MOLO))
+		{
+			orgVia = revVia;
+			qValue += cs_One;
+			if (errCnt == 0)
+			{
+				sprintf (errMsg,"Datum transformation method on datum named %s does not match.  Method was %d, is now %d",
+								original->key_nm,
+								original->to84_via,
+								revised->to84_via);
+			}
+			errCnt += 1;
+		}
+		else if (revVia == cs_DTCTYP_MREG && (orgVia == cs_DTCTYP_GEOCTR ||
+											  orgVia == cs_DTCTYP_3PARM  ||
+											  orgVia == cs_DTCTYP_MOLO))
+		{
+			revVia = orgVia;
+			qValue += cs_One;
+			if (errCnt == 0)
+			{
+				sprintf (errMsg,"Datum transformation method on datum named %s does not match.  Method was %d, is now %d",
+								original->key_nm,
+								original->to84_via,
+								revised->to84_via);
+			}
+			errCnt += 1;
+		}
+		else if (orgVia == cs_DTCTYP_MREG && revVia == cs_DTCTYP_MREG)
+		{
+			// It could very well be that we don't want to even try in this
+			// case.  We don't have access to the MULREG definition in this
+			// function, so there is nothing to chack other than what the
+			// fallback will; be.  So, you may want to uncomment the code
+			// provided.
+			//*qValuePtr = cs_Zero;
+			//return 0;
+		}
+
+		// OK, see if we have an equivalent method, or at least roughly
+		// equivalent method.
+		if (orgVia != revVia)
 		{
 			if (errCnt == 0)
 			{
@@ -284,6 +335,8 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 			   parameters, of course. */
 			switch (original->to84_via) {
 			case cs_DTCTYP_MOLO:    paramUseCount = 3; break;
+			// The following case assumes unused parameters are set to zero and
+			// therefore will match perfectly.
 			case cs_DTCTYP_MREG:    paramUseCount = 7; break;
 			case cs_DTCTYP_BURS:    paramUseCount = 7; break;
 			case cs_DTCTYP_NAD27:   paramUseCount = 0; break;
@@ -361,7 +414,7 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 					sprintf (errMsg,"%s: X Rotation was %12.3f, is now %12.3f",original->key_nm,original->rot_X,revised->rot_X);
 				}
 				errCnt += 1;
-				qValue += delta * 2.0;
+				qValue += delta * cs_K15;
 			}
 			delta = fabs (original->rot_Y - revised->rot_Y);
 			if (delta > rotEpsilon)
@@ -371,7 +424,7 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 					sprintf (errMsg,"%s: Y Rotation was %12.3f, is now %12.3f",original->key_nm,original->rot_Y,revised->rot_Y);
 				}
 				errCnt += 1;
-				qValue += delta * 2.0;
+				qValue += delta * cs_K15;
 			}
 			delta = fabs (original->rot_Z - revised->rot_Z);
 			if (delta > rotEpsilon)
@@ -381,7 +434,7 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 					sprintf (errMsg,"%s: Z Rotation was %12.3f, is now %12.3f",original->key_nm,original->rot_Z,revised->rot_Z);
 				}
 				errCnt += 1;
-				qValue += delta * 2.0;
+				qValue += delta * cs_K15;
 			}
 		}
 		if (paramUseCount > 3 && paramUseCount != 6)
@@ -394,7 +447,7 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 					sprintf (errMsg,"%s: Scale was %12.8f, is now %12.8f",original->key_nm,original->bwscale,revised->bwscale);
 				}
 				errCnt += 1;
-				qValue += delta * 10.0;
+				qValue += delta * cs_Six;
 			}
 		}
 	}

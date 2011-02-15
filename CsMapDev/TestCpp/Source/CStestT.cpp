@@ -62,123 +62,138 @@ extern "C"
 extern "C" char csErrmsg [256];
 int CStestT (bool verbose,long32_t duration)
 {
-    int err_cnt = 0;
+	int err_cnt = 0;
+
+#ifdef __SKIP__
+
+	double xyz [3];
+
+	xyz [0] = 0.0;
+	xyz [1] = 20000000.000;
+	xyz [2] = 0.0;
+
+	int st = CS_cnvrt ("WGS84.PseudoMercator","LL",xyz);
+	if (st != 0)
+	{
+		err_cnt += 1;
+	}
+#endif
 
 #ifndef __SKIP__
 
-    double xyz [3];
+	char wktOne   [1024] = "PROJCS[\"DHDN / Gauss-Kruger zone 5\",GEOGCS[\"DHDN\",DATUM[\"Deutsches_Hauptdreiecksnetz\",SPHEROID[\"Bessel 1841\",6377397.155,299.1528128,AUTHORITY[\"EPSG\",\"7004\"]],AUTHORITY[\"EPSG\",\"6314\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4314\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",15],PARAMETER[\"scale_factor\",1],PARAMETER[\"false_easting\",5500000],PARAMETER[\"false_northing\",0],AUTHORITY[\"EPSG\",\"31469\"]]";
+	char wktTwo   [1024] = "GEOGCS[\"LL84\",DATUM[\"WGS84\",SPHEROID[\"WGS84\",6378137.000,298.25722293]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.01745329251994]]";
+	char wktThree [1024] = "PROJCS[\"NAD83 / California zone 3 (ftUS)\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],UNIT[\"US survey foot\",0.3048006096012192,AUTHORITY[\"EPSG\",\"9003\"]],PROJECTION[\"Lambert_Conformal_Conic_2SP\"],PARAMETER[\"standard_parallel_1\",38.43333333333333],PARAMETER[\"standard_parallel_2\",37.06666666666667],PARAMETER[\"latitude_of_origin\",36.5],PARAMETER[\"central_meridian\",-120.5],PARAMETER[\"false_easting\",6561666.667],PARAMETER[\"false_northing\",1640416.667],AUTHORITY[\"EPSG\",\"2227\"],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH]]";
+	char wktFour  [1024] = "PROJCS[\"DHDN.Berlin/Cassini\",GEOGCS[\"DHDN.LL\",DATUM[\"DHDN\",SPHEROID[\"BESSEL\",6377397.155,299.15281535],TOWGS84[582.0000,105.0000,414.0000,-1.040000,-0.350000,3.080000,8.30000000]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]],PROJECTION[\"Cassini-Soldner\"],PARAMETER[\"false_easting\",40000.000],PARAMETER[\"false_northing\",10000.000],PARAMETER[\"central_meridian\",13.62720366666667],PARAMETER[\"latitude_of_origin\",52.41864827777778],UNIT[\"Meter\",1.00000000000000]]";
+	char wktFive  [1024] = "PROJCS[\"NAD83 / UTM zone 19N\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-69],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],AUTHORITY[\"EPSG\",\"26919\"],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]";
 
-    xyz [0] = 0.0;
-    xyz [1] = 20000000.000;
-    xyz [2] = 0.0;
- 
-    int st = CS_cnvrt ("WGS84.PseudoMercator","LL",xyz);
-    if (st != 0)
-    {
-        err_cnt += 1;
-    }
+	int stOne;
+	struct cs_Csdef_ csDefOne;
+	struct cs_Dtdef_ dtDefOne;
+	struct cs_Eldef_ elDefOne;
+
+	int stTwo;
+	struct cs_Csdef_ csDefTwo;
+	struct cs_Dtdef_ dtDefTwo;
+	struct cs_Eldef_ elDefTwo;
+
+	int stThree;
+	struct cs_Csdef_ csDefThree;
+	struct cs_Dtdef_ dtDefThree;
+	struct cs_Eldef_ elDefThree;
+
+	int stFour;
+	struct cs_Csdef_ csDefFour;
+	struct cs_Dtdef_ dtDefFour;
+	struct cs_Eldef_ elDefFour;
+
+	int stFive;
+	struct cs_Csdef_ csDefFive;
+	struct cs_Dtdef_ dtDefFive;
+	struct cs_Eldef_ elDefFive;
+
+	csErrmsg [0] = '\0';
+	stOne = CS_wktToCsEx (&csDefOne,&dtDefOne,&elDefOne,wktFlvrOgc,wktOne,TRUE);
+	if (verbose && stOne < 0)
+	{
+		printf ("WKT1 processing failed! Status = %d; Reason: %s\n",stOne,csErrmsg);
+	}
+
+	csErrmsg [0] = '\0';
+	stTwo = CS_wktToCsEx (&csDefTwo,&dtDefTwo,&elDefTwo,wktFlvrNone,wktTwo,FALSE);
+	if (verbose && stTwo < 0)
+	{
+		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stTwo,csErrmsg);
+	}
+
+
+	csErrmsg [0] = '\0';
+	stThree = CS_wktToCsEx (&csDefThree,&dtDefThree,&elDefThree,wktFlvrOgc,wktThree,TRUE);
+	if (verbose && stThree < 0)
+	{
+		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stThree,csErrmsg);
+	}
+
+	csErrmsg [0] = '\0';
+	stFour = CS_wktToCsEx (&csDefFour,&dtDefFour,&elDefFour,wktFlvrOgc,wktFour,TRUE);
+	if (verbose && stFour < 0)
+	{
+		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stFour,csErrmsg);
+	}
+
+
+	csErrmsg [0] = '\0';
+	stFive = CS_wktToCsEx (&csDefFive,&dtDefFive,&elDefFive,wktFlvrOgc,wktFive,TRUE);
+	if (verbose && stFour < 0)
+	{
+		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stFive,csErrmsg);
+	}
+
+	err_cnt += (stOne   != 0);
+	err_cnt += (stTwo   != 0);
+	err_cnt += (stThree != 0);
+	err_cnt += (stFour  != 0);
+	err_cnt += (stFive  != 0);
+
 #endif
-
 #ifdef __SKIP__
+	int st;
 
-    char wktOne   [1024] = "PROJCS[\"DHDN / Gauss-Kruger zone 5\",GEOGCS[\"DHDN\",DATUM[\"Deutsches_Hauptdreiecksnetz\",SPHEROID[\"Bessel 1841\",6377397.155,299.1528128,AUTHORITY[\"EPSG\",\"7004\"]],AUTHORITY[\"EPSG\",\"6314\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4314\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",15],PARAMETER[\"scale_factor\",1],PARAMETER[\"false_easting\",5500000],PARAMETER[\"false_northing\",0],AUTHORITY[\"EPSG\",\"31469\"]]";
-    char wktTwo   [1024] = "GEOGCS[\"LL84\",DATUM[\"WGS84\",SPHEROID[\"WGS84\",6378137.000,298.25722293]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.01745329251994]]";
-    char wktThree [1024] = "PROJCS[\"NAD83 / California zone 3 (ftUS)\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],UNIT[\"US survey foot\",0.3048006096012192,AUTHORITY[\"EPSG\",\"9003\"]],PROJECTION[\"Lambert_Conformal_Conic_2SP\"],PARAMETER[\"standard_parallel_1\",38.43333333333333],PARAMETER[\"standard_parallel_2\",37.06666666666667],PARAMETER[\"latitude_of_origin\",36.5],PARAMETER[\"central_meridian\",-120.5],PARAMETER[\"false_easting\",6561666.667],PARAMETER[\"false_northing\",1640416.667],AUTHORITY[\"EPSG\",\"2227\"],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH]]";
-    char wktFour  [1024] = "PROJCS[\"DHDN.Berlin/Cassini\",GEOGCS[\"DHDN.LL\",DATUM[\"DHDN\",SPHEROID[\"BESSEL\",6377397.155,299.15281535],TOWGS84[582.0000,105.0000,414.0000,-1.040000,-0.350000,3.080000,8.30000000]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]],PROJECTION[\"Cassini-Soldner\"],PARAMETER[\"false_easting\",40000.000],PARAMETER[\"false_northing\",10000.000],PARAMETER[\"central_meridian\",13.62720366666667],PARAMETER[\"latitude_of_origin\",52.41864827777778],UNIT[\"Meter\",1.00000000000000]]";
+	unsigned idx;
+	unsigned gxIdxCnt;
 
-    int stOne;
-    struct cs_Csdef_ csDefOne;
-    struct cs_Dtdef_ dtDefOne;
-    struct cs_Eldef_ elDefOne;
+	Const struct cs_GxIndex_* gxIdxPtr;
+	struct cs_GeodeticTransform_ *gxDefPtr;
 
-    int stTwo;
-    struct cs_Csdef_ csDefTwo;
-    struct cs_Dtdef_ dtDefTwo;
-    struct cs_Eldef_ elDefTwo;
+	int err_list [8];
 
-    int stThree;
-    struct cs_Csdef_ csDefThree;
-    struct cs_Dtdef_ dtDefThree;
-    struct cs_Eldef_ elDefThree;
-
-    int stFour;
-    struct cs_Csdef_ csDefFour;
-    struct cs_Dtdef_ dtDefFour;
-    struct cs_Eldef_ elDefFour;
-
-    csErrmsg [0] = '\0';
-    stOne = CS_wktToCsEx (&csDefOne,&dtDefOne,&elDefOne,wktFlvrOgc,wktOne,TRUE);
-    if (verbose && stOne < 0)
-    {
-        printf ("WKT1 processing failed! Status = %d; Reason: %s\n",stOne,csErrmsg);
-    }
-
-    csErrmsg [0] = '\0';
-    stTwo = CS_wktToCsEx (&csDefTwo,&dtDefTwo,&elDefTwo,wktFlvrNone,wktTwo,FALSE);
-    if (verbose && stTwo < 0)
-    {
-        printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stTwo,csErrmsg);
-    }
-    
-
-    csErrmsg [0] = '\0';
-    stThree = CS_wktToCsEx (&csDefThree,&dtDefThree,&elDefThree,wktFlvrOgc,wktThree,TRUE);
-    if (verbose && stThree < 0)
-    {
-        printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stThree,csErrmsg);
-    }
-
-    csErrmsg [0] = '\0';
-    stFour = CS_wktToCsEx (&csDefFour,&dtDefFour,&elDefFour,wktFlvrOgc,wktFour,TRUE);
-    if (verbose && stFour < 0)
-    {
-        printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stFour,csErrmsg);
-    }
-
-    err_cnt += (stOne   != 0);
-    err_cnt += (stTwo   != 0);
-    err_cnt += (stThree != 0);
-    err_cnt += (stFour  != 0);
-
-#endif
-#ifdef __SKIP__
-    int st;
-
-    unsigned idx;
-    unsigned gxIdxCnt;
-
-    Const struct cs_GxIndex_* gxIdxPtr;
-    struct cs_GeodeticTransform_ *gxDefPtr;
-
-    int err_list [8];
-
-    gxIdxCnt = CS_getGxIndexCount ();
-    for (idx = 0;idx < gxIdxCnt;idx++)
-    {
-        gxIdxPtr = CS_getGxIndexEntry (idx);
-        if (gxIdxPtr == NULL)
-        {
-            err_cnt += 1;
-        }
-        else
-        {
-            gxDefPtr = CS_gxdef (gxIdxPtr->xfrmName);
-            if (gxDefPtr == NULL)
-            {
-                err_cnt += 1;
-            }
-            else
-            {
-                st = CS_gxchk (gxDefPtr,cs_GXCHK_DATUM | cs_GXCHK_REPORT,err_list,sizeof (err_list) / sizeof (int));
-                if (st != 0)
-                {
-                    printf ("CS_gxchk failed on geodetic transformation named %s.\n",gxDefPtr->xfrmName);
-                    err_cnt += 1;
-                }
-                CS_free (gxDefPtr);
-            }
-        }
-    }
+	gxIdxCnt = CS_getGxIndexCount ();
+	for (idx = 0;idx < gxIdxCnt;idx++)
+	{
+		gxIdxPtr = CS_getGxIndexEntry (idx);
+		if (gxIdxPtr == NULL)
+		{
+			err_cnt += 1;
+		}
+		else
+		{
+			gxDefPtr = CS_gxdef (gxIdxPtr->xfrmName);
+			if (gxDefPtr == NULL)
+			{
+				err_cnt += 1;
+			}
+			else
+			{
+				st = CS_gxchk (gxDefPtr,cs_GXCHK_DATUM | cs_GXCHK_REPORT,err_list,sizeof (err_list) / sizeof (int));
+				if (st != 0)
+				{
+					printf ("CS_gxchk failed on geodetic transformation named %s.\n",gxDefPtr->xfrmName);
+					err_cnt += 1;
+				}
+				CS_free (gxDefPtr);
+			}
+		}
+	}
 #endif
 #ifdef __SKIP__
 	int st;
@@ -201,137 +216,137 @@ int CStestT (bool verbose,long32_t duration)
 #ifdef __SKIP__
 	int st;
 
-    const char* csOneName = "LL27";
-    const char* csTwoName = "Tokyo";
+	const char* csOneName = "LL27";
+	const char* csTwoName = "Tokyo";
 
-    struct cs_Csprm_ *csOne;
-    struct cs_Csprm_ *csTwo;
- 	struct cs_Dtcprm_ *dtcPrm;
- 
+	struct cs_Csprm_ *csOne;
+	struct cs_Csprm_ *csTwo;
+	struct cs_Dtcprm_ *dtcPrm;
+
 	double llTmp [3];
- 	
-    printf ("Running temporary test code module.\n");
 
-    csOne = CS_csloc (csOneName);
-    csTwo = CS_csloc (csTwoName);
-    if (csOne == NULL || csTwo == NULL)
-    {
-        return 1;
-    }
+	printf ("Running temporary test code module.\n");
 
-    dtcPrm = CS_dtcsu (csOne,csTwo,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
-    if (dtcPrm == NULL)
-    {
-        return 1;
-    }
-    
-    llTmp [0] = -122.1509375;
-    llTmp [1] = 36.10875;
-    llTmp [2] = 0.0;
- 
+	csOne = CS_csloc (csOneName);
+	csTwo = CS_csloc (csTwoName);
+	if (csOne == NULL || csTwo == NULL)
+	{
+		return 1;
+	}
+
+	dtcPrm = CS_dtcsu (csOne,csTwo,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
+	if (dtcPrm == NULL)
+	{
+		return 1;
+	}
+
+	llTmp [0] = -122.1509375;
+	llTmp [1] = 36.10875;
+	llTmp [2] = 0.0;
+
 	st = CS_dtcvt3D (dtcPrm,llTmp,llTmp);
-    
+
 	if (st != 0)
 	{
 		err_cnt += 1;
 	}
-	
+
 	CS_dtcls (dtcPrm);
 #endif
 #ifdef __SKIP__
-    int st;
-    int counter;
-    FILE* tstStrm;
-    struct cs_Csprm_ *csOne;
-    struct cs_Csprm_ *csTwo;
- 	struct cs_Dtcprm_ *dtcPrm;
- 	
- 	double lngMin = -5.5000;
- 	double lngMax = 10.0000;
- 	double latMin = 41.0000;
- 	double latMax = 52.0000;
- 	
- 	double llOne [3];
- 	double llTmp [3];
- 	double llTwo [3];
- 
-    const char* csOneName = "LL-RGF93";
-    const char* csTwoName = "NTF.LL";
- 
-    tstStrm = fopen ("C:\\Tmp\\TestPoints.txt","wt");
-    if (tstStrm == NULL)
-    {
-        return 1;
-    }
+	int st;
+	int counter;
+	FILE* tstStrm;
+	struct cs_Csprm_ *csOne;
+	struct cs_Csprm_ *csTwo;
+	struct cs_Dtcprm_ *dtcPrm;
 
-    csOne = CS_csloc (csOneName);
-    csTwo = CS_csloc (csTwoName);
-    if (csOne == NULL || csTwo == NULL)
-    {
-        return 1;
-    }
-    dtcPrm = CS_dtcsu (csOne,csTwo,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
-    if (dtcPrm == NULL)
-    {
-        return 1;
-    }
+	double lngMin = -5.5000;
+	double lngMax = 10.0000;
+	double latMin = 41.0000;
+	double latMax = 52.0000;
 
-    for (counter = 0;counter < duration;counter += 1)
-    {
-        st = 0;
-        llOne [0] = CStestRN (lngMin,lngMax);
-        llOne [1] = CStestRN (latMin,latMax);
-        llOne [2] = 0.0;
-        st  = CS_cs3ll (csOne,llTmp,llOne);
-        st |= CS_dtcvt (dtcPrm,llTmp,llTmp);
-        st |= CS_ll3cs (csTwo,llTwo,llTmp);
-        
-        fprintf (tstStrm,"%s,%.9f,%.9f,%s,%.9f,%.9f,1.0E-08,1.0E-08\n",csOneName,llOne [0],
-                                                                                 llOne [1],
-                                                                                 csTwoName,
-                                                                                 llTwo [0],
-                                                                                 llTwo [1]);
-        fprintf (tstStrm,"%s,%.9f,%.9f,%s,%.9f,%.9f,1.0E-08,1.0E-08\n",csTwoName,llTwo [0],
-                                                                                 llTwo [1],
-                                                                                 csOneName,
-                                                                                 llOne [0],
-                                                                                 llOne [1]);
-        if (st != 0)
-        {
-            err_cnt += 1;
-        }
-    }
-    fclose (tstStrm);
+	double llOne [3];
+	double llTmp [3];
+	double llTwo [3];
+
+	const char* csOneName = "LL-RGF93";
+	const char* csTwoName = "NTF.LL";
+
+	tstStrm = fopen ("C:\\Tmp\\TestPoints.txt","wt");
+	if (tstStrm == NULL)
+	{
+		return 1;
+	}
+
+	csOne = CS_csloc (csOneName);
+	csTwo = CS_csloc (csTwoName);
+	if (csOne == NULL || csTwo == NULL)
+	{
+		return 1;
+	}
+	dtcPrm = CS_dtcsu (csOne,csTwo,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
+	if (dtcPrm == NULL)
+	{
+		return 1;
+	}
+
+	for (counter = 0;counter < duration;counter += 1)
+	{
+		st = 0;
+		llOne [0] = CStestRN (lngMin,lngMax);
+		llOne [1] = CStestRN (latMin,latMax);
+		llOne [2] = 0.0;
+		st  = CS_cs3ll (csOne,llTmp,llOne);
+		st |= CS_dtcvt (dtcPrm,llTmp,llTmp);
+		st |= CS_ll3cs (csTwo,llTwo,llTmp);
+	    
+		fprintf (tstStrm,"%s,%.9f,%.9f,%s,%.9f,%.9f,1.0E-08,1.0E-08\n",csOneName,llOne [0],
+																				 llOne [1],
+																				 csTwoName,
+																				 llTwo [0],
+																				 llTwo [1]);
+		fprintf (tstStrm,"%s,%.9f,%.9f,%s,%.9f,%.9f,1.0E-08,1.0E-08\n",csTwoName,llTwo [0],
+																				 llTwo [1],
+																				 csOneName,
+																				 llOne [0],
+																				 llOne [1]);
+		if (st != 0)
+		{
+			err_cnt += 1;
+		}
+	}
+	fclose (tstStrm);
 #endif
 #ifdef __SKIP__
 	int st;
 
-    const char* dtOneName = "AFGOOYE";
-    const char* dtTwoName = "WGS84";
+	const char* dtOneName = "AFGOOYE";
+	const char* dtTwoName = "WGS84";
 
-    struct cs_Datum_ *dtOne;
-    struct cs_Datum_ *dtTwo;
- 	struct cs_Dtcprm_ *dtcPrm;
- 
+	struct cs_Datum_ *dtOne;
+	struct cs_Datum_ *dtTwo;
+	struct cs_Dtcprm_ *dtcPrm;
+
 	double llTmp [3];
- 	
-    printf ("Running temporary test code module.\n");
 
-    dtOne = CS_dtloc (dtOneName);
-    dtTwo = CS_dtloc (dtTwoName);
-    if (dtOne == NULL || dtTwo == NULL)
-    {
-        return 1;
-    }
+	printf ("Running temporary test code module.\n");
 
-    dtcPrm = CSdtcsu (dtOne,dtTwo,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
-    if (dtcPrm == NULL)
-    {
-        return 1;
-    }
+	dtOne = CS_dtloc (dtOneName);
+	dtTwo = CS_dtloc (dtTwoName);
+	if (dtOne == NULL || dtTwo == NULL)
+	{
+		return 1;
+	}
+
+	dtcPrm = CSdtcsu (dtOne,dtTwo,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
+	if (dtcPrm == NULL)
+	{
+		return 1;
+	}
 
 	CS_dtcls (dtcPrm);
 #endif
 
-    return err_cnt;
+	return err_cnt;
 }
