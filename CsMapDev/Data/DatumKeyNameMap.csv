@@ -231,6 +231,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 22800,6310,0,0,0,0,0,,Yoff,Yoff,,Yoff,D_Yoff,Yoff (EPSG ID 6310),,,Yoff,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 22900,6311,0,0,0,0,0,,ZANDERIJ,Zanderij,ZANDERIJ,Zanderij,D_Zanderij,Zanderij (EPSG ID 6311),,,Zanderij,,,,Zanderij,,,,,0,0,0
 23000,6312,0,0,0,0,0,,MGI,MGI,MGI-AT,Militar-Geographische Institut,D_MGI,Militar-Geographische Institut (EPSG ID 6312),,,Militar-Geographische Institut,,,,,,,,,0,0,0
+23050,1031,0,0,0,0,0,, , ,MGI/gc,MGI 1901,,,,,,,,,,,,,,0,0,0
 23100,6313,0,0,0,0,0,,Belge72,Belge72,Belge72,Reseau National Belge 1972,D_Belge_1972,Reseau National Belge 1972 (EPSG ID 6313),,,Reseau National Belge 1972,,,,,,,,,0,0,0
 23200,6314,0,0,0,0,0,,DHDN,DHDN,DHDN,Deutsches Hauptdreiecksnetz,D_Deutsches_Hauptdreiecksnetz|D_Deutsche_Hauptdreiecksnetz,Deutsches Hauptdreiecksnetz (EPSG ID 6314),,,Deutsches Hauptdreiecksnetz,,,,DHDN (Potsdam/Rauenberg),,,,Alias in ESRI name required to support a legacy misspelling of the name.,0,0,0
 23300,6315,0,0,0,0,0,,Conakry05,Conakry05,Conakry1905,Conakry 1905,D_Conakry_1905,Conakry 1905 (EPSG ID 6315),,,Conakry 1905,,,,,,,,,0,0,0
@@ -282,7 +283,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 27800,6637,0,0,0,0,0,,Perroud50,Perroud50,Perroud1950,Pointe Geologie Perroud 1950,D_Pointe_Geologie_Perroud_1950,Pointe Geologie Perroud 1950 (EPSG ID 6637),,,,,,,,,,,,0,0,0
 27900,6638,0,0,0,0,0,,Miquelon50,Miquelon50,Miquelon1950,Saint Pierre et Miquelon 1950,D_Saint_Pierre_et_Miquelon_1950,Saint Pierre et Miquelon 1950 (EPSG ID 6638),,,,,,,,,,,,0,0,0
 28000,6639,0,0,0,0,0,,MOP78,MOP78,MOP1978,MOP78,D_MOP78,MOP78 (EPSG ID 6639),,,,,,,,,,,,0,0,0
-28100,6640,0,0,0,0,0,,Antilles91,Antilles91,Antilles91,Reseau de Reference des Antilles Francaises 1991,D_RRAF_1991,Reseau de Reference des Antilles Francaises 1991 (EPSG ID 6640),,,,,,,,,,,,0,0,0
+28100,6640,0,0,0,0,0,,Antilles91,Antilles91,Antilles91,,D_RRAF_1991,Reseau de Reference des Antilles Francaises 1991 (EPSG ID 6640),,,,,,,,,,,,0,0,0
+28110,1047,0,0,0,0,0,, , ,Antilles91/1,Reseau de Reference des Antilles Francaises 1991,,,,,,,,,,,,,,0,0,0
 28200,6641,0,0,0,0,0,,IGN53/Mare,IGN53/Mare,IGN53/Mare,IGN53 Mare,D_IGN53_Mare,IGN53 Mare (EPSG ID 6641),,,,,,,,,,,,0,65536,0
 28300,6642,0,0,0,0,0,,ST84IleDesPins,ST84IleDesPins,ST84IleDesPins,ST84 Ile des Pins,D_ST84_Ile_des_Pins,ST84 Ile des Pins (EPSG ID 6642),,,,,,,,,,,,0,0,0
 28400,6643,0,0,0,0,0,,ST71Belep,ST71Belep,ST71Belep,ST71 Belep,D_ST71_Belep,ST71 Belep (EPSG ID 6643),,,,,,,,,,,,0,0,0
@@ -373,7 +375,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 36400,6725,0,0,0,0,0,,JHNSTN,JohnstonIs61,JHNSTN,Johnston Island 1961,D_Johnston_Island_1961,,,,,,,,Johnston Island 1961,,,,,0,0,0
 36500,6726,0,0,0,0,0,,LittleCayman1961,LittleCayman1961,LittleCayman61,Little Cayman 1961,,,,,,,,,,,,,,0,65536,0
 36600,6727,0,0,0,0,0,,MIDWAY,MidwayAstro61,MIDWAY,Midway 1961,D_Midway_1961,,,,,,,,Midway Astro 1961,,,,,0,0,0
-36700,6728,0,0,0,0,0,,CANARY,PicoDeLasNieves,CANARY,Pico de la Nieves,D_Pico_de_Las_Nieves,,,,,,,,,,,,,0,0,0
+36700,6728,0,0,0,0,0,,CANARY,PicoDeLasNieves,CANARY,Pico de las Nieves 1984,D_Pico_de_Las_Nieves,,,,,,,,,,,,,0,0,0
 36800,6729,0,0,0,0,0,,PITCAIRN,Pitcairn67,PITCAIRN,Pitcairn 1967,D_Pitcairn_1967,,,,,,,,Pitcairn Astro 1967,,,,,0,0,0
 36900,6730,0,0,0,0,0,,Santo1965,Santo1965,Santo65,Santo 1965,,,,,,,,,,,,,,0,65536,0
 37000,6731,0,0,0,0,0,,VITI,VitiLevu16,VITI,Viti Levu 1916,D_Viti_Levu_1916,,,,,,,,Viti Levu 1916,,,,,0,0,0
@@ -389,7 +391,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 ",,0,65536,0
 38000,6741,0,0,0,0,0,,FD54,FD54,,Faroe Datum 1954,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 38100,6742,0,0,0,0,0,,GDM2000,GDM2000,,Geodetic Datum of Malaysia 2000,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
-38200,6743,0,0,0,0,0,,Karbala1979/P,Karbala1979/P,Karbala79/P,Karbala 1979 (Polservice),,,,,,,,,,,,,,0,65536,0
+38200,6743,0,0,0,0,0,,Karbala1979/P,Karbala1979/P,Karbala79/P,Karbala 1979,,,,,,,,,,,,,,0,65536,0
 38300,6744,0,0,0,0,0,,Nahrwan1934,Nahrwan1934,,Nahrwan 1934,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 38400,6745,0,0,0,0,0,,Rauenberg83,Rauenberg83,,Rauenberg Datum/83,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0
 38500,6746,0,0,0,0,0,,Potsdam83,Potsdam83,,Potsdam Datum/83,,,,,,,,,,,,Couldn't locate the operation method for this datum.,,0,0,0

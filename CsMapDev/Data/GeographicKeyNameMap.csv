@@ -272,7 +272,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 27200,4637,4637,4637,0,0,0,,Perroud50.LL,Perroud50.LL,Perroud1950.LL,Perroud 1950,GCS_Pointe_Geologie_Perroud_1950,Perroud 1950,,,,,,,,,,,,0,0,0
 27300,4638,4638,4638,0,0,0,,Miquelon50.LL,Miquelon50.LL,Miquelon1950.LL,Saint Pierre et Miquelon 1950,GCS_Saint_Pierre_et_Miquelon_1950,Saint Pierre et Miquelon 1950,,,,,,,,,,,,0,0,0
 27400,4639,4639,4639,0,0,0,,MOP78.LL,MOP78.LL,MOP1978.LL,MOP78,GCS_MOP78,MOP78,,,,,,,,,,,,0,0,0
-27500,4640,4640,4640,0,0,0,,Antilles91.LL,Antilles91.LL,Antilles91.LL,RRAF 1991,GCS_RRAF_1991,RRAF 1991,,,,,,,,,,,,0,0,0
+27500,4640,4640,4640,0,0,0,,Antilles91.LL,Antilles91.LL,Antilles91.LL,,GCS_RRAF_1991,RRAF 1991,,,,,,,,,,,,0,0,0
+27510,4558, , , , , ,, , ,Antilles91/1.LL,RRAF 1991,,,,,,,,,,,,,,0,0,0
 27600,4641,4641,4641,0,0,0,,IGN53/Mare.LL,IGN53/Mare.LL,IGN53/Mare.LL,IGN53 Mare,GCS_IGN53_Mare,IGN53 Mare,,,,,,,,,,,,0,0,0
 27700,4642,4642,4642,0,0,0,,ST84IleDesPins.LL,ST84IleDesPins.LL,ST84IleDesPins.LL,ST84 Ile des Pins,GCS_ST84_Ile_des_Pins,ST84 Ile des Pins,,,,,,,,,,,,0,0,0
 27800,4643,4643,4643,0,0,0,,ST71Belep.LL,ST71Belep.LL,ST71Belep.LL,ST71 Belep,GCS_ST71_Belep,ST71 Belep,,,,,,,,,,,,0,0,0
@@ -349,7 +350,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 35000,4725,37222,0,0,0,8238,,JHNSTN.LL,JohnstonIs61.LL,JHNSTN.LL,Johnston Island 1961,GCS_Johnston_Island_1961,,,,,,,,Longitude / Latitude (Johnston Island 1961),,,,,0,0,0
 35100,4726,0,0,0,0,0,,LittleCayman1961.LL,LittleCayman1961.LL,LittleCayman61.LL,Little Cayman 1961,,,,,,,,,,,,,,0,0,0
 35200,4727,37224,0,0,0,8252,,MIDWAY.LL,MidwayAstro.LL,MIDWAY.LL,Midway 1961,GCS_Midway_1961,,,,,,,,Longitude / Latitude (Midway Astro 1961),,,,,0,0,0
-35300,4728,37246,0,0,0,0,,CANARY.LL,PicoDeLasNieves.LL,CANARY.LL,Pico de la Nieves,GCS_Pico_de_Las_Nieves,,,,,,,,,,,,,0,0,0
+35300,4728,37246,0,0,0,0,,CANARY.LL,PicoDeLasNieves.LL,CANARY.LL,Pico de las Nieves 1984,GCS_Pico_de_Las_Nieves,,,,,,,,,,,,,0,0,0
 35400,4729,37226,0,0,0,8280,,PITCAIRN.LL,Pitcairn67.LL,PITCAIRN.LL,Pitcairn 1967,GCS_Pitcairn_1967,,,,,,,,Longitude / Latitude (Pitcairn Astro 1967),,,,,0,0,0
 35500,4730,0,0,0,0,0,,Santo1965.LL,Santo1965.LL,Santo65.LL,Santo 1965,,,,,,,,,,,,,,0,0,0
 35600,4731,37228,0,0,0,8303,,VITI.LL,VitiLevu16.LL,VITI.LL,Viti Levu 1916,GCS_Viti_Levu_1916,,,,,,,,Longitude / Latitude (Viti Levu 1916),,,,,0,0,0
@@ -364,7 +365,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 36500,4740,0,0,0,0,0,,ParametropZemp1990.LL,ParametropZemp1990.LL,ParametropZemp1990.LL,PZ-90,,,,,,,,,,,,,,0,0,0
 36600,4741,0,0,0,0,0,,Faroe1954.LL,Faroe1954.LL,,FD54,,,,,,,,,,,,,,0,0,0
 36700,4742,0,0,0,0,0,,GDM2000.LL,GDM2000.LL,,GDM2000,,,,,,,,,,,,,,0,0,0
-36800,4743,0,0,0,0,0,,Karbala1979/P.LL,Karbala1979/P.LL,Karbala79/P.LL,Karbala 1979 (Polservice),,,,,,,,,,,,,,0,0,0
+36800,4743,0,0,0,0,0,,Karbala1979/P.LL,Karbala1979/P.LL,Karbala79/P.LL,Karbala 1979,,,,,,,,,,,,,,0,0,0
 36900,4744,0,0,0,0,0,,Nahrwan1934.LL,Nahrwan1934.LL,,Nahrwan 1934,,,,,,,,,,,,,,0,0,0
 37000,4745,0,0,0,0,8289,,Rauenberg83.LL,Rauenberg83.LL,,RD/83,,,,,,,,,Longitude / Latitude (Rauenberg),,,,,0,0,0
 37100,4746,0,0,0,0,8281,,Potsdam83.LL,Potsdam83.LL,,PD/83,,,,,,,,,Longitude / Latitude (Potsdam),,,,,0,0,0
