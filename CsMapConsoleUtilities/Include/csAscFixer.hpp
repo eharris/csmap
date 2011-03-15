@@ -56,27 +56,11 @@ enum EcsDictType {	dictTypNone       = 0,
 					dictTypCoordsys   = 1,
 					dictTypDatum      = 2,
 					dictTypEllipsoid  = 4,
-					dictTypMreg        = 5,
+					dictTypMreg       = 5,
+					dictTypXform      = 6,
+					dictTypPath       = 7,
 					dictTypUnknown    = 1024
 				 };
-
-//enum EcsElpLabels {	elLblNone = 0,
-//					elLblElName,
-//					elLblDescNm,
-//					elLblERad,
-//					elLblPRad,
-//					elLblEcent,
-//					elLblGroup,
-//					elLblFlat,
-//					elLblEpsg,
-//					elLblUnknown = 999
-//				  };
-//
-//struct TcsElpLabelTbl
-//{
-//	char Label [10];
-//	EcsElpLabels LabelType;
-//};
 
 ///////////////////////////////////////////////////////////////////////////////
 // TcsDefLine represents a line in a .asc file.  This is maintained in an
@@ -197,6 +181,7 @@ public:
 	bool InsertBefore (const char* label,const TcsDefLine& newLine);
 	bool InsertAfter (const char* label,const TcsDefLine& newLine);
 	bool Append (const TcsDefLine& newLine);
+	bool RemoveLine (const char* label);
 	bool WriteToStream (std::ostream& outStrm) const;
 private:
 	///////////////////////////////////////////////////////////////////////////

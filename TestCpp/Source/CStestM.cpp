@@ -175,7 +175,7 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		    }
 		}
 	}
-	printf ("Ellipsoid Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
+	printf ("\tEllipsoid Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
 	errCnt += (failedCnt + missingCnt + deprCnt);
 	wrnCnt += mapCnt;
 
@@ -312,7 +312,7 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			}
 		}
 	}
-	printf ("Datum Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d,nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
+	printf ("\tDatum Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d,nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
 	errCnt += (failedCnt + missingCnt + deprCnt);
 	wrnCnt += mapCnt;
 
@@ -465,7 +465,7 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			}
 		}
 	}
-	printf ("Coordinate System Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
+	printf ("\tCoordinate System Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
 	if (verbose)
 	{
 		printf ("%d Warning conditions encvountered in testM\n",wrnCnt);

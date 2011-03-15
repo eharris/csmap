@@ -24,6 +24,7 @@ const TcsEpsgDataSetV6* GetEpsgObjectPtr (void);
 void ReleaseEpsgObjectPtr (void);
 
 bool CS_strrpl (char* string1,size_t strSize,const char* find,const char* rplWith);
+int CS_nmMprRplName (TcsCsvFileBase& csvFile,short fldNnr,const char* oldName,const char* newName,bool once);
 
 void csWriteProjectionCsv (std::wostream& oStrm);
 void csWriteParameterCsv (std::wostream& oStrm);
@@ -184,6 +185,7 @@ class TcsCategoryFile
 	TcsCategoryFile (const TcsCategoryFile&  source);		// not implemented
 	TcsCategoryFile& operator= (const TcsCategoryFile& rhs);	// not implemented
 public:
+	static const char KcsObsoleteCatName [128];
 	///////////////////////////////////////////////////////////////////////////
 	// Construction  /  Destruction  /  Assignment
 	TcsCategoryFile (void);
@@ -198,6 +200,9 @@ public:
 	TcsCategory* FetchCategory (const char* categoryName);
 	void AddCategory (const TcsCategory& newCategory);
 	bool ReadFromStream (std::istream& inStrm);
+	bool TcsCategoryFile::DeprecateCrs (const char* oldCrsName,const char* newCrsName,
+															   const char* deprNote,
+															   const char* newCrsDescription = 0);
 	bool WriteToStream (std::ostream& outStrm);
 private:
 	///////////////////////////////////////////////////////////////////////////

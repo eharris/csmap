@@ -26,7 +26,7 @@
 
 extern const wchar_t csDataDir [] = L"C:\\Developement\\SVN\\MgDev\\OS\\Oem\\CsMap\\Data";
 extern const char csDictDir [] = "C:\\Developement\\SVN\\MgDev\\OS\\Oem\\CsMap\\dictionaries";
-extern const wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
+extern const wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_06\\CSV";
 extern const TcsEpsgDataSetV6* KcsEpsgDataSetV6Ptr = 0;
 
 extern "C"

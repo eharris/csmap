@@ -94,9 +94,11 @@ TcsDefLine::TcsDefLine (EcsDictType dictType,const char* label,const char* value
 
 	switch (dictType) {
 	case dictTypCoordsys:  wsBase = 16;   break;
-	case dictTypDatum:     wsBase = 18;   break;
+	case dictTypDatum:     wsBase = 14;   break;
 	case dictTypEllipsoid: wsBase = 16;   break;
 	case dictTypMreg:      wsBase = 13;   break;
+	case dictTypXform:     wsBase =  8;   break;
+	case dictTypPath:      wsBase = 13;   break;
 	default:               wsBase = 15;   break;
 	}
 	
@@ -212,6 +214,12 @@ bool TcsDefLine::IsNameDef () const
 			break;
 		case dictTypMreg:
 			isNameDef = (stricmp (Label,"DATUM_NAME:") == 0);
+			break;
+		case dictTypXform:
+			isNameDef = (stricmp (Label,"GX_NAME:") == 0);
+			break;
+		case dictTypPath:
+			isNameDef = (stricmp (Label,"GP_NAME:") == 0);
 			break;
 		case dictTypNone:
 		case dictTypUnknown:
@@ -437,7 +445,7 @@ EcsAscLineType TcsDefLine::ParseTextLine (const char* textLine)
 					state = sepWs;
 				}
 			}
-			else if (isalnum (cc) || cc == '_')
+			else if (isalnum (cc) || cc == '_' || cc == ' ')
 			{
 				kCp += 1;			// accept character
 				if (labelCnt < (sizeof (Label) - 1))
@@ -831,7 +839,7 @@ bool TcsAscDefinition::SetValue (const char* label,const char* newValue)
 	EcsAscLineType lineType;
 	const char* lblPtr;
 	TcsDefLnItr lineItr;
-	
+
 	for (lineItr = Definition.begin ();lineItr != Definition.end ();lineItr++)
 	{
 		lineType = lineItr->GetType ();
@@ -951,6 +959,29 @@ bool TcsAscDefinition::Append (const TcsDefLine& newLine)
 	}
 	return ok;
 }
+bool TcsAscDefinition::RemoveLine (const char* label)
+{
+	bool ok (false);
+	EcsAscLineType lineType;
+	const char* lblPtr;
+	TcsDefLnItr lineItr;
+
+	for (lineItr = Definition.begin ();lineItr != Definition.end ();lineItr++)
+	{
+		lineType = lineItr->GetType ();
+		if (lineType == ascTypLblVal)
+		{
+			lblPtr = lineItr->GetLabel ();
+			if (!stricmp (lblPtr,label))
+			{
+				Definition.erase (lineItr);
+				ok = true;
+				break;
+			}
+		}
+	}
+	return ok;
+}
 bool TcsAscDefinition::WriteToStream (std::ostream& outStrm) const
 {
 	bool ok (true);
@@ -988,6 +1019,12 @@ TcsDefFile::TcsDefFile (EcsDictType dictType) : DictType    (dictType),
 		break;
 	case dictTypMreg:
 		Definitions.reserve (48U);
+		break;
+	case dictTypXform:
+		Definitions.reserve (600U);
+		break;
+	case dictTypPath:
+		Definitions.reserve (60U);
 		break;
 	case dictTypNone:
 	case dictTypUnknown:

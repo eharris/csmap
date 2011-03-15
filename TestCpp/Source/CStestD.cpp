@@ -59,6 +59,7 @@ int CStestD (bool verbose,long32_t duration)
 {
 	int status;
 	int err_cnt;
+	int isPseudo;
 
 	long32_t il;
 
@@ -128,6 +129,12 @@ int CStestD (bool verbose,long32_t duration)
 			}
 			strcpy (cs_MeKynm,csprm->csdef.key_nm);
 
+			isPseudo = FALSE;
+			if (csprm->prj_code == cs_PRJCOD_MRCATPV)
+			{
+				isPseudo = TRUE;
+			}
+
 			low_lng = csprm->cent_mer + csprm->min_ll [LNG];
 			hi_lng =  csprm->cent_mer + csprm->max_ll [LNG];
 			low_lat = csprm->min_ll [LAT];
@@ -137,6 +144,13 @@ int CStestD (bool verbose,long32_t duration)
 				ll [LNG] = CStestRN (low_lng,hi_lng);
 				ll [LNG] = CS_adj180 (ll [LNG]);
 				ll [LAT] = CStestRN (low_lat,hi_lat);
+
+				/* The pseudo Mercator cannot convert any point with
+				   latitude higher than 84. */
+				if (isPseudo && fabs (ll [LAT]) > 83.0)
+				{
+					continue;
+				}
 
 				/* We set the tolerance to what equals about one
 				   a meter for this test.  A smaller tolerance is

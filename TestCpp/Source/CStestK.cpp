@@ -90,6 +90,7 @@ struct csTestKIgnores_
 	{ wktFlvrEsri,    "TMBLI-B.RSOBorneo.ft", "ESRI says false arigin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
 	{ wktFlvrEsri,     "TMBLI-B.RSOBorneo.m", "ESRI says false arigin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
 	{ wktFlvrEsri,            "WGS84.TM-6NE", "ESRI says false northing is 10,000,000.0; EPSG says zero.  We go with EPSG."                                     },
+	{ wktFlvrEsri,             "HD72/7P.EOV", "Does not appear that ESRI has a parameter for Standard parallel as CS-MAP does"                                  },
 	{ wktFlvrNone,                        "", "End of table marker."                                                                                            }
 };
 int CStestK (bool verbose,long32_t duration)

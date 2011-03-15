@@ -121,6 +121,10 @@ unsigned long KcsSkippedDatums [] =
 					//              The CS-MAP definition jives with Mugnier.  I could
 					//              not verify the EPSG definition anywhere else, even at
 					//              the source EPSG specifies. (Feb2011)
+	 6230UL,		// ERP50-7P -- Our definition comes from NIMA.  It does not match precisely
+					//             with any of the 42 variants EPSG defines.  It is close enough
+					//             to warrant our blessing as a valid definition even though
+					//             EPSG does not carry this definition.
 		0UL			// End of Table marker.
 };
 
@@ -254,7 +258,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		}
 		// On to the next ellipsoid.
 	}
-	printf ("Ellipsoid Test: ok = %d, different = %d, noCvt = %d, failed = %d\n",okCnt,diffCnt,cvtCnt,failCnt);
+	printf ("\tEllipsoid Test: ok = %d, different = %d, noCvt = %d, failed = %d\n",okCnt,diffCnt,cvtCnt,failCnt);
 	errCnt += (diffCnt + failCnt);
 
 	okCnt = 0;
@@ -269,6 +273,8 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 	recordCount = epsgV6.GetRecordCount (epsgTblDatum);
 	for (index = 0;index < recordCount;++index)
 	{
+		double qValTolerance = 0.5;
+	
 		// Get the EPSG Datum code.
 		ok = epsgV6.GetCodeByIndex (epsgCode,epsgTblDatum,epsgFldDatumCode,index);
 		if (!ok)
@@ -283,6 +289,11 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		{
 			continue;
 		}
+
+		// For certain datums we increase the qValTolerance to account for the fact
+		// that certain definitions have been verified as being valid, even though
+		// they differen from EPSG by a non-trivial amount.
+		// Added the one datum of this type to the ignore list.
 
 		// We only do EPSG datums of the "geodetic" type.
 		ok = epsgV6.GetFieldByCode (fldData,epsgTblDatum,epsgFldDatumType,epsgCode);
@@ -362,7 +373,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			lclOk = epsgV6.LocateGeographicBase (geographicBase,epsgCrsTypGeographic2D,epsgCode);
 			if (lclOk)
 			{
-				// We have the base geogrpahic system.  Create a collection of
+				// We have the base geographic system.  Create a collection of
 				// transofrmations which convert from the base to WGS84.  Another
 				// complication here:  EPSG considers WGS84 to be most current
 				// realization.  Thus, it considers HARN and WGS84 to be the same
@@ -492,7 +503,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			// Perhaps we should use the CS_dtDefCMpEx() function here.  We'll
 			// see how this all works out and then decide.
 			/*int st =*/ CS_dtDefCmpEx (&qValue,csMapDtDef,&epsgDtDef,message,sizeof (message));
-			if (qValue <= 0.5)
+			if (qValue <= qValTolerance)
 			{
 				okCnt += 1;
 			}
@@ -511,7 +522,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			CS_free (csMapDtDef);
 		}
 	}
-	printf ("Datum Test: ok = %d, different = %d, noCvt = %d, failed = %d\n",okCnt,diffCnt,cvtCnt,failCnt);
+	printf ("\tDatum Test: ok = %d, different = %d, noCvt = %d, failed = %d\n",okCnt,diffCnt,cvtCnt,failCnt);
 	errCnt += (diffCnt + failCnt);
 
 	okCnt = 0;
@@ -677,7 +688,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			// NameMapper Audit.  So, we ignore it here.
 		}
 	}
-	printf ("Coordsys Test: ok = %d, different = %d, noCvt = %d, failed = %d\n",okCnt,diffCnt,cvtCnt,failCnt);
+	printf ("\tCoordsys Test: ok = %d, different = %d, noCvt = %d, failed = %d\n",okCnt,diffCnt,cvtCnt,failCnt);
 	errCnt += (diffCnt + failCnt);
 
 	return errCnt;
