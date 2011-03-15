@@ -680,7 +680,8 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			// we should use a std::auto_ptr.
 			dtDefPtr = CS_dtdef (csMapDtName);
 		}
-		else
+		
+        if(csDef->dat_knm[0] == '\0')
 		{
 			// Create an empty datum
 			dtDefPtr = (struct cs_Dtdef_ *)CS_malc (sizeof (struct cs_Dtdef_));
@@ -989,7 +990,17 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 							// check the datum
 							char szElTargetName[24];
 							szElTargetName[0]='\0';
+
+							// NTO:07Mar2011::At this point we used to check if
+							// the current candidate was geodetically or
+							// cartographically referenced.  This produced an
+							// erroneous match with the genric 'LL' system
+							// occasionally.  AT this time, we correct this to/
+							// check if how teh system we're trying to match is
+							// referenced.
+//??// hOIWEVER, WITH THIS CHANGE, PdTdEFtARGET CAN BE NULL AND WE HAVE A MEMORY EXCEPTION BELOW.
 							if (pCsDefTarget->dat_knm && *pCsDefTarget->dat_knm)
+							//if (csDef->dat_knm [0] != '\0')
 							{
 								//load the datum
 								cs_Dtdef_ *pDtDefTarget=CS_dtdef(pCsDefTarget->dat_knm);

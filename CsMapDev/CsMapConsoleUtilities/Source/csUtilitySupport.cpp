@@ -135,6 +135,61 @@ bool CS_strrpl (char* string1,size_t strSize,const char* find,const char* rplWit
 	return ok;
 }
 
+int CS_nmMprRplName (TcsCsvFileBase& csvFile,short fldNbr,const char* oldName,
+														  const char* newName,
+														  bool once)
+{
+	bool ok;					// get the primary loop started
+
+	int rplCount (0);
+	unsigned idx;
+	unsigned recCount;
+	const char* kCp;
+
+	char chrFieldData [512];
+	wchar_t wcFieldData [512];
+
+	std::wstring fieldData;
+	TcsCsvStatus csvStatus;
+
+	recCount = csvFile.RecordCount ();
+	ok = (recCount > 0);
+	for (idx = 0;ok && idx < recCount;idx += 1)
+	{
+		kCp = 0;
+		ok= csvFile.GetField (fieldData,idx,fldNbr,csvStatus);
+		if (ok)
+		{
+			wcstombs (chrFieldData,fieldData.c_str (),sizeof (chrFieldData));
+			chrFieldData [sizeof (chrFieldData) - 1] = '\0';
+			ok = (strlen (chrFieldData) < (sizeof (chrFieldData) - 1));
+			if (ok)
+			{
+				kCp = CS_stristr (chrFieldData,oldName);
+			}
+		}
+		if (kCp == 0)
+		{
+			continue;
+		}
+		
+		// We have found a record with this name as one of the aliases.
+		// Replace the name in the field data, ad then in the csvTable.
+		CS_strrpl (chrFieldData,sizeof (chrFieldData),oldName,newName);
+		mbstowcs (wcFieldData,chrFieldData,wcCount (wcFieldData));
+		fieldData = std::wstring (wcFieldData);
+		ok = csvFile.ReplaceField (fieldData,idx,fldNbr,csvStatus);
+		rplCount += 1;
+
+		// If once is true, then we are to only make one replacement.
+		if (!ok || once)
+		{
+			break;
+		}
+	}
+	return ok?rplCount:-1;
+}
+
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
 // TcsCoordsysFile Object  --  Abstracts the CS-MAP Coordsys file.
@@ -598,10 +653,16 @@ bool TcsCategory::WriteToStream (std::ostream& outStrm)
 	outStrm << std::endl;
 	return (outStrm.good ());
 }
-
+//newPage//
+const char TcsCategoryFile::KcsObsoleteCatName [] = "Obsolete Coordinate Systems";
 TcsCategoryFile::TcsCategoryFile (void) : CopyrightNotice (),
 										  Categories ()
 {
+}
+TcsCategoryFile::TcsCategoryFile (std::istream& inStrm) : CopyrightNotice (),
+														  Categories ()
+{
+	ReadFromStream (inStrm);
 }
 TcsCategoryFile::~TcsCategoryFile (void)
 {
@@ -715,6 +776,67 @@ bool TcsCategoryFile::ReadFromStream (std::istream& inStrm)
 			}
 		}
 		ok = true;
+	}
+	return ok;
+}
+bool TcsCategoryFile::DeprecateCrs (const char* oldCrsName,const char* newCrsName,
+														   const char* deprNote,
+														   const char* newCrsDescription)
+{
+	bool ok (false);
+	unsigned rplCount;
+	TcsCategory* obsoleteCat;
+	TcsCategory* categoryPtr;
+	TcsCategoryItem* itemPtr;
+	std::vector<TcsCategory>::iterator catItr;
+
+	char itemDescription [256];
+
+	// We will need to add a copy of every entry that we modify to the
+	// Obsolete category, so we lobtain a pointer to that category now.
+	obsoleteCat = FetchCategory (TcsCategoryFile::KcsObsoleteCatName);
+	ok = (obsoleteCat != 0);
+
+	// Formulate the description which we will apply to the deprecated
+	// category item.
+	sprintf (itemDescription,"%s Replaced by %s.",deprNote,newCrsName);
+
+	// Scan all catagories looking for an item with an item name equal to
+	// the provided old CRS name.
+	rplCount = 0;
+	for (catItr = Categories.begin ();ok && catItr != Categories.end ();catItr++)
+	{
+		categoryPtr = &(*catItr);
+		if (categoryPtr == obsoleteCat)
+		{
+			continue;
+		}
+		itemPtr = categoryPtr->GetItem (oldCrsName);
+		if (itemPtr != 0)
+		{
+			// We have found a reference to this CRS in current category.
+			// If we have not done so already, make sure the obsolete category
+			// has a refernce to the CRS we are deprecating.
+			if (rplCount == 0)
+			{
+				TcsCategoryItem deprecatedItem (*itemPtr);
+				deprecatedItem.SetDescription (itemDescription);
+				obsoleteCat->AddItem (deprecatedItem);
+			}
+			rplCount += 1;
+			
+			// Replace the old name of this entry with the new name and
+			// new description, is any.
+			itemPtr->SetItemName (newCrsName);
+			if (newCrsDescription != 0 && *newCrsDescription != '\0')
+			{
+				itemPtr->SetDescription (newCrsDescription);
+			}
+		}					
+	}
+	if (ok)
+	{
+		ok = (rplCount > 0);
 	}
 	return ok;
 }

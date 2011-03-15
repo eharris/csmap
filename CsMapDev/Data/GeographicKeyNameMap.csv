@@ -42,18 +42,18 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 4100,4120,4120,4120,0,0,0,,Greek.LL,Greek.LL,,Greek,GCS_Greek,Greek,,,Greek,,,,,,,,,0,0,0
 4200,4121,4121,4121,0,0,0,,GGRS87.LL,Greek/GGRS87.LL,GGRS87.LL,GGRS87,GCS_GGRS_1987,GGRS87,,,GGRS87,,,,,,,,,0,0,0
 4300,4122,4122,4122,0,0,0,,LL77,ATS77.LL,LL-ATS77,ATS77,GCS_ATS_1977,ATS77,,,,,,,,,,,,0,0,0
-4400,4123,4123,4123,0,0,0,,KKJ.LL,FinlandKKJ.LL,KKJ.LL,KKJ,GCS_KKJ,KKJ,,,KKJ,,,,,,,,,0,0,0
-4500,4124,4124,4124,0,0,8288,,LL-RT90,RT90.LL,LL-RT90-7P,RT90,GCS_RT_1990,RT90,,,RT90,,,,Longitude / Latitude (RT 90),,,,,0,0,0
+4400,4123,4123,4123,0,0,0,,KKJ.LL,FinlandKKJ.LL,KKJa.LL,KKJ,GCS_KKJ,KKJ,,,KKJ,,,,,,,,,0,0,0
+4500,4124,4124,4124,0,0,8288,,LL-RT90,RT90.LL,RT90-3/7P.LL,RT90,GCS_RT_1990,RT90,,,RT90,,,,Longitude / Latitude (RT 90),,,,,0,0,0
 4600,0,4125,4125,0,0,0,,Samboja.LL,Samboja.LL,Samboja_1.LL,Samboja,GCS_Samboja,Samboja,,,Samboja,,,,,,,,,0,0,0
 4700,4669,4126,4126,0,0,0,,Lithuania94.LL,Lithuania94.LL,Lithuania94.LL,LKS94 (ETRS89),GCS_LKS_1994,LKS94|LKS94 (ETRS89),,,LKS94 (ETRS89),,,,,,,,,0,0,0
-4800,4127,4127,4127,0,0,0,,Tete.LL,Tete.LL,Tete.LL,Tete,GCS_Tete,Tete,,,Tete,,,,,,,,,0,0,0
+4800,4127,4127,4127,0,0,0,,Tete.LL,Tete.LL,Tete/a.LL,Tete,GCS_Tete,Tete,,,Tete,,,,,,,,,0,0,0
 4900,4128,4128,4128,0,0,0,,Madzansua.LL,Madzansua.LL,,Madzansua,GCS_Madzansua,Madzansua,,,Madzansua,,,,,,,,,0,0,0
 5000,4129,4129,4129,0,0,0,,Observatario.LL,Observatario.LL,,Observatario,GCS_Observatario,Observatario,,,Observatario,,,,,,,,,0,0,0
 5100,4130,4130,4130,0,0,0,,Moznet.LL,Moznet.LL,Moznet.LL,Moznet,GCS_Moznet,Moznet,,,Moznet,,,,,,,,,0,0,0
 5200,4131,4131,4131,0,0,0,,Indian60.LL,Indian60.LL,Indian1960/E.LL,Indian 1960,GCS_Indian_1960,Indian 1960,,,Indian 1960,,,,,,,,,0,0,0
 5300,4132,4132,4132,0,0,0,,Final58.LL,Final58.LL,Final1958.LL,FD58,GCS_FD_1958,FD58,,,FD58,,,,,,,,,0,0,0
-5400,4133,4133,4133,0,0,0,,Estonia92,Estonia92,Estonia92,EST92,GCS_Estonia_1992,EST92,,,EST92,,,,,,,,,0,0,0
-5500,4134,4134,4134,0,0,0,,PDOSurvey93.LL,PDOSurvey93.LL,PDOSurvey93.LL,PSD93,GCS_PDO_1993,PDO Survey Datum 1993,,,PDO Survey Datum 1993,,,,,,,,,0,0,0
+5400,4133,4133,4133,0,0,0,,Estonia92,Estonia92,Estonia92a.LL,EST92,GCS_Estonia_1992,EST92,,,EST92,,,,,,,,,0,0,0
+5500,4134,4134,4134,0,0,0,,PDOSurvey93.LL,PDOSurvey93.LL,PDOSurvey93a.LL,PSD93,GCS_PDO_1993,PDO Survey Datum 1993,,,PDO Survey Datum 1993,,,,,,,,,0,0,0
 5600,4135,4135,4135,0,0,8277,,LL-OLDHI,OldHawaiian.LL,LL-OLDHI,Old Hawaiian,GCS_Old_Hawaiian,Old Hawaiian,,,Old Hawaiian,,,,Longitude / Latitude (Old Hawaiian),,,,,0,0,0
 5700,4136,4136,4136,0,0,0,,StLawrence.LL,StLawrence.LL,,St. Lawrence Island,GCS_St_Lawrence_Island,St. Lawrence Island,,,,,,,,,,,,0,0,0
 5800,4137,4137,4137,0,0,0,,StPaul.LL,StPaul.LL,,St. Paul Island,GCS_St_Paul_Island,St. Paul Island,,,,,,,,,,,,0,0,0
@@ -75,7 +75,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 7400,4153,4153,4153,0,0,0,,Rassadiran.LL,Rassadiran.LL,Rassadiran_1.LL,Rassadiran,GCS_Rassadiran,Rassadiran,,,Rassadiran,,,,,,,,,0,0,0
 7500,4154,4154,4154,0,0,8223,,Europ50/77.LL,ED50/77.LL,Europ50/1977.LL,ED50(ED77),GCS_European_1950_ED77,ED50(ED77),,,ED50(ED77),,,,Longitude / Latitude (ED 50),,,,,0,0,0
 7600,4155,4155,4155,0,0,0,,Dabola81.LL,Dabola81.LL,Dabola1981.LL,Dabola 1981,GCS_Dabola_1981,Dabola 1981,,,Dabola 1981,,,,,,,,,0,0,0
-7700,4156,4156,4156,0,0,0,,,,Czech/JTSK.LL,S-JTSK,GCS_S_JTSK,S-JTSK,,,S-JTSK,,,,,,,,,0,0,0
+7700,4156,4156,4156,0,0,0,,,,CzechJTSK/5.LL,S-JTSK,GCS_S_JTSK,S-JTSK,,,S-JTSK,,,,,,,,,0,0,0
 7800,4157,4157,4157,0,0,0,,MountDillon.LL,MountDillon.LL,,Mount Dillon,GCS_Mount_Dillon,Mount Dillon,,,Mount Dillon,,,,,,,,,0,0,0
 7900,4158,4158,4158,0,0,8272,,NAPARIMA.LL,Naparima55.LL,NAPARIMA.LL,Naparima 1955,GCS_Naparima_1955,Naparima 1955,,,Naparima 1955,,,,"Longitude / Latitude (Naparima, BWI)",,,,,0,0,0
 8000,4159,4159,4159,0,0,0,,EuropLibyan79.LL,ED79/Lybyan.LL,ELD1979.LL,ELD79,GCS_European_Libyan_Datum_1979,ELD79,,,ELD79,,,,,,,,,0,0,0
@@ -96,10 +96,10 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 9500,4174,4174,4174,0,0,0,,SierraLeone24.LL,SierraLeone24.LL,,Sierra Leone 1924,GCS_Sierra_Leone_1924,Sierra Leone 1924,,,Sierra Leone 1924,,,,,,,,,0,0,0
 9600,4175,4175,4175,0,0,0,,SierraLeone68.LL,SierraLeone68.LL,SierraLeone1968.LL,Sierra Leone 1968,GCS_Sierra_Leone_1968,Sierra Leone 1968,,,Sierra Leone 1968,,,,,,,,,0,0,0
 9700,4176,4176,4176,0,0,0,,Antarctic98.LL,Antarctic98.LL,Antarctic98.LL,Australian Antarctic,GCS_Australian_Antarctic_1998,Australian Antarctic,,,Australian Antarctic,,,,,,,,,0,0,0
-9800,4178,4178,4178,0,0,0,,Pulkovo42/83.LL,Pulkovo42/83.LL,Pulkovo42/83.LL,Pulkovo 1942(83),GCS_Pulkovo_1942_Adj_1983,Pulkovo 1942(83),,,Pulkovo 1942(83),,,,,,,,,0,0,0
-9900,4179,4179,4179,0,0,0,,Pulkovo42/58.LL,Pulkovo42/58.LL,Pulkovo42/58.LL,Pulkovo 1942(58),GCS_Pulkovo_1942_Adj_1958,Pulkovo 1942(58),,,Pulkovo 1942(58),,,,,,,,,0,0,0
+9800,4178,4178,4178,0,0,0,,Pulkovo42/83.LL,Pulkovo42/83.LL,Pulkovo42/83a.LL,Pulkovo 1942(83),GCS_Pulkovo_1942_Adj_1983,Pulkovo 1942(83),,,Pulkovo 1942(83),,,,,,,,,0,0,0
+9900,4179,4179,4179,0,0,0,,Pulkovo42/58.LL,Pulkovo42/58.LL,Pulkovo42/58a.LL,Pulkovo 1942(58),GCS_Pulkovo_1942_Adj_1958,Pulkovo 1942(58),,,Pulkovo 1942(58),,,,,,,,,0,0,0
 10000,4180,4180,4180,0,0,0,,Estonia97.LL,Estonia97.LL,Estonia97.LL,EST97,GCS_Estonia_1997,EST97,,,EST97,,,,,,,,,0,0,0
-10100,4181,4181,4181,0,0,0,,Luxembourg30.LL,Luxembourg30.LL,Luxembourg30.LL,Luxembourg 1930,GCS_Luxembourg_1930,Luxembourg 1930,,,Luxembourg 1930,,,,,,,,,0,0,0
+10100,4181,4181,4181,0,0,0,,Luxembourg30.LL,Luxembourg30.LL,Luxembourg30a.LL,Luxembourg 1930,GCS_Luxembourg_1930,Luxembourg 1930,,,Luxembourg 1930,,,,,,,,,0,0,0
 10200,4182,4182,4182,0,0,8275,,OBSRV66.LL,AzoresOccdtl39.LL,OBSRV66.LL,Azores Occidental 1939,GCS_Azores_Occidental_1939,Azores Occidental 1939,,,Azores Occidental 1939,,,,Longitude / Latitude (Observatorio 1966),,,,,0,0,0
 10300,4183,4183,4183,0,0,8299,,AZORES.LL,AzoresCentral48.LL,AZORES.LL,Azores Central 1948,GCS_Azores_Central_1948,Azores Central 1948,,,Azores Central 1948,,,,Longitude / Latitude (Southwest Base),,,,,0,0,0
 10400,4184,4184,4184,0,0,8294,,SAOBRAZ.LL,SaoBraz.LL,SAOBRAZ.LL,Azores Oriental 1940,GCS_Azores_Oriental_1940,Azores Oriental 1940,,,Azores Oriental 1940,,,,Longitude / Latitude (Sao Braz),,,,,0,0,0
@@ -111,8 +111,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 11000,4192,4192,4192,0,0,0,,Douala48.LL,Douala48.LL,Douala1948.LL,Douala 1948,GCS_Douala_1948,Douala 1948,,,Douala 1948,,,,,,,,,0,0,0
 11100,4193,4193,4193,0,0,0,,Manoca62.LL,Manoca62.LL,Manoca1962.LL,Manoca 1962,GCS_Manoca_1962,Manoca 1962,,,Manoca 1962,,,,,,,,,0,0,0
 11200,4194,4194,4194,0,0,0,,Qornoq27.LL,Qornoq27.LL,Qornoq1927.LL,Qornoq 1927,GCS_Qornoq_1927,Qornoq 1927,,,Qornoq 1927,,,,,,,,,0,0,0
-11300,4195,4195,4195,0,0,0,,Scoresbysund52.LL,Scoresbysund52.LL,Scoresbysund52.LL,Scoresbysund 1952,GCS_Scoresbysund_1952,Scoresbysund 1952,,,Scoresbysund 1952,,,,,,,,,0,0,0
-11400,4196,4196,4196,0,0,0,,Ammassalik58.LL,Ammassalik58.LL,Ammassalik58.LL,Ammassalik 1958,GCS_Ammassalik_1958,Ammassalik 1958,,,Ammassalik 1958,,,,,,,,,0,0,0
+11300,4195,4195,4195,0,0,0,,Scoresbysund52.LL,Scoresbysund52.LL,Scoresbysund52a.LL,Scoresbysund 1952,GCS_Scoresbysund_1952,Scoresbysund 1952,,,Scoresbysund 1952,,,,,,,,,0,0,0
+11400,4196,4196,4196,0,0,0,,Ammassalik58.LL,Ammassalik58.LL,Ammassalik58a.LL,Ammassalik 1958,GCS_Ammassalik_1958,Ammassalik 1958,,,Ammassalik 1958,,,,,,,,,0,0,0
 11500,4197,0,4234,0,0,0,,GarouaRgs.LL,GarouaRgs.LL,,Garoua,,Garoua,,,Garoua,,,,,,,,,0,0,0
 11600,4198,4198,4198,0,0,0,,Kousseri.LL,Kousseri.LL,,Kousseri,GCS_Kousseri,Kousseri,,,Kousseri,,,,,,,,,0,0,0
 11700,4199,4199,4199,0,0,0,,Egypt30.LL,Egypt30.LL,,Egypt 1930,GCS_Egypt_1930,Egypt 1930,,,Egypt 1930,,,,,,,,,0,0,0
@@ -123,7 +123,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 12200,4204,4204,4204,0,0,8197,,AinElAbd.LL,AinElAbd.LL,AinElAbd.LL,Ain el Abd,GCS_Ain_el_Abd_1970,Ain el Abd,,,Ain el Abd,,,,Longitude / Latitude (Ain el Abd 1970),,,,,0,0,0
 12300,4205,4205,4205,0,0,8196,,Afgooye.LL,Afgooye.LL,Afgooye.LL,Afgooye,GCS_Afgooye,Afgooye,,,Afgooye,,,,Longitude / Latitude (Afgooye),,,,,0,0,0
 12400,4206,4206,4206,0,0,0,,Agadez.LL,Agadez.LL,,Agadez,GCS_Agadez,Agadez,,,Agadez,,,,,,,,,0,0,0
-12500,4207,4207,4207,0,0,0,,Lisbon37.LL,Lisbon37.LL,Lisbon37.LL,Lisbon,GCS_Lisbon,Lisbon,,,Lisbon,,,,,,,,,0,0,0
+12500,4207,4207,4207,0,0,0,,Lisbon37.LL,Lisbon37.LL,Lisbon37a.LL,Lisbon,GCS_Lisbon,Lisbon,,,Lisbon,,,,,,,,,0,0,0
 12600,4208,4208,4208,0,0,0,,Aratu.LL,Aratu.LL,Aratu_1.LL,Aratu,GCS_Aratu,Aratu,,,Aratu,,,,,,,,,0,0,0
 12700,4209,4209,4209,0,0,8199,,Arc1950.LL,Arc1950.LL,Arc1950.LL/01,Arc 1950,GCS_Arc_1950,Arc 1950,,,Arc 1950,,,,Longitude / Latitude (Arc 1950),,,,,0,0,0
 12800,4210,4210,4210,0,0,8200,,Arc1960.LL,Arc1960.LL,Arc1960.LL,Arc 1960,GCS_Arc_1960,Arc 1960,,,Arc 1960,,,,Longitude / Latitude (Arc 1960),,,,,0,0,0
@@ -131,7 +131,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 13000,0,0,0,0,0,0,,DJAKRTA.LL,,DJAKRTA.LL,_Djakarta_,gcs_Djakarta,_Djakarta,,,_Djakarta,,,,Longitude / Latitude (_Djakarta),,,WKT names invented by CS-MAP developers to distinguish between similar datums.,"The WKT names provided here are bogus, invented to distinguish the DJAKRTA datum which is the same as Batavia, but uses the DMA mulriple regression algorithm.",0,0,0
 13100,4212,4212,4212,0,0,0,,Barbados38.LL,Barbados38.LL,Barbados1938.LL,Barbados 1938,GCS_Barbados_1938,Barbados 1938,,,Barbados 1938,,,,,,,,,0,0,0
 13200,4213,4213,4213,0,0,0,,Beduaram.LL,Beduaram.LL,,Beduaram,GCS_Beduaram,Beduaram,,,Beduaram,,,,,,,,,0,0,0
-13300,4214,4214,4214,0,0,0,,Beijing54.LL,Beijing54.LL,Beijing1954.LL,Beijing 1954,GCS_Beijing_1954,Beijing 1954,,,Beijing 1954,,,,,,,,,0,0,0
+13300,4214,4214,4214,0,0,0,,Beijing54.LL,Beijing54.LL,Beijing1954/a.LL,Beijing 1954,GCS_Beijing_1954,Beijing 1954,,,Beijing 1954,,,,,,,,,0,0,0
 13400,4215,4215,4215,0,0,8206,,Belge50.LL,Belge50.LL,,Belge 1950,GCS_Belge_1950,Belge 1950,,,Belge 1950,,,,Longitude / Latitude (Belgium),,,,,0,0,0
 13500,4216,4216,4216,0,0,8208,,Bermuda.LL,Bermuda57.LL,Bermuda.LL,Bermuda 1957,GCS_Bermuda_1957,Bermuda 1957,,,Bermuda 1957,,,,Longitude / Latitude (Bermuda 1957),,,,,0,0,0
 13600,4218,4218,4218,0,0,8209,,Bogota.LL,Bogota75.LL,Bogota.LL,Bogota 1975,GCS_Bogota,Bogota 1975,,,Bogota 1975,,,,Longitude / Latitude (Bogota Observatory),,,,,0,0,0
@@ -143,7 +143,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 14200,4224,4224,4224,0,0,8217,,Chua.LL,ChuaAstro.LL,Chua.LL,Chua,GCS_Chua,Chua,,,Chua,,,,Longitude / Latitude (Chua Astro),,,,,0,0,0
 14300,4225,4225,2000016,0,0,8218,,Corrego.LL,Corrego.LL,Corrego.LL,Corrego Alegre,GCS_Corrego_Alegre,Corrego Alegre,,,Corrego Alegre,,,,Longitude / Latitude (Corrego Alegre),,,,,0,0,0
 14400,4226,4226,4226,0,0,0,,CoteDIvoire.LL,CoteDIvoire.LL,,Cote d'Ivoire,GCS_Cote_d_Ivoire,Cote d'Ivoire,,,Cote d'Ivoire,,,,,,,,,0,0,0
-14500,4227,4227,4227,0,0,0,,DeirEzZor.LL,DeirEzZor.LL,DeirEzZor_1.LL,Deir ez Zor,GCS_Deir_ez_Zor,Deir ez Zor,,,Deir ez Zor,,,,,,,,,0,0,0
+14500,4227,4227,4227,0,0,0,,DeirEzZor.LL,DeirEzZor.LL,DeirEzZor_2.LL,Deir ez Zor,GCS_Deir_ez_Zor,Deir ez Zor,,,Deir ez Zor,,,,,,,,,0,0,0
 14600,4228,4228,4228,0,0,0,,Douala.LL,Douala.LL,,Douala,GCS_Douala,Douala,,,Douala,,,,,,,,,0,0,0
 14700,4229,4229,4229,0,0,8276,,Old-Egyp.LL,Egypt07.LL,Old-Egyp.LL,Egypt 1907,GCS_Egypt_1907,Egypt 1907,,,Egypt 1907,,,,Longitude / Latitude (Old Egyptian),,,,,0,0,0
 14800,4230,4230,4230,0,0,8223,,LL-ERP50,ED50/Molo.LL,LL-ERP50,ED50,GCS_European_1950,ED50,,,,,,,Longitude / Latitude (ED 50),,,,,0,0,0
@@ -153,7 +153,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 15200,4234,4234,0,0,0,0,,GarouaIgn.LL,GarouaIgn.LL,,Garoua,GCS_Garoua,,,,Garoua,,,,,,,,,0,0,0
 15300,4235,4235,4235,0,0,0,,GuyaneFrancaise.LL,GuyaneFrancaise.LL,,Guyane Francaise,GCS_Guyane_Francaise,Guyane Francaise,,,Guyane Francaise,,,,,,,,,0,0,0
 15400,4236,4236,4236,0,0,8233,,HuTzuShan.LL,HuTzuShan.LL,HuTzuShan_1.LL,Hu Tzu Shan 1950,GCS_Hu_Tzu_Shan,Hu Tzu Shan,,,Hu Tzu Shan,,,,Longitude / Latitude (Hu-Tzu-Shan),,,,,0,0,0
-15500,4237,4237,4237,0,0,0,,,Hungarian72.LL,HD-72.LL,HD72,GCS_Hungarian_1972,HD72,,,HD72,,,,,,,,,0,0,0
+15500,4237,4237,4237,0,0,0,,,Hungarian72.LL,HD72/7P.LL,HD72,GCS_Hungarian_1972,HD72,,,HD72,,,,,,,,,0,0,0
 15600,4238,4238,4238,0,0,0,,Indonesian74.LL,,Indonesian1974.LL,ID74,GCS_Indonesian_1974,ID74,,,ID74,,,,,,,,,,,
 15700,4239,4239,4239,0,0,0,,Indian54.LL,Indian54.LL,Indian1954.LL,Indian 1954,GCS_Indian_1954,Indian 1954,,,Indian 1954,,,,,,,,,0,0,0
 15800,4240,4240,4240,0,0,0,,Indian75.LL,Indian75.LL,Indian75/E.LL,Indian 1975,GCS_Indian_1975,Indian 1975,,,Indian 1975,,,,,,,,,0,0,0
@@ -170,7 +170,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 16900,4251,4251,4251,0,0,8243,,Liberia.LL,Liberia.LL,Liberia.LL,Liberia 1964,GCS_Liberia_1964,Liberia 1964,,,Liberia 1964,,,,Longitude / Latitude (Liberia 1964),,,,,0,0,0
 17000,4252,4252,4252,0,0,0,,Lome.LL,Lome.LL,,Lome,GCS_Lome,Lome,,,Lome,,,,,,,,,0,0,0
 17100,4253,4253,4253,0,0,8246,,Luzon.LL,Luzon.LL,Luzon.LL,Luzon 1911,GCS_Luzon_1911,Luzon 1911,,,Luzon 1911,,,,Longitude / Latitude (Luzon for Philippines),,,,,0,0,0
-17200,4254,4254,4254,0,0,8231,,HitoXVIII63.LL,HitoXVIII63.LL,HitoXVIII63.LL,Hito XVIII 1963,GCS_Hito_XVIII_1963,Hito XVIII 1963,,,Hito XVIII 1963,,,,Longitude / Latitude (Hito XVIII 1963),,,,,0,0,0
+17200,4254,4254,4254,0,0,8231,,HitoXVIII63.LL,HitoXVIII63.LL,HitoXVIII63a.LL,Hito XVIII 1963,GCS_Hito_XVIII_1963,Hito XVIII 1963,,,Hito XVIII 1963,,,,Longitude / Latitude (Hito XVIII 1963),,,,,0,0,0
 17300,4255,4255,4255,0,0,0,,HeratNorth.LL,HeratNorth.LL,HeratNorth_1.LL,Herat North,GCS_Herat_North,Herat North,,,Herat North,,,,,,,,,0,0,0
 17400,4256,4256,4256,0,0,8247,,Mahe1971.LL,Mahe1971.LL,Mahe1971.LL,Mahe 1971,GCS_Mahe_1971,Mahe 1971,,,Mahe 1971,,,,Longitude / Latitude (Mahe 1971),,,,,0,0,0
 17500,4257,4257,4257,0,0,0,,Makassar.LL,Makassar.LL,Makassar/E.LL,Makassar,GCS_Makassar,Makassar,,,Makassar,,,,,,,,,0,0,0
@@ -188,8 +188,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 18700,4270,4270,4270,0,0,8269,,NHRWN-O.LL,Nahrwan67.LL,NHRWN-O.LL,Nahrwan 1967,GCS_Nahrwan_1967,Nahrwan 1967,,,Nahrwan 1967,,,,Longitude / Latitude (Nahrwan for Masirah Island),,,,,0,0,0
 18800,4271,4271,4271,0,0,0,,Naparima72.LL,Naparima72.LL,Naparima1972.LL,Naparima 1972,GCS_Naparima_1972,Naparima 1972,,,Naparima 1972,,,,,,,,,0,0,0
 18900,4272,4272,4272,0,0,8229,,LL-NZGD49,NZGD49.LL,LL-GD1949-Grid,NZGD49,GCS_New_Zealand_1949,NZGD49,,,,,,,Longitude / Latitude (Geodetic Datum 1949),,,,,0,0,0
-19000,4273,4273,4273,0,0,0,,NGO48.LL,NGO48.LL,NGO48.LL,NGO 1948,GCS_NGO_1948,NGO 1948,,,NGO 1948,,,,,,,,,0,0,0
-19100,4274,4274,4274,0,0,8289,,Datum73.LL,Datum73.LL,Datum73.LL,Datum 73,GCS_Datum_73,Datum 73,,,Datum 73,,,,Longitude / Latitude (Melrica 1973)|Longitude / Latitude (D73),,,,,0,0,0
+19000,4273,4273,4273,0,0,0,,NGO48.LL,NGO48.LL,NGO48a.LL,NGO 1948,GCS_NGO_1948,NGO 1948,,,NGO 1948,,,,,,,,,0,0,0
+19100,4274,4274,4274,0,0,8289,,Datum73.LL,Datum73.LL,Datum73a.LL,Datum 73,GCS_Datum_73,Datum 73,,,Datum 73,,,,Longitude / Latitude (Melrica 1973)|Longitude / Latitude (D73),,,,,0,0,0
 19200,4275,4275,4275,0,0,8266,,NTF.LL,NTF.LL,NTF.LL,NTF,GCS_NTF,NTF,,,NTF,,,,Longitude / Latitude (NTF with Greenwich prime meridian),,,,,0,0,0
 19300,4276,4276,4276,0,0,0,,NSWC9Z-2.LL,NSWC9Z-2.LL,,NSWC 9Z-2,GCS_NSWC_9Z_2,NSWC 9Z-2,,,NSWC 9Z-2,,,,,,,,,0,0,0
 19400,4277,4277,4277,0,0,8274,,OSGB.LL,OSGB.LL,OSGB.LL,OSGB 1936,GCS_OSGB_1936,OSGB 1936,,,OSGB 1936,,,,Longitude / Latitude (OSGB 36),,,,,0,0,0
@@ -204,7 +204,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 20300,4286,4286,4286,0,0,0,,Qatar48.LL,Qatar48.LL,Qatar48.LL,Qatar 1948,GCS_Qatar_1948,Qatar 1948,,,Qatar 1948,,,,,,,,,0,0,0
 20400,0,0,0,0,0,8286,,Qatar.LL,,Qatar.LL,,,,,,,,,,Longitude / Latitude (Qatar National),,,,"Ellipsoid on the original definitions, as taken from DMA 8352, is wrong.  Is International 1924, should have been Helmert 1906.  Qatar48.LL is correct.",0,0,0
 20500,4288,4288,4288,0,0,0,,LomaQuintana.LL,LomaQuintana.LL,,Loma Quintana,GCS_Loma_Quintana,Loma Quintana,,,Loma Quintana,,,,,,,,,0,0,0
-20600,4289,4289,4289,0,0,8273,,Amersfoort.LL,Amersfoort.LL,Amersfoort.LL,Amersfoort,GCS_Amersfoort,Amersfoort,,,Amersfoort,,,,Longitude / Latitude (Netherlands),,,,,0,0,0
+20600,4289,4289,4289,0,0,8273,,Amersfoort.LL,Amersfoort.LL,Amersfoort/a.LL,Amersfoort,GCS_Amersfoort,Amersfoort,,,Amersfoort,,,,Longitude / Latitude (Netherlands),,,,,0,0,0
 20700,4291,,,0,0,,,,,SAD69.LL,SAD69|xSAD69,x_South_American_1969,xSAD69,,,xSAD69,,,,Longitude / Latitude (xSAD 69),,,,,0,0,0
 20900,4292,4292,4292,0,0,8295,0,Sapper.LL,,Sapper.LL,Sapper Hill 1943,GCS_Sapper_Hill_1943,Sapper Hill 1943,,,Sapper Hill 1943,,,,Longitude / Latitude (Sapper Hill 1943),,,,,,,
 21000,4293,4293,4293,0,0,8296,,Schwarzk.LL,Schwarzeck.LL,Schwarzk.LL,Schwarzeck,GCS_Schwarzeck,Schwarzeck,,,Schwarzeck,,,,Longitude / Latitude (Schwarzeck),,,,,0,0,0
@@ -212,7 +212,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 21200,4296,4296,4296,0,0,0,,Sudan.LL,Sudan.LL,,Sudan,GCS_Sudan,Sudan,,,Sudan,,,,,,,,,0,0,0
 21300,4297,4297,4297,0,0,0,,Tananarive25.LL,Tananarive25.LL,Tananarive1925.LL,Tananarive,GCS_Tananarive_1925,Tananarive,,,Tananarive,,,,,,,,,0,0,0
 21400,4298,4298,4298,0,0,8300,,TIMBALAI.LL,Timbalai48.LL,TIMBALAI.LL,Timbalai 1948,GCS_Timbalai_1948,Timbalai 1948,,,Timbalai 1948,,,,Longitude / Latitude (Timbalai 1948),,,"This mapping uses the DMA, with multiple regression, definition of the Timbalai 1948 datum.  Using this over TMBLI-B was a rather arbitrary decision.",,0,0,0
-21500,4299,4299,4299,0,0,8237,,TM65.LL,TM65.LL,TM1965.LL,TM65,GCS_TM65,TM65,,,TM65,,,,Longitude / Latitude (Ireland 1965),,,,,0,0,0
+21500,4299,4299,4299,0,0,8237,,TM65.LL,TM65.LL,TM1965/a.LL,TM65,GCS_TM65,TM65,,,TM65,,,,Longitude / Latitude (Ireland 1965),,,,,0,0,0
 21600,4300,4300,4300,0,0,0,,TM75.LL,TM75.LL,,TM75,GCS_TM75,TM75,,,TM75,,,,,,,,,0,0,0
 21700,4301,4301,2000003,0,0,8301,,Tokyo,Tokyo.LL,Tokyo,Tokyo,GCS_Tokyo,Tokyo,,,Tokyo,,,,Longitude / Latitude (Tokyo),,,,,0,0,0
 21800,4302,4302,4302,0,0,0,,Trinidad03.LL,Trinidad03.LL,Trinidad1903.LL,Trinidad 1903,GCS_Trinidad_1903,Trinidad 1903,,,Trinidad 1903,,,,,,,,,0,0,0
@@ -225,15 +225,15 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 22500,4310,4310,4310,0,0,0,,Yoff.LL,Yoff.LL,,Yoff,GCS_Yoff,Yoff,,,Yoff,,,,,,,,,0,0,0
 22600,4311,4311,4311,0,0,8310,,Zanderij.LL,Zanderij.LL,Zanderij.LL,Zanderij,GCS_Zanderij,Zanderij,,,Zanderij,,,,Longitude / Latitude (Zanderij),,,,,0,0,0
 22700,4312,4312,4312,0,0,0,,MGI.LL,MGI.LL,MGI-AT.LL,MGI,GCS_MGI,MGI,,,MGI,,,,,,,,,0,0,0
-22800,4313,4313,4313,0,0,0,,Belge72.LL,Belge72.LL,Belge72.LL,Belge 1972,GCS_Belge_1972,Belge 1972,,,Belge 1972,,,,,,,,,0,0,0
-22900,4314,4314,4314,0,0,8220,,DHDN.LL,DHDN.LL,DHDN.LL,DHDN,GCS_Deutsches_Hauptdreiecksnetz,DHDN,,,DHDN,,,,Longitude / Latitude (DHDN),,,,,0,0,0
+22800,4313,4313,4313,0,0,0,,Belge72.LL,Belge72.LL,Belge72a.LL,Belge 1972,GCS_Belge_1972,Belge 1972,,,Belge 1972,,,,,,,,,0,0,0
+22900,4314,4314,4314,0,0,8220,,DHDN.LL,DHDN.LL,DHDN/2.LL,DHDN,GCS_Deutsches_Hauptdreiecksnetz,DHDN,,,DHDN,,,,Longitude / Latitude (DHDN),,,,,0,0,0
 23000,4315,4315,4315,0,0,0,,Conakry05.LL,Conakry05.LL,Conakry1905.LL,Conakry 1905,GCS_Conakry_1905,Conakry 1905,,,Conakry 1905,,,,,,,,,0,0,0
 23100,4316,4316,4316,0,0,0,,DealulPiscului33.LL,DealulPiscului33.LL,DealulPiscului1933.LL,Dealul Piscului 1930,GCS_Dealul_Piscului_1933,Dealul Piscului 1933,,,Dealul Piscului 1933,,,,,,,,,0,0,0
 23200,4317,0,4317,0,0,0,,DealulPiscului70.LL,DealulPiscului70.LL,DealulPiscului1970.LL,,GCS_Dealul_Piscului_1970,Dealul Piscului 1970,,,Dealul Piscului 1970,,,,,,,,,0,0,0
 23300,4318,4318,4318,0,0,0,,NtlGeodeticNet.LL,NtlGeodeticNet.LL,NtlGeodeticNet.LL,NGN,GCS_NGN,NGN,,,NGN,,,,,,,,,0,0,0
 23400,4319,4319,4319,0,0,0,,KuwaitUtility.LL,KuwaitUtility.LL,KuwaitUtility.LL,KUDAMS,GCS_KUDAMS,KUDAMS,,,KUDAMS,,,,,,,,,0,0,0
 23500,4322,4322,4322,0,0,8306,,LL72,WGS72.LL,LL72,WGS 72,GCS_WGS_1972,WGS 72,,,WGS 72,,,,Longitude / Latitude (WGS 72),,,,,0,0,0
-23600,4324,4324,4324,0,0,0,,WGS72-TBE.LL,WGS72/be.LL,WGS72-TBE.LL,WGS 72BE,GCS_WGS_1972_BE,WGS 72BE,,,WGS 72BE,,,,,,,,,0,0,0
+23600,4324,4324,4324,0,0,0,,WGS72-TBE.LL,WGS72/be.LL,WGS72-TBE/a.LL,WGS 72BE,GCS_WGS_1972_BE,WGS 72BE,,,WGS 72BE,,,,,,,,,0,0,0
 23700,4326,4326,2000002,0,0,8192,,LL84,WGS84.LL,LL84|CRS:84,WGS 84,GCS_WGS_1984,WGS 84|TWD97,,,WGS 84,,CRS:84,,WGS 84|Longitude / Latitude (WGS 84),"WGS84 Lat/Long's, Degrees, -180 ==> +180",,,,0,0,0
 23800,4600,4600,4600,0,0,0,,Anguilla57.LL,Anguilla57.LL,,Anguilla 1957,GCS_Anguilla_1957,Anguilla 1957,,,Anguilla 1957,,,,,,,,,0,0,0
 23900,4601,4601,4601,0,0,0,,Antigua43.LL,Antigua43.LL,Antigua1943.LL,Antigua 1943,GCS_Antigua_1943,Antigua 1943,,,Antigua 1943,,,,,,,,,0,0,0
@@ -246,10 +246,10 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 24600,4608,4608,4608,0,0,0,,NAD27Adj76.LL,NAD27Adj76.LL,,NAD27(76),GCS_NAD_1927_Definition_1976,NAD27(76),,,,,,,,,,,,0,0,0
 24700,4609,4609,4609,0,0,0,,NAD27Cgq77.LL,NAD27Cgq77.LL,,NAD27(CGQ77),GCS_NAD_1927_CGQ77,NAD27(CGQ77),,,,,,,,,,,,0,0,0
 24800,4610,4610,4610,0,0,0,,Xian80.LL,Xian80.LL,Xian80.LL,Xian 1980,GCS_Xian_1980,Xian 1980,,,Xian 1980,,,,,,,,,0,0,0
-24900,4611,104104,4611,0,0,0,,HongKong80.LL,HongKong80.LL,HongKong80.LL,Hong Kong 1980,GCS_Hong_Kong_1980,Hong Kong 1980,,,Hong Kong 1980,,,,,,,,,0,0,0
+24900,4611,104104,4611,0,0,0,,HongKong80.LL,HongKong80.LL,HongKong80a.LL,Hong Kong 1980,GCS_Hong_Kong_1980,Hong Kong 1980,,,Hong Kong 1980,,,,,,,,,0,0,0
 25000,4612,4612,4612,0,0,0,,JGD2000.LL,JGD2000.LL,LL-JGD2K-7P,JGD2000,GCS_JGD_2000,JGD2000,,,JGD2000,,,,,,,,,0,0,0
 25100,4613,4613,4613,0,0,0,,Segara.LL,GunungSegara.LL,GunungSegara.LL,Segara,GCS_Gunung_Segara,Segara,,,Segara,,,,,,,,,0,0,0
-25200,4614,4614,4614,0,0,0,,QatarNtl95.LL,QatarNtl95.LL,QatarNtl95.LL,QND95,GCS_QND_1995,QND95,,,QND95,,,,,,,,,0,0,0
+25200,4614,4614,4614,0,0,0,,QatarNtl95.LL,QatarNtl95.LL,QatarNtl95a.LL,QND95,GCS_QND_1995,QND95,,,QND95,,,,,,,,,0,0,0
 25300,4615,4615,4615,0,0,8298,,MADEIRA.LL,PortoSanto.LL,MADEIRA.LL,Porto Santo,GCS_Porto_Santo_1936,Porto Santo,,,Porto Santo,,,,Longitude / Latitude (Southeast Base),,,,,0,0,0
 25400,4616,37250,4616,0,0,0,,SelvagemGrande.LL,SelvagemGrande.LL,Selvagem.LL,Selvagem Grande,GCS_Selvagem_Grande_1938,Selvagem Grande,,,Selvagem Grande,,,,,,,,,0,0,0
 25500,4618,4291,4618,0,0,8292,,SAD69.LL,SAD69.LL,SAD1969.LL/01,SAD69,GCS_South_American_1969,SAD69,,,SAD69,,,,Longitude / Latitude (SAD 69),,,,,0,0,0
@@ -258,7 +258,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 25800,4621,4621,4621,0,0,0,,FortMarigot.LL,FortMarigot.LL,FortMarigot_1.LL,Fort Marigot,GCS_Fort_Marigot,Fort Marigot,,,,,,,,,,,,0,0,0
 25900,4622,4622,4622,0,0,0,,StAnne.LL,StAnne.LL,Guadeloupe48.LL,Guadeloupe 1948,GCS_Sainte_Anne,Sainte Anne,,,,,,,,,,,,0,0,0
 26000,4623,4623,4623,0,0,0,,CSG67.LL,CSG67.LL,CSG1967.LL,CSG67,GCS_CSG_1967,CSG67,,,,,,,,,,,,0,0,0
-26100,4624,4624,4624,0,0,0,,Guyane95.LL,Guyane95.LL,Guyane95.LL,RGFG95,GCS_RGFG_1995,RGFG95,,,,,,,,,,,,0,0,0
+26100,4624,4624,4624,0,0,0,,Guyane95.LL,Guyane95.LL,Guyane95a.LL,RGFG95,GCS_RGFG_1995,RGFG95,,,,,,,,,,,,0,0,0
 26200,4625,4625,4625,0,0,0,,FortDesaix.LL,FortDesaix.LL,Martinique38.LL,Martinique 1938,GCS_Fort_Desaix,Fort Desaix,,,,,,,,,,,,0,0,0
 26300,4626,4626,4626,0,0,8290,,REUNION.LL,REUNION.LL,REUNION.LL,Reunion 1947,GCS_Piton_des_Neiges|GCS_Reunion,Piton des Neiges,,,,,,,Longitude / Latitude (Reunion),,,,,0,0,0
 26400,4627,4627,4627,0,0,0,,Reunion92.LL,Reunion92.LL,Reunion92.LL,RGR92,GCS_RGR_1992,RGR92,,,,,,,,,,,,0,0,0
@@ -271,13 +271,13 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 27100,4636,4636,4636,0,0,0,,Petrels72.LL,Petrels72.LL,Petrels1972.LL,Petrels 1972,GCS_Petrels_1972,Petrels 1972,,,,,,,,,,,,0,0,0
 27200,4637,4637,4637,0,0,0,,Perroud50.LL,Perroud50.LL,Perroud1950.LL,Perroud 1950,GCS_Pointe_Geologie_Perroud_1950,Perroud 1950,,,,,,,,,,,,0,0,0
 27300,4638,4638,4638,0,0,0,,Miquelon50.LL,Miquelon50.LL,Miquelon1950.LL,Saint Pierre et Miquelon 1950,GCS_Saint_Pierre_et_Miquelon_1950,Saint Pierre et Miquelon 1950,,,,,,,,,,,,0,0,0
-27400,4639,4639,4639,0,0,0,,MOP78.LL,MOP78.LL,MOP1978.LL,MOP78,GCS_MOP78,MOP78,,,,,,,,,,,,0,0,0
+27400,4639,4639,4639,0,0,0,,MOP78.LL,MOP78.LL,MOP1978a.LL,MOP78,GCS_MOP78,MOP78,,,,,,,,,,,,0,0,0
 27500,4640,4640,4640,0,0,0,,Antilles91.LL,Antilles91.LL,Antilles91.LL,,GCS_RRAF_1991,RRAF 1991,,,,,,,,,,,,0,0,0
-27510,4558, , , , , ,, , ,Antilles91/1.LL,RRAF 1991,,,,,,,,,,,,,,0,0,0
+27510,4558,,,,,,,,,Antilles91/1.LL,RRAF 1991,,,,,,,,,,,,,,0,0,0
 27600,4641,4641,4641,0,0,0,,IGN53/Mare.LL,IGN53/Mare.LL,IGN53/Mare.LL,IGN53 Mare,GCS_IGN53_Mare,IGN53 Mare,,,,,,,,,,,,0,0,0
-27700,4642,4642,4642,0,0,0,,ST84IleDesPins.LL,ST84IleDesPins.LL,ST84IleDesPins.LL,ST84 Ile des Pins,GCS_ST84_Ile_des_Pins,ST84 Ile des Pins,,,,,,,,,,,,0,0,0
-27800,4643,4643,4643,0,0,0,,ST71Belep.LL,ST71Belep.LL,ST71Belep.LL,ST71 Belep,GCS_ST71_Belep,ST71 Belep,,,,,,,,,,,,0,0,0
-27900,4644,4644,4644,0,0,0,,NEA74Noumea.LL,NEA74Noumea.LL,NEA74Noumea.LL,NEA74 Noumea,GCS_NEA74_Noumea,NEA74 Noumea,,,,,,,,,,,,0,0,0
+27700,4642,4642,4642,0,0,0,,ST84IleDesPins.LL,ST84IleDesPins.LL,ST84IlePins/a.LL,ST84 Ile des Pins,GCS_ST84_Ile_des_Pins,ST84 Ile des Pins,,,,,,,,,,,,0,0,0
+27800,4643,4643,4643,0,0,0,,ST71Belep.LL,ST71Belep.LL,ST71Belep/a.LL,ST71 Belep,GCS_ST71_Belep,ST71 Belep,,,,,,,,,,,,0,0,0
+27900,4644,4644,4644,0,0,0,,NEA74Noumea.LL,NEA74Noumea.LL,Noumea74.LL,NEA74 Noumea,GCS_NEA74_Noumea,NEA74 Noumea,,,,,,,,,,,,0,0,0
 28000,4645,4645,4645,0,0,0,,Caledonie91.LL,Caledonie91.LL,Caledonie91.LL,RGNC 1991,GCS_RGNC_1991,RGNC 1991,,,,,,,,,,,,0,0,0
 28100,4646,4646,4646,0,0,0,,GrandComoros.LL,GrandComoros.LL,,Grand Comoros,GCS_Grand_Comoros,Grand Comoros,,,,,,,,,,,,0,0,0
 28200,4657,4657,4657,0,0,0,,Reykjavik.LL,Reykjavik.LL,Reykjavik.LL,Reykjavik 1900,GCS_Reykjavik_1900,Reykjavik 1900,,,,,,,,,,,,0,0,0

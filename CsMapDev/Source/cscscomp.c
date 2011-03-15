@@ -264,6 +264,7 @@ int EXP_LVL9 CScscomp (	Const char *inpt,
 
 	size_t rdCnt;
 	size_t wrCnt;
+	size_t strLen;
 	
 	long tmpLong;
 
@@ -497,8 +498,16 @@ int EXP_LVL9 CScscomp (	Const char *inpt,
 			cs_def.xy_min [YY] = novalue;
 			cs_def.xy_max [XX] = novalue;
 			cs_def.xy_max [YY] = novalue;
+
+			strLen = strlen (cp);
 			CS_stncp (cs_def.key_nm,cp,sizeof (cs_def.key_nm));
 			st = CS_nampp (cs_def.key_nm);
+			if (strLen > cs_KEYNM_MAX)
+			{
+				sprintf (err_msg,"Key name %s exceeds maximun length of %d; line %d.",cp,cs_KEYNM_MAX,line_nbr);
+				cancel = (*err_func)(err_msg);
+				err_cnt += 1;
+			}
 			if (st != 0)
 			{
 				sprintf (err_msg,"%s is not a valid coordinate system key name; line %d.",cp,line_nbr);

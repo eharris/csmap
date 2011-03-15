@@ -19,7 +19,7 @@
 #include "csConsoleUtilities.hpp"
 
 const wchar_t csTempDir [] = L"C:\\TEMP";
-wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_05\\CSV";
+wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_06\\CSV";
 const wchar_t csDataDir [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Data";
 const wchar_t csDictDir [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Dictionaries";
 const wchar_t csDictSrc [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Dictionaries";
@@ -27,7 +27,6 @@ const wchar_t csDictSrc [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components
 int main (int argc,char* argv [])
 {
 	bool ok;
-	char pathName [512];
 
 #if defined (_MSC_VER) && _MSC_VER >= 1400
 	// This is a Microsoft specific function call.  It forces the exponential
@@ -36,17 +35,20 @@ int main (int argc,char* argv [])
 	_set_output_format(_TWO_DIGIT_EXPONENT);
 #endif
 
+	// Manufacture NameMapper.csv
+	ok = ManufactureNameMapperCsv (csDictDir,csDataDir);
+
+	// Perform EPSG 7.06 Update synchronization.
+	//ok = csCrsNamesToSource (L"C:\\TMP",L"Epsg7-06UpdateWrkB.csv",L"csrRenameTable.cpp");
+	//ok = Epsg706Updates (csDictDir,csDataDir,csDictDir);
+
 	// Replaces the old HPGN CRS names (e.g. "COHP-S") with the new
 	// names (e.g. "HARN/CO.CO-S") in the .csv source files which are
 	// used to construct the name mapper file.
-	ok = ReplaceOldHpgnCrsNames (csDataDir,csDataDir);
-	if (ok)
-	{
-		ok = ManufactureNameMapperCsv (csDictDir,csDataDir);
-	}
+	//ok = ReplaceOldHpgnCrsNames (csDataDir,csDataDir);
 
-    // Generate a regression test file in the OsGeo Test File format.
-    // ok = csGenerateRegressTestFile (L"CsMap-12.02.csv",csDataDir,csDictDir);
+	// Generate a regression test file in the OsGeo Test File format.
+	// ok = csGenerateRegressTestFile (L"CsMap-12.02.csv",csDataDir,csDictDir);
 
 	//ok = csGenerateHpgnTable (csTempDir,csDictDir);
 
@@ -54,9 +56,8 @@ int main (int argc,char* argv [])
 
 	// ok = csAddEpsgCodes (csDictSrc,csEpsgDir,csTempDir);
 
-	// Manufacture NameMapper.csv
-	// ok = AddSequenceNumbers (csDataDir);
-	// ok = ManufactureNameMapperCsv (csDictDir,csDataDir);
+	// Add sequence numbers to the NameMapper source files.
+	//ok = AddSequenceNumbers (csDataDir);
 
 	// Generate a list of EPSG codes, EPSG descriptions,
 	// and Autodesk/Mentor names.
@@ -80,7 +81,7 @@ int main (int argc,char* argv [])
 	// ok = ListEpsgCodes (csDictDir);
 
 	// Three Parameter Fix
-	//		char pathName [512];
+	//char pathName [512];
 	//wcstombs (pathName,csDictSrc,sizeof (pathName));
 	//ok = ThreeParameterFixer (pathName,"C:\\TEMP");
 	//if (ok)
@@ -89,6 +90,7 @@ int main (int argc,char* argv [])
 	//}
 
 	// Geocentric Fix
+	//char pathName [512];
 	//wcstombs (pathName,csDictSrc,sizeof (pathName));
 	//ok = GeocentricFixer (pathName,"C:\\TEMP");
 

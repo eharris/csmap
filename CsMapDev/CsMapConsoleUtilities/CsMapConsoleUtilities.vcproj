@@ -279,7 +279,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Csmap.lib"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib80\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\..\..\lib\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib80\$(ConfigurationName)64&quot;;&quot;$(SolutionDir)\..\..\lib\$(ConfigurationName)64&quot;"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="17"
@@ -340,7 +340,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\csCrsNamesToSource.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\csCsMapToCsv.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\csEpsg706Update.cpp"
 				>
 			</File>
 			<File

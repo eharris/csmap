@@ -993,6 +993,7 @@ bool TcsSingleOp::Classify (const TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& op
 TcsOpVariant::TcsOpVariant (const TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& operationCode)
 																:
 														   Type        (epsgOpTypNone),
+														   EpsgOpCode  (operationCode),
 														   VariantNbr  (0U),
 														   Version     (),
 														   Accuracy    (),
@@ -1087,6 +1088,7 @@ TcsOpVariant::TcsOpVariant (const TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& op
 //lint -restore
 }
 TcsOpVariant::TcsOpVariant (const TcsOpVariant& source) : Type        (source.Type),
+														  EpsgOpCode  (source.EpsgOpCode),
 														  VariantNbr  (source.VariantNbr),
 														  Version     (source.Version),
 														  Accuracy    (source.Accuracy),
@@ -1103,6 +1105,7 @@ TcsOpVariant& TcsOpVariant::operator= (const TcsOpVariant& rhs)
 	if (&rhs != this)
 	{
 		Type        = rhs.Type;
+		EpsgOpCode  = rhs.EpsgOpCode;
 		VariantNbr  = rhs.VariantNbr;
 		Version     = rhs.Version;
 		Accuracy    = rhs.Accuracy;

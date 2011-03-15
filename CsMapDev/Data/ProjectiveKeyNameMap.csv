@@ -69,7 +69,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 6900,2062,2062,0,0,0,0,,Madrid1870.Spain,Madrid1870.Spain,,Madrid 1870 (Madrid) / Spain,Madrid_1870_Madrid_Spain,,,,Madrid 1870 (Madrid) / Spain,,,,,,,,,0,0,0
 7000,3461,2063,2063,0,0,0,,Dabola81.UTM-28N,Dabola81.UTM-28N,Dabola1981.UTM-28N/01,Dabola 1981 / UTM zone 28N,Dabola_UTM_Zone_28N,Dabola 1981 / UTM zone 28N,,,Dabola 1981 / UTM zone 28N,,,,,,,,,0,0,0
 7100,3462,2064,2064,0,0,0,,Dabola81.UTM-29N,Dabola81.UTM-29N,Dabola1981.UTM-29N/01,Dabola 1981 / UTM zone 29N,Dabola_UTM_Zone_29N,Dabola 1981 / UTM zone 29N,,,Dabola 1981 / UTM zone 29N,,,,,,,,,0,0,0
-7200,2065,2065,0,0,0,0,,Krovak S-JTSK,SJTSK.Krovak,Czech/JTSK.Krovak,S-JTSK (Ferro) / Krovak,S-JTSK_Ferro_Krovak,S-JTSK (Ferro) / Krovak,,,S-JTSK (Ferro) / Krovak,,,,,,,,,0,0,0
+7200,2065,2065,0,0,0,0,,Krovak S-JTSK,SJTSK.Krovak,CzechJTSK/5.Krovak,S-JTSK (Ferro) / Krovak,S-JTSK_Ferro_Krovak,S-JTSK (Ferro) / Krovak,,,S-JTSK (Ferro) / Krovak,,,,,,,,,0,0,0
 7300,2066,2066,2066,0,0,0,,MountDillon.TobagoGrid,MountDillon.TobagoGrid,,Mount Dillon / Tobago Grid,Mount_Dillon_Tobago_Grid,Mount Dillon / Tobago Grid,,,,,,,,,,,,0,0,0
 7400,2067,2067,2067,0,0,0,,Naparima55.UTM-20N,Naparima55.UTM-20N,Naparima55.UTM-20N,Naparima 1955 / UTM zone 20N,Naparima_1955_UTM_Zone_20N,Naparima 1955 / UTM zone 20N,,,Naparima 1955 / UTM zone 20N,,,,,,,,,0,0,0
 7500,2068,2068,2068,0,0,0,,ELD79.Libya-5,ED79/Libyan.Libya-5,ELD1979.Libya-5,ELD79 / Libya zone 5,ELD_1979_Libya_5,ELD79 / Libya zone 5,,,ELD79 / Libya zone 5,,,,,,,,,0,0,0
@@ -87,8 +87,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 8700,2080,2080,2080,0,0,0,,ELD79.UTM-35N,ED79/Libyan.UTM-35N,ELD1979.UTM-35N,ELD79 / UTM zone 35N,ELD_1979_UTM_Zone_35N,ELD79 / UTM zone 35N,,,ELD79 / UTM zone 35N,,,,,,,,,0,0,0
 8800,2081,2081,2081,0,0,0,,ChosMalal14.Argentina-2,ChosMalal14.Argentina-2,,Chos Malal 1914 / Argentina zone 2,Chos_Malal_1914_Argentina_2,Chos Malal 1914 / Argentina zone 2,,,Chos Malal 1914 / Argentina zone 2,,,,,,,,,0,0,0
 8900,2082,2082,2082,0,0,0,,Castillo.Argentina-2,Castillo.Argentina-2,pCastillo.Argentina-2,Pampa del Castillo / Argentina 2,Pampa_del_Castillo_Argentina_2,Pampa del Castillo / Argentina zone 2,,,Pampa del Castillo / Argentina zone 2,,,,,,,,,0,0,0
-9000,2083,2083,2083,0,0,0,,Hito63.Argentina-2,Hito63.Argentina-2,Hito63.Argentina-2,Hito XVIII 1963 / Argentina 2,Hito_XVIII_1963_Argentina_2,Hito XVIII 1963 / Argentina zone 2,,,Hito XVIII 1963 / Argentina zone 2,,,,,,,,,0,0,0
-9100,2084,2084,2084,0,0,0,,Hito63.UTM-19S,Hito63.UTM-19S,Hito63.UTM-19S,Hito XVIII 1963 / UTM zone 19S,Hito_XVIII_1963_UTM_19S,Hito XVIII 1963 / UTM zone 19S,,,Hito XVIII 1963 / UTM zone 19S,,,,,,,,,0,0,0
+9000,2083,2083,2083,0,0,0,,Hito63.Argentina-2,Hito63.Argentina-2,Hito63a.Argentina-2,Hito XVIII 1963 / Argentina 2,Hito_XVIII_1963_Argentina_2,Hito XVIII 1963 / Argentina zone 2,,,Hito XVIII 1963 / Argentina zone 2,,,,,,,,,0,0,0
+9100,2084,2084,2084,0,0,0,,Hito63.UTM-19S,Hito63.UTM-19S,Hito63a.UTM-19S,Hito XVIII 1963 / UTM zone 19S,Hito_XVIII_1963_UTM_19S,Hito XVIII 1963 / UTM zone 19S,,,Hito XVIII 1963 / UTM zone 19S,,,,,,,,,0,0,0
 9200,3795,2085,2085,0,0,0,,NAD27.CubaNorte,NAD27.CubaNorte,NAD27.CubaNorte/1,NAD27 / Cuba Norte,NAD_1927_Cuba_Norte,NAD27 / Cuba Norte,,,,,,,,,,,,0,0,0
 9300,3796,2086,2086,0,0,0,,NAD27.CubaSur,NAD27.CubaSur,NAD27.CubaSur/1,NAD27 / Cuba Sur,NAD_1927_Cuba_Sur,NAD27 / Cuba Sur,,,,,,,,,,,,0,0,0
 9400,2087,2087,2087,0,0,0,,ELD79.TM-12NE,ED79/Libyan.TM-12NE,ELD1979.TM-12NE,ELD79 / TM 12 NE,ELD_1979_TM_12_NE,ELD79 / TM 12 NE,,,ELD79 / TM 12 NE,,,,,,,,,0,0,0
@@ -96,7 +96,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 9600,2089,2089,2089,0,0,0,,Yemen96.UTM-38N,Yemen96.UTM-38N,Yemen96.UTM-38N,Yemen NGN96 / UTM zone 38N,Yemen_NGN_1996_UTM_Zone_38N,Yemen NGN96 / UTM zone 38N,,,Yemen NGN96 / UTM zone 38N,,,,,,,,,0,0,0
 9700,2090,2090,2090,0,0,0,,Yemen96.UTM-39N,Yemen96.UTM-39N,Yemen96.UTM-39N,Yemen NGN96 / UTM zone 39N,Yemen_NGN_1996_UTM_Zone_39N,Yemen NGN96 / UTM zone 39N,,,Yemen NGN96 / UTM zone 39N,,,,,,,,,0,0,0
 9800,2093,2093,2093,0,0,0,,Hanoi72.GK-106NE,Hanoi72.GK-106NE,Hanoi1972.GK-106NE,Hanoi 1972 / GK 106 NE,Hanoi_1972_GK_106_NE,Hanoi 1972 / GK 106 NE,,,Hanoi 1972 / GK 106 NE,,,,,,,,,0,0,0
-9900,2094,2094,2094,0,0,0,,WGS72be.TM-106NE,WGS72/be.TM-106NE,WGS72be.TM-106NE,WGS 72BE / TM 106 NE,WGS_1972_BE_TM_106_NE,WGS 72BE / TM 106 NE,,,WGS 72BE / TM 106 NE,,,,,,,,,0,0,0
+9900,2094,2094,2094,0,0,0,,WGS72be.TM-106NE,WGS72/be.TM-106NE,WGS72be/a.TM-106NE,WGS 72BE / TM 106 NE,WGS_1972_BE_TM_106_NE,WGS 72BE / TM 106 NE,,,WGS 72BE / TM 106 NE,,,,,,,,,0,0,0
 10000,2095,2095,2095,0,0,0,,Bissau.UTM-28N,Bissau.UTM-28N,Bissau_1.UTM-28N,Bissau / UTM zone 28N,Bissau_UTM_Zone_28N,Bissau / UTM zone 28N,,,Bissau / UTM zone 28N,,,,,,,,,0,0,0
 10100,2096,2096,2096,0,0,0,,Korean85.EastBelt,Korean85.EastBelt,,Korean 1985 / Korea East Belt,Korean_1985_Korea_East_Belt,Korean 1985 / Korea East Belt,,,Korean 1985 / Korea East Belt,,,,,,,,,0,0,0
 10200,2097,2097,2097,0,0,0,,Korean85.CentralBelt,Korean85.CentralBelt,,Korean 1985 / Korea Central Belt,Korean_1985_Korea_Central_Belt,Korean 1985 / Korea Central Belt,,,Korean 1985 / Korea Central Belt,,,,,,,,,0,0,0
@@ -158,13 +158,13 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 15300,2163,2163,0,0,0,0,,,,,US National Atlas Equal Area,US_National_Atlas_Equal_Area,,,,US National Atlas Equal Area,,,,,,,,,0,0,0
 15400,2164,2164,2164,0,0,0,,Locodjo65.TM-5NW,Locodjo65.TM-5NW,Locodjo1965.TM-5NW,Locodjo 1965 / TM 5 NW,Locodjo_1965_TM_5_NW,Locodjo 1965 / TM 5 NW,,,Locodjo 1965 / TM 5 NW,,,,,,,,,0,0,0
 15500,2165,2165,2165,0,0,0,,Abidjan87.TM-5NW,Abidjan87.TM-5NW,Abidjan1987.TM-5NW,Abidjan 1987 / TM 5 NW,Abidjan_1987_TM_5_NW,Abidjan 1987 / TM 5 NW,,,Abidjan 1987 / TM 5 NW,,,,,,,,,0,0,0
-15600,2169,2169,2169,0,0,0,,Luxembourg30.Gauss,Luxembourg30.Gauss,Luxembourg30.Gauss,Luxembourg 1930 / Gauss,Luxembourg_1930_Gauss,Luxembourg 1930 / Gauss,,,Luxembourg 1930 / Gauss,,,,,,,,,0,0,0
+15600,2169,2169,2169,0,0,0,,Luxembourg30.Gauss,Luxembourg30.Gauss,Luxembourg30a.Gauss,Luxembourg 1930 / Gauss,Luxembourg_1930_Gauss,Luxembourg 1930 / Gauss,,,Luxembourg 1930 / Gauss,,,,,,,,,0,0,0
 15700,2170,2170,2170,0,0,0,,,,,MGI / Slovenia Grid,MGI_Slovenia_Grid,MGI / Slovenia Grid,,,MGI / Slovenia Grid,,,,,,,,,0,0,0
 15800,3911,,,0,0,0,,,,MGI/gc.Slovenia,MGI 1901 / Slovenia Grid,,,,,,,,,,,,,,0,0,0
-15900,2172,0,2172,0,0,0,,Pulkovo/58.Poland-II,Pulkovo/58.Poland-II,Pulkovo/58.Poland-II,Pulkovo 1942(58) / Poland zone II,,Pulkovo 1942(58) / Poland zone II,,,Pulkovo 1942(58) / Poland zone II,,,,,,,,,0,0,0
-16000,2173,0,2173,0,0,0,,Pulkovo/58.Poland-III,Pulkovo/58.Poland-III,Pulkovo/58.Poland-III,Pulkovo 1942(58) / Poland zone III,,Pulkovo 1942(58) / Poland zone III,,,Pulkovo 1942(58) / Poland zone III,,,,,,,,,0,0,0
-16100,2174,0,2174,0,0,0,,Pulkovo/58.Poland-IV,Pulkovo/58.Poland-IV,Pulkovo/58.Poland-IV,Pulkovo 1942(58) / Poland zone IV,,Pulkovo 1942(58) / Poland zone IV,,,Pulkovo 1942(58) / Poland zone IV,,,,,,,,,0,0,0
-16200,2175,0,2175,0,0,0,,Pulkovo/58.Poland-V,Pulkovo/58.Poland-V,Pulkovo/58.Poland-V,Pulkovo 1942(58) / Poland zone V,,Pulkovo 1942(58) / Poland zone V,,,Pulkovo 1942(58) / Poland zone V,,,,,,,,,0,0,0
+15900,2172,0,2172,0,0,0,,Pulkovo/58.Poland-II,Pulkovo/58.Poland-II,Pulkovo/58a.Poland-II,Pulkovo 1942(58) / Poland zone II,,Pulkovo 1942(58) / Poland zone II,,,Pulkovo 1942(58) / Poland zone II,,,,,,,,,0,0,0
+16000,2173,0,2173,0,0,0,,Pulkovo/58.Poland-III,Pulkovo/58.Poland-III,Pulkovo/58a.Poland-III,Pulkovo 1942(58) / Poland zone III,,Pulkovo 1942(58) / Poland zone III,,,Pulkovo 1942(58) / Poland zone III,,,,,,,,,0,0,0
+16100,2174,0,2174,0,0,0,,Pulkovo/58.Poland-IV,Pulkovo/58.Poland-IV,Pulkovo/58a.Poland-IV,Pulkovo 1942(58) / Poland zone IV,,Pulkovo 1942(58) / Poland zone IV,,,Pulkovo 1942(58) / Poland zone IV,,,,,,,,,0,0,0
+16200,2175,0,2175,0,0,0,,Pulkovo/58.Poland-V,Pulkovo/58.Poland-V,Pulkovo/58a.Poland-V,Pulkovo 1942(58) / Poland zone V,,Pulkovo 1942(58) / Poland zone V,,,Pulkovo 1942(58) / Poland zone V,,,,,,,,,0,0,0
 16300,2176,2176,2176,0,0,0,,ETRS89.PolandCS2K-5,ETRF89.PolandCS2K-5,ETRS89.PolandCS2K-5,ETRS89 / Poland CS2000 zone 5,ETRS_1989_Poland_CS2000_Zone_5,ETRS89 / Poland CS2000 zone 5,,,ETRS89 / Poland CS2000 zone 5,,,,,,,,,0,0,0
 16400,2177,2177,2177,0,0,0,,ETRS89.PolandCS2K-6,ETRF89.PolandCS2K-6,ETRS89.PolandCS2K-6,ETRS89 / Poland CS2000 zone 6,ETRS_1989_Poland_CS2000_Zone_6,ETRS89 / Poland CS2000 zone 6,,,ETRS89 / Poland CS2000 zone 6,,,,,,,,,0,0,0
 16500,2178,2178,2178,0,0,0,,ETRS89.PolandCS2K-7,ETRF89.PolandCS2K-7,ETRS89.PolandCS2K-7,ETRS89 / Poland CS2000 zone 7,ETRS_1989_Poland_CS2000_Zone_7,ETRS89 / Poland CS2000 zone 7,,,ETRS89 / Poland CS2000 zone 7,,,,,,,,,0,0,0
@@ -301,7 +301,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 29700,2323,2323,2323,0,0,0,,ED50.TM39,ED50.TM39,ED50.TM39,ED50 / TM39,ED_1950_TM39,ED50 / TM39,,,,,,,,,,,,0,0,0
 29800,2324,2324,2324,0,0,0,,ED50.TM42,ED50.TM42,ED50.TM42,ED50 / TM42,ED_1950_TM42,ED50 / TM42,,,,,,,,,,,,0,0,0
 29900,2325,2325,2325,0,0,0,,ED50.TM45,ED50.TM45,ED50.TM45,ED50 / TM45,ED_1950_TM45,ED50 / TM45,,,,,,,,,,,,0,0,0
-30000,2326,2326,2326,0,0,0,,HongKong80.GridSystem,HongKong80.HongKongGrid,HongKong80.GridSystem,Hong Kong 1980 Grid System,Hong_Kong_1980_Grid,Hong Kong 1980 Grid System,,,Hong Kong 1980 Grid System,,,,,,,,,0,0,0
+30000,2326,2326,2326,0,0,0,,HongKong80.GridSystem,HongKong80.HongKongGrid,HongKong80a.GridSystem,Hong Kong 1980 Grid System,Hong_Kong_1980_Grid,Hong Kong 1980 Grid System,,,Hong Kong 1980 Grid System,,,,,,,,,0,0,0
 30100,2327,2327,2327,0,0,0,,Xian80.GK-13,Xian80.GK-13,Xian80.GK-13,Xian 1980 / Gauss-Kruger zone 13,Xian_1980_GK_Zone_13,Xian 1980 / Gauss-Kruger zone 13,,,Xian 1980 / Gauss-Kruger zone 13,,,,,,,,,0,0,0
 30200,2328,2328,2328,0,0,0,,Xian80.GK-14,Xian80.GK-14,Xian80.GK-14,Xian 1980 / Gauss-Kruger zone 14,Xian_1980_GK_Zone_14,Xian 1980 / Gauss-Kruger zone 14,,,Xian 1980 / Gauss-Kruger zone 14,,,,,,,,,0,0,0
 30300,2329,2329,2329,0,0,0,,Xian80.GK-15,Xian80.GK-15,Xian80.GK-15,Xian 1980 / Gauss-Kruger zone 15,Xian_1980_GK_Zone_15,Xian 1980 / Gauss-Kruger zone 15,,,Xian 1980 / Gauss-Kruger zone 15,,,,,,,,,0,0,0
@@ -366,57 +366,57 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 36200,2388,2388,2388,0,0,0,,Xian80.GK3d/CM-129E,Xian80.GK3d/CM-129E,Xian80.GK3d/CM-129E,Xian 1980 / 3-degree Gauss-Kruger CM 129E,Xian_1980_3_Degree_GK_CM_129E,Xian 1980 / 3-degree Gauss-Kruger CM 129E,,,Xian 1980 / 3-degree Gauss-Kruger CM 129E,,,,,,,,,0,0,0
 36300,2389,2389,2389,0,0,0,,Xian80.GK3d/CM-132E,Xian80.GK3d/CM-132E,Xian80.GK3d/CM-132E,Xian 1980 / 3-degree Gauss-Kruger CM 132E,Xian_1980_3_Degree_GK_CM_132E,Xian 1980 / 3-degree Gauss-Kruger CM 132E,,,Xian 1980 / 3-degree Gauss-Kruger CM 132E,,,,,,,,,0,0,0
 36400,2390,2390,2390,0,0,0,,Xian80.GK3d/CM-135E,Xian80.GK3d/CM-135E,Xian80.GK3d/CM-135E,Xian 1980 / 3-degree Gauss-Kruger CM 135E,Xian_1980_3_Degree_GK_CM_135E,Xian 1980 / 3-degree Gauss-Kruger CM 135E,,,Xian 1980 / 3-degree Gauss-Kruger CM 135E,,,,,,,,,0,0,0
-36500,2391,2391,2391,0,0,294912,,KKJ.Finland-1,KKJ.Finland-1,KKJ.Finland-1,KKJ / Finland zone 1,Finland_Zone_1,KKJ / Finland zone 1,,,KKJ / Finland zone 1,,,,Finnish KKJ Zone 1,,,,,0,0,0
-36600,2392,2392,2392,0,0,294913,,KKJ.Finland-2,KKJ.Finland-2,KKJ.Finland-2,KKJ / Finland zone 2,Finland_Zone_2,KKJ / Finland zone 2,,,KKJ / Finland zone 2,,,,Finnish KKJ Zone 2,,,,,0,0,0
-36700,2393,2393,2393,0,0,0,,KKJ.Finland-UCS,KKJ.Finland-UCS,KKJ.Finland-UCS,KKJ / Finland Uniform Coordinate System,Finland_Zone_3,KKJ / Finland Uniform Coordinate System,,,KKJ / Finland Uniform Coordinate System,,,,,,,,,0,0,0
-36800,2394,2394,2394,0,0,294915,,KKJ.Finland-4,KKJ.Finland-4,KKJ.Finland-4,KKJ / Finland zone 4,Finland_Zone_4,KKJ / Finland zone 4,,,KKJ / Finland zone 4,,,,Finnish KKJ Zone 4,,,,,0,0,0
+36500,2391,2391,2391,0,0,294912,,KKJ.Finland-1,KKJ.Finland-1,KKJa.Finland-1,KKJ / Finland zone 1,Finland_Zone_1,KKJ / Finland zone 1,,,KKJ / Finland zone 1,,,,Finnish KKJ Zone 1,,,,,0,0,0
+36600,2392,2392,2392,0,0,294913,,KKJ.Finland-2,KKJ.Finland-2,KKJa.Finland-2,KKJ / Finland zone 2,Finland_Zone_2,KKJ / Finland zone 2,,,KKJ / Finland zone 2,,,,Finnish KKJ Zone 2,,,,,0,0,0
+36700,2393,2393,2393,0,0,0,,KKJ.Finland-UCS,KKJ.Finland-UCS,KKJa.Finland-UCS,KKJ / Finland Uniform Coordinate System,Finland_Zone_3,KKJ / Finland Uniform Coordinate System,,,KKJ / Finland Uniform Coordinate System,,,,,,,,,0,0,0
+36800,2394,2394,2394,0,0,294915,,KKJ.Finland-4,KKJ.Finland-4,KKJa.Finland-4,KKJ / Finland zone 4,Finland_Zone_4,KKJ / Finland zone 4,,,KKJ / Finland zone 4,,,,Finnish KKJ Zone 4,,,,,0,0,0
 36900,2395,2091,2395,0,0,0,,SouthYemen.GK-8,SouthYemen.GK-8,SouthYemen_1.GK-8,South Yemen / Gauss-Kruger zone 8,South_Yemen_GK_Zone_8,South Yemen / Gauss-Kruger zone 8,,,South Yemen / Gauss-Kruger zone 8,,,,,,,,,0,0,0
 37000,2396,2092,2396,0,0,0,,SouthYemen.GK-9,SouthYemen.GK-9,SouthYemen_1.GK-9,South Yemen / Gauss-Kruger zone 9,South_Yemen_GK_Zone_9,South Yemen / Gauss-Kruger zone 9,,,South Yemen / Gauss-Kruger zone 9,,,,,,,,,0,0,0
-37100,2397,2166,2397,0,0,0,,Pulkovo/83.GK-3,Pulkovo/83.GK-3,Pulkovo/83.GK-3,Pulkovo 1942(83) / 3-degree Gauss-Kruger zone 3,Pulkovo_1942_Adj_1983_3_Degree_GK_Zone_3,Pulkovo 1942(83) / Gauss-Kruger zone 3,,,Pulkovo 1942(83) / Gauss-Kruger zone 3,,,,,,,,,0,0,0
-37200,2398,2167,2398,0,0,0,,Pulkovo/83.GK-4,Pulkovo/83.GK-4,Pulkovo/83.GK-4,Pulkovo 1942(83) / 3-degree Gauss-Kruger zone 4,Pulkovo_1942_Adj_1983_3_Degree_GK_Zone_4,Pulkovo 1942(83) / Gauss-Kruger zone 4,,,Pulkovo 1942(83) / Gauss-Kruger zone 4,,,,,,,,,0,0,0
-37300,2399,2168,2399,0,0,0,,Pulkovo/83.GK-5,Pulkovo/83.GK-5,Pulkovo/83.GK-5,Pulkovo 1942(83) / 3-degree Gauss-Kruger zone 5,Pulkovo_1942_Adj_1983_3_Degree_GK_Zone_5,Pulkovo 1942(83) / Gauss-Kruger zone 5,,,Pulkovo 1942(83) / Gauss-Kruger zone 5,,,,,,,,,0,0,0
-37400,2401,2401,2401,0,0,0,,Beijing54.GK3d-25,Beijing54.GK3d-25,Beijing1954.GK3d-25,Beijing 1954 / 3-degree Gauss-Kruger zone 25,Beijing_1954_3_Degree_GK_Zone_25,Beijing 1954 / 3-degree Gauss-Kruger zone 25,,,Beijing 1954 / 3-degree Gauss-Kruger zone 25,,,,,,,,,0,0,0
-37500,2402,2402,2402,0,0,0,,Beijing54.GK3d-26,Beijing54.GK3d-26,Beijing1954.GK3d-26,Beijing 1954 / 3-degree Gauss-Kruger zone 26,Beijing_1954_3_Degree_GK_Zone_26,Beijing 1954 / 3-degree Gauss-Kruger zone 26,,,Beijing 1954 / 3-degree Gauss-Kruger zone 26,,,,,,,,,0,0,0
-37600,2403,2403,2403,0,0,0,,Beijing54.GK3d-27,Beijing54.GK3d-27,Beijing1954.GK3d-27,Beijing 1954 / 3-degree Gauss-Kruger zone 27,Beijing_1954_3_Degree_GK_Zone_27,Beijing 1954 / 3-degree Gauss-Kruger zone 27,,,Beijing 1954 / 3-degree Gauss-Kruger zone 27,,,,,,,,,0,0,0
-37700,2404,2404,2404,0,0,0,,Beijing54.GK3d-28,Beijing54.GK3d-28,Beijing1954.GK3d-28,Beijing 1954 / 3-degree Gauss-Kruger zone 28,Beijing_1954_3_Degree_GK_Zone_28,Beijing 1954 / 3-degree Gauss-Kruger zone 28,,,Beijing 1954 / 3-degree Gauss-Kruger zone 28,,,,,,,,,0,0,0
-37800,2405,2405,2405,0,0,0,,Beijing54.GK3d-29,Beijing54.GK3d-29,Beijing1954.GK3d-29,Beijing 1954 / 3-degree Gauss-Kruger zone 29,Beijing_1954_3_Degree_GK_Zone_29,Beijing 1954 / 3-degree Gauss-Kruger zone 29,,,Beijing 1954 / 3-degree Gauss-Kruger zone 29,,,,,,,,,0,0,0
-37900,2406,2406,2406,0,0,0,,Beijing54.GK3d-30,Beijing54.GK3d-30,Beijing1954.GK3d-30,Beijing 1954 / 3-degree Gauss-Kruger zone 30,Beijing_1954_3_Degree_GK_Zone_30,Beijing 1954 / 3-degree Gauss-Kruger zone 30,,,Beijing 1954 / 3-degree Gauss-Kruger zone 30,,,,,,,,,0,0,0
-38000,2407,2407,2407,0,0,0,,Beijing54.GK3d-31,Beijing54.GK3d-31,Beijing1954.GK3d-31,Beijing 1954 / 3-degree Gauss-Kruger zone 31,Beijing_1954_3_Degree_GK_Zone_31,Beijing 1954 / 3-degree Gauss-Kruger zone 31,,,Beijing 1954 / 3-degree Gauss-Kruger zone 31,,,,,,,,,0,0,0
-38100,2408,2408,2408,0,0,0,,Beijing54.GK3d-32,Beijing54.GK3d-32,Beijing1954.GK3d-32,Beijing 1954 / 3-degree Gauss-Kruger zone 32,Beijing_1954_3_Degree_GK_Zone_32,Beijing 1954 / 3-degree Gauss-Kruger zone 32,,,Beijing 1954 / 3-degree Gauss-Kruger zone 32,,,,,,,,,0,0,0
-38200,2409,2409,2409,0,0,0,,Beijing54.GK3d-33,Beijing54.GK3d-33,Beijing1954.GK3d-33,Beijing 1954 / 3-degree Gauss-Kruger zone 33,Beijing_1954_3_Degree_GK_Zone_33,Beijing 1954 / 3-degree Gauss-Kruger zone 33,,,Beijing 1954 / 3-degree Gauss-Kruger zone 33,,,,,,,,,0,0,0
-38300,2410,2410,2410,0,0,0,,Beijing54.GK3d-34,Beijing54.GK3d-34,Beijing1954.GK3d-34,Beijing 1954 / 3-degree Gauss-Kruger zone 34,Beijing_1954_3_Degree_GK_Zone_34,Beijing 1954 / 3-degree Gauss-Kruger zone 34,,,Beijing 1954 / 3-degree Gauss-Kruger zone 34,,,,,,,,,0,0,0
-38400,2411,2411,2411,0,0,0,,Beijing54.GK3d-35,Beijing54.GK3d-35,Beijing1954.GK3d-35,Beijing 1954 / 3-degree Gauss-Kruger zone 35,Beijing_1954_3_Degree_GK_Zone_35,Beijing 1954 / 3-degree Gauss-Kruger zone 35,,,Beijing 1954 / 3-degree Gauss-Kruger zone 35,,,,,,,,,0,0,0
-38500,2412,2412,2412,0,0,0,,Beijing54.GK3d-36,Beijing54.GK3d-36,Beijing1954.GK3d-36,Beijing 1954 / 3-degree Gauss-Kruger zone 36,Beijing_1954_3_Degree_GK_Zone_36,Beijing 1954 / 3-degree Gauss-Kruger zone 36,,,Beijing 1954 / 3-degree Gauss-Kruger zone 36,,,,,,,,,0,0,0
-38600,2413,2413,2413,0,0,0,,Beijing54.GK3d-37,Beijing54.GK3d-37,Beijing1954.GK3d-37,Beijing 1954 / 3-degree Gauss-Kruger zone 37,Beijing_1954_3_Degree_GK_Zone_37,Beijing 1954 / 3-degree Gauss-Kruger zone 37,,,Beijing 1954 / 3-degree Gauss-Kruger zone 37,,,,,,,,,0,0,0
-38700,2414,2414,2414,0,0,0,,Beijing54.GK3d-38,Beijing54.GK3d-38,Beijing1954.GK3d-38,Beijing 1954 / 3-degree Gauss-Kruger zone 38,Beijing_1954_3_Degree_GK_Zone_38,Beijing 1954 / 3-degree Gauss-Kruger zone 38,,,Beijing 1954 / 3-degree Gauss-Kruger zone 38,,,,,,,,,0,0,0
-38800,2415,2415,2415,0,0,0,,Beijing54.GK3d-39,Beijing54.GK3d-39,Beijing1954.GK3d-39,Beijing 1954 / 3-degree Gauss-Kruger zone 39,Beijing_1954_3_Degree_GK_Zone_39,Beijing 1954 / 3-degree Gauss-Kruger zone 39,,,Beijing 1954 / 3-degree Gauss-Kruger zone 39,,,,,,,,,0,0,0
-38900,2416,2416,2416,0,0,0,,Beijing54.GK3d-40,Beijing54.GK3d-40,Beijing1954.GK3d-40,Beijing 1954 / 3-degree Gauss-Kruger zone 40,Beijing_1954_3_Degree_GK_Zone_40,Beijing 1954 / 3-degree Gauss-Kruger zone 40,,,Beijing 1954 / 3-degree Gauss-Kruger zone 40,,,,,,,,,0,0,0
-39000,2417,2417,2417,0,0,0,,Beijing54.GK3d-41,Beijing54.GK3d-41,Beijing1954.GK3d-41,Beijing 1954 / 3-degree Gauss-Kruger zone 41,Beijing_1954_3_Degree_GK_Zone_41,Beijing 1954 / 3-degree Gauss-Kruger zone 41,,,Beijing 1954 / 3-degree Gauss-Kruger zone 41,,,,,,,,,0,0,0
-39100,2418,2418,2418,0,0,0,,Beijing54.GK3d-42,Beijing54.GK3d-42,Beijing1954.GK3d-42,Beijing 1954 / 3-degree Gauss-Kruger zone 42,Beijing_1954_3_Degree_GK_Zone_42,Beijing 1954 / 3-degree Gauss-Kruger zone 42,,,Beijing 1954 / 3-degree Gauss-Kruger zone 42,,,,,,,,,0,0,0
-39200,2419,2419,2419,0,0,0,,Beijing54.GK3d-43,Beijing54.GK3d-43,Beijing1954.GK3d-43,Beijing 1954 / 3-degree Gauss-Kruger zone 43,Beijing_1954_3_Degree_GK_Zone_43,Beijing 1954 / 3-degree Gauss-Kruger zone 43,,,Beijing 1954 / 3-degree Gauss-Kruger zone 43,,,,,,,,,0,0,0
-39300,2420,2420,2420,0,0,0,,Beijing54.GK3d-44,Beijing54.GK3d-44,Beijing1954.GK3d-44,Beijing 1954 / 3-degree Gauss-Kruger zone 44,Beijing_1954_3_Degree_GK_Zone_44,Beijing 1954 / 3-degree Gauss-Kruger zone 44,,,Beijing 1954 / 3-degree Gauss-Kruger zone 44,,,,,,,,,0,0,0
-39400,2421,2421,2421,0,0,0,,Beijing54.GK3d-45,Beijing54.GK3d-45,Beijing1954.GK3d-45,Beijing 1954 / 3-degree Gauss-Kruger zone 45,Beijing_1954_3_Degree_GK_Zone_45,Beijing 1954 / 3-degree Gauss-Kruger zone 45,,,Beijing 1954 / 3-degree Gauss-Kruger zone 45,,,,,,,,,0,0,0
-39500,2422,2422,2422,0,0,0,,Beijing54.GK3d/CM-75E,Beijing54.GK3d/CM-75E,Beijing1954.GK3d/CM-75E,Beijing 1954 / 3-degree Gauss-Kruger CM 75E,Beijing_1954_3_Degree_GK_CM_75E,Beijing 1954 / 3-degree Gauss-Kruger CM 75E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 75E,,,,,,,,,0,0,0
-39600,2423,2423,2423,0,0,0,,Beijing54.GK3d/CM-78E,Beijing54.GK3d/CM-78E,Beijing1954.GK3d/CM-78E,Beijing 1954 / 3-degree Gauss-Kruger CM 78E,Beijing_1954_3_Degree_GK_CM_78E,Beijing 1954 / 3-degree Gauss-Kruger CM 78E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 78E,,,,,,,,,0,0,0
-39700,2424,2424,2424,0,0,0,,Beijing54.GK3d/CM-81E,Beijing54.GK3d/CM-81E,Beijing1954.GK3d/CM-81E,Beijing 1954 / 3-degree Gauss-Kruger CM 81E,Beijing_1954_3_Degree_GK_CM_81E,Beijing 1954 / 3-degree Gauss-Kruger CM 81E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 81E,,,,,,,,,0,0,0
-39800,2425,2425,2425,0,0,0,,Beijing54.GK3d/CM-84E,Beijing54.GK3d/CM-84E,Beijing1954.GK3d/CM-84E,Beijing 1954 / 3-degree Gauss-Kruger CM 84E,Beijing_1954_3_Degree_GK_CM_84E,Beijing 1954 / 3-degree Gauss-Kruger CM 84E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 84E,,,,,,,,,0,0,0
-39900,2426,2426,2426,0,0,0,,Beijing54.GK3d/CM-87E,Beijing54.GK3d/CM-87E,Beijing1954.GK3d/CM-87E,Beijing 1954 / 3-degree Gauss-Kruger CM 87E,Beijing_1954_3_Degree_GK_CM_87E,Beijing 1954 / 3-degree Gauss-Kruger CM 87E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 87E,,,,,,,,,0,0,0
-40000,2427,2427,2427,0,0,0,,Beijing54.GK3d/CM-90E,Beijing54.GK3d/CM-90E,Beijing1954.GK3d/CM-90E,Beijing 1954 / 3-degree Gauss-Kruger CM 90E,Beijing_1954_3_Degree_GK_CM_90E,Beijing 1954 / 3-degree Gauss-Kruger CM 90E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 90E,,,,,,,,,0,0,0
-40100,2428,2428,2428,0,0,0,,Beijing54.GK3d/CM-93E,Beijing54.GK3d/CM-93E,Beijing1954.GK3d/CM-93E,Beijing 1954 / 3-degree Gauss-Kruger CM 93E,Beijing_1954_3_Degree_GK_CM_93E,Beijing 1954 / 3-degree Gauss-Kruger CM 93E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 93E,,,,,,,,,0,0,0
-40200,2429,2429,2429,0,0,0,,Beijing54.GK3d/CM-96E,Beijing54.GK3d/CM-96E,Beijing1954.GK3d/CM-96E,Beijing 1954 / 3-degree Gauss-Kruger CM 96E,Beijing_1954_3_Degree_GK_CM_96E,Beijing 1954 / 3-degree Gauss-Kruger CM 96E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 96E,,,,,,,,,0,0,0
-40300,2430,2430,2430,0,0,0,,Beijing54.GK3d/CM-99E,Beijing54.GK3d/CM-99E,Beijing1954.GK3d/CM-99E,Beijing 1954 / 3-degree Gauss-Kruger CM 99E,Beijing_1954_3_Degree_GK_CM_99E,Beijing 1954 / 3-degree Gauss-Kruger CM 99E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 99E,,,,,,,,,0,0,0
-40400,2431,2431,2431,0,0,0,,Beijing54.GK3d/CM-102E,Beijing54.GK3d/CM-102E,Bjing54.GK3d/CM-102E,Beijing 1954 / 3-degree Gauss-Kruger CM 102E,Beijing_1954_3_Degree_GK_CM_102E,Beijing 1954 / 3-degree Gauss-Kruger CM 102E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 102E,,,,,,,,,0,0,0
-40500,2432,2432,2432,0,0,0,,Beijing54.GK3d/CM-105E,Beijing54.GK3d/CM-105E,Bjing54.GK3d/CM-105E,Beijing 1954 / 3-degree Gauss-Kruger CM 105E,Beijing_1954_3_Degree_GK_CM_105E,Beijing 1954 / 3-degree Gauss-Kruger CM 105E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 105E,,,,,,,,,0,0,0
-40600,2433,2433,2433,0,0,0,,Beijing54.GK3d/CM-108E,Beijing54.GK3d/CM-108E,Bjing54.GK3d/CM-108E,Beijing 1954 / 3-degree Gauss-Kruger CM 108E,Beijing_1954_3_Degree_GK_CM_108E,Beijing 1954 / 3-degree Gauss-Kruger CM 108E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 108E,,,,,,,,,0,0,0
-40700,2434,2434,2434,0,0,0,,Beijing54.GK3d/CM-111E,Beijing54.GK3d/CM-111E,Bjing54.GK3d/CM-111E,Beijing 1954 / 3-degree Gauss-Kruger CM 111E,Beijing_1954_3_Degree_GK_CM_111E,Beijing 1954 / 3-degree Gauss-Kruger CM 111E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 111E,,,,,,,,,0,0,0
-40800,2435,2435,2435,0,0,0,,Beijing54.GK3d/CM-114E,Beijing54.GK3d/CM-114E,Bjing54.GK3d/CM-114E,Beijing 1954 / 3-degree Gauss-Kruger CM 114E,Beijing_1954_3_Degree_GK_CM_114E,Beijing 1954 / 3-degree Gauss-Kruger CM 114E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 114E,,,,,,,,,0,0,0
-40900,2436,2436,2436,0,0,0,,Beijing54.GK3d/CM-117E,Beijing54.GK3d/CM-117E,Bjing54.GK3d/CM-117E,Beijing 1954 / 3-degree Gauss-Kruger CM 117E,Beijing_1954_3_Degree_GK_CM_117E,Beijing 1954 / 3-degree Gauss-Kruger CM 117E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 117E,,,,,,,,,0,0,0
-41000,2437,2437,2437,0,0,0,,Beijing54.GK3d/CM-120E,Beijing54.GK3d/CM-120E,Bjing54.GK3d/CM-120E,Beijing 1954 / 3-degree Gauss-Kruger CM 120E,Beijing_1954_3_Degree_GK_CM_120E,Beijing 1954 / 3-degree Gauss-Kruger CM 120E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 120E,,,,,,,,,0,0,0
-41100,2438,2438,2438,0,0,0,,Beijing54.GK3d/CM-123E,Beijing54.GK3d/CM-123E,Bjing54.GK3d/CM-123E,Beijing 1954 / 3-degree Gauss-Kruger CM 123E,Beijing_1954_3_Degree_GK_CM_123E,Beijing 1954 / 3-degree Gauss-Kruger CM 123E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 123E,,,,,,,,,0,0,0
-41200,2439,2439,2439,0,0,0,,Beijing54.GK3d/CM-126E,Beijing54.GK3d/CM-126E,Bjing54.GK3d/CM-126E,Beijing 1954 / 3-degree Gauss-Kruger CM 126E,Beijing_1954_3_Degree_GK_CM_126E,Beijing 1954 / 3-degree Gauss-Kruger CM 126E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 126E,,,,,,,,,0,0,0
-41300,2440,2440,2440,0,0,0,,Beijing54.GK3d/CM-129E,Beijing54.GK3d/CM-129E,Bjing54.GK3d/CM-129E,Beijing 1954 / 3-degree Gauss-Kruger CM 129E,Beijing_1954_3_Degree_GK_CM_129E,Beijing 1954 / 3-degree Gauss-Kruger CM 129E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 129E,,,,,,,,,0,0,0
-41400,2441,2441,2441,0,0,0,,Beijing54.GK3d/CM-132E,Beijing54.GK3d/CM-132E,Bjing54.GK3d/CM-132E,Beijing 1954 / 3-degree Gauss-Kruger CM 132E,Beijing_1954_3_Degree_GK_CM_132E,Beijing 1954 / 3-degree Gauss-Kruger CM 132E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 132E,,,,,,,,,0,0,0
-41500,2442,2442,2442,0,0,0,,Beijing54.GK3d/CM-135E,Beijing54.GK3d/CM-135E,Bjing54.GK3d/CM-135E,Beijing 1954 / 3-degree Gauss-Kruger CM 135E,Beijing_1954_3_Degree_GK_CM_135E,Beijing 1954 / 3-degree Gauss-Kruger CM 135E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 135E,,,,,,,,,0,0,0
+37100,2397,2166,2397,0,0,0,,Pulkovo/83.GK-3,Pulkovo/83.GK-3,Pulkovo42/83a.GK-3,Pulkovo 1942(83) / 3-degree Gauss-Kruger zone 3,Pulkovo_1942_Adj_1983_3_Degree_GK_Zone_3,Pulkovo 1942(83) / Gauss-Kruger zone 3,,,Pulkovo 1942(83) / Gauss-Kruger zone 3,,,,,,,,,0,0,0
+37200,2398,2167,2398,0,0,0,,Pulkovo/83.GK-4,Pulkovo/83.GK-4,Pulkovo42/83a.GK-4,Pulkovo 1942(83) / 3-degree Gauss-Kruger zone 4,Pulkovo_1942_Adj_1983_3_Degree_GK_Zone_4,Pulkovo 1942(83) / Gauss-Kruger zone 4,,,Pulkovo 1942(83) / Gauss-Kruger zone 4,,,,,,,,,0,0,0
+37300,2399,2168,2399,0,0,0,,Pulkovo/83.GK-5,Pulkovo/83.GK-5,Pulkovo42/83a.GK-5,Pulkovo 1942(83) / 3-degree Gauss-Kruger zone 5,Pulkovo_1942_Adj_1983_3_Degree_GK_Zone_5,Pulkovo 1942(83) / Gauss-Kruger zone 5,,,Pulkovo 1942(83) / Gauss-Kruger zone 5,,,,,,,,,0,0,0
+37400,2401,2401,2401,0,0,0,,Beijing54.GK3d-25,Beijing54.GK3d-25,Beijing1954/a.GK3d-25,Beijing 1954 / 3-degree Gauss-Kruger zone 25,Beijing_1954_3_Degree_GK_Zone_25,Beijing 1954 / 3-degree Gauss-Kruger zone 25,,,Beijing 1954 / 3-degree Gauss-Kruger zone 25,,,,,,,,,0,0,0
+37500,2402,2402,2402,0,0,0,,Beijing54.GK3d-26,Beijing54.GK3d-26,Beijing1954/a.GK3d-26,Beijing 1954 / 3-degree Gauss-Kruger zone 26,Beijing_1954_3_Degree_GK_Zone_26,Beijing 1954 / 3-degree Gauss-Kruger zone 26,,,Beijing 1954 / 3-degree Gauss-Kruger zone 26,,,,,,,,,0,0,0
+37600,2403,2403,2403,0,0,0,,Beijing54.GK3d-27,Beijing54.GK3d-27,Beijing1954/a.GK3d-27,Beijing 1954 / 3-degree Gauss-Kruger zone 27,Beijing_1954_3_Degree_GK_Zone_27,Beijing 1954 / 3-degree Gauss-Kruger zone 27,,,Beijing 1954 / 3-degree Gauss-Kruger zone 27,,,,,,,,,0,0,0
+37700,2404,2404,2404,0,0,0,,Beijing54.GK3d-28,Beijing54.GK3d-28,Beijing1954/a.GK3d-28,Beijing 1954 / 3-degree Gauss-Kruger zone 28,Beijing_1954_3_Degree_GK_Zone_28,Beijing 1954 / 3-degree Gauss-Kruger zone 28,,,Beijing 1954 / 3-degree Gauss-Kruger zone 28,,,,,,,,,0,0,0
+37800,2405,2405,2405,0,0,0,,Beijing54.GK3d-29,Beijing54.GK3d-29,Beijing1954/a.GK3d-29,Beijing 1954 / 3-degree Gauss-Kruger zone 29,Beijing_1954_3_Degree_GK_Zone_29,Beijing 1954 / 3-degree Gauss-Kruger zone 29,,,Beijing 1954 / 3-degree Gauss-Kruger zone 29,,,,,,,,,0,0,0
+37900,2406,2406,2406,0,0,0,,Beijing54.GK3d-30,Beijing54.GK3d-30,Beijing1954/a.GK3d-30,Beijing 1954 / 3-degree Gauss-Kruger zone 30,Beijing_1954_3_Degree_GK_Zone_30,Beijing 1954 / 3-degree Gauss-Kruger zone 30,,,Beijing 1954 / 3-degree Gauss-Kruger zone 30,,,,,,,,,0,0,0
+38000,2407,2407,2407,0,0,0,,Beijing54.GK3d-31,Beijing54.GK3d-31,Beijing1954/a.GK3d-31,Beijing 1954 / 3-degree Gauss-Kruger zone 31,Beijing_1954_3_Degree_GK_Zone_31,Beijing 1954 / 3-degree Gauss-Kruger zone 31,,,Beijing 1954 / 3-degree Gauss-Kruger zone 31,,,,,,,,,0,0,0
+38100,2408,2408,2408,0,0,0,,Beijing54.GK3d-32,Beijing54.GK3d-32,Beijing1954/a.GK3d-32,Beijing 1954 / 3-degree Gauss-Kruger zone 32,Beijing_1954_3_Degree_GK_Zone_32,Beijing 1954 / 3-degree Gauss-Kruger zone 32,,,Beijing 1954 / 3-degree Gauss-Kruger zone 32,,,,,,,,,0,0,0
+38200,2409,2409,2409,0,0,0,,Beijing54.GK3d-33,Beijing54.GK3d-33,Beijing1954/a.GK3d-33,Beijing 1954 / 3-degree Gauss-Kruger zone 33,Beijing_1954_3_Degree_GK_Zone_33,Beijing 1954 / 3-degree Gauss-Kruger zone 33,,,Beijing 1954 / 3-degree Gauss-Kruger zone 33,,,,,,,,,0,0,0
+38300,2410,2410,2410,0,0,0,,Beijing54.GK3d-34,Beijing54.GK3d-34,Beijing1954/a.GK3d-34,Beijing 1954 / 3-degree Gauss-Kruger zone 34,Beijing_1954_3_Degree_GK_Zone_34,Beijing 1954 / 3-degree Gauss-Kruger zone 34,,,Beijing 1954 / 3-degree Gauss-Kruger zone 34,,,,,,,,,0,0,0
+38400,2411,2411,2411,0,0,0,,Beijing54.GK3d-35,Beijing54.GK3d-35,Beijing1954/a.GK3d-35,Beijing 1954 / 3-degree Gauss-Kruger zone 35,Beijing_1954_3_Degree_GK_Zone_35,Beijing 1954 / 3-degree Gauss-Kruger zone 35,,,Beijing 1954 / 3-degree Gauss-Kruger zone 35,,,,,,,,,0,0,0
+38500,2412,2412,2412,0,0,0,,Beijing54.GK3d-36,Beijing54.GK3d-36,Beijing1954/a.GK3d-36,Beijing 1954 / 3-degree Gauss-Kruger zone 36,Beijing_1954_3_Degree_GK_Zone_36,Beijing 1954 / 3-degree Gauss-Kruger zone 36,,,Beijing 1954 / 3-degree Gauss-Kruger zone 36,,,,,,,,,0,0,0
+38600,2413,2413,2413,0,0,0,,Beijing54.GK3d-37,Beijing54.GK3d-37,Beijing1954/a.GK3d-37,Beijing 1954 / 3-degree Gauss-Kruger zone 37,Beijing_1954_3_Degree_GK_Zone_37,Beijing 1954 / 3-degree Gauss-Kruger zone 37,,,Beijing 1954 / 3-degree Gauss-Kruger zone 37,,,,,,,,,0,0,0
+38700,2414,2414,2414,0,0,0,,Beijing54.GK3d-38,Beijing54.GK3d-38,Beijing1954/a.GK3d-38,Beijing 1954 / 3-degree Gauss-Kruger zone 38,Beijing_1954_3_Degree_GK_Zone_38,Beijing 1954 / 3-degree Gauss-Kruger zone 38,,,Beijing 1954 / 3-degree Gauss-Kruger zone 38,,,,,,,,,0,0,0
+38800,2415,2415,2415,0,0,0,,Beijing54.GK3d-39,Beijing54.GK3d-39,Beijing1954/a.GK3d-39,Beijing 1954 / 3-degree Gauss-Kruger zone 39,Beijing_1954_3_Degree_GK_Zone_39,Beijing 1954 / 3-degree Gauss-Kruger zone 39,,,Beijing 1954 / 3-degree Gauss-Kruger zone 39,,,,,,,,,0,0,0
+38900,2416,2416,2416,0,0,0,,Beijing54.GK3d-40,Beijing54.GK3d-40,Beijing1954/a.GK3d-40,Beijing 1954 / 3-degree Gauss-Kruger zone 40,Beijing_1954_3_Degree_GK_Zone_40,Beijing 1954 / 3-degree Gauss-Kruger zone 40,,,Beijing 1954 / 3-degree Gauss-Kruger zone 40,,,,,,,,,0,0,0
+39000,2417,2417,2417,0,0,0,,Beijing54.GK3d-41,Beijing54.GK3d-41,Beijing1954/a.GK3d-41,Beijing 1954 / 3-degree Gauss-Kruger zone 41,Beijing_1954_3_Degree_GK_Zone_41,Beijing 1954 / 3-degree Gauss-Kruger zone 41,,,Beijing 1954 / 3-degree Gauss-Kruger zone 41,,,,,,,,,0,0,0
+39100,2418,2418,2418,0,0,0,,Beijing54.GK3d-42,Beijing54.GK3d-42,Beijing1954/a.GK3d-42,Beijing 1954 / 3-degree Gauss-Kruger zone 42,Beijing_1954_3_Degree_GK_Zone_42,Beijing 1954 / 3-degree Gauss-Kruger zone 42,,,Beijing 1954 / 3-degree Gauss-Kruger zone 42,,,,,,,,,0,0,0
+39200,2419,2419,2419,0,0,0,,Beijing54.GK3d-43,Beijing54.GK3d-43,Beijing1954/a.GK3d-43,Beijing 1954 / 3-degree Gauss-Kruger zone 43,Beijing_1954_3_Degree_GK_Zone_43,Beijing 1954 / 3-degree Gauss-Kruger zone 43,,,Beijing 1954 / 3-degree Gauss-Kruger zone 43,,,,,,,,,0,0,0
+39300,2420,2420,2420,0,0,0,,Beijing54.GK3d-44,Beijing54.GK3d-44,Beijing1954/a.GK3d-44,Beijing 1954 / 3-degree Gauss-Kruger zone 44,Beijing_1954_3_Degree_GK_Zone_44,Beijing 1954 / 3-degree Gauss-Kruger zone 44,,,Beijing 1954 / 3-degree Gauss-Kruger zone 44,,,,,,,,,0,0,0
+39400,2421,2421,2421,0,0,0,,Beijing54.GK3d-45,Beijing54.GK3d-45,Beijing1954/a.GK3d-45,Beijing 1954 / 3-degree Gauss-Kruger zone 45,Beijing_1954_3_Degree_GK_Zone_45,Beijing 1954 / 3-degree Gauss-Kruger zone 45,,,Beijing 1954 / 3-degree Gauss-Kruger zone 45,,,,,,,,,0,0,0
+39500,2422,2422,2422,0,0,0,,Beijing54.GK3d/CM-75E,Beijing54.GK3d/CM-75E,Bjing54/a.GK3d/CM-75E,Beijing 1954 / 3-degree Gauss-Kruger CM 75E,Beijing_1954_3_Degree_GK_CM_75E,Beijing 1954 / 3-degree Gauss-Kruger CM 75E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 75E,,,,,,,,,0,0,0
+39600,2423,2423,2423,0,0,0,,Beijing54.GK3d/CM-78E,Beijing54.GK3d/CM-78E,Bjing54/a.GK3d/CM-78E,Beijing 1954 / 3-degree Gauss-Kruger CM 78E,Beijing_1954_3_Degree_GK_CM_78E,Beijing 1954 / 3-degree Gauss-Kruger CM 78E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 78E,,,,,,,,,0,0,0
+39700,2424,2424,2424,0,0,0,,Beijing54.GK3d/CM-81E,Beijing54.GK3d/CM-81E,Bjing54/a.GK3d/CM-81E,Beijing 1954 / 3-degree Gauss-Kruger CM 81E,Beijing_1954_3_Degree_GK_CM_81E,Beijing 1954 / 3-degree Gauss-Kruger CM 81E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 81E,,,,,,,,,0,0,0
+39800,2425,2425,2425,0,0,0,,Beijing54.GK3d/CM-84E,Beijing54.GK3d/CM-84E,Bjing54/a.GK3d/CM-84E,Beijing 1954 / 3-degree Gauss-Kruger CM 84E,Beijing_1954_3_Degree_GK_CM_84E,Beijing 1954 / 3-degree Gauss-Kruger CM 84E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 84E,,,,,,,,,0,0,0
+39900,2426,2426,2426,0,0,0,,Beijing54.GK3d/CM-87E,Beijing54.GK3d/CM-87E,Bjing54/a.GK3d/CM-87E,Beijing 1954 / 3-degree Gauss-Kruger CM 87E,Beijing_1954_3_Degree_GK_CM_87E,Beijing 1954 / 3-degree Gauss-Kruger CM 87E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 87E,,,,,,,,,0,0,0
+40000,2427,2427,2427,0,0,0,,Beijing54.GK3d/CM-90E,Beijing54.GK3d/CM-90E,Bjing54/a.GK3d/CM-90E,Beijing 1954 / 3-degree Gauss-Kruger CM 90E,Beijing_1954_3_Degree_GK_CM_90E,Beijing 1954 / 3-degree Gauss-Kruger CM 90E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 90E,,,,,,,,,0,0,0
+40100,2428,2428,2428,0,0,0,,Beijing54.GK3d/CM-93E,Beijing54.GK3d/CM-93E,Bjing54/a.GK3d/CM-93E,Beijing 1954 / 3-degree Gauss-Kruger CM 93E,Beijing_1954_3_Degree_GK_CM_93E,Beijing 1954 / 3-degree Gauss-Kruger CM 93E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 93E,,,,,,,,,0,0,0
+40200,2429,2429,2429,0,0,0,,Beijing54.GK3d/CM-96E,Beijing54.GK3d/CM-96E,Bjing54/a.GK3d/CM-96E,Beijing 1954 / 3-degree Gauss-Kruger CM 96E,Beijing_1954_3_Degree_GK_CM_96E,Beijing 1954 / 3-degree Gauss-Kruger CM 96E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 96E,,,,,,,,,0,0,0
+40300,2430,2430,2430,0,0,0,,Beijing54.GK3d/CM-99E,Beijing54.GK3d/CM-99E,Bjing54/a.GK3d/CM-99E,Beijing 1954 / 3-degree Gauss-Kruger CM 99E,Beijing_1954_3_Degree_GK_CM_99E,Beijing 1954 / 3-degree Gauss-Kruger CM 99E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 99E,,,,,,,,,0,0,0
+40400,2431,2431,2431,0,0,0,,Beijing54.GK3d/CM-102E,Beijing54.GK3d/CM-102E,Bjing54/a.GK3d/CM-102E,Beijing 1954 / 3-degree Gauss-Kruger CM 102E,Beijing_1954_3_Degree_GK_CM_102E,Beijing 1954 / 3-degree Gauss-Kruger CM 102E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 102E,,,,,,,,,0,0,0
+40500,2432,2432,2432,0,0,0,,Beijing54.GK3d/CM-105E,Beijing54.GK3d/CM-105E,Bjing54/a.GK3d/CM-105E,Beijing 1954 / 3-degree Gauss-Kruger CM 105E,Beijing_1954_3_Degree_GK_CM_105E,Beijing 1954 / 3-degree Gauss-Kruger CM 105E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 105E,,,,,,,,,0,0,0
+40600,2433,2433,2433,0,0,0,,Beijing54.GK3d/CM-108E,Beijing54.GK3d/CM-108E,Bjing54/a.GK3d/CM-108E,Beijing 1954 / 3-degree Gauss-Kruger CM 108E,Beijing_1954_3_Degree_GK_CM_108E,Beijing 1954 / 3-degree Gauss-Kruger CM 108E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 108E,,,,,,,,,0,0,0
+40700,2434,2434,2434,0,0,0,,Beijing54.GK3d/CM-111E,Beijing54.GK3d/CM-111E,Bjing54/a.GK3d/CM-111E,Beijing 1954 / 3-degree Gauss-Kruger CM 111E,Beijing_1954_3_Degree_GK_CM_111E,Beijing 1954 / 3-degree Gauss-Kruger CM 111E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 111E,,,,,,,,,0,0,0
+40800,2435,2435,2435,0,0,0,,Beijing54.GK3d/CM-114E,Beijing54.GK3d/CM-114E,Bjing54/a.GK3d/CM-114E,Beijing 1954 / 3-degree Gauss-Kruger CM 114E,Beijing_1954_3_Degree_GK_CM_114E,Beijing 1954 / 3-degree Gauss-Kruger CM 114E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 114E,,,,,,,,,0,0,0
+40900,2436,2436,2436,0,0,0,,Beijing54.GK3d/CM-117E,Beijing54.GK3d/CM-117E,Bjing54/a.GK3d/CM-117E,Beijing 1954 / 3-degree Gauss-Kruger CM 117E,Beijing_1954_3_Degree_GK_CM_117E,Beijing 1954 / 3-degree Gauss-Kruger CM 117E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 117E,,,,,,,,,0,0,0
+41000,2437,2437,2437,0,0,0,,Beijing54.GK3d/CM-120E,Beijing54.GK3d/CM-120E,Bjing54/a.GK3d/CM-120E,Beijing 1954 / 3-degree Gauss-Kruger CM 120E,Beijing_1954_3_Degree_GK_CM_120E,Beijing 1954 / 3-degree Gauss-Kruger CM 120E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 120E,,,,,,,,,0,0,0
+41100,2438,2438,2438,0,0,0,,Beijing54.GK3d/CM-123E,Beijing54.GK3d/CM-123E,Bjing54/a.GK3d/CM-123E,Beijing 1954 / 3-degree Gauss-Kruger CM 123E,Beijing_1954_3_Degree_GK_CM_123E,Beijing 1954 / 3-degree Gauss-Kruger CM 123E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 123E,,,,,,,,,0,0,0
+41200,2439,2439,2439,0,0,0,,Beijing54.GK3d/CM-126E,Beijing54.GK3d/CM-126E,Bjing54/a.GK3d/CM-126E,Beijing 1954 / 3-degree Gauss-Kruger CM 126E,Beijing_1954_3_Degree_GK_CM_126E,Beijing 1954 / 3-degree Gauss-Kruger CM 126E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 126E,,,,,,,,,0,0,0
+41300,2440,2440,2440,0,0,0,,Beijing54.GK3d/CM-129E,Beijing54.GK3d/CM-129E,Bjing54/a.GK3d/CM-129E,Beijing 1954 / 3-degree Gauss-Kruger CM 129E,Beijing_1954_3_Degree_GK_CM_129E,Beijing 1954 / 3-degree Gauss-Kruger CM 129E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 129E,,,,,,,,,0,0,0
+41400,2441,2441,2441,0,0,0,,Beijing54.GK3d/CM-132E,Beijing54.GK3d/CM-132E,Bjing54/a.GK3d/CM-132E,Beijing 1954 / 3-degree Gauss-Kruger CM 132E,Beijing_1954_3_Degree_GK_CM_132E,Beijing 1954 / 3-degree Gauss-Kruger CM 132E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 132E,,,,,,,,,0,0,0
+41500,2442,2442,2442,0,0,0,,Beijing54.GK3d/CM-135E,Beijing54.GK3d/CM-135E,Bjing54/a.GK3d/CM-135E,Beijing 1954 / 3-degree Gauss-Kruger CM 135E,Beijing_1954_3_Degree_GK_CM_135E,Beijing 1954 / 3-degree Gauss-Kruger CM 135E,,,Beijing 1954 / 3-degree Gauss-Kruger CM 135E,,,,,,,,,0,0,0
 41600,2443,2443,2443,0,0,82090,,JGD2K.CS-I,JGD2K.CS-I,JGD2K.PlnRctCS-I|JGD2K-01,JGD2000 / Japan Plane Rectangular CS I,JGD_2000_Japan_Zone_1,JGD2000 / Japan Plane Rectangular CS I,,,JGD2000 / Japan Plane Rectangular CS I,,,,Japanese Zone I,,,,,0,0,0
 41700,2444,2444,2444,0,0,82091,,JGD2K.CS-II,JGD2K.CS-II,JGD2K.PlnRctCS-II|JGD2K-02,JGD2000 / Japan Plane Rectangular CS II,JGD_2000_Japan_Zone_2,JGD2000 / Japan Plane Rectangular CS II,,,JGD2000 / Japan Plane Rectangular CS II,,,,Japanese Zone II,,,,,0,0,0
 41800,2445,2445,2445,0,0,82092,,JGD2K.CS-III,JGD2K.CS-III,JGD2K.PlnRctCS-III|JGD2K-03,JGD2000 / Japan Plane Rectangular CS III,JGD_2000_Japan_Zone_3,JGD2000 / Japan Plane Rectangular CS III,,,JGD2000 / Japan Plane Rectangular CS III,,,,Japanese Zone III,,,,,0,0,0
@@ -707,8 +707,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 70500,2733,2733,2733,0,0,0,,Pulkovo95.GK3d/CM-123E,Pulkovo95.GK3d/CM-123E,Pulkovo95.GK3d/CM-123E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 123E,Pulkovo_1995_3_Degree_GK_CM_123E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 123E,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 123E,,,,,,,,,0,0,0
 70600,2734,2734,2734,0,0,0,,Pulkovo95.GK3d/CM-126E,Pulkovo95.GK3d/CM-126E,Pulkovo95.GK3d/CM-126E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 126E,Pulkovo_1995_3_Degree_GK_CM_126E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 126E,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 126E,,,,,,,,,0,0,0
 70700,2735,2735,2735,0,0,0,,Pulkovo95.GK3d/CM-129E,Pulkovo95.GK3d/CM-129E,Pulkovo95.GK3d/CM-129E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 129E,Pulkovo_1995_3_Degree_GK_CM_129E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 129E,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 129E,,,,,,,,,0,0,0
-70800,2736,2736,2736,0,0,0,,Tete.UTM-36S,Tete.UTM-36S,Tete.UTM-36S,Tete / UTM zone 36S,Tete_UTM_Zone_36S,Tete / UTM zone 36S,,,Tete / UTM zone 36S,,,,,,,,,0,0,0
-70900,2737,2737,2737,0,0,0,,Tete.UTM-37S,Tete.UTM-37S,Tete.UTM-37S,Tete / UTM zone 37S,Tete_UTM_Zone_37S,Tete / UTM zone 37S,,,Tete / UTM zone 37S,,,,,,,,,0,0,0
+70800,2736,2736,2736,0,0,0,,Tete.UTM-36S,Tete.UTM-36S,Tete/a.UTM-36S,Tete / UTM zone 36S,Tete_UTM_Zone_36S,Tete / UTM zone 36S,,,Tete / UTM zone 36S,,,,,,,,,0,0,0
+70900,2737,2737,2737,0,0,0,,Tete.UTM-37S,Tete.UTM-37S,Tete/a.UTM-37S,Tete / UTM zone 37S,Tete_UTM_Zone_37S,Tete / UTM zone 37S,,,Tete / UTM zone 37S,,,,,,,,,0,0,0
 71000,2738,2738,2738,0,0,0,,Pulkovo95.GK3d/CM-132E,Pulkovo95.GK3d/CM-132E,Pulkovo95.GK3d/CM-132E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 132E,Pulkovo_1995_3_Degree_GK_CM_132E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 132E,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 132E,,,,,,,,,0,0,0
 71100,2739,2739,2739,0,0,0,,Pulkovo95.GK3d/CM-135E,Pulkovo95.GK3d/CM-135E,Pulkovo95.GK3d/CM-135E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 135E,Pulkovo_1995_3_Degree_GK_CM_135E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 135E,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 135E,,,,,,,,,0,0,0
 71200,2740,2740,2740,0,0,0,,Pulkovo95.GK3d/CM-138E,Pulkovo95.GK3d/CM-138E,Pulkovo95.GK3d/CM-138E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 138E,Pulkovo_1995_3_Degree_GK_CM_138E,Pulkovo 1995 / 3-degree Gauss-Kruger CM 138E,,,Pulkovo 1995 / 3-degree Gauss-Kruger CM 138E,,,,,,,,,0,0,0
@@ -901,7 +901,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 89900,2929,2929,2929,0,0,0,,WIHP-CF,HARN.WI-C.USFt,HARN/WI.WI-CF,NAD83(HARN) / Wisconsin Central (ftUS),NAD_1983_HARN_StatePlane_Wisconsin_Central_FIPS_4802_Feet,NAD83(HARN) / Wisconsin Central (ftUS),,,NAD83(HARN) / Wisconsin Central (ftUS),,,,,,,,,0,0,0
 90000,2930,2930,2930,0,0,0,,WIHP-SF,HARN.WI-S.USFt,HARN/WI.WI-SF,NAD83(HARN) / Wisconsin South (ftUS),NAD_1983_HARN_StatePlane_Wisconsin_South_FIPS_4803_Feet,NAD83(HARN) / Wisconsin South (ftUS),,,NAD83(HARN) / Wisconsin South (ftUS),,,,,,,,,0,0,0
 90100,2931,0,2931,0,0,0,,Beduaram.TM 13 NE,Beduaram.TM 13 NE,,Beduaram / TM 13 NE,,Beduaram / TM 13 NE,,,Beduaram / TM 13 NE,,,,,,,,,0,0,0
-90200,2932,0,2932,0,0,0,,QND95.QatarNational,QND95.QatarNational,QND95.QatarNational,QND95 / Qatar National Grid,,QND95 / Qatar National Grid,,,QND95 / Qatar National Grid,,,,,,,,,0,0,0
+90200,2932,0,2932,0,0,0,,QND95.QatarNational,QND95.QatarNational,QND95a.QatarNational,QND95 / Qatar National Grid,,QND95 / Qatar National Grid,,,QND95 / Qatar National Grid,,,,,,,,,0,0,0
 90300,2933,2550,2933,0,0,0,,Segara.UTM-50S,Segara.UTM-50S,GunungSegara.UTM-50S,Segara / UTM zone 50S,Samboja_UTM_Zone_50S,Segara / UTM zone 50S,,,Segara / UTM zone 50S,,,,,,,,,0,0,0
 90400,2934,0,0,0,0,0,,,,,Segara (Jakarta) / NEIEZ,,,,,Segara (Jakarta) / NEIEZ,,,,,,,,,0,0,0
 90500,2935,2935,2935,0,0,0,,Pulkovo42.CS63-A1,Pulkovo42.CS63-A1,Pulkovo42.CS63-A1|CS63-A1,Pulkovo 1942 / CS63 zone A1,Pulkovo_1942_CS63_Zone_A1,Pulkovo 1942 / CS63 zone A1,,,Pulkovo 1942 / CS63 zone A1,,,,,,,,,0,0,0
@@ -940,7 +940,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 93900,2969,2969,2969,0,0,0,,FortMarigot.UTM-20N,FortMarigot.UTM-20N,FortMarigot_1.UTM-20N,Fort Marigot / UTM zone 20N,Fort_Marigot_UTM_20N,Fort Marigot / UTM zone 20N,,,,,,,,,,,,0,0,0
 94000,2970,2970,2970,0,0,0,,SainteAnne.UTM-20N,SainteAnne.UTM-20N,Guadeloupe48.UTM-20N,Guadeloupe 1948 / UTM zone 20N,Sainte_Anne_UTM_20N,Sainte Anne / UTM zone 20N,,,,,,,,,,,,0,0,0
 94100,2971,2971,2971,0,0,0,,CSG67.UTM-22N,CSG67.UTM-22N,CSG1967.UTM-22N,CSG67 / UTM zone 22N,CSG_1967_UTM_22N,CSG67 / UTM zone 22N,,,,,,,,,,,,0,0,0
-94200,2972,2972,2972,0,0,0,,RGFG95.UTM-22N,RGFG95.UTM-22N,RGFG95.UTM-22N,RGFG95 / UTM zone 22N,RGFG_1995_UTM_22N,RGFG95 / UTM zone 22N,,,,,,,,,,,,0,0,0
+94200,2972,2972,2972,0,0,0,,RGFG95.UTM-22N,RGFG95.UTM-22N,RGFG95a.UTM-22N,RGFG95 / UTM zone 22N,RGFG_1995_UTM_22N,RGFG95 / UTM zone 22N,,,,,,,,,,,,0,0,0
 94300,2973,2973,2973,0,0,0,,FortDesaix.UTM-20N,FortDesaix.UTM-20N,Martinique38.UTM-20N,Martinique 1938 / UTM zone 20N,Fort_Desaix_UTM_20N,Fort Desaix / UTM zone 20N,,,,,,,,,,,,0,0,0
 94400,2975,2975,2975,0,0,0,,RGR92.UTM-40S,RGR92.UTM-40S,RGR92.UTM-40S,RGR92 / UTM zone 40S,RGR_1992_UTM_40S,RGR92 / UTM zone 40S,,,,,,,,,,,,0,0,0
 94500,2976,2976,2976,0,0,0,,Tahiti.UTM-6S,Tahiti.UTM-6S,Tahiti52.UTM-6S,Tahiti 52 / UTM zone 6S,Tahiti_UTM_6S,Tahiti / UTM zone 6S,,,,,,,,,,,,0,0,0
@@ -954,7 +954,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 95300,2985,2985,2985,0,0,0,,,,,Petrels 1972 / Terre Adelie Polar Stereographic,Petrels_1972_Terre_Adelie_Polar_Stereographic,Petrels 1972 / Terre Adelie Polar Stereographic,,,,,,,,,,,,0,0,0
 95400,2986,2986,2986,0,0,0,,,,,Perroud 1950 / Terre Adelie Polar Stereographic,Perroud_1950_Terre_Adelie_Polar_Stereographic,Perroud 1950 / Terre Adelie Polar Stereographic,,,,,,,,,,,,0,0,0
 95500,2987,2987,2987,0,0,0,,Miquelon50.UTM-21N,Miquelon50.UTM-21N,Miquelon1950.UTM-21N,Saint Pierre et Miquelon 1950 / UTM zone 21N,Saint_Pierre_et_Miquelon_1950_UTM_21N,Saint Pierre et Miquelon 1950 / UTM zone 21N,,,,,,,,,,,,0,0,0
-95600,2988,2988,2988,0,0,0,,MOP78.UTM-1S,MOP78.UTM-1S,MOP1978.UTM-1S,MOP78 / UTM zone 1S,MOP78_UTM_1S,MOP78 / UTM zone 1S,,,,,,,,,,,,0,0,0
+95600,2988,2988,2988,0,0,0,,MOP78.UTM-1S,MOP78.UTM-1S,MOP1978a.UTM-1S,MOP78 / UTM zone 1S,MOP78_UTM_1S,MOP78 / UTM zone 1S,,,,,,,,,,,,0,0,0
 95700,2989,2989,2989,0,0,0,,RRAF91.UTM-20N,Antilles91.UTM-20N,RRAF91.UTM-20N,RRAF 1991 / UTM zone 20N,RRAF_1991_UTM_20N,RRAF 1991 / UTM zone 20N,,,,,,,,,,,,0,0,0
 95800,2990,2990,2990,0,0,0,,REUNION.TmReunion,REUNION.TmReunion,REUNION.Reunion/TM/02,,Piton_des_Neiges_TM_Reunion,Piton des Neiges / TM Reunion,,,,,,,,,,,,0,0,0
 95900,2991,2991,2991,0,0,0,,NAD83.OregonLambert,NAD83.OregonLambert,NAD83.OregonLambert|OR-GIS83-M,NAD83 / Oregon Lambert,NAD_1983_Oregon_Statewide_Lambert,NAD83 / Oregon Lambert,,,,,,,,,,,,0,0,0
@@ -962,9 +962,9 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 96100,2993,2993,2993,0,0,0,,HARN.OregonLambert,HARN.OregonLambert,HARN/WO.OregonLambert,NAD83(HARN) / Oregon Lambert,NAD_1983_HARN_Oregon_Statewide_Lambert,NAD83(HARN) / Oregon Lambert,,,,,,,,,,,,0,0,0
 96200,2994,2994,2994,0,0,0,,HARN.OregonLambert.ft,HARN.OregonLambert.IntnlFt,HARN/WO.OregonLambert-F,NAD83(HARN) / Oregon Lambert (ft),NAD_1983_HARN_Oregon_Statewide_Lambert_Feet_Intl,NAD83(HARN) / Oregon Lambert (ft),,,,,,,,,,,,0,0,0
 96300,2995,2995,2995,0,0,0,,IGN53/Mare.UTM-58S,IGN53/Mare.UTM-58S,IGN53/Mare.UTM-58S,IGN53 Mare / UTM zone 58S,IGN53_Mare_UTM_58S,IGN53 Mare / UTM zone 58S,,,,,,,,,,,,0,0,0
-96400,2996,2996,2996,0,0,0,,ST84IledesPins.UTM-58S,ST84IledesPins.UTM-58S,ST84IledesPins.UTM-58S,ST84 Ile des Pins / UTM zone 58S,ST84_Ile_des_Pins_UTM_58S,ST84 Ile des Pins / UTM zone 58S,,,,,,,,,,,,0,0,0
-96500,2997,2997,2997,0,0,0,,ST71Belep.UTM-58S,ST71Belep.UTM-58S,ST71Belep.UTM-58S,ST71 Belep / UTM zone 58S,ST71_Belep_UTM_58S,ST71 Belep / UTM zone 58S,,,,,,,,,,,,0,0,0
-96600,2998,2998,2998,0,0,0,,NEA74Noumea.UTM-58S,NEA74Noumea.UTM-58S,NEA74Noumea.UTM-58S,NEA74 Noumea / UTM zone 58S,NEA74_Noumea_UTM_58S,NEA74 Noumea / UTM zone 58S,,,,,,,,,,,,0,0,0
+96400,2996,2996,2996,0,0,0,,ST84IledesPins.UTM-58S,ST84IledesPins.UTM-58S,ST84IlePins/a.UTM-58S,ST84 Ile des Pins / UTM zone 58S,ST84_Ile_des_Pins_UTM_58S,ST84 Ile des Pins / UTM zone 58S,,,,,,,,,,,,0,0,0
+96500,2997,2997,2997,0,0,0,,ST71Belep.UTM-58S,ST71Belep.UTM-58S,ST71Belep/a.UTM-58S,ST71 Belep / UTM zone 58S,ST71_Belep_UTM_58S,ST71 Belep / UTM zone 58S,,,,,,,,,,,,0,0,0
+96600,2998,2998,2998,0,0,0,,NEA74Noumea.UTM-58S,NEA74Noumea.UTM-58S,Noumea74.UTM-58S,NEA74 Noumea / UTM zone 58S,NEA74_Noumea_UTM_58S,NEA74 Noumea / UTM zone 58S,,,,,,,,,,,,0,0,0
 96700,2999,2999,2999,0,0,0,,GrandComoros.UTM-38S,GrandComoros.UTM-38S,,Grand Comoros / UTM zone 38S,Grand_Comoros_UTM_38S,Grand Comoros / UTM zone 38S,,,,,,,,,,,,0,0,0
 96800,3000,3000,3000,0,0,0,,Segara.NEIEZ,Segara.NEIEZ,GunungSegara.NEIEZ/01,Segara / NEIEZ,Gunung_Segara_NEIEZ,Segara / NEIEZ,,,,,,,,,,,,0,0,0
 96900,3001,3001,3001,0,0,0,,Batavia.NEIEZ,Batavia.NEIEZ,Batavia_1.NEIEZ/01,Batavia / NEIEZ,Batavia_NEIEZ,Batavia / NEIEZ,,,,,,,,,,,,0,0,0
@@ -985,12 +985,12 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 98400,3016,3016,3016,0,0,0,,SWEREF 99 20 15,SWEREF99.20 15,SWEREF-99-20-15,SWEREF99 20 15,SWEREF99_20_15,SWEREF99 20 15,,,,,,,,,,,,0,0,0
 98500,3017,3017,3017,0,0,0,,SWEREF 99 21 45,SWEREF99.21 45,SWEREF-99-21-45,SWEREF99 21 45,SWEREF99_21_45,SWEREF99 21 45,,,,,,,,,,,,0,0,0
 98600,3018,3018,3018,0,0,0,,SWEREF 99 23 15,SWEREF99.23 15,SWEREF-99-23-15,SWEREF99 23 15,SWEREF99_23_15,SWEREF99 23 15,,,,,,,,,,,,0,0,0
-98700,3019,3019,3019,0,0,0,,RT90-7.5V,RT90.RT-75V,SW-75GONV,RT90 7.5 gon V,RT90_75_gon_V,RT90 7.5 gon V,,,,,,,,,,,,0,0,0
-98800,3020,3020,3020,0,0,0,,RT90-5V,RT90.RT-50V,SW-5GONV,RT90 5 gon V,RT90_5_gon_V,RT90 5 gon V,,,,,,,,,,,,0,0,0
-98900,3021,3021,3021,0,0,82202,,RT90-2.5V,RT90.RT-25V,SW-25GONV,RT90 2.5 gon V,RT90_25_gon_V,RT90 2.5 gon V,,,,,,,Swedish National System (RT 90),,,,,0,0,0
-99000,3022,3022,3022,0,0,0,,RT90-0,RT90.RT-00,SW-0GONV,RT90 0 gon,RT90_0_gon,RT90 0 gon,,,,,,,,,,,,0,0,0
-99100,3023,3023,3023,0,0,0,,RT90-2.5O,RT90.RT-25O,SW-25GONO,RT90 2.5 gon O,RT90_25_gon_O,RT90 2.5 gon O,,,,,,,,,,,,0,0,0
-99200,3024,3024,3024,0,0,0,,RT90-5O,RT90.RT-50O,SW-5GONO,RT90 5 gon O,RT90_5_gon_O,RT90 5 gon O,,,,,,,,,,,,0,0,0
+98700,3019,3019,3019,0,0,0,,RT90-7.5V,RT90.RT-75V,RT90-3/7P.SW-75GONV,RT90 7.5 gon V,RT90_75_gon_V,RT90 7.5 gon V,,,,,,,,,,,,0,0,0
+98800,3020,3020,3020,0,0,0,,RT90-5V,RT90.RT-50V,RT90-3/7P.SW-5GONV,RT90 5 gon V,RT90_5_gon_V,RT90 5 gon V,,,,,,,,,,,,0,0,0
+98900,3021,3021,3021,0,0,82202,,RT90-2.5V,RT90.RT-25V,RT90-3/7P.SW-25GONV,RT90 2.5 gon V,RT90_25_gon_V,RT90 2.5 gon V,,,,,,,Swedish National System (RT 90),,,,,0,0,0
+99000,3022,3022,3022,0,0,0,,RT90-0,RT90.RT-00,RT90-3/7P.SW-0GONV,RT90 0 gon,RT90_0_gon,RT90 0 gon,,,,,,,,,,,,0,0,0
+99100,3023,3023,3023,0,0,0,,RT90-2.5O,RT90.RT-25O,RT90-3/7P.SW-25GONO,RT90 2.5 gon O,RT90_25_gon_O,RT90 2.5 gon O,,,,,,,,,,,,0,0,0
+99200,3024,3024,3024,0,0,0,,RT90-5O,RT90.RT-50O,RT90-3/7P.SW-5GONO,RT90 5 gon O,RT90_5_gon_O,RT90 5 gon O,,,,,,,,,,,,0,0,0
 99300,3025,3025,3025,0,0,0,,Stockholm38.RT-75V,Stockholm38.RT-75V,,RT38 7.5 gon V,RT38_75_gon_V,RT38 7.5 gon V,,,,,,,,,,,,0,0,0
 99400,3026,3026,3026,0,0,0,,Stockholm38.RT-50V,Stockholm38.RT-50V,,RT38 5 gon V,RT38_5_gon_V,RT38 5 gon V,,,,,,,,,,,,0,0,0
 99500,3027,3027,3027,0,0,0,,Stockholm38.RT-25V,Stockholm38.RT-25V,,RT38 2.5 gon V,RT38_25_gon_V,RT38 2.5 gon V,,,RT38 2.5 gon V,,,,,,,,,0,0,0
@@ -1033,8 +1033,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 103200,3064,3064,3064,0,0,0,,IGM1995.UTM-32N,IGM1995.UTM-32N,IGM1995.UTM-32N,IGM95 / UTM zone 32N,IGM_1995_UTM_Zone_32N,IGM95 / UTM zone 32N,,,,,,,,,,,,0,0,0
 103300,3065,3065,3065,0,0,0,,IGM1995.UTM-33N,IGM1995.UTM-33N,IGM1995.UTM-33N,IGM95 / UTM zone 33N,IGM_1995_UTM_Zone_33N,IGM95 / UTM zone 33N,,,,,,,,,,,,0,0,0
 103400,3066,3066,0,0,0,0,,ED50.Jordan/TM,ED50.Jordan/TM,ED50.Jordan/TM,ED50 / Jordan TM,ED_1950_Jordan_TM,,,,,,,,,,,,,0,0,0
-103500,3067,3067,0,0,0,0,,ETRF89.TM-35/Fin,ETRF89.TM-35/Fin,ETRF89.TM-35/Fin,ETRS89 / ETRS-TM35FIN,EUREF_FIN_TM35FIN,,,,,,,,,,,,,0,0,0
-103600,3068,3068,0,0,0,0,,DHDN.Berlin/Cassini,DHDN.Berlin/Cassini,DHDN.Berlin/Cassini,DHDN / Soldner Berlin,DHDN_Soldner_Berlin,,,,,,,,,,,,,0,0,0
+103500,3067,3067,0,0,0,0,,ETRF89.TM-35/Fin,ETRF89.TM-35/Fin,ETRF89.TM-35/Fin,"ETRS89 / TM35FIN(E,N)",EUREF_FIN_TM35FIN,,,,,,,,,,,,,0,0,0
+103600,3068,3068,0,0,0,0,,DHDN.Berlin/Cassini,DHDN.Berlin/Cassini,DHDN/2.Berlin/Cassini,DHDN / Soldner Berlin,DHDN_Soldner_Berlin,,,,,,,,,,,,,0,0,0
 103700,3069,3069,0,0,0,0,,WisconsinTM-27,NAD27.Wisconsin/TM,WI27-TM,NAD27 / Wisconsin Transverse Mercator,NAD_1927_Wisconsin_TM,,,,,,,,,,,,,0,0,0
 103800,3070,3070,0,0,0,0,,WisconsinTM-83,NAD83.Wisconsin/TM,WI83-TM,NAD83 / Wisconsin Transverse Mercator,NAD_1983_Wisconsin_TM,,,,,,,,,,,,,0,0,0
 103900,3071,3071,0,0,0,0,,WisconsinTM-HP,HARN.Wisconsin/TM,HARN/WI.WisconsinTM,NAD83(HARN) / Wisconsin Transverse Mercator,NAD_1983_HARN_Wisconsin_TM,,,,,,,,,,,,,0,0,0
@@ -1083,7 +1083,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 108500,3117,0,0,0,0,0,,MAGNA.Columbia-EastCtrl,MAGNA.Columbia-EastCentral,MAGNA.Columbia-EastCtrl,MAGNA-SIRGAS / Colombia East Central zone,,,,,,,,,,,,,,0,0,0
 108600,3118,0,0,0,0,0,,MAGNA.Columbia-East,MAGNA.Columbia-East,MAGNA.Columbia-East,MAGNA-SIRGAS / Colombia East zone,,,,,,,,,,,,,,0,0,0
 108700,3119,0,0,0,0,0,,Douala48.AEF-West,Douala1948.AEF-West,Douala1948.AEF-West,Douala 1948 / AEF west,Douala_1948_AOF_West,Douala 1948 / AOF west,,,Douala 1948 / AOF west,,,,,,,,,0,0,0
-108800,3120,0,2171,0,0,0,,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1|Pulkovo/58.Poland-I/a,Pulkovo 1942(58) / Poland zone I,,Pulkovo 1942(58) / Poland zone I,,,Pulkovo 1942(58) / Poland zone I,,,,,,,,,0,0,0
+108800,3120,0,2171,0,0,0,,Pulkovo42/58.Poland-1,Pulkovo42/58.Poland-1,Pulkovo42/58a.Poland-1|Pulkovo/58.Poland-I/a,Pulkovo 1942(58) / Poland zone I,,Pulkovo 1942(58) / Poland zone I,,,Pulkovo 1942(58) / Poland zone I,,,,,,,,,0,0,0
 108900,3121,0,0,0,0,0,,PRS92.Philippines-1,PRS92.Philippines-1,PRS92.Philippines-1,PRS92 / Philippines zone 1,,,,,,,,,,,,,,0,0,0
 109000,3122,0,0,0,0,0,,PRS92.Philippines-2,PRS92.Philippines-2,PRS92.Philippines-2,PRS92 / Philippines zone 2,,,,,,,,,,,,,,0,0,0
 109100,3123,0,0,0,0,0,,PRS92.Philippines-3,PRS92.Philippines-3,PRS92.Philippines-3,PRS92 / Philippines zone 3,,,,,,,,,,,,,,0,0,0
@@ -1127,8 +1127,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 112900,3161,0,0,0,0,0,,NAD83.Ontario/MNR,NAD83.Ontario/MNR,NAD83.Ontario/MNR,NAD83 / Ontario MNR Lambert,,,,,,,,,,,,,,0,0,0
 113000,3162,0,0,0,0,0,,CSRS.Ontario/MNR,CSRS.Ontario/MNR,CSRS.Ontario/MNR,NAD83(CSRS) / Ontario MNR Lambert,,,,,,,,,,,,,,0,0,0
 113100,3163,2984,2984,0,0,0,,RGN/91-93.NewCaledonia,RGN-Caledonie/91-93.NewCaledonia,RGN/91-93.NewCaledonia,RGNC91-93 / Lambert New Caledonia,RGNC_1991_Lambert_New_Caledonia,RGNC 1991 / Lambert New Caledonia,,,,,,,,,,,,0,0,0
-113200,3165,0,0,0,0,0,,NEA74Noumea.Noumea,NEA74Noumea.Noumea/Lambert,NEA74Noumea.Noumea,NEA74 Noumea / Noumea Lambert,,,,,,,,,,,,,,0,0,0
-113300,3166,0,0,0,0,0,,NEA74Noumea.Noumea-2,NEA74Noumea.Noumea-2,NEA74Noumea.Noumea-2,NEA74 Noumea / Noumea Lambert 2,,,,,,,,,,,,,,0,0,0
+113200,3165,0,0,0,0,0,,NEA74Noumea.Noumea,NEA74Noumea.Noumea/Lambert,Noumea74.Noumea,NEA74 Noumea / Noumea Lambert,,,,,,,,,,,,,,0,0,0
+113300,3166,0,0,0,0,0,,NEA74Noumea.Noumea-2,NEA74Noumea.Noumea-2,Noumea74.Noumea-2,NEA74 Noumea / Noumea Lambert 2,,,,,,,,,,,,,,0,0,0
 113400,3167,24571,24571,0,0,0,,Kertau/RSO.Malaysia.BrC,Kertau/RSO.RsoMalaysia.BrChn,Kertau.MalayaRSO/01,Kertau (RSO) / RSO Malaya (ch),Kertau_RSO_Malaya_Chains,Kertau / R.S.O. Malaya (ch),,,Kertau / R.S.O. Malaya (ch),,,,,,,,,0,0,0
 113500,3168,0,0,0,0,0,,Kertau/RSO.Malaysia,Kertau/RSO.RsoMalaysia,,Kertau (RSO) / RSO Malaya (m),,,,,,,,,,,,,,0,0,0
 113600,3169,0,0,0,0,0,,RGN/91-93.UTM-57S,RGN-Caledonie/91-93.UTM-57S,RGN/91-93.UTM-57S,RGNC91-93 / UTM zone 57S,,,,,,,,,,,,,,0,0,0
@@ -1260,7 +1260,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 126200,3297,0,0,0,0,0,,RGP-Francaise.UTM-6S,RGP-Francaise.UTM-6S,RGP-Francaise.UTM-6S,RGPF / UTM zone 6S,,,,,,,,,,,,,,0,0,0
 126300,3298,0,0,0,0,0,,RGP-Francaise.UTM-7S,RGP-Francaise.UTM-7S,RGP-Francaise.UTM-7S,RGPF / UTM zone 7S,,,,,,,,,,,,,,0,0,0
 126400,3299,0,0,0,0,0,,RGP-Francaise.UTM-8S,RGP-Francaise.UTM-8S,RGP-Francaise.UTM-8S,RGPF / UTM zone 8S,,,,,,,,,,,,,,0,0,0
-126500,3300,3300,3300,0,0,0,,Estonia92.Estonia,Estonia92.Estonia,Estonia92.Estonia,Estonian Coordinate System of 1992,Estonian_Coordinate_System_of_1992,Estonian Coordinate System of 1992,,,Estonian Coordinate System of 1992,,,,,,,,,0,0,0
+126500,3300,3300,3300,0,0,0,,Estonia92.Estonia,Estonia92.Estonia,Estonia92a.Estonia,Estonian Coordinate System of 1992,Estonian_Coordinate_System_of_1992,Estonian Coordinate System of 1992,,,Estonian Coordinate System of 1992,,,,,,,,,0,0,0
 126600,3301,3301,3301,0,0,0,,Estonia97.Estonia,Estonia97.Estonia,Estonia97.Estonia,Estonian Coordinate System of 1997,Estonia_1997_Estonia_National_Grid,Estonian Coordinate System of 1997,,,Estonian Coordinate System of 1997,,,,,,,,,0,0,0
 126700,3302,0,0,0,0,0,,,,,IGN63 Hiva Oa / UTM zone 7S,,,,,,,,,,,,,,0,0,0
 126800,3303,0,0,0,0,0,,,,,Fatu Iva 72 / UTM zone 7S,,,,,,,,,,,,,,0,0,0
@@ -1385,8 +1385,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 138800,3436,102672,0,0,0,82078,,IL83-WF,NAD83.IL-W.USFt,IL83-WF,NAD83 / Illinois West (ftUS),NAD_1983_StatePlane_Illinois_West_FIPS_1202_Feet,,,,,,,,"Illinois 1202, Western Zone (1983, US Survey feet)",,,,,0,0,0
 138900,3437,102710,0,0,0,82150,,NH83F,NAD83.NH.USFt,NH83F,NAD83 / New Hampshire (ftUS),NAD_1983_StatePlane_New_Hampshire_FIPS_2800_Feet,,,,,,,,"New Hampshire 2800 (1983, US Survey feet)",,,,,0,0,0
 139000,3438,102730,0,0,0,82200,,RI83F,NAD83.RI.USFt,RI83F,NAD83 / Rhode Island (ftUS),NAD_1983_StatePlane_Rhode_Island_FIPS_3800_Feet,,,,,,,,"Rhode Island 3800 (1983, US Survey feet)",,,,,0,0,0
-139100,3439,3439,3439,0,0,0,,PSD93.UTM-39N,PSD93.UTM-39N,PSD93.UTM-39N,PSD93 / UTM zone 39N,PDO_1993_UTM_Zone_39N,PSD93 / UTM zone 39N,,,PSD93 / UTM zone 39N,,,,,,,,,0,0,0
-139200,3440,3440,3440,0,0,0,,PSD93.UTM-40N,PSD93.UTM-40N,PSD93.UTM-40N,PSD93 / UTM zone 40N,PDO_1993_UTM_Zone_40N,PSD93 / UTM zone 40N,,,PSD93 / UTM zone 40N,,,,,,,,,0,0,0
+139100,3439,3439,3439,0,0,0,,PSD93.UTM-39N,PSD93.UTM-39N,PSD93a.UTM-39N,PSD93 / UTM zone 39N,PDO_1993_UTM_Zone_39N,PSD93 / UTM zone 39N,,,PSD93 / UTM zone 39N,,,,,,,,,0,0,0
+139200,3440,3440,3440,0,0,0,,PSD93.UTM-40N,PSD93.UTM-40N,PSD93a.UTM-40N,PSD93 / UTM zone 40N,PDO_1993_UTM_Zone_40N,PSD93 / UTM zone 40N,,,PSD93 / UTM zone 40N,,,,,,,,,0,0,0
 139250,3441,0,0,0,0,0,0,ARHP-NF,,HARN/AR.AR-NF,NAD83(HARN) / Arkansas North (ftUS),,,,,,,,,,,,,,,,
 139251,3442,0,0,0,0,0,0,ARHP-SF,,HARN/AR.AR-SF,NAD83(HARN) / Arkansas South (ftUS),,,,,,,,,,,,,,,,
 139252,3443,0,0,0,0,0,0,ILHP-EF,,HARN/IL.IL-EF,NAD83(HARN) / Illinois East (ftUS),,,,,,,,,,,,,,,,
@@ -1569,28 +1569,28 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 155000,21150,21150,21150,0,0,0,,Batavia.UTM-50S,Batavia.UTM-50S,Batavia_1.UTM-50S,Batavia / UTM zone 50S,Batavia_UTM_Zone_50S,Batavia / UTM zone 50S,,,Batavia / UTM zone 50S,,,,,,,,,0,0,0
 155100,21291,21291,21291,0,0,0,,Barbados38.BWIgrid,Barbados38.BWIgrid,Barbados1938.BWIgrid,Barbados 1938 / British West Indies Grid,Barbados_1938_British_West_Indies_Grid,Barbados 1938 / British West Indies Grid,,,Barbados 1938 / British West Indies Grid,,,,,,,,,0,0,0
 155200,21292,21292,21292,0,0,0,,Barbados38.NtlGrid,Barbados38.NtlGrid,Barbados1938.NtlGrid,Barbados 1938 / Barbados National Grid,Barbados_1938_Barbados_Grid,Barbados 1938 / Barbados National Grid,,,Barbados 1938 / Barbados National Grid,,,,,,,,,0,0,0
-155300,21413,21413,21413,0,0,0,,Beijing54.GK-13,Beijing54.GK-13,Beijing1954.GK-13,Beijing 1954 / Gauss-Kruger zone 13,Beijing_1954_GK_Zone_13,Beijing 1954 / Gauss-Kruger zone 13,,,Beijing 1954 / Gauss-Kruger zone 13,,,,,,,,,0,0,0
-155400,21414,21414,21414,0,0,0,,Beijing54.GK-14,Beijing54.GK-14,Beijing1954.GK-14,Beijing 1954 / Gauss-Kruger zone 14,Beijing_1954_GK_Zone_14,Beijing 1954 / Gauss-Kruger zone 14,,,Beijing 1954 / Gauss-Kruger zone 14,,,,,,,,,0,0,0
-155500,21415,21415,21415,0,0,0,,Beijing54.GK-15,Beijing54.GK-15,Beijing1954.GK-15,Beijing 1954 / Gauss-Kruger zone 15,Beijing_1954_GK_Zone_15,Beijing 1954 / Gauss-Kruger zone 15,,,Beijing 1954 / Gauss-Kruger zone 15,,,,,,,,,0,0,0
-155600,21416,21416,21416,0,0,0,,Beijing54.GK-16,Beijing54.GK-16,Beijing1954.GK-16,Beijing 1954 / Gauss-Kruger zone 16,Beijing_1954_GK_Zone_16,Beijing 1954 / Gauss-Kruger zone 16,,,Beijing 1954 / Gauss-Kruger zone 16,,,,,,,,,0,0,0
-155700,21417,21417,21417,0,0,0,,Beijing54.GK-17,Beijing54.GK-17,Beijing1954.GK-17,Beijing 1954 / Gauss-Kruger zone 17,Beijing_1954_GK_Zone_17,Beijing 1954 / Gauss-Kruger zone 17,,,Beijing 1954 / Gauss-Kruger zone 17,,,,,,,,,0,0,0
-155800,21418,21418,21418,0,0,0,,Beijing54.GK-18,Beijing54.GK-18,Beijing1954.GK-18,Beijing 1954 / Gauss-Kruger zone 18,Beijing_1954_GK_Zone_18,Beijing 1954 / Gauss-Kruger zone 18,,,Beijing 1954 / Gauss-Kruger zone 18,,,,,,,,,0,0,0
-155900,21419,21419,21419,0,0,0,,Beijing54.GK-19,Beijing54.GK-19,Beijing1954.GK-19,Beijing 1954 / Gauss-Kruger zone 19,Beijing_1954_GK_Zone_19,Beijing 1954 / Gauss-Kruger zone 19,,,Beijing 1954 / Gauss-Kruger zone 19,,,,,,,,,0,0,0
-156000,21420,21420,21420,0,0,0,,Beijing54.GK-20,Beijing54.GK-20,Beijing1954.GK-20,Beijing 1954 / Gauss-Kruger zone 20,Beijing_1954_GK_Zone_20,Beijing 1954 / Gauss-Kruger zone 20,,,Beijing 1954 / Gauss-Kruger zone 20,,,,,,,,,0,0,0
-156100,21421,21421,21421,0,0,0,,Beijing54.GK-21,Beijing54.GK-21,Beijing1954.GK-21,Beijing 1954 / Gauss-Kruger zone 21,Beijing_1954_GK_Zone_21,Beijing 1954 / Gauss-Kruger zone 21,,,Beijing 1954 / Gauss-Kruger zone 21,,,,,,,,,0,0,0
-156200,21422,21422,21422,0,0,0,,Beijing54.GK-22,Beijing54.GK-22,Beijing1954.GK-22,Beijing 1954 / Gauss-Kruger zone 22,Beijing_1954_GK_Zone_22,Beijing 1954 / Gauss-Kruger zone 22,,,Beijing 1954 / Gauss-Kruger zone 22,,,,,,,,,0,0,0
-156300,21423,21423,21423,0,0,0,,Beijing54.GK-23,Beijing54.GK-23,Beijing1954.GK-23,Beijing 1954 / Gauss-Kruger zone 23,Beijing_1954_GK_Zone_23,Beijing 1954 / Gauss-Kruger zone 23,,,Beijing 1954 / Gauss-Kruger zone 23,,,,,,,,,0,0,0
-156400,21453,0,21453,0,0,0,,Beijing54.GK/CM-75E,Beijing54.GK/CM-75E,Beijing1954.GK/CM-75E|Beijing1954.GK-13N,Beijing 1954 / Gauss-Kruger CM 75E,,Beijing 1954 / Gauss-Kruger CM 75E,,,Beijing 1954 / Gauss-Kruger CM 75E,,,,,,,,,0,0,0
-156500,21454,0,21454,0,0,0,,Beijing54.GK/CM-81E,Beijing54.GK/CM-81E,Beijing1954.GK/CM-81E|Beijing1954.GK-14N,Beijing 1954 / Gauss-Kruger CM 81E,,Beijing 1954 / Gauss-Kruger CM 81E,,,Beijing 1954 / Gauss-Kruger CM 81E,,,,,,,,,0,0,0
-156600,21455,0,21455,0,0,0,,Beijing54.GK/CM-87E,Beijing54.GK/CM-87E,Beijing1954.GK/CM-87E|Beijing1954.GK-15N,Beijing 1954 / Gauss-Kruger CM 87E,,Beijing 1954 / Gauss-Kruger CM 87E,,,Beijing 1954 / Gauss-Kruger CM 87E,,,,,,,,,0,0,0
-156700,21456,0,21456,0,0,0,,Beijing54.GK/CM-93E,Beijing54.GK/CM-93E,Beijing1954.GK/CM-93E|Beijing1954.GK-16N,Beijing 1954 / Gauss-Kruger CM 93E,,Beijing 1954 / Gauss-Kruger CM 93E,,,Beijing 1954 / Gauss-Kruger CM 93E,,,,,,,,,0,0,0
-156800,21457,0,21457,0,0,0,,Beijing54.GK/CM-99E,Beijing54.GK/CM-99E,Beijing1954.GK/CM-99E|Beijing1954.GK-17N,Beijing 1954 / Gauss-Kruger CM 99E,,Beijing 1954 / Gauss-Kruger CM 99E,,,Beijing 1954 / Gauss-Kruger CM 99E,,,,,,,,,0,0,0
-156900,21458,0,21458,0,0,0,,Beijing54.GK/CM-105E,Beijing54.GK/CM-105E,Beijing1954.GK/CM-105E|Beijing1954.GK-18N,Beijing 1954 / Gauss-Kruger CM 105E,,Beijing 1954 / Gauss-Kruger CM 105E,,,Beijing 1954 / Gauss-Kruger CM 105E,,,,,,,,,0,0,0
-157000,21459,0,21459,0,0,0,,Beijing54.GK/CM-111E,Beijing54.GK/CM-111E,Beijing1954.GK/CM-111E|Beijing1954.GK-19N,Beijing 1954 / Gauss-Kruger CM 111E,,Beijing 1954 / Gauss-Kruger CM 111E,,,Beijing 1954 / Gauss-Kruger CM 111E,,,,,,,,,0,0,0
-157100,21460,0,21460,0,0,0,,Beijing54.GK/CM-117E,Beijing54.GK/CM-117E,Beijing1954.GK/CM-117E|Beijing1954.GK-20N,Beijing 1954 / Gauss-Kruger CM 117E,,Beijing 1954 / Gauss-Kruger CM 117E,,,Beijing 1954 / Gauss-Kruger CM 117E,,,,,,,,,0,0,0
-157200,21461,0,21461,0,0,0,,Beijing54.GK/CM-123E,Beijing54.GK/CM-123E,Beijing1954.GK/CM-123E|Beijing1954.GK-21N,Beijing 1954 / Gauss-Kruger CM 123E,,Beijing 1954 / Gauss-Kruger CM 123E,,,Beijing 1954 / Gauss-Kruger CM 123E,,,,,,,,,0,0,0
-157300,21462,0,21462,0,0,0,,Beijing54.GK/CM-129E,Beijing54.GK/CM-129E,Beijing1954.GK/CM-129E|Beijing1954.GK-22N,Beijing 1954 / Gauss-Kruger CM 129E,,Beijing 1954 / Gauss-Kruger CM 129E,,,Beijing 1954 / Gauss-Kruger CM 129E,,,,,,,,,0,0,0
-157400,21463,0,21463,0,0,0,,Beijing54.GK/CM-135E,Beijing54.GK/CM-135E,Beijing1954.GK/CM-135E|Beijing1954.GK-23N,Beijing 1954 / Gauss-Kruger CM 135E,,Beijing 1954 / Gauss-Kruger CM 135E,,,Beijing 1954 / Gauss-Kruger CM 135E,,,,,,,,,0,0,0
+155300,21413,21413,21413,0,0,0,,Beijing54.GK-13,Beijing54.GK-13,Beijing1954/a.GK-13,Beijing 1954 / Gauss-Kruger zone 13,Beijing_1954_GK_Zone_13,Beijing 1954 / Gauss-Kruger zone 13,,,Beijing 1954 / Gauss-Kruger zone 13,,,,,,,,,0,0,0
+155400,21414,21414,21414,0,0,0,,Beijing54.GK-14,Beijing54.GK-14,Beijing1954/a.GK-14,Beijing 1954 / Gauss-Kruger zone 14,Beijing_1954_GK_Zone_14,Beijing 1954 / Gauss-Kruger zone 14,,,Beijing 1954 / Gauss-Kruger zone 14,,,,,,,,,0,0,0
+155500,21415,21415,21415,0,0,0,,Beijing54.GK-15,Beijing54.GK-15,Beijing1954/a.GK-15,Beijing 1954 / Gauss-Kruger zone 15,Beijing_1954_GK_Zone_15,Beijing 1954 / Gauss-Kruger zone 15,,,Beijing 1954 / Gauss-Kruger zone 15,,,,,,,,,0,0,0
+155600,21416,21416,21416,0,0,0,,Beijing54.GK-16,Beijing54.GK-16,Beijing1954/a.GK-16,Beijing 1954 / Gauss-Kruger zone 16,Beijing_1954_GK_Zone_16,Beijing 1954 / Gauss-Kruger zone 16,,,Beijing 1954 / Gauss-Kruger zone 16,,,,,,,,,0,0,0
+155700,21417,21417,21417,0,0,0,,Beijing54.GK-17,Beijing54.GK-17,Beijing1954/a.GK-17,Beijing 1954 / Gauss-Kruger zone 17,Beijing_1954_GK_Zone_17,Beijing 1954 / Gauss-Kruger zone 17,,,Beijing 1954 / Gauss-Kruger zone 17,,,,,,,,,0,0,0
+155800,21418,21418,21418,0,0,0,,Beijing54.GK-18,Beijing54.GK-18,Beijing1954/a.GK-18,Beijing 1954 / Gauss-Kruger zone 18,Beijing_1954_GK_Zone_18,Beijing 1954 / Gauss-Kruger zone 18,,,Beijing 1954 / Gauss-Kruger zone 18,,,,,,,,,0,0,0
+155900,21419,21419,21419,0,0,0,,Beijing54.GK-19,Beijing54.GK-19,Beijing1954/a.GK-19,Beijing 1954 / Gauss-Kruger zone 19,Beijing_1954_GK_Zone_19,Beijing 1954 / Gauss-Kruger zone 19,,,Beijing 1954 / Gauss-Kruger zone 19,,,,,,,,,0,0,0
+156000,21420,21420,21420,0,0,0,,Beijing54.GK-20,Beijing54.GK-20,Beijing1954/a.GK-20,Beijing 1954 / Gauss-Kruger zone 20,Beijing_1954_GK_Zone_20,Beijing 1954 / Gauss-Kruger zone 20,,,Beijing 1954 / Gauss-Kruger zone 20,,,,,,,,,0,0,0
+156100,21421,21421,21421,0,0,0,,Beijing54.GK-21,Beijing54.GK-21,Beijing1954/a.GK-21,Beijing 1954 / Gauss-Kruger zone 21,Beijing_1954_GK_Zone_21,Beijing 1954 / Gauss-Kruger zone 21,,,Beijing 1954 / Gauss-Kruger zone 21,,,,,,,,,0,0,0
+156200,21422,21422,21422,0,0,0,,Beijing54.GK-22,Beijing54.GK-22,Beijing1954/a.GK-22,Beijing 1954 / Gauss-Kruger zone 22,Beijing_1954_GK_Zone_22,Beijing 1954 / Gauss-Kruger zone 22,,,Beijing 1954 / Gauss-Kruger zone 22,,,,,,,,,0,0,0
+156300,21423,21423,21423,0,0,0,,Beijing54.GK-23,Beijing54.GK-23,Beijing1954/a.GK-23,Beijing 1954 / Gauss-Kruger zone 23,Beijing_1954_GK_Zone_23,Beijing 1954 / Gauss-Kruger zone 23,,,Beijing 1954 / Gauss-Kruger zone 23,,,,,,,,,0,0,0
+156400,21453,0,21453,0,0,0,,Beijing54.GK/CM-75E,Beijing54.GK/CM-75E,Beijing1954/a.GK/CM-75E|Beijing1954.GK-13N,Beijing 1954 / Gauss-Kruger CM 75E,,Beijing 1954 / Gauss-Kruger CM 75E,,,Beijing 1954 / Gauss-Kruger CM 75E,,,,,,,,,0,0,0
+156500,21454,0,21454,0,0,0,,Beijing54.GK/CM-81E,Beijing54.GK/CM-81E,Beijing1954/a.GK/CM-81E|Beijing1954.GK-14N,Beijing 1954 / Gauss-Kruger CM 81E,,Beijing 1954 / Gauss-Kruger CM 81E,,,Beijing 1954 / Gauss-Kruger CM 81E,,,,,,,,,0,0,0
+156600,21455,0,21455,0,0,0,,Beijing54.GK/CM-87E,Beijing54.GK/CM-87E,Beijing1954/a.GK/CM-87E|Beijing1954.GK-15N,Beijing 1954 / Gauss-Kruger CM 87E,,Beijing 1954 / Gauss-Kruger CM 87E,,,Beijing 1954 / Gauss-Kruger CM 87E,,,,,,,,,0,0,0
+156700,21456,0,21456,0,0,0,,Beijing54.GK/CM-93E,Beijing54.GK/CM-93E,Beijing1954/a.GK/CM-93E|Beijing1954.GK-16N,Beijing 1954 / Gauss-Kruger CM 93E,,Beijing 1954 / Gauss-Kruger CM 93E,,,Beijing 1954 / Gauss-Kruger CM 93E,,,,,,,,,0,0,0
+156800,21457,0,21457,0,0,0,,Beijing54.GK/CM-99E,Beijing54.GK/CM-99E,Beijing1954/a.GK/CM-99E|Beijing1954.GK-17N,Beijing 1954 / Gauss-Kruger CM 99E,,Beijing 1954 / Gauss-Kruger CM 99E,,,Beijing 1954 / Gauss-Kruger CM 99E,,,,,,,,,0,0,0
+156900,21458,0,21458,0,0,0,,Beijing54.GK/CM-105E,Beijing54.GK/CM-105E,Bjing54/a.GK/CM-105E|Beijing1954.GK-18N,Beijing 1954 / Gauss-Kruger CM 105E,,Beijing 1954 / Gauss-Kruger CM 105E,,,Beijing 1954 / Gauss-Kruger CM 105E,,,,,,,,,0,0,0
+157000,21459,0,21459,0,0,0,,Beijing54.GK/CM-111E,Beijing54.GK/CM-111E,Bjing54/a.GK/CM-111E|Beijing1954.GK-19N,Beijing 1954 / Gauss-Kruger CM 111E,,Beijing 1954 / Gauss-Kruger CM 111E,,,Beijing 1954 / Gauss-Kruger CM 111E,,,,,,,,,0,0,0
+157100,21460,0,21460,0,0,0,,Beijing54.GK/CM-117E,Beijing54.GK/CM-117E,Bjing54/a.GK/CM-117E|Beijing1954.GK-20N,Beijing 1954 / Gauss-Kruger CM 117E,,Beijing 1954 / Gauss-Kruger CM 117E,,,Beijing 1954 / Gauss-Kruger CM 117E,,,,,,,,,0,0,0
+157200,21461,0,21461,0,0,0,,Beijing54.GK/CM-123E,Beijing54.GK/CM-123E,Bjing54/a.GK/CM-123E|Beijing1954.GK-21N,Beijing 1954 / Gauss-Kruger CM 123E,,Beijing 1954 / Gauss-Kruger CM 123E,,,Beijing 1954 / Gauss-Kruger CM 123E,,,,,,,,,0,0,0
+157300,21462,0,21462,0,0,0,,Beijing54.GK/CM-129E,Beijing54.GK/CM-129E,Bjing54/a.GK/CM-129E|Beijing1954.GK-22N,Beijing 1954 / Gauss-Kruger CM 129E,,Beijing 1954 / Gauss-Kruger CM 129E,,,Beijing 1954 / Gauss-Kruger CM 129E,,,,,,,,,0,0,0
+157400,21463,0,21463,0,0,0,,Beijing54.GK/CM-135E,Beijing54.GK/CM-135E,Bjing54/a.GK/CM-135E|Beijing1954.GK-23N,Beijing 1954 / Gauss-Kruger CM 135E,,Beijing 1954 / Gauss-Kruger CM 135E,,,Beijing 1954 / Gauss-Kruger CM 135E,,,,,,,,,0,0,0
 157500,0,21473,21473,0,0,0,,Beijing54.GK-13N,Beijing54.GK-13,,,Beijing_1954_GK_Zone_13N,Beijing 1954 / Gauss-Kruger 13N,,,Beijing 1954 / Gauss-Kruger 13N,,,,,,,,,0,0,0
 157600,0,21474,21474,0,0,0,,Beijing54.GK-14N,Beijing54.GK-14,,,Beijing_1954_GK_Zone_14N,Beijing 1954 / Gauss-Kruger 14N,,,Beijing 1954 / Gauss-Kruger 14N,,,,,,,,,0,0,0
 157700,0,21475,21475,0,0,0,,Beijing54.GK-15N,Beijing54.GK-15,,,Beijing_1954_GK_Zone_15N,Beijing 1954 / Gauss-Kruger 15N,,,Beijing 1954 / Gauss-Kruger 15N,,,,,,,,,0,0,0
@@ -1660,8 +1660,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 164000,22524,22524,22524,0,0,82306,,Corrego.UTM-24S,Corrego.UTM-24S,Corrego.UTM-24S|BRAC-NE2,Corrego Alegre / UTM zone 24S,Corrego_Alegre_UTM_Zone_24S,Corrego Alegre / UTM zone 24S,,,Corrego Alegre / UTM zone 24S,,,,"UTM Zone 24, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
 164100,22525,0,0,0,0,82312,,,Corrego.UTM-25S,,Corrego Alegre / UTM zone 25S,,,,,,,,,"UTM Zone 25, Southern Hemisphere (Corrego Alegre)",,,,,0,0,0
 164200,22700,22700,22700,0,0,0,,DeirEzZor.Levant,DeirEzZor.LevantZone,,Deir ez Zor / Levant Zone,Deir_ez_Zor_Levant_Zone,Deir ez Zor / Levant Zone,,,Deir ez Zor / Levant Zone,,,,,,,,,0,0,0
-164300,22770,22770,22770,0,0,0,,DeirEzZor.Syria,DeirEzZor.SyriaLambert,DeirEzZor_1.Syria,Deir ez Zor / Syria Lambert,Deir_ez_Zor_Syria_Lambert,Deir ez Zor / Syria Lambert,,,Deir ez Zor / Syria Lambert,,,,,,,,,0,0,0
-164400,22780,22780,0,0,0,0,,DeirEzZor.Levant,DeirEzZor.LevantStereo,DeirEzZor_1.Levant,Deir ez Zor / Levant Stereographic,Deir_ez_Zor_Levant_Stereographic,,,,Deir ez Zor / Levant Stereographic,,,,,,,,,0,0,0
+164300,22770,22770,22770,0,0,0,,DeirEzZor.Syria,DeirEzZor.SyriaLambert,DeirEzZor_2.Syria,Deir ez Zor / Syria Lambert,Deir_ez_Zor_Syria_Lambert,Deir ez Zor / Syria Lambert,,,Deir ez Zor / Syria Lambert,,,,,,,,,0,0,0
+164400,22780,22780,0,0,0,0,,DeirEzZor.Levant,DeirEzZor.LevantStereo,DeirEzZor_2.Levant,Deir ez Zor / Levant Stereographic,Deir_ez_Zor_Levant_Stereographic,,,,Deir ez Zor / Levant Stereographic,,,,,,,,,0,0,0
 164500,22832,22832,22832,0,0,0,,Douala.UTM-32N,Douala.UTM-32N,,Douala / UTM zone 32N,Douala_UTM_Zone_32N,Douala / UTM zone 32N,,,Douala / UTM zone 32N,,,,,,,,,0,0,0
 164600,22991,22991,22991,0,0,0,,Old-Egyp.Blue,Egypt07.Blue,Old-Egyp.Blue,Egypt 1907 / Blue Belt,Egypt_Blue_Belt,Egypt 1907 / Blue Belt,,,Egypt 1907 / Blue Belt,,,,,,,,,0,0,0
 164700,22992,22992,22992,0,0,0,,Old-Egyp.Red,Egypt07.Red,Old-Egyp.Red,Egypt 1907 / Red Belt,Egypt_Red_Belt,Egypt 1907 / Red Belt,,,Egypt 1907 / Red Belt,,,,,,,,,0,0,0
@@ -1682,7 +1682,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 166200,23095,23095,23095,0,0,0,,Europ50.TM-5NE,ED50.TM-5NE,Europ50.TM-5NE,ED50 / TM 5 NE,ED_1950_TM_5_NE,ED50 / TM 5 NE,,,,,,,,,,,,0,0,0
 166300,23239,23239,23239,0,0,0,,Fahud.UTM-39N,Fahud.UTM-39N,Fahud_1.UTM-39N,Fahud / UTM zone 39N,Fahud_UTM_Zone_39N,Fahud / UTM zone 39N,,,Fahud / UTM zone 39N,,,,,,,,,0,0,0
 166400,23240,23240,23240,0,0,0,,Fahud.UTM-40N,Fahud.UTM-40N,Fahud_1.UTM-40N,Fahud / UTM zone 40N,Fahud_UTM_Zone_40N,Fahud / UTM zone 40N,,,Fahud / UTM zone 40N,,,,,,,,,0,0,0
-166600,23700,23700,23700,0,0,0,,HUN-EOV72-7P,Hungarian72.EOV,HUN-EOV72-7P,HD72 / EOV,Hungarian_1972_Egyseges_Orszagos_Vetuleti,HD72 / EOV,,,HD72 / EOV,,,,,,,,,0,0,0
+166600,23700,23700,23700,0,0,0,,HUN-EOV72-7P,Hungarian72.EOV,HD72/7P.EOV,HD72 / EOV,Hungarian_1972_Egyseges_Orszagos_Vetuleti,HD72 / EOV,,,HD72 / EOV,,,,,,,,,0,0,0
 166700,23846,23846,23846,0,0,0,,Indonesian74.UTM-46N,Indonesian74.UTM-46N,Indonesian1974.UTM-46N,ID74 / UTM zone 46N,Indonesian_1974_UTM_Zone_46N,ID74 / UTM zone 46N,,,ID74 / UTM zone 46N,,,,,,,,,0,0,0
 166800,23847,23847,23847,0,0,0,,Indonesian74.UTM-47N,Indonesian74.UTM-47N,Indonesian1974.UTM-47N,ID74 / UTM zone 47N,Indonesian_1974_UTM_Zone_47N,ID74 / UTM zone 47N,,,ID74 / UTM zone 47N,,,,,,,,,0,0,0
 166900,23848,23848,23848,0,0,0,,Indonesian74.UTM-48N,Indonesian74.UTM-48N,Indonesian1974.UTM-48N,ID74 / UTM zone 48N,Indonesian_1974_UTM_Zone_48N,ID74 / UTM zone 48N,,,ID74 / UTM zone 48N,,,,,,,,,0,0,0
@@ -2040,8 +2040,8 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 201500,27396,27396,27396,0,0,0,,NGO48.Norway-VI,NGO48.Norway-VI,NGO-VI-MOD,NGO 1948 (Oslo) / NGO zone VI,NGO_1948_Oslo_Norway_Zone_6,NGO 1948 (Oslo) / NGO zone VI,,,NGO 1948 (Oslo) / NGO zone VI,,,,,,,,,0,0,0
 201600,27397,27397,27397,0,0,0,,NGO48.Norway-VII,NGO48.Norway-VII,NGO-VII-MOD,NGO 1948 (Oslo) / NGO zone VII,NGO_1948_Oslo_Norway_Zone_7,NGO 1948 (Oslo) / NGO zone VII,,,NGO 1948 (Oslo) / NGO zone VII,,,,,,,,,0,0,0
 201700,27398,27398,27398,0,0,0,,NGO48.Norway-VIII,NGO48.Norway-VIII,NGO-VIII,NGO 1948 (Oslo) / NGO zone VIII,NGO_1948_Oslo_Norway_Zone_8,NGO 1948 (Oslo) / NGO zone VIII,,,NGO 1948 (Oslo) / NGO zone VIII,,,,,,,,,0,0,0
-201800,27429,27429,27429,0,0,0,,Datum73.UTM-29N,Datum73.UTM-29N,Datum73.UTM-29N,Datum 73 / UTM zone 29N,Datum_73_UTM_Zone_29N,Datum 73 / UTM zone 29N,,,Datum 73 / UTM zone 29N,,,,,,,,,0,0,0
-201900,27493,102161,27492,0,0,82176,,Datum73.ModPortgGrd,Datum73.ModPortgGrd,Datum73.ModPortgGrd,Datum 73 / Modified Portuguese Grid,Datum_73_Hayford_Gauss_IPCC,Datum 73 / Modified Portuguese Grid,,,Datum 73 / Modified Portuguese Grid,,,,Portuguese National System (D73),,,,,0,0,0
+201800,27429,27429,27429,0,0,0,,Datum73.UTM-29N,Datum73.UTM-29N,Datum73a.UTM-29N,Datum 73 / UTM zone 29N,Datum_73_UTM_Zone_29N,Datum 73 / UTM zone 29N,,,Datum 73 / UTM zone 29N,,,,,,,,,0,0,0
+201900,27493,102161,27492,0,0,82176,,Datum73.ModPortgGrd,Datum73.ModPortgGrd,Datum73a.ModPortgGrd,Datum 73 / Modified Portuguese Grid,Datum_73_Hayford_Gauss_IPCC,Datum 73 / Modified Portuguese Grid,,,Datum 73 / Modified Portuguese Grid,,,,Portuguese National System (D73),,,,,0,0,0
 202000,27500,27500,0,0,0,0,,ATF.NordDeGuerre,ATF.NordDeDuerre,,ATF (Paris) / Nord de Guerre,Nord_de_Guerre,,,,ATF (Paris) / Nord de Guerre,,,,,,,,,0,0,0
 202100,27561,0,0,0,0,41013,,NTF.Lambert-1,NTF.Lambert-1,NTF.Lambert-1-ClrkIGN,NTF (Paris) / Lambert Nord France,,,,,NTF (Paris) / Lambert Nord France,,,,French Lambert I Nord,,,,,0,0,0
 202200,27562,0,0,0,0,41015,,NTF.Lambert-2,NTF.Lambert-2,NTF.Lambert-2-ClrkIGN,NTF (Paris) / Lambert Centre France,,,,,NTF (Paris) / Lambert Centre France,,,,French Lambert II Centre,,,,,0,0,0
@@ -2148,7 +2148,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 212300,29872,29872,29872,0,0,0,,TMBLI-B.RSOBorneo.ft,Timbalai48.RSOBorneo.SearsFt,TMBLI-B.RSOBorneo.ft,Timbalai 1948 / RSO Borneo (ft),Timbalai_1948_RSO_Borneo_Feet,Timbalai 1948 / R.S.O. Borneo (ft),,,Timbalai 1948 / R.S.O. Borneo (ft),,,,,,,,,0,0,0
 212400,29873,29873,29873,0,0,0,,TMBLI-B.RSOBorneo.m,Timbalai48.RSOBorneo,TMBLI-B.RSOBorneo.m,Timbalai 1948 / RSO Borneo (m),Timbalai_1948_RSO_Borneo_Meters,Timbalai 1948 / R.S.O. Borneo (m),,,Timbalai 1948 / R.S.O. Borneo (m),,,,,,,,,0,0,0
 212500,29901,29901,29901,0,0,0,,OSNI52.IrishNtlGrid,OSNI52.IrishNtlGrid,OSNI52.IrishNtlGrid,OSNI 1952 / Irish National Grid,OSNI_1952_Irish_National_Grid,OSNI 1952 / Irish National Grid,,,OSNI 1952 / Irish National Grid,,,,,,,,,0,0,0
-212600,29902,29900,29902,0,0,0,,TM65.Irish Grid,TM65.Irish Grid,TM1965.IrishGrid|TM65g.IrishNationalGrid,TM65 / Irish Grid,Irish_National_Grid,TM65 / Irish Grid,,,TM65 / Irish Grid,,,,,,,,,0,0,0
+212600,29902,29900,29902,0,0,0,,TM65.Irish Grid,TM65.Irish Grid,TM1965/a.IrishGrid|TM65g.IrishNationalGrid,TM65 / Irish Grid,Irish_National_Grid,TM65 / Irish Grid,,,TM65 / Irish Grid,,,,,,,,,0,0,0
 212700,29903,29903,29903,0,0,0,,TM75.Irish Grid,TM75.Irish Grid,ING-75,TM75 / Irish Grid,TM75_Irish_Grid,TM75 / Irish Grid,,,TM75 / Irish Grid,,,,,,,,,0,0,0
 212800,30161,30161,30161,0,0,0,,Tokyo.PlnRctCS-I,Tokyo.PlnRctCS-I,Tokyo.PlnRctCS-I,Tokyo / Japan Plane Rectangular CS I,Japan_Zone_1,Tokyo / Japan Plane Rectangular CS I,,,Tokyo / Japan Plane Rectangular CS I,,,,,,,,,0,0,0
 212900,30162,30162,30162,0,0,0,,Tokyo.PlnRctCS-II,Tokyo.PlnRctCS-II,Tokyo.PlnRctCS-II,Tokyo / Japan Plane Rectangular CS II,Japan_Zone_2,Tokyo / Japan Plane Rectangular CS II,,,Tokyo / Japan Plane Rectangular CS II,,,,,,,,,0,0,0
@@ -2214,17 +2214,17 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 218700,31289,0,31289,0,0,0,,,,MGI-AT/F.M31,MGI (Ferro) / M31,,MGI (Ferro) / M31,,,,,,,,,,,,0,0,0
 218800,31290,0,31290,0,0,0,,,,MGI-AT/F.M34,MGI (Ferro) / M34,,MGI (Ferro) / M34,,,,,,,,,,,,0,0,0
 219200,31297,31297,31297,0,0,0,,,,,MGI / Austria Lambert,MGI_Austria_Lambert,MGI / Austria Lambert,,,MGI / Austria Lambert,,,,,,,,Deprecated,0,0,0
-219300,31300,0,31300,0,0,0,,Belge72.Lambert72,Belge72.Lambert72,Belge72.Lambert72,Belge 1972 / Belge Lambert 72,,Belge 1972 / Belge Lambert 72,,,Belge 1972 / Belge Lambert 72,,,,,,,,,0,0,0
-219400,31370,31370,31370,0,0,0,,Belge72.Lambert72A,Belge72.Lambert72A,Belge72.Lambert72A,Belge 1972 / Belgian Lambert 72,Belge_Lambert_1972,Belge 1972 / Belgian Lambert 72,,,Belge 1972 / Belgian Lambert 72,,,,,,,,,0,0,0
-219500,0,31461,31461,0,0,0,,,,DHDN.Gauss3d-1,,DHDN_3_Degree_Gauss_Zone_1,DHDN / 3-degree Gauss zone 1,,,DHDN / 3-degree Gauss zone 1,,,,,,,,Deprecated by EPSG as the zone is not used.,0,0,0
-219600,31466,31466,31466,0,0,82015,,DHDN.Gauss3d-2,DHDN.GaussKruger-2,DHDN.Gauss3d-2,DHDN / 3-degree Gauss-Kruger zone 2,DHDN_3_Degree_Gauss_Zone_2,DHDN / Gauss-Kruger zone 2,,,DHDN / Gauss-Kruger zone 2,,,,GK Zone 2 (DHDN),,,,,0,0,0
-219700,31467,31467,31467,0,0,82027,,DHDN.Gauss3d-3,DHDN.GaussKruger-3,DHDN.Gauss3d-3,DHDN / 3-degree Gauss-Kruger zone 3,DHDN_3_Degree_Gauss_Zone_3,DHDN / Gauss-Kruger zone 3,,,DHDN / Gauss-Kruger zone 3,,,,GK Zone 3 (DHDN),,,,,0,0,0
-219800,31468,31468,31468,0,0,82032,,DHDN.Gauss3d-4,DHDN.GaussKruger-4,DHDN.Gauss3d-4,DHDN / 3-degree Gauss-Kruger zone 4,DHDN_3_Degree_Gauss_Zone_4,DHDN / Gauss-Kruger zone 4,,,DHDN / Gauss-Kruger zone 4,,,,GK Zone 4 (DHDN),,,,,0,0,0
-219900,31469,31469,31469,0,0,82034,,DHDN.Gauss3d-5,DHDN.GaussKruger-5,DHDN.Gauss3d-5,DHDN / 3-degree Gauss-Kruger zone 5,DHDN_3_Degree_Gauss_Zone_5,DHDN / Gauss-Kruger zone 5,,,DHDN / Gauss-Kruger zone 5,,,,GK Zone 5 (DHDN),,,,,0,0,0
+219300,31300,0,31300,0,0,0,,Belge72.Lambert72,Belge72.Lambert72,Belge72a.Lambert72,Belge 1972 / Belge Lambert 72,,Belge 1972 / Belge Lambert 72,,,Belge 1972 / Belge Lambert 72,,,,,,,,,0,0,0
+219400,31370,31370,31370,0,0,0,,Belge72.Lambert72A,Belge72.Lambert72A,Belge72a.Lambert72A,Belge 1972 / Belgian Lambert 72,Belge_Lambert_1972,Belge 1972 / Belgian Lambert 72,,,Belge 1972 / Belgian Lambert 72,,,,,,,,,0,0,0
+219500,0,31461,31461,0,0,0,,,,DHDN/2.Gauss3d-1,,DHDN_3_Degree_Gauss_Zone_1,DHDN / 3-degree Gauss zone 1,,,DHDN / 3-degree Gauss zone 1,,,,,,,,Deprecated by EPSG as the zone is not used.,0,0,0
+219600,31466,31466,31466,0,0,82015,,DHDN.Gauss3d-2,DHDN.GaussKruger-2,DHDN/2.Gauss3d-2,DHDN / 3-degree Gauss-Kruger zone 2,DHDN_3_Degree_Gauss_Zone_2,DHDN / Gauss-Kruger zone 2,,,DHDN / Gauss-Kruger zone 2,,,,GK Zone 2 (DHDN),,,,,0,0,0
+219700,31467,31467,31467,0,0,82027,,DHDN.Gauss3d-3,DHDN.GaussKruger-3,DHDN/2.Gauss3d-3,DHDN / 3-degree Gauss-Kruger zone 3,DHDN_3_Degree_Gauss_Zone_3,DHDN / Gauss-Kruger zone 3,,,DHDN / Gauss-Kruger zone 3,,,,GK Zone 3 (DHDN),,,,,0,0,0
+219800,31468,31468,31468,0,0,82032,,DHDN.Gauss3d-4,DHDN.GaussKruger-4,DHDN/2.Gauss3d-4,DHDN / 3-degree Gauss-Kruger zone 4,DHDN_3_Degree_Gauss_Zone_4,DHDN / Gauss-Kruger zone 4,,,DHDN / Gauss-Kruger zone 4,,,,GK Zone 4 (DHDN),,,,,0,0,0
+219900,31469,31469,31469,0,0,82034,,DHDN.Gauss3d-5,DHDN.GaussKruger-5,DHDN/2.Gauss3d-5,DHDN / 3-degree Gauss-Kruger zone 5,DHDN_3_Degree_Gauss_Zone_5,DHDN / Gauss-Kruger zone 5,,,DHDN / Gauss-Kruger zone 5,,,,GK Zone 5 (DHDN),,,,,0,0,0
 220000,31528,31528,31528,0,0,0,,Conakry05.UTM-28N,Conakry05.UTM-28N,Conakry1905.UTM-28N,Conakry 1905 / UTM zone 28N,Conakry_1905_UTM_Zone_28N,Conakry 1905 / UTM zone 28N,,,Conakry 1905 / UTM zone 28N,,,,,,,,,0,0,0
 220100,31529,31529,31529,0,0,0,,Conakry05.UTM-29N,Conakry05.UTM-29N,Conakry1905.UTM-29N,Conakry 1905 / UTM zone 29N,Conakry_1905_UTM_Zone_29N,Conakry 1905 / UTM zone 29N,,,Conakry 1905 / UTM zone 29N,,,,,,,,,0,0,0
 220200,31600,31600,31600,0,0,0,,DealulPiscului33.Stero,DealulPiscului33.Stero33,Piscului33.Stero,Dealul Piscului 1930 / Stereo 33,Stereo_33,Dealul Piscului 1933/ Stereo 33,,,Dealul Piscului 1933/ Stereo 33,,,,,,,,,0,0,0
-220300,3844,31700,31700,0,0,0,,DealulPiscului70.Stero,DealulPiscului70.Stereo70,Pulkovo42/58.Stereo70,Pulkovo 1942(58) / Stereo70,Stereo_70,Dealul Piscului 1970/ Stereo 70,,,Dealul Piscului 1970/ Stereo 70,,,,,,,,,0,0,0
+220300,3844,31700,31700,0,0,0,,DealulPiscului70.Stero,DealulPiscului70.Stereo70,Pulkovo42/58a.Stereo70,Pulkovo 1942(58) / Stereo70,Stereo_70,Dealul Piscului 1970/ Stereo 70,,,Dealul Piscului 1970/ Stereo 70,,,,,,,,,0,0,0
 220400,31838,31838,31838,0,0,0,,NGN.UTM-38N,NGN.UTM-38N,NGN.UTM-38N,NGN / UTM zone 38N,NGN_UTM_Zone_38N,NGN / UTM zone 38N,,,NGN / UTM zone 38N,,,,,,,,,0,0,0
 220500,31839,31839,31839,0,0,0,,NGN.UTM-39N,NGN.UTM-39N,NGN.UTM-39N,NGN / UTM zone 39N,NGN_UTM_Zone_39N,NGN / UTM zone 39N,,,NGN / UTM zone 39N,,,,,,,,,0,0,0
 220700,31901,31901,31901,0,0,0,,KuwaitUtility.KTM,KuwaitUtility.KTM,KuwaitUtility.KTM,KUDAMS / KTM,KUDAMS_KTM,KUDAMS / KTM,,,,,,,,,,,,0,0,0
@@ -2534,126 +2534,126 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 251100,32358,32358,32358,0,0,0,,WGS72.UTM-58S,WGS72.UTM-58S,WGS72.UTM-58S,WGS 72 / UTM zone 58S,WGS_1972_UTM_Zone_58S,WGS 72 / UTM zone 58S,,,WGS 72 / UTM zone 58S,,,,,,,,,0,0,0
 251200,32359,32359,32359,0,0,0,,WGS72.UTM-59S,WGS72.UTM-59S,WGS72.UTM-59S,WGS 72 / UTM zone 59S,WGS_1972_UTM_Zone_59S,WGS 72 / UTM zone 59S,,,WGS 72 / UTM zone 59S,,,,,,,,,0,0,0
 251300,32360,32360,32360,0,0,0,,WGS72.UTM-60S,WGS72.UTM-60S,WGS72.UTM-60S,WGS 72 / UTM zone 60S,WGS_1972_UTM_Zone_60S,WGS 72 / UTM zone 60S,,,WGS 72 / UTM zone 60S,,,,,,,,,0,0,0
-251400,32401,0,32401,0,0,0,,WGS72be.UTM-1N,WGS72/be.UTM-1N,WGS72be.UTM-1N,WGS 72BE / UTM zone 1N,,WGS 72BE / UTM zone 1N,,,WGS 72BE / UTM zone 1N,,,,,,,,,0,0,0
-251500,32402,0,32402,0,0,0,,WGS72be.UTM-2N,WGS72/be.UTM-2N,WGS72be.UTM-2N,WGS 72BE / UTM zone 2N,,WGS 72BE / UTM zone 2N,,,WGS 72BE / UTM zone 2N,,,,,,,,,0,0,0
-251600,32403,0,32403,0,0,0,,WGS72be.UTM-3N,WGS72/be.UTM-3N,WGS72be.UTM-3N,WGS 72BE / UTM zone 3N,,WGS 72BE / UTM zone 3N,,,WGS 72BE / UTM zone 3N,,,,,,,,,0,0,0
-251700,32404,0,32404,0,0,0,,WGS72be.UTM-4N,WGS72/be.UTM-4N,WGS72be.UTM-4N,WGS 72BE / UTM zone 4N,,WGS 72BE / UTM zone 4N,,,WGS 72BE / UTM zone 4N,,,,,,,,,0,0,0
-251800,32405,0,32405,0,0,0,,WGS72be.UTM-5N,WGS72/be.UTM-5N,WGS72be.UTM-5N,WGS 72BE / UTM zone 5N,,WGS 72BE / UTM zone 5N,,,WGS 72BE / UTM zone 5N,,,,,,,,,0,0,0
-251900,32406,0,32406,0,0,0,,WGS72be.UTM-6N,WGS72/be.UTM-6N,WGS72be.UTM-6N,WGS 72BE / UTM zone 6N,,WGS 72BE / UTM zone 6N,,,WGS 72BE / UTM zone 6N,,,,,,,,,0,0,0
-252000,32407,0,32407,0,0,0,,WGS72be.UTM-7N,WGS72/be.UTM-7N,WGS72be.UTM-7N,WGS 72BE / UTM zone 7N,,WGS 72BE / UTM zone 7N,,,WGS 72BE / UTM zone 7N,,,,,,,,,0,0,0
-252100,32408,0,32408,0,0,0,,WGS72be.UTM-8N,WGS72/be.UTM-8N,WGS72be.UTM-8N,WGS 72BE / UTM zone 8N,,WGS 72BE / UTM zone 8N,,,WGS 72BE / UTM zone 8N,,,,,,,,,0,0,0
-252200,32409,0,32409,0,0,0,,WGS72be.UTM-9N,WGS72/be.UTM-9N,WGS72be.UTM-9N,WGS 72BE / UTM zone 9N,,WGS 72BE / UTM zone 9N,,,WGS 72BE / UTM zone 9N,,,,,,,,,0,0,0
-252300,32410,0,32410,0,0,0,,WGS72be.UTM-10N,WGS72/be.UTM-10N,WGS72be.UTM-10N,WGS 72BE / UTM zone 10N,,WGS 72BE / UTM zone 10N,,,WGS 72BE / UTM zone 10N,,,,,,,,,0,0,0
-252400,32411,0,32411,0,0,0,,WGS72be.UTM-11N,WGS72/be.UTM-11N,WGS72be.UTM-11N,WGS 72BE / UTM zone 11N,,WGS 72BE / UTM zone 11N,,,WGS 72BE / UTM zone 11N,,,,,,,,,0,0,0
-252500,32412,0,32412,0,0,0,,WGS72be.UTM-12N,WGS72/be.UTM-12N,WGS72be.UTM-12N,WGS 72BE / UTM zone 12N,,WGS 72BE / UTM zone 12N,,,WGS 72BE / UTM zone 12N,,,,,,,,,0,0,0
-252600,32413,0,32413,0,0,0,,WGS72be.UTM-13N,WGS72/be.UTM-13N,WGS72be.UTM-13N,WGS 72BE / UTM zone 13N,,WGS 72BE / UTM zone 13N,,,WGS 72BE / UTM zone 13N,,,,,,,,,0,0,0
-252700,32414,0,32414,0,0,0,,WGS72be.UTM-14N,WGS72/be.UTM-14N,WGS72be.UTM-14N,WGS 72BE / UTM zone 14N,,WGS 72BE / UTM zone 14N,,,WGS 72BE / UTM zone 14N,,,,,,,,,0,0,0
-252800,32415,0,32415,0,0,0,,WGS72be.UTM-15N,WGS72/be.UTM-15N,WGS72be.UTM-15N,WGS 72BE / UTM zone 15N,,WGS 72BE / UTM zone 15N,,,WGS 72BE / UTM zone 15N,,,,,,,,,0,0,0
-252900,32416,0,32416,0,0,0,,WGS72be.UTM-16N,WGS72/be.UTM-16N,WGS72be.UTM-16N,WGS 72BE / UTM zone 16N,,WGS 72BE / UTM zone 16N,,,WGS 72BE / UTM zone 16N,,,,,,,,,0,0,0
-253000,32417,0,32417,0,0,0,,WGS72be.UTM-17N,WGS72/be.UTM-17N,WGS72be.UTM-17N,WGS 72BE / UTM zone 17N,,WGS 72BE / UTM zone 17N,,,WGS 72BE / UTM zone 17N,,,,,,,,,0,0,0
-253100,32418,0,32418,0,0,0,,WGS72be.UTM-18N,WGS72/be.UTM-18N,WGS72be.UTM-18N,WGS 72BE / UTM zone 18N,,WGS 72BE / UTM zone 18N,,,WGS 72BE / UTM zone 18N,,,,,,,,,0,0,0
-253200,32419,0,32419,0,0,0,,WGS72be.UTM-19N,WGS72/be.UTM-19N,WGS72be.UTM-19N,WGS 72BE / UTM zone 19N,,WGS 72BE / UTM zone 19N,,,WGS 72BE / UTM zone 19N,,,,,,,,,0,0,0
-253300,32420,0,32420,0,0,0,,WGS72be.UTM-20N,WGS72/be.UTM-20N,WGS72be.UTM-20N,WGS 72BE / UTM zone 20N,,WGS 72BE / UTM zone 20N,,,WGS 72BE / UTM zone 20N,,,,,,,,,0,0,0
-253400,32421,0,32421,0,0,0,,WGS72be.UTM-21N,WGS72/be.UTM-21N,WGS72be.UTM-21N,WGS 72BE / UTM zone 21N,,WGS 72BE / UTM zone 21N,,,WGS 72BE / UTM zone 21N,,,,,,,,,0,0,0
-253500,32422,0,32422,0,0,0,,WGS72be.UTM-22N,WGS72/be.UTM-22N,WGS72be.UTM-22N,WGS 72BE / UTM zone 22N,,WGS 72BE / UTM zone 22N,,,WGS 72BE / UTM zone 22N,,,,,,,,,0,0,0
-253600,32423,0,32423,0,0,0,,WGS72be.UTM-23N,WGS72/be.UTM-23N,WGS72be.UTM-23N,WGS 72BE / UTM zone 23N,,WGS 72BE / UTM zone 23N,,,WGS 72BE / UTM zone 23N,,,,,,,,,0,0,0
-253700,32424,0,32424,0,0,0,,WGS72be.UTM-24N,WGS72/be.UTM-24N,WGS72be.UTM-24N,WGS 72BE / UTM zone 24N,,WGS 72BE / UTM zone 24N,,,WGS 72BE / UTM zone 24N,,,,,,,,,0,0,0
-253800,32425,0,32425,0,0,0,,WGS72be.UTM-25N,WGS72/be.UTM-25N,WGS72be.UTM-25N,WGS 72BE / UTM zone 25N,,WGS 72BE / UTM zone 25N,,,WGS 72BE / UTM zone 25N,,,,,,,,,0,0,0
-253900,32426,0,32426,0,0,0,,WGS72be.UTM-26N,WGS72/be.UTM-26N,WGS72be.UTM-26N,WGS 72BE / UTM zone 26N,,WGS 72BE / UTM zone 26N,,,WGS 72BE / UTM zone 26N,,,,,,,,,0,0,0
-254000,32427,0,32427,0,0,0,,WGS72be.UTM-27N,WGS72/be.UTM-27N,WGS72be.UTM-27N,WGS 72BE / UTM zone 27N,,WGS 72BE / UTM zone 27N,,,WGS 72BE / UTM zone 27N,,,,,,,,,0,0,0
-254100,32428,0,32428,0,0,0,,WGS72be.UTM-28N,WGS72/be.UTM-28N,WGS72be.UTM-28N,WGS 72BE / UTM zone 28N,,WGS 72BE / UTM zone 28N,,,WGS 72BE / UTM zone 28N,,,,,,,,,0,0,0
-254200,32429,0,32429,0,0,0,,WGS72be.UTM-29N,WGS72/be.UTM-29N,WGS72be.UTM-29N,WGS 72BE / UTM zone 29N,,WGS 72BE / UTM zone 29N,,,WGS 72BE / UTM zone 29N,,,,,,,,,0,0,0
-254300,32430,0,32430,0,0,0,,WGS72be.UTM-30N,WGS72/be.UTM-30N,WGS72be.UTM-30N,WGS 72BE / UTM zone 30N,,WGS 72BE / UTM zone 30N,,,WGS 72BE / UTM zone 30N,,,,,,,,,0,0,0
-254400,32431,0,32431,0,0,0,,WGS72be.UTM-31N,WGS72/be.UTM-31N,WGS72be.UTM-31N,WGS 72BE / UTM zone 31N,,WGS 72BE / UTM zone 31N,,,WGS 72BE / UTM zone 31N,,,,,,,,,0,0,0
-254500,32432,0,32432,0,0,0,,WGS72be.UTM-32N,WGS72/be.UTM-32N,WGS72be.UTM-32N,WGS 72BE / UTM zone 32N,,WGS 72BE / UTM zone 32N,,,WGS 72BE / UTM zone 32N,,,,,,,,,0,0,0
-254600,32433,0,32433,0,0,0,,WGS72be.UTM-33N,WGS72/be.UTM-33N,WGS72be.UTM-33N,WGS 72BE / UTM zone 33N,,WGS 72BE / UTM zone 33N,,,WGS 72BE / UTM zone 33N,,,,,,,,,0,0,0
-254700,32434,0,32434,0,0,0,,WGS72be.UTM-34N,WGS72/be.UTM-34N,WGS72be.UTM-34N,WGS 72BE / UTM zone 34N,,WGS 72BE / UTM zone 34N,,,WGS 72BE / UTM zone 34N,,,,,,,,,0,0,0
-254800,32435,0,32435,0,0,0,,WGS72be.UTM-35N,WGS72/be.UTM-35N,WGS72be.UTM-35N,WGS 72BE / UTM zone 35N,,WGS 72BE / UTM zone 35N,,,WGS 72BE / UTM zone 35N,,,,,,,,,0,0,0
-254900,32436,0,32436,0,0,0,,WGS72be.UTM-36N,WGS72/be.UTM-36N,WGS72be.UTM-36N,WGS 72BE / UTM zone 36N,,WGS 72BE / UTM zone 36N,,,WGS 72BE / UTM zone 36N,,,,,,,,,0,0,0
-255000,32437,0,32437,0,0,0,,WGS72be.UTM-37N,WGS72/be.UTM-37N,WGS72be.UTM-37N,WGS 72BE / UTM zone 37N,,WGS 72BE / UTM zone 37N,,,WGS 72BE / UTM zone 37N,,,,,,,,,0,0,0
-255100,32438,0,32438,0,0,0,,WGS72be.UTM-38N,WGS72/be.UTM-38N,WGS72be.UTM-38N,WGS 72BE / UTM zone 38N,,WGS 72BE / UTM zone 38N,,,WGS 72BE / UTM zone 38N,,,,,,,,,0,0,0
-255200,32439,0,32439,0,0,0,,WGS72be.UTM-39N,WGS72/be.UTM-39N,WGS72be.UTM-39N,WGS 72BE / UTM zone 39N,,WGS 72BE / UTM zone 39N,,,WGS 72BE / UTM zone 39N,,,,,,,,,0,0,0
-255300,32440,0,32440,0,0,0,,WGS72be.UTM-40N,WGS72/be.UTM-40N,WGS72be.UTM-40N,WGS 72BE / UTM zone 40N,,WGS 72BE / UTM zone 40N,,,WGS 72BE / UTM zone 40N,,,,,,,,,0,0,0
-255400,32441,0,32441,0,0,0,,WGS72be.UTM-41N,WGS72/be.UTM-41N,WGS72be.UTM-41N,WGS 72BE / UTM zone 41N,,WGS 72BE / UTM zone 41N,,,WGS 72BE / UTM zone 41N,,,,,,,,,0,0,0
-255500,32442,0,32442,0,0,0,,WGS72be.UTM-42N,WGS72/be.UTM-42N,WGS72be.UTM-42N,WGS 72BE / UTM zone 42N,,WGS 72BE / UTM zone 42N,,,WGS 72BE / UTM zone 42N,,,,,,,,,0,0,0
-255600,32443,0,32443,0,0,0,,WGS72be.UTM-43N,WGS72/be.UTM-43N,WGS72be.UTM-43N,WGS 72BE / UTM zone 43N,,WGS 72BE / UTM zone 43N,,,WGS 72BE / UTM zone 43N,,,,,,,,,0,0,0
-255700,32444,0,32444,0,0,0,,WGS72be.UTM-44N,WGS72/be.UTM-44N,WGS72be.UTM-44N,WGS 72BE / UTM zone 44N,,WGS 72BE / UTM zone 44N,,,WGS 72BE / UTM zone 44N,,,,,,,,,0,0,0
-255800,32445,0,32445,0,0,0,,WGS72be.UTM-45N,WGS72/be.UTM-45N,WGS72be.UTM-45N,WGS 72BE / UTM zone 45N,,WGS 72BE / UTM zone 45N,,,WGS 72BE / UTM zone 45N,,,,,,,,,0,0,0
-255900,32446,0,32446,0,0,0,,WGS72be.UTM-46N,WGS72/be.UTM-46N,WGS72be.UTM-46N,WGS 72BE / UTM zone 46N,,WGS 72BE / UTM zone 46N,,,WGS 72BE / UTM zone 46N,,,,,,,,,0,0,0
-256000,32447,0,32447,0,0,0,,WGS72be.UTM-47N,WGS72/be.UTM-47N,WGS72be.UTM-47N,WGS 72BE / UTM zone 47N,,WGS 72BE / UTM zone 47N,,,WGS 72BE / UTM zone 47N,,,,,,,,,0,0,0
-256100,32448,0,32448,0,0,0,,WGS72be.UTM-48N,WGS72/be.UTM-48N,WGS72be.UTM-48N,WGS 72BE / UTM zone 48N,,WGS 72BE / UTM zone 48N,,,WGS 72BE / UTM zone 48N,,,,,,,,,0,0,0
-256200,32449,0,32449,0,0,0,,WGS72be.UTM-49N,WGS72/be.UTM-49N,WGS72be.UTM-49N,WGS 72BE / UTM zone 49N,,WGS 72BE / UTM zone 49N,,,WGS 72BE / UTM zone 49N,,,,,,,,,0,0,0
-256300,32450,0,32450,0,0,0,,WGS72be.UTM-50N,WGS72/be.UTM-50N,WGS72be.UTM-50N,WGS 72BE / UTM zone 50N,,WGS 72BE / UTM zone 50N,,,WGS 72BE / UTM zone 50N,,,,,,,,,0,0,0
-256400,32451,0,32451,0,0,0,,WGS72be.UTM-51N,WGS72/be.UTM-51N,WGS72be.UTM-51N,WGS 72BE / UTM zone 51N,,WGS 72BE / UTM zone 51N,,,WGS 72BE / UTM zone 51N,,,,,,,,,0,0,0
-256500,32452,0,32452,0,0,0,,WGS72be.UTM-52N,WGS72/be.UTM-52N,WGS72be.UTM-52N,WGS 72BE / UTM zone 52N,,WGS 72BE / UTM zone 52N,,,WGS 72BE / UTM zone 52N,,,,,,,,,0,0,0
-256600,32453,0,32453,0,0,0,,WGS72be.UTM-53N,WGS72/be.UTM-53N,WGS72be.UTM-53N,WGS 72BE / UTM zone 53N,,WGS 72BE / UTM zone 53N,,,WGS 72BE / UTM zone 53N,,,,,,,,,0,0,0
-256700,32454,0,32454,0,0,0,,WGS72be.UTM-54N,WGS72/be.UTM-54N,WGS72be.UTM-54N,WGS 72BE / UTM zone 54N,,WGS 72BE / UTM zone 54N,,,WGS 72BE / UTM zone 54N,,,,,,,,,0,0,0
-256800,32455,0,32455,0,0,0,,WGS72be.UTM-55N,WGS72/be.UTM-55N,WGS72be.UTM-55N,WGS 72BE / UTM zone 55N,,WGS 72BE / UTM zone 55N,,,WGS 72BE / UTM zone 55N,,,,,,,,,0,0,0
-256900,32456,0,32456,0,0,0,,WGS72be.UTM-56N,WGS72/be.UTM-56N,WGS72be.UTM-56N,WGS 72BE / UTM zone 56N,,WGS 72BE / UTM zone 56N,,,WGS 72BE / UTM zone 56N,,,,,,,,,0,0,0
-257000,32457,0,32457,0,0,0,,WGS72be.UTM-57N,WGS72/be.UTM-57N,WGS72be.UTM-57N,WGS 72BE / UTM zone 57N,,WGS 72BE / UTM zone 57N,,,WGS 72BE / UTM zone 57N,,,,,,,,,0,0,0
-257100,32458,0,32458,0,0,0,,WGS72be.UTM-58N,WGS72/be.UTM-58N,WGS72be.UTM-58N,WGS 72BE / UTM zone 58N,,WGS 72BE / UTM zone 58N,,,WGS 72BE / UTM zone 58N,,,,,,,,,0,0,0
-257200,32459,0,32459,0,0,0,,WGS72be.UTM-59N,WGS72/be.UTM-59N,WGS72be.UTM-59N,WGS 72BE / UTM zone 59N,,WGS 72BE / UTM zone 59N,,,WGS 72BE / UTM zone 59N,,,,,,,,,0,0,0
-257300,32460,0,32460,0,0,0,,WGS72be.UTM-60N,WGS72/be.UTM-60N,WGS72be.UTM-60N,WGS 72BE / UTM zone 60N,,WGS 72BE / UTM zone 60N,,,WGS 72BE / UTM zone 60N,,,,,,,,,0,0,0
-257400,32501,0,32501,0,0,0,,WGS72be.UTM-1S,WGS72/be.UTM-1S,WGS72be.UTM-1S,WGS 72BE / UTM zone 1S,,WGS 72BE / UTM zone 1S,,,WGS 72BE / UTM zone 1S,,,,,,,,,0,0,0
-257500,32502,0,32502,0,0,0,,WGS72be.UTM-2S,WGS72/be.UTM-2S,WGS72be.UTM-2S,WGS 72BE / UTM zone 2S,,WGS 72BE / UTM zone 2S,,,WGS 72BE / UTM zone 2S,,,,,,,,,0,0,0
-257600,32503,0,32503,0,0,0,,WGS72be.UTM-3S,WGS72/be.UTM-3S,WGS72be.UTM-3S,WGS 72BE / UTM zone 3S,,WGS 72BE / UTM zone 3S,,,WGS 72BE / UTM zone 3S,,,,,,,,,0,0,0
-257700,32504,0,32504,0,0,0,,WGS72be.UTM-4S,WGS72/be.UTM-4S,WGS72be.UTM-4S,WGS 72BE / UTM zone 4S,,WGS 72BE / UTM zone 4S,,,WGS 72BE / UTM zone 4S,,,,,,,,,0,0,0
-257800,32505,0,32505,0,0,0,,WGS72be.UTM-5S,WGS72/be.UTM-5S,WGS72be.UTM-5S,WGS 72BE / UTM zone 5S,,WGS 72BE / UTM zone 5S,,,WGS 72BE / UTM zone 5S,,,,,,,,,0,0,0
-257900,32506,0,32506,0,0,0,,WGS72be.UTM-6S,WGS72/be.UTM-6S,WGS72be.UTM-6S,WGS 72BE / UTM zone 6S,,WGS 72BE / UTM zone 6S,,,WGS 72BE / UTM zone 6S,,,,,,,,,0,0,0
-258000,32507,0,32507,0,0,0,,WGS72be.UTM-7S,WGS72/be.UTM-7S,WGS72be.UTM-7S,WGS 72BE / UTM zone 7S,,WGS 72BE / UTM zone 7S,,,WGS 72BE / UTM zone 7S,,,,,,,,,0,0,0
-258100,32508,0,32508,0,0,0,,WGS72be.UTM-8S,WGS72/be.UTM-8S,WGS72be.UTM-8S,WGS 72BE / UTM zone 8S,,WGS 72BE / UTM zone 8S,,,WGS 72BE / UTM zone 8S,,,,,,,,,0,0,0
-258200,32509,0,32509,0,0,0,,WGS72be.UTM-9S,WGS72/be.UTM-9S,WGS72be.UTM-9S,WGS 72BE / UTM zone 9S,,WGS 72BE / UTM zone 9S,,,WGS 72BE / UTM zone 9S,,,,,,,,,0,0,0
-258300,32510,0,32510,0,0,0,,WGS72be.UTM-10S,WGS72/be.UTM-10S,WGS72be.UTM-10S,WGS 72BE / UTM zone 10S,,WGS 72BE / UTM zone 10S,,,WGS 72BE / UTM zone 10S,,,,,,,,,0,0,0
-258400,32511,0,32511,0,0,0,,WGS72be.UTM-11S,WGS72/be.UTM-11S,WGS72be.UTM-11S,WGS 72BE / UTM zone 11S,,WGS 72BE / UTM zone 11S,,,WGS 72BE / UTM zone 11S,,,,,,,,,0,0,0
-258500,32512,0,32512,0,0,0,,WGS72be.UTM-12S,WGS72/be.UTM-12S,WGS72be.UTM-12S,WGS 72BE / UTM zone 12S,,WGS 72BE / UTM zone 12S,,,WGS 72BE / UTM zone 12S,,,,,,,,,0,0,0
-258600,32513,0,32513,0,0,0,,WGS72be.UTM-13S,WGS72/be.UTM-13S,WGS72be.UTM-13S,WGS 72BE / UTM zone 13S,,WGS 72BE / UTM zone 13S,,,WGS 72BE / UTM zone 13S,,,,,,,,,0,0,0
-258700,32514,0,32514,0,0,0,,WGS72be.UTM-14S,WGS72/be.UTM-14S,WGS72be.UTM-14S,WGS 72BE / UTM zone 14S,,WGS 72BE / UTM zone 14S,,,WGS 72BE / UTM zone 14S,,,,,,,,,0,0,0
-258800,32515,0,32515,0,0,0,,WGS72be.UTM-15S,WGS72/be.UTM-15S,WGS72be.UTM-15S,WGS 72BE / UTM zone 15S,,WGS 72BE / UTM zone 15S,,,WGS 72BE / UTM zone 15S,,,,,,,,,0,0,0
-258900,32516,0,32516,0,0,0,,WGS72be.UTM-16S,WGS72/be.UTM-16S,WGS72be.UTM-16S,WGS 72BE / UTM zone 16S,,WGS 72BE / UTM zone 16S,,,WGS 72BE / UTM zone 16S,,,,,,,,,0,0,0
-259000,32517,0,32517,0,0,0,,WGS72be.UTM-17S,WGS72/be.UTM-17S,WGS72be.UTM-17S,WGS 72BE / UTM zone 17S,,WGS 72BE / UTM zone 17S,,,WGS 72BE / UTM zone 17S,,,,,,,,,0,0,0
-259100,32518,0,32518,0,0,0,,WGS72be.UTM-18S,WGS72/be.UTM-18S,WGS72be.UTM-18S,WGS 72BE / UTM zone 18S,,WGS 72BE / UTM zone 18S,,,WGS 72BE / UTM zone 18S,,,,,,,,,0,0,0
-259200,32519,0,32519,0,0,0,,WGS72be.UTM-19S,WGS72/be.UTM-19S,WGS72be.UTM-19S,WGS 72BE / UTM zone 19S,,WGS 72BE / UTM zone 19S,,,WGS 72BE / UTM zone 19S,,,,,,,,,0,0,0
-259300,32520,0,32520,0,0,0,,WGS72be.UTM-20S,WGS72/be.UTM-20S,WGS72be.UTM-20S,WGS 72BE / UTM zone 20S,,WGS 72BE / UTM zone 20S,,,WGS 72BE / UTM zone 20S,,,,,,,,,0,0,0
-259400,32521,0,32521,0,0,0,,WGS72be.UTM-21S,WGS72/be.UTM-21S,WGS72be.UTM-21S,WGS 72BE / UTM zone 21S,,WGS 72BE / UTM zone 21S,,,WGS 72BE / UTM zone 21S,,,,,,,,,0,0,0
-259500,32522,0,32522,0,0,0,,WGS72be.UTM-22S,WGS72/be.UTM-22S,WGS72be.UTM-22S,WGS 72BE / UTM zone 22S,,WGS 72BE / UTM zone 22S,,,WGS 72BE / UTM zone 22S,,,,,,,,,0,0,0
-259600,32523,0,32523,0,0,0,,WGS72be.UTM-23S,WGS72/be.UTM-23S,WGS72be.UTM-23S,WGS 72BE / UTM zone 23S,,WGS 72BE / UTM zone 23S,,,WGS 72BE / UTM zone 23S,,,,,,,,,0,0,0
-259700,32524,0,32524,0,0,0,,WGS72be.UTM-24S,WGS72/be.UTM-24S,WGS72be.UTM-24S,WGS 72BE / UTM zone 24S,,WGS 72BE / UTM zone 24S,,,WGS 72BE / UTM zone 24S,,,,,,,,,0,0,0
-259800,32525,0,32525,0,0,0,,WGS72be.UTM-25S,WGS72/be.UTM-25S,WGS72be.UTM-25S,WGS 72BE / UTM zone 25S,,WGS 72BE / UTM zone 25S,,,WGS 72BE / UTM zone 25S,,,,,,,,,0,0,0
-259900,32526,0,32526,0,0,0,,WGS72be.UTM-26S,WGS72/be.UTM-26S,WGS72be.UTM-26S,WGS 72BE / UTM zone 26S,,WGS 72BE / UTM zone 26S,,,WGS 72BE / UTM zone 26S,,,,,,,,,0,0,0
-260000,32527,0,32527,0,0,0,,WGS72be.UTM-27S,WGS72/be.UTM-27S,WGS72be.UTM-27S,WGS 72BE / UTM zone 27S,,WGS 72BE / UTM zone 27S,,,WGS 72BE / UTM zone 27S,,,,,,,,,0,0,0
-260100,32528,0,32528,0,0,0,,WGS72be.UTM-28S,WGS72/be.UTM-28S,WGS72be.UTM-28S,WGS 72BE / UTM zone 28S,,WGS 72BE / UTM zone 28S,,,WGS 72BE / UTM zone 28S,,,,,,,,,0,0,0
-260200,32529,0,32529,0,0,0,,WGS72be.UTM-29S,WGS72/be.UTM-29S,WGS72be.UTM-29S,WGS 72BE / UTM zone 29S,,WGS 72BE / UTM zone 29S,,,WGS 72BE / UTM zone 29S,,,,,,,,,0,0,0
-260300,32530,0,32530,0,0,0,,WGS72be.UTM-30S,WGS72/be.UTM-30S,WGS72be.UTM-30S,WGS 72BE / UTM zone 30S,,WGS 72BE / UTM zone 30S,,,WGS 72BE / UTM zone 30S,,,,,,,,,0,0,0
-260400,32531,0,32531,0,0,0,,WGS72be.UTM-31S,WGS72/be.UTM-31S,WGS72be.UTM-31S,WGS 72BE / UTM zone 31S,,WGS 72BE / UTM zone 31S,,,WGS 72BE / UTM zone 31S,,,,,,,,,0,0,0
-260500,32532,0,32532,0,0,0,,WGS72be.UTM-32S,WGS72/be.UTM-32S,WGS72be.UTM-32S,WGS 72BE / UTM zone 32S,,WGS 72BE / UTM zone 32S,,,WGS 72BE / UTM zone 32S,,,,,,,,,0,0,0
-260600,32533,0,32533,0,0,0,,WGS72be.UTM-33S,WGS72/be.UTM-33S,WGS72be.UTM-33S,WGS 72BE / UTM zone 33S,,WGS 72BE / UTM zone 33S,,,WGS 72BE / UTM zone 33S,,,,,,,,,0,0,0
-260700,32534,0,32534,0,0,0,,WGS72be.UTM-34S,WGS72/be.UTM-34S,WGS72be.UTM-34S,WGS 72BE / UTM zone 34S,,WGS 72BE / UTM zone 34S,,,WGS 72BE / UTM zone 34S,,,,,,,,,0,0,0
-260800,32535,0,32535,0,0,0,,WGS72be.UTM-35S,WGS72/be.UTM-35S,WGS72be.UTM-35S,WGS 72BE / UTM zone 35S,,WGS 72BE / UTM zone 35S,,,WGS 72BE / UTM zone 35S,,,,,,,,,0,0,0
-260900,32536,0,32536,0,0,0,,WGS72be.UTM-36S,WGS72/be.UTM-36S,WGS72be.UTM-36S,WGS 72BE / UTM zone 36S,,WGS 72BE / UTM zone 36S,,,WGS 72BE / UTM zone 36S,,,,,,,,,0,0,0
-261000,32537,0,32537,0,0,0,,WGS72be.UTM-37S,WGS72/be.UTM-37S,WGS72be.UTM-37S,WGS 72BE / UTM zone 37S,,WGS 72BE / UTM zone 37S,,,WGS 72BE / UTM zone 37S,,,,,,,,,0,0,0
-261100,32538,0,32538,0,0,0,,WGS72be.UTM-38S,WGS72/be.UTM-38S,WGS72be.UTM-38S,WGS 72BE / UTM zone 38S,,WGS 72BE / UTM zone 38S,,,WGS 72BE / UTM zone 38S,,,,,,,,,0,0,0
-261200,32539,0,32539,0,0,0,,WGS72be.UTM-39S,WGS72/be.UTM-39S,WGS72be.UTM-39S,WGS 72BE / UTM zone 39S,,WGS 72BE / UTM zone 39S,,,WGS 72BE / UTM zone 39S,,,,,,,,,0,0,0
-261300,32540,0,32540,0,0,0,,WGS72be.UTM-40S,WGS72/be.UTM-40S,WGS72be.UTM-40S,WGS 72BE / UTM zone 40S,,WGS 72BE / UTM zone 40S,,,WGS 72BE / UTM zone 40S,,,,,,,,,0,0,0
-261400,32541,0,32541,0,0,0,,WGS72be.UTM-41S,WGS72/be.UTM-41S,WGS72be.UTM-41S,WGS 72BE / UTM zone 41S,,WGS 72BE / UTM zone 41S,,,WGS 72BE / UTM zone 41S,,,,,,,,,0,0,0
-261500,32542,0,32542,0,0,0,,WGS72be.UTM-42S,WGS72/be.UTM-42S,WGS72be.UTM-42S,WGS 72BE / UTM zone 42S,,WGS 72BE / UTM zone 42S,,,WGS 72BE / UTM zone 42S,,,,,,,,,0,0,0
-261600,32543,0,32543,0,0,0,,WGS72be.UTM-43S,WGS72/be.UTM-43S,WGS72be.UTM-43S,WGS 72BE / UTM zone 43S,,WGS 72BE / UTM zone 43S,,,WGS 72BE / UTM zone 43S,,,,,,,,,0,0,0
-261700,32544,0,32544,0,0,0,,WGS72be.UTM-44S,WGS72/be.UTM-44S,WGS72be.UTM-44S,WGS 72BE / UTM zone 44S,,WGS 72BE / UTM zone 44S,,,WGS 72BE / UTM zone 44S,,,,,,,,,0,0,0
-261800,32545,0,32545,0,0,0,,WGS72be.UTM-45S,WGS72/be.UTM-45S,WGS72be.UTM-45S,WGS 72BE / UTM zone 45S,,WGS 72BE / UTM zone 45S,,,WGS 72BE / UTM zone 45S,,,,,,,,,0,0,0
-261900,32546,0,32546,0,0,0,,WGS72be.UTM-46S,WGS72/be.UTM-46S,WGS72be.UTM-46S,WGS 72BE / UTM zone 46S,,WGS 72BE / UTM zone 46S,,,WGS 72BE / UTM zone 46S,,,,,,,,,0,0,0
-262000,32547,0,32547,0,0,0,,WGS72be.UTM-47S,WGS72/be.UTM-47S,WGS72be.UTM-47S,WGS 72BE / UTM zone 47S,,WGS 72BE / UTM zone 47S,,,WGS 72BE / UTM zone 47S,,,,,,,,,0,0,0
-262100,32548,0,32548,0,0,0,,WGS72be.UTM-48S,WGS72/be.UTM-48S,WGS72be.UTM-48S,WGS 72BE / UTM zone 48S,,WGS 72BE / UTM zone 48S,,,WGS 72BE / UTM zone 48S,,,,,,,,,0,0,0
-262200,32549,0,32549,0,0,0,,WGS72be.UTM-49S,WGS72/be.UTM-49S,WGS72be.UTM-49S,WGS 72BE / UTM zone 49S,,WGS 72BE / UTM zone 49S,,,WGS 72BE / UTM zone 49S,,,,,,,,,0,0,0
-262300,32550,0,32550,0,0,0,,WGS72be.UTM-50S,WGS72/be.UTM-50S,WGS72be.UTM-50S,WGS 72BE / UTM zone 50S,,WGS 72BE / UTM zone 50S,,,WGS 72BE / UTM zone 50S,,,,,,,,,0,0,0
-262400,32551,0,32551,0,0,0,,WGS72be.UTM-51S,WGS72/be.UTM-51S,WGS72be.UTM-51S,WGS 72BE / UTM zone 51S,,WGS 72BE / UTM zone 51S,,,WGS 72BE / UTM zone 51S,,,,,,,,,0,0,0
-262500,32552,0,32552,0,0,0,,WGS72be.UTM-52S,WGS72/be.UTM-52S,WGS72be.UTM-52S,WGS 72BE / UTM zone 52S,,WGS 72BE / UTM zone 52S,,,WGS 72BE / UTM zone 52S,,,,,,,,,0,0,0
-262600,32553,0,32553,0,0,0,,WGS72be.UTM-53S,WGS72/be.UTM-53S,WGS72be.UTM-53S,WGS 72BE / UTM zone 53S,,WGS 72BE / UTM zone 53S,,,WGS 72BE / UTM zone 53S,,,,,,,,,0,0,0
-262700,32554,0,32554,0,0,0,,WGS72be.UTM-54S,WGS72/be.UTM-54S,WGS72be.UTM-54S,WGS 72BE / UTM zone 54S,,WGS 72BE / UTM zone 54S,,,WGS 72BE / UTM zone 54S,,,,,,,,,0,0,0
-262800,32555,0,32555,0,0,0,,WGS72be.UTM-55S,WGS72/be.UTM-55S,WGS72be.UTM-55S,WGS 72BE / UTM zone 55S,,WGS 72BE / UTM zone 55S,,,WGS 72BE / UTM zone 55S,,,,,,,,,0,0,0
-262900,32556,0,32556,0,0,0,,WGS72be.UTM-56S,WGS72/be.UTM-56S,WGS72be.UTM-56S,WGS 72BE / UTM zone 56S,,WGS 72BE / UTM zone 56S,,,WGS 72BE / UTM zone 56S,,,,,,,,,0,0,0
-263000,32557,0,32557,0,0,0,,WGS72be.UTM-57S,WGS72/be.UTM-57S,WGS72be.UTM-57S,WGS 72BE / UTM zone 57S,,WGS 72BE / UTM zone 57S,,,WGS 72BE / UTM zone 57S,,,,,,,,,0,0,0
-263100,32558,0,32558,0,0,0,,WGS72be.UTM-58S,WGS72/be.UTM-58S,WGS72be.UTM-58S,WGS 72BE / UTM zone 58S,,WGS 72BE / UTM zone 58S,,,WGS 72BE / UTM zone 58S,,,,,,,,,0,0,0
-263200,32559,0,32559,0,0,0,,WGS72be.UTM-59S,WGS72/be.UTM-59S,WGS72be.UTM-59S,WGS 72BE / UTM zone 59S,,WGS 72BE / UTM zone 59S,,,WGS 72BE / UTM zone 59S,,,,,,,,,0,0,0
-263300,32560,0,32560,0,0,0,,WGS72be.UTM-60S,WGS72/be.UTM-60S,WGS72be.UTM-60S,WGS 72BE / UTM zone 60S,,WGS 72BE / UTM zone 60S,,,WGS 72BE / UTM zone 60S,,,,,,,,,0,0,0
+251400,32401,0,32401,0,0,0,,WGS72be.UTM-1N,WGS72/be.UTM-1N,WGS72be/a.UTM-1N,WGS 72BE / UTM zone 1N,,WGS 72BE / UTM zone 1N,,,WGS 72BE / UTM zone 1N,,,,,,,,,0,0,0
+251500,32402,0,32402,0,0,0,,WGS72be.UTM-2N,WGS72/be.UTM-2N,WGS72be/a.UTM-2N,WGS 72BE / UTM zone 2N,,WGS 72BE / UTM zone 2N,,,WGS 72BE / UTM zone 2N,,,,,,,,,0,0,0
+251600,32403,0,32403,0,0,0,,WGS72be.UTM-3N,WGS72/be.UTM-3N,WGS72be/a.UTM-3N,WGS 72BE / UTM zone 3N,,WGS 72BE / UTM zone 3N,,,WGS 72BE / UTM zone 3N,,,,,,,,,0,0,0
+251700,32404,0,32404,0,0,0,,WGS72be.UTM-4N,WGS72/be.UTM-4N,WGS72be/a.UTM-4N,WGS 72BE / UTM zone 4N,,WGS 72BE / UTM zone 4N,,,WGS 72BE / UTM zone 4N,,,,,,,,,0,0,0
+251800,32405,0,32405,0,0,0,,WGS72be.UTM-5N,WGS72/be.UTM-5N,WGS72be/a.UTM-5N,WGS 72BE / UTM zone 5N,,WGS 72BE / UTM zone 5N,,,WGS 72BE / UTM zone 5N,,,,,,,,,0,0,0
+251900,32406,0,32406,0,0,0,,WGS72be.UTM-6N,WGS72/be.UTM-6N,WGS72be/a.UTM-6N,WGS 72BE / UTM zone 6N,,WGS 72BE / UTM zone 6N,,,WGS 72BE / UTM zone 6N,,,,,,,,,0,0,0
+252000,32407,0,32407,0,0,0,,WGS72be.UTM-7N,WGS72/be.UTM-7N,WGS72be/a.UTM-7N,WGS 72BE / UTM zone 7N,,WGS 72BE / UTM zone 7N,,,WGS 72BE / UTM zone 7N,,,,,,,,,0,0,0
+252100,32408,0,32408,0,0,0,,WGS72be.UTM-8N,WGS72/be.UTM-8N,WGS72be/a.UTM-8N,WGS 72BE / UTM zone 8N,,WGS 72BE / UTM zone 8N,,,WGS 72BE / UTM zone 8N,,,,,,,,,0,0,0
+252200,32409,0,32409,0,0,0,,WGS72be.UTM-9N,WGS72/be.UTM-9N,WGS72be/a.UTM-9N,WGS 72BE / UTM zone 9N,,WGS 72BE / UTM zone 9N,,,WGS 72BE / UTM zone 9N,,,,,,,,,0,0,0
+252300,32410,0,32410,0,0,0,,WGS72be.UTM-10N,WGS72/be.UTM-10N,WGS72be/a.UTM-10N,WGS 72BE / UTM zone 10N,,WGS 72BE / UTM zone 10N,,,WGS 72BE / UTM zone 10N,,,,,,,,,0,0,0
+252400,32411,0,32411,0,0,0,,WGS72be.UTM-11N,WGS72/be.UTM-11N,WGS72be/a.UTM-11N,WGS 72BE / UTM zone 11N,,WGS 72BE / UTM zone 11N,,,WGS 72BE / UTM zone 11N,,,,,,,,,0,0,0
+252500,32412,0,32412,0,0,0,,WGS72be.UTM-12N,WGS72/be.UTM-12N,WGS72be/a.UTM-12N,WGS 72BE / UTM zone 12N,,WGS 72BE / UTM zone 12N,,,WGS 72BE / UTM zone 12N,,,,,,,,,0,0,0
+252600,32413,0,32413,0,0,0,,WGS72be.UTM-13N,WGS72/be.UTM-13N,WGS72be/a.UTM-13N,WGS 72BE / UTM zone 13N,,WGS 72BE / UTM zone 13N,,,WGS 72BE / UTM zone 13N,,,,,,,,,0,0,0
+252700,32414,0,32414,0,0,0,,WGS72be.UTM-14N,WGS72/be.UTM-14N,WGS72be/a.UTM-14N,WGS 72BE / UTM zone 14N,,WGS 72BE / UTM zone 14N,,,WGS 72BE / UTM zone 14N,,,,,,,,,0,0,0
+252800,32415,0,32415,0,0,0,,WGS72be.UTM-15N,WGS72/be.UTM-15N,WGS72be/a.UTM-15N,WGS 72BE / UTM zone 15N,,WGS 72BE / UTM zone 15N,,,WGS 72BE / UTM zone 15N,,,,,,,,,0,0,0
+252900,32416,0,32416,0,0,0,,WGS72be.UTM-16N,WGS72/be.UTM-16N,WGS72be/a.UTM-16N,WGS 72BE / UTM zone 16N,,WGS 72BE / UTM zone 16N,,,WGS 72BE / UTM zone 16N,,,,,,,,,0,0,0
+253000,32417,0,32417,0,0,0,,WGS72be.UTM-17N,WGS72/be.UTM-17N,WGS72be/a.UTM-17N,WGS 72BE / UTM zone 17N,,WGS 72BE / UTM zone 17N,,,WGS 72BE / UTM zone 17N,,,,,,,,,0,0,0
+253100,32418,0,32418,0,0,0,,WGS72be.UTM-18N,WGS72/be.UTM-18N,WGS72be/a.UTM-18N,WGS 72BE / UTM zone 18N,,WGS 72BE / UTM zone 18N,,,WGS 72BE / UTM zone 18N,,,,,,,,,0,0,0
+253200,32419,0,32419,0,0,0,,WGS72be.UTM-19N,WGS72/be.UTM-19N,WGS72be/a.UTM-19N,WGS 72BE / UTM zone 19N,,WGS 72BE / UTM zone 19N,,,WGS 72BE / UTM zone 19N,,,,,,,,,0,0,0
+253300,32420,0,32420,0,0,0,,WGS72be.UTM-20N,WGS72/be.UTM-20N,WGS72be/a.UTM-20N,WGS 72BE / UTM zone 20N,,WGS 72BE / UTM zone 20N,,,WGS 72BE / UTM zone 20N,,,,,,,,,0,0,0
+253400,32421,0,32421,0,0,0,,WGS72be.UTM-21N,WGS72/be.UTM-21N,WGS72be/a.UTM-21N,WGS 72BE / UTM zone 21N,,WGS 72BE / UTM zone 21N,,,WGS 72BE / UTM zone 21N,,,,,,,,,0,0,0
+253500,32422,0,32422,0,0,0,,WGS72be.UTM-22N,WGS72/be.UTM-22N,WGS72be/a.UTM-22N,WGS 72BE / UTM zone 22N,,WGS 72BE / UTM zone 22N,,,WGS 72BE / UTM zone 22N,,,,,,,,,0,0,0
+253600,32423,0,32423,0,0,0,,WGS72be.UTM-23N,WGS72/be.UTM-23N,WGS72be/a.UTM-23N,WGS 72BE / UTM zone 23N,,WGS 72BE / UTM zone 23N,,,WGS 72BE / UTM zone 23N,,,,,,,,,0,0,0
+253700,32424,0,32424,0,0,0,,WGS72be.UTM-24N,WGS72/be.UTM-24N,WGS72be/a.UTM-24N,WGS 72BE / UTM zone 24N,,WGS 72BE / UTM zone 24N,,,WGS 72BE / UTM zone 24N,,,,,,,,,0,0,0
+253800,32425,0,32425,0,0,0,,WGS72be.UTM-25N,WGS72/be.UTM-25N,WGS72be/a.UTM-25N,WGS 72BE / UTM zone 25N,,WGS 72BE / UTM zone 25N,,,WGS 72BE / UTM zone 25N,,,,,,,,,0,0,0
+253900,32426,0,32426,0,0,0,,WGS72be.UTM-26N,WGS72/be.UTM-26N,WGS72be/a.UTM-26N,WGS 72BE / UTM zone 26N,,WGS 72BE / UTM zone 26N,,,WGS 72BE / UTM zone 26N,,,,,,,,,0,0,0
+254000,32427,0,32427,0,0,0,,WGS72be.UTM-27N,WGS72/be.UTM-27N,WGS72be/a.UTM-27N,WGS 72BE / UTM zone 27N,,WGS 72BE / UTM zone 27N,,,WGS 72BE / UTM zone 27N,,,,,,,,,0,0,0
+254100,32428,0,32428,0,0,0,,WGS72be.UTM-28N,WGS72/be.UTM-28N,WGS72be/a.UTM-28N,WGS 72BE / UTM zone 28N,,WGS 72BE / UTM zone 28N,,,WGS 72BE / UTM zone 28N,,,,,,,,,0,0,0
+254200,32429,0,32429,0,0,0,,WGS72be.UTM-29N,WGS72/be.UTM-29N,WGS72be/a.UTM-29N,WGS 72BE / UTM zone 29N,,WGS 72BE / UTM zone 29N,,,WGS 72BE / UTM zone 29N,,,,,,,,,0,0,0
+254300,32430,0,32430,0,0,0,,WGS72be.UTM-30N,WGS72/be.UTM-30N,WGS72be/a.UTM-30N,WGS 72BE / UTM zone 30N,,WGS 72BE / UTM zone 30N,,,WGS 72BE / UTM zone 30N,,,,,,,,,0,0,0
+254400,32431,0,32431,0,0,0,,WGS72be.UTM-31N,WGS72/be.UTM-31N,WGS72be/a.UTM-31N,WGS 72BE / UTM zone 31N,,WGS 72BE / UTM zone 31N,,,WGS 72BE / UTM zone 31N,,,,,,,,,0,0,0
+254500,32432,0,32432,0,0,0,,WGS72be.UTM-32N,WGS72/be.UTM-32N,WGS72be/a.UTM-32N,WGS 72BE / UTM zone 32N,,WGS 72BE / UTM zone 32N,,,WGS 72BE / UTM zone 32N,,,,,,,,,0,0,0
+254600,32433,0,32433,0,0,0,,WGS72be.UTM-33N,WGS72/be.UTM-33N,WGS72be/a.UTM-33N,WGS 72BE / UTM zone 33N,,WGS 72BE / UTM zone 33N,,,WGS 72BE / UTM zone 33N,,,,,,,,,0,0,0
+254700,32434,0,32434,0,0,0,,WGS72be.UTM-34N,WGS72/be.UTM-34N,WGS72be/a.UTM-34N,WGS 72BE / UTM zone 34N,,WGS 72BE / UTM zone 34N,,,WGS 72BE / UTM zone 34N,,,,,,,,,0,0,0
+254800,32435,0,32435,0,0,0,,WGS72be.UTM-35N,WGS72/be.UTM-35N,WGS72be/a.UTM-35N,WGS 72BE / UTM zone 35N,,WGS 72BE / UTM zone 35N,,,WGS 72BE / UTM zone 35N,,,,,,,,,0,0,0
+254900,32436,0,32436,0,0,0,,WGS72be.UTM-36N,WGS72/be.UTM-36N,WGS72be/a.UTM-36N,WGS 72BE / UTM zone 36N,,WGS 72BE / UTM zone 36N,,,WGS 72BE / UTM zone 36N,,,,,,,,,0,0,0
+255000,32437,0,32437,0,0,0,,WGS72be.UTM-37N,WGS72/be.UTM-37N,WGS72be/a.UTM-37N,WGS 72BE / UTM zone 37N,,WGS 72BE / UTM zone 37N,,,WGS 72BE / UTM zone 37N,,,,,,,,,0,0,0
+255100,32438,0,32438,0,0,0,,WGS72be.UTM-38N,WGS72/be.UTM-38N,WGS72be/a.UTM-38N,WGS 72BE / UTM zone 38N,,WGS 72BE / UTM zone 38N,,,WGS 72BE / UTM zone 38N,,,,,,,,,0,0,0
+255200,32439,0,32439,0,0,0,,WGS72be.UTM-39N,WGS72/be.UTM-39N,WGS72be/a.UTM-39N,WGS 72BE / UTM zone 39N,,WGS 72BE / UTM zone 39N,,,WGS 72BE / UTM zone 39N,,,,,,,,,0,0,0
+255300,32440,0,32440,0,0,0,,WGS72be.UTM-40N,WGS72/be.UTM-40N,WGS72be/a.UTM-40N,WGS 72BE / UTM zone 40N,,WGS 72BE / UTM zone 40N,,,WGS 72BE / UTM zone 40N,,,,,,,,,0,0,0
+255400,32441,0,32441,0,0,0,,WGS72be.UTM-41N,WGS72/be.UTM-41N,WGS72be/a.UTM-41N,WGS 72BE / UTM zone 41N,,WGS 72BE / UTM zone 41N,,,WGS 72BE / UTM zone 41N,,,,,,,,,0,0,0
+255500,32442,0,32442,0,0,0,,WGS72be.UTM-42N,WGS72/be.UTM-42N,WGS72be/a.UTM-42N,WGS 72BE / UTM zone 42N,,WGS 72BE / UTM zone 42N,,,WGS 72BE / UTM zone 42N,,,,,,,,,0,0,0
+255600,32443,0,32443,0,0,0,,WGS72be.UTM-43N,WGS72/be.UTM-43N,WGS72be/a.UTM-43N,WGS 72BE / UTM zone 43N,,WGS 72BE / UTM zone 43N,,,WGS 72BE / UTM zone 43N,,,,,,,,,0,0,0
+255700,32444,0,32444,0,0,0,,WGS72be.UTM-44N,WGS72/be.UTM-44N,WGS72be/a.UTM-44N,WGS 72BE / UTM zone 44N,,WGS 72BE / UTM zone 44N,,,WGS 72BE / UTM zone 44N,,,,,,,,,0,0,0
+255800,32445,0,32445,0,0,0,,WGS72be.UTM-45N,WGS72/be.UTM-45N,WGS72be/a.UTM-45N,WGS 72BE / UTM zone 45N,,WGS 72BE / UTM zone 45N,,,WGS 72BE / UTM zone 45N,,,,,,,,,0,0,0
+255900,32446,0,32446,0,0,0,,WGS72be.UTM-46N,WGS72/be.UTM-46N,WGS72be/a.UTM-46N,WGS 72BE / UTM zone 46N,,WGS 72BE / UTM zone 46N,,,WGS 72BE / UTM zone 46N,,,,,,,,,0,0,0
+256000,32447,0,32447,0,0,0,,WGS72be.UTM-47N,WGS72/be.UTM-47N,WGS72be/a.UTM-47N,WGS 72BE / UTM zone 47N,,WGS 72BE / UTM zone 47N,,,WGS 72BE / UTM zone 47N,,,,,,,,,0,0,0
+256100,32448,0,32448,0,0,0,,WGS72be.UTM-48N,WGS72/be.UTM-48N,WGS72be/a.UTM-48N,WGS 72BE / UTM zone 48N,,WGS 72BE / UTM zone 48N,,,WGS 72BE / UTM zone 48N,,,,,,,,,0,0,0
+256200,32449,0,32449,0,0,0,,WGS72be.UTM-49N,WGS72/be.UTM-49N,WGS72be/a.UTM-49N,WGS 72BE / UTM zone 49N,,WGS 72BE / UTM zone 49N,,,WGS 72BE / UTM zone 49N,,,,,,,,,0,0,0
+256300,32450,0,32450,0,0,0,,WGS72be.UTM-50N,WGS72/be.UTM-50N,WGS72be/a.UTM-50N,WGS 72BE / UTM zone 50N,,WGS 72BE / UTM zone 50N,,,WGS 72BE / UTM zone 50N,,,,,,,,,0,0,0
+256400,32451,0,32451,0,0,0,,WGS72be.UTM-51N,WGS72/be.UTM-51N,WGS72be/a.UTM-51N,WGS 72BE / UTM zone 51N,,WGS 72BE / UTM zone 51N,,,WGS 72BE / UTM zone 51N,,,,,,,,,0,0,0
+256500,32452,0,32452,0,0,0,,WGS72be.UTM-52N,WGS72/be.UTM-52N,WGS72be/a.UTM-52N,WGS 72BE / UTM zone 52N,,WGS 72BE / UTM zone 52N,,,WGS 72BE / UTM zone 52N,,,,,,,,,0,0,0
+256600,32453,0,32453,0,0,0,,WGS72be.UTM-53N,WGS72/be.UTM-53N,WGS72be/a.UTM-53N,WGS 72BE / UTM zone 53N,,WGS 72BE / UTM zone 53N,,,WGS 72BE / UTM zone 53N,,,,,,,,,0,0,0
+256700,32454,0,32454,0,0,0,,WGS72be.UTM-54N,WGS72/be.UTM-54N,WGS72be/a.UTM-54N,WGS 72BE / UTM zone 54N,,WGS 72BE / UTM zone 54N,,,WGS 72BE / UTM zone 54N,,,,,,,,,0,0,0
+256800,32455,0,32455,0,0,0,,WGS72be.UTM-55N,WGS72/be.UTM-55N,WGS72be/a.UTM-55N,WGS 72BE / UTM zone 55N,,WGS 72BE / UTM zone 55N,,,WGS 72BE / UTM zone 55N,,,,,,,,,0,0,0
+256900,32456,0,32456,0,0,0,,WGS72be.UTM-56N,WGS72/be.UTM-56N,WGS72be/a.UTM-56N,WGS 72BE / UTM zone 56N,,WGS 72BE / UTM zone 56N,,,WGS 72BE / UTM zone 56N,,,,,,,,,0,0,0
+257000,32457,0,32457,0,0,0,,WGS72be.UTM-57N,WGS72/be.UTM-57N,WGS72be/a.UTM-57N,WGS 72BE / UTM zone 57N,,WGS 72BE / UTM zone 57N,,,WGS 72BE / UTM zone 57N,,,,,,,,,0,0,0
+257100,32458,0,32458,0,0,0,,WGS72be.UTM-58N,WGS72/be.UTM-58N,WGS72be/a.UTM-58N,WGS 72BE / UTM zone 58N,,WGS 72BE / UTM zone 58N,,,WGS 72BE / UTM zone 58N,,,,,,,,,0,0,0
+257200,32459,0,32459,0,0,0,,WGS72be.UTM-59N,WGS72/be.UTM-59N,WGS72be/a.UTM-59N,WGS 72BE / UTM zone 59N,,WGS 72BE / UTM zone 59N,,,WGS 72BE / UTM zone 59N,,,,,,,,,0,0,0
+257300,32460,0,32460,0,0,0,,WGS72be.UTM-60N,WGS72/be.UTM-60N,WGS72be/a.UTM-60N,WGS 72BE / UTM zone 60N,,WGS 72BE / UTM zone 60N,,,WGS 72BE / UTM zone 60N,,,,,,,,,0,0,0
+257400,32501,0,32501,0,0,0,,WGS72be.UTM-1S,WGS72/be.UTM-1S,WGS72be/a.UTM-1S,WGS 72BE / UTM zone 1S,,WGS 72BE / UTM zone 1S,,,WGS 72BE / UTM zone 1S,,,,,,,,,0,0,0
+257500,32502,0,32502,0,0,0,,WGS72be.UTM-2S,WGS72/be.UTM-2S,WGS72be/a.UTM-2S,WGS 72BE / UTM zone 2S,,WGS 72BE / UTM zone 2S,,,WGS 72BE / UTM zone 2S,,,,,,,,,0,0,0
+257600,32503,0,32503,0,0,0,,WGS72be.UTM-3S,WGS72/be.UTM-3S,WGS72be/a.UTM-3S,WGS 72BE / UTM zone 3S,,WGS 72BE / UTM zone 3S,,,WGS 72BE / UTM zone 3S,,,,,,,,,0,0,0
+257700,32504,0,32504,0,0,0,,WGS72be.UTM-4S,WGS72/be.UTM-4S,WGS72be/a.UTM-4S,WGS 72BE / UTM zone 4S,,WGS 72BE / UTM zone 4S,,,WGS 72BE / UTM zone 4S,,,,,,,,,0,0,0
+257800,32505,0,32505,0,0,0,,WGS72be.UTM-5S,WGS72/be.UTM-5S,WGS72be/a.UTM-5S,WGS 72BE / UTM zone 5S,,WGS 72BE / UTM zone 5S,,,WGS 72BE / UTM zone 5S,,,,,,,,,0,0,0
+257900,32506,0,32506,0,0,0,,WGS72be.UTM-6S,WGS72/be.UTM-6S,WGS72be/a.UTM-6S,WGS 72BE / UTM zone 6S,,WGS 72BE / UTM zone 6S,,,WGS 72BE / UTM zone 6S,,,,,,,,,0,0,0
+258000,32507,0,32507,0,0,0,,WGS72be.UTM-7S,WGS72/be.UTM-7S,WGS72be/a.UTM-7S,WGS 72BE / UTM zone 7S,,WGS 72BE / UTM zone 7S,,,WGS 72BE / UTM zone 7S,,,,,,,,,0,0,0
+258100,32508,0,32508,0,0,0,,WGS72be.UTM-8S,WGS72/be.UTM-8S,WGS72be/a.UTM-8S,WGS 72BE / UTM zone 8S,,WGS 72BE / UTM zone 8S,,,WGS 72BE / UTM zone 8S,,,,,,,,,0,0,0
+258200,32509,0,32509,0,0,0,,WGS72be.UTM-9S,WGS72/be.UTM-9S,WGS72be/a.UTM-9S,WGS 72BE / UTM zone 9S,,WGS 72BE / UTM zone 9S,,,WGS 72BE / UTM zone 9S,,,,,,,,,0,0,0
+258300,32510,0,32510,0,0,0,,WGS72be.UTM-10S,WGS72/be.UTM-10S,WGS72be/a.UTM-10S,WGS 72BE / UTM zone 10S,,WGS 72BE / UTM zone 10S,,,WGS 72BE / UTM zone 10S,,,,,,,,,0,0,0
+258400,32511,0,32511,0,0,0,,WGS72be.UTM-11S,WGS72/be.UTM-11S,WGS72be/a.UTM-11S,WGS 72BE / UTM zone 11S,,WGS 72BE / UTM zone 11S,,,WGS 72BE / UTM zone 11S,,,,,,,,,0,0,0
+258500,32512,0,32512,0,0,0,,WGS72be.UTM-12S,WGS72/be.UTM-12S,WGS72be/a.UTM-12S,WGS 72BE / UTM zone 12S,,WGS 72BE / UTM zone 12S,,,WGS 72BE / UTM zone 12S,,,,,,,,,0,0,0
+258600,32513,0,32513,0,0,0,,WGS72be.UTM-13S,WGS72/be.UTM-13S,WGS72be/a.UTM-13S,WGS 72BE / UTM zone 13S,,WGS 72BE / UTM zone 13S,,,WGS 72BE / UTM zone 13S,,,,,,,,,0,0,0
+258700,32514,0,32514,0,0,0,,WGS72be.UTM-14S,WGS72/be.UTM-14S,WGS72be/a.UTM-14S,WGS 72BE / UTM zone 14S,,WGS 72BE / UTM zone 14S,,,WGS 72BE / UTM zone 14S,,,,,,,,,0,0,0
+258800,32515,0,32515,0,0,0,,WGS72be.UTM-15S,WGS72/be.UTM-15S,WGS72be/a.UTM-15S,WGS 72BE / UTM zone 15S,,WGS 72BE / UTM zone 15S,,,WGS 72BE / UTM zone 15S,,,,,,,,,0,0,0
+258900,32516,0,32516,0,0,0,,WGS72be.UTM-16S,WGS72/be.UTM-16S,WGS72be/a.UTM-16S,WGS 72BE / UTM zone 16S,,WGS 72BE / UTM zone 16S,,,WGS 72BE / UTM zone 16S,,,,,,,,,0,0,0
+259000,32517,0,32517,0,0,0,,WGS72be.UTM-17S,WGS72/be.UTM-17S,WGS72be/a.UTM-17S,WGS 72BE / UTM zone 17S,,WGS 72BE / UTM zone 17S,,,WGS 72BE / UTM zone 17S,,,,,,,,,0,0,0
+259100,32518,0,32518,0,0,0,,WGS72be.UTM-18S,WGS72/be.UTM-18S,WGS72be/a.UTM-18S,WGS 72BE / UTM zone 18S,,WGS 72BE / UTM zone 18S,,,WGS 72BE / UTM zone 18S,,,,,,,,,0,0,0
+259200,32519,0,32519,0,0,0,,WGS72be.UTM-19S,WGS72/be.UTM-19S,WGS72be/a.UTM-19S,WGS 72BE / UTM zone 19S,,WGS 72BE / UTM zone 19S,,,WGS 72BE / UTM zone 19S,,,,,,,,,0,0,0
+259300,32520,0,32520,0,0,0,,WGS72be.UTM-20S,WGS72/be.UTM-20S,WGS72be/a.UTM-20S,WGS 72BE / UTM zone 20S,,WGS 72BE / UTM zone 20S,,,WGS 72BE / UTM zone 20S,,,,,,,,,0,0,0
+259400,32521,0,32521,0,0,0,,WGS72be.UTM-21S,WGS72/be.UTM-21S,WGS72be/a.UTM-21S,WGS 72BE / UTM zone 21S,,WGS 72BE / UTM zone 21S,,,WGS 72BE / UTM zone 21S,,,,,,,,,0,0,0
+259500,32522,0,32522,0,0,0,,WGS72be.UTM-22S,WGS72/be.UTM-22S,WGS72be/a.UTM-22S,WGS 72BE / UTM zone 22S,,WGS 72BE / UTM zone 22S,,,WGS 72BE / UTM zone 22S,,,,,,,,,0,0,0
+259600,32523,0,32523,0,0,0,,WGS72be.UTM-23S,WGS72/be.UTM-23S,WGS72be/a.UTM-23S,WGS 72BE / UTM zone 23S,,WGS 72BE / UTM zone 23S,,,WGS 72BE / UTM zone 23S,,,,,,,,,0,0,0
+259700,32524,0,32524,0,0,0,,WGS72be.UTM-24S,WGS72/be.UTM-24S,WGS72be/a.UTM-24S,WGS 72BE / UTM zone 24S,,WGS 72BE / UTM zone 24S,,,WGS 72BE / UTM zone 24S,,,,,,,,,0,0,0
+259800,32525,0,32525,0,0,0,,WGS72be.UTM-25S,WGS72/be.UTM-25S,WGS72be/a.UTM-25S,WGS 72BE / UTM zone 25S,,WGS 72BE / UTM zone 25S,,,WGS 72BE / UTM zone 25S,,,,,,,,,0,0,0
+259900,32526,0,32526,0,0,0,,WGS72be.UTM-26S,WGS72/be.UTM-26S,WGS72be/a.UTM-26S,WGS 72BE / UTM zone 26S,,WGS 72BE / UTM zone 26S,,,WGS 72BE / UTM zone 26S,,,,,,,,,0,0,0
+260000,32527,0,32527,0,0,0,,WGS72be.UTM-27S,WGS72/be.UTM-27S,WGS72be/a.UTM-27S,WGS 72BE / UTM zone 27S,,WGS 72BE / UTM zone 27S,,,WGS 72BE / UTM zone 27S,,,,,,,,,0,0,0
+260100,32528,0,32528,0,0,0,,WGS72be.UTM-28S,WGS72/be.UTM-28S,WGS72be/a.UTM-28S,WGS 72BE / UTM zone 28S,,WGS 72BE / UTM zone 28S,,,WGS 72BE / UTM zone 28S,,,,,,,,,0,0,0
+260200,32529,0,32529,0,0,0,,WGS72be.UTM-29S,WGS72/be.UTM-29S,WGS72be/a.UTM-29S,WGS 72BE / UTM zone 29S,,WGS 72BE / UTM zone 29S,,,WGS 72BE / UTM zone 29S,,,,,,,,,0,0,0
+260300,32530,0,32530,0,0,0,,WGS72be.UTM-30S,WGS72/be.UTM-30S,WGS72be/a.UTM-30S,WGS 72BE / UTM zone 30S,,WGS 72BE / UTM zone 30S,,,WGS 72BE / UTM zone 30S,,,,,,,,,0,0,0
+260400,32531,0,32531,0,0,0,,WGS72be.UTM-31S,WGS72/be.UTM-31S,WGS72be/a.UTM-31S,WGS 72BE / UTM zone 31S,,WGS 72BE / UTM zone 31S,,,WGS 72BE / UTM zone 31S,,,,,,,,,0,0,0
+260500,32532,0,32532,0,0,0,,WGS72be.UTM-32S,WGS72/be.UTM-32S,WGS72be/a.UTM-32S,WGS 72BE / UTM zone 32S,,WGS 72BE / UTM zone 32S,,,WGS 72BE / UTM zone 32S,,,,,,,,,0,0,0
+260600,32533,0,32533,0,0,0,,WGS72be.UTM-33S,WGS72/be.UTM-33S,WGS72be/a.UTM-33S,WGS 72BE / UTM zone 33S,,WGS 72BE / UTM zone 33S,,,WGS 72BE / UTM zone 33S,,,,,,,,,0,0,0
+260700,32534,0,32534,0,0,0,,WGS72be.UTM-34S,WGS72/be.UTM-34S,WGS72be/a.UTM-34S,WGS 72BE / UTM zone 34S,,WGS 72BE / UTM zone 34S,,,WGS 72BE / UTM zone 34S,,,,,,,,,0,0,0
+260800,32535,0,32535,0,0,0,,WGS72be.UTM-35S,WGS72/be.UTM-35S,WGS72be/a.UTM-35S,WGS 72BE / UTM zone 35S,,WGS 72BE / UTM zone 35S,,,WGS 72BE / UTM zone 35S,,,,,,,,,0,0,0
+260900,32536,0,32536,0,0,0,,WGS72be.UTM-36S,WGS72/be.UTM-36S,WGS72be/a.UTM-36S,WGS 72BE / UTM zone 36S,,WGS 72BE / UTM zone 36S,,,WGS 72BE / UTM zone 36S,,,,,,,,,0,0,0
+261000,32537,0,32537,0,0,0,,WGS72be.UTM-37S,WGS72/be.UTM-37S,WGS72be/a.UTM-37S,WGS 72BE / UTM zone 37S,,WGS 72BE / UTM zone 37S,,,WGS 72BE / UTM zone 37S,,,,,,,,,0,0,0
+261100,32538,0,32538,0,0,0,,WGS72be.UTM-38S,WGS72/be.UTM-38S,WGS72be/a.UTM-38S,WGS 72BE / UTM zone 38S,,WGS 72BE / UTM zone 38S,,,WGS 72BE / UTM zone 38S,,,,,,,,,0,0,0
+261200,32539,0,32539,0,0,0,,WGS72be.UTM-39S,WGS72/be.UTM-39S,WGS72be/a.UTM-39S,WGS 72BE / UTM zone 39S,,WGS 72BE / UTM zone 39S,,,WGS 72BE / UTM zone 39S,,,,,,,,,0,0,0
+261300,32540,0,32540,0,0,0,,WGS72be.UTM-40S,WGS72/be.UTM-40S,WGS72be/a.UTM-40S,WGS 72BE / UTM zone 40S,,WGS 72BE / UTM zone 40S,,,WGS 72BE / UTM zone 40S,,,,,,,,,0,0,0
+261400,32541,0,32541,0,0,0,,WGS72be.UTM-41S,WGS72/be.UTM-41S,WGS72be/a.UTM-41S,WGS 72BE / UTM zone 41S,,WGS 72BE / UTM zone 41S,,,WGS 72BE / UTM zone 41S,,,,,,,,,0,0,0
+261500,32542,0,32542,0,0,0,,WGS72be.UTM-42S,WGS72/be.UTM-42S,WGS72be/a.UTM-42S,WGS 72BE / UTM zone 42S,,WGS 72BE / UTM zone 42S,,,WGS 72BE / UTM zone 42S,,,,,,,,,0,0,0
+261600,32543,0,32543,0,0,0,,WGS72be.UTM-43S,WGS72/be.UTM-43S,WGS72be/a.UTM-43S,WGS 72BE / UTM zone 43S,,WGS 72BE / UTM zone 43S,,,WGS 72BE / UTM zone 43S,,,,,,,,,0,0,0
+261700,32544,0,32544,0,0,0,,WGS72be.UTM-44S,WGS72/be.UTM-44S,WGS72be/a.UTM-44S,WGS 72BE / UTM zone 44S,,WGS 72BE / UTM zone 44S,,,WGS 72BE / UTM zone 44S,,,,,,,,,0,0,0
+261800,32545,0,32545,0,0,0,,WGS72be.UTM-45S,WGS72/be.UTM-45S,WGS72be/a.UTM-45S,WGS 72BE / UTM zone 45S,,WGS 72BE / UTM zone 45S,,,WGS 72BE / UTM zone 45S,,,,,,,,,0,0,0
+261900,32546,0,32546,0,0,0,,WGS72be.UTM-46S,WGS72/be.UTM-46S,WGS72be/a.UTM-46S,WGS 72BE / UTM zone 46S,,WGS 72BE / UTM zone 46S,,,WGS 72BE / UTM zone 46S,,,,,,,,,0,0,0
+262000,32547,0,32547,0,0,0,,WGS72be.UTM-47S,WGS72/be.UTM-47S,WGS72be/a.UTM-47S,WGS 72BE / UTM zone 47S,,WGS 72BE / UTM zone 47S,,,WGS 72BE / UTM zone 47S,,,,,,,,,0,0,0
+262100,32548,0,32548,0,0,0,,WGS72be.UTM-48S,WGS72/be.UTM-48S,WGS72be/a.UTM-48S,WGS 72BE / UTM zone 48S,,WGS 72BE / UTM zone 48S,,,WGS 72BE / UTM zone 48S,,,,,,,,,0,0,0
+262200,32549,0,32549,0,0,0,,WGS72be.UTM-49S,WGS72/be.UTM-49S,WGS72be/a.UTM-49S,WGS 72BE / UTM zone 49S,,WGS 72BE / UTM zone 49S,,,WGS 72BE / UTM zone 49S,,,,,,,,,0,0,0
+262300,32550,0,32550,0,0,0,,WGS72be.UTM-50S,WGS72/be.UTM-50S,WGS72be/a.UTM-50S,WGS 72BE / UTM zone 50S,,WGS 72BE / UTM zone 50S,,,WGS 72BE / UTM zone 50S,,,,,,,,,0,0,0
+262400,32551,0,32551,0,0,0,,WGS72be.UTM-51S,WGS72/be.UTM-51S,WGS72be/a.UTM-51S,WGS 72BE / UTM zone 51S,,WGS 72BE / UTM zone 51S,,,WGS 72BE / UTM zone 51S,,,,,,,,,0,0,0
+262500,32552,0,32552,0,0,0,,WGS72be.UTM-52S,WGS72/be.UTM-52S,WGS72be/a.UTM-52S,WGS 72BE / UTM zone 52S,,WGS 72BE / UTM zone 52S,,,WGS 72BE / UTM zone 52S,,,,,,,,,0,0,0
+262600,32553,0,32553,0,0,0,,WGS72be.UTM-53S,WGS72/be.UTM-53S,WGS72be/a.UTM-53S,WGS 72BE / UTM zone 53S,,WGS 72BE / UTM zone 53S,,,WGS 72BE / UTM zone 53S,,,,,,,,,0,0,0
+262700,32554,0,32554,0,0,0,,WGS72be.UTM-54S,WGS72/be.UTM-54S,WGS72be/a.UTM-54S,WGS 72BE / UTM zone 54S,,WGS 72BE / UTM zone 54S,,,WGS 72BE / UTM zone 54S,,,,,,,,,0,0,0
+262800,32555,0,32555,0,0,0,,WGS72be.UTM-55S,WGS72/be.UTM-55S,WGS72be/a.UTM-55S,WGS 72BE / UTM zone 55S,,WGS 72BE / UTM zone 55S,,,WGS 72BE / UTM zone 55S,,,,,,,,,0,0,0
+262900,32556,0,32556,0,0,0,,WGS72be.UTM-56S,WGS72/be.UTM-56S,WGS72be/a.UTM-56S,WGS 72BE / UTM zone 56S,,WGS 72BE / UTM zone 56S,,,WGS 72BE / UTM zone 56S,,,,,,,,,0,0,0
+263000,32557,0,32557,0,0,0,,WGS72be.UTM-57S,WGS72/be.UTM-57S,WGS72be/a.UTM-57S,WGS 72BE / UTM zone 57S,,WGS 72BE / UTM zone 57S,,,WGS 72BE / UTM zone 57S,,,,,,,,,0,0,0
+263100,32558,0,32558,0,0,0,,WGS72be.UTM-58S,WGS72/be.UTM-58S,WGS72be/a.UTM-58S,WGS 72BE / UTM zone 58S,,WGS 72BE / UTM zone 58S,,,WGS 72BE / UTM zone 58S,,,,,,,,,0,0,0
+263200,32559,0,32559,0,0,0,,WGS72be.UTM-59S,WGS72/be.UTM-59S,WGS72be/a.UTM-59S,WGS 72BE / UTM zone 59S,,WGS 72BE / UTM zone 59S,,,WGS 72BE / UTM zone 59S,,,,,,,,,0,0,0
+263300,32560,0,32560,0,0,0,,WGS72be.UTM-60S,WGS72/be.UTM-60S,WGS72be/a.UTM-60S,WGS 72BE / UTM zone 60S,,WGS 72BE / UTM zone 60S,,,WGS 72BE / UTM zone 60S,,,,,,,,,0,0,0
 263400,32600,0,32600,0,0,0,,,,,WGS 84 / UTM grid system (northern hemisphere),,WGS 84 / UTM grid system (northern hemisphere),,,WGS 84 / UTM grid system (northern hemisphere),,,,,,,,,0,0,0
 263500,32601,32601,32601,0,0,82208,,UTM84-1N,WGS84.UTM-01N,UTM84-1N,WGS 84 / UTM zone 1N,WGS_1984_UTM_Zone_1N,WGS 84 / UTM zone 1N,,,WGS 84 / UTM zone 1N,,,,"UTM Zone 1, Northern Hemisphere (WGS 84)",,,,,0,0,0
 263600,32602,32602,32602,0,0,82271,,UTM84-2N,WGS84.UTM-02N,UTM84-2N,WGS 84 / UTM zone 2N,WGS_1984_UTM_Zone_2N,WGS 84 / UTM zone 2N,,,WGS 84 / UTM zone 2N,,,,"UTM Zone 2, Northern Hemisphere (WGS 84)",,,,,0,0,0

@@ -183,6 +183,7 @@ int EXP_LVL9 CSdtcomp (	Const char *inpt,
 
 	size_t rdCnt;
 	size_t wrCnt;
+	size_t strLen;
 
 	char *cp;
 	csFILE *inStrm;
@@ -359,8 +360,15 @@ int EXP_LVL9 CSdtcomp (	Const char *inpt,
 			dtdef.protect = FALSE;
 			dtdef.to84_via = cs_DTCTYP_NONE;
 
+			strLen = strlen (cp);
 			CS_stncp (dtdef.key_nm,cp,sizeof (dtdef.key_nm));
 			st = CS_nampp (dtdef.key_nm);
+			if (strLen > cs_KEYNM_MAX)
+			{
+				sprintf (err_msg,"Key name %s exceeds maximun length of %d; line %d.",cp,cs_KEYNM_MAX,line_nbr);
+				cancel = (*err_func)(err_msg);
+				err_cnt += 1;
+			}
 			if (st != 0)
 			{
 				sprintf (err_msg,"%s is not a valid datum key name; line %d.",cp,line_nbr);

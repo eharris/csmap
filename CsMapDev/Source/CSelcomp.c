@@ -110,7 +110,9 @@ int EXP_LVL9 CSelcomp (	Const char *inpt,
 	int crypt;
 	int line_nbr;
 	int err_cnt;
+	
 	size_t wrCnt;
+	size_t strLen;
 
 	char *cp;
 	csFILE *inStrm;
@@ -241,8 +243,16 @@ int EXP_LVL9 CSelcomp (	Const char *inpt,
 		
 			/* Prepare for the next ellipsoid definition. */
 			(void)memset ((char *)&eldef,'\0',sizeof (eldef));
+
+			strLen = strlen (cp);
 			(void)CS_stncp (eldef.key_nm,cp,sizeof (eldef.key_nm));
 			st = CS_nampp (eldef.key_nm);
+			if (strLen > cs_KEYNM_MAX)
+			{
+				sprintf (err_msg,"key name %s exceeds maximun length of %d; line %d.",cp,cs_KEYNM_MAX,line_nbr);
+				cancel = (*err_func)(err_msg);
+				err_cnt += 1;
+			}
 			if (st != 0)
 			{
 				sprintf (err_msg,"%s is not a valid ellipsoid key name; line %d.",cp,line_nbr);
