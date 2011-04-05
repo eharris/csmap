@@ -461,7 +461,7 @@ int main (int argc,char *argv [])
 	/* Force test values to upper case. */
 	for (cp = tests;*cp != '\0';cp += 1)
 	{
-		*cp = toupper (*cp);
+		*cp = (char)toupper (*cp);
 	}
 
 	/* Open a file with and save the file descriptor.
@@ -530,9 +530,9 @@ int main (int argc,char *argv [])
 
 	hi._pentry = NULL;
 	mem_used = 0;
-	while (TRUE)
+	for (;;)
 	{
-		hi_st = heapwalk (&hi);
+		hi_st = _heapwalk (&hi);
 		if (hi_st != _HEAPOK) break;
 		if (hi._useflag == _USEDENTRY)
 		{

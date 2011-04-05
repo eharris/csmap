@@ -629,8 +629,8 @@ int CScalcMgrsFromLlUtm (struct cs_Mgrs_ *__This,char *result,int size,double la
 		}
 
 		/* Back to sanity. */
-		*rsltPtr++ = '0' + (utmZone / 10);
-		*rsltPtr++ = '0' + (utmZone % 10);
+		*rsltPtr++ = '0' + (char)(utmZone / 10);
+		*rsltPtr++ = '0' + (char)(utmZone % 10);
 		if (latLng [LAT] >= 72.0)
 		{
 			*rsltPtr++ = 'X';

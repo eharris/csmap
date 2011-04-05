@@ -601,6 +601,11 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 																			  csMapFlvrEpsg,
 																			  epsgCode);
 		}
+		else
+		{
+    		csMapSt = csMapNoMatch;                     // keep VS2010 happy
+
+		}
 		if (csMapSt != csMapOk)
 		{
 			mapCnt += 1;

@@ -124,11 +124,11 @@ bool CS_strrpl (char* string1,size_t strSize,const char* find,const char* rplWit
 			count3 = strlen (rplWith);
 			count4 = strlen (string1) - count1 - count2;
 
-			cPtr = CS_stncp (wrkStr,string1,count1 + 1);
-			cPtr = CS_stncp (cPtr,rplWith,count3 + 1);
-			cPtr = CS_stncp (cPtr,(string1 + count1 + count2),count4 + 1);
+			cPtr = CS_stncp (wrkStr,string1,(int)(count1 + 1));
+			cPtr = CS_stncp (cPtr,rplWith,(int)(count3 + 1));
+			cPtr = CS_stncp (cPtr,(string1 + count1 + count2),(int)(count4 + 1));
 			
-			CS_stncp (string1,wrkStr,strSize);
+			CS_stncp (string1,wrkStr,(int)strSize);
 			ok = true;
 		}
 	}
