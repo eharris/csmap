@@ -132,7 +132,6 @@ int EXP_LVL9 CSgeoctI3 (struct csGeoct_ *geoct,double* trgLl,Const double* srcLl
 {
 	int status;
 
-	double xx, yy, zz;
 	double xyz [3];
 
 	/* Convert the geographic coordinates to geocentric XYZ coordinates. */

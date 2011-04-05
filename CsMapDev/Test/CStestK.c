@@ -41,8 +41,8 @@ extern unsigned short cs_ErrSup;
 #if _RUN_TIME <= _rt_UNIXPCC
 extern ulong32_t cs_Doserr;
 #endif
-const unsigned long KcsNmMapNoNumber;
-const unsigned long KcsNmInvNumber;
+extern const unsigned long KcsNmMapNoNumber;
+extern const unsigned long KcsNmInvNumber;
 extern char cs_TestDir [];
 char* cs_TestDirP;
 

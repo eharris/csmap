@@ -20,8 +20,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)bin80\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)../bin90/$(ConfigurationName)"
+			IntermediateDirectory="$(ProjectDir)../obj90/$(ProjectName)/$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="2"
 			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
@@ -44,13 +44,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)../Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
@@ -66,9 +66,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmapd.lib"
-				OutputFile="$(OutDir)\CS_Comp.exe"
+				OutputFile="$(OutDir)/CS_Comp.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib80\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../lib90/$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -94,13 +94,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
+				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(ProjectDir)../Dictionaries&quot; &quot;$(ProjectDir)../Dictionaries&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)bin80\$(ConfigurationName)64"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)64"
+			OutputDirectory="$(ProjectDir)../bin90/$(ConfigurationName)64"
+			IntermediateDirectory="$(ProjectDir)../obj90/$(ProjectName)\$(ConfigurationName)64"
 			ConfigurationType="1"
 			CharacterSet="2"
 			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
@@ -124,13 +124,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)../Include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
@@ -148,7 +148,7 @@
 				AdditionalDependencies="csmapd.lib"
 				OutputFile="$(OutDir)\CS_Comp.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib80\$(ConfigurationName)64&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../lib90/$(ConfigurationName)64&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -174,13 +174,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="if %PROCESSOR_ARCHITEW6432%==AMD64 &quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
+				CommandLine="if %PROCESSOR_ARCHITECTURE%==AMD64 &quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(ProjectDir)..\Dictionaries&quot; &quot;$(ProjectDir)..\Dictionaries&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)bin80\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)../bin90/$(ConfigurationName)"
+			IntermediateDirectory="$(ProjectDir)../obj90/$(ProjectName)/$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="2"
 			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
@@ -205,12 +205,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="4"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)../Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
@@ -226,8 +226,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmap.lib"
-				OutputFile="$(OutDir)\CS_Comp.exe"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib80\$(ConfigurationName)&quot;"
+				OutputFile="$(OutDir)/CS_Comp.exe"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../lib90/$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -255,13 +255,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
+				CommandLine="&quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(ProjectDir)../Dictionaries&quot; &quot;$(ProjectDir)../Dictionaries&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(SolutionDir)bin80\$(ConfigurationName)64"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)64"
+			OutputDirectory="$(ProjectDir)../bin90/$(ConfigurationName)64"
+			IntermediateDirectory="$(ProjectDir)../obj90/$(ProjectName)\$(ConfigurationName)64"
 			ConfigurationType="1"
 			CharacterSet="2"
 			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
@@ -287,12 +287,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="4"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Include&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)../Include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
@@ -309,7 +309,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmap.lib"
 				OutputFile="$(OutDir)\CS_Comp.exe"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib80\$(ConfigurationName)64&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../lib90/$(ConfigurationName)64&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -337,7 +337,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="if %PROCESSOR_ARCHITEW6432%==AMD64 &quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(SolutionDir)Dictionaries&quot; &quot;$(SolutionDir)Dictionaries&quot;"
+				CommandLine="if %PROCESSOR_ARCHITECTURE%==AMD64 &quot;$(OutDir)\CS_Comp.exe&quot; /b &quot;$(ProjectDir)..\Dictionaries&quot; &quot;$(ProjectDir)..\Dictionaries&quot;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -350,7 +350,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\CS_COMP.c"
+				RelativePath="..\Dictionaries\CS_COMP.c"
 				>
 			</File>
 		</Filter>
@@ -375,31 +375,31 @@
 			Filter="asc"
 			>
 			<File
-				RelativePath=".\category.asc"
+				RelativePath="..\Dictionaries\category.asc"
 				>
 			</File>
 			<File
-				RelativePath=".\coordsys.asc"
+				RelativePath="..\Dictionaries\coordsys.asc"
 				>
 			</File>
 			<File
-				RelativePath=".\datums.asc"
+				RelativePath="..\Dictionaries\datums.asc"
 				>
 			</File>
 			<File
-				RelativePath=".\elipsoid.asc"
+				RelativePath="..\Dictionaries\elipsoid.asc"
 				>
 			</File>
 			<File
-				RelativePath=".\GeodeticPath.asc"
+				RelativePath="..\Dictionaries\GeodeticPath.asc"
 				>
 			</File>
 			<File
-				RelativePath=".\GeodeticTransformation.asc"
+				RelativePath="..\Dictionaries\GeodeticTransformation.asc"
 				>
 			</File>
 			<File
-				RelativePath=".\mreg.asc"
+				RelativePath="..\Dictionaries\mreg.asc"
 				>
 			</File>
 		</Filter>

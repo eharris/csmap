@@ -20,8 +20,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)bin80/$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)obj80/$(ProjectName)/$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)../bin90/$(ConfigurationName)"
+			IntermediateDirectory="$(ProjectDir)../obj90/$(ProjectName)/$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)Include"
+				AdditionalIncludeDirectories="$(ProjectDir)../Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;__HEAP__"
 				KeepComments="false"
 				MinimalRebuild="true"
@@ -54,7 +54,7 @@
 				FloatingPointExceptions="true"
 				UsePrecompiledHeader="0"
 				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
@@ -70,9 +70,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmapd.lib"
-				OutputFile="$(OutDir)\CS_Test.exe"
+				OutputFile="$(OutDir)/CS_Test.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SolutionDir)lib80\$(ConfigurationName)"
+				AdditionalLibraryDirectories="$(ProjectDir)../lib90/$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
@@ -103,8 +103,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)bin80/$(ConfigurationName)64"
-			IntermediateDirectory="$(SolutionDir)obj80/$(ProjectName)/$(ConfigurationName)64"
+			OutputDirectory="$(ProjectDir)../bin90/$(ConfigurationName)64"
+			IntermediateDirectory="$(ProjectDir)../obj90/$(ProjectName)/$(ConfigurationName)64"
 			ConfigurationType="1"
 			CharacterSet="1"
 			DeleteExtensionsOnClean="*.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;$(TargetPath)"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SolutionDir)Include"
+				AdditionalIncludeDirectories="$(ProjectDir)../Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				KeepComments="false"
 				MinimalRebuild="true"
@@ -138,7 +138,7 @@
 				FloatingPointExceptions="true"
 				UsePrecompiledHeader="0"
 				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
@@ -156,7 +156,7 @@
 				AdditionalDependencies="csmapd.lib"
 				OutputFile="$(OutDir)\CS_Test.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SolutionDir)lib80\$(ConfigurationName)64"
+				AdditionalLibraryDirectories="$(ProjectDir)../lib90/$(ConfigurationName)64"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
@@ -187,8 +187,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)bin80\$(ConfigurationName)"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="$(ProjectDir)../bin90/$(ConfigurationName)"
+			IntermediateDirectory="$(ProjectDir)../obj90/$(ProjectName)/$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -210,14 +210,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)Include"
+				AdditionalIncludeDirectories="$(ProjectDir)../Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
 				FloatingPointExceptions="true"
 				UsePrecompiledHeader="0"
 				ProgramDataBaseFileName="$(OutDir)\CS_Test.pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
@@ -233,9 +233,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmap.lib"
-				OutputFile="$(OutDir)\CS_Test.exe"
+				OutputFile="$(OutDir)/CS_Test.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SolutionDir)lib80\$(ConfigurationName)"
+				AdditionalLibraryDirectories="$(ProjectDir)../lib90/$(ConfigurationName)"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -268,8 +268,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(SolutionDir)bin80/$(ConfigurationName)64"
-			IntermediateDirectory="$(SolutionDir)obj80\$(ProjectName)\$(ConfigurationName)64"
+			OutputDirectory="$(ProjectDir)../bin90/$(ConfigurationName)64"
+			IntermediateDirectory="$(ProjectDir)../obj90/$(ProjectName)\$(ConfigurationName)64"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -292,14 +292,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(SolutionDir)Include"
+				AdditionalIncludeDirectories="$(ProjectDir)../Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
 				FloatingPointExceptions="true"
 				UsePrecompiledHeader="0"
 				ProgramDataBaseFileName="$(OutDir)\CS_Test.pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
@@ -317,7 +317,7 @@
 				AdditionalDependencies="csmap.lib"
 				OutputFile="$(OutDir)\CS_Test.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SolutionDir)lib80\$(ConfigurationName)64"
+				AdditionalLibraryDirectories="$(ProjectDir)../lib90/$(ConfigurationName)64"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -358,103 +358,103 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\CS_test.c"
+				RelativePath="..\Test\CS_test.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest1.c"
+				RelativePath="..\Test\CStest1.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest2.c"
+				RelativePath="..\Test\CStest2.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest3.c"
+				RelativePath="..\Test\CStest3.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest4.c"
+				RelativePath="..\Test\CStest4.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest5.c"
+				RelativePath="..\Test\CStest5.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest6.c"
+				RelativePath="..\Test\CStest6.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest7.c"
+				RelativePath="..\Test\CStest7.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest8.c"
+				RelativePath="..\Test\CStest8.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStest9.c"
+				RelativePath="..\Test\CStest9.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestA.c"
+				RelativePath="..\Test\CStestA.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestB.c"
+				RelativePath="..\Test\CStestB.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestC.c"
+				RelativePath="..\Test\CStestC.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestD.c"
+				RelativePath="..\Test\CStestD.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestE.c"
+				RelativePath="..\Test\CStestE.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestF.c"
+				RelativePath="..\Test\CStestF.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestG.c"
+				RelativePath="..\Test\CStestG.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestH.c"
+				RelativePath="..\Test\CStestH.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestI.c"
+				RelativePath="..\Test\CStestI.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestJ.c"
+				RelativePath="..\Test\CStestJ.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestK.c"
+				RelativePath="..\Test\CStestK.c"
 				>
 			</File>
 			<File
-				RelativePath=".\csTestL.c"
+				RelativePath="..\Test\csTestL.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestS.c"
+				RelativePath="..\Test\CStestS.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestSupport.c"
+				RelativePath="..\Test\CStestSupport.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CStestT.c"
+				RelativePath="..\Test\CStestT.c"
 				>
 			</File>
 		</Filter>
@@ -464,14 +464,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\cs_Test.h"
+				RelativePath="..\Test\cs_Test.h"
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\csmap.vcproj"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
