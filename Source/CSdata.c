@@ -637,6 +637,7 @@ Const struct cs_Grptbl_ cs_CsGrptbl [] =
 	{   "CAMER","Central American Coordinate Systems"         ,cs_GRPTBL_ACTIVE},
 	{  "AFRICA","African Coordinate Systems"                  ,cs_GRPTBL_ACTIVE},
 	{    "ASIA","Asian Coordinate Systems"                    ,cs_GRPTBL_ACTIVE},
+	{  "RUSSIA","Russian Coordinate Systems"                  ,cs_GRPTBL_ACTIVE},
 	{ "PACIFIC","Other Pacific Coordinate Systems"            ,cs_GRPTBL_ACTIVE},
 	{"ATLANTIC","Other Atlantic Coordinate Systems"           ,cs_GRPTBL_ACTIVE},
 	{   "POLAR","Polar Coordinate Systems"                    ,cs_GRPTBL_ACTIVE},
