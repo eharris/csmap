@@ -335,7 +335,7 @@ struct csGeoidHeightEntry_* CSnewGeoidHeightEntry (struct csDatumCatalogEntry_* 
 		}
 		__This->type = csGeoidHgtTypeGeoid99;
 	}
-	else if (!CS_stricmp (cp,"osg"))
+	else if (!CS_stricmp (cp,"txt"))
 	{
 		/* These are supposed to be OSGM91 type files. */
 		/* Must not set the type until allocated for correct error handling. */
@@ -356,6 +356,16 @@ struct csGeoidHeightEntry_* CSnewGeoidHeightEntry (struct csDatumCatalogEntry_* 
 		}
 		__This->type = csGeoidHgtTypeBynGridFile;
 	}
+   else if (!CS_stricmp (cp,"grd"))
+   {
+      /* Must not set the type until allocated for correct error handling. */
+      __This->pointers.egm96Ptr = CSnewEgm96 (catPtr->pathName,catPtr->bufferSize,catPtr->flags,catPtr->density);
+      if (__This->pointers.egm96Ptr == NULL)
+      {
+         goto error;
+      }
+      __This->type = csGeoidHgtTypeEgm96;
+   }
 	else
 	{
 		CS_erpt (cs_GHGT_EXT);
@@ -387,6 +397,9 @@ void CSdeleteGeoidHeightEntry (struct csGeoidHeightEntry_* __This)
 		case csGeoidHgtTypeBynGridFile:
 			CSdeleteBynGridFile (__This->pointers.bynGridFilePtr);
 			break;
+      case csGeoidHgtTypeEgm96:
+         CSdeleteEgm96 (__This->pointers.egm96Ptr);
+         break;
 		case csGeoidHgtTypeWorld:
 		case csGeoidHgtTypeAustralia:
 		case csGeoidHgtTypeNone:
@@ -418,6 +431,9 @@ void CSreleaseGeoidHeightEntry (struct csGeoidHeightEntry_* __This)
 		case csGeoidHgtTypeBynGridFile:
 			CSreleaseBynGridFile (__This->pointers.bynGridFilePtr);
 			break;
+      case csGeoidHgtTypeEgm96:
+         CSreleaseEgm96 (__This->pointers.egm96Ptr);
+         break;
 		case csGeoidHgtTypeWorld:
 		case csGeoidHgtTypeAustralia:
 		case csGeoidHgtTypeNone:
@@ -451,6 +467,9 @@ double CStestGeoidHeightEntry (struct csGeoidHeightEntry_* __This,Const double* 
 		case csGeoidHgtTypeBynGridFile:
 			rtnValue = CStestBynGridFile (__This->pointers.bynGridFilePtr,ll84);
 			break;
+      case csGeoidHgtTypeEgm96:
+         rtnValue = CStestEgm96 (__This->pointers.egm96Ptr,ll84);
+         break;
 		case csGeoidHgtTypeWorld:
 		case csGeoidHgtTypeAustralia:
 		case csGeoidHgtTypeNone:
@@ -487,6 +506,9 @@ int CScalcGeoidHeightEntry (struct csGeoidHeightEntry_* __This,double* geoidHgt,
 		case csGeoidHgtTypeBynGridFile:
 			status = CScalcBynGridFile (__This->pointers.bynGridFilePtr,geoidHgt,ll84);
 			break;
+      case csGeoidHgtTypeEgm96:
+         status = CScalcEgm96 (__This->pointers.egm96Ptr,geoidHgt,ll84);
+         break;
 		case csGeoidHgtTypeWorld:
 		case csGeoidHgtTypeAustralia:
 		case csGeoidHgtTypeNone:
