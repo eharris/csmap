@@ -87,6 +87,8 @@ int CStestT (bool verbose,long32_t duration)
 	char wktThree [1024] = "PROJCS[\"NAD83 / California zone 3 (ftUS)\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],UNIT[\"US survey foot\",0.3048006096012192,AUTHORITY[\"EPSG\",\"9003\"]],PROJECTION[\"Lambert_Conformal_Conic_2SP\"],PARAMETER[\"standard_parallel_1\",38.43333333333333],PARAMETER[\"standard_parallel_2\",37.06666666666667],PARAMETER[\"latitude_of_origin\",36.5],PARAMETER[\"central_meridian\",-120.5],PARAMETER[\"false_easting\",6561666.667],PARAMETER[\"false_northing\",1640416.667],AUTHORITY[\"EPSG\",\"2227\"],AXIS[\"X\",EAST],AXIS[\"Y\",NORTH]]";
 	char wktFour  [1024] = "PROJCS[\"DHDN.Berlin/Cassini\",GEOGCS[\"DHDN.LL\",DATUM[\"DHDN\",SPHEROID[\"BESSEL\",6377397.155,299.15281535],TOWGS84[582.0000,105.0000,414.0000,-1.040000,-0.350000,3.080000,8.30000000]],PRIMEM[\"Greenwich\",0],UNIT[\"Degree\",0.017453292519943295]],PROJECTION[\"Cassini-Soldner\"],PARAMETER[\"false_easting\",40000.000],PARAMETER[\"false_northing\",10000.000],PARAMETER[\"central_meridian\",13.62720366666667],PARAMETER[\"latitude_of_origin\",52.41864827777778],UNIT[\"Meter\",1.00000000000000]]";
 	char wktFive  [1024] = "PROJCS[\"NAD83 / UTM zone 19N\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-69],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],AUTHORITY[\"EPSG\",\"26919\"],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]";
+	char wktSix   [1024] = "PROJCS[\"NAD_1983_HARN_StatePlane_Hawaii_3_FIPS_5103_Feet\",GEOGCS[\"GCS_North_American_1983_HARN\",DATUM[\"D_North_American_1983_HARN\",SPHEROID[\"GRS_1980\",6378137.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",1640416.666666667],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-158.0],PARAMETER[\"Scale_Factor\",0.99999],PARAMETER[\"Latitude_Of_Origin\",21.16666666666667],UNIT[\"Foot_US\",0.3048006096012192]]";
+	char wktSeven [1024] = "PROJCS[\"NAD_1983_UTM_Zone_12N\",GEOGCS[\"GCS_North_American_1983\",DATUM[\"D_North_American_1983\",SPHEROID[\"GRS_1980\",6378137.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",500000.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-111.0],PARAMETER[\"Scale_Factor\",0.9996],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]]";
 
 	int stOne;
 	struct cs_Csdef_ csDefOne;
@@ -112,6 +114,16 @@ int CStestT (bool verbose,long32_t duration)
 	struct cs_Csdef_ csDefFive;
 	struct cs_Dtdef_ dtDefFive;
 	struct cs_Eldef_ elDefFive;
+
+	int stSix;
+	struct cs_Csdef_ csDefSix;
+	struct cs_Dtdef_ dtDefSix;
+	struct cs_Eldef_ elDefSix;
+
+	int stSeven;
+	struct cs_Csdef_ csDefSeven;
+	struct cs_Dtdef_ dtDefSeven;
+	struct cs_Eldef_ elDefSeven;
 
 	csErrmsg [0] = '\0';
 	stOne = CS_wktToCsEx (&csDefOne,&dtDefOne,&elDefOne,wktFlvrOgc,wktOne,TRUE);
@@ -142,12 +154,25 @@ int CStestT (bool verbose,long32_t duration)
 		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stFour,csErrmsg);
 	}
 
-
 	csErrmsg [0] = '\0';
 	stFive = CS_wktToCsEx (&csDefFive,&dtDefFive,&elDefFive,wktFlvrOgc,wktFive,TRUE);
-	if (verbose && stFour < 0)
+	if (verbose && stFive < 0)
 	{
 		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stFive,csErrmsg);
+	}
+
+	csErrmsg [0] = '\0';
+	stSix = CS_wktToCsEx (&csDefSix,&dtDefSix,&elDefSix,wktFlvrEsri,wktSix,TRUE);
+	if (verbose && stSix < 0)
+	{
+		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stSix,csErrmsg);
+	}
+
+	csErrmsg [0] = '\0';
+	stSeven = CS_wktToCsEx (&csDefSeven,&dtDefSeven,&elDefSeven,wktFlvrEsri,wktSeven,TRUE);
+	if (verbose && stSeven < 0)
+	{
+		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stSeven,csErrmsg);
 	}
 
 	err_cnt += (stOne   != 0);
@@ -155,6 +180,8 @@ int CStestT (bool verbose,long32_t duration)
 	err_cnt += (stThree != 0);
 	err_cnt += (stFour  != 0);
 	err_cnt += (stFive  != 0);
+	err_cnt += (stSix   != 0);
+	err_cnt += (stSeven != 0);
 
 #endif
 #ifdef __SKIP__

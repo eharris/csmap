@@ -967,7 +967,7 @@ void TrcWktElement::RemoveElementFromString (std::string& value,size_t eleStrt,s
 	while (begIdx > 0 && isspace (value [begIdx - 1])) begIdx -= 1;
 
 	// If the thing we are removing is followed by a comma, we always remove that.
-	if (value [endIdx + 1] == ',')
+	if ((endIdx+1) < value.length() && value [endIdx + 1] == ',')
 	{
 		endIdx += 1;
 	}
