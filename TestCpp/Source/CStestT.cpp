@@ -89,6 +89,8 @@ int CStestT (bool verbose,long32_t duration)
 	char wktFive  [1024] = "PROJCS[\"NAD83 / UTM zone 19N\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",-69],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],AUTHORITY[\"EPSG\",\"26919\"],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]";
 	char wktSix   [1024] = "PROJCS[\"NAD_1983_HARN_StatePlane_Hawaii_3_FIPS_5103_Feet\",GEOGCS[\"GCS_North_American_1983_HARN\",DATUM[\"D_North_American_1983_HARN\",SPHEROID[\"GRS_1980\",6378137.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",1640416.666666667],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-158.0],PARAMETER[\"Scale_Factor\",0.99999],PARAMETER[\"Latitude_Of_Origin\",21.16666666666667],UNIT[\"Foot_US\",0.3048006096012192]]";
 	char wktSeven [1024] = "PROJCS[\"NAD_1983_UTM_Zone_12N\",GEOGCS[\"GCS_North_American_1983\",DATUM[\"D_North_American_1983\",SPHEROID[\"GRS_1980\",6378137.0,298.257222101]],PRIMEM[\"Greenwich\",0.0],UNIT[\"Degree\",0.0174532925199433]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"False_Easting\",500000.0],PARAMETER[\"False_Northing\",0.0],PARAMETER[\"Central_Meridian\",-111.0],PARAMETER[\"Scale_Factor\",0.9996],PARAMETER[\"Latitude_Of_Origin\",0.0],UNIT[\"Meter\",1.0]]";
+	char wktEight [1024] = "PROJCS[\"Italian National System (Gauss-Boaga), Zone 1 (West) Peninsular\",GEOGCS [\"Rome 1940\",DATUM [\"Rome 1940\",SPHEROID [\"International 1924\", 6378388, 297], -104.1, -49.1, -9.9, 0.971, -2.917, 0.714, -11.68],PRIMEM [ \"Greenwich\", 0.000000 ],UNIT [\"Decimal Degree\", 0.01745329251994330]],PROJECTION [\"Transverse Mercator\"],PARAMETER [\"Scale_Factor\", 0.999600],PARAMETER [\"Central_Meridian\", 9.000000],PARAMETER [\"False_Easting\", 150000000],UNIT [\"Centimeter\", 0.01]]";
+	char wktNine  [1024] = "PROJCS[\"ENEL GB\",GEOGCS[\"ROME1940-IT-7P\",DATUM[\"ROME1940-IT-7P\",SPHEROID[\"International 1924 (EPSG ID 7022)\",6378388.000,297.00000000],TOWGS84[-104.1000,-49.1000,-9.9000,0.971000,-2.917000,0.714000,-11.68000000]],PRIMEM[\"Greenwich\",0],UNIT[\"Decimal Degree\",0.017453292519943295]],PROJECTION[\"Transverse Mercator\"],PARAMETER[\"False_Easting\",1500000.000],PARAMETER[\"False_Northing\",0.000],PARAMETER[\"Scale_Factor\",1.000000000000],PARAMETER[\"Central_Meridian\",9.00000000000000],PARAMETER[\"Latitude_Of_Origin\",0.00000000000000],UNIT[\"Centimeter\",0.01000000000000]]";
 
 	int stOne;
 	struct cs_Csdef_ csDefOne;
@@ -124,6 +126,16 @@ int CStestT (bool verbose,long32_t duration)
 	struct cs_Csdef_ csDefSeven;
 	struct cs_Dtdef_ dtDefSeven;
 	struct cs_Eldef_ elDefSeven;
+
+	int stEight;
+	struct cs_Csdef_ csDefEight;
+	struct cs_Dtdef_ dtDefEight;
+	struct cs_Eldef_ elDefEight;
+
+	int stNine;
+	struct cs_Csdef_ csDefNine;
+	struct cs_Dtdef_ dtDefNine;
+	struct cs_Eldef_ elDefNine;
 
 	csErrmsg [0] = '\0';
 	stOne = CS_wktToCsEx (&csDefOne,&dtDefOne,&elDefOne,wktFlvrOgc,wktOne,TRUE);
@@ -175,6 +187,20 @@ int CStestT (bool verbose,long32_t duration)
 		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stSeven,csErrmsg);
 	}
 
+	csErrmsg [0] = '\0';
+	stEight = CS_wktToCsEx (&csDefEight,&dtDefEight,&elDefEight,wktFlvrEsri,wktEight,TRUE);
+	if (verbose && stEight < 0)
+	{
+		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stEight,csErrmsg);
+	}
+
+	csErrmsg [0] = '\0';
+	stNine = CS_wktToCsEx (&csDefNine,&dtDefNine,&elDefNine,wktFlvrEsri,wktNine,TRUE);
+	if (verbose && stNine < 0)
+	{
+		printf ("WKT2 processing failed! Status = %d; Reason: %s\n",stNine,csErrmsg);
+	}
+
 	err_cnt += (stOne   != 0);
 	err_cnt += (stTwo   != 0);
 	err_cnt += (stThree != 0);
@@ -182,6 +208,8 @@ int CStestT (bool verbose,long32_t duration)
 	err_cnt += (stFive  != 0);
 	err_cnt += (stSix   != 0);
 	err_cnt += (stSeven != 0);
+	err_cnt += (stEight != 0);
+	err_cnt += (stNine != 0);
 
 #endif
 #ifdef __SKIP__
