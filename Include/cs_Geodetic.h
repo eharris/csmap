@@ -63,8 +63,8 @@
 
 
 /* The following transformation "methods" are supported by the
-   Geodetic Transformation facility.  The metohds are grouped by
-   a mthod class; the method class distinguishing the type of
+   Geodetic Transformation facility.  The methods are grouped by
+   a method class; the method class distinguishing the type of
    parameters which are used by the method (i.e. which member
    of the parameter union of the cs_GeodeticTransform_ structure
    applies to that method). */
@@ -142,30 +142,42 @@
 #define cs_GXIDX_DUPXFRM   -2
 #define cs_GXIDX_ERROR     -3
 
-#define cs_XFRMFLGS_NULLX  0x0000
-#define cs_XFRMFLGS_WGS72  0x0000
-#define cs_XFRMFLGS_MOLOD  0x0000
-#define cs_XFRMFLGS_AMOLO  0x0000
-#define cs_XFRMFLGS_GEOCT  0x0000
-#define cs_XFRMFLGS_3PARM  0x0000
-#define cs_XFRMFLGS_4PARM  0x0000
-#define cs_XFRMFLGS_6PARM  0x0000
-#define cs_XFRMFLGS_BURSA  0x0000
-#define cs_XFRMFLGS_FRAME  0x0000
-#define cs_XFRMFLGS_7PARM  0x0000
-#define cs_XFRMFLGS_BDKAS  0x0000
-#define cs_XFRMFLGS_MULRG  0x0000
-#define cs_XFRMFLGS_PLYNM  0x0000
-#define cs_XFRMFLGS_GFILE  0x0000
+/* The following are essentially bits used to add specific properties to
+   specific transformations and/or their variations.  Curently, we have
+   only one such property: that is being reentrant.  Quite likely to be
+   more before this code is sent to code heaven. */
+  
+#define cs_XFRMFLG_NONE    0x0000UL
+#define cs_XFRMFLG_RNTRNT  0x0001UL				/* (1UL << 0) */
 
-#define cs_FRMTFLGS_CNTv1  0x0000
-#define cs_FRMTFLGS_CNTv2  0x0000
-#define cs_FRMTFLGS_NADCN  0x0000
-#define cs_FRMTFLGS_FRNCH  0x0000
-#define cs_FRMTFLGS_JAPAN  0x0000
-#define cs_FRMTFLGS_ATS77  0x0000
-#define cs_FRMTFLGS_OST97  0x0000
-#define cs_FRMTFLGS_OST02  0x0000
+
+#define cs_FRMTFLG_NONE    0x0000UL
+#define cs_FRMTFLG_RNTRNT  0x0001UL				/* (1UL << 0) */
+
+#define cs_XFRMFLGS_NULLX  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_WGS72  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_MOLOD  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_AMOLO  cs_XFRMFLG_NONE			/* Not iumplemented, don't know yet */
+#define cs_XFRMFLGS_GEOCT  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_3PARM  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_4PARM  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_6PARM  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_BURSA  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_FRAME  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_7PARM  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_BDKAS  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_MULRG  cs_XFRMFLG_RNTRNT
+#define cs_XFRMFLGS_PLYNM  cs_XFRMFLG_NONE			/* Not implemented, don't know yet */
+#define cs_XFRMFLGS_GFILE  cs_XFRMFLG_NONE			/* Depends upon the file format. */
+
+#define cs_FRMTFLGS_CNTv1  cs_FRMTFLG_NONE			/* Obsolete, probably always be non-reentrant. */
+#define cs_FRMTFLGS_CNTv2  cs_FRMTFLG_NONE			/* Need to examine buffer use */
+#define cs_FRMTFLGS_NADCN  cs_FRMTFLG_RNTRNT		/* Need to remove the local buffer */
+#define cs_FRMTFLGS_FRNCH  cs_FRMTFLG_RNTRNT		/* Data grids are memory resident upon construction */
+#define cs_FRMTFLGS_JAPAN  cs_FRMTFLG_RNTRNT		/* Data grids are memory resident upon construction */
+#define cs_FRMTFLGS_ATS77  cs_FRMTFLG_NONE			/* Don't really know about this one. */
+#define cs_FRMTFLGS_OST97  cs_FRMTFLG_NONE			/* Not implemented yet as a geodetic transformation, which it should be. */
+#define cs_FRMTFLGS_OST02  cs_FRMTFLG_NONE			/* Not implemented yet as a geodetic transformation, which it should be. */
 
 /*
 	The following defines define possible values of the bit mapped

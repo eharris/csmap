@@ -1436,6 +1436,7 @@ typedef long32_t cs_magic_t;
 
 						/* Additional processes */
 #define cs_PRJFLG_AFFINE  (1L << 20)	/* Affine transformation post-processer */
+#define cs_PRJFLG_RNTRNT  (1L << 21)	/* Projection code is reentrant */
 
 						/* Parameter Control */
 #define cs_PRJFLG_ORGFLS  (1L << 24)	/* The projection does NOT support
@@ -6985,6 +6986,11 @@ int			EXP_LVL5	CS_isBigEndian (void);
 int			EXP_LVL1	CS_isgeo (Const char *csys);
 int			EXP_LVL1	CS_isHlpAvailable (void);
 int			EXP_LVL5	CS_isLittleEndian (void);
+int			EXP_LVL1	CS_isCsPrmReentrant (Const struct cs_Csprm_ *prjConversion);
+int			EXP_LVL1	CS_isCsReentrant (Const char *csys);
+int			EXP_LVL1	CS_isDtXfrmReentrant (Const struct cs_Dtcprm_ *dtc_ptr);
+int			EXP_LVL1	CS_isGxDefReentrant (Const struct cs_GeodeticTransform_ *gxDef);
+int			EXP_LVL1	CS_isGxfrmReentrant (Const struct cs_GxXform_ *gxXform);
 
 int			EXP_LVL3	CS_isalpha (int chr);
 int			EXP_LVL3	CS_isupper (int chr);

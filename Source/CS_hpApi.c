@@ -830,3 +830,74 @@ int EXP_LVL3 CS_xychk (Const struct cs_Csprm_ *csprm,int cnt,Const double pnts [
 
 	return (status);
 }
+
+/* Returns TRUE (i.e. non-zero) if the conversion represented by the provided
+   cs_Csprm_ structure is reentrant. */
+int	EXP_LVL1 CS_isCsPrmReentrant (Const struct cs_Csprm_ *prjConversion)
+{
+	extern char csErrnam [];				/* Dimensioned at MAXPATH */
+
+	int isReentrant;
+
+	if (prjConversion != NULL)
+	{
+		isReentrant = 0;
+		if (prjConversion != NULL)
+		{
+			isReentrant = ((prjConversion->prj_flags & cs_PRJFLG_RNTRNT) != 0);
+		}
+	}
+	else
+	{
+		CS_stncp (csErrnam,"CS_hpApi:1",MAXPATH);
+		CS_erpt (cs_ISER);
+	}
+	return isReentrant;
+}
+int	CS_isCsReentrant (Const char *csys)
+{
+	extern char csErrnam [];				/* Dimensioned at MAXPATH */
+	extern struct cs_Prjtab_ cs_Prjtab [];	/* Projection Table */
+
+	int isReentrant;
+	struct cs_Prjtab_ *pp;
+	struct cs_Csdef_ *csDefPtr;
+	
+	isReentrant = -1;		/* -1 says error, probably csys is not the name,
+							   could also be a bogus projection key name in
+							   the definition. */
+
+	if (csys != NULL)
+	{
+		csDefPtr = CS_csdef (csys);
+		if (csDefPtr != NULL)
+		{
+			for (pp = cs_Prjtab;pp->code != cs_PRJCOD_END;pp += 1)
+			{
+				if (!CS_stricmp (csDefPtr->prj_knm,pp->key_nm))
+				{
+					break;
+				}
+			}
+			if (pp->code != cs_PRJCOD_END)
+			{
+				isReentrant = ((pp->flags & cs_PRJFLG_RNTRNT) != 0);
+			}
+			else
+			{
+				CS_erpt (cs_UNKWN_PROJ);
+			}
+			CS_free (csDefPtr);
+		}
+		else
+		{
+			CS_erpt (cs_CS_NOT_FND);
+		}
+	}
+	else
+	{
+		CS_stncp (csErrnam,"CS_hpApi:2",MAXPATH);
+		CS_erpt (cs_ISER);
+	}
+	return isReentrant;
+}

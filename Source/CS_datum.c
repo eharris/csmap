@@ -1468,3 +1468,42 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 error:
 	return -1;	
 }
+
+int	EXP_LVL1 CS_isDtXfrmReentrant (Const struct cs_Dtcprm_ *dtc_ptr)
+{
+	extern char csErrnam [MAXPATH];
+
+	short idx;
+	int isReentrant;
+	int xformsAreReentrant;
+
+	struct cs_GxXform_ *gxXform;
+
+	isReentrant = -1;
+	if (dtc_ptr != NULL)
+	{
+		if (dtc_ptr->xfrmCount == 0)
+		{
+			isReentrant = TRUE;
+		}
+		else
+		{
+			xformsAreReentrant = TRUE;
+			for (idx = 0;idx < dtc_ptr->xfrmCount && (xformsAreReentrant == TRUE);idx += 1)
+			{
+				gxXform = dtc_ptr->xforms [idx];
+				if (gxXform != NULL)
+				{
+					xformsAreReentrant = (CS_isGxfrmReentrant (gxXform) > 0) ? TRUE : FALSE;
+				}
+			}
+			isReentrant = xformsAreReentrant;
+		}
+	}
+	else
+	{
+		CS_stncp (csErrnam,"CS_datum:E",MAXPATH);
+		CS_erpt (cs_ISER);
+	}
+	return isReentrant;
+}
