@@ -60,126 +60,126 @@ struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrm
 	int status;
 	int errorCount;
 
-		struct cs_GxXform_ *xfrmPtr;
-		struct cs_Datum_ *srcDtPtr;
-		struct cs_Datum_ *trgDtPtr;
-		struct cs_XfrmTab_* xfrmTabPtr;
+	struct cs_GxXform_ *xfrmPtr;
+	struct cs_Datum_ *srcDtPtr;
+	struct cs_Datum_ *trgDtPtr;
+	struct cs_XfrmTab_* xfrmTabPtr;
 
-		int err_list [4];
+	int err_list [4];
 
-		if (NULL == xfrmDefPtr)
+	if (NULL == xfrmDefPtr)
+	{
+		CS_erpt (cs_ERSUP_SOFT);
+		return NULL;
+	}
+
+	/* Prepare for any type of error. */
+
+	xfrmPtr = NULL;
+	srcDtPtr = NULL;
+	trgDtPtr = NULL;
+
+	xfrmPtr = (struct cs_GxXform_*)CS_malc (sizeof (struct cs_GxXform_));
+	if (xfrmPtr == NULL)
+	{
+		CS_erpt (cs_NO_MEM);
+		goto error;
+	}
+	memset (xfrmPtr,0,sizeof (struct cs_GxXform_));
+	xfrmPtr->isNullXfrm = FALSE;
+	xfrmPtr->userDirection = userDirection;
+
+	/* Check the definition for validity.  The dictionary compiler
+	   also performs this test, but we do it everytime here in case
+	   a program somewhere adjusted the dictionary outside of the
+	   "official" compiler. */
+	errorCount = CS_gxchk (xfrmDefPtr,0,err_list,sizeof (err_list) / sizeof (int));
+	if (errorCount)
+	{
+		CS_erpt (err_list [0]);
+		goto error;
+	}
+
+	/* Transfer the method independent stuff from the definition to the
+	   implementation structure. */
+	memcpy (&xfrmPtr->gxDef,xfrmDefPtr,sizeof (struct cs_GeodeticTransform_));
+
+	srcDtPtr = CS_dtloc (xfrmDefPtr->srcDatum);
+	if (srcDtPtr == NULL)
+	{
+		goto error;
+	}
+
+	memcpy (&xfrmPtr->srcDatum,srcDtPtr,sizeof (struct cs_Datum_));
+	CS_free (srcDtPtr);
+	srcDtPtr = NULL;
+
+	trgDtPtr = CS_dtloc (xfrmDefPtr->trgDatum);
+	if (trgDtPtr == NULL)
+	{
+		goto error;
+	}
+	memcpy (&xfrmPtr->trgDatum,trgDtPtr,sizeof (struct cs_Datum_));
+	CS_free (trgDtPtr);
+	trgDtPtr = NULL;
+
+	CS_stncp (xfrmPtr->xfrmName,xfrmDefPtr->xfrmName,sizeof (xfrmPtr->xfrmName));
+	CS_stncp (xfrmPtr->group,xfrmDefPtr->group,sizeof (xfrmPtr->group));
+	CS_stncp (xfrmPtr->description,xfrmDefPtr->description,sizeof (xfrmPtr->description));
+	CS_stncp (xfrmPtr->source,xfrmDefPtr->source,sizeof (xfrmPtr->source));
+
+	xfrmPtr->methodCode = xfrmDefPtr->methodCode;
+	xfrmPtr->epsgNbr = xfrmDefPtr->epsgCode;
+	xfrmPtr->epsgVar = xfrmDefPtr->epsgVariation;
+	xfrmPtr->inverseSupported = xfrmDefPtr->inverseSupported;
+	xfrmPtr->maxIterations = xfrmDefPtr->maxIterations;
+	xfrmPtr->protect = xfrmDefPtr->protect;
+	xfrmPtr->cnvrgValue = xfrmDefPtr->cnvrgValue;
+	xfrmPtr->errorValue = xfrmDefPtr->errorValue;
+	xfrmPtr->accuracy = xfrmDefPtr->accuracy;
+
+	/* Initialize this transformation. */
+	for (xfrmTabPtr = cs_XfrmTab;xfrmTabPtr->methodCode != cs_DTCMTH_NONE;xfrmTabPtr++)
+	{
+		if (xfrmTabPtr->methodCode == xfrmPtr->methodCode)
 		{
-			CS_erpt (cs_ERSUP_SOFT);
-			return NULL;
+			break;
 		}
+	}
+	if (xfrmTabPtr->methodCode == cs_DTCMTH_NONE)
+	{
+		CS_stncp (csErrnam,"<unknown>",MAXPATH);
+		CS_erpt (cs_UNKWN_DTCMTH);
+		goto error;
+	}
+	status = (*xfrmTabPtr->initialize)(xfrmPtr);
+	if (status != 0)
+	{
+		goto error;
+	}
 
-		/* Prepare for any type of error. */
+	return xfrmPtr;
 
+error:
+	if (xfrmPtr != NULL)
+	{
+		CS_free (xfrmPtr);
 		xfrmPtr = NULL;
-		srcDtPtr = NULL;
-		trgDtPtr = NULL;
-
-		xfrmPtr = (struct cs_GxXform_*)CS_malc (sizeof (struct cs_GxXform_));
-		if (xfrmPtr == NULL)
-		{
-			CS_erpt (cs_NO_MEM);
-			goto error;
-		}
-		memset (xfrmPtr,0,sizeof (struct cs_GxXform_));
-		xfrmPtr->isNullXfrm = FALSE;
-		xfrmPtr->userDirection = userDirection;
-
-		/* Check the definition for validity.  The dictionary compiler
-		   also performs this test, but we do it everytime here in case
-		   a program somewhere adjusted the dictionary outside of the
-		   "official" compiler. */
-		errorCount = CS_gxchk (xfrmDefPtr,0,err_list,sizeof (err_list) / sizeof (int));
-		if (errorCount)
-		{
-			CS_erpt (err_list [0]);
-			goto error;
-		}
-
-		/* Transfer the method independent stuff from the definition to the
-		   implementation structure. */
-		memcpy (&xfrmPtr->gxDef,xfrmDefPtr,sizeof (struct cs_GeodeticTransform_));
-
-		srcDtPtr = CS_dtloc (xfrmDefPtr->srcDatum);
-		if (srcDtPtr == NULL)
-		{
-			goto error;
-		}
-
-		memcpy (&xfrmPtr->srcDatum,srcDtPtr,sizeof (struct cs_Datum_));
+	}
+	if (srcDtPtr != NULL)
+	{
 		CS_free (srcDtPtr);
 		srcDtPtr = NULL;
-
-		trgDtPtr = CS_dtloc (xfrmDefPtr->trgDatum);
-		if (trgDtPtr == NULL)
-		{
-			goto error;
-		}
-		memcpy (&xfrmPtr->trgDatum,trgDtPtr,sizeof (struct cs_Datum_));
+	}
+	if (trgDtPtr != NULL)
+	{
 		CS_free (trgDtPtr);
 		trgDtPtr = NULL;
+	}
 
-		CS_stncp (xfrmPtr->xfrmName,xfrmDefPtr->xfrmName,sizeof (xfrmPtr->xfrmName));
-		CS_stncp (xfrmPtr->group,xfrmDefPtr->group,sizeof (xfrmPtr->group));
-		CS_stncp (xfrmPtr->description,xfrmDefPtr->description,sizeof (xfrmPtr->description));
-		CS_stncp (xfrmPtr->source,xfrmDefPtr->source,sizeof (xfrmPtr->source));
+	//don't free [xfrmDefPtr] - owned by the caller
 
-		xfrmPtr->methodCode = xfrmDefPtr->methodCode;
-		xfrmPtr->epsgNbr = xfrmDefPtr->epsgCode;
-		xfrmPtr->epsgVar = xfrmDefPtr->epsgVariation;
-		xfrmPtr->inverseSupported = xfrmDefPtr->inverseSupported;
-		xfrmPtr->maxIterations = xfrmDefPtr->maxIterations;
-		xfrmPtr->protect = xfrmDefPtr->protect;
-		xfrmPtr->cnvrgValue = xfrmDefPtr->cnvrgValue;
-		xfrmPtr->errorValue = xfrmDefPtr->errorValue;
-		xfrmPtr->accuracy = xfrmDefPtr->accuracy;
-
-		/* Initialize this transformation. */
-		for (xfrmTabPtr = cs_XfrmTab;xfrmTabPtr->methodCode != cs_DTCMTH_NONE;xfrmTabPtr++)
-		{
-			if (xfrmTabPtr->methodCode == xfrmPtr->methodCode)
-			{
-				break;
-			}
-		}
-		if (xfrmTabPtr->methodCode == cs_DTCMTH_NONE)
-		{
-			CS_stncp (csErrnam,"<unknown>",MAXPATH);
-			CS_erpt (cs_UNKWN_DTCMTH);
-			goto error;
-		}
-		status = (*xfrmTabPtr->initialize)(xfrmPtr);
-		if (status != 0)
-		{
-			goto error;
-		}
-
-		return xfrmPtr;
-
-	error:
-		if (xfrmPtr != NULL)
-		{
-			CS_free (xfrmPtr);
-			xfrmPtr = NULL;
-		}
-		if (srcDtPtr != NULL)
-		{
-			CS_free (srcDtPtr);
-			srcDtPtr = NULL;
-		}
-		if (trgDtPtr != NULL)
-		{
-			CS_free (trgDtPtr);
-			trgDtPtr = NULL;
-		}
-
-		//don't free [xfrmDefPtr] - owned by the caller
-
-		return NULL;
+	return NULL;
 }
 
 /* A fallback for strange situations. */
@@ -471,4 +471,188 @@ int CS_gxIsNull (struct cs_GxXform_ *xfrmPtr)
 void CS_gxDisable (struct cs_GxXform_ *xfrmPtr)
 {
 	xfrmPtr->isNullXfrm = TRUE;
+}
+int	EXP_LVL1 CS_isGxfrmReentrant (Const struct cs_GxXform_ *gxXform)
+{
+	extern char csErrnam [MAXPATH];
+	extern struct cs_XfrmTab_ cs_XfrmTab[];
+	extern struct cs_GridFormatTab_ cs_GridFormatTab [];
+
+	short idx;
+	short fileCount;
+	int isReentrant;
+	int filesAreReentrant;
+	unsigned short tblFormatCode; 
+
+	struct cs_XfrmTab_* tblPtr;
+	struct cs_GridFormatTab_* frmtTblPtr;
+	Const struct cs_GridFile_* fileDefPtr;
+	Const struct csGridi_ *filesPtr;
+
+	/* Locate the entry in the transformation table for this transformation
+	   method. */
+	isReentrant = -1;
+	if (gxXform != NULL)
+	{
+		for (tblPtr = cs_XfrmTab;tblPtr->methodCode != cs_DTCMTH_NONE;tblPtr += 1)
+		{
+			if (tblPtr->methodCode == gxXform->methodCode)
+			{
+				break;
+			}
+		}
+		if (tblPtr->methodCode != cs_DTCMTH_NONE)
+		{
+			if (tblPtr->methodCode == cs_DTCMTH_GFILE)
+			{
+				/* Reentrant status dependent upon the file format.  The
+				   transformation method of all files in the list must be
+				   reentrant if the result is to be reentrant. */
+				filesAreReentrant = TRUE;				/* Until we know different. */
+				filesPtr = &gxXform->xforms.gridi;
+				fileCount = gxXform->xforms.gridi.fileCount;
+				for (idx = 0;idx < fileCount && filesAreReentrant == TRUE;idx += 1)
+				{
+					fileDefPtr = filesPtr->gridFiles [idx];
+
+					/* Locate the file format in the list table.  This is
+					   another unfortunate, but necessary, kludge.  The file
+					   format stored in the Grid Format Table is a define code
+					   value, while the value in the cs_GridFile_ structure is
+					   an enumerator.  The result of getting things done in a
+					   compressed development cycle.  A bit ugly, but I've seen
+					   worse.
+
+					   So, we simply need to convert the enumerator in the cs_GridFile_
+					   sturcture to the appropriate which exists in the cs_GridFormatTab. */
+					switch (fileDefPtr->format) {
+					case gridFrmtNTv1:  tblFormatCode = cs_DTCFRMT_CNTv1; break; 
+					case gridFrmtNTv2:  tblFormatCode = cs_DTCFRMT_CNTv2; break; 
+					case gridFrmtNadcn: tblFormatCode = cs_DTCFRMT_NADCN; break; 
+					case gridFrmtFrnch: tblFormatCode = cs_DTCFRMT_FRNCH; break; 
+					case gridFrmtJapan: tblFormatCode = cs_DTCFRMT_JAPAN; break; 
+					case gridFrmtAts77: tblFormatCode = cs_DTCFRMT_ATS77; break; 
+					case gridFrmtOst97: tblFormatCode = cs_DTCFRMT_OST97; break; 
+					case gridFrmtOst02: tblFormatCode = cs_DTCFRMT_OST02; break; 
+					case gridFrmtNone:
+					case gridFrmtUnknown:
+					default:
+						tblFormatCode = cs_DTCFRMT_NONE;
+						CS_stncp (csErrnam,"CS_gxprm:1",MAXPATH);
+						CS_erpt (cs_ISER);
+						break;
+					}
+
+					for (frmtTblPtr = cs_GridFormatTab;frmtTblPtr->formatCode != cs_DTCFRMT_NONE;frmtTblPtr += 1)
+					{
+						if (frmtTblPtr->formatCode == tblFormatCode)
+						{
+							break;
+						}
+					}
+					if (frmtTblPtr->formatCode != cs_DTCFRMT_NONE)
+					{
+						filesAreReentrant = ((frmtTblPtr->formatFlags & cs_FRMTFLG_RNTRNT) != 0) ? TRUE : FALSE;
+					}
+					else
+					{
+						filesAreReentrant = -1;
+					}
+				}
+				isReentrant = filesAreReentrant;
+			}
+			else
+			{
+				/* The method flags indicate the nature of the transformation. */
+				isReentrant = ((tblPtr->methodFlags & cs_XFRMFLG_RNTRNT) != 0);
+			}
+		}
+		else
+		{
+			CS_stncp (csErrnam,"<unknown>",MAXPATH);
+			CS_erpt (cs_UNKWN_DTCMTH);
+		}
+	}
+	else
+	{
+		CS_stncp (csErrnam,"CS_gxprm:2",MAXPATH);
+		CS_erpt (cs_ISER);
+	}
+	return isReentrant;
+}
+int EXP_LVL1 CS_isGxDefReentrant (Const struct cs_GeodeticTransform_ *gxDef)
+{
+	extern char csErrnam [MAXPATH];
+	extern struct cs_XfrmTab_ cs_XfrmTab[];
+	extern struct cs_GridFormatTab_ cs_GridFormatTab [];
+
+	short idx;
+	short fileCount;
+	int isReentrant;
+	int filesAreReentrant;
+
+	struct cs_XfrmTab_* tblPtr;
+	struct cs_GridFormatTab_* frmtTblPtr;
+	struct csGeodeticXfromParmsFile_* fileDefPtr;
+	struct csGeodeticXformParmsGridFiles_* filesPtr;
+
+	isReentrant = -1;
+	if (gxDef != NULL)
+	{
+		for (tblPtr = cs_XfrmTab;tblPtr->methodCode != cs_DTCMTH_NONE;tblPtr += 1)
+		{
+			if (tblPtr->methodCode == gxDef->methodCode)
+			{
+				break;
+			}
+		}
+		if (tblPtr->methodCode != cs_DTCMTH_NONE)
+		{
+			if (tblPtr->methodCode == cs_DTCMTH_GFILE)
+			{
+				/* Reentrant status dependent upon the file format. */
+				filesAreReentrant = TRUE;				/* Until we know different. */
+				filesPtr = &gxDef->parameters.fileParameters;
+				fileCount = filesPtr->fileReferenceCount;
+				for (idx = 0;idx < fileCount && filesAreReentrant == TRUE;idx += 1)
+				{
+					fileDefPtr = &filesPtr->fileNames [idx];
+
+					/* Locate the file format in the list table. */
+					for (frmtTblPtr = cs_GridFormatTab;frmtTblPtr->formatCode != cs_DTCFRMT_NONE;frmtTblPtr += 1)
+					{
+						if (frmtTblPtr->formatCode == fileDefPtr->fileFormat)
+						{
+							break;
+						}
+					}
+					if (frmtTblPtr->formatCode != cs_DTCFRMT_NONE)
+					{
+						filesAreReentrant = ((frmtTblPtr->formatFlags & cs_FRMTFLG_RNTRNT) != 0) ? TRUE : FALSE;
+					}
+					else
+					{
+						filesAreReentrant = -1;
+					}
+				}
+				isReentrant = filesAreReentrant;
+			}
+			else
+			{
+				/* The method flags indicate the nature of the transformation. */
+				isReentrant = ((tblPtr->methodFlags & cs_XFRMFLG_RNTRNT) != 0);
+			}
+		}
+		else
+		{
+			CS_stncp (csErrnam,"<unknown>",MAXPATH);
+			CS_erpt (cs_UNKWN_DTCMTH);
+		}
+	}
+	else
+	{
+		CS_stncp (csErrnam,"CS_gxprm:3",MAXPATH);
+		CS_erpt (cs_ISER);
+	}
+	return isReentrant;
 }

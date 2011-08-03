@@ -116,186 +116,218 @@
 #define cs_PRJFLGS_UNITY	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG | \
 							 cs_PRJFLG_GEOGR  | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGFLS)
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGFLS | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_LM2SP	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CONIC)
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_LM1SP	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CONIC  | \
-							 cs_PRJFLG_SCLRED)
+							 cs_PRJFLG_SCLRED | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_LMBLG	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CONIC)
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_WCCSL	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CONIC)
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_MNDOTL	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CONIC)
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_TRMER	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV | \
-							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
+							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_TRMRKRG	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV | \
-							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
+							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_TRMRS	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV | \
-							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
+							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_SOTRM	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV | \
-							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
+							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_UTM		(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV | \
-							 cs_PRJFLG_ORGLNG | cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGFLS)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
+							 cs_PRJFLG_ORGLNG | cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGFLS | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_WCCST	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV | \
-							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
+							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_MNDOTT	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_ALBER	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_EAREA  | \
-							 cs_PRJFLG_CONIC)
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_HOM1UV	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
 							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLAT | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_HOM1XY	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
 							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLAT | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_HOM2UV	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
-							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ   | \
+							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_HOM2XY	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
-							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ   | \
+							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_RSKEW	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ   | \
 							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLAT | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_RSKEWC	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ   | \
 							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLAT | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_MRCAT	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_MRCATK	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | \
 							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLAT | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_AZMED	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_EDIST  | cs_PRJFLG_AZMTH  | \
-							 cs_PRJFLG_FLAT)
+							 cs_PRJFLG_FLAT   | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_LMTAN	(cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CONIC  | \
-							 cs_PRJFLG_SCLRED)
+							 cs_PRJFLG_SCLRED | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_PLYCN	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_EDIST  | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_CONIC  | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_MODPC	(cs_PRJFLG_ELLIPS | \
-							 cs_PRJFLG_CONIC	 | \
-							 cs_PRJFLG_ORGLNG | cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_ORGLNG | cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_AZMEA	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_EAREA  | cs_PRJFLG_AZMTH  | \
-							 cs_PRJFLG_FLAT)
+							 cs_PRJFLG_FLAT   | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_EDCNC	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_EDIST  | \
-							 cs_PRJFLG_CONIC)
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_MILLR	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG | \
 							 cs_PRJFLG_CYLND  | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_SSTRO	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | cs_PRJFLG_AZMTH  | \
 							 cs_PRJFLG_FLAT   | \
-							 cs_PRJFLG_SCLRED)
+							 cs_PRJFLG_SCLRED | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_OSTRO	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | cs_PRJFLG_AZMTH  | \
 							 cs_PRJFLG_FLAT   | \
-							 cs_PRJFLG_SCLRED)
+							 cs_PRJFLG_SCLRED | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_PSTRO	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | cs_PRJFLG_AZMTH  | \
 							 cs_PRJFLG_FLAT   | \
-							 cs_PRJFLG_SCLRED)
+							 cs_PRJFLG_SCLRED | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_PSTROSL	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
@@ -305,131 +337,156 @@
 #define cs_PRJFLGS_MSTRO	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_FLAT)
+							 cs_PRJFLG_FLAT   | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_NZLND 	(cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_FLAT)
+							 cs_PRJFLG_FLAT   | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_SINUS	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG | \
 							 cs_PRJFLG_EAREA  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_PSEUDO | \
 							 cs_PRJFLG_INTR   | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_ORTHO	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_AZMTH  | \
-							 cs_PRJFLG_FLAT)
+							 cs_PRJFLG_FLAT   | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_GNOMC	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_AZMTH  | \
-							 cs_PRJFLG_FLAT)
+							 cs_PRJFLG_FLAT   | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_EDCYL	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG | \
 							 cs_PRJFLG_EDIST  | \
-							 cs_PRJFLG_CYLND)
+							 cs_PRJFLG_CYLND  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_VDGRN	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_OTHER  | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_CSINI	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_ROBIN	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_PSEUDO | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_BONNE	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_EAREA  | \
-							 cs_PRJFLG_CONIC  | cs_PRJFLG_PSEUDO)
+							 cs_PRJFLG_CONIC  | cs_PRJFLG_PSEUDO | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_EKRT4	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_EAREA  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_PSEUDO | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_EKRT6	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_EAREA  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_PSEUDO | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_MOLWD	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_EAREA  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_PSEUDO | \
 							 cs_PRJFLG_INTR   | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_HMLSN	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_EAREA  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_PSEUDO | \
 							 cs_PRJFLG_INTR   | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_NACYL	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_EAREA  | \
 							 cs_PRJFLG_CYLND  | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_TACYL	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_EAREA  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
-							 cs_PRJFLG_SCLRED)
+							 cs_PRJFLG_SCLRED | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_BPCNC	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CONIC  | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_SWISS	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_CNFRM  | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_GAUSSK	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_KROVAK	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CONIC  | cs_PRJFLG_OBLQ | \
-							 cs_PRJFLG_SCLRED)
+							 cs_PRJFLG_SCLRED | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_KRVK95	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CONIC  | cs_PRJFLG_OBLQ   | \
 							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGFLS)
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGFLS | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_TRMERAF	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_AFFINE | \
 							 cs_PRJFLG_TRNSV  | cs_PRJFLG_SCLRED | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_NERTH	(cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | cs_PRJFLG_OTHER  | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_OBQCYL	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_CNFRM  | cs_PRJFLG_SCLRED | \
-							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ)
+							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_SYS34	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
 							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
-							 cs_PRJFLG_ORGFLS)
+							 cs_PRJFLG_ORGFLS | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_OSTN97	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
@@ -441,7 +498,8 @@
 #define cs_PRJFLGS_AZEDE	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | \
 							 cs_PRJFLG_EDIST  | cs_PRJFLG_AZMTH  | \
-							 cs_PRJFLG_FLAT)
+							 cs_PRJFLG_FLAT   | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_OSTN02	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
@@ -454,49 +512,58 @@
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
 							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
-							 cs_PRJFLG_ORGFLS)
+							 cs_PRJFLG_ORGFLS | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_RSKEWO	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_OBLQ | \
 							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLAT | \
-							 cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_WINKL	(cs_PRJFLG_SPHERE | \
 							 cs_PRJFLG_AZMTH  | \
 							 cs_PRJFLG_FLAT   | cs_PRJFLG_PSEUDO | \
-							 cs_PRJFLG_ORGLAT)
+							 cs_PRJFLG_ORGLAT | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_NRTHSRT	(cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | cs_PRJFLG_OTHER  | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_LMBRTAF	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | cs_PRJFLG_AFFINE | \
-							 cs_PRJFLG_CONIC)
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_SYS34_01	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CYLND  | cs_PRJFLG_TRNSV  | \
 							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
-							 cs_PRJFLG_ORGFLS)
+							 cs_PRJFLG_ORGFLS | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_EDCYLE	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG | \
 							 cs_PRJFLG_EDIST  | \
-							 cs_PRJFLG_CYLND)
+							 cs_PRJFLG_CYLND  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_PCARREE	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG | \
 							 cs_PRJFLG_EDIST  | \
-							 cs_PRJFLG_CYLND)
+							 cs_PRJFLG_CYLND  | \
+							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_MRCATPV	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_SCALH  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CYLND  | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG)
+							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
+							 cs_PRJFLG_RNTRNT)
 							 
 /*
 	Obsolete definitions; preserved for historical reasons only.
