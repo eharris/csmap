@@ -1226,7 +1226,10 @@ int EXP_LVL9 CStrmerI (Const struct cs_Trmer_ *trmer,double ll [2],Const double 
 			   we return a cs_CNVRT_INDF. */
 
 			del_lng = cs_Zero;
-			rtn_val = cs_CNVRT_INDF;
+			if (rtn_val == cs_CNVRT_NRML)
+			{
+			    rtn_val = cs_CNVRT_INDF;
+			}
 		}
 	}
 	else
@@ -1399,7 +1402,10 @@ int EXP_LVL9 CStrmerI (Const struct cs_Trmer_ *trmer,double ll [2],Const double 
 
 	if (fabs (del_lng) > cs_Pi)
 	{
-		rtn_val = cs_CNVRT_RNG;
+        if (rtn_val == cs_CNVRT_NRML)
+        {
+            rtn_val = cs_CNVRT_RNG;
+        }
 		del_lng = CS_adj2pi (del_lng);
 	}
 
