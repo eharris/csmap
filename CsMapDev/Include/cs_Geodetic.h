@@ -1281,6 +1281,7 @@ struct csDtmBridge_
 										   added to the bridge from the traget
 										   end.  csPath_MAXXFRM (or greater)
 										   means none as yet. */
+
 };
 
 /* DESIGN NOTE: this object represents a geodetic path which has been fully
@@ -1384,10 +1385,10 @@ int EXP_LVL1 CS_gxInvrs2D (struct cs_GxXform_ *xform,double trgLl [3],Const doub
 int EXP_LVL1 CS_gxIsNull  (struct cs_GxXform_ *xform);
 void EXP_LVL1 CS_gxDisable (struct cs_GxXform_ *xform);
 
-int CSdtcsuPhaseOne   (struct csDtmBridge_* bridgePtr);
-int CSdtcsuPhaseTwo   (struct csDtmBridge_* bridgePtr);
-int CSdtcsuPhaseThree (struct csDtmBridge_* bridgePtr);
-int CSdtcsuPhaseFour  (struct csDtmBridge_* bridgePtr);
+int CSdtcsuPhaseOne   (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr);
+int CSdtcsuPhaseTwo   (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr);
+int CSdtcsuPhaseThree (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr);
+int CSdtcsuPhaseFour  (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr);
 
 struct csDtmBridge_* CSnewDtmBridge (Const struct cs_Datum_* src_dt,
 									 Const struct cs_Datum_* dst_dt);
