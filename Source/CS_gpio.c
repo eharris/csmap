@@ -706,7 +706,7 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 	strm = CS_gpopn (_STRM_BINRD);
 	if (strm == NULL) goto error;
 
-	/* Search the file for the requested ellipsoid definition. */
+	/* Search the file for the requested path definition. */
 	fwdFpos = 0L;
 	invFpos = 0L;
 	for (;;)

@@ -217,6 +217,13 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 	   transformation. */
 	if (src_dt->key_nm [0] == '\0' || dst_dt->key_nm [0] == '\0')
 	{
+	    // Having an explicit call to a "Null Transformation" may be desirable
+	    // in the future.  If so, the following commented out code could be
+	    // used.  Note that this code expects that a null transformation
+	    // definition exists in the dictionary.  This doesn't sound so
+	    // hot; i.e. the system breaks if a special definition is not in the
+	    // dictionary or gets deleted for some reason.
+
 		//xfrmPtr = CS_gxloc (cs_NullXformName,cs_DTCDIR_FWD);
 		//if (xfrmPtr == NULL)
 		//{
@@ -298,7 +305,7 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 		   Path dictionary for a path definition which converts from the
 		   source datum to the target datum.  If such is located, we copy
 		   the transformations into the bridge and we're done. */
-		bridgeStatus = CSdtcsuPhaseOne (bridgePtr);
+		bridgeStatus = CSdtcsuPhaseOne (bridgePtr,dtcPtr);
 		if (bridgeStatus == cs_DTCBRG_COMPLETE)
 		{
 			//CS_stncp (dtcPtr->pathName,gpDef.pathName,sizeof (dtcPtr->pathName));
@@ -312,7 +319,7 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 			   we look for a transformation which converts directly from
 			   the source datum to the target datum.  If we find one, we
 			   add that transformation to the bridge and we're all done. */
-			bridgeStatus = CSdtcsuPhaseTwo (bridgePtr);
+			bridgeStatus = CSdtcsuPhaseTwo (bridgePtr,dtcPtr);
 		}
 		if (bridgeStatus == cs_DTCBRG_BUILDING)
 		{
@@ -322,7 +329,7 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 			   datum to the target datum using a pivot datum.  The pivot datum
 			   is typically WGS84.  However, our new phase three will do this
 			   function using an ordered list of pivot datums. */
-			bridgeStatus = CSdtcsuPhaseThree (bridgePtr);
+			bridgeStatus = CSdtcsuPhaseThree (bridgePtr,dtcPtr);
 		}
 		if (bridgeStatus == cs_DTCBRG_BUILDING)
 		{
@@ -349,7 +356,7 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 			   return cs_DTCBRG_ERROR if it doesn't modify the bridge in anyway.
 			   This is what will break the 'while' loop in the event of an
 			   impossible path. */
-			bridgeStatus = CSdtcsuPhaseFour (bridgePtr);
+			bridgeStatus = CSdtcsuPhaseFour (bridgePtr,dtcPtr);
 		}
 	}
 
@@ -574,7 +581,7 @@ error:
 	controlled by the reversible flag.
 */
 
-int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr)
+int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 {
 	extern char csErrnam [MAXPATH];
 
@@ -675,6 +682,17 @@ int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr)
 			CS_erpt (cs_ISER);
 			goto error;
 		}
+
+		/* Here on some sort of success.  We copy information from the path
+		   definition we used to the resulting cs_Dtcprm_ structure.  That's
+		   why its an argument (as well as an after thought) to this
+		   function. */
+		CS_stncp (dtcPtr->pathName,pathPtr->pathName,sizeof (dtcPtr->pathName));
+		CS_stncp (dtcPtr->description,pathPtr->description,sizeof (dtcPtr->description));
+		CS_stncp (dtcPtr->source,pathPtr->source,sizeof (dtcPtr->source));
+		CS_stncp (dtcPtr->group,pathPtr->group,sizeof (dtcPtr->group));
+		
+		/* OK, we don't need the path definition any more. */
 		CS_free (pathPtr);
 		pathPtr = NULL;
 	}	
@@ -702,7 +720,7 @@ error:
 	with a single entry in it which contains the name of the transformation which
 	we have located.
 */
-int CSdtcsuPhaseTwo (struct csDtmBridge_* bridgePtr)
+int CSdtcsuPhaseTwo (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 {
 	extern char csErrnam [MAXPATH];
 
@@ -769,7 +787,7 @@ int CSdtcsuPhaseTwo (struct csDtmBridge_* bridgePtr)
 						situation which is likely to occur occasionally
 						and is something that requires end user action.
 */
-int CSdtcsuPhaseThree (struct csDtmBridge_* bridgePtr)
+int CSdtcsuPhaseThree (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 {
 	extern char csErrnam [MAXPATH];
 	extern struct cs_PivotDatumTbl_ cs_PivotDatumTbl [];
@@ -1011,60 +1029,7 @@ error:
    
    Similarly with the target datum.  Maybe we are then complete, maybe
    not.  If not, we go back and try phases one, two, and three again. */
-int CSdtcsuPhaseFour (struct csDtmBridge_* bridgePtr)
-{
-	extern char csErrnam [MAXPATH];
-
-	int gxIndex;
-	int direction;
-	int bridgeStatus;
-
-	Const char* srcDtmName;
-	Const char* trgDtmName;
-
-	Const struct cs_GxIndex_* gxIdxPtr; 
-
-	/* Get the datum names of the gap we are currently seeking a bridge
-	   segment for. */
-	srcDtmName = CSdtmBridgeGetSourceDtm (bridgePtr);
-	trgDtmName = CSdtmBridgeGetTargetDtm (bridgePtr);
-
-	/* Prepare for the failure case where we find no additions to
-	   the bridge being built. */
-	bridgeStatus = cs_DTCBRG_ERROR;
-
-	/* See if there is a singular reference to the source datum in the
-	   Geodetic Transformation dictionary. */
-	gxIndex = CS_locateGxFromDatum (&direction,srcDtmName);
-	if (gxIndex >= 0)
-	{
-		/* Yup, there is.  Add it to the source end of the bridge. */
-		gxIdxPtr = CS_getGxIndexEntry (gxIndex);
-		bridgeStatus = CSdtmBridgeAddSrcTransformation (bridgePtr,gxIdxPtr,(short)direction);
-	}
-
-	/* See if there is a singular reference to the target datum in the
-	   Geodetic Transformation dictionary. */
-	gxIndex = CS_locateGxToDatum (&direction,trgDtmName);
-	if (gxIndex >= 0)
-	{
-		/* Yup, there is.  Add it to the target end of the bridge. */
-		gxIdxPtr = CS_getGxIndexEntry (gxIndex);
-		bridgeStatus = CSdtmBridgeAddTrgTransformation (bridgePtr,gxIdxPtr,(short)direction);
-	}
-	return bridgeStatus;
-}
-/* In phase four, we look for singular datum references and add them to the
-   bridge as is appropriate.  For example, we search the geodetic
-   transformation index for a transformation which comverts from (or to)
-   the source datum.  If this reference is singular within the entire
-   geodetic transformation dictionary, we know this transformation MUST
-   be involved in any successful path from source to target datums, so
-   we add this transformation to the source end of the bridge.
-   
-   Similarly with the target datum.  Maybe we are then complete, maybe
-   not.  If not, we go back and try phases one, two, and three again. */
-int CSdtcsuPhaseNintyNine (struct csDtmBridge_* bridgePtr)
+int CSdtcsuPhaseFour (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 {
 	extern char csErrnam [MAXPATH];
 
