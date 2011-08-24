@@ -11,7 +11,7 @@ SeqNbr,EpsgNbr,EsriNbr,OracleNbr,MapInfoNbr,OemNbr,Oracle9Nbr,CsMapNbr,CsMapName
 1000,0,,,,,,,NautM-UK,,NautM-UK,,,Nautical Mile (UK),,,,,,,Nautical Mile (UK),,,,,,,
 1100,9001,,,,,,,Meter,,Meter,metre,Meter,Meter,,,metre,Meter,Meter,Meter,Meter,METER,,,,,,
 1200,9002,,,,,,,IFoot,,IFoot,foot,Foot,Foot (International),,,3.048 dm,Foot_Intnl,Foot (International),Foot_Intnl,Foot (International),,,,,,,
-1300,9003,,,,,,,Foot,,Foot,US survey foot,Foot_US,U.S. Foot,,,3.048 dm,Foot_US|US survey foot,U.S. Foot|US survey foot,Foot_US,U.S. Foot,,,,,,,
+1300,9003,,,,,,,Foot,,Foot,US survey foot,Foot_US,foot,,,3.048 dm,Foot_US|US survey foot,U.S. Foot|US survey foot,Foot_US,U.S. Foot,,,,,,,
 1400,9005,,,,,,,ClarkeFoot,,ClarkeFoot,Clarke's foot,Foot_Clarke,Clarke's Foot,,,,foot_clarke|Clarke's foot,Clarke's foot,Foot_Clarke,Clarke's Foot,,,,,,,
 1500,9030,,,,,,,NautM,,NautM,nautical mile,,Nautical Mile,,,,Nautical Mile,Nautical Mile,,Nautical Mile,,,,,,,
 1600,9031,,,,,,,GermanMeter,,GermanMeter,German legal metre,German_Meter,German legal metre,,,German legal metre,german_meter|German legal metre,german_meter|German legal metre,German legal metre,German legal metre,,,,,,,
