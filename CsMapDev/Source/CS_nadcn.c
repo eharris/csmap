@@ -830,7 +830,7 @@ int CSextractNadconFile (struct cs_NadconFile_* thisPtr,Const double* sourceLL)
 	   is to force a result, such as, 0.99999999999998 to be a 1.0. */
 	eleNbr = (long32_t)((sourceLL [LNG] - thisPtr->coverage.southWest [LNG] + cs_LlNoise) / thisPtr->deltaLng);
 	recNbr = (long32_t)((sourceLL [LAT] - thisPtr->coverage.southWest [LAT] + cs_LlNoise) / thisPtr->deltaLat);
-	if (eleNbr > thisPtr->elementCount || recNbr > thisPtr->recordCount)
+	if (eleNbr >= thisPtr->elementCount || recNbr >= thisPtr->recordCount)
 	{
 		/* This is not supposed to happen.  This is a "private" function and
 		   only called when it is known that the provided coordinate is within

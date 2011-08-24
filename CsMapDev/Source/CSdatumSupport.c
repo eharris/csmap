@@ -49,6 +49,8 @@ void CSinitCoverage (struct csGridCoverage_* thisPtr)
 
 double CStestCoverage (struct csGridCoverage_* thisPtr,Const double point [2])
 {
+	extern double cs_LlNoise;			/* 1.0E-12 */
+
 	/* Return value is the density value used to select a specific source in
 	   the case of overlap which is rare, but possible.  A zero return value
 	   indicates that the current coverage window does not include the
@@ -58,12 +60,25 @@ double CStestCoverage (struct csGridCoverage_* thisPtr,Const double point [2])
 	   north and east.  This is standard for all grid interpolation files
 	   except the Canadian National Transformation (version 1 and 2).  The
 	   north and east edges of the typical grid file are not part of the
-	   coverage of such a file. */
+	   coverage of such a file.
+	   
+	   This rather simple algorithm needs help in the case where the given
+	   point is very very close to the north or eastern edges.  In the grid
+	   cell calculator, the calculations which compute record number and
+	   element number include a noise factor neccessary as floating point
+	   results such as 0.999999999999999 need to be considered by the
+	   (long32_t) type cast to produce an integer value of 1L.  Thus, to
+	   prevent an attempt to convert a point on the northern or eastern
+	   edges of the grid file, we must also take this noise factor into
+	   effect.
+	   
+	   Could it be that we should reduce the northEast extent values by this
+	   much on construction of the grid file object???? */
 	double returnValue = 0.0;
 	if (point [LNG] >= thisPtr->southWest [LNG] &&
 		point [LAT] >= thisPtr->southWest [LAT] &&
-		point [LNG] <  thisPtr->northEast [LNG] &&
-		point [LAT] <  thisPtr->northEast [LAT])
+		(point [LNG] - cs_LlNoise) <  thisPtr->northEast [LNG] &&
+		(point [LAT] - cs_LlNoise) <  thisPtr->northEast [LAT])
 	{
 		returnValue = thisPtr->density;
 	}
