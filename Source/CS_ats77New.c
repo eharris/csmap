@@ -94,8 +94,8 @@ int CSats77Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,i
 		strm = NULL;
 
 		if (rdCnt != sizeof (chrBuffer) ||
-		    chrBuffer [0] != 'T' ||
-		    chrBuffer [1] != '\0')
+			chrBuffer [0] != 'T' ||
+			chrBuffer [1] != '\0')
 		{
 			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FORMAT;
 		}
@@ -130,11 +130,11 @@ int CSats77S  (struct cs_GridFile_ *gridFile)
 		gridFile->release = (cs_RELEASE_CAST)CSats77R;
 		gridFile->destroy = (cs_DESTROY_CAST)CSats77D;
 
-		status = 0;
+		status = csGRIDI_ST_OK;
 	}
 	else
 	{
-		status = -1;
+		status = csGRIDI_ST_SYSTEM;
 	}
 	return status;
 }
@@ -152,20 +152,25 @@ int CSats77F2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 	extern char csErrnam [MAXPATH];
 
 	int status;
-	double ll_lcl [3];
+	double ll_lcl [2];
 
-	if (ll_trg != ll_src)
-	{
-		ll_trg [LNG] = ll_src [LNG]; 
-		ll_trg [LAT] = ll_src [LAT]; 
-		ll_trg [HGT] = ll_src [HGT]; 
-	}
-	status = CScalcAts77 (ats77,ll_lcl,ll_src);
-	if (status >= 0)
+	ll_lcl [LNG] = ll_src [LNG]; 
+	ll_lcl [LAT] = ll_src [LAT]; 
+
+	status = CScalcAts77 (ats77,ll_lcl,ll_lcl);
+
+	if (status >= csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = ll_lcl [LNG]; 
 		ll_trg [LAT] = ll_lcl [LAT]; 
 	}
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG]; 
+		ll_trg [LAT] = ll_src [LAT]; 
+	}
+	ll_trg [HGT] = ll_src [HGT];
+
 	return status;
 }
 int CSats77F3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
@@ -176,30 +181,31 @@ int CSats77F3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 	int status;
 	double lcl_ll [3];
 
-	if (ll_trg != ll_src)
-	{
-		ll_trg [LNG] = ll_src [LNG];
-		ll_trg [LAT] = ll_src [LAT];
-		ll_trg [HGT] = ll_src [HGT];
-	}
 	lcl_ll [LNG] = ll_src [LNG]; 
 	lcl_ll [LAT] = ll_src [LAT]; 
 	lcl_ll [HGT] = cs_Zero;
 
 	status = CSats77F2 (ats77,lcl_ll,lcl_ll);
-	if (status >= 0)
+	if (status == csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = lcl_ll [LNG];
 		ll_trg [LAT] = lcl_ll [LAT];
+		ll_trg [HGT] = lcl_ll [HGT];
 	}
-	return status;	
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
+		ll_trg [HGT] = ll_src [HGT];
+	}
+	return status;
 }
 int CSats77I2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 {
 	int status;
 
 	CS_erpt (cs_ATS77_INV);
-	status = -1;
+	status = csGRIDI_ST_SYSTEM;
 	return status;
 }
 int CSats77I3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
@@ -207,7 +213,7 @@ int CSats77I3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 	int status;
 
 	CS_erpt (cs_ATS77_INV);
-	status = -1;
+	status = csGRIDI_ST_SYSTEM;
 	return status;
 }
 int CSats77L  (struct cs_Ats77_ *ats77,int cnt,Const double pnts [][3])
@@ -630,7 +636,7 @@ int CScalcAts77 (Const struct cs_Ats77_ *thisPtr,double ll_out [2],Const double 
 	struct cs_Cmplx_ cTmp;
 	struct cs_Cmplx_ cTmp1;
 
-	status = 0;
+	status = csGRIDI_ST_OK;
 
 	/* There are 5 sets of doubles in the A array (among other things).
 	   The following are set up as the 'C' index to the first element
@@ -655,7 +661,7 @@ int CScalcAts77 (Const struct cs_Ats77_ *thisPtr,double ll_out [2],Const double 
 		xyz [1] += ats77DeltaY;
 		xyz [2] += ats77DeltaZ;
 		st = CS_xyzToLlh (llh,xyz,ats77Rad,ats77Esq);
-		if (st != 0) status = 1;
+		if (st != 0) status = csGRIDI_ST_COVERAGE;
 	}
 	else if (thisPtr->direction == ats77DirToNad27)
 	{
@@ -664,64 +670,68 @@ int CScalcAts77 (Const struct cs_Ats77_ *thisPtr,double ll_out [2],Const double 
 		xyz [1] -= ats77DeltaY;
 		xyz [2] -= ats77DeltaZ;
 		st = CS_xyzToLlh (llh,xyz,clrk66Rad,clrk66Esq);
-		if (st != 0) status = 1;
+		if (st != 0) status = csGRIDI_ST_COVERAGE;
 	}
 
-	/* The rest of this stuff expects longitude to be positive west. */
-	llh [0] = -llh [0];
-
-	/* Now for the hard stuff.  We apply the complex coefficients.  We
-	   work with the results of above, i.e. llh. */
-	deltaLng = thisPtr->dataScale [0] * (llh [0] - thisPtr->localOrigin [0]);
-	deltaLat = thisPtr->dataScale [1] * (llh [1] - thisPtr->localOrigin [1]);
-	llDd = sqrt (deltaLng * deltaLng + deltaLat * deltaLat);
-	if (llDd <= thisPtr->oprue)
+	if (status == csGRIDI_ST_OK)
 	{
-		/* Appears to be in range.  Compute the result of applying the base
-		   polynomial to the input values. */
-		CS_iicrt (&cz,deltaLat,deltaLng);
-		CS_iicpy (&thisPtr->ccc [0],&cf);
-		CS_iicrt (&czz,cs_One,cs_Zero);
-		for (idx = 1;idx < thisPtr->nf;idx += 1)
-		{
-			CS_iimul (&czz,&cz,&czz);
-			CS_iimul (&czz,&thisPtr->ccc [idx],&cTmp);
-			CS_iiadd (&cf,&cTmp,&cf);
-		}
-		qq = cs_Zero;
-		CS_iicrt (&czz,cs_Zero,cs_Zero);
-		if (thisPtr->rui2 != 0.0)
-		{
-			for (idx = 0;idx < thisPtr->controlStations;idx += 1)
-			{
-				CS_iicrt (&zz,thisPtr->coeffs [idxNp1 + (2 * idx)],thisPtr->coeffs [idxNp1 + (2 * idx) + 1]);
-				CS_iisub (&cz,&zz,&cTmp);
-				dd = (cTmp.real * cTmp.real + cTmp.img * cTmp.img) / thisPtr->rui2;
-				expdd = cs_Zero;
-				if (dd < 172.00) expdd = exp (-dd);
-				qw = thisPtr->coeffs [idxNp5 + idx] * expdd;
-				if (fabs (qq + qw) >= 1.0E-75)
-				{
-					CS_iicrt (&cTmp,thisPtr->coeffs [idxNp3 + (2 * idx)],thisPtr->coeffs [idxNp3 + (2 * idx) + 1]);
-					CS_iikmul (&cTmp,qw,&cTmp);
-					CS_iikmul (&czz,qq,&cTmp1);
-					CS_iiadd (&cTmp1,&cTmp,&cTmp);
-					CS_iikmul (&cTmp,(1.0 / (qq + qw)),&czz);
-				}
-				qq += qw;
-			}
-			fu = cf.real  / thisPtr->SU + thisPtr->UO;
-			fv = cf.img   / thisPtr->SV + thisPtr->VO;
-			gu = czz.real / thisPtr->SU;
-			gv = czz.img  / thisPtr->SV;
+		/* The rest of this stuff expects longitude to be positive west. */
+		llh [0] = -llh [0];
 
-			ll_out [0] = -((llh [0] * 3600.00) - fv - gv) / 3600.00;
-			ll_out [1] =  ((llh [1] * 3600.00) - fu - gu) / 3600.00;
+		/* Now for the hard stuff.  We apply the complex coefficients.  We
+		   work with the results of above, i.e. llh. */
+		deltaLng = thisPtr->dataScale [0] * (llh [0] - thisPtr->localOrigin [0]);
+		deltaLat = thisPtr->dataScale [1] * (llh [1] - thisPtr->localOrigin [1]);
+		llDd = sqrt (deltaLng * deltaLng + deltaLat * deltaLat);
+		if (llDd <= thisPtr->oprue)
+		{
+			/* Appears to be in range.  Compute the result of applying the base
+			   polynomial to the input values. */
+			CS_iicrt (&cz,deltaLat,deltaLng);
+			CS_iicpy (&thisPtr->ccc [0],&cf);
+			CS_iicrt (&czz,cs_One,cs_Zero);
+			for (idx = 1;idx < thisPtr->nf;idx += 1)
+			{
+				CS_iimul (&czz,&cz,&czz);
+				CS_iimul (&czz,&thisPtr->ccc [idx],&cTmp);
+				CS_iiadd (&cf,&cTmp,&cf);
+			}
+			qq = cs_Zero;
+			CS_iicrt (&czz,cs_Zero,cs_Zero);
+			if (thisPtr->rui2 != 0.0)
+			{
+				for (idx = 0;idx < thisPtr->controlStations;idx += 1)
+				{
+					CS_iicrt (&zz,thisPtr->coeffs [idxNp1 + (2 * idx)],thisPtr->coeffs [idxNp1 + (2 * idx) + 1]);
+					CS_iisub (&cz,&zz,&cTmp);
+					dd = (cTmp.real * cTmp.real + cTmp.img * cTmp.img) / thisPtr->rui2;
+					expdd = cs_Zero;
+					if (dd < 172.00) expdd = exp (-dd);
+					qw = thisPtr->coeffs [idxNp5 + idx] * expdd;
+					if (fabs (qq + qw) >= 1.0E-75)
+					{
+						CS_iicrt (&cTmp,thisPtr->coeffs [idxNp3 + (2 * idx)],thisPtr->coeffs [idxNp3 + (2 * idx) + 1]);
+						CS_iikmul (&cTmp,qw,&cTmp);
+						CS_iikmul (&czz,qq,&cTmp1);
+						CS_iiadd (&cTmp1,&cTmp,&cTmp);
+						CS_iikmul (&cTmp,(1.0 / (qq + qw)),&czz);
+					}
+					qq += qw;
+				}
+				fu = cf.real  / thisPtr->SU + thisPtr->UO;
+				fv = cf.img   / thisPtr->SV + thisPtr->VO;
+				gu = czz.real / thisPtr->SU;
+				gv = czz.img  / thisPtr->SV;
+
+				ll_out [0] = -((llh [0] * 3600.00) - fv - gv) / 3600.00;
+				ll_out [1] =  ((llh [1] * 3600.00) - fu - gu) / 3600.00;
+			}
 		}
 	}
 	else
 	{
-		status = 1;
+		ll_out [0] = ll_in [0];
+		ll_out [1] = ll_in [1];
 	}
 	return status;
 }

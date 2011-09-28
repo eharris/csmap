@@ -44,6 +44,13 @@
 #define cs_DTCFLG_BLK_I   3		/* Ignore */
 #define cs_DTCFLG_BLK_10  4		/* Warn up to 10 blocks, then ignore. */
 
+/* Status values used internally in the grid file interpolation system.
+   Basically the same values as those used everywhere else in CS-MAP. */
+#define csGRIDI_ST_OK 0
+#define csGRIDI_ST_COVERAGE  1
+#define csGRIDI_ST_FALLBACK  2
+#define csGRIDI_ST_SYSTEM   -1
+
 /*
 	The following define the extensions of the grid interpolation data
 	files.  We used to have different cases for different environments. The
@@ -772,7 +779,7 @@ struct csMulrg_
    file in the definition.
    
    This introduces the problem of overlap.  Which file is to be used in the case
-   where the point ot be converted is in a region of overlap between the two
+   where the point to be converted is in a region of overlap between the two
    files.  This is resolved by simply using the files in the order listed in the
    definition.  Thus, there can be a transformation named NAD83/US which gives
    priority to the US NADCON files (i.e. the NADCON files are listed first) and

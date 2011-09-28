@@ -80,7 +80,7 @@ int CSfrnchS  (struct cs_GridFile_ *gridFile)
 
 	struct cs_Frnch_ *frnchPtr;
 
-	status = -1;
+	status = csGRIDI_ST_SYSTEM;
 	frnchPtr = CSnewFrnch (gridFile->filePath,gridFile->bufferSize,gridFile->flags,gridFile->density);
 	if (frnchPtr != NULL)
 	{
@@ -99,7 +99,7 @@ int CSfrnchS  (struct cs_GridFile_ *gridFile)
 		gridFile->release = (cs_RELEASE_CAST)CSfrnchR;
 		gridFile->destroy = (cs_DESTROY_CAST)CSfrnchD;
 		
-		status = 0;
+		status = csGRIDI_ST_OK;
 	}
 	return status;
 }
@@ -124,10 +124,16 @@ int CSfrnchF2 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src)
 	myRgf [LAT] = ll_src [LAT];
 	myRgf [HGT] = cs_Zero;
 	status = CScalcRgfToNtf (frnch,myNtf,myRgf);
-	if (status >= 0)
+	if (status >= csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = myNtf [LNG];
 		ll_trg [LAT] = myNtf [LAT];
+		ll_trg [HGT] = ll_src [HGT];
+	}
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
 		ll_trg [HGT] = ll_src [HGT];
 	}
 	return status;
@@ -139,11 +145,17 @@ int CSfrnchF3 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src)
 	double myNtf [3];
 
 	status = CScalcRgfToNtf (frnch,myNtf,ll_src);
-	if (status >= 0)
+	if (status >= csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = myNtf [LNG];
 		ll_trg [LAT] = myNtf [LAT];
 		ll_trg [HGT] = myNtf [HGT];
+	}
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
+		ll_trg [HGT] = ll_src [HGT];
 	}
 	return status;
 }
@@ -160,10 +172,16 @@ int CSfrnchI2 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src)
 	myNtf [LAT] = ll_src [LAT];
 	myNtf [HGT] = cs_Zero;
 	status = CScalcNtfToRgf (frnch,myRgf,myNtf);
-	if (status >= 0)
+	if (status >= csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = myRgf [LNG];
 		ll_trg [LAT] = myRgf [LAT];
+		ll_trg [HGT] = ll_src [HGT];
+	}
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
 		ll_trg [HGT] = ll_src [HGT];
 	}
 	return status;
@@ -181,17 +199,39 @@ int CSfrnchI3 (struct cs_Frnch_ *frnch,double *ll_trg,Const double *ll_src)
 	myNtf [LAT] = ll_src [LAT];
 	myNtf [HGT] = ll_src [HGT];
 	status = CScalcNtfToRgf (frnch,myRgf,myNtf);
-	if (status >= 0)
+	if (status >= csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = myRgf [LNG];
 		ll_trg [LAT] = myRgf [LAT];
 		ll_trg [HGT] = myRgf [HGT];
 	}
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
+		ll_trg [HGT] = ll_src [HGT];
+	}
 	return status;
 }
 int CSfrnchL  (struct cs_Frnch_ *frnch,int cnt,Const double pnts [][3])
 {
-	return 0;
+	short ok;
+	int index;
+	double density;
+
+	ok = TRUE;
+	for (index = 0;index < cnt;index += 1)
+	{
+		/* Note: CSfrnchT ignores the direction parameter.  The assumption
+		   always forward. */
+		density = CSfrnchT (frnch,pnts [index],cs_DTCDIR_FWD);
+		if (fabs (density) > 1.0E-08)		/* i.e. != 0.0 */
+		{
+			ok = FALSE;
+			break;
+		}
+	}
+	return (ok != TRUE) ? cs_CNVRT_USFL : cs_CNVRT_OK;
 }
 int CSfrnchR  (struct cs_Frnch_ *frnch)
 {
@@ -523,7 +563,7 @@ int CSinitFrnch (struct cs_Frnch_* thisPtr,Const char *filePath,long32_t bufferS
 	/* OK, we're outa here. */
 	CS_fclose (fstrm);
 	fstrm = NULL;
-	status = 0;
+	status = csGRIDI_ST_OK;
 	return status;
 
 error:
@@ -537,7 +577,7 @@ error:
 		CS_fclose (fstrm);
 		fstrm = NULL;
 	}
-	return -1;
+	return csGRIDI_ST_SYSTEM;
 }
 /* Release allocated resources without losing existence information.
 	object can still be used. */
@@ -614,7 +654,7 @@ int CScalcRgf2NtfDeltas (struct cs_Frnch_* thisPtr,double *deltaX,double *deltaY
 
 	/* Check and make sure we have proper coverage. */
 	density = CStestCoverage (&thisPtr->coverage,ll_rgf93);
-	if (density == 0.0) return 1;
+	if (density == 0.0) return csGRIDI_ST_COVERAGE;
 
 	/* Here if we have coverage.  Calculate the indices to the appropriate cell. */
 	lngIdx = (long32_t)((ll_rgf93 [0] - thisPtr->coverage.southWest [0]) / thisPtr->deltaLng);
@@ -702,7 +742,7 @@ int CScalcRgfToNtf (struct cs_Frnch_* thisPtr,double* llNtf,Const double *llRgf9
 	   However, in this case, CScalcNtf2RfgDeltas returns delta X, Y, & Z set
 	   to average values.  Thus, we do the following regardless of the value
 	   of rtnVal. */
-	if (rtnVal >= 0)
+	if (rtnVal >= csGRIDI_ST_OK)
 	{
 		/* OK, we have the appropriate delta values.  We need to do a three parameter
 		   transformation using these values.  Before we can do this, we need to convert
@@ -712,10 +752,10 @@ int CScalcRgfToNtf (struct cs_Frnch_* thisPtr,double* llNtf,Const double *llRgf9
 		xyz [1] -= deltaY;
 		xyz [2] -= deltaZ;
 		xyzSt = CS_xyzToLlh (llNtf,xyz,thisPtr->ntfERad,thisPtr->ntfESq);
-		if (xyzSt != 0)
+		if (xyzSt != csGRIDI_ST_OK)
 		{
 			CS_erpt ( cs_XYZ_ITR);
-			rtnVal = -1;
+			rtnVal = csGRIDI_ST_COVERAGE;
 		}
 	}
 	return rtnVal;
@@ -741,7 +781,7 @@ int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf,Const double* llNtf)
 	double epsilon [3];
 
 	/* Assume everything goes OK until we know different. */
-	rtnVal = 0;
+	rtnVal = csGRIDI_ST_OK;
 
 	/* First, we copy the source lat/longs to the local array.
 	   This is the default result which the user may want in
@@ -759,10 +799,10 @@ int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf,Const double* llNtf)
 
 		/* Compute the WGS-84 lat/long for our current guess. */
 		rtnVal = CScalcRgfToNtf (thisPtr,newLl,guess);
-		if (rtnVal != 0)
+		if (rtnVal != csGRIDI_ST_OK)
 		{
-			/* Oopps!! We must have been given some pretty strange
-			   coordinate values. */
+			/* Oopps!! It appears this iterative inverse function has wandered
+			   across the grid file coverage boundary. */
 			break;
 		}
 
@@ -790,30 +830,38 @@ int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf,Const double* llNtf)
 		if (lngOk && latOk) break;
 	}
 
-	/* If we didn't resolve in maxIteration tries, we issue a warning
-	   message.  Usually, three or four iterations does the trick. */
-	if (ii >= thisPtr->maxIterations)
+	if (rtnVal == csGRIDI_ST_OK)
 	{
-		CS_erpt (cs_RGF93_ICNT);
-
-		/* Issue a warning if we're close, a fatal if we are still way off.
-		   In any case, we return the last computed value.  We could have
-		   gotten very fancy with this stuff, but it would have had serious
-		   affects on the performance.  So we just check epsilon here as
-		   we know we have an error and this doesn't happen very often. */
-		rtnVal = 1;
-		if (fabs (epsilon [LNG]) > thisPtr->errorValue ||
-		    fabs (epsilon [LAT]) > thisPtr->errorValue)
+		/* If we didn't resolve in maxIteration tries, we issue a warning
+		   message.  Usually, three or four iterations does the trick. */
+		if (ii >= thisPtr->maxIterations)
 		{
-			rtnVal = -1;
+			rtnVal = csGRIDI_ST_COVERAGE;
+			CS_erpt (cs_RGF93_ICNT);
+
+			/* Issue a warning if we're close, a fatal if we are still way off.
+			   In any case, we return the last computed value.  We could have
+			   gotten very fancy with this stuff, but it would have had serious
+			   affects on the performance.  So we just check epsilon here as
+			   we know we have an error and this doesn't happen very often. */
+			if (fabs (epsilon [LNG]) > thisPtr->errorValue ||
+				fabs (epsilon [LAT]) > thisPtr->errorValue)
+			{
+				rtnVal = csGRIDI_ST_SYSTEM;
+			}
 		}
 	}
 
 	/* Return the resuls if everything converged. */
-	if (rtnVal >= 0)
+	if (rtnVal == csGRIDI_ST_OK)
 	{
 		llRgf [LNG] = guess [LNG];
 		llRgf [LAT] = guess [LAT];
+	}
+	else
+	{
+		llRgf [LNG] = llNtf [LNG];
+		llRgf [LAT] = llNtf [LAT];
 	}
 	return rtnVal;
 }
@@ -851,6 +899,7 @@ int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf,Const double* llNtf)
 	if (rtnVal != 0)
 	{
 		CS_erpt ( cs_XYZ_ITR);
+		rtnVal = csGRIDI_ST_COVERAGE;
 	}
 	else
 	{
@@ -870,6 +919,7 @@ int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf,Const double* llNtf)
 			if (rtnVal != 0)
 			{
 				CS_erpt ( cs_XYZ_ITR);
+				rtnVal = csGRIDI_ST_COVERAGE;
 			}
 		}
 	}

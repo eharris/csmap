@@ -186,6 +186,24 @@ int EXP_LVL9 CSmulrgS (struct cs_GxXform_* gxXfrm)
 
 	return 0;
 }
+/* Note that this multiple regression function is called directly by the high
+   level interface.  Contrary to the grid file interpolation techniques which
+   are only called by the CS_gridi.c module.  Thus, the status values
+   returned by this module needs to represent the status values which are
+   to be returned to the high level user.
+
+   Thus, to fix a defect (Trac 110), we necessarily use different status values
+   here with regard to fall back modules than are used in the grid file
+   interpolation modules. 
+
+   To review:
+    0 = a normal calculation
+   -1 = a system error of some sort (physical I/O, heap corruption, etc.)
+   +1 = the point to be converted is outside of the useful range of the
+        transformation.  In this case, the point is returned unshifted.
+   +2 = the point to be converted is outside of the useful range, but a
+        fallback method was successfully used.
+*/
 int EXP_LVL9 CSmulrgF3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl)
 {
 	extern double cs_One;
@@ -197,7 +215,7 @@ int EXP_LVL9 CSmulrgF3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 	short wrdIdx;
 	short bitNbr;
 
-	int status;
+	int fbStatus;
 
 	ulong32_t mask;
 
@@ -236,23 +254,23 @@ int EXP_LVL9 CSmulrgF3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 		CS_erpt (cs_MREG_RANGE);			/* Register warning. */
 		switch (mulrg->fallback) {
 		case cs_DTCMTH_MOLOD:
-			status = CSmolodF3 (&mulrg->fallbackXfrm.molod,trgLl,srcLl);
+			fbStatus = CSmolodF3 (&mulrg->fallbackXfrm.molod,trgLl,srcLl);
 			break;
 		case cs_DTCMTH_6PARM:
-			status = CSparm6F3 (&mulrg->fallbackXfrm.parm6,trgLl,srcLl);
+			fbStatus = CSparm6F3 (&mulrg->fallbackXfrm.parm6,trgLl,srcLl);
 			break;
 		case cs_DTCMTH_7PARM:
-			status = CSparm7F3 (&mulrg->fallbackXfrm.parm7,trgLl,srcLl);
+			fbStatus = CSparm7F3 (&mulrg->fallbackXfrm.parm7,trgLl,srcLl);
 			break;
 		case dtcTypNone:
 		default:
-			/* If there is no fallback, return a hard error. */
-			CS_erpt (cs_MREG_RANGEF);		/* Fatal message */
-			status = -1;
+			/* There is no fallback, return out of range indication. */
+			CS_erpt (cs_MREG_RANGEF);
+			fbStatus = 1;
 			break;
 		}
-		/* +1 status says we used a fallback calculation. */
-		return (status < 0) ? -1 : 1;
+		/* +2 status says we used a fallback calculation. */
+		return (fbStatus == 0) ? 2 : 1;
 	}
 
 	/* Initialize the variables in which we will accumulate
@@ -339,13 +357,14 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 	int ii;
 	int status;
 	int rtnVal;
+	int fbStatus;
 
 	double guess [3];
 	double newLl [3];
 	double epsilon [3];
 
 	/* Assume everything goes OK until we know different. */
-	rtnVal = 0;
+	status = rtnVal = 0;
 	epsilon [0] = epsilon [1] = mulrg->cnvrgValue;		/* keep gcc compiler happy */
 
 	/* First, we copy the WGS-84 lat/longs to the local array.
@@ -367,12 +386,13 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 
 		/* Compute the WGS-84 lat/long for our current guess. */
 		status = CSmulrgF3 (mulrg,newLl,guess);
-		if (status > 0) rtnVal = 2;			/* Fallback used. */
-		else if (status < 0)
+		if (status != 0)
 		{
-			/* Fatal problem, usually outside the range with no
-			   fallback.  Return fatal status. */
-			rtnVal = -1;
+			/* Something other than the normal situation happened.  Typically,
+			   this means the current guess (perhaps the provided point) is
+			   outside the useful range of the transformation.  In any case,
+			   we'll deal with this below as the end of this 'for' loop
+			   code block. */
 			break;
 		}
 
@@ -401,36 +421,79 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 		if (lngOk && latOk) break;
 	}
 
-	/* If we didn't resolve in eight tries, we issue a warning message. */
-	if (ii >= mulrg->maxIterations)
+	/* We now need to deal with the situation where the forward function
+	   used in the iterative loop above indicated that the last guess
+	   (often the original point) was outside of the useful range of the
+	   transformation.  Note, that encountering any guess that is outside
+	   of the useful range, we deal with as indicated here. */
+	if (status == 0)
 	{
-		CS_erpt (cs_WGS_CNVRG);
-
-		/* Issue a warning if we're close, a fatal if we are still way off.
-		   In any case, we return the last computed value.  We could have
-		   gotten very fancy with this stuff, but it would have had serious
-		   affects on the performance.  So we just check epsilon here as
-		   we know we have an error and this doesn't happen very often. */
-		rtnVal = 1;
-		if (fabs (epsilon [LNG]) > mulrg->errorValue ||
-		    fabs (epsilon [LAT]) > mulrg->errorValue)
+		/* If we didn't resolve in maxIteration tries, we issue a warning
+		   message. */
+		if (ii >= mulrg->maxIterations)
 		{
-			rtnVal = -1;
+			CS_erpt (cs_WGS_CNVRG);
+
+			/* Issue a warning if we're close, a fatal if we are still way off.
+			   In any case, we return the last computed value.  We could have
+			   gotten very fancy with this stuff, but it would have had serious
+			   affects on the performance.  So we just check epsilon here as
+			   we know we have an error and this doesn't happen very often. */
+			rtnVal = 1;
+			if (fabs (epsilon [LNG]) > mulrg->errorValue ||
+				fabs (epsilon [LAT]) > mulrg->errorValue)
+			{
+				rtnVal = -1;
+			}
+		}
+
+		/* Adjust the ll_lcl value to the computed value, now that we
+		   know that it should be correct. */
+		if (rtnVal >= 0)
+		{
+			trgLl [LNG] = guess [LNG];
+			trgLl [LAT] = guess [LAT];
+			/* The iterative forward calculations above are all done with a height
+			   value of zero.  Thus, the height returned is essentially a delta
+			   height. */
+			trgLl [HGT] = srcLl [HGT] - guess [HGT];
 		}
 	}
-
-	/* Adjust the ll_lcl value to the computed value, now that we
-	   know that it should be correct. */
-	if (rtnVal >= 0)
+	else if (status > 0)
 	{
-		trgLl [LNG] = guess [LNG];
-		trgLl [LAT] = guess [LAT];
-		/* The iterative forward calculations above are all done with a height
-		   value of zero.  Thus, the height returned is essentially a delta
-		   height. */
-		trgLl [HGT] = srcLl [HGT] - guess [HGT];
-	}
+		/* We were provided a point which is outside of the usefule range
+		   of this transformation, or the iterative conversion technique
+		   wandered outside the useful range of the transformation. */
+		CS_erpt (cs_MREG_RANGE);			/* Register warning message. */
+		switch (mulrg->fallback) {
+		case cs_DTCMTH_MOLOD:
+			fbStatus = CSmolodI3 (&mulrg->fallbackXfrm.molod,trgLl,srcLl);
+			break;
+		case cs_DTCMTH_6PARM:
+			fbStatus = CSparm6I3 (&mulrg->fallbackXfrm.parm6,trgLl,srcLl);
+			break;
+		case cs_DTCMTH_7PARM:
+			fbStatus = CSparm7I3 (&mulrg->fallbackXfrm.parm7,trgLl,srcLl);
+			break;
+		case dtcTypNone:
+		default:
+			fbStatus = 1;
+			break;
+		}
 
+		/* If the fallback inverse returned a normal status, we return +2 as an
+		   indication that the fallback technique was used.  Otherwise, we use
+		   +1 to indicate the that provided point was outside the useful range. */
+		rtnVal = (fbStatus == 0) ? 2 : 1;
+	}
+	else
+	{
+		/* We encountered some sort of system error; i.e. an error which is
+		   not related to the point that has been provided. Heap corruption,
+		   out of memory, physical I/O error are examples. */
+		CS_erpt (cs_NO_MEM);
+		rtnVal = -1;
+	}
 	return rtnVal;
 }
 
@@ -458,7 +521,26 @@ int EXP_LVL9 CSmulrgI2 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 }
 int EXP_LVL9 CSmulrgL (struct csMulrg_ *mulrg,int cnt,Const double pnts [][3])
 {
-	return cs_CNVRT_OK;
+	int status;
+	int index;
+
+	double uu;
+	double vv;
+
+	status = cs_CNVRT_OK;
+	for (index = 0;index < cnt;index += 1)
+	{
+		/* Compute the normalized input coordinates, uu and vv. */
+		uu = (pnts [index][LAT] + mulrg->uu_off) * mulrg->normalizationScale;
+		vv = (pnts [index][LNG] + mulrg->vv_off) * mulrg->normalizationScale;
+
+		if (fabs (uu) > mulrg->validation || fabs (vv) > mulrg->validation)
+		{
+			status = cs_CNVRT_USFL;
+			break;
+		}
+	}
+	return status;
 }
 int EXP_LVL9 CSmulrgN  (struct csMulrg_ *mulrg)
 {
@@ -472,3 +554,4 @@ int EXP_LVL9 CSmulrgD (struct csMulrg_ *mulrg)
 {
 	return 0;
 }
+

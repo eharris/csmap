@@ -152,9 +152,8 @@ int CStestZ (bool verbose,char *test_file)
 		if (!testOk)
 		{
 			osGeoTestFile.GetTestName (fieldData,idx);
-			printf ("%S: Calculation failed.  [%s -> %s; %.2fmm]\n",fieldData.c_str (),srcKeyNm,trgKeyNm,delta);
+			printf ("%S: Calculation failed.  [%s -> %s; %.2fmm; %d]\n",fieldData.c_str (),srcKeyNm,trgKeyNm,delta,stDtc);
 			errCount += 1;
-			continue;
 		}
 		if (srcCsPrm != 0)
 		{
@@ -172,5 +171,6 @@ int CStestZ (bool verbose,char *test_file)
 			dtcParms = 0;
 		}
 	}
+	printf ("Test Z: %d tests of %d failed.\n",errCount,testCount);
 	return (ok) ? errCount : -1;
 }

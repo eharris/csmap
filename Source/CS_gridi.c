@@ -147,6 +147,17 @@ int EXP_LVL9 CSgridiQ (struct cs_GeodeticTransform_ *gxDef,unsigned short xfrmCo
 	return (err_cnt + 1);
 }
 /******************************************************************************
+The following is the "SetUp" (perhaps constructor would be more appropriate).
+
+Note that this is a generic grid file interpolation object.  Thus the specifics
+related to a specific file format are not dealt with here.  What gets handled
+here is what is common to all file formats.
+
+Also note that the design is such that a specific transformation of this
+type can support grid interpolation data files of different formats.  Thus,
+we can support the generic French grid file which covers all of France, and
+also include the NTv2 format files used by several municipal governments in
+the same transformation.
 */
 int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 {
@@ -224,7 +235,9 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 		cc2 = *(cp + 1);
 		if (cc1 == '.' && (cc2 == '\\' || cc2 == '/'))
 		{
-			/* The file reference is relative. */
+			/* The file reference is relative.  Relative, now means relative to
+			   the main data directory which is maintained in cs_Dir, the same
+			   directory to which we look for the various dictionaries. */
 			*cs_DirP = '\0';
 			CS_stncp (wrkBufr,cs_Dir,MAXPATH);
 			CS_stncat (wrkBufr,(cp + 2),MAXPATH);
@@ -236,10 +249,10 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 			   it as it is. */
 			CS_stncp (gridFilePtr->filePath,fileDefPtr->fileName,sizeof (gridFilePtr->filePath));
 		}
-		gridFilePtr->bufferSize = 0L;
-		gridFilePtr->flags = 0UL;
+		gridFilePtr->bufferSize = 0L;	/* Zero says use format based default value. */
+		gridFilePtr->flags = 0UL;		/* Legacy feature, currently unused. */
 		gridFilePtr->density = 0.0;
-		gridFilePtr->cnvrgValue = gridi->cnvrgValue;
+		gridFilePtr->cnvrgValue = gridi->cnvrgValue;	
 		gridFilePtr->errorValue = gridi->errorValue;
 		gridFilePtr->maxIterations = gridi->maxIterations;
 
@@ -252,6 +265,9 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 		}
 		if (frmtTblPtr->formatCode == cs_DTCFRMT_NONE)
 		{
+			/* Oops!!! The format specification is invalid.  This should never
+			   happen as the dictionary compiler verifies this, as does the
+			   Q check function. */
 			CS_erpt (cs_ISER);
 			goto error;
 		}
@@ -282,9 +298,30 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 			CS_erpt (cs_FLBK_NTFND);
 			goto error;
 		}
+		
+/* Kludge to fix a defect.  The "RGF93_to_NTF-G-Grid" transformation, or
+   anything similar to it, can and will often refer to the "NTF-G_to_WGS84"
+   geodetic transformation (a Molodensky transformation) as a fallback.  The
+   problem is that the "RGF93_to_NTF-G-Grid" transformation converts from RGF93
+   (i.e. WGS84) to NTF, while the "NTF-G_to_WGS84" transformation converts
+   in the opposite direction.  This defect is introduced, and a lot of
+   additional confusion is experienced, because the French grid interpolation
+   data file, "gr3df97a.txt" converts from the new to the old (RGF93 -> NTF),
+   while all other grid data interpoolation files convert from the old to
+   the new.  The "old to the new" convention of most all grid data files
+   (except the French) is consistent with standard datum definitions (i.e.
+   convert to WGS84, the newer datum).  There are better weays to deal with
+   these issues.  Scheduling pressure and the need to pass a comprehensive
+   regression test have lead to this rather kludgy solution.
+   
+   TODO -- Fix this in a more generic manner.  I suspect, that we need to
+   define a new Molodensky transformation that goes in the opposite direction
+   as the normal one (i.e. flip the signs on the translation vector) and use
+   that as the fall back for transforms which involving NTF and RGF93 which
+   are defined to go in the opposite direction. */ 
 if (!CS_stricmp (filesPtr->fallback,"NTF-G_to_WGS84") &&
-    !CS_stricmp (gxXfrm->gxDef.srcDatum,"RGF93") &&
-    !CS_stricmp (gxXfrm->gxDef.trgDatum,"NTF-G-Grid"))
+	!CS_stricmp (gxXfrm->gxDef.srcDatum,"RGF93") &&
+	!CS_stricmp (gxXfrm->gxDef.trgDatum,"NTF-G-Grid"))
 {
 	gridi->fallbackDir = cs_DTCDIR_INV;
 }
@@ -310,6 +347,13 @@ error:
 	}
 	return -1;
 }
+/*
+The 3 dimensional forward conversion function.  Most grid interpolation data
+files are strictly horizontal (i.e. 2 dimensional) in nature.  The French
+technique, based on the "gr3df97a.txt" data file is the exception.  The
+French technique is indeed 3 dimensional.  So our design here supports both
+2 and 3 dimensional grid files.
+ */
 int EXP_LVL9 CSgridiF3 (struct csGridi_ *gridi,double trgLl [3],Const double srcLl [3])
 {
 	extern char csErrnam [MAXPATH];
@@ -317,21 +361,26 @@ int EXP_LVL9 CSgridiF3 (struct csGridi_ *gridi,double trgLl [3],Const double src
 	int status;
 	int fbStatus;
 	int selectedIdx;
-	
+
 	struct cs_GridFile_* gridFilePtr;
 
+	status = 1;		/* Until we know different, we assume no coverage. */
 	selectedIdx = CSgridiT (gridi,srcLl,cs_DTCDIR_FWD);
 	if (selectedIdx >= 0)
 	{
+		/* The normal case, we found a grid file which includes the point to be
+		   converted within its coverage. */
 		gridFilePtr = gridi->gridFiles [selectedIdx];
 		if (gridFilePtr != NULL)
 		{
 			if (gridFilePtr->direction == cs_DTCDIR_FWD)
 			{
+				/* Call the file format specific forward 3D function. */
 				status = (*gridFilePtr->frwrd3D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
 			}
 			else if (gridFilePtr->direction == cs_DTCDIR_INV)
 			{
+				/* Call the file format specific inverse 3D function.+ */
 				status = (*gridFilePtr->invrs3D)(gridFilePtr->fileObject.genericPtr,trgLl,srcLl);
 			}
 			else
@@ -348,34 +397,46 @@ int EXP_LVL9 CSgridiF3 (struct csGridi_ *gridi,double trgLl [3],Const double src
 			status = -1;
 		}
 	}
-	else if (gridi->fallback != 0)
+	if (status > 0)
 	{
-		/* These function calls probably should be calls to the 3D versions,
-		   but this is what was in the pre-RFC 2 code.  Thus we duplicate that
-		   code here in order to get all regression tests to pass.  This is
-		   probably a problem in pre-RFC 2 CS-MAP, but we'll fix it only after
-		   all regression tests have been passed and acceptance by QA has been
-		   made.
-		   
-		   Note: Most all grid interpolation file methods are 2D, but the
-		   French method is different.  That's the likely cause of the bug. */
-		if (gridi->fallbackDir == cs_DTCDIR_FWD)
+		/* We encountered a coverage issue during the calculation. */
+		if (gridi->fallback != 0)
 		{
-			fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
-		}
-		else if (gridi->fallbackDir == cs_DTCDIR_INV)
-		{
-			fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+			/* There is a fallback transformation and either there was no
+			   primary coverage or the primary transformation failed because
+			   of a coverage issue.  (This can happen in the case where an
+			   iterative technique was used, e.g. an inverse grid function,
+			   and the point provided is very close to the coverage boundary.)
+			   
+			   These function calls probably should be calls to the 3D versions,
+			   but this is what was in the pre-RFC 2 code.  Thus we duplicate that
+			   code here in order to get all regression tests to pass.  This is
+			   probably a problem in pre-RFC 2 CS-MAP, but we'll fix it only after
+			   all regression tests have been passed and acceptance by QA has been
+			   made.
+			   
+			   Note: Most all grid interpolation file methods are 2D, but the
+			   French method is different.  That's the likely cause of the bug. */
+			if (gridi->fallbackDir == cs_DTCDIR_FWD)
+			{
+				fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+			}
+			else if (gridi->fallbackDir == cs_DTCDIR_INV)
+			{
+				fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+			}
+			else
+			{
+				fbStatus = 1;
+			}
+			status = (fbStatus == 0) ? 2 : 1;
 		}
 		else
 		{
-			fbStatus = 1;
+			/* There is no fallback transformation and a coverage issue prevented
+			   a normal calculation. */
+			status = 1;
 		}
-		status = (fbStatus == 0) ? 2 : 1;
-	}
-	else
-	{
-		status = 1;
 	}
 	return status;
 }
@@ -389,6 +450,7 @@ int EXP_LVL9 CSgridiF2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	
 	struct cs_GridFile_* gridFilePtr;
 
+	status = 1;		/* Until we know different, we assume no coverage. */
 	selectedIdx = CSgridiT (gridi,srcLl,cs_DTCDIR_FWD);
 	if (selectedIdx >= 0)
 	{
@@ -417,25 +479,36 @@ int EXP_LVL9 CSgridiF2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 			status = -1;
 		}
 	}
-	else if (gridi->fallback != 0)
+	if (status > 0)
 	{
-		if (gridi->fallbackDir == cs_DTCDIR_FWD)
+		/* We encountered a coverage issue during the calculation. */
+		if (gridi->fallback != 0)
 		{
-			fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
-		}
-		else if (gridi->fallbackDir == cs_DTCDIR_INV)
-		{
-			fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+			/* There is a fallback transformation and either there was no
+			   primary coverage or the primary transformation failed because
+			   of a coverage issue.  (This can happen in the case where an
+			   iterative technique was used, e.g. and inverse grid function,
+			   and the point provided is very close to the coverage boundary.) */
+			if (gridi->fallbackDir == cs_DTCDIR_FWD)
+			{
+				fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+			}
+			else if (gridi->fallbackDir == cs_DTCDIR_INV)
+			{
+				fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+			}
+			else
+			{
+				fbStatus = 1;
+			}
+			status = (fbStatus == 0) ? 2 : 1;
 		}
 		else
 		{
-			fbStatus = 1;
+			/* There is no fallback transformation and a coverage issue prevented
+			   a normal calculation. */
+			status = 1;
 		}
-		status = (fbStatus == 0) ? 2 : 1;
-	}
-	else
-	{
-		status = 1;
 	}
 	return status;
 }
@@ -449,6 +522,7 @@ int EXP_LVL9 CSgridiI3 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	
 	struct cs_GridFile_* gridFilePtr;
 
+	status = 1;		/* Until we know different, we assume no coverage. */
 	selectedIdx = CSgridiT (gridi,srcLl,cs_DTCDIR_INV);
 	if (selectedIdx >= 0)
 	{
@@ -477,38 +551,49 @@ int EXP_LVL9 CSgridiI3 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 			status = -1;
 		}
 	}
-	else if (gridi->fallback != 0)
+	if (status > 0)
 	{
-		if (gridi->fallbackDir == cs_DTCDIR_FWD)
+		/* We encountered a coverage issue during the calculation. */
+		if (gridi->fallback != 0)
 		{
-			/* One might think this should be a call to CS_gxInvrs3d.  In
-			   releases of CS-MAP, prior to RFC 2, it was the equivalent of
-			   CS_gxInvrs2D, so that's what we have here in order to preclude
-			   regression test failures.  Thinking about this sime more, I
-			   believe this is correct, as this is a grid file interpolation
-			   method, and most all of these, except the French, is a two
-			   dimensional operation.  Thus, when a fall back function is
-			   used, the two dimensional version should also be used. */
-			/* TODO:  See if this needs to get special treatment for the
-			   French variation of grid file interpolation. */
-			fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
-		}
-		else if (gridi->fallbackDir == cs_DTCDIR_INV)
-		{
-			/* TODO: See commant above; some special treatment for the French
-			   grid file interpolation method may be needed here as the
-			   French method is indeed three dimensional. */
-			fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+			/* There is a fallback transformation and either there was no
+			   primary coverage or the primary transformation failed because
+			   of a coverage issue.  (This can happen in the case where an
+			   iterative technique was used, e.g. and inverse grid function,
+			   and the point provided is very close to the coverage boundary.) */
+			if (gridi->fallbackDir == cs_DTCDIR_FWD)
+			{
+				/* One might think this should be a call to CS_gxInvrs3d.  In
+				   releases of CS-MAP, prior to RFC 2, it was the equivalent of
+				   CS_gxInvrs2D, so that's what we have here in order to preclude
+				   regression test failures.  Thinking about this some more, I
+				   believe this is correct, as this is a grid file interpolation
+				   method, and most all of these, except the French, is a two
+				   dimensional operation.  Thus, when a fall back function is
+				   used, the two dimensional version should also be used. */
+				/* TODO:  See if this needs to get special treatment for the
+				   French variation of grid file interpolation. */
+				fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+			}
+			else if (gridi->fallbackDir == cs_DTCDIR_INV)
+			{
+				/* TODO: See comment above; some special treatment for the French
+				   grid file interpolation method may be needed here as the
+				   French method is indeed three dimensional. */
+				fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+			}
+			else
+			{
+				fbStatus = 1;
+			}
+			status = (fbStatus == 0) ? 2 : 1;
 		}
 		else
 		{
-			fbStatus = 1;
+			/* There is no fallback transformation and a coverage issue prevented
+			   a normal calculation. */
+			status = 1;
 		}
-		status = (fbStatus == 0) ? 2 : 1;
-	}
-	else
-	{
-		status = 1;
 	}
 	return status;
 }
@@ -522,6 +607,7 @@ int EXP_LVL9 CSgridiI2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 	
 	struct cs_GridFile_* gridFilePtr;
 
+	status = 1;		/* Until we know different, we assume no coverage. */
 	selectedIdx = CSgridiT (gridi,srcLl,cs_DTCDIR_INV);
 	if (selectedIdx >= 0)
 	{
@@ -550,32 +636,65 @@ int EXP_LVL9 CSgridiI2 (struct csGridi_ *gridi,double* trgLl,Const double* srcLl
 			status = -1;
 		}
 	}
-	else if (gridi->fallback != 0)
+	if (status > 0)
 	{
-		if (gridi->fallbackDir == cs_DTCDIR_FWD)
+		/* We encountered a coverage issue during the calculation. */
+		if (gridi->fallback != 0)
 		{
-			fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
-		}
-		else if (gridi->fallbackDir == cs_DTCDIR_INV)
-		{
-			fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+			/* There is a fallback transformation and either there was no
+			   primary coverage or the primary transformation failed because
+			   of a coverage issue.  (This can happen in the case where an
+			   iterative technique was used, e.g. and inverse grid function,
+			   and the point provided is very close to the coverage boundary.) */
+			if (gridi->fallbackDir == cs_DTCDIR_FWD)
+			{
+				fbStatus = CS_gxInvrs2D (gridi->fallback,trgLl,srcLl);
+			}
+			else if (gridi->fallbackDir == cs_DTCDIR_INV)
+			{
+				fbStatus = CS_gxFrwrd2D (gridi->fallback,trgLl,srcLl);
+			}
+			else
+			{
+				fbStatus = 1;
+			}
+			status = (fbStatus == 0) ? 2 : 1;
 		}
 		else
 		{
-			fbStatus = 1;
+			/* There is no fallback transformation and a coverage issue prevented
+			   a normal calculation. */
+			status = 1;
 		}
-		status = (fbStatus == 0) ? 2 : 1;
-	}
-	else
-	{
-		status = 1;
 	}
 	return status;
 }
 int EXP_LVL9 CSgridiL (struct csGridi_ *gridi,int cnt,Const double pnts [][3])
 {
 	int status;
-	status = 0;
+	int index;
+	int selectedIdx;
+
+	/* NOTE: a grid file interpolation object with no files is considered a
+	   null transformation.  All points are with in the converage of the
+	   nuill transformation. */
+	status = cs_CNVRT_OK;	/* until we know differently */
+
+	/* We need to check each point independently, as the different points
+	   may be covered by different files.  If we have a file which can
+	   provide coverage, we assume that to be sufficient evidence to
+	   say that the point is covered by this transformation. */
+	for (index = 0;index < cnt;index += 1)
+	{
+		selectedIdx = CSgridiT (gridi,pnts [index],cs_DTCDIR_FWD);
+		if (selectedIdx < 0)
+		{
+			/* No file in the transformation has coverage for this
+			   point. */
+			status = cs_CNVRT_USFL;
+			break;
+		}
+	}
 	return status;
 }
 int EXP_LVL9 CSgridiN  (struct csGridi_ *gridi)
