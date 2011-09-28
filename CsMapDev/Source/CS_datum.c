@@ -453,8 +453,8 @@ struct cs_Dtcprm_ * EXP_LVL3 CSdtcsu (	Const struct cs_Datum_ *src_dt,
 			   codes are either cs_DTCDIR_FWD or cs_DTCDIR_INV, ignoring other
 			   current or future possibiliti8es.  It doesn't cost much, so we
 			   do it the hard and safe way. */
-			if ((prevXfrmPtr->userDirection == cs_DTCDIR_FWD && currXfrmPtr->userDirection === cs_DTCDIR_INV) ||
-			    (prevXfrmPtr->userDirection == cs_DTCDIR_INV && currXfrmPtr->userDirection === cs_DTCDIR_FWD))
+			if ((prevXfrmPtr->userDirection == cs_DTCDIR_FWD && currXfrmPtr->userDirection == cs_DTCDIR_INV) ||
+			    (prevXfrmPtr->userDirection == cs_DTCDIR_INV && currXfrmPtr->userDirection == cs_DTCDIR_FWD))
 			{
 				CS_gxDisable (prevXfrmPtr);
 				prevXfrmPtr = NULL;
@@ -1289,7 +1289,7 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 				status = -1;
 
 				/* In the case of a actual gxStatus of -1, the cause of the
-				   fatal failure will have been reported a;ready.  In the case
+				   fatal failure will have been reported already.  In the case
 				   of a gxStatus > 0, we willneed to report the cause of the
 				   failure. */
 				if (gxStatus > 0)
@@ -1403,7 +1403,6 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 			case cs_DTCFLG_BLK_W:
 				/* Issue a warning message and continue. */
 				CS_erpt (rptCode);
-				status = 1;
 				break;
 
 			case cs_DTCFLG_BLK_I:

@@ -83,6 +83,7 @@ int CStest4 (bool verbose,char *test_file)
 	char bufrX [32];
 	char bufrY [32];
 	char msgBufr [256];
+	char debugBufr [256];
 
 	printf ("Checking all test cases in %s.\n",test_file);
 
@@ -132,6 +133,7 @@ int CStest4 (bool verbose,char *test_file)
 	while (fgets (l_buf,sizeof (l_buf),fs_tst) != NULL)
 	{
 		line_nbr += 1;
+		CS_stncp (debugBufr,l_buf,sizeof (debugBufr));
 
 		/* Trim any leading and trailing white space. */
 

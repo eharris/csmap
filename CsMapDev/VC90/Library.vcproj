@@ -356,6 +356,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Include\cs_Japan.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Include\cs_Legacy.h"
 				>
 			</File>

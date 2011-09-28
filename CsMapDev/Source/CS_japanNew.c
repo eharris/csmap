@@ -106,11 +106,11 @@ int CSjapanS  (struct cs_GridFile_ *gridFile)
 		gridFile->release = (cs_RELEASE_CAST)CSjapanR;
 		gridFile->destroy = (cs_DESTROY_CAST)CSjapanD;
 
-		status = 0;
+		status = csGRIDI_ST_OK;
 	}
 	else
 	{
-		status = -1;
+		status = csGRIDI_ST_SYSTEM;
 	}
 	return status;
 }
@@ -158,7 +158,7 @@ int CSjapanF2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 	   This file format only provides a two dimensional transformation. */
 	
 	status = CScalcJgd2kGridFile (japan,lcl_ll,ll_src);
-	if (status == 0)
+	if (status == csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = lcl_ll [LNG];
 		ll_trg [LAT] = lcl_ll [LAT];
@@ -179,7 +179,7 @@ int CSjapanF3 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 	double lcl_ll [3];
 	
 	status = CScalcJgd2kGridFile (japan,lcl_ll,ll_src);
-	if (status == 0)
+	if (status == csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = lcl_ll [LNG];
 		ll_trg [LAT] = lcl_ll [LAT];
@@ -204,7 +204,7 @@ int CSjapanI2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 	double epsilon [2];
 	double newResult [3];
 
-	status = 0;
+	status = csGRIDI_ST_OK;
 	guess [LNG] = ll_src [LNG];
 	guess [LAT] = ll_src [LAT];
 	guess [HGT] = ll_src [HGT];
@@ -219,17 +219,14 @@ int CSjapanI2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 
 		/* Compute the NAD83 lat/long for our current guess. */
 		status = CSjapanF2 (japan,newResult,guess);
-
-		/* If there is no data for this lat/long, we use the fallback
-		   if one is available. */
-		//if (status != 0)
-		//{
-		//	if (status > 0 && japan->fallback != NULL)
-		//	{
-		//		status = CScalcFallbackInverse (japan->fallback,ll_trg,ll_src);
-		//	}
-		//	return status;
-		//}
+		if (status != csGRIDI_ST_OK)
+		{
+			/* It appears that this iterative inverse function has wandered
+			   outside the coverage of the grid data file.  Especially likely
+			   for this file format as the coverage is not necessarily
+			   rectangular, and can have holes in the middle of it. */
+			break;
+		}
 
 		/* See how far we are off. */
 		epsilon [LNG] = ll_src [LNG] - newResult [LNG];
@@ -253,22 +250,32 @@ int CSjapanI2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 		if (lng_ok && lat_ok) break;
 	}
 
-	if (ii >= japan->maxIterations)
+	if (status == csGRIDI_ST_OK)
 	{
-		status = 1;
-		CS_erpt (cs_TOKYO_ICNT);
-		if (fabs (epsilon [LNG]) > japan->errorValue ||
-		    fabs (epsilon [LAT]) > japan->errorValue)
+		if (ii >= japan->maxIterations)
 		{
-			status = -1;
-		}	
-		return status;
+			status = csGRIDI_ST_COVERAGE;
+			CS_erpt (cs_TOKYO_ICNT);
+			if (fabs (epsilon [LNG]) > japan->errorValue ||
+				fabs (epsilon [LAT]) > japan->errorValue)
+			{
+				status = csGRIDI_ST_SYSTEM;
+			}
+		}
 	}
 
-	/* Adjust the ll_27 value to the computed value, now that we
+	/* Adjust the Tokyo value to the computed value, now that we
 	   know that it should be correct. */
-	ll_trg [LNG] = guess [LNG];
-	ll_trg [LAT] = guess [LAT];
+	if (status == csGRIDI_ST_OK)
+	{
+		ll_trg [LNG] = guess [LNG];
+		ll_trg [LAT] = guess [LAT];
+	}
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
+	}
 	return status;
 }
 int CSjapanI3 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
@@ -278,13 +285,13 @@ int CSjapanI3 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 	double lcl_ll [3];
 	
 	status = CSjapanI2 (japan,lcl_ll,ll_src);
-	if (status == 0)
+	if (status == csGRIDI_ST_OK)
 	{
 		ll_trg [LNG] = lcl_ll [LNG];
 		ll_trg [LAT] = lcl_ll [LAT];
 		ll_trg [HGT] = ll_src [HGT];
 	}
-	else if (status > 0)
+	else if (status > csGRIDI_ST_OK)
 	{
 		if (ll_trg != ll_src)
 		{
@@ -302,19 +309,17 @@ int CSjapanL  (struct cs_Japan_ *japan,int cnt,Const double pnts [][3])
 	int status;
 	double density;
 
-	status = 0;
+	status = cs_CNVRT_OK;
 	for (idx = 0;idx < cnt;idx += 1)
 	{
 		density = CSjapanT (japan,pnts [idx],cs_DTCDIR_FWD);
-		if (density == 0.0)
+		if (fabs (density) < 1.0E-08)	/* i.e. == 0.0 */
 		{
-			status = 1;
+			status = cs_CNVRT_USFL;
 			break;
 		}
 	}
 	return status;
-
-	return 0;
 }
 int CSjapanR  (struct cs_Japan_ *japan)
 {
@@ -425,7 +430,7 @@ struct cs_Japan_* CSnewJgd2kGridFile (Const char *path,long32_t bufferSize,ulong
 	{
 		CS_stncp (csErrnam,"CS_japan::1",MAXPATH);
 		CS_erpt (cs_ISER);
-		goto error;		
+		goto error;
 	}
 
 	/* Capture the min/max of the the file coverage in the coverage object. */
@@ -516,11 +521,11 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	if (CStestCoverage (&thisPtr->lngCell.coverage,sourceLL) != 0.0)
 	{
 		/* The longitude cell covers this point.  The latitude cell always
-		   covers the exact smae cell, no need to waste time checking it.
+		   covers the exact same cell, no need to waste time checking it.
 		   
 		   Since we already have the appropriate grid cell available, we're
 		   done.  */
-		return 0;
+		return csGRIDI_ST_OK;
 	}
 
 	/* Ok, the provided point is not in the same cell as the last point.  We
@@ -534,7 +539,7 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	{
 		/* Out of range.  This check eliminates the need for lots of error
 		   checking below */
-		return 1;
+		return csGRIDI_ST_COVERAGE;
 	}
 
 	/* Open the binary image file if is isn't open already. */
@@ -546,7 +551,7 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 		{
 			CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
 			CS_erpt (cs_DTC_FILE);
-			return -1;
+			return csGRIDI_ST_SYSTEM;
 		} 
 	}
 
@@ -580,7 +585,7 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	meshCode = CSjpnLlToMeshCode (sourceLL);
 	if (meshCode == 0UL)
 	{
-		return -1;
+		return csGRIDI_ST_SYSTEM;
 	}
 	CSjpnMeshCodeToLl (swLL,meshCode);
 	iLng = (ulong32_t)CS_degToSec (swLL [0]);
@@ -594,7 +599,7 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	if (rdCnt != sizeof (swRec))
 	{
 		CS_erpt (cs_IOERR);
-		return -1;
+		return csGRIDI_ST_SYSTEM;
 	}
 
 	/* Now for the southeast corner of the cell. */
@@ -611,7 +616,7 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	if (rdCnt != sizeof (seRec))
 	{
 		CS_erpt (cs_IOERR);
-		return -1;
+		return csGRIDI_ST_SYSTEM;
 	}
 
 	/* The northeast corner of the grid cell. */
@@ -628,7 +633,7 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	if (rdCnt != sizeof (neRec))
 	{
 		CS_erpt (cs_IOERR);
-		return -1;
+		return csGRIDI_ST_SYSTEM;
 	}
 
 	/* Finally, the northwest corner of the grid cell. */
@@ -645,7 +650,7 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	if (rdCnt != sizeof (nwRec))
 	{
 		CS_erpt (cs_IOERR);
-		return -1;
+		return csGRIDI_ST_SYSTEM;
 	}
 
 	/* If we're still here, we have all four corners and finally, at last,
@@ -674,7 +679,7 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	CS_stncp (thisPtr->latCell.sourceId,thisPtr->fileName,sizeof (thisPtr->lngCell.sourceId));
 
 	/* We're done, some one else does the actual calculation. */
-	return 0;
+	return csGRIDI_ST_OK;
 }
 /* Transform the provided point.  Again, if the provided point is outside the
    rectagular bounding box for this object, this is a very expensive way to
@@ -716,7 +721,7 @@ int CScalcJgd2kGridFile (struct cs_Japan_* thisPtr,double targetLL [2],Const dou
 
    This function is implemented as records in the ASCII text file may not be
    of fixed length, there can be a million of them, and there is no guarantee
-   that the records in the text file will be properly soprted.  The binary
+   that the records in the text file will be properly sorted.  The binary
    file enables random access to the data file for decent performance without
    eating up 12MB of RAM. */
 int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
@@ -887,12 +892,12 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 			   (especially negative ones) is different than what you will see on
 			   WIN32 platforms.  Which one is correct is of no concern to me,
 			   only that they are different. */
-            latTmp *= 100000.0;
-            latTmp += (latTmp >= 0.0) ? 0.1 : -0.1;
-            lngTmp *= 100000.0;
-            lngTmp += (lngTmp >= 0.0) ? 0.1 : -0.1;
-            /* End Linux fix, Trac #13 */
-    
+			latTmp *= 100000.0;
+			latTmp += (latTmp >= 0.0) ? 0.1 : -0.1;
+			lngTmp *= 100000.0;
+			lngTmp += (lngTmp >= 0.0) ? 0.1 : -0.1;
+			/* End Linux fix, Trac #13 */
+
 			gridRec.deltaLat = (long32_t)(latTmp);
 			gridRec.deltaLng = (long32_t)(lngTmp);
 			wrCnt = CS_fwrite (&gridRec,sizeof (gridRec),1,bStrm);
@@ -930,7 +935,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 		   search algorithm on it.  This should also cause the min/max records
 		   to end up being the first two records in the file. This is very
 		   convenient.
-		   
+
 		   Note that the position of any one record in the file with respect
 		   to any other record in the file is immaterial in this file format.
 		   Thus, we can reorder the file any way we want to.  The original
@@ -948,7 +953,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 		CS_fclose (bStrm);
 		bStrm = NULL;
 		if (st < 0) goto error;
-		if (st == 1) st = 0;			/* CS_ips returns 1 for success, for historical reasons. */
+		if (st == 1) st = csGRIDI_ST_OK;	/* CS_ips returns 1 for success, for historical reasons. */
 
 		/* OK, now we're really done. */
 	}
@@ -956,7 +961,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 	/* If all that was done successfully, we change the name of
 	   the file and return success. */
 	CS_stncp (thisPtr->filePath,binaryPath,sizeof (thisPtr->filePath));
-	return 0;
+	return csGRIDI_ST_OK;
 error:
 	if (aStrm != NULL)
 	{
@@ -968,7 +973,7 @@ error:
 		CS_fclose (bStrm);
 		bStrm = NULL;
 	}
-	return -1;
+	return csGRIDI_ST_SYSTEM;
 }
 /*
 	The following function returns the mesh code appropriate for the given

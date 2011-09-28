@@ -125,7 +125,7 @@ double CScntv2T (struct cs_NTv2_ *cntv2,double ll_src [2],short direction)
 {
 	double density;			/* actually, grid cell size */
 
-	/* For this fiule format, we don't care about the direction. */
+	/* For this file format, we don't care about the direction. */
 	
 	density = CStestNTv2 (cntv2,ll_src);
 	return density;
@@ -140,6 +140,9 @@ int CScntv2F2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 	
 	ll_trg [LNG] = ll_src [LNG];
 	ll_trg [LAT] = ll_src [LAT];
+	
+	/* CScalcNTv2 returns the datum shift, in seconds of arc.  The shift is
+	   set to zero in the event of an error. */
 	status = CScalcNTv2 (cntv2,deltaLL,ll_src);
 	if (status == 0)
 	{
@@ -168,6 +171,12 @@ int CScntv2F3 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 	}
 	return status;
 }
+/* The NTv2 format specifies the shift from one datum to another datum.  The
+   only way to go the other way is the iterative technique used below.  As
+   long as the transformation is continuous with out any sharp deviations,
+   this technique works fine.  You can run into problem when close to an
+   edge in the coverage, and the iterative technique can wander outside the
+   coverage of the file, and thus fail to converge. */
 int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 {
 	short lng_ok;
@@ -183,6 +192,8 @@ int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 	guess [LAT] = ll_src [LAT];
 	guess [HGT] = ll_src [HGT];
 
+	status = csGRIDI_ST_SYSTEM;			/* until we know different */
+
 	/* Start a loop which will iterate up to 10 times. The Canadians and
 	   the Aussies max out at 4.  We would duplicate theirs, but since
 	   this is an inverse, we'll do a little better than they do. */
@@ -193,17 +204,20 @@ int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 
 		/* Compute the NAD83 lat/long for our current guess. */
 		status = CScntv2F2 (cntv2,newResult,guess);
-
-		/* If there is no data for this lat/long, we use the fallback
-		   in one is available. */
-//if (status != 0)
-//{
-//	if (status > 0 && __This->fallback != NULL)
-//	{
-//		status = CScalcFallbackInverse (__This->fallback,ll27,ll83);
-//	}
-//	return (status);
-//}
+		if (status != csGRIDI_ST_OK)
+		{
+			/* In this context, this error can occur when inverting points
+			   close to the coverage boundary of the file.  If we detect a
+			   single instance of wandering across the boundary, we simply
+			   return a coverage status and the overall grid file
+			   interpolation system will use the fallback if one was
+			   specified.
+			   
+			   If we don't do as written above, the iterative technique fails
+			   to converge and we have a situation where a system error may
+			   be generated and the results may not be reproducable. */
+			break;
+		}
 
 		/* See how far we are off. */
 		epsilon [LNG] = ll_src [LNG] - newResult [LNG];
@@ -227,23 +241,45 @@ int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 		if (lng_ok && lat_ok) break;
 	}
 
-	/* If we didn't resolve in maxIteration tries, we issue a warning
-	   message.  Casual reading of the NADCON code would lead one to
-	   believe that they do five iterations, but four is all they really
-	   do.  Since this is an inverse, and our clients expect it to produce
-	   what we started with, we do maxIterations iterations, insteadt of the
-	   four that GRIDINT does.  Thus, there is room for a slight discrepancy
-	   between the two programs. */
-	if (ii >= cntv2->maxIterations)
+	if (status == csGRIDI_ST_OK)
 	{
-		CS_erpt (cs_NADCON_ICNT);
-		return (-1);
+		/* If we didn't resolve in maxIteration tries, we issue a warning
+		   message.  Casual reading of the NADCON code would lead one to
+		   believe that they do five iterations, but four is all they really
+		   do.  Since this is an inverse, and our clients expect it to produce
+		   what we started with, we do maxIterations iterations, insteadt of the
+		   four that GRIDINT does.  Thus, there is room for a slight discrepancy
+		   between the two programs. */
+		if (ii >= cntv2->maxIterations)
+		{
+			status = csGRIDI_ST_COVERAGE;
+			CS_erpt (cs_NADCON_ICNT);
+			
+			if (fabs (epsilon [LNG]) > cntv2->errorValue ||
+				fabs (epsilon [LAT]) > cntv2->errorValue)
+			{
+				/* Here if either residual is greater than that specified in
+				   the transformation definition.  This rarely, if ever,
+				   happens in normal usage.  Should it really happen, the
+				   problem is indeed serious. */
+				status = csGRIDI_ST_SYSTEM;			/* fatal */
+			}
+		}
 	}
 
 	/* Adjust the ll_27 value to the computed value, now that we
 	   know that it should be correct. */
-	ll_trg [LNG] = guess [LNG];
-	ll_trg [LAT] = guess [LAT];
+
+	if (status == csGRIDI_ST_OK)
+	{
+		ll_trg [LNG] = guess [LNG];
+		ll_trg [LAT] = guess [LAT];
+	}
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
+	}
 	return 0;
 }
 int CScntv2I3 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
@@ -272,13 +308,13 @@ int CScntv2L  (struct cs_NTv2_ *cntv2,int cnt,Const double pnts [][3])
 	int status;
 	double density;
 
-	status = 0;
+	status = cs_CNVRT_OK;
 	for (idx = 0;idx < cnt;idx += 1)
 	{
 		density = CStestNTv2 (cntv2,pnts [idx]);
-		if (density == 0.0)
+		if (fabs (density) > 1.0E-08)
 		{
-			status = 1;
+			status = cs_CNVRT_USFL;
 			break;
 		}
 	}
@@ -939,6 +975,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 	struct TcsCaNTv2Data northWest;
 
 	/* Until we know differently. */
+	rtnValue = csGRIDI_ST_SYSTEM;
 	thisPtr->CellIsValid = FALSE;
 
 	/* In case of an error.  This saves duplication of this many many times. */
@@ -1299,7 +1336,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 		/* Perform the interpolation calculation. */
 		deltaLL [LNG] = CScalcNTv2GridCell (&thisPtr->longitudeCell,source);
 		deltaLL [LAT] = CScalcNTv2GridCell (&thisPtr->latitudeCell,source);
-		rtnValue = 0;
+		rtnValue = csGRIDI_ST_OK;
 	}
 	else
 	{
@@ -1307,12 +1344,12 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 		   coverage. */
 		deltaLL [LNG] = cs_Zero;
 		deltaLL [LAT] = cs_Zero;
-		rtnValue = 1;
+		rtnValue = csGRIDI_ST_COVERAGE;
 	}
 	csErrnam [0] = '\0';
 	return rtnValue;
 error:
-	return -1;
+	return csGRIDI_ST_SYSTEM;
 }
 
 /* Test function, used to determine if this object covers the provided point.

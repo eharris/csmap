@@ -272,7 +272,7 @@ int CSnadcnF2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 	/* Within the NADCON data files for Alaska, the coverage is given as
 	   -194.0 to -128.0.  Internally, CS-MAP normalizes longitude to the
 	   +/- 180 range.  Thus, if we see a longitude which is greater than
-	   or equal to +166.0, we assume it is a longitude for ALaskan geography
+	   or equal to +166.0, we assume it is a longitude for Alaskan geography
 	   and make the change here.  This code is particular to the NADCON
 	   file format, and the 'NA' in NADCON refers to North America.  So
 	   this rather simple test is considered sufficient. */
@@ -284,11 +284,17 @@ int CSnadcnF2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 
 	deltaLng = deltaLat = cs_Zero;
 	status = CScalcNadconFile (nadcn->lngShift,&deltaLng,lclSrcLl);
-	if (status == 0)
+	if (status == csGRIDI_ST_OK)
 	{
 		status = CScalcNadconFile (nadcn->latShift,&deltaLat,lclSrcLl);
 	}
-	if (status != 0)
+	
+	/* Status at this point is either 0 for there is coverage and the
+	   calculation is good, or -1 indicating the data file does not provide
+	   coverage.  The -1 condition should only happen in normal circumstances
+	   in the case where this function is being called by the iterative
+	   inverse function. */
+	if (status != csGRIDI_ST_OK)
 	{
 		deltaLng = cs_Zero;
 		deltaLat = cs_Zero;
@@ -298,11 +304,10 @@ int CSnadcnF2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 	ll_trg [HGT] = lclSrcLl [HGT];
 
 	/* Undo the Alaska kludge. */
-	if (status >= 0 && flag180 && (ll_trg [LNG] < cs_Km180))
+	if (flag180 && (ll_trg [LNG] < cs_Km180))
 	{
 		ll_trg [LNG] += cs_K360;
 	}
-
 	return status;
 }
 int CSnadcnF3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
@@ -342,28 +347,37 @@ int CSnadcnF3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 
 	deltaLng = deltaLat = deltaHgt = cs_Zero;
 	status = CScalcNadconFile (nadcn->lngShift,&deltaLng,lclSrcLl);
-	if (status == 0)
+	if (status == csGRIDI_ST_OK)
 	{
 		status = CScalcNadconFile (nadcn->latShift,&deltaLat,lclSrcLl);
-		if (status != 0)
-		{
-			deltaLng = cs_Zero;
-			deltaLat = cs_Zero;
-		}
-	}
-	ll_trg [LNG] = lclSrcLl [LNG] - deltaLng * cs_Sec2Deg;
-	ll_trg [LAT] = lclSrcLl [LAT] + deltaLat * cs_Sec2Deg;
-	if (status == 0 && nadcn->type == nadconNAD27Shift)
-	{
-		vcStatus = CSvrtcon29To88 (&deltaHgt,ll_trg);
-		if (vcStatus == 0)
-		{
-			ll_trg [HGT] = lclSrcLl [HGT] + deltaHgt;
-		}
 	}
 
+	/* Status at this point is either 0 for there is coverage and the
+	   calculation is good, or -1 indicating the data file does not provide
+	   coverage.  The -1 condition should only happen in normal circumstances
+	   in the case where this function is being called by the iterative
+	   inverse function. */
+	if (status != csGRIDI_ST_OK)
+	{
+		deltaLng = cs_Zero;
+		deltaLat = cs_Zero;
+	}
+
+	ll_trg [LNG] = lclSrcLl [LNG] - deltaLng * cs_Sec2Deg;
+	ll_trg [LAT] = lclSrcLl [LAT] + deltaLat * cs_Sec2Deg;
+	deltaHgt = cs_Zero;
+	if (nadcn->type == nadconNAD27Shift && status >= csGRIDI_ST_OK)
+	{
+		vcStatus = CSvrtcon29To88 (&deltaHgt,ll_trg);
+		if (vcStatus != 0)
+		{
+			deltaHgt = cs_Zero;
+		}
+	}
+	ll_trg [HGT] = lclSrcLl [HGT] + deltaHgt;
+
 	/* Undo the Alaska kludge. */
-	if (status >= 0 && flag180 && (ll_trg [LNG] < cs_Km180))
+	if (flag180 && (ll_trg [LNG] < cs_Km180))
 	{
 		ll_trg [LNG] += cs_K360;
 	}
@@ -395,9 +409,11 @@ int CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 
 		/* Compute the NAD83 lat/long for our current guess. */
 		status = CSnadcnF2 (nadcn,newResult,guess);
-		if (status != 0)
+		if (status != csGRIDI_ST_OK)
 		{
-			return (status);
+			/* A negative status here is possible if this iterative solution
+			   has wandered outside of the coverage of the grid data file. */
+			break;
 		}
 
 		/* See how far we are off. */
@@ -422,24 +438,39 @@ int CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 		if (lng_ok && lat_ok) break;
 	}
 
-	/* If we didn't resolve in maxIteration tries, we issue a warning
-	   message.  Casual reading of the NADCON code would lead one to
-	   believe that they do five iterations, but four is all they really
-	   do.  Since this is an inverse, and our clients expect it to produce
-	   what we started with, we do maxIterations iterations, insteadt of the
-	   four that GRIDINT does.  Thus, there is room for a slight discrepancy
-	   between the two programs. */
-	if (ii >= nadcn->maxIterations)
+	if (status == 0)
 	{
-		CS_erpt (cs_NADCON_ICNT);
-		return (-1);
+		/* Here if the iterative algorithm completed normally.
+	
+		   If we didn't resolve in maxIteration tries, we issue a warning
+		   message.  Casual reading of the NADCON code would lead one to
+		   believe that they do five iterations, but four is all they really
+		   do.  Since this is an inverse, and our clients expect it to produce
+		   what we started with, we do maxIterations iterations, instead of the
+		   four that GRIDINT does.  Thus, there is room for a slight discrepancy
+		   between the two programs. */
+		if (ii >= nadcn->maxIterations)
+		{
+			status = csGRIDI_ST_COVERAGE;
+			CS_erpt (cs_NADCON_ICNT);
+			if (fabs (epsilon [LNG]) > nadcn->errorValue ||
+				fabs (epsilon [LAT]) > nadcn->errorValue)
+			{
+				status = csGRIDI_ST_SYSTEM;			/* fatal */
+			}
+		}
 	}
-
-	/* Adjust the ll_27 value to the computed value, now that we
-	   know that it should be correct. */
-	ll_trg [LNG] = guess [LNG];
-	ll_trg [LAT] = guess [LAT];
-	return 0;
+	if (status == csGRIDI_ST_OK)
+	{
+		ll_trg [LNG] = guess [LNG];
+		ll_trg [LAT] = guess [LAT];
+	}
+	else
+	{
+		ll_trg [LNG] = ll_src [LNG];
+		ll_trg [LAT] = ll_src [LAT];
+	}
+	return status;
 }
 int CSnadcnI3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 {
@@ -467,11 +498,11 @@ int CSnadcnI3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 		CSvrtcon29To88 (&deltaHgt,ll_src);
 	}
 
-	/* Use the 2D inverse to move the horizontal potion of the cooridnate.
+	/* Use the 2D inverse to move the horizontal potion of the coordinate.
 	   In the case of the NADCON grid file interpolation method, we have
 	   no choice in the matter. */
 	status = CSnadcnI2 (nadcn,ll_trg,ll_src);
-	if (status == 0)
+	if (status == csGRIDI_ST_OK)
 	{
 		ll_trg [2] = ll_src [2] - deltaHgt;
 	}
@@ -479,7 +510,22 @@ int CSnadcnI3 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 }
 int CSnadcnL  (struct cs_Nadcn_ *nadcn,int cnt,Const double pnts [][3])
 {
-	return 0;
+	short ok;
+	int index;
+	double density;
+
+	ok = TRUE;
+	for (index = 0;index < cnt;index += 1)
+	{
+		/* Note: CSnadcnT ignores the direction parameter.  The assumption
+		   always forward. */
+		density = CSnadcnT (nadcn,pnts [index],cs_DTCDIR_FWD);
+		if (fabs (density) > 1.0E-08)		/* i.e. != 0.0 */
+		{
+			ok = FALSE;
+		}
+	}
+	return (ok != TRUE) ? cs_CNVRT_USFL : cs_CNVRT_OK;
 }
 int CSnadcnR  (struct cs_Nadcn_ *nadcn)
 {
@@ -651,7 +697,7 @@ struct cs_NadconFile_* CSnewNadconFile (Const char* filePath,long32_t bufferSize
 	   does not always provide precise results.  To get the precise results we
 	   require, we assume that the value (which is in degrees) is an intergal
 	   number of seconds.
-	   
+
 	   You can reproduce NADCON results precisely by replacing this stuff with
 	   the following:
 
@@ -819,12 +865,9 @@ int CSextractNadconFile (struct cs_NadconFile_* thisPtr,Const double* sourceLL)
 			sourceLL [LNG] <  thisPtr->currentCell.coverage.northEast [LNG] &&
 			sourceLL [LAT] <  thisPtr->currentCell.coverage.northEast [LAT])
 		{
-			return 0;
+			return csGRIDI_ST_OK;
 		}
 	}
-
-	/* Until we know differently. */
-	thisPtr->cellIsValid = FALSE;
 
 	/* Compute the basic indices to the cell in the data file. Use of cs_LlNoise
 	   is to force a result, such as, 0.99999999999998 to be a 1.0. */
@@ -833,12 +876,22 @@ int CSextractNadconFile (struct cs_NadconFile_* thisPtr,Const double* sourceLL)
 	if (eleNbr >= thisPtr->elementCount || recNbr >= thisPtr->recordCount)
 	{
 		/* This is not supposed to happen.  This is a "private" function and
-		   only called when it is known that the provided coordinate is within
-		   the coverage of the file. */
-		CS_stncp (csErrnam,"CS_nadcn::1",MAXPATH);
-		CS_erpt  (cs_ISER);
-		goto error;
+		   is to be called only when it is known that the provided coordinate is
+		   within the coverage of the file.
+		   
+		   That was when originally designed.  It turns out that when
+		   converting a point very close the coverage boundary, the iteratiive
+		   inverse function can easily generate a point which is outside the
+		   converage of the file.  Not by much, mind you, but enough to cause
+		   this function to fail.  The iterative inverse function needs to be
+		   informed about this.  So return a +1 status.  Note, that we haven't
+		   done anything yet that requires undoing, so we can simp[ly return. */
+		CS_erpt  (cs_DTC_RNG_W);
+		return csGRIDI_ST_COVERAGE;
 	}
+
+	/* Until we know differently. */
+	thisPtr->cellIsValid = FALSE;
 
 	/* Compute the latitude and longitude of the southwest corner of the grid cell. */
 	thisPtr->currentCell.coverage.southWest [LNG] = thisPtr->coverage.southWest [LNG] + thisPtr->deltaLng * (double)eleNbr;
@@ -1027,7 +1080,7 @@ int CSextractNadconFile (struct cs_NadconFile_* thisPtr,Const double* sourceLL)
 	/* If we get here, the current cell should be valid. */
 	thisPtr->cellIsValid = TRUE;
 
-	return 0;
+	return csGRIDI_ST_OK;
 
 error:
 	/* Disable the current grid cell to indicate that it is invalid. */
@@ -1043,7 +1096,7 @@ error:
 	CSreleaseNadconFile (thisPtr);
 
 	/* Negative return indicates a system error of sorts. */
-	return -1;
+	return csGRIDI_ST_SYSTEM;
 }
 int CScalcNadconFile (struct cs_NadconFile_* thisPtr,double* result,Const double* sourceLL)
 {
