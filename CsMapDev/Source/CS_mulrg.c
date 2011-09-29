@@ -443,13 +443,19 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 			if (fabs (epsilon [LNG]) > mulrg->errorValue ||
 				fabs (epsilon [LAT]) > mulrg->errorValue)
 			{
-				rtnVal = -1;
+				/* In normal use, this never happens.  However, when processing
+				   data on the edges of the coverage, this can happen.  We have
+				   a choice.  Increase the values of "errorValue", or simply
+				   consider a failure to converge in the specified number of
+				   iterations as a coverage issue.  For now, we consider a
+				   failure to converge as a coverage issue. */
+				rtnVal = 1;
 			}
 		}
 
 		/* Adjust the ll_lcl value to the computed value, now that we
 		   know that it should be correct. */
-		if (rtnVal >= 0)
+		if (rtnVal == 0)
 		{
 			trgLl [LNG] = guess [LNG];
 			trgLl [LAT] = guess [LAT];
@@ -459,9 +465,9 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 			trgLl [HGT] = srcLl [HGT] - guess [HGT];
 		}
 	}
-	else if (status > 0)
+	if (status > 0)
 	{
-		/* We were provided a point which is outside of the usefule range
+		/* We were provided a point which is outside of the useful range
 		   of this transformation, or the iterative conversion technique
 		   wandered outside the useful range of the transformation. */
 		CS_erpt (cs_MREG_RANGE);			/* Register warning message. */
@@ -484,9 +490,23 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 		/* If the fallback inverse returned a normal status, we return +2 as an
 		   indication that the fallback technique was used.  Otherwise, we use
 		   +1 to indicate the that provided point was outside the useful range. */
-		rtnVal = (fbStatus == 0) ? 2 : 1;
+		if (fbStatus == 0)
+		{
+			/* Indicate that the result of using a fallback function. */
+			rtnVal = 2;
+		}
+		else
+		{
+			/* The fallback didn't work, so our results are the same as the
+			   input coordinates, and we return 1 to indicate a coverage
+			   issue. */
+			trgLl [LNG] = srcLl [LNG];
+			trgLl [LAT] = srcLl [LAT];
+			trgLl [HGT] = srcLl [HGT];
+			rtnVal = 1;
+		}
 	}
-	else
+	else if (status < 0)
 	{
 		/* We encountered some sort of system error; i.e. an error which is
 		   not related to the point that has been provided. Heap corruption,

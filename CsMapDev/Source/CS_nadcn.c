@@ -396,6 +396,8 @@ int CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 	double epsilon [2];
 	double newResult [3];
 
+	status = -1;			/* Defensive, until we know differently. */
+
 	guess [LNG] = ll_src [LNG];
 	guess [LAT] = ll_src [LAT];
 
@@ -999,7 +1001,7 @@ int CSextractNadconFile (struct cs_NadconFile_* thisPtr,Const double* sourceLL)
 			if (lngTmp > 0L)
 			{
 				/* In case the expanded end of read exceeded the end of the
-				   file, we can move the beginning of the read up some more,
+				   file, we can move the beginning of the read up some more.
 				   However, never more than the beginning of the first
 				   data record. */
 				thisPtr->bufferBeginPosition -= thisPtr->recordSize * lngTmp;
@@ -1010,7 +1012,23 @@ int CSextractNadconFile (struct cs_NadconFile_* thisPtr,Const double* sourceLL)
 				readCount = thisPtr->bufferEndPosition - thisPtr->bufferBeginPosition;
 			}
 
-			/* Defensive programming. */
+			lngTmp = (thisPtr->bufferSize - readCount) / thisPtr->recordSize;
+			if (lngTmp > 0L)
+			{
+				/* In case the expanded beginning of read exceeded the beginning
+				   of the file, we can move the end of the read back some more.
+				   However, never more than the end of the file data record. */
+				thisPtr->bufferEndPosition += thisPtr->recordSize * lngTmp;
+				if (thisPtr->bufferEndPosition > thisPtr->fileSize)
+				{
+					thisPtr->bufferEndPosition = thisPtr->fileSize;
+				}
+				readCount = thisPtr->bufferEndPosition - thisPtr->bufferBeginPosition;
+			}
+
+			/* Defensive programming.  If all this is working the way it was
+			   intended, the read count and the buffer size whould be the
+			   same. */
 			if (readCount != thisPtr->bufferSize)
 			{
 				CS_stncp (csErrnam,"CS_nadcn::2",MAXPATH);

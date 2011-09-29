@@ -260,7 +260,12 @@ int EXP_LVL9 CSparm6I2 (struct csParm6_* parm6,double* trgLl,Const double* srcLl
 		if (fabs (epsilon [LNG]) > parm6->errorValue ||
 		    fabs (epsilon [LAT]) > parm6->errorValue)
 		{
-			rtnVal = -1;
+			/* This is not supposed to happen.  It will not happen if the
+			   input coordinates are anywhere reasonable.  However, since the
+			   contract is that once created, a transformation always returns
+			   a rational result, with perhaps a warning status, we return a
+			   +1 here.  If you prefer a fatal, change this value to -1. */
+			rtnVal = 1;
 		}
 	}
 
