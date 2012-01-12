@@ -15158,6 +15158,7 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 3399,16,EPSG,3399,"RD/83 / 3-degree Gauss-Kruger zone 5",0,0,0,0,,
 3399,16,Autodesk,0,"DHDN/BeTA.Gauss3d-5",0,0,0,0,,
 3400,16,EPSG,3400,"NAD83 / Alberta 10-TM (Forest)",0,0,0,0,,
+3400,16,Autodesk,0,"CANA83-10TM115-EAP",0,0,0,0,,
 3401,16,EPSG,3401,"NAD83 / Alberta 10-TM (Resource)",0,0,0,0,,
 3401,16,Autodesk,0,"CANA83-10TM115",0,0,0,0,,
 3402,16,EPSG,3402,"NAD83(CSRS) / Alberta 10-TM (Forest)",0,0,0,0,,
