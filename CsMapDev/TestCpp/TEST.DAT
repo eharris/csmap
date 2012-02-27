@@ -60,7 +60,7 @@
 #		not been located.
 #
 #  The following tests were verified using CORPSCON. Note, that CS_MAP
-#  uses a more accurate meridinal arc calculation then does the version
+#  uses a more accurate meridional arc calculation then does the version
 #  of CORPSCON used in generating these tests. Therefore, variations as much
 #  as a millimeter can be expected in the higher latitudes.
 #
@@ -2556,8 +2556,8 @@ LL-ETRS89,-8 43 20.41418,54 42 12.51498,ITM,553443.173,884170.627,0.001,0.001
 # well, i.e. plus or minus a couple of millimeters.
 LL-IRELND75,-1 11 0.00,52 56 0.000,LL-ETRS89,-1 11 05.775760,52 56 1.001312,1.0E-08,1.0E-08
 LL-ETRS89,-1 11 05.775760,52 56 1.001312,LL-IRELND75,-1 11 0.00,52 56 0.000,1.0E-08,1.0E-08
-LL-IRELND75,-0 59 14.35,53 17 1.230,LL-ETRS89,-0 -59 19.763805,53 17 2.077929,1.0E-08,1.0E-08
-LL-ETRS89,-0 -59 19.763805,53 17 2.077929,LL-IRELND75,-0 59 14.35,53 17 1.230,1.0E-08,1.0E-08
+LL-IRELND75,-0 59 14.35,53 17 1.230,LL-ETRS89,-0 59 19.763805,53 17 2.077929,1.0E-08,1.0E-08
+LL-ETRS89,-0 59 19.763805,53 17 2.077929,LL-IRELND75,-0 59 14.35,53 17 1.230,1.0E-08,1.0E-08
 LL-IRELND75,-2 2 12.75,55 23 18.09000,LL-ETRS89,-2 2 20.408259,55 23 18.834474,1.0E-08,1.0E-08
 LL-ETRS89,-2 2 20.408259,55 23 18.834474,LL-IRELND75,-2 2 12.75,55 23 18.09000,1.0E-08,1.0E-08
 
@@ -2696,7 +2696,7 @@ MAL-RSO-SH,704570.402,653979.691,LL84,116 2 21.47404E,5 54 16.59963N,1.0E-08,1.0
 #LL-CSRS,67 3 25.36575W,44 39 318.68840N,LL27,67 03 27.38475W,44 39 31.37465N,1.0E-08,1.0E-08
 #
 # Test points for system T-KrugerTM that is categorized as a TEST GROUP which are not
-# ordinarily in clided in release builds.  To be able to test this kind of system, you
+# ordinarily included in release builds.  To be able to test this kind of system, you
 # will need to compile the distionaries with the /t option and remove the comments
 # from the two following test points.
 #LL,24.0000,66.0000,T-KrugerTM,555304.016555,1135809.413803,0.0001,0.0001
@@ -2779,7 +2779,7 @@ LL84,13 17 15.26945E,49 46 46.76778N,Czech/JTSK.Krovak,-828271.04,-1065184.38,0.
 LL84,13 36 27.62158E,49 50 58.55330N,Czech/JTSK.Krovak,-804332.20,-1060930.08,0.4,0.4
 LL84,14 18 4.02926E,50 50 38.89685N,Czech/JTSK.Krovak,-739718.90,-958472.30,0.4,0.4
 LL84,14 41 47.26566E,50 49 19.40403N,Czech/JTSK.Krovak,-712455.19,-964672.84,0.4,0.4
-LL84,15 0 2.78717E,50 51 57.39828N,Czech/JTSK.Krovak,-690566.42,-962631 .62,0.4,0.4
+LL84,15 0 2.78717E,50 51 57.39828N,Czech/JTSK.Krovak,-690566.42,-962631.62,0.4,0.4
 LL84,14 4 1.61886E,50 43 43.30715N,Czech/JTSK.Krovak,-757849.52,-968888.13,0.4,0.4
 LL84,14 18 8.62856E,50 40 19.50674N,Czech/JTSK.Krovak,-742268.24,-977441.34,0.4,0.4
 LL84,14 59 55.42334E,50 40 47.07529N,Czech/JTSK.Krovak,-693373.68,-983155.57,0.4,0.4
@@ -2858,7 +2858,7 @@ LL84,17 10 54.43044E,49 36 35.10403N,Czech/JTSK.Krovak,-551962.07,-1119209.73,0.
 LL84,16 48 51.57444E,49 32 47.19499N,Czech/JTSK.Krovak,-579116.30,-1123493.42,0.4,0.4
 LL84,16 10 40.35480E,49 30 10.54416N,Czech/JTSK.Krovak,-625443.86,-1123283.34,0.4,0.4
 LL84,16 21 25.91555E,49 26 2.80974N,Czech/JTSK.Krovak,-613385.84,-1132343.26,0.4,0.4
-LL84,16 32 1 .05526E,49 21 56.38219N,Czech/JTSK.Krovak,-601493.08,-1141313.43,0.4,0.4
+LL84,16 32 1.05526E,49 21 56.38219N,Czech/JTSK.Krovak,-601493.08,-1141313.43,0.4,0.4
 LL84,16 54 36.13847E,49 25 51.48201N,Czech/JTSK.Krovak,-573557.46,-1136987.72,0.4,0.4
 LL84,17 6 15.19387E,49 24 57.20855N,Czech/JTSK.Krovak,-559716.11,-1140095.79,0.4,0.4
 LL84,16 53 2.51752E,49 10 21.61236N,Czech/JTSK.Krovak,-578416.88,-1165360.81,0.4,0.4
@@ -3391,7 +3391,7 @@ LL,10.0,55.0,T-EDCYLE,1113194.91,6097230.31,0.015,0.015
 T-EDCYLE,1113194.91,6097230.31,LL,10.0,55.0,0.000001,0.000001
 ###############################################################################
 #
-#	Popular Visualisation Pseudo Mercator (Google Maps, Virtual World, etc.)
+#	Popular Visualisation Pseudo Mercator (Google Earth)
 #	from EPSG Guidance Note 7-2 (EPSG V7.1), page 34
 #
 LL,100 20 00.000W,24 22 54.433N,WGS84.PseudoMercator,-11169055.58,2800000.00,0.015,0.015
