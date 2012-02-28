@@ -738,6 +738,15 @@ int EXP_LVL9 CSgridiD (struct csGridi_ *gridi)
 			gridi->gridFiles [idx] = NULL;
 		}
 	}
+
+	if (NULL != gridi->fallback)
+	{
+		(*gridi->fallback).destroy(&gridi->fallback->xforms);
+
+		CS_free(gridi->fallback);
+		gridi->fallback = NULL;
+	}
+
 	return status;
 }
 int CSgridiT (struct csGridi_ *gridi,double* ll_src,short direction)
