@@ -116,6 +116,8 @@ void EXP_LVL9 CSmrcatS (struct cs_Csprm_ *csprm)
 	extern double cs_Zero;
 	extern double cs_Half;				/* 0.5 */
 	extern double cs_One;				/* 1.0 */
+	extern double cs_Pi;				/*  Pi, i.e.  3.14159 */
+	extern double cs_Mpi;				/* -Pi, i.e. -3.14159 */
 	extern double cs_Degree;			/* 1.0 / 57.29577... */
 	extern double cs_Radian;			/* 57.29577... */
 	extern double cs_NPTest;			/* .001 seconds of arc
@@ -144,6 +146,26 @@ void EXP_LVL9 CSmrcatS (struct cs_Csprm_ *csprm)
 	mrcat->ecent = csprm->datum.ecent;
 	mrcat->e_sq = mrcat->ecent * mrcat->ecent;
 	mrcat->quad = cs_QuadMap [csprm->csdef.quad - cs_QuadMin];
+
+	/* Set up the longitude range for this definition.  We need to capture
+	   these values here as the CSmrcatI and CSmrcatF functions do not have
+	   access to the cs_Csdef_ structure.  These values are used to determine
+	   if a longitude which outside the +/- 180 range is to be converted
+	   without warning.  Thus, a definition can specify a useful range which
+	   extends past the +/- 180 degree crack. */
+	if ((fabs (csprm->csdef.ll_max [0]) < 1.0E-12) &&		/* csprm->csdef.ll_max [0] == 0.0 */
+		(fabs (csprm->csdef.ll_min [0]) < 1.0E-12))			/* csprm->csdef.ll_min [0] == 0.0 */
+	{
+		/* A useful range was not specified in the definition.  We default
+		   to the standard values. */
+		mrcat->eastLimit = cs_Pi;
+		mrcat->westLimit = cs_Mpi;
+	}
+	else
+	{
+		mrcat->eastLimit = (csprm->csdef.ll_max [0] - csprm->csdef.prj_prm1) * cs_Degree;
+		mrcat->westLimit = (csprm->csdef.ll_min [0] - csprm->csdef.prj_prm1) * cs_Degree;
+	}
 
 	/* Handle the two (currently) variations to this projection. */
 
@@ -217,7 +239,7 @@ void EXP_LVL9 CSmrcatS (struct cs_Csprm_ *csprm)
 
 	csprm->cent_mer = mrcat->cent_lng * cs_Radian;
 	if (csprm->csdef.ll_min [LNG] == 0.0 &&
-	    csprm->csdef.ll_min [LNG] == 0.0)
+		csprm->csdef.ll_max [LNG] == 0.0)
 	{
 		/* Here if the definition does not specify; we calculate
 		   some reasonable values. */
@@ -231,9 +253,9 @@ void EXP_LVL9 CSmrcatS (struct cs_Csprm_ *csprm)
 	{
 		/* Use whatever the user provides, without checking.
 		   The user specifies values in absolute terms. */
-		csprm->min_ll [LNG] = CS_adj180 (csprm->csdef.ll_min [LNG] - csprm->cent_mer);
+		csprm->min_ll [LNG] = csprm->csdef.ll_min [LNG] - csprm->cent_mer;
 		csprm->min_ll [LAT] = csprm->csdef.ll_min [LAT];
-		csprm->max_ll [LNG] = CS_adj180 (csprm->csdef.ll_max [LNG] - csprm->cent_mer);
+		csprm->max_ll [LNG] = csprm->csdef.ll_max [LNG] - csprm->cent_mer;
 		csprm->max_ll [LAT] = csprm->csdef.ll_max [LAT];
 	}
 
@@ -314,6 +336,7 @@ int EXP_LVL9 CSmrcatF (Const struct cs_Mrcat_ *mrcat,double xy [2],Const double 
 	extern double cs_Pi_o_2;            /* Pi / 2.0 */
 	extern double cs_Two_pi;			/* 2 pi */
 	extern double cs_Pi;				/*  Pi, i.e. 3.14159 */
+	extern double cs_3Pi_o_2;			/*  3 pi over 2  */
 	extern double cs_NPTest;			/* 0.001 arc seconds
 										   short of the north
 										   pole in radians. */
@@ -336,18 +359,57 @@ int EXP_LVL9 CSmrcatF (Const struct cs_Mrcat_ *mrcat,double xy [2],Const double 
 	double tmp2;
 
 	rtn_val = cs_CNVRT_NRML;
-	lng = ll [0] * cs_Degree;
-	lat = ll [1] * cs_Degree;
 
-	/* Deal with X, it's easy. */
-	lng = cs_Degree * ll [LNG];
-	del_lng = lng - mrcat->cent_lng;
-	if      (del_lng >  cs_Pi) del_lng -= cs_Two_pi;
-	else if (del_lng < -cs_Pi) del_lng += cs_Two_pi;
-	if (fabs (del_lng) > cs_Pi)
+	/* Adjust the longitude value such that it falls within the range specified
+	   in the definition.  We used to adjust so that the longitude was in the
+	   +/1 180 range, so as to establish a one to one relationship between
+	   the cartesian and sphereical coordinate systems.
+	   
+	   We now adjust the supplied longitude to be within the longitude range
+	   specified in the definition (i.e. the useful range).  Thus, the
+	   input longitude can now be less than -180 or greater than +180.
+	   
+	   The inverse is adjusted to accept easting values which produce
+	   such longitudes and thus will produce the original longitude
+	   value as long as this longitude is within the specified range.
+	   
+	   However, once these longitudes go through another transformation,
+	   such as a datum transformation, it is likely that the value will
+	   again be normailzed to be within +- 180, and this capability
+	   will be lost. */
+
+	lng = ll [LNG] * cs_Degree;
+	lat = ll [LAT] * cs_Degree;
+
+	/* Deal with obviously obnoxious coordinates which should only be caused
+	   by using thewrong coordinate system.  This is done here largely to
+	   enable the use of a relatively simple normalization algorithm below,
+	   without running the risk of a huge pregnant pause in processing. */
+	if (fabs (lng) > cs_3Pi_o_2)
 	{
 		rtn_val = cs_CNVRT_RNG;
-		del_lng = CS_adj2pi (del_lng);
+		lng = CS_adj2piI (lng);
+	}
+
+	/* Deal with X, it's relatively simple, mathemagically. */
+	del_lng = lng - mrcat->cent_lng;
+	if (del_lng < mrcat->westLimit)
+	{
+		rtn_val = cs_CNVRT_RNG;
+		while (del_lng < mrcat->westLimit)
+		{
+			lng += cs_Two_pi;
+			del_lng = lng - mrcat->cent_lng;
+		}
+	}
+	if (del_lng > mrcat->eastLimit)
+	{
+		rtn_val = cs_CNVRT_RNG;
+		while (del_lng > mrcat->eastLimit)
+		{
+			lng -= cs_Two_pi;
+			del_lng = lng - mrcat->cent_lng;
+		}
 	}
 	xy [XX] = mrcat->Rfact * del_lng;
 
@@ -513,13 +575,13 @@ int EXP_LVL9 CSmrcatI (Const struct cs_Mrcat_ *mrcat,double ll [2],Const double 
 	/* The longitude calculation is the same for both the
 	   spherical and ellipsoidal cases.  There may be a
 	   slight difference if the standard parallel is not
-	   the equator, but tis is taken care of during set up
+	   the equator, but this is taken care of during set up
 	   and shows up in the Rfact variable. */
 
 	del_lng = xx / mrcat->Rfact;
 	if (fabs (del_lng) >= cs_3Pi_o_2)
 	{
-	    	rtn_val = cs_CNVRT_RNG;
+		rtn_val = cs_CNVRT_RNG;
 		del_lng = CS_adj2pi (del_lng);
 	}
 

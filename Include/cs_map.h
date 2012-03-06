@@ -3457,6 +3457,28 @@ struct cs_Mrcat_
 							   theoretically, be infinitiy.  Does
 							   not include the false origin, if
 							   any. */
+    double eastLimit;		/* The eastern limit of the range of the
+							   CRS definition, relative to the central
+							   meridian, in radians.  That is, a
+							   copy of the cs_Csdef_ ll_max [0] value made
+							   relative to the central meridian and converted
+							   to radians. The value is typically a positive
+							   value indicating that it refers to a meridian
+							   which is east of the central meridian.
+							   Necessary here as the CSmrcatF & CSmrcatI
+							   functions do not have access to the cs_Csdef_
+							   structure for the active CRS definition. */
+    double westLimit;		/* The western limit of the range of the
+							   CRS definition, relative to the central
+							   meridian, in radians.  That is, a
+							   copy of the cs_Csdef_ ll_max [0] value made
+							   relative to the central meridian and converted
+							   to radians.  The value is typically a negative
+							   value indicating that it refers to a meridian
+							   which is west of the central meridian.
+							   Necessary here as the CSmrcatF & CSmrcatI
+							   functions do not have access to the cs_Csdef_
+							   structure for the active CRS definition. */
 
 	struct cs_ChicofI_ chicofI;
 							/* The coefficients of the series expansion
