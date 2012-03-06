@@ -837,15 +837,11 @@ int	EXP_LVL1 CS_isCsPrmReentrant (Const struct cs_Csprm_ *prjConversion)
 {
 	extern char csErrnam [];				/* Dimensioned at MAXPATH */
 
-	int isReentrant;
+	int isReentrant = FALSE;
 
 	if (prjConversion != NULL)
 	{
-		isReentrant = 0;
-		if (prjConversion != NULL)
-		{
-			isReentrant = ((prjConversion->prj_flags & cs_PRJFLG_RNTRNT) != 0);
-		}
+		isReentrant = ((prjConversion->prj_flags & cs_PRJFLG_RNTRNT) != 0);
 	}
 	else
 	{
