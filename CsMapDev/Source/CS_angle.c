@@ -1093,3 +1093,72 @@ void EXP_LVL7 CSllnrml (Const double oll [2],Const double ll  [2],double ll1 [2]
 
 	return;
 }
+
+/**********************************************************************
+**	double CS_deltaLongitude (double baseMeridian, double relativeLongtiude);
+**
+**	baseLongitude;				the reference longitude to which the
+**								returned delta longitude is referenced
+**								to. IN DEGREES.
+**	relativeLongitude;			the longitude to be converted to a delta
+**								referenced to the baseMeridian.  IN DEGREES.
+**	RETURNS:					the difference between the the relativeLongtiude
+**								and the baseMeridian, where a negative value
+**								indicates that the relative longitude value
+**								indicates a meridian west of the provided
+**								base meridian.
+**
+** No assumptions are made concerning the the meridian and longitude
+** values provided.  Both are normalizaed to +/- 180 before any
+** calculations are performed.
+**
+** Both longitude values are expected to be referenced to the same
+** prime meridian.  It makes no difference what that prime meridian
+** is, just as long as both are referenced to the same prime meridian.
+**
+**********************************************************************/
+
+/*
+baseMeridian,  relativeLongitude, deltaLongitude,  Case            
+         0.0,              180.0,         +180.0, special case 1
+       180.0,                0.0,         -180.0, special case 1
+      -179.0,             +179.0,         +358.0, special case 2
+      +179.0,             -179.0,         -358.0, special case 3
+*/
+double EXP_LVL7 CS_deltaLongitude (double baseMeridian,double relativeLongitude)
+{
+	extern double cs_K180;
+	extern double cs_Km180;
+	extern double cs_K360;
+	
+	double myBase;
+	double myRelative;
+	double deltaLongitude;
+	
+	myBase = CS_adj180 (baseMeridian);
+	myRelative = CS_adj180 (relativeLongitude);
+	deltaLongitude = relativeLongitude - baseMeridian;
+
+	/* For 99.99% of the cases, we're done.  The whole purpose of having
+	   this function is the 0.01% of the time where the relative longitude
+	   is antiPodal or the simple calculation crosses over the +/- 180
+	   degree crack.  Thus we have three special cases: */
+	if (fabs (fabs (deltaLongitude) - cs_K180) < 1.0E-10)
+	{
+		/* 1.0E-10 ~ 0.01 millimeters at the equator of the earth. */
+		/* Special case 1: the relative longitude is antiPodal to the
+		   base meridian. */
+		deltaLongitude = cs_K180;
+	}
+	else if (deltaLongitude > cs_K180)
+	{
+		/* Special case 2: crossing the +/- 180 degree crack going west */ 
+		deltaLongitude -= cs_K360;
+	}
+	else if (deltaLongitude < cs_Km180)
+	{
+		/* Special case 3: crossing the =/- 180 degree crack going east. */
+		deltaLongitude += cs_K360;
+	}
+	return deltaLongitude;
+}
