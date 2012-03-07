@@ -51,7 +51,10 @@ void CSinitCoverage (struct csGridCoverage_* thisPtr)
 double CStestCoverage (struct csGridCoverage_* thisPtr,Const double point [2])
 {
 	extern double cs_Zero;
+	extern double cs_LlNoise;			/* 1.0E-12 */
 
+	double neLng;
+	double neLat;
 	double returnValue;
 
 	/* Return value is the density value used to select a specific source in
@@ -64,11 +67,16 @@ double CStestCoverage (struct csGridCoverage_* thisPtr,Const double point [2])
 	   except the Canadian National Transformation (version 1 and 2).  The
 	   north and east edges of the typical grid file are not part of the
 	   coverage of such a file. */
+	neLng  = thisPtr->northEast [LNG];
+	neLng += (neLng >= 0.0) ? -cs_LlNoise : cs_LlNoise;
+	neLat  = thisPtr->northEast [LAT];
+	neLat += (neLat >= 0.0) ? -cs_LlNoise : cs_LlNoise;
+	
 	returnValue = cs_Zero;
 	if (point [LNG] >= thisPtr->southWest [LNG] &&
 		point [LAT] >= thisPtr->southWest [LAT] &&
-		point [LNG] <  thisPtr->northEast [LNG] &&
-		point [LAT] <  thisPtr->northEast [LAT])
+		point [LNG] <  neLng &&
+		point [LAT] <  neLat)
 	{
 		returnValue = thisPtr->density;
 	}

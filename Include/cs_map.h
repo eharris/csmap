@@ -6868,6 +6868,7 @@ int			EXP_LVL1	CS_cmpDbls (double first,double second);
 int			EXP_LVL3	CS_defCmpPrjPrm (struct cs_Prjtab_* pp,int prmNbr,double orgValue,double revValue,char *message,size_t messageSize);
 int			EXP_LVL3	CS_defCmpPrjPrmEx (struct cs_Prjtab_* pp,int prmNbr,double orgValue,double revValue,char *message,size_t messageSize,double* qValue);
 long32_t	EXP_LVL5	CS_degToSec (double degrees);
+double		EXP_LVL3	CS_deltaLongitude (double baseMeridian,double relativeLongitude);
 void		EXP_LVL3	CS_dtcls (struct cs_Dtcprm_ *dtc_ptr);
 int			EXP_LVL7	CS_dtcmp (Const struct cs_Dtdef_ *pp,Const struct cs_Dtdef_ *qq);
 struct cs_Dtcprm_* EXP_LVL3	CS_dtcsu (Const struct cs_Csprm_ *src_cs,Const struct cs_Csprm_ *dest_cs,int dat_erf,int blk_erf);

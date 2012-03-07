@@ -419,7 +419,7 @@ int CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 		}
 
 		/* See how far we are off. */
-		epsilon [LNG] = ll_src [LNG] - newResult [LNG];
+		epsilon [LNG] = -CS_deltaLongitude (ll_src [LNG],newResult [LNG]);
 		epsilon [LAT] = ll_src [LAT] - newResult [LAT];
 
 		/* If our guess at the longitude is off by more than
@@ -875,7 +875,7 @@ int CSextractNadconFile (struct cs_NadconFile_* thisPtr,Const double* sourceLL)
 	   is to force a result, such as, 0.99999999999998 to be a 1.0. */
 	eleNbr = (long32_t)((sourceLL [LNG] - thisPtr->coverage.southWest [LNG] + cs_LlNoise) / thisPtr->deltaLng);
 	recNbr = (long32_t)((sourceLL [LAT] - thisPtr->coverage.southWest [LAT] + cs_LlNoise) / thisPtr->deltaLat);
-	if (eleNbr >= thisPtr->elementCount || recNbr >= thisPtr->recordCount)
+	if (eleNbr >= (thisPtr->elementCount - 1 ) || recNbr >= (thisPtr->recordCount - 1))
 	{
 		/* This is not supposed to happen.  This is a "private" function and
 		   is to be called only when it is known that the provided coordinate is
@@ -887,7 +887,7 @@ int CSextractNadconFile (struct cs_NadconFile_* thisPtr,Const double* sourceLL)
 		   converage of the file.  Not by much, mind you, but enough to cause
 		   this function to fail.  The iterative inverse function needs to be
 		   informed about this.  So return a +1 status.  Note, that we haven't
-		   done anything yet that requires undoing, so we can simp[ly return. */
+		   done anything yet that requires undoing, so we can simply return. */
 		CS_erpt  (cs_DTC_RNG_W);
 		return csGRIDI_ST_COVERAGE;
 	}
