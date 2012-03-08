@@ -357,7 +357,6 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 	int ii;
 	int status;
 	int rtnVal;
-	int fbStatus;
 
 	double guess [3];
 	double newLl [3];
@@ -386,13 +385,13 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 
 		/* Compute the WGS-84 lat/long for our current guess. */
 		status = CSmulrgF3 (mulrg,newLl,guess);
-		if (status != 0)
+		if (status < 0 || status == 1)
 		{
 			/* Something other than the normal situation happened.  Typically,
 			   this means the current guess (perhaps the provided point) is
-			   outside the useful range of the transformation.  In any case,
-			   we'll deal with this below as the end of this 'for' loop
-			   code block. */
+			   outside the useful range of the transformation and there was no
+			   fallback.  In any case, we'll deal with this below as the end
+			   of this 'for' loop code block. */
 			break;
 		}
 
@@ -426,7 +425,7 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 	   (often the original point) was outside of the useful range of the
 	   transformation.  Note, that encountering any guess that is outside
 	   of the useful range, we deal with as indicated here. */
-	if (status == 0)
+	if (status == 0 || status == 2)
 	{
 		/* If we didn't resolve in maxIteration tries, we issue a warning
 		   message. */
@@ -465,46 +464,16 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 			trgLl [HGT] = srcLl [HGT] - guess [HGT];
 		}
 	}
-	if (status > 0)
+	if (status == 1)
 	{
 		/* We were provided a point which is outside of the useful range
 		   of this transformation, or the iterative conversion technique
 		   wandered outside the useful range of the transformation. */
 		CS_erpt (cs_MREG_RANGE);			/* Register warning message. */
-		switch (mulrg->fallback) {
-		case cs_DTCMTH_MOLOD:
-			fbStatus = CSmolodI3 (&mulrg->fallbackXfrm.molod,trgLl,srcLl);
-			break;
-		case cs_DTCMTH_6PARM:
-			fbStatus = CSparm6I3 (&mulrg->fallbackXfrm.parm6,trgLl,srcLl);
-			break;
-		case cs_DTCMTH_7PARM:
-			fbStatus = CSparm7I3 (&mulrg->fallbackXfrm.parm7,trgLl,srcLl);
-			break;
-		case dtcTypNone:
-		default:
-			fbStatus = 1;
-			break;
-		}
-
-		/* If the fallback inverse returned a normal status, we return +2 as an
-		   indication that the fallback technique was used.  Otherwise, we use
-		   +1 to indicate the that provided point was outside the useful range. */
-		if (fbStatus == 0)
-		{
-			/* Indicate that the result of using a fallback function. */
-			rtnVal = 2;
-		}
-		else
-		{
-			/* The fallback didn't work, so our results are the same as the
-			   input coordinates, and we return 1 to indicate a coverage
-			   issue. */
-			trgLl [LNG] = srcLl [LNG];
-			trgLl [LAT] = srcLl [LAT];
-			trgLl [HGT] = srcLl [HGT];
-			rtnVal = 1;
-		}
+		trgLl [LNG] = srcLl [LNG];
+		trgLl [LAT] = srcLl [LAT];
+		trgLl [HGT] = srcLl [HGT];
+		rtnVal = 1;
 	}
 	else if (status < 0)
 	{
