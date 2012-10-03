@@ -288,19 +288,6 @@ int main (int argc,char *argv [])
 		return (1);
 	}
 
-	/* Compile the Multiple Regression definition files. */
-	strcpy (src_name,src_dir);
-	strcat (src_name,"mreg.asc");
-	printf ("Compiling %s to the %s directory.\n",src_name,mr_path);
-	err_cnt = CSmrcomp (src_name,mr_path,flags,dt_path,err_disp);
-	if (err_cnt != 0)
-	{
-		printf ("%d errors detected in %s.\n",err_cnt,src_name);
-		printf ("Multiple Regression compile to %s is not complete.\n",mr_path);
-		if (!batch) acknowledge ();
-		return (1);
-	}
-
 	/* Compile the Geodetic Transformation Dictionary. */
 	strcpy (src_name,src_dir);
 	strcat (src_name,"GeodeticTransformation.asc");
