@@ -4,10 +4,8 @@ This text file discusses issues concerning geodetic grid interpolation
 data files which are supported by CS-MAP, but which are not distributed
 with CS-MAP.   In the absence of a any of the actions described in this
 file, the datum shift portion of the coordinate conversion process of
-Canadian geographic features will be processed as indicated by the
-fallback specifications given the .gdc files (CS-MAP 12.02 and earlier)
-or in the Geodetic Transformation Dictionary definition (CS-MAP 13.0
-or later).
+Canadian geographic features will be processed as indicated in the 
+Geodetic Transformation Dictionary definition.
 
 In those cases where a fallback method has been specified, and the
 fallback method was used successfully, a non-fatal, non-normal status
@@ -47,14 +45,6 @@ perform the following steps:
 folder hierarchy, preferably at Canada (this is the same directory where
 this ReadMe.txt file was installed) and name it “Ntv2_0.gsb”.
 
-For CS-MAP 12.02 or earlier:
-3.  Open the file Nad27ToNad83.gdc (located in the same directory
-as the coordinate system dictionary files) with some text editor
-program such as Notepad.  Find the section labeled "CANADA SPECIFIC
-NOTES."  Delete the initial "#" symbol from the line that begins:
-#.\Canada\Ntv2_0.gsb
-
-For CS-MAP 13.00  or later:
 3. You will need to modify the definition of the Geodetic Transformation
 named "NAD27_to_NAD83" as defined in the dictionary source file named
 "GeodeticTransform.asc".  Essentially you will need to edit that definition to
@@ -78,7 +68,5 @@ ALASKA.L?S files along the common border between Canada and Alaska.
 The procedure to use datum shift files provided by a provincial government
 is similar to the above.  You must first obtain the file, copy it into a logical
 location in the dictionary folder hierarchy, and then make CS-MAP aware of
-the existence and location of the file by editing the appropriate Geodetic
-Data Catalog (.gdc) file, or in the case of CS-MAP 13.0 or later, by editing,
-and then compiling, the “GeodeticTransform.asc” data file as described
-above.
+the existence and location of the file by editing and then compiling, 
+the “GeodeticTransform.asc” data file as described above.
