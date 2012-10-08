@@ -41,21 +41,23 @@
 */
 
 #if _RUN_TIME < _rt_UNIXPCC
-char cs_DirK [260] = "C:\\MAPPING\\";
-csThread char cs_Dir [260] = "";
+char cs_DirK [MAXPATH] = "C:\\MAPPING\\";
+csThread char cs_Dir [MAXPATH] = "";
 csThread char *cs_DirP = NULL;
+csThread char cs_UserDir [MAXPATH] = "";
 char cs_DirsepC = '\\';
 char cs_ExtsepC = '.';
 char cs_OptchrC = '/';
-csThread char cs_NameMapperName [260] = "NameMapper.csv";
+csThread char cs_NameMapperName [MAXPATH] = "NameMapper.csv";
 #else
-char cs_DirK [512] = "/usr/MAPPING/data/";
-char cs_Dir [512] = "/usr/MAPPING/data/";
+char cs_DirK [MAXPATH] = "/usr/MAPPING/data/";
+char cs_Dir [MAXPATH] = "/usr/MAPPING/data/";
 char *cs_DirP = NULL;
+char cs_UserDir [MAXPATH] = "";
 char cs_DirsepC = '/';
 char cs_ExtsepC = '.';
 char cs_OptchrC = '-';
-char cs_NameMapperName [512] = "NameMapper.csv";
+char cs_NameMapperName [MAXPATH] = "NameMapper.csv";
 #endif
 
 /*
@@ -115,10 +117,6 @@ csThread char cs_Gpname  [cs_FNM_MAXLEN]      = cs_GP_NAME;
 
 csThread char cs_Envvar  [cs_FNM_MAXLEN]      = cs_ENV_VAR;
 csThread char cs_NmMapNm [cs_FNM_MAXLEN]      = cs_NMP_NAME;
-
-csThread char cs_UsrCsName  [cs_FNM_MAXLEN]   = cs_USR_CS_NAME;
-csThread char cs_UsrDtName  [cs_FNM_MAXLEN]   = cs_USR_DAT_NAME;
-csThread char cs_UsrElName  [cs_FNM_MAXLEN]   = cs_USR_ELL_NAME;
 
 csThread char cs_NadName     [cs_FNM_MAXLEN]  = cs_NAD_NAME;
 csThread char cs_HarnName    [cs_FNM_MAXLEN]  = cs_HARN_NAME;
@@ -202,34 +200,6 @@ csThread char csAuDflt [32] = "";	/* The current default angular unit. */
 char cs_Unique = ':';
 short cs_Protect = 0;
 int cs_Safe = 1;
-
-/*
-	The following variables are used to keep the three dictionary files open
-	during normal operation.  It has been found that certain virus checking
-	programs incur a substantial performance penalty for each file open.
-	Thus, the policy of opening, and then closing, teh dictionary files on
-	each access caused a dreadful situation.
-	
-	The opening and closing business has been in CS-MAP since its inception,
-	this being when on both MNS-DOS and UNIX the number of files which could
-	be open simultaneously was severly limited (i.e. like 8 on MS-DOS and 20
-	for a UNIX process, and 100 for an entire UNIX system).
-	
-	Now, a dictionary search will cause the dictionary file to be opened,
-	and it will be left open until an update, or delete, operation is
-	requested.  After such an operation, the next search will cause the
-	file to be open (and left open) again.
-	
-	For each stream, there is a flag.  The above described operation is
-	suppressed if the flag is TRUE, which is the initial state.
-*/
-csThread short cs_CsStrmFlg = FALSE;
-csThread short cs_DtStrmFlg = FALSE;
-csThread short cs_ElStrmFlg = FALSE;
-
-csThread csFILE* cs_CsStream = 0;
-csThread csFILE* cs_DtStream = 0;
-csThread csFILE* cs_ElStream = 0;
 
 /*
 	The following are used to communicate certain information

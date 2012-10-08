@@ -54,6 +54,10 @@ int EXP_LVL1 CS_altdr (Const char *alt_dir)
 	extern char cs_DirK [];
 	extern char cs_Dir [];
 	extern char *cs_DirP;
+
+	extern char cs_UserDir [];
+	extern char *cs_UserDirP;
+
 	extern char cs_Csname [];
 	extern char cs_Envvar [];
 	extern char cs_DirsepC;
@@ -150,6 +154,73 @@ int EXP_LVL1 CS_altdr (Const char *alt_dir)
 		flag = TRUE;
 	}
 	return (flag ? 0 : -1);
+}
+
+/**********************************************************************
+**	int result = CS_usrdr (usr_dir);
+**
+**	char *usr_dir;				the directory where to store all custom definitions in.
+**								Note, that this directory isn't required to contain
+**								any CSD files (yet).
+**								Must be less than (MAXPATH - 1) characters.
+**								If NULL or empty, the user dictionary path will be unset.
+**								That is, all user defined definitions will be written
+**								into the CSD files found in the directory specified
+**								in [cs_dir].
+**
+**	result						0 if successfull, -1 otherwise
+**
+**	Note, that this method can only be called, if cs_Protect is >= 0. That is,
+**	the protection scheme for 'system' definitions must be somehow enabled.
+**********************************************************************/
+int EXP_LVL1 CS_usrdr (Const char *usr_dir)
+{
+	extern char cs_DirsepC;
+	extern short cs_Protect;
+
+	extern char *cs_CsKeyNames;
+	extern char *cs_DtKeyNames;
+	extern char *cs_ElKeyNames;
+
+	extern char cs_UserDir [];
+
+	char* pathEnd = NULL;
+
+	if (cs_Protect < 0)
+		return -1;
+
+	if (NULL != usr_dir && strlen(usr_dir) >= MAXPATH)
+		goto arg_error;
+
+	//zero out everything & let [cs_UserDirP] point to '\0'
+	memset(cs_UserDir, '\0', MAXPATH * sizeof(char));
+	if (NULL == usr_dir || '\0' == *usr_dir)
+		goto exit;
+
+	//copy the new user directory into our [cs_UserDir] variable
+	//cs_UserDirP now points to the end of the string
+	pathEnd = CS_stcpy(cs_UserDir, usr_dir);
+
+	//add the dir-separator char, if it's not there already
+	if (*(pathEnd - 1) != cs_DirsepC)
+	{
+		*pathEnd++ = cs_DirsepC;
+		*pathEnd = '\0';//make sure, we've only 1 dir separator char
+	}
+
+exit:
+	//now that a new directory has been setup, we've to cleanup all of our internal "definition" caches
+	CS_free(cs_CsKeyNames);
+	CS_free(cs_DtKeyNames);
+	CS_free(cs_ElKeyNames);
+	CSrlsCategories();
+
+	return 0;
+
+arg_error:
+
+	CS_erpt(cs_INV_ARG1);
+	return -1;
 }
 
 /**********************************************************************
@@ -450,7 +521,7 @@ void EXP_LVL1 CS_init (int keepers)
 	extern csThread char *cs_CsKeyNames;
 	extern csThread char *cs_DtKeyNames;
 	extern csThread char *cs_ElKeyNames;
- 	extern csThread struct cs_Csgrplst_ *cs_CsGrpList;
+	extern csThread struct cs_Csgrplst_ *cs_CsGrpList;
 
 	int status;
 
@@ -711,10 +782,10 @@ int EXP_LVL1 CS_prchk (short prot_val)
 	surrounded white space.  Leading white space is ignored.
 
 	Return value:
-     0 = normal completion.
-     1 = End of File
-    -1 = some sort of error, typically a double value not delimited by
-         white space.
+	 0 = normal completion.
+	 1 = End of File
+	-1 = some sort of error, typically a double value not delimited by
+		 white space.
 */
 int EXP_LVL5 CSextractDbl (csFILE *aStrm,double* result)
 {

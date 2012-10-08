@@ -26,34 +26,7 @@
 */
 
 #include "cs_map.h"
-
-extern csFILE* cs_DtStream;
-extern short cs_DtStrmFlg;
-
-/**********************************************************************
- Hook function to support the use of temporary datum definitions.
-
- To activate, set the global CS_usrDtDefPtr variable to point to your
- function.  To deactivate, set CS_usrDtDefPtr to NULL.
- 
- CS_dtdef calls the (*CS_usrDtDefPtr) function before it does anything
- with the name.  Thus, temporary names need not adhere to any CS-MAP
- convention regarding key names.
-
- (*CS_usrDtDefPtr) should return:
- -1 to indicate an error of sorts, in which case the error condition
-    must have already been reported to CS_erpt.
- +1 to indicate that normal CS_dtdef processing is to be performed.
-  0 to indicate that the cs_Dtdef_ structure provided by the first
-    argument has been properly filled in with the desired definition
-	which is to be returned by CS_dtdef.
-
- In the case where (*CS_usrDtDefPtr) returns 0, CS_dtdef will return
- a copy of the data provided in a chunk of memory it malloc's from
- the heap.  Also note, that the data returned is not checked.  You
- are responsible for making sure this data is valid.
-**********************************************************************/
-extern int (*CS_usrDtDefPtr) (struct cs_Dtdef_ *dtDef,Const char *keyName);
+#include "cs_ioUtil.h"
 
 /**********************************************************************
 **	strm = CS_dtopn (mode);
@@ -68,68 +41,7 @@ extern int (*CS_usrDtDefPtr) (struct cs_Dtdef_ *dtDef,Const char *keyName);
 
 csFILE * EXP_LVL3 CS_dtopn (Const char *mode)
 {
-	extern char cs_Dir [];
-	extern char *cs_DirP;
-	extern char cs_Dtname [];
-	extern char csErrnam [];
-
-	size_t rdCnt;
-
-	csFILE *strm = NULL;
-
-	cs_magic_t magic;
-
-	if (cs_DtStream != 0)
-	{
-		if (!CS_stricmp (mode,_STRM_BINRD))
-		{
-			strm = cs_DtStream;
-			CS_fseek (strm,(long)sizeof (magic),SEEK_SET);
-		}
-		else
-		{
-			CS_fclose (cs_DtStream);
-			cs_DtStream = NULL;
-		}
-	}
-	if (strm == NULL)
-	{
-		strcpy (cs_DirP,cs_Dtname);
-		strm = CS_fopen (cs_Dir,mode);
-		if (strm != NULL)
-		{
-			rdCnt = CS_fread ((char *)&magic,1,sizeof (magic),strm);
-			if (rdCnt != sizeof (magic))
-			{
-				if (CS_ferror (strm)) CS_erpt (cs_IOERR);
-				else				  CS_erpt (cs_INV_FILE);
-				CS_fclose (strm);
-				strm = NULL;
-				strcpy (csErrnam,cs_Dir);
-			}
-			else
-			{
-				CS_bswap (&magic,"l");
-				if (magic != cs_DTDEF_MAGIC)
-				{
-					CS_fclose (strm);
-					strm = NULL;
-					strcpy (csErrnam,cs_Dir);
-					CS_erpt (cs_DT_BAD_MAGIC);
-				}
-				else if (!strcmp (mode,_STRM_BINRD))
-				{
-					cs_DtStream = strm;
-				}
-			}
-		}
-		else
-		{
-			strcpy (csErrnam,cs_Dir);
-			CS_erpt (cs_DTDICT);
-		}
-	}
-	return (strm);
+	return CS_dtFileOpen(mode);
 }
 
 /**********************************************************************
@@ -137,16 +49,11 @@ csFILE * EXP_LVL3 CS_dtopn (Const char *mode)
 **
 **	csFILE *stream;				stream to be closed
 **
-**	Stream is closed.  If it is the stream to which cs_DtStream
-**	points, cs_DtStream is set to the NULL pointer.
+**	Stream is closed.
 **********************************************************************/
 
 void CS_dtDictCls (csFILE* stream)
 {
-	if (stream == cs_DtStream)
-	{
-		cs_DtStream = NULL;
-	}
 	CS_fclose (stream);
 }
 
@@ -161,85 +68,9 @@ void CS_dtDictCls (csFILE* stream)
 **	int flag;					returns +1 for successful read, 0 for EOF,
 **								-1 for error.
 **********************************************************************/
-
-
 int EXP_LVL3 CS_dtrd (csFILE *strm,struct cs_Dtdef_ *dt_def,int *crypt)
 {
-	cs_Register unsigned char key;
-	cs_Register unsigned char *cp;
-
-	int st;
-	size_t rd_cnt;
-	unsigned char *cpe;
-
-	char tmpKeyName [cs_KEYNM_DEF];
-
-	/* Synchronize the stream. */
-	st = CS_fseek (strm,0L,SEEK_CUR);
-	if (st != 0)
-	{
-		CS_erpt (cs_IOERR);
-		return (-1);
-	}
-
-	/* Now we can read. */
-	cp = (unsigned char *)dt_def;
-	rd_cnt = CS_fread ((char *)dt_def,1,sizeof (*dt_def),strm);
-	if (rd_cnt != sizeof (*dt_def))
-	{
-		if (CS_feof (strm))
-		{
-			return 0;
-		}
-		else if (CS_ferror (strm))
-		{
-			CS_erpt (cs_IOERR);
-		}
-		else
-		{
-			CS_erpt (cs_INV_FILE);
-		}
-		return (-1);
-	}
-
-	/* Do the encryption bit. */
-	key = (unsigned char)dt_def->fill [0];
-	if (key != '\0')
-	{
-		*crypt = TRUE;
-		cpe = cp + sizeof (*dt_def);
-		while (cp < cpe)
-		{
-			key ^= *cp;
-			*cp++ = key;
-		}
-	}
-	else
-	{
-		*crypt = FALSE;
-	}
-
-	/* Swap the bytes if necessary. */
-	CS_bswap (dt_def,cs_BSWP_DTDEF);
-
-	/* Check the result. The name must always meet the criteria
-	   set by the CS_nmpp function.  At least so far, the criteria
-	   established by CS_nampp over the years has always been
-	   expanded, never restricted.  Thus, any definition which
-	   was legitimate in a previous release would always be
-	   legitimate iin subsequent releases. */
-	CS_stncp (tmpKeyName,dt_def->key_nm,sizeof (tmpKeyName));
-	if (CS_nampp (tmpKeyName) != 0)
-	{
-		/* Replace the error condition reported by CS_nampp with
-		   and Invalid File indication. */
-		CS_erpt (cs_INV_FILE);
-		return (-1);
-	}
-
-	/* Reset the encryption indicator in the record. */
-	dt_def->fill [0] = '\0';
-	return (1);
+	return CS_dtRead(strm, dt_def, crypt);
 }
 
 /**********************************************************************
@@ -255,89 +86,9 @@ int EXP_LVL3 CS_dtrd (csFILE *strm,struct cs_Dtdef_ *dt_def,int *crypt)
 **								successfully, else returns TRUE.
 **
 **********************************************************************/
-
 int EXP_LVL3 CS_dtwr (csFILE *strm,Const struct cs_Dtdef_ *dt_def,int crypt)
 {
-	cs_Register unsigned char key;
-	cs_Register unsigned char *cp;
-	static unsigned seed = 0;
-
-	int st;
-	size_t wr_cnt;
-	unsigned char *cpe;
-
- 	__ALIGNMENT__1		/* For some versions of Sun compiler. */
-
-	struct cs_Dtdef_ lcl_dt;
-
-	/* Get a local copy which we can modify without screwing up
-	   the calling module. */
-	memcpy ((char *)&lcl_dt,(char *)dt_def,sizeof (lcl_dt));
-
-	/* Swap the bytes, if necessary, before possible encryption. */
-	CS_bswap (&lcl_dt,cs_BSWP_DTDEF);
-
-	/* Encrypt if requested. */
-	if (crypt)
-	{
-		if (seed == 0)
-		{
-			seed = (unsigned)CS_time ((cs_Time_ *)0);
-			srand (seed);
-		}
-		for (;;)
-		{
-			key = (unsigned char)rand ();
-			cpe = (unsigned char *)&lcl_dt;
-			cp = cpe + sizeof (lcl_dt);
-			lcl_dt.fill [0] = (char)key;
-			lcl_dt.fill [1] = (char)rand ();
-			while (--cp > cpe)
-			{
-				*cp ^= *(cp - 1);
-			}
-			*cp ^= (unsigned char)lcl_dt.fill [0];
-
-			if (lcl_dt.fill [0] != '\0') break;
-
-			/* OPPS!!! The key turned out to be
-			   zero. Need to try another one.
-
-			   Need to restore the original data
-			   or we'll be encrypting encrypted
-			   data.  We can't decipher that one. */
-
-			memcpy ((char *)&lcl_dt,(char *)dt_def,
-						      sizeof (lcl_dt));
-			CS_bswap (&lcl_dt,cs_BSWP_DTDEF);
-		}
-	}
-	else
-	{
-		/* If no encryption, set code to
-		   zero.  This effectively turns
-		   encryption off. */
-		lcl_dt.fill [0] = '\0';
-		lcl_dt.fill [1] = '\0';
-	}
-
-	/* Synchronize the stream. */
-	st = CS_fseek (strm,0L,SEEK_CUR);
-	if (st != 0)
-	{
-		CS_erpt (cs_IOERR);
-		return (TRUE);
-	}
-
-	/* Now we can write. */
-	wr_cnt = CS_fwrite ((char *)&lcl_dt,1,sizeof (lcl_dt),strm);
-	if (wr_cnt != sizeof (lcl_dt))
-	{
-		if (CS_ferror (strm)) CS_erpt (cs_IOERR);
-		else				  CS_erpt (cs_DISK_FULL);
-		return (TRUE);
-	}
-	return (FALSE);
+	return CS_dtWrite(strm, dt_def, crypt);
 }
 
 /**********************************************************************
@@ -352,176 +103,25 @@ int EXP_LVL3 CS_dtwr (csFILE *strm,Const struct cs_Dtdef_ *dt_def,int crypt)
 **	cs_Dtdef_ structure provided, forcing all lower case
 **	characters to upper case.
 **********************************************************************/
-
 int EXP_LVL3 CS_dtdel (struct cs_Dtdef_ *dtdef)
 {
-    extern char *cs_DtKeyNames;
-	extern char csErrnam [];
-	extern char cs_Dir [];
-	extern short cs_Protect;
+	extern char *cs_DtKeyNames;
+	int result = CS_dtDelete(dtdef);
 
-	short cs_time;
-
-	int st;
-	csFILE *old_strm;
-	csFILE *new_strm;
-	int rd_st;
-	int crypt;
-	size_t wr_cnt;
-
-	cs_magic_t magic;
-
-	struct cs_Dtdef_ *my_ptr;
-
-	char tmp_nam [MAXPATH];
-
- 	__ALIGNMENT__1		/* For some versions of Sun compiler. */
-
-	struct cs_Dtdef_ cpy_buf;
-
-	/* Capture the current time. */
-	cs_time = (short)((CS_time ((cs_Time_ *)0) - 630720000L) / 86400L);
-
-	/* Prepare for an error. */
-	new_strm = NULL;
-	old_strm = NULL;
-	my_ptr = NULL;
-	tmp_nam [0] = '\0';
-
-	/* Adjust the name and make sure it is all upper case.
-	   By convention, datum names are case insensitive. */
-	st = CS_nampp (dtdef->key_nm);
-	if (st != 0) goto error;
-
-	/* Get a pointer to the existing definition. If it doesn't
-	   exist, we're all done. */
-	my_ptr = CS_dtdef (dtdef->key_nm);
-	if (my_ptr == NULL)
+	if (!result)
 	{
-		goto error;
+		/* Looks like we will be deleting this datum definition. cs_DtKeyNames
+		is a memory array which contains all of the existing datum key names.
+		Since we're going to change this, we free up the in memory list to
+		force a regeneration of same next time its use is required.  This
+		regeneration will not have this name in it if our addition completes
+		successfully. */
+
+		CS_free (cs_DtKeyNames);
+		cs_DtKeyNames = NULL;
 	}
 
-	/* See if this definition is protected.  If so, we have to
-	   leave it alone. If cs_Protect < 0, there is no protection. */
-	if (cs_Protect >= 0)
-	{
-		if (my_ptr->protect == 1)
-		{
-			CS_stncp (csErrnam,my_ptr->key_nm,MAXPATH);
-			CS_erpt (cs_DT_PROT);
-			goto error;
-		}
-		if (cs_Protect > 0)
-		{
-			/* Here if user definition protection is
-			   enabled. */
-			if (my_ptr->protect < (cs_time - cs_Protect))
-			{
-				CS_stncp (csErrnam,my_ptr->key_nm,MAXPATH);
-				CS_erpt (cs_DT_UPROT);
-				goto error;
-			}
-		}
-	}
-	CS_free (my_ptr);
-	my_ptr = NULL;
-
-    /* Looks like we will be deleting this datum definition.  cs_DtKeyNames
-       is a memory array which contains all of the existing datum key names.
-       Since we're going to change this, we free up the in memory list to
-       force a regeneration of same next time its use is required.  This
-       regeneration will not have this name in it if our addition completes
-       successfully. */
-    if (cs_DtKeyNames != NULL)
-    {
-        CS_free (cs_DtKeyNames);
-        cs_DtKeyNames = NULL;
-    }
-
-	/* Make sure the entry that we have been provided is marked as
-	   unencrypted so that the comparison function will work. */
-	dtdef->fill [0] = '\0';
-
-	/* Open up the datum dictionary file and verify its
-	   magic number. */
-	old_strm = CS_dtopn (_STRM_BINRD);
-	if (old_strm == NULL)
-	{
-		goto error;
-	}
-
-	/* Create a temporary file for the new dictionary. */
-	st = CS_tmpfn (tmp_nam);
-	if (st != 0)
-	{
-		goto error;
-	}
-	new_strm = CS_fopen (tmp_nam,_STRM_BINWR);
-	if (new_strm == NULL)
-	{
-		CS_erpt (cs_TMP_CRT);
-		goto error;
-	}
-
-	/* Copy the file, skipping the entry to be deleted.  First
-	   we must deal with the magic number. */
-	magic = cs_DTDEF_MAGIC;
-	CS_bswap (&magic,"l");
-	wr_cnt = CS_fwrite ((char *)&magic,1,sizeof (magic),new_strm);
-	if (wr_cnt != sizeof (magic))
-	{
-		if (CS_ferror (new_strm)) CS_erpt (cs_IOERR);
-		else					  CS_erpt (cs_DISK_FULL);
-		goto error;
-	}
-
-	/* Now we copy the file.  If the existing record was encrypted,
-	   we encrypt the record which we write. */
-	while ((rd_st = CS_dtrd (old_strm,&cpy_buf,&crypt)) > 0)
-	{
-		if (CS_dtcmp (&cpy_buf,dtdef) != 0)
-		{
-			if (CS_dtwr (new_strm,&cpy_buf,crypt))
-			{
-				goto error;
-			}
-		}
-	}
-	if (rd_st != 0)
-	{
-		/* The copy loop terminated due to an error. */
-		goto error;
-	}
-
-	/* Close up, remove the old dictionary and rename the
-	   new dictionary. */
-	CS_fclose (new_strm);
-	new_strm = NULL;
-	CS_dtDictCls (old_strm);
-	old_strm = NULL;
-	st = CS_remove (cs_Dir);
-	if (st != 0)
-	{
-		strcpy (csErrnam,cs_Dir);
-		CS_erpt (cs_UNLINK);
-		goto error;
-	}
-	st = CS_rename (tmp_nam,cs_Dir);
-	if (st != 0) goto error;
-
-	/* We're done. */
-	return (0);
-
-error:
-	if (new_strm != NULL)
-	{
-		/* tmp_nam can never be uninitialized if new_fd >= 0 */
-		CS_fclose (new_strm);
-		CS_remove (tmp_nam);				/*lint !e534 !e645 */
-	}
-	if (old_strm != NULL) CS_dtDictCls (old_strm);
-	if (my_ptr != NULL) CS_free (my_ptr);
-	return (-1);
+	return result;
 }
 
 /**********************************************************************
@@ -546,176 +146,25 @@ error:
 **	provided cs_Dtdef_ structure, changing all lower case
 **	characters to upper case.
 **********************************************************************/
-
 int EXP_LVL3 CS_dtupd (struct cs_Dtdef_ *dtdef,int crypt)
 {
-    extern char *cs_DtKeyNames;
-	extern char csErrnam [];
-	extern short cs_Protect;
-	extern char cs_Unique;
+	extern char *cs_DtKeyNames;
+	int updateStatus = CS_dtUpdate(dtdef, crypt);
+	if (updateStatus < 0)
+		return updateStatus;
 
-	short cs_time = 0;
-
-	int st;
-	int flag;
-	int dummy;
-
-	csFILE *strm;
-
-	long32_t fpos;
-
-	char *cp;
-
- 	__ALIGNMENT__1		/* For some versions of Sun compiler. */
-
-	struct cs_Dtdef_ my_dtdef;
-
-	/* Capture the current time. For our purposes here, time is
-	   the number of days since (approx) January 1, 1990. If this
-	   record does get written, the protect field will indicate
-	   that it has changed. */
-	if (dtdef->protect >= 0)
+	/*	cs_DtKeyNames is a memory array which contains all of the existing
+		datum key names.  Since we're going to change this, we free up the
+		in memory list to force a regeneration of same next time its use is
+		required.  This regeneration will have the new name in it if our
+		addition completes successfully. */
+	if (0 == updateStatus)
 	{
-		if ((cs_Protect < 0) || (dtdef->protect != 1))
-		{
-			cs_time = (short)((CS_time ((cs_Time_ *)0) - 630720000L) / 86400L);
-			dtdef->protect = cs_time;
-		}
+		CS_free(cs_DtKeyNames);
+		cs_DtKeyNames = NULL;
 	}
 
-	/* Prepare for a possible error. */
-	strm = NULL;
-
-	/* Adjust the name and make sure it is all upper
-	   case.  By convention, datum names are case
-	   insensitive. */
-	st = CS_nampp (dtdef->key_nm);
-	if (st != 0) goto error;
-
-	/* Open up the Datum Dictionary and verify its magic number. */
-	strm = CS_dtopn (_STRM_BINUP);
-	if (strm == NULL)
-	{
-		goto error;
-	}
-
-	/* See if we have a datum with this name already. */
-	flag = CS_bins (strm,(long32_t)sizeof (cs_magic_t),(long32_t)0,sizeof (*dtdef),
-						(char *)dtdef,(CMPFUNC_CAST)CS_dtcmp);
-	if (flag < 0) goto error;
-	if (flag)
-	{
-		/* Here when the datum already exists. See if we are
-		   allowed to change this definition. */
-		if (cs_Protect >= 0)
-		{
-			/* Distribution protection is enabled. */
-			fpos = CS_ftell (strm);
-			if (fpos < 0L)
-			{
-				CS_erpt (cs_IOERR);
-				goto error;
-			}
-			st = CS_dtrd (strm,&my_dtdef,&dummy);
-			if (st == 0) CS_erpt (cs_INV_FILE);
-			if (st <= 0)
-			{
-				goto error;
-			}
-
-			if (my_dtdef.protect == 1)
-			{
-				CS_stncp (csErrnam,dtdef->key_nm,MAXPATH);
-				CS_erpt (cs_DT_PROT);
-				goto error;
-			}
-			if (cs_Protect > 0 && my_dtdef.protect > 0)
-			{
-				if (my_dtdef.protect < (cs_time - cs_Protect))		/*lint !e644 */
-				{
-					CS_stncp (csErrnam,dtdef->key_nm,MAXPATH);
-					CS_erpt (cs_DT_UPROT);
-					goto error;
-				}
-			}
-			st  = CS_fseek (strm,fpos,SEEK_SET);
-			if (st < 0L)
-			{
-				CS_erpt (cs_IOERR);
-				goto error;
-			}
-		}
-
-		/* If we're still here, it's OK to update this definition. */
-		if (CS_dtwr (strm,dtdef,crypt))
-		{
-			goto error;
-		}
-	}
-	else
-	{
-        /* We're going to attempt writing this definition to the dictionary.
-           cs_DtKeyNames is a memory array which contains all of the existing
-           datum key names.  Since we're going to change this, we free up the
-           in memory list to force a regeneration of same next time its use is
-           required.  This regeneration will have the new name in it if our
-           addition completes successfully. */
-        if (cs_DtKeyNames != NULL)
-        {
-            CS_free (cs_DtKeyNames);
-            cs_DtKeyNames = NULL;
-        }
-
-		/* Here if the datum definition doesn't exist.  We
-		   have to add it. If cs_Unique is not zero, we
-		   require that a cs_Unique character be present
-		   in the key name before we'll allow it to be
-		   written. */
-		if (cs_Unique != '\0')
-		{
-			cp = strchr (dtdef->key_nm,cs_Unique);
-			if (cp == NULL)
-			{
-				csErrnam [0] = cs_Unique;
-				csErrnam [1] = '\0';
-				CS_erpt (cs_UNIQUE);
-				goto error;
-			}
-		}
-
-		/* Now we can add it. Write to the end of the file, and then
-		   sort the file. */
-		st = CS_fseek (strm,0L,SEEK_END);
-		if (st != 0)
-		{
-			CS_erpt (cs_IOERR);
-			goto error;
-		}
-		if (CS_dtwr (strm,dtdef,crypt))
-		{
-			goto error;
-		}
-
-		/* Sort the file into proper order, thereby
-		   moving the new datum to its proper place
-		   in the dictionary. */
-		st = CS_fseek (strm,(long)sizeof (cs_magic_t),SEEK_SET);
-		if (st != 0)
-		{
-			CS_erpt (cs_IOERR);
-			goto error;
-		}
-		st = CS_ips (strm,sizeof (*dtdef),0L,(CMPFUNC_CAST)CS_dtcmp);
-		if (st < 0) goto error;
-	}
-
-	/* The Datum Dictionary has been updated. */
-	CS_dtDictCls (strm);
-	return (flag);
-
-error:
-	if (strm != NULL) CS_dtDictCls (strm);
-	return (-1);
+	return updateStatus;
 }
 
 /**********************************************************************
@@ -790,92 +239,23 @@ int EXP_LVL7 CS_dtcmp (Const struct cs_Dtdef_ *pp,Const struct cs_Dtdef_ *qq)
 
 struct cs_Dtdef_ * EXP_LVL3 CS_dtdef (Const char *dat_nam)
 {
+	return CS_dtdef2 (dat_nam, NULL);
+}
+
+struct cs_Dtdef_ * EXP_LVL3 CS_dtdef2 (Const char *dat_nam, char* pszDirPath)
+{
 	extern char csErrnam [];
 
 	extern double cs_DelMax;		/* 5,000.0 */
 	extern double cs_RotMax;		/* 15.0    */
 	extern double cs_SclMax;		/* 200.0   */
 
-	int st;
-	int flag;
-	int crypt;
+	struct cs_Dtdef_* dtptr = NULL;
+	int isUsrDef = FALSE;
 
-	csFILE *strm;
-	struct cs_Dtdef_ *dtptr;
-
- 	__ALIGNMENT__1				/* For some versions of Sun compiler. */
-
-	struct cs_Dtdef_ dtdef;
-
-	/* Prepare for an error condition. */
-	dtptr = NULL;
-	strm = NULL;
-
-	/* Give the application first shot at satisfying this request. */
-	if (CS_usrDtDefPtr != NULL)
-	{
-		st = (*CS_usrDtDefPtr)(&dtdef,dat_nam);
-		if (st < 0) return NULL;
-		if (st == 0)
-		{
-			dtptr = (struct cs_Dtdef_ *)CS_malc (sizeof (struct cs_Dtdef_));
-			if (dtptr == NULL)
-			{
-				CS_erpt (cs_NO_MEM);
-				goto error;
-			}
-			memmove (dtptr,&dtdef,sizeof (*dtptr));
-			return dtptr;
-		}
-	}
-
-	/* Verify the name is OK. */
-	CS_stncp (dtdef.key_nm,dat_nam,sizeof (dtdef.key_nm));
-	st = CS_nampp (dtdef.key_nm);
-	if (st != 0) goto error;
-
-	/* Mark this name as unencrypted so that the comaprison function
-	   will work. */
-	dtdef.fill [0] = '\0';
-
-	/* Open the Datum Dictionary and test its magic number. */
-	strm = CS_dtopn (_STRM_BINRD);
-	if (strm == NULL) goto error;
-
-	/* Search for the requested datum. */
-	flag = CS_bins (strm,(long32_t)sizeof (cs_magic_t),(long32_t)0,sizeof (dtdef),&dtdef,(CMPFUNC_CAST)CS_dtcmp);
-	if (flag < 0) goto error;
-
-	/* Tell the user if we didn't find the requested datum. */
-	if (!flag)
-	{
-		CS_stncp (csErrnam,dat_nam,MAXPATH);
-		CS_erpt (cs_DT_NOT_FND);
-		goto error;
-	}
-	else
-	{
-		/* The datum exists, malloc some memory for it. */
-		dtptr = (struct cs_Dtdef_ *)CS_malc (sizeof (*dtptr));
-		if (dtptr == NULL)
-		{
-			CS_erpt (cs_NO_MEM);
-			goto error;
-		}
-
-		/* Read it in. */
-		if (!CS_dtrd (strm,dtptr,&crypt))
-		{
-			goto error;
-		}
-	}
-
-	/* We don't need the datum dictionary anymore. */
-	if (!cs_DtStrmFlg)
-	{
-		CS_dtDictCls (strm);
-	}
-	strm = NULL;
+	dtptr = CS_dtDefinition(dat_nam, pszDirPath, &isUsrDef);
+	if (NULL == dtptr || TRUE == isUsrDef)
+		return dtptr;
 
 	/* Verify that the values are not completely bogus. */
 	if (fabs (dtptr->delta_X) > cs_DelMax ||
@@ -888,6 +268,7 @@ struct cs_Dtdef_ * EXP_LVL3 CS_dtdef (Const char *dat_nam)
 	{
 		CS_stncp (csErrnam,dat_nam,MAXPATH);
 		CS_erpt (cs_DTDEF_INV);
+
 		goto error;
 	}
 
@@ -895,13 +276,31 @@ struct cs_Dtdef_ * EXP_LVL3 CS_dtdef (Const char *dat_nam)
 	return (dtptr);
 
 error:
-	if (strm != NULL) CS_dtDictCls (strm);
 	if (dtptr != NULL)
 	{
 		CS_free (dtptr);
 		dtptr = NULL;
 	}
-	return (dtptr);
+
+	return NULL;
+}
+
+/**********************************************************************
+**	count = CS_dtdefAll (pDefArray);
+**
+**	cs_Dtdef_ **pDefArray[];	A pointer to an array of cs_Dtdef_ instances.
+**	
+**	This function reads all available cs_Dtdef_ definitions from all available
+**	dictionary files. [pDefArray] will be set to a malloc'ed array
+**	of cs_Dtdef_ pointers where both, i.e. the array and the pointers contained,
+**	will have to be CS_free'd() by the caller. The number
+**	of pointers contained in the array is returned by [count].
+**	That is, count will be >= 0 in case of success and a negative value
+**	otherwise in which case [pDefArray] must not be examined by the caller.
+**********************************************************************/
+int CS_dtdefAll (struct cs_Dtdef_ **pDefArray[])
+{
+	return CS_dtDefinitionAll(pDefArray);
 }
 
 /**********************************************************************
@@ -920,10 +319,4 @@ void EXP_LVL1 CS_dtfnm (Const char *new_name)
 	(void)CS_stncp (cs_Dtname,new_name,cs_FNM_MAXLEN);
 	return;
 }
-void EXP_LVL1 CS_usrDtfnm (Const char *new_name)
-{
-	extern char cs_UsrDtName [];
 
-	(void)CS_stncp (cs_UsrDtName,new_name,cs_FNM_MAXLEN);
-	return;
-}

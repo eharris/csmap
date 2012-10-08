@@ -87,23 +87,23 @@ void EXP_LVL1 CS_errmsg (char *user_bufr,int bfr_size)
 	Bit | Define Name     |  Description
 	-------------------------------------------------------------------
 	  1 | cs_ERSUP_SOFT   | Software problems; problems which are not
-	    |                 | supposed to happen if all is working per
-	    |                 | design.
+		|                 | supposed to happen if all is working per
+		|                 | design.
 	  2 | cs_ERSUP_SYS    | System problems, e.g. malloc failed,
-	    |                 | I/O error, disk full.
+		|                 | I/O error, disk full.
 	  4 | cs_ERSUP_CONFIG | Installation, configuration, manufacturing
-	    |                 | problems; e.g. couln't open COORDSYS
+		|                 | problems; e.g. couln't open COORDSYS
 	  8 | cs_ERSUP_OPR    | Operational problems; e.g. invalid name,
-	    |                 | bogus coordinate system name.  Conditions
-	    |                 | a user might cause.
+		|                 | bogus coordinate system name.  Conditions
+		|                 | a user might cause.
 	 16 | cs_ERSUP_DATA   | A problem with supplied data; i.e. convergence
-	    |                 | failures, etc.
+		|                 | failures, etc.
 	 32 | cs_ERSUP_RNG    | Converting data out of normal range, e.g.
-	    |                 | converting a European lat/long to NAD27.
-	    
+		|                 | converting a European lat/long to NAD27.
+		
 	 If you want to invent your own, work your way down from the
 	 most significant bit.  We'll add from 32 on up.
-	    
+		
 */
 
 struct csErrtab_
@@ -650,51 +650,51 @@ struct csErrtab_ csErrtab [] =
  { cs_WKT_INVUNIT, csET_NM,cs_ERSUP_DATA,
 						   "The text presented as a WKT definition for conversion contained a UNIT definition (%s) which is not supported." },
  { cs_WKT_NOGEOCS,       0,cs_ERSUP_DATA,
-						    "The text presented as a WKT definition for conversion did not contain a GEOGCS definition as is required." },
+							"The text presented as a WKT definition for conversion did not contain a GEOGCS definition as is required." },
  { cs_WKT_NOGUNIT,       0,cs_ERSUP_DATA,
-						    "The GEOGCS definition contained within the text presented as a WKT definition did not contain a UNIT specification." },
+							"The GEOGCS definition contained within the text presented as a WKT definition did not contain a UNIT specification." },
  {cs_WKT_INVGUNIT, csET_NM,cs_ERSUP_DATA,
-						    "The UNIT specification within the GEOGCS definition contained within the text presented as a WKT definition, contained an unrecognized unit name (%s)." },
+							"The UNIT specification within the GEOGCS definition contained within the text presented as a WKT definition, contained an unrecognized unit name (%s)." },
  {  cs_WKT_NOPROJ,       0,cs_ERSUP_DATA,
-						    "The text presented as a WKT definition for conversion did not contain a PROJECTION specification as is required." },
+							"The text presented as a WKT definition for conversion did not contain a PROJECTION specification as is required." },
  { cs_WKT_INVPROJ, csET_NM,cs_ERSUP_DATA,
-						    "The PROJECTION specification contained within the text presented as a WKT definition specified an unsupported projection (%s)." },
+							"The PROJECTION specification contained within the text presented as a WKT definition specified an unsupported projection (%s)." },
  { cs_WKT_GEOGCNT, csET_NM,cs_ERSUP_DATA,
-						    "Could not locate two GEOGCS objects in the GEOGTRAN object named %s.  Exactly two are required." },
+							"Could not locate two GEOGCS objects in the GEOGTRAN object named %s.  Exactly two are required." },
  { cs_WKT_NOSRCDT, csET_NM,cs_ERSUP_DATA,
-						    "Could not locate a DATUM object in the first of the two GEOGCS objects in the GEOGTRAN object named %s." },
+							"Could not locate a DATUM object in the first of the two GEOGCS objects in the GEOGTRAN object named %s." },
  { cs_WKT_NOMETH,  csET_NM,cs_ERSUP_DATA,
-						    "Could not locate a METHOD object in the GEOGTRAN object named %s." },
+							"Could not locate a METHOD object in the GEOGTRAN object named %s." },
  { cs_WKT_MTHERR,  csET_NM,cs_ERSUP_DATA,
-						    "The parameters provided and the METHOD specified for GEOGTRAN named %s are inconsistent." },
+							"The parameters provided and the METHOD specified for GEOGTRAN named %s are inconsistent." },
  { cs_WKT_UKMETH,  csET_NM,cs_ERSUP_DATA,
-						    "The GEOGTRAN object named %s contains a METHOD specification which is not recognized." },
+							"The GEOGTRAN object named %s contains a METHOD specification which is not recognized." },
  { cs_WKT_WRNGTRG, csET_NM,cs_ERSUP_DATA,
-						    "The GEOGTRAN object named %s does not have \"WGS_1984\" as the target datum.  GEOGTRANS must produce WGS84 to be converted." },
+							"The GEOGTRAN object named %s does not have \"WGS_1984\" as the target datum.  GEOGTRANS must produce WGS84 to be converted." },
  {cs_WKT_PRMSUPRT, csET_NM,cs_ERSUP_DATA,
-						    "WKT system named %s uses a parameter arrangement unsupported by CS-MAP." },
+							"WKT system named %s uses a parameter arrangement unsupported by CS-MAP." },
  {cs_WKT_UNITMAP,  csET_NM,cs_ERSUP_DATA,
-						    "WKT conversion failed; the WKT equivalent for the %s unit is unknown." },
+							"WKT conversion failed; the WKT equivalent for the %s unit is unknown." },
  {cs_WKT_PRJSUPRT, csET_NM,cs_ERSUP_DATA,
-						    "The WKT equivalent for the %s projection is either non-existent or incompatible.  WKT conversion failed." },
+							"The WKT equivalent for the %s projection is either non-existent or incompatible.  WKT conversion failed." },
  {cs_WKT_NODTMNM,        0,cs_ERSUP_DATA,
-						    "The WKT definition contained an unnamed DATUM specification in addition to not having a TOWGS84 specification." },
+							"The WKT definition contained an unnamed DATUM specification in addition to not having a TOWGS84 specification." },
  {cs_WKT_NODTMSPC, csET_NM,cs_ERSUP_DATA,
-						    "The WKT definition did not contan a TOWGS84 specification and a datum with the name given, %s, could not be found in the dictionary." },
+							"The WKT definition did not contan a TOWGS84 specification and a datum with the name given, %s, could not be found in the dictionary." },
  {cs_WKT_NOLLBASE, csET_NM,cs_ERSUP_DATA,
-						    "The datum reference of the coordinate system named %s could not be converted to a valid geographic system reference." },
+							"The datum reference of the coordinate system named %s could not be converted to a valid geographic system reference." },
  { cs_WKT_NODTREF, csET_NM,cs_ERSUP_DATA,
-						    "%s is cartographically referenced.  WKT does not support this, conversion to WKT failed." },
+							"%s is cartographically referenced.  WKT does not support this, conversion to WKT failed." },
  {   cs_WLD_NOSOL,       0,cs_ERSUP_DATA,
-						    "The control points provided to the .WLD file calculator failed to produce a unique solution." },
+							"The control points provided to the .WLD file calculator failed to produce a unique solution." },
  { cs_WKT_BADFORM, csET_NM,cs_ERSUP_DATA,
-						    "WKT string provided is incorrectly formed and cannot be parsed.  The invalid string begins with: %s" },
+							"WKT string provided is incorrectly formed and cannot be parsed.  The invalid string begins with: %s" },
  {   cs_WKT_DTMAP, csET_NM,cs_ERSUP_DATA,
-						    "WKT string referenced datum named '%s'.  This datum name could not be mapped to a dictionary definition" },
+							"WKT string referenced datum named '%s'.  This datum name could not be mapped to a dictionary definition" },
  {  cs_WKT_FLAVOR, csET_NM,cs_ERSUP_DATA,
-						    "Flavor of WKT string named '%s' could not be determined." },
+							"Flavor of WKT string named '%s' could not be determined." },
  {cs_WKT_INCNSIST,       0,cs_ERSUP_DATA,
-						    "Information provided to the WKT formatting functions is inconsistent." },
+							"Information provided to the WKT formatting functions is inconsistent." },
  {  cs_DHDN_RNG_F, csET_LOC,cs_ERSUP_RNG,
 						   "Encountered data at %s which is outside DHDN<->ETRF89 data file coverage."},
  {  cs_DHDN_RNG_W, csET_LOC,cs_ERSUP_RNG,
@@ -808,6 +808,16 @@ struct csErrtab_ csErrtab [] =
 						   "No path could be found or automatically constructed to convert from %s."},
  { cs_ATS77_INV,         0,cs_ERSUP_SOFT,
 						   "An attempt to perform an inverse calculation using an ATS77 'TRANSFORM' file was detected.  Cannot comply."},
+ { cs_CT_NOT_FND, csET_NM,cs_ERSUP_OPR,
+						   "Category named %s does not exist."},
+ { cs_CT_CS_NOT_IN, csET_NM,cs_ERSUP_OPR,
+						   "Category does not contain a coordinate system named %s."},
+ { cs_CT_PROT, csET_NM,cs_ERSUP_OPR,
+						   "Category %s cannot be removed."},
+ { cs_CT_CS_ADD_DUP, csET_NM,cs_ERSUP_OPR,
+						   "Category already contains a coordinate system named %s."},
+ { cs_CT_DICT,              0,cs_ERSUP_CONFIG,
+						   "The Category dictionary open failed."},
  {              0,       0,0,""}
 };
 
@@ -830,7 +840,7 @@ unsigned short EXP_LVL7 CSerpt (char *mesg,int size,int err_num)
 
 	long32_t ltemp;
 
-  	char *cp;
+	char *cp;
 	struct csErrtab_ *err_ptr;
 
 	char ctemp [32];
@@ -979,7 +989,7 @@ void EXP_LVL9 CSsprntf (char *dst,int size,char *frmt,char *insert)
 	while (*frmt != '\0' && size > 0)
 	{
 		if (*frmt == '%' &&
-		    *(frmt + 1) == 's')
+			*(frmt + 1) == 's')
 		{
 			while (*insert != '\0' && size > 0)
 			{

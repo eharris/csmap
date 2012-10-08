@@ -36,14 +36,6 @@ int main (int argc,char *argv [])
 	extern char cs_Csname [];
 	extern char cs_Dtname [];
 	extern char cs_Elname [];
-	
-	/* The following variables are part of the deferred close scheme.  Under
-	   ordinary circumstances they preclude having two Coordsys (et al)
-	   dictionary files open at once.  We set this variable to zero in
-	   order to allow multiple dictionary files to be open. */
-	extern csFILE* cs_CsStream;
-	extern csFILE* cs_DtStream;
-	extern csFILE* cs_ElStream;
 
 	int cmpVal, iTmp;
 	int csDiffCnt, dtDiffCnt, elDiffCnt;
@@ -116,7 +108,6 @@ int main (int argc,char *argv [])
 		printf ("Open of %s in the 'WAS' directory failed.\n",cs_Csname);
 		Usage ();
 	}
-	cs_CsStream = 0;
 
 	CS_altdr (isDir);											/*lint !e534 */
 	isStrm = CS_csopn (_STRM_BINRD);
@@ -125,7 +116,6 @@ int main (int argc,char *argv [])
 		printf ("Open of %s in the 'IS' directory failed.\n",cs_Csname);
 		Usage ();
 	}
-	cs_CsStream = 0;
 
 	/* Now, we loop through the dictionaries.  In this module, we simply
 	   compare key names, looking for new definitions, or deleted
@@ -297,7 +287,6 @@ int main (int argc,char *argv [])
 		printf ("Open of %s in the 'WAS' directory failed.\n",cs_Dtname);
 		Usage ();
 	}
-	cs_DtStream = 0;
 
 	CS_altdr (isDir);											/*lint !e534 */
 	isStrm = CS_dtopn (_STRM_BINRD);
@@ -306,7 +295,6 @@ int main (int argc,char *argv [])
 		printf ("Open of %s in the 'IS' directory failed.\n",cs_Dtname);
 		Usage ();
 	}
-	cs_DtStream = 0;
 
 	iTmp = CS_dtrd (wasStrm,&wasDtDef,&dummy);
 	if (iTmp < 0)
@@ -470,7 +458,6 @@ int main (int argc,char *argv [])
 		printf ("Open of %s in the 'WAS' directory failed.\n",cs_Elname);
 		Usage ();
 	}
-	cs_ElStream = 0;
 
 	CS_altdr (isDir);											/*lint !e534 */
 	isStrm = CS_elopn (_STRM_BINRD);
@@ -479,7 +466,6 @@ int main (int argc,char *argv [])
 		printf ("Open of %s in the 'IS' directory failed.\n",cs_Elname);
 		Usage ();
 	}
-	cs_ElStream = 0;
 
 	iTmp = CS_elrd (wasStrm,&wasElDef,&dummy);
 	if (iTmp < 0)

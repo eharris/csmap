@@ -179,9 +179,9 @@
 
 #define cs_FRMTFLGS_CNTv1  cs_FRMTFLG_NONE			/* Obsolete, probably always be non-reentrant. */
 #define cs_FRMTFLGS_CNTv2  cs_FRMTFLG_NONE			/* Need to examine buffer use */
-#define cs_FRMTFLGS_NADCN  cs_FRMTFLG_RNTRNT		/* Need to remove the local buffer */
-#define cs_FRMTFLGS_FRNCH  cs_FRMTFLG_RNTRNT		/* Data grids are memory resident upon construction */
-#define cs_FRMTFLGS_JAPAN  cs_FRMTFLG_RNTRNT		/* Data grids are memory resident upon construction */
+#define cs_FRMTFLGS_NADCN  cs_FRMTFLG_NONE			/* Need to remove the local buffer */
+#define cs_FRMTFLGS_FRNCH  cs_FRMTFLG_NONE			/* Data grids are memory resident upon construction */
+#define cs_FRMTFLGS_JAPAN  cs_FRMTFLG_NONE			/* Data grids are memory resident upon construction */
 #define cs_FRMTFLGS_ATS77  cs_FRMTFLG_NONE			/* Don't really know about this one. */
 #define cs_FRMTFLGS_OST97  cs_FRMTFLG_NONE			/* Not implemented yet as a geodetic transformation, which it should be. */
 #define cs_FRMTFLGS_OST02  cs_FRMTFLG_NONE			/* Not implemented yet as a geodetic transformation, which it should be. */

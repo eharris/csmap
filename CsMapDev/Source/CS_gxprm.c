@@ -272,17 +272,20 @@ struct cs_GxXform_*	CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_
 
 	if (src_dt->to84_via == cs_DTCTYP_MOLO)
 	{
-		xfrmPtr->methodCode = cs_DTCMTH_MOLOD;
+		xfrmPtr->gxDef.methodCode = cs_DTCMTH_MOLOD;
+        xfrmPtr->methodCode = cs_DTCMTH_MOLOD;
 		xfrmPtr->accuracy = cs_Eight;
 	}
 	else if (src_dt->to84_via == cs_DTCTYP_BURS)
 	{
-		xfrmPtr->methodCode = cs_DTCMTH_BURSA;
+		xfrmPtr->gxDef.methodCode = cs_DTCMTH_BURSA;
+        xfrmPtr->methodCode = cs_DTCMTH_BURSA;
 		xfrmPtr->accuracy = cs_Five;
 	}
 	else if (src_dt->to84_via == cs_DTCTYP_7PARM)
 	{
-		xfrmPtr->methodCode = cs_DTCMTH_7PARM;
+		xfrmPtr->gxDef.methodCode = cs_DTCMTH_7PARM;
+        xfrmPtr->methodCode = cs_DTCMTH_7PARM;
 		xfrmPtr->accuracy = cs_Three;
 	}
 

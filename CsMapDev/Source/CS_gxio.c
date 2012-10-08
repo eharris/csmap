@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_ioUtil.h"
 
 /**********************************************************************
 **	Calling Sequence:	strm = CS_gxopn (mode);
@@ -39,48 +40,7 @@
 **********************************************************************/
 csFILE * EXP_LVL3 CS_gxopn (Const char *mode)
 {
-	extern char cs_Dir [];
-	extern char *cs_DirP;
-	extern char cs_Gxname [];
-	extern char csErrnam [];
-
-	size_t rdCnt;
-
-	csFILE *strm = NULL;
-
-	cs_magic_t magic;
-
-	strcpy (cs_DirP,cs_Gxname);
-	strm = CS_fopen (cs_Dir,mode);
-	if (strm != NULL)
-	{
-		rdCnt = CS_fread ((char *)&magic,1,sizeof (magic),strm);
-		if (rdCnt != sizeof (magic))
-		{
-			if (CS_ferror (strm)) CS_erpt (cs_IOERR);
-			else                  CS_erpt (cs_INV_FILE);
-			CS_fclose (strm);
-			strm = NULL;
-			strcpy (csErrnam,cs_Dir);
-		}
-		else
-		{ 
-			CS_bswap (&magic,"l");
-			if (magic != cs_GXDEF_MAGIC)
-			{
-				CS_fclose (strm);
-				strm = NULL;
-				strcpy (csErrnam,cs_Dir);
-				CS_erpt (cs_GX_BAD_MAGIC);
-			}
-		}
-	}
-	else
-	{
-		strcpy (csErrnam,cs_Dir);
-		CS_erpt (cs_GXDICT);
-	}
-	return (strm);
+	return CS_gxFileOpen(mode);
 }
 
 /**********************************************************************
@@ -95,62 +55,16 @@ csFILE * EXP_LVL3 CS_gxopn (Const char *mode)
 **********************************************************************/
 int EXP_LVL3 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
 {
-	int st;
-	size_t rdCnt;
+	char datumKeyName[cs_KEYNM_DEF] = { '\0' };
 
-	char tmpKeyName [64];
+	int result = CS_gxRead(strm, gx_def);
+	if (result <= 0)
+		return result;
 
-	/* Synchronize the strm before the read. */
-	st = CS_fseek (strm,0L,SEEK_CUR);
-	if (st != 0)
-	{
-		CS_erpt (cs_IOERR);
-		return (-1);
-	}
-
-	/* OK, now we can read. */
-	rdCnt = CS_fread ((char *)gx_def,1,sizeof (*gx_def),strm);
-	if (rdCnt != sizeof (*gx_def))
-	{
-		if (CS_feof (strm))
-		{
-			return 0;
-		}
-		if (CS_ferror (strm)) CS_erpt (cs_IOERR);
-		else				  CS_erpt (cs_INV_FILE);
-		return (-1);
-	}
-
-	/* Swap the bytes if necessary. */
-	CS_gxswp (gx_def);
-	
-	/* Replace the directory separator characters if/as appropriate. */
 	CS_gxsep (gx_def);
 
-	/* Check the result. The name must always meet the criteria
-	   set by the CS_nmpp64 function.  At least so far, the criteria
-	   established by CS_nampp over the years has always been
-	   expanded, never restricted.  Thus, any definition which
-	   was legitimate in a previous release would always be
-	   legitimate iin subsequent releases. */
-	CS_stncp (tmpKeyName,gx_def->xfrmName,sizeof (tmpKeyName));
-	if (CS_nampp64 (tmpKeyName) != 0)
-	{
-		/* Replace the error condition reported by CS_nampp with
-		   and Invalid File indication. */
-		CS_erpt (cs_INV_FILE);
-		return (-1);
-	}
-	CS_stncp (tmpKeyName,gx_def->srcDatum,sizeof (tmpKeyName));
-	if (CS_nampp (tmpKeyName) != 0)
-	{
-		/* Replace the error condition reported by CS_nampp with
-		   and Invalid File indication. */
-		CS_erpt (cs_INV_FILE);
-		return (-1);
-	}
-	CS_stncp (tmpKeyName,gx_def->trgDatum,sizeof (tmpKeyName));
-	if (CS_nampp (tmpKeyName) != 0)
+	CS_stncp (datumKeyName, gx_def->srcDatum, sizeof (datumKeyName));
+	if (CS_nampp (datumKeyName) != 0)
 	{
 		/* Replace the error condition reported by CS_nampp with
 		   and Invalid File indication. */
@@ -158,7 +72,16 @@ int EXP_LVL3 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
 		return (-1);
 	}
 
-	return (1);
+	CS_stncp (datumKeyName,gx_def->trgDatum,sizeof (datumKeyName));
+	if (CS_nampp (datumKeyName) != 0)
+	{
+		/* Replace the error condition reported by CS_nampp with
+		   and Invalid File indication. */
+		CS_erpt (cs_INV_FILE);
+		return (-1);
+	}
+
+	return result;
 }
 /**********************************************************************
 **	st = CS_gxwr (strm,gx_rec);
@@ -173,36 +96,7 @@ int EXP_LVL3 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
 **********************************************************************/
 int EXP_LVL3 CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gx_def)
 {
-	int st;
-	size_t wrCnt;
-
-	__ALIGNMENT__1		/* For some versions of Sun compiler. */
-	struct cs_GeodeticTransform_ lcl_gxDef;
-
-	/* Get a copy which we can modify without screwing up the
-	   calling module. */
-	memcpy ((char *)&lcl_gxDef,(char *)gx_def,sizeof (lcl_gxDef));
-
-	/* Swap bytes as necessary */
-	CS_gxswp (&lcl_gxDef);
-
-	/* Synchronize the stream prior to the write. */
-	st = CS_fseek (strm,0L,SEEK_CUR);
-	if (st != 0)
-	{
-		CS_erpt (cs_IOERR);
-		return TRUE;		
-	}
-
-	/* Now we can write. */
-	wrCnt = CS_fwrite ((char *)&lcl_gxDef,1,sizeof (lcl_gxDef),strm);
-	if (wrCnt != sizeof (lcl_gxDef))
-	{
-		if (CS_ferror (strm)) CS_erpt (cs_IOERR);
-		else				  CS_erpt (cs_DISK_FULL);
-		return (TRUE);
-	}
-	return (FALSE);
+	return CS_gxWrite(strm, gx_def);
 }
 
 /**********************************************************************
@@ -217,163 +111,54 @@ int EXP_LVL3 CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gx_def)
 **********************************************************************/
 int EXP_LVL3 CS_gxdel (struct cs_GeodeticTransform_ *gx_def)
 {
-	extern char csErrnam [];
-	extern char cs_Dir [];
-	extern short cs_Protect;
+	int result = CS_gxDelete(gx_def);
 
-	short cs_time;
-
-	int st;
-	int rdSt;
-	size_t wrCnt;
-
-	csFILE *old_strm;
-	csFILE *new_strm;
-
-	cs_magic_t magic;
-
-	struct cs_GeodeticTransform_ *my_ptr;
-
-	char tmp_nam [MAXPATH];
-
-	__ALIGNMENT__1		/* For some versions of Sun compiler. */
-	struct cs_GeodeticTransform_ keyBufr;
-
-	__ALIGNMENT__2		/* For some versions of Sun compiler. */
-	struct cs_GeodeticTransform_ cpy_buf;
-
-	/* Capture the current time. */
-	cs_time = (short)((CS_time ((cs_Time_ *)0) - 630720000L) / 86400L);
-
-	/* Prepare for an error. */
-	new_strm = NULL;
-	old_strm = NULL;
-	my_ptr = NULL;
-
-	/* Set up a key structure which we will use to identify all path records
-	   which belong to the definition which is to be deleted. */
-	memset ((void *)&keyBufr,0,sizeof (keyBufr));
-	CS_stncp (keyBufr.xfrmName,gx_def->xfrmName,sizeof (keyBufr.xfrmName));
-
-	/* Get a pointer to the existing definition. If it doesn't
-	   exist, we're all done. */
-	my_ptr = CS_gxdef (keyBufr.xfrmName);
-	if (my_ptr == NULL)
+	if (0 == result)
 	{
-		/* If it doesn't exist, it can't be deleted. */
-		goto error;
+		/* Looks like we've deleted a Geodetic Transformation definition.
+		   We delete any existiung Geodetic Transformation Index so that the
+		   next time it is needed, it will be regenerated and the result will
+		   not have this entry in it any longer. */
+		CS_releaseGxIndex ();
 	}
 
-	/* See if this definition is protected.  If so, we have to
-	   leave it alone. If cs_Protect < 0, there is no protection. */
-	if (cs_Protect >= 0)
-	{
-		if (my_ptr->protect == 1)
-		{
-			CS_stncp (csErrnam,my_ptr->xfrmName,MAXPATH);
-			CS_erpt (cs_GX_PROT);
-			goto error;
-		}
-		if (cs_Protect > 0)
-		{
-			/* Here if user definition protection is
-			   enabled. */
-			if (my_ptr->protect < (cs_time - cs_Protect))
-			{
-				CS_stncp (csErrnam,my_ptr->xfrmName,MAXPATH);
-				CS_erpt (cs_GX_UPROT);
-				goto error;
-			}
-		}
-	}
-	CS_free (my_ptr);
-	my_ptr = NULL;
-
-    /* Looks like we'll be deleting a Geodetic Transformation definition.
-       We delete any existiung Geodetic Transformation Index so that the
-       nest time it is needed, it will be regenerated and the result will
-       not have this entry in it any longer. */
-    CS_releaseGxIndex ();
-
-	/* Open up the geodetic path dictionary file and verify its
-	   magic number. */
-	old_strm = CS_gxopn (_STRM_BINRD);
-	if (old_strm == NULL)
-	{
-		goto error;
-	}
-
-	/* Create a temporary file for the new dictionary. */
-	st = CS_tmpfn (tmp_nam);
-	if (st != 0)
-	{
-		goto error;
-	}
-	new_strm = CS_fopen (tmp_nam,_STRM_BINWR);
-	if (new_strm == NULL)
-	{
-		CS_erpt (cs_TMP_CRT);
-		goto error;
-	}
-
-	/* Copy the file, skipping the entry to be deleted.  First
-	   we must write the magic number. */
-	magic = cs_GXDEF_MAGIC;
-	CS_bswap (&magic,"l");
-	wrCnt = CS_fwrite ((char *)&magic,1,sizeof (magic),new_strm);
-	if (wrCnt != sizeof (magic))
-	{
-		if (CS_ferror (new_strm)) CS_erpt (cs_IOERR);
-		else					  CS_erpt (cs_DISK_FULL);
-		goto error;
-	}
-
-	/* Now we copy the file, skipping the entry to be
-	   deleted. */
-	while ((rdSt = CS_gxrd (old_strm,&cpy_buf)) > 0)
-	{
-		if (CS_gxcmp (&cpy_buf,&keyBufr) != 0)
-		{
-			if (CS_gxwr (new_strm,&cpy_buf))
-			{
-				goto error;
-			}
-		}
-	}
-
-	/* See if the copy loop terminated due to an error. */
-	if (rdSt != 0) goto error;
-
-	/* Close up, remove the old dictionary and rename the
-	   new dictionary. */
-	CS_fclose (new_strm);
-	new_strm = NULL;
-	CS_fclose (old_strm);
-	old_strm = NULL;
-	st = CS_remove (cs_Dir);
-	if (st != 0)
-	{
-		strcpy (csErrnam,cs_Dir);
-		CS_erpt (cs_UNLINK);
-		goto error;
-	}
-	st = CS_rename (tmp_nam,cs_Dir);
-	if (st != 0) goto error;
-
-	/* We're done. */
-	return (0);
-
-error:
-	if (new_strm != NULL)
-	{
-		/* tmp_nam must have been initialize if new_strm >= 0 */
-		CS_fclose (new_strm);
-		CS_remove (tmp_nam);						/*lint !e534 !e645 */
-	}
-	if (old_strm != NULL) CS_fclose (old_strm);
-	if (my_ptr != NULL) CS_free (my_ptr);
-	return (-1);
+	return result;
 }
+
+
+int CS_gxwrtchk(struct cs_GeodeticTransform_ *gx_target, Const struct cs_GeodeticTransform_ *gx_source, int* isProtected)
+{
+	__ALIGNMENT__1
+	struct csGeodeticXformParmsGridFiles_ updatedGridFiles;
+
+	if (NULL == isProtected)
+		return -1;
+
+	if (FALSE == *isProtected) //nothing we'd wanted to change here; it's write enabled already
+		return 0;
+
+	/* The definition is protected and the transformation method
+	type is grid interpolation.  We copy all of the grid file
+	information to the instance of the definition we just
+	read from the disk, and then write that out as our
+	"update".  We'll return a +2 in this case so that the
+	calling module will know that this is what happened, if
+	it cares to know. */
+
+	//keep this definition write protected; if it's not a transformation using grid files
+	if (cs_DTCMTH_GFILE != gx_source->methodCode)
+		return 0;
+
+	//we just update the potentially updated grid files information; everything else we
+	//take from the dictionary definition
+	updatedGridFiles = gx_target->parameters.fileParameters;
+	*gx_target = *gx_source;
+	gx_target->parameters.fileParameters = updatedGridFiles;
+
+	*isProtected = FALSE;
+	return 0;
+}
+
 
 /******************************************************************************
 **	flag = CS_gxupd (gxdef,crypt);
@@ -394,253 +179,16 @@ error:
 *******************************************************************************/
 int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 {
-	extern char csErrnam [];
-	extern short cs_Protect;
-	extern char cs_Unique;
+	int result = CS_gxUpdate(gx_def);
 
-	short cs_time = 0;
-	short fileIdx;
-	short fileReferenceCount;
-
-	int st;
-	int flag;
-	int sort;
-
-	int isProtected;
-
-	long32_t fpos;
-
-	char *cp;
-	csFILE *strm;
-	struct csGeodeticXfromParmsFile_* usrFileParmsPtr;
-	struct csGeodeticXfromParmsFile_* myFileParmsPtr;
-
-
-	__ALIGNMENT__1		/* For some versions of Sun compiler. */
-	struct cs_GeodeticTransform_ my_gxdef;
-
-	/* Prepare for a possible error. */
-	strm = NULL;
-	sort = FALSE;
-	fpos = 0L;
-
-	/* Compute the time, as we use it internally.  This is
-	   days since January 1, 1990. If this record does get
-	   written, we want it to have the current date in it.
-	   This means that even if allowed by the protection system,
-	   a distribution coordinate system will be marked as having
-	   been twiddled. */
-	if (gx_def->protect >= 0)
+	if (0 == result)
 	{
-		if ((cs_Protect < 0) || (gx_def->protect != 1))
-		{
-			cs_time = (short)((CS_time ((cs_Time_ *)0) - 630720000L) / 86400L);
-			/* This modifies the user supplied definition. */
-			gx_def->protect = cs_time;
-		}
+		//looks like we've added a geodetic transformation;
+		//if we did just update an existing definition, we don't have to release the index here; the code is the same anyway
+		CS_releaseGxIndex();
 	}
 
-	/* Adjust the name and make sure it is proper.  By convention, geodetic
-	   datum names are case insensitive. */
-	st = CS_nampp64 (gx_def->xfrmName);
-	if (st != 0) goto error;
-
-	/* Open up the Geodetic Path Dictionary and verify its magic number. */
-	strm = CS_gxopn (_STRM_BINUP);
-	if (strm == NULL)
-	{
-		goto error;
-	}
-
-	/* See if we have a geodetic transform with this name already. */
-	flag = CS_bins (strm,(long32_t)sizeof (cs_magic_t),(long32_t)0,sizeof (*gx_def),(char *)gx_def,(CMPFUNC_CAST)CS_gxcmp);
-	if (flag < 0) goto error;
-	if (flag)
-	{
-		/* Here when the geodetic transformation already exists.  The case of
-		   geodetic transformatsions is special.  In this special case,
-		   "protected" means that if the transformation is of the grid file
-		   interpolation type, we allow an update of the grid file and
-		   fallback information.  Otherwise, an attempt to update a
-		   "protected" geodetic transformation definition will produce an error
-		   condition. */
-		isProtected = FALSE;
-		if (cs_Protect >= 0)
-		{
-			/* The protection system is active.  Thus the definition could
-			   concievabley be protected.  We need to get the actual definition
-			   to determine this. */
-			fpos = CS_ftell (strm);
-			if (fpos < 0L)
-			{
-				CS_erpt (cs_IOERR);
-				goto error;
-			}
-			st = CS_gxrd (strm,&my_gxdef);
-			if (st == 0)
-			{
-				CS_erpt (cs_INV_FILE);
-			}
-			if (st <= 0)
-			{
-				goto error;
-			}
-			
-			/* Return the file to the position located by the binary search. */
-			st = CS_fseek (strm,fpos,SEEK_SET);
-			if (st != 0)
-			{
-				CS_erpt (cs_IOERR);
-				goto error;
-			}
-
-			/* OK, see if this definition is protected.  In the following, the
-			   isProtected variable is zero if the definition is NOT protected.
-			   If the definition is protected, isProtected is non-zero and the
-			   value is the error code indicating the type of protection. */
-			if (my_gxdef.protect == 1)
-			{
-				isProtected = cs_GX_PROT;
-			}
-			else if (cs_Protect > 0 && my_gxdef.protect > 0 &&
-					 (my_gxdef.protect < (cs_time - cs_Protect))
-					)
-			{
-				isProtected = cs_GX_UPROT;
-			}
-
-			/* Now there are now three possibilities.
-				1> consider the definition protected and issur the error.
-				2> update only the grid file and fallback information.
-				3> update the entire definition.
-				
-				Let's do the easiest first. */
-			if (isProtected && my_gxdef.methodCode != cs_DTCMTH_GFILE)
-			{
-				/* The method type is not grid file interpolation.  Therefore,
-				   we honor the protection completely and issue an error
-				   condition. */
-				CS_stncp (csErrnam,gx_def->xfrmName,MAXPATH);
-				CS_erpt (isProtected);
-				goto error;
-			}
-			else if (!isProtected)
-			{
-				/* The definition is not protected, we comply with the calling
-				   module's request and update the entire definition without
-				   any restrictions.  Note that we returned the file position
-				   to the correct spot above. */
-				st = CS_gxwr (strm,gx_def);
-				if (st != 0)
-				{
-					goto error;
-				}
-			}
-			else 
-			{
-				/* The definition is protected and the transformation method
-				   type is grid interpolation.  We copy all of the grid file
-				   information to the instance of the definition we just
-				   read from the disk, and then write that out as our
-				   "update".  We'll return a +2 in this case so that the
-				   calling module will know that this is what happened, if
-				   it cares to know. */
-				memset (&my_gxdef.parameters.fileParameters,'\0',sizeof (my_gxdef.parameters.fileParameters));
-				fileReferenceCount = gx_def->parameters.fileParameters.fileReferenceCount;
-				my_gxdef.parameters.fileParameters.fileReferenceCount = 0;
-				for (fileIdx = 0;fileIdx < fileReferenceCount;fileIdx += 1)
-				{
-					usrFileParmsPtr = &gx_def->parameters.fileParameters.fileNames [fileIdx];
-					myFileParmsPtr  = &my_gxdef.parameters.fileParameters.fileNames [fileIdx];
-
-					myFileParmsPtr->fileFormat = usrFileParmsPtr->fileFormat;
-					myFileParmsPtr->direction  = usrFileParmsPtr->direction;
-					CS_stncp (myFileParmsPtr->fileName,usrFileParmsPtr->fileName,sizeof (myFileParmsPtr->fileName));
-					my_gxdef.parameters.fileParameters.fileReferenceCount += 1;
-				}
-				
-				/* The fallback information used to reside in the .gdc file
-				   which was user editable.  So, we continue to consider the
-				   fallback information as "user editable". */
-				CS_stncp (my_gxdef.parameters.fileParameters.fallback,gx_def->parameters.fileParameters.fallback,sizeof (my_gxdef.parameters.fileParameters.fallback));
-				
-				/* Write the updated copy of the original to the dictionary.
-				   We are replaceing is "in place" so no sort should be
-				   necessary. */
-				st = CS_gxwr (strm,&my_gxdef);
-				if (st != 0)
-				{
-					goto error;
-				}
-				
-				/* It would be nice to set the return value to 2 for this special
-				   stituation.  However, there are several known calling modules
-				   that will break if the return value is not -1, 0, or +1.
-				flag = 2;
-				*/
-			}
-		}
-	}
-	else
-	{
-        /* Looks like we'll be adding a Geodetic Transformation definition.
-           We delete any existiung Geodetic Transformation Index so that the
-           next time it is needed, it will be regenerated and the result will
-           have this new entry in it. */
-        CS_releaseGxIndex ();
-
-		/* Here if the geodetic path definition doesn't exist.  We
-		   have to add it. If cs_Unique is not zero, we require that
-		   a cs_Unique character be present in the key name of the path
-		   before we'll allow it to be written. */
-		if (cs_Unique != '\0')
-		{
-			cp = strchr (gx_def->xfrmName,cs_Unique);
-			if (cp == NULL)
-			{
-				csErrnam [0] = cs_Unique;
-				csErrnam [1] = '\0';
-				CS_erpt (cs_UNIQUE);
-				goto error;
-			}
-		}
-
-		/* If we're still here, we append the new geodetic path definition
-		   to the end of the file and then sort the file. */
-		st = CS_fseek (strm,fpos,SEEK_END);
-		if (st != 0)
-		{
-			CS_erpt (cs_IOERR);
-			goto error;
-		}
-		st = CS_gxwr (strm,gx_def);
-		if (st != 0)
-		{
-			goto error;
-		}
-		sort = TRUE;
-	}
-	if (sort)
-	{
-		/* Sort the file into proper order, thereby moving the new
-		   transformation to its proper place in the dictionary. */
-		st = CS_fseek (strm,(long)sizeof (cs_magic_t),SEEK_SET);
-		if (st != 0)
-		{
-			CS_erpt (cs_IOERR);
-			goto error;
-		}
-		st = CS_ips (strm,sizeof (struct cs_GeodeticTransform_),0L,(CMPFUNC_CAST)CS_gxcmp);
-		if (st < 0) goto error;
-	}
-
-	/* The Geodetic Path Dictionary has been updated. */
-	CS_fclose (strm);
-	return (flag);
-
-error:
-	if (strm != NULL) CS_fclose (strm);
-	return (-1);
+	return result;
 }
 
 /**********************************************************************
@@ -665,7 +213,7 @@ int EXP_LVL7 CS_gxcmp (Const struct cs_GeodeticTransform_ *pp,
 
 	/* OK, now we can compare the two structures.  For sorting
 	   and binary search purposes, we only look at the source and
-	   traget key names and the record number. */
+	   target key names and the record number. */
 
 	st = CS_stricmp (pp->xfrmName,qq->xfrmName);
 	return (st);
@@ -686,77 +234,30 @@ int EXP_LVL7 CS_gxcmp (Const struct cs_GeodeticTransform_ *pp,
 **********************************************************************/
 struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdef (Const char *xfrmName)
 {
-	extern char csErrnam [];
+	return CS_gxdef2(xfrmName, NULL);
+}
 
-	int st;
-	int flag;
+struct cs_GeodeticTransform_* EXP_LVL3 CS_gxdef2 (Const char *xfrmName, char* pszDirPath)
+{
+	return CS_gxDefinition(xfrmName, pszDirPath);
+}
 
-	csFILE *strm;
-	struct cs_GeodeticTransform_ *gx_def;
-
-	char tmpKeyName [64];
-
-	__ALIGNMENT__1				/* For some versions of Sun compiler. */
-	struct cs_GeodeticTransform_ srchDef;
-
-	/* Prepare for the potential error condition. */
-	strm = NULL;
-	gx_def = NULL; 
-
-	/* Make sure the provided name is OK. */
-	CS_stncp (tmpKeyName,xfrmName,sizeof (tmpKeyName));
-	st = CS_nampp64 (tmpKeyName);
-	if (st != 0) goto error;
-
-	/* Open up the geodetic path dictionary file. */
-	strm = CS_gxopn (_STRM_BINRD);
-	if (strm == NULL) goto error;
-
-	/* Search the file for the requested ellipsoid definition. */
-	CS_stncp (srchDef.xfrmName,xfrmName,sizeof (srchDef.xfrmName));
-	flag = CS_bins (strm,(long32_t)sizeof (cs_magic_t),(long32_t)0,sizeof (srchDef),(char *)&srchDef,(CMPFUNC_CAST)CS_gxcmp);
-	if (flag < 0) goto error;
-
-	if (!flag)
-	{
-		CS_stncp (csErrnam,xfrmName,MAXPATH);
-		CS_erpt (cs_GX_NOT_FND);
-		goto error;
-	}
-	else
-	{
-		/* The geodetic path definition exists.  Therefore, we malloc the
-		   geodetic path definition structure and read it in. */
-		gx_def = (struct cs_GeodeticTransform_ *)CS_malc (sizeof (struct cs_GeodeticTransform_));
-		if (gx_def == NULL)
-		{
-			CS_erpt (cs_NO_MEM);
-			goto error;
-		}
-		memset ((void*)gx_def,0,sizeof (*gx_def));
-		if (!CS_gxrd (strm,gx_def))
-		{
-			goto error;
-		}
-	}
-	if (strm != NULL)
-	{
-		CS_fclose (strm);
-		strm = NULL;
-	}
-
-	/* Return a pointer to the malloc'ed geodetic path definition to the
-	   user. */
-	return (gx_def);
-
-error:
-	if (strm != NULL) CS_fclose (strm);
-	if (gx_def != NULL)
-	{
-		CS_free (gx_def);
-		gx_def = NULL;
-	}
-	return (gx_def);
+/**********************************************************************
+**	count = CS_gxdefAll (pDefArray);
+**
+**	cs_GeodeticTransform_ **pDefArray[];	A pointer to an array of cs_GeodeticTransform_ instances.
+**	
+**	This function reads all available cs_GeodeticTransform_ definitions from all available
+**	dictionary files. [pDefArray] will be set to a malloc'ed array
+**	of cs_GeodeticTransform_ pointers where both, i.e. the array and the pointers contained,
+**	will have to be CS_free'd() by the caller. The number
+**	of pointers contained in the array is returned by [count].
+**	That is, count will be >= 0 in case of success and a negative value
+**	otherwise in which case [pDefArray] must not be examined by the caller.
+**********************************************************************/
+int EXP_LVL3 CS_gxdefAll (struct cs_GeodeticTransform_ **pDefArray[])
+{
+	return CS_gxDefinitionAll(pDefArray);
 }
 
 /**********************************************************************
@@ -775,8 +276,22 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 													Const char *trgDatum)
 {
 	extern char csErrnam [];
+	extern char cs_UserDir[];
+	extern char cs_Dir[];
+	extern char* cs_DirP;
 
+	extern int cs_Error;
+
+	char currentDir[MAXPATH] = { '\0' };
+	char targetPaths[2][MAXPATH] = { '\0', '\0' };
+	char const* pTargetPath;
+
+	int globalFoundForward;
+	int globalFoundBackward;
+
+	
 	int st;
+	int i;
 	int direction;
 
 	long fwdFpos;
@@ -788,12 +303,15 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 
 	char tmpKeyName [64];
 
-	__ALIGNMENT__1				/* For some versions of Sun compiler. */
+    __ALIGNMENT__1				/* For some versions of Sun compiler. */
 	struct cs_GeodeticTransform_ gx_rec;
 
-	/* Prepare for the potential error condition. */
+    /* Prepare for the potential error condition. */
 	strm = NULL;
 	gx_def = NULL;
+
+    globalFoundForward = 0;
+	globalFoundBackward = 0;
 
 	/* Make sure the provided names are OK. */
 	CS_stncp (tmpKeyName,srcDatum,sizeof (tmpKeyName));
@@ -803,110 +321,150 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 	st = CS_nampp (tmpKeyName);
 	if (st != 0) goto error;
 
-	/* Open up the geodetic transformation dictionary file. */
-	strm = CS_gxopn (_STRM_BINRD);
-	if (strm == NULL) goto error;
+	CS_getdr(currentDir);
 
-	/* Search the file for the requested transformation definition. */
-	fwdFpos = 0L;
-	invFpos = 0L;
-	for (;;)
+	CS_stncp(targetPaths[0], cs_UserDir, sizeof(targetPaths[0]));
+	CS_stncp(targetPaths[1], currentDir, sizeof(targetPaths[1]));
+
+	//go through all directories we've
+	for (i = 0; i < (sizeof(targetPaths) / sizeof(targetPaths[0])); ++i)
 	{
-		st = CS_gxrd (strm,&gx_rec);
-		if (st < 0)
+		if (NULL != strm)
 		{
-			goto error;	
-		} 
-		if (st == 0)
+			CS_fclose (strm);
+			strm = NULL;
+		}
+
+		/* Search the file for the requested coordinate system definition. */
+		pTargetPath = targetPaths[i];
+		if ('\0' == *pTargetPath)
+			continue;
+
+		//switch [cs_dir] and [cs_DirP] to whatever the current target directory is
+		if (CS_setdr(pTargetPath, NULL))
+			goto error;
+
+		/* Open up the geodetic transformation dictionary file. */
+		strm = CS_gxopn (_STRM_BINRD);
+		if (strm == NULL) 
 		{
-			break;
+			cs_Error = 0;
+			continue;
+		}
+
+		/* Search the file for the requested transformation definition. */
+		fwdFpos = 0L;
+		invFpos = 0L;
+		for (;;)
+		{
+			st = CS_gxrd (strm,&gx_rec);
+			if (st < 0)
+			{
+				goto error;	
+			} 
+			if (st == 0)
+			{
+				break;
+			}
+		
+			/* See if we have a match in the forward direction. */
+			if (!CS_stricmp (gx_rec.srcDatum,srcDatum) &&
+				!CS_stricmp (gx_rec.trgDatum,trgDatum))
+			{
+				direction = cs_DTCDIR_FWD;
+				if (fwdFpos == 0L && 0 == globalFoundForward)
+				{
+					fwdFpos = CS_ftell (strm);
+					globalFoundForward = 1;
+				}
+				else
+				{
+					cp = CS_stncp (tmpKeyName,srcDatum,cs_KEYNM_DEF);
+					*cp++ = ':';
+					*cp++ = ':';
+					CS_stncp (cp,trgDatum,cs_KEYNM_DEF);
+					CS_stncp (csErrnam,tmpKeyName,MAXPATH);
+					CS_erpt (cs_GEOPATH_DUP);
+					goto error;
+				}
+			}
+			/* See if we have a match in the inverse direction. */
+			if (gx_rec.inverseSupported != 0 &&
+				!CS_stricmp (gx_rec.srcDatum,trgDatum) &&
+				!CS_stricmp (gx_rec.trgDatum,srcDatum))
+			{
+				direction = cs_DTCDIR_INV;
+				if (invFpos == 0L && 0 == globalFoundBackward)
+				{
+					invFpos = CS_ftell (strm);
+					globalFoundBackward = 1;
+				}
+				else
+				{
+					cp = CS_stncp (tmpKeyName,srcDatum,cs_KEYNM_DEF);
+					*cp++ = ':';
+					*cp++ = ':';
+					CS_stncp (cp,trgDatum,cs_KEYNM_DEF);
+					CS_stncp (csErrnam,tmpKeyName,MAXPATH);
+					CS_erpt (cs_GEOPATH_DUP);
+					goto error;
+				}
+			}
+		}
+
+		/* We always return the forward definition if we found one. */
+		if (fwdFpos != 0L)
+		{
+			if (!gx_def) //we might have allocated that in the first round (inverse)
+				gx_def = (struct cs_GeodeticTransform_ *)CS_malc (sizeof (struct cs_GeodeticTransform_));
+
+			if (gx_def == NULL)
+			{
+				CS_erpt (cs_NO_MEM);
+				goto error;
+			}
+			memset ((void*)gx_def,0,sizeof (*gx_def));
+			st = CS_fseek (strm,fwdFpos,SEEK_SET);
+			if (st != 0)
+			{
+				CS_erpt (cs_IOERR);
+				goto error;
+			}
+			if (!CS_gxrd (strm,gx_def))
+			{
+				goto error;
+			}
+		}
+		else if (invFpos != 0L && !gx_def) //we prefer the forward paths over the backward ones
+		{
+			gx_def = (struct cs_GeodeticTransform_ *)CS_malc (sizeof (struct cs_GeodeticTransform_));
+			if (gx_def == NULL)
+			{
+				CS_erpt (cs_NO_MEM);
+				goto error;
+			}
+			memset ((void*)gx_def,0,sizeof (*gx_def));
+			st = CS_fseek (strm,fwdFpos,SEEK_SET);
+			if (st != 0)
+			{
+				CS_erpt (cs_IOERR);
+				goto error;
+			}
+			if (!CS_gxrd (strm,gx_def))
+			{
+				goto error;
+			}
 		}
 		
-		/* See if we have a match in the forward direction. */
-		if (!CS_stricmp (gx_rec.srcDatum,srcDatum) &&
-		    !CS_stricmp (gx_rec.trgDatum,trgDatum))
+		if (strm != NULL)
 		{
-			direction = cs_DTCDIR_FWD;
-			if (fwdFpos == 0L)
-			{
-				fwdFpos = CS_ftell (strm);
-			}
-			else
-			{
-				cp = CS_stncp (tmpKeyName,srcDatum,cs_KEYNM_DEF);
-				*cp++ = ':';
-				*cp++ = ':';
-				CS_stncp (cp,trgDatum,cs_KEYNM_DEF);
-				CS_stncp (csErrnam,tmpKeyName,MAXPATH);
-				CS_erpt (cs_GEOPATH_DUP);
-				goto error;
-			}
+			CS_fclose (strm);
+			strm = NULL;
 		}
-		/* See if we have a match in the inverse direction. */
-		if (gx_rec.inverseSupported != 0 &&
-			!CS_stricmp (gx_rec.srcDatum,trgDatum) &&
-			!CS_stricmp (gx_rec.trgDatum,srcDatum))
-		{
-			direction = cs_DTCDIR_INV;
-			if (invFpos == 0L)
-			{
-				invFpos = CS_ftell (strm);
-			}
-			else
-			{
-				cp = CS_stncp (tmpKeyName,srcDatum,cs_KEYNM_DEF);
-				*cp++ = ':';
-				*cp++ = ':';
-				CS_stncp (cp,trgDatum,cs_KEYNM_DEF);
-				CS_stncp (csErrnam,tmpKeyName,MAXPATH);
-				CS_erpt (cs_GEOPATH_DUP);
-				goto error;
-			}
-		}
+
 	}
 
-	/* We always return the forward definition if we found one. */
-	if (fwdFpos != 0L)
-	{
-		gx_def = (struct cs_GeodeticTransform_ *)CS_malc (sizeof (struct cs_GeodeticTransform_));
-		if (gx_def == NULL)
-		{
-			CS_erpt (cs_NO_MEM);
-			goto error;
-		}
-		memset ((void*)gx_def,0,sizeof (*gx_def));
-		st = CS_fseek (strm,fwdFpos,SEEK_SET);
-		if (st != 0)
-		{
-			CS_erpt (cs_IOERR);
-			goto error;
-		}
-		if (!CS_gxrd (strm,gx_def))
-		{
-			goto error;
-		}
-	}
-	else if (invFpos != 0L)
-	{
-		gx_def = (struct cs_GeodeticTransform_ *)CS_malc (sizeof (struct cs_GeodeticTransform_));
-		if (gx_def == NULL)
-		{
-			CS_erpt (cs_NO_MEM);
-			goto error;
-		}
-		memset ((void*)gx_def,0,sizeof (*gx_def));
-		st = CS_fseek (strm,fwdFpos,SEEK_SET);
-		if (st != 0)
-		{
-			CS_erpt (cs_IOERR);
-			goto error;
-		}
-		if (!CS_gxrd (strm,gx_def))
-		{
-			goto error;
-		}
-	}
-	else
+	if (NULL == gx_def)
 	{
 		cp = CS_stncp (tmpKeyName,srcDatum,cs_KEYNM_DEF);
 		*cp++ = ':';
@@ -917,11 +475,7 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 		goto error;
 	}
 
-	if (strm != NULL)
-	{
-		CS_fclose (strm);
-		strm = NULL;
-	}
+	CS_setdr(currentDir, NULL);
 
 	/* Return a pointer to the malloc'ed geodetic path definition to the
 	   user. */
@@ -934,6 +488,9 @@ error:
 		CS_free (gx_def);
 		gx_def = NULL;
 	}
+
+	CS_setdr(currentDir, NULL);
+
 	return (gx_def);
 }
 

@@ -735,7 +735,8 @@ int main (int argc,char* argv [])
 	}
 
 	printf ("%d tests completed successfully.\n",ok_cnt);
-	if (bad_cnt != 0)
+	bool testFailed = (bad_cnt != 0);
+	if (testFailed)
 	{
 		printf ("%d tests failed!!!!\n",bad_cnt);
 	}
@@ -746,7 +747,8 @@ int main (int argc,char* argv [])
 		getchar ();
 		printf ("\n");
 	}
-	return (0);
+
+	return testFailed ? -1 : 0;
 }
 //newPage//
 // I thought matherrr was ANSI standard.  Maybe it isn't, as the code below

@@ -4,12 +4,13 @@ C_FLG = -c -DGCC_3 -D__CPP__ -Wall -O3 -I../Include
 CPP_FLG = -c -DGCC_3 -D__CPP__ -Wall -O3 -I../Include
 
 .cpp.o:
-	gcc $(CPP_FLG) $<
+	$(CXX) $(CPP_FLG) $<
 
 .c.o:
-	gcc $(C_FLG) $<
+	$(CC) $(C_FLG) $<
 
 CSMAP_LIB_SRC = \
+	csIoUtil.cpp \
 	CS_alber.c \
 	CS_angle.c \
 	CS_ansi.c \
@@ -22,6 +23,7 @@ CSMAP_LIB_SRC = \
 	CS_bursa.c \
 	CS_bynFile.c \
 	CS_category.c \
+	cs_ctio.c \
 	CS_csini.c \
 	CS_csio.c \
 	CS_csprm.c \
@@ -157,6 +159,7 @@ CSMAP_LIB_SRC = \
 	rcWktKonstants.cpp
 
 CSMAP_LIB_OBJ = \
+	csIoUtil.o \
 	CS_alber.o \
 	CS_angle.o \
 	CS_ansi.o \
@@ -169,6 +172,7 @@ CSMAP_LIB_OBJ = \
 	CS_bursa.o \
 	CS_bynFile.o \
 	CS_category.o \
+	cs_ctio.o \
 	CS_csini.o \
 	CS_csio.o \
 	CS_csprm.o \
@@ -305,3 +309,10 @@ CSMAP_LIB_OBJ = \
 
 CsMap.a : $(CSMAP_LIB_OBJ)
 	ar rv CsMap.a $?
+
+clean:
+	rm -f $(CSMAP_LIB_OBJ)
+	rm -f CsMap.a
+
+rebuild: clean CsMap.a
+

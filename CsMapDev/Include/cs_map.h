@@ -1297,12 +1297,12 @@ typedef long32_t cs_magic_t;
 #define cs_PRJCOD_ORTHO    18
 #define cs_PRJCOD_GNOMC    19
 #define cs_PRJCOD_EDCYL    20       /* Deprecated, preserved for LEGACY use only.
-                                       Use cs_PRJCOD_EDCYLE which supports both the
-                                       spherical form and the ellipsoidal form of
-                                       this projection.  The original form is retained
-                                       only to maintain consistency of definitions
-                                       which referenced this system to a datum and
-                                       thus to an ellipsoid. */
+									   Use cs_PRJCOD_EDCYLE which supports both the
+									   spherical form and the ellipsoidal form of
+									   this projection.  The original form is retained
+									   only to maintain consistency of definitions
+									   which referenced this system to a datum and
+									   thus to an ellipsoid. */
 #define cs_PRJCOD_VDGRN    21
 #define cs_PRJCOD_CSINI    22
 #define cs_PRJCOD_ROBIN    23
@@ -1385,10 +1385,10 @@ typedef long32_t cs_magic_t;
 									   1999 vintage, except for Bornholm, which are post
 									   1999. */
 #define cs_PRJCOD_EDCYLE   67		/* Equidistant Cylindrical, ellipsoid form supported.
-                                       This variation replaces the original variation which
-                                       only supported the psherical form of this projection. */
+									   This variation replaces the original variation which
+									   only supported the psherical form of this projection. */
 #define cs_PRJCOD_PCARREE  68		/* Plate Carree, standard form.  This is _NOT_ the same
-                                       as EPSG 9825 - Pseudo Plate Carree. */
+									   as EPSG 9825 - Pseudo Plate Carree. */
 #define cs_PRJCOD_MRCATPV  69		/* Psuedo Mercator, Popular Visualization. */
 
 #define cs_PRJCOD_HOM1UV   ((cs_PRJCOD_OBLQM << 8) + 1)
@@ -1869,9 +1869,6 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_GX_NAME           "GeodeticTransform.CSD"
 #define cs_GP_NAME           "GeodeticPath.CSD"
 #define cs_NMP_NAME          "NameMapper.csv"
-#define cs_USR_CS_NAME		 "UserCoordsys.CSD"
-#define cs_USR_DAT_NAME		 "UserDatums.CSD"
-#define cs_USR_ELL_NAME      "UserEllipsoids.CSD"
 #define cs_NAD_NAME          "Nad27ToNad83.gdc"
 #define cs_HARN_NAME         "Nad83ToHarn.gdc"
 #define cs_GEOID_NAME        "GeoidHeight.gdc"
@@ -2181,9 +2178,6 @@ struct cs_GrfMreg06_
 #define cs_CATDEF_UNUSED "<unused>"
 #define cs_CATDEF_CATNMSZ 128
 #define cs_CATDEF_ALLOC 12
-#define cs_CATDEF_READ 1
-#define cs_CATDEF_RELEASE 2
-#define cs_CATDEF_ASIS 3
 
 /* The following structure represents a coordinate system name as it appears
    within a category entry. */
@@ -2198,11 +2192,15 @@ struct cs_CtItmName_
 struct cs_Ctdef_
 {
 	struct cs_Ctdef_ *next;
+	struct cs_Ctdef_ *previous;
+	int protect;
 	char ctName [cs_CATDEF_CATNMSZ];
 	ulong32_t nameCnt;
 	ulong32_t allocCnt;
 	struct cs_CtItmName_ *csNames;
+	ulong32_t userNameIndex; //at which index in [ctName] start the user added CS names; 
 };
+
 
 /*
 	Turn off whatever packing was used for release 6 stuff, then
@@ -2275,7 +2273,7 @@ struct cs_Eldef_
 							   entry in the table. */
 	char group [6];         /* Used to group ellipsoids for selection
 							   purposes. */
-   	char fill [2];			/* Filler, also used for encryption. */
+	char fill [2];			/* Filler, also used for encryption. */
 	double e_rad;           /* Equatorial radius IN METERS. */
 	double p_rad;           /* Polar radius IN METERS. */
 	double flat;            /* Flattening ratio, e.g. 1.0/297.0 */
@@ -2720,7 +2718,7 @@ struct cs_Cmplx_
 	now use.
 
 	The nomenclature is Forward: latitude --> distance.
-			    Inverse: distance --> latitude.
+				Inverse: distance --> latitude.
 
 	Distances are always in the same unit as the equatorial
 	radius supplied to the setup functions.
@@ -2867,7 +2865,7 @@ struct cs_Zone_
 						   radians. */
 	double width;		/* Width of the zone in
 						   radians.
-						     0.0 < width < 2*PI  */
+							 0.0 < width < 2*PI  */
 	double west_xx;		/* Western extent of the zone
 						   in cartesian units. */
 	double east_xx;		/* Eastern extent of the zone
@@ -2977,7 +2975,7 @@ struct cs_Lmbrt_
 							   be consistent. */
 	double affineDenom;		/* Constant term used in the affine inverse. */
 
- 	struct cs_ChicofI_ chicofI;
+	struct cs_ChicofI_ chicofI;
 							/* The coefficients of the series expansion
 							   for converting the conformal latitude,
 							   Chi, to the ellipsoidal geodetic
@@ -3087,8 +3085,8 @@ struct cs_Trmer_
 							   meridonal distance from the equator. */
 	struct cs_MmcofI_ mmcofI;/* Coeffieients necessary to compute the
 							   foot print lataitude. */
- 	struct cs_ChicofF_ chicofF;/* Coefficients for calculating conformal
- 								  latitude by series */
+	struct cs_ChicofF_ chicofF;/* Coefficients for calculating conformal
+								  latitude by series */
 	struct cs_ChicofI_ chicofI;/* Coefficients for converting conformal
 								  latitude back to geographic latitude by
 								  series. */
@@ -3361,7 +3359,7 @@ struct cs_Oblqm_
 	double E;
 	double gamma_0;			/* The azimuth of the central line at the
 								projection origin. */
- 	struct cs_ChicofI_ chicofI;
+	struct cs_ChicofI_ chicofI;
 				/* The coefficients of the series expansion
 				   for converting the conformal latitude,
 				   Chi, to the ellipsoidal geodetic
@@ -3457,7 +3455,7 @@ struct cs_Mrcat_
 							   theoretically, be infinitiy.  Does
 							   not include the false origin, if
 							   any. */
-    double eastLimit;		/* The eastern limit of the range of the
+	double eastLimit;		/* The eastern limit of the range of the
 							   CRS definition, relative to the central
 							   meridian, in radians.  That is, a
 							   copy of the cs_Csdef_ ll_max [0] value made
@@ -3468,7 +3466,7 @@ struct cs_Mrcat_
 							   Necessary here as the CSmrcatF & CSmrcatI
 							   functions do not have access to the cs_Csdef_
 							   structure for the active CRS definition. */
-    double westLimit;		/* The western limit of the range of the
+	double westLimit;		/* The western limit of the range of the
 							   CRS definition, relative to the central
 							   meridian, in radians.  That is, a
 							   copy of the cs_Csdef_ ll_max [0] value made
@@ -5936,9 +5934,9 @@ struct cs_Mgrs_
    requested position. */
 struct csMgrsGrdSqrVector_
 {
-    short enumValue;            /* Redundant, but helpful in test and debug. */
-    double xx;
-    double yy;
+	short enumValue;            /* Redundant, but helpful in test and debug. */
+	double xx;
+	double yy;
 };
 
 /* Three separate constructors.  In C++ they would be simple overloads.  In C,
@@ -6767,6 +6765,14 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_DT_NOPATH	  464		/* Couldn't locate or construct a path between datums. */
 #define cs_ATS77_INV	  465		/* Attempt to perform an inverse calculation on the ATS77 datum. */
 
+#define cs_CT_NOT_FND	  466		/* Category not found. */
+#define cs_CT_CS_NOT_IN	  467		/* CS name not contained in category. */
+#define cs_CT_PROT		  468		/* CT is (partially) protected. */
+#define cs_CT_CS_ADD_DUP  469		/* CT already contains a CS with that name. */
+#define cs_CT_DICT		  470		/* CT dictionary open failed. */
+
+#define cs_ERROR_MAX	  cs_CT_DICT
+
 /*
 	The following casts are used to eliminate warnings from
 	ANSI compilers.  I don't understand why they are necessary,
@@ -6815,6 +6821,7 @@ double		EXP_LVL5	CS_adj2pi (double az_in);
 double		EXP_LVL5	CS_adj2piI (double az_in);
 int			EXP_LVL5	CS_adjll (double ll [2]);
 int			EXP_LVL1	CS_altdr (Const char *alt_dir);
+int			EXP_LVL1	CS_usrdr (Const char *usr_dir);
 double		EXP_LVL1	CS_ansiAtof (Const char *string);
 void		EXP_LVL1	CS_ats77Name (Const char *newName);
 long32_t	EXP_LVL1	CS_atof (double *result,Const char *value);
@@ -6839,6 +6846,8 @@ void		EXP_LVL7	CS_csDictCls (csFILE* stream);
 int			EXP_LVL7	CS_cscmp (Const struct cs_Csdef_ *pp,Const struct cs_Csdef_ *qq);
 double		EXP_LVL3	CS_cscnv (Const struct cs_Csprm_ *csprm,Const double ll [3]);
 struct cs_Csdef_* EXP_LVL3	CS_csdef (Const char *cs_nam);
+struct cs_Csdef_ * EXP_LVL3 CS_csdef2 (Const char *cs_nam, char* pszDirPath);
+int			EXP_LVL3	CS_csdefAll (struct cs_Csdef_ **pDefArray[]);
 int			EXP_LVL1	CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize);
 int			EXP_LVL1	CS_csDefCmpEx (double* qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_csdel (struct cs_Csdef_ *csdef);
@@ -6874,7 +6883,9 @@ int			EXP_LVL7	CS_dtcmp (Const struct cs_Dtdef_ *pp,Const struct cs_Dtdef_ *qq);
 struct cs_Dtcprm_* EXP_LVL3	CS_dtcsu (Const struct cs_Csprm_ *src_cs,Const struct cs_Csprm_ *dest_cs,int dat_erf,int blk_erf);
 int			EXP_LVL3	CS_dtcvt (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [2],double ll_out [2]);
 int			EXP_LVL3	CS_dtcvt3D (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [3],double ll_out [3]);
-struct cs_Dtdef_* EXP_LVL3     CS_dtdef (Const char *dat_nam);
+struct cs_Dtdef_* EXP_LVL3	CS_dtdef (Const char *dat_nam);
+struct cs_Dtdef_ * EXP_LVL3	CS_dtdef2 (Const char *dat_nam, char* pszDirPath);
+int			EXP_LVL3	CS_dtdefAll	(struct cs_Dtdef_ **pDefArray[]);
 int			EXP_LVL3	CS_dtDefCmp (Const struct cs_Dtdef_ *original,Const struct cs_Dtdef_ *revised,char* message,size_t messageSize);
 int			EXP_LVL3	CS_dtDefCmpEx (double *qValuePtr,Const struct cs_Dtdef_ *original,Const struct cs_Dtdef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_dtdel (struct cs_Dtdef_ *dtdef);
@@ -6896,6 +6907,8 @@ int			EXP_LVL3	CS_dynutm (struct cs_Csprm_ *csprm,int zone);
 Const char*	EXP_LVL3	CS_ecvt (double value,int count,int *dec,int *sign);
 int			EXP_LVL7	CS_elcmp (Const struct cs_Eldef_ *pp,Const struct cs_Eldef_ *qq);
 struct cs_Eldef_* EXP_LVL3     CS_eldef (Const char *el_nam);
+struct cs_Eldef_* EXP_LVL3     CS_eldef2 (Const char *el_nam, char* pszFileDirPath);
+int			EXP_LVL3	CS_eldefAll (struct cs_Eldef_ **pDefArray[]);
 int			EXP_LVL3	CS_elDefCmp (Const struct cs_Eldef_ *original,Const struct cs_Eldef_ *revised,char* message,size_t messageSize);
 int			EXP_LVL3	CS_elDefCmpEx (double* qValuePtr,Const struct cs_Eldef_ *original,Const struct cs_Eldef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_eldel (struct cs_Eldef_ *eldef);
@@ -6958,8 +6971,11 @@ int			EXP_LVL1	CS_gpchk (Const struct cs_GeodeticPath_ *gpPath,unsigned short gp
 int			EXP_LVL7	CS_gpcmp (Const struct cs_GeodeticPath_ *pp,Const struct cs_GeodeticPath_ *qq);
 struct cs_GeodeticPath_*
 			EXP_LVL3	CS_gpdef (Const char *pathName);
+struct cs_GeodeticPath_ *
+			EXP_LVL3	CS_gpdef2 (Const char *pathName, char* pszDirPath);
 struct cs_GeodeticPath_*
 			EXP_LVL3	CS_gpdefEx (int *direction,Const char *srcDatum,Const char *trgDatum);
+int			EXP_LVL3	CS_gpdefAll (struct cs_GeodeticPath_ **pDefArray[]);
 int			EXP_LVL3	CS_gpdel (struct cs_GeodeticPath_ *gpdef);
 void		EXP_LVL1	CS_gpfnm (Const char *new_name);
 csFILE *	EXP_LVL3	CS_gpopn (Const char *mode);
@@ -6970,9 +6986,12 @@ int			EXP_LVL3	CS_gpwr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def);
 int			EXP_LVL1	CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFlg,int err_list [],int list_sz);
 int			EXP_LVL7	CS_gxcmp (Const struct cs_GeodeticTransform_ *pp,Const struct cs_GeodeticTransform_ *qq);
 struct cs_GeodeticTransform_*
-			EXP_LVL3	CS_gxdef (Const char *pathName);
+			EXP_LVL3	CS_gxdef (Const char *xfrmName);
+struct cs_GeodeticTransform_*
+			EXP_LVL3	CS_gxdef2 (Const char *xfrmName, char* pszDirPath);
 struct cs_GeodeticTransform_*
 			EXP_LVL3	CS_gxdefEx (Const char *srcDatum,Const char *trgDatum);
+int			EXP_LVL3	CS_gxdefAll (struct cs_GeodeticTransform_ **pDefArray[]);
 int			EXP_LVL3	CS_gxdel (struct cs_GeodeticTransform_ *gpdef);
 void		EXP_LVL1	CS_gxfnm (Const char *new_name);
 csFILE *	EXP_LVL3	CS_gxopn (Const char *mode);
@@ -7119,8 +7138,6 @@ double		EXP_LVL1	CS_unitlu (short type,Const char *name);
 Const char*	EXP_LVL3	CS_unitluByFactor (short type,double factor);
 int			EXP_LVL3	CS_unitDel (short type,Const char *name);
 
-void		EXP_LVL1	CS_usrCsfnm (Const char *new_name);
-int			EXP_LVL9	CS_usrCsDef (struct cs_Csdef_ *csDef,Const char *keyName);
 void		EXP_LVL1	CS_usrDtfnm (Const char *new_name);
 void		EXP_LVL1	CS_usrElfnm (Const char *new_name);
 int			EXP_LVL3	CS_utmzon (double lng);
@@ -7758,28 +7775,51 @@ int			EXP_LVL1 CS_unique (int newValue);
 
 
 int			EXP_LVL1	CS_vldCtName (const char* catName);
+int			EXP_LVL1	CS_vldCtNameEx (const char* catName, struct cs_Ctdef_* pCtDef);
 Const char*	EXP_LVL1	CS_getCatName (unsigned idx);
 Const char*	EXP_LVL1	CS_getItmName (const char* catName,unsigned idx);
+int			EXP_LVL1	CS_getItmNameCount (const char* catName);
 
-struct cs_Ctdef_* EXP_LVL3 CSgetCtDefHead (int mode);
-void		EXP_LVL3	CSsetCtDefHead (struct cs_Ctdef_* newCtDefHead);
 void		EXP_LVL3	CS_ctfnm (const char* new_name);
 int			EXP_LVL3	CSrplItmName (Const char* catName,unsigned idx,Const char* newName);
 int			EXP_LVL3	CSrmvItmName (Const char* catName,unsigned idx);
+int			EXP_LVL3	CSrmvItmNameEx (struct cs_Ctdef_ *pCategoryIn, Const char* name);
+int			EXP_LVL3	CSrmvItmNames (Const char* catName);
+int			EXP_LVL3	CSrmvItmNamesEx (struct cs_Ctdef_ *pCategoryIn);
 int			EXP_LVL3	CSaddItmName (Const char* catName,Const char* newName);
+int			EXP_LVL3	CSaddItmNameEx (struct cs_Ctdef_ *pCategoryIn, Const char* newName);
 int			EXP_LVL3	CSrplCatName (Const char* newCtName,unsigned idx);
+int			EXP_LVL3	CSrplCatNameEx (Const char* oldCtName, Const char* newCtName);
 int			EXP_LVL3	CSaddCategory (Const char* catName);
 
-struct cs_Ctdef_* EXP_LVL3 CSrdCategory (csFILE* stream);
-struct cs_Ctdef_* EXP_LVL3 CSrdCatFile (void);
-struct cs_Ctdef_* EXP_LVL3 CSnewCategory (Const char* ctName);
-int			EXP_LVL3	CSwrtCategory (csFILE* stream,Const struct cs_Ctdef_*ctDefPtr);
-int			EXP_LVL3	CSwrtCatFile (csFILE* stream,Const struct cs_Ctdef_*ctDefPtr);
-void		EXP_LVL3	CSrlsCategory (struct cs_Ctdef_ *ctDefPtr);
-void		EXP_LVL3	CSrlsCategoryList (struct cs_Ctdef_ *ctDefHead);
-void		EXP_LVL3	CSrlsCatgeories ();
-int			EXP_LVL9	CSctcomp (Const char *inpt,Const char *outp,int flags,Const char *coordsys,
+struct	cs_Ctdef_*	EXP_LVL3	CSrdCategory (csFILE* stream);
+int					EXP_LVL3	CSrdCategoryEx (csFILE* stream, struct cs_Ctdef_ *pCategoryIn);
+struct	cs_Ctdef_*	EXP_LVL3	CSrdCatFile (void);
+struct	cs_Ctdef_*	EXP_LVL3	CSnewCategory (Const char* ctName);
+struct	cs_Ctdef_*	EXP_LVL3	CSnewCategoryEx (Const char* ctName, int preAllocate);
+struct	cs_Ctdef_*	EXP_LVL3	CSgetCtDef(const char* catName);
+int		            EXP_LVL3	CSgetCtDefAll(struct cs_Ctdef_ **pDefArray[]);
+struct	cs_Ctdef_*	EXP_LVL3	CScpyCategory(Const struct cs_Ctdef_ * pCategoryIn);
+struct	cs_Ctdef_*	EXP_LVL3	CScpyCategoryEx(struct cs_Ctdef_* pDstCategory, Const struct cs_Ctdef_ * pSrcCategory, int setProtectFlag);
+int					EXP_LVL3	CSclnCategory(struct cs_Ctdef_ * pCategoryIn);
+int					EXP_LVL3	CSdelCategory(Const char* catName);
+int					EXP_LVL3	CSupdCategory(Const struct cs_Ctdef_*ctDefPtr);
+int					EXP_LVL3	CSupdCategories (Const struct cs_Ctdef_*ctDefPtr);
+int					EXP_LVL3	CSwrtCategory (csFILE* stream,Const struct cs_Ctdef_*ctDefPtr);
+int					EXP_LVL3	CSwrtCatFile (csFILE* stream,Const struct cs_Ctdef_*ctDefPtr);
+void				EXP_LVL3	CSrlsCategory (struct cs_Ctdef_ *ctDefPtr);
+void				EXP_LVL3	CSrlsCategoryList (struct cs_Ctdef_ *ctDefHead);
+void				EXP_LVL3	CSrlsCategories();
+int					EXP_LVL9	CSctcomp (Const char *inpt,Const char *outp,int flags,Const char *coordsys,
 																			  int (*err_func)(char *mesg));
+
+csFILE*				EXP_LVL3	CS_ctopn (Const char *mode);
+struct	cs_Ctdef_*	EXP_LVL3	CS_ctdef (Const char *ct_nam);
+int					EXP_LVL3	CS_ctdefAll (struct cs_Ctdef_ **pDefArray[]);
+int					EXP_LVL3	CS_ctdel (struct cs_Ctdef_ *ctdef);
+int					EXP_LVL3	CS_ctupd (Const struct cs_Ctdef_ *ctdef);
+int					EXP_LVL3	CS_ctrd (csFILE *strm, struct cs_Ctdef_ *ct_def);
+int					EXP_LVL3	CS_ctwr (csFILE *strm,Const struct cs_Ctdef_ *ct_def);
 
 #if defined (__MFC__)
 // The following are the prototype interface functions for the MFC portion
@@ -8346,10 +8386,10 @@ int EXP_LVL5 CS_xyzToLlh (double llh [3],Const double xyz [3],double e_rad,doubl
 csFILE *CS_fopen (const char *filename,const char *mode);
 #endif
 /* Note: ftw is only used in the CS_swpal function in the CS_rlsUpdt module.
-     The CS_swpal function is only used in the CStestS.c  function of the CS_Test
-    (console test) module.  Since it is not used in the library portion of the product,
-    It should be moved to be a function in the CStestSupport.c source  module,
-    With a prototype added to the cs_Test.h module.
+	 The CS_swpal function is only used in the CStestS.c  function of the CS_Test
+	(console test) module.  Since it is not used in the library portion of the product,
+	It should be moved to be a function in the CStestSupport.c source  module,
+	With a prototype added to the cs_Test.h module.
 
    Alternatively, the ‘S’ test of the CS_Test module could be removed and
    all references to CS_ftw could then be removed from the product.
