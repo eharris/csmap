@@ -115,7 +115,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>"$(OutDir)CS_Comp.exe" /b "$(ProjectDir)../Dictionaries" "$(ProjectDir)../Dictionaries"</Command>
+      <Command>"$(OutDir)CS_Comp.exe" /b /c "$(ProjectDir)../Dictionaries" "$(ProjectDir)../Dictionaries"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -146,7 +146,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>"$(OutDir)CS_Comp.exe" /b "$(ProjectDir)../Dictionaries" "$(ProjectDir)../Dictionaries"</Command>
+      <Command>"$(OutDir)CS_Comp.exe" /b /c "$(ProjectDir)../Dictionaries" "$(ProjectDir)../Dictionaries"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -176,7 +176,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>"$(OutDir)CS_Comp.exe" /b "$(ProjectDir)../Dictionaries" "$(ProjectDir)../Dictionaries"</Command>
+      <Command>"$(OutDir)CS_Comp.exe" /b /c "$(ProjectDir)../Dictionaries" "$(ProjectDir)../Dictionaries"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -209,7 +209,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>"$(OutDir)CS_Comp.exe" /b "$(ProjectDir)../Dictionaries" "$(ProjectDir)../Dictionaries"</Command>
+      <Command>"$(OutDir)CS_Comp.exe" /b /c "$(ProjectDir)../Dictionaries" "$(ProjectDir)../Dictionaries"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

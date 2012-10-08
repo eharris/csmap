@@ -140,9 +140,16 @@ libCsmap_la_SOURCES = \
   Source/CSwinHlp.cpp \
   Source/CSwktFlavors.c \
   Source/rcWellKnownText.cpp \
-  Source/rcWktKonstants.cpp
+  Source/rcWktKonstants.cpp \
+  Source/csIoUtil.cpp
 
 noinst_HEADERS = \
+  Include/csIoUtilAutoPtr.hpp \
+  Include/csIoUtilDirIterator.hpp \
+  Include/csIoUtilDirSwitch.hpp \
+  Include/csIoUtil.hpp \
+  Include/cs_ioUtil.h \
+  Include/csCsvFileSupport.hpp \
   Include/csCsvFileSupport.hpp \
   Include/csepsgstuff.h \
   Include/csNameMapper.hpp \
@@ -164,6 +171,8 @@ noinst_HEADERS = \
   Include/rcWellKnownText.hpp
 
 INCLUDES = -IInclude 
+
+AM_CFLAGS = @CFLAGS@
 
 AM_CXXFLAGS = @CXXFLAGS@ -DMG
 

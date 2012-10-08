@@ -644,8 +644,8 @@ int CSmrdefwr (	struct csDmaMReg_ *mr_ptr,
 	char *cp;
 	csFILE *mrStrm;
 
-	char mr_path [128];
-	char err_msg [128];
+	char mr_path [MAXPATH];
+	char err_msg [MAXPATH];
 
 	__ALIGNMENT__3		/* For some versions of Sun compiler. */
 	struct cs_Dtdef_ dt_def;

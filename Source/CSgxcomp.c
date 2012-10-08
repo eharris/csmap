@@ -696,7 +696,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			if (cpDir == NULL)
 			{
 				CS_stncp (err_seg,cp,sizeof (err_seg));
-				sprintf (err_msg,"Grid file direction not provided at line %d.",err_seg,line_nbr);
+				sprintf (err_msg,"Grid file direction not provided at line %d.",line_nbr);
 				cancel = (*err_func)(err_msg);
 				gxdef.xfrmName [0] = '\0';
 				continue;
@@ -706,7 +706,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			if (cpFile == NULL)
 			{
 				CS_stncp (err_seg,cp,sizeof (err_seg));
-				sprintf (err_msg,"Grid file format not provided at line %d.",err_seg,line_nbr);
+				sprintf (err_msg,"Grid file format not provided at line %d.",line_nbr);
 				cancel = (*err_func)(err_msg);
 				gxdef.xfrmName [0] = '\0';
 				continue;

@@ -762,6 +762,9 @@ void EXP_LVL1 CS_recvr (void)
 		CS_free (csch_tmp);
 	}
 
+    /* Free up any in-memory category list */
+    CSrlsCategories();
+
 	/* Free up any name lists which may be present. */
 
 	CS_releaseGxIndex ();

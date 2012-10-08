@@ -215,30 +215,36 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Include\csIoUtil.hpp" />
+    <ClInclude Include="..\Include\csIoUtilAutoPtr.hpp" />
+    <ClInclude Include="..\Include\csIoUtilDirIterator.hpp" />
+    <ClInclude Include="..\Include\csIoUtilDirSwitch.hpp" />
     <ClInclude Include="..\Include\cs_Ats77.h" />
-    <ClInclude Include="..\include\cs_clientBeg.h" />
-    <ClInclude Include="..\include\cs_clientEnd.h" />
+    <ClInclude Include="..\Include\cs_clientBeg.h" />
+    <ClInclude Include="..\Include\cs_clientEnd.h" />
+    <ClInclude Include="..\Include\cs_ioUtil.h" />
     <ClInclude Include="..\Include\cs_Frnch.h" />
     <ClInclude Include="..\Include\cs_Geodetic.h" />
-    <ClInclude Include="..\include\cs_hlp.h" />
+    <ClInclude Include="..\Include\cs_hlp.h" />
     <ClInclude Include="..\Include\cs_Legacy.h" />
-    <ClInclude Include="..\include\cs_map.h" />
-    <ClInclude Include="..\include\cs_mfc.h" />
+    <ClInclude Include="..\Include\cs_map.h" />
+    <ClInclude Include="..\Include\cs_mfc.h" />
     <ClInclude Include="..\Include\cs_Nadcon.h" />
     <ClInclude Include="..\Include\cs_NTv1.h" />
     <ClInclude Include="..\Include\cs_NTv2.h" />
-    <ClInclude Include="..\include\cs_OpenSource.h" />
-    <ClInclude Include="..\include\cs_res.h" />
-    <ClInclude Include="..\include\cs_Wchar.hpp" />
-    <ClInclude Include="..\include\cs_wkt.h" />
-    <ClInclude Include="..\include\csCsvFileSupport.hpp" />
+    <ClInclude Include="..\Include\cs_OpenSource.h" />
+    <ClInclude Include="..\Include\cs_res.h" />
+    <ClInclude Include="..\Include\cs_Wchar.hpp" />
+    <ClInclude Include="..\Include\cs_wkt.h" />
+    <ClInclude Include="..\Include\csCsvFileSupport.hpp" />
     <ClInclude Include="..\Include\csepsgstuff.h" />
-    <ClInclude Include="..\include\csNameMapper.hpp" />
-    <ClInclude Include="..\include\csNameMapperSupport.h" />
-    <ClInclude Include="..\include\mgTest.h" />
-    <ClInclude Include="..\include\rcWellKnownText.hpp" />
+    <ClInclude Include="..\Include\csNameMapper.hpp" />
+    <ClInclude Include="..\Include\csNameMapperSupport.h" />
+    <ClInclude Include="..\Include\mgTest.h" />
+    <ClInclude Include="..\Include\rcWellKnownText.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source\csIoUtil.cpp" />
     <ClCompile Include="..\Source\CS_alber.c" />
     <ClCompile Include="..\Source\CS_angle.c" />
     <ClCompile Include="..\Source\CS_ansi.c" />
@@ -285,6 +291,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Source\CS_csWktLoc.c" />
+    <ClCompile Include="..\Source\cs_ctio.c" />
     <ClCompile Include="..\Source\CS_datum.c" />
     <ClCompile Include="..\Source\CS_defaults.c" />
     <ClCompile Include="..\Source\CS_defCmp.c" />

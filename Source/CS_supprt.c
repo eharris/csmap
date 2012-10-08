@@ -164,6 +164,10 @@ int EXP_LVL7 CS_bins (csFILE *strm,long32_t start,long32_t eofPos,int rs,Const v
 			CS_erpt (cs_IOERR);
 			goto error;
 		}
+
+		CS_free (buff);
+		buff = NULL;
+
 		return (0);
 	}
 
@@ -1044,8 +1048,20 @@ void EXP_LVL7 CS_lput (char *fld,Const char *str,int size,char fill)
 char * EXP_LVL3 CS_stcpy (char *dest,Const char *source)
 
 {
+#ifndef _MSC_VER
 	do { } while ((*dest++ = *source++) != '\0');
 	return (--dest);
+#else
+
+	char* result = strcpy(dest, source);
+	if (NULL != result)
+	{
+		return dest + strlen(source);
+	}
+
+	return NULL;
+
+#endif
 }
 
 /**********************************************************************
