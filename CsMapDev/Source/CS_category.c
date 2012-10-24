@@ -1429,7 +1429,7 @@ int EXP_LVL3 CSupdCategories (Const struct cs_Ctdef_* ctDefPtr)
 	extern char cs_Ctname [];
 
 	int writeStatus = -1;
-	cs_magic_t magic = 0;
+	cs_magic_t magic = cs_CTDEF_MAGIC;
 	ulong32_t i;
 
 	csFILE * targetFileStream = NULL;
