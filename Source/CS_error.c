@@ -818,6 +818,10 @@ struct csErrtab_ csErrtab [] =
 						   "Category already contains a coordinate system named %s."},
  { cs_CT_DICT,              0,cs_ERSUP_CONFIG,
 						   "The Category dictionary open failed."},
+ { cs_DICT_INV,             0,cs_ERSUP_CONFIG,
+						   "A dictionary contains an invalid entry."},
+ { cs_DICT_DUP_IDS,         0,cs_ERSUP_CONFIG,
+						   "A dictionary contains duplicated key names."},
  {              0,       0,0,""}
 };
 
