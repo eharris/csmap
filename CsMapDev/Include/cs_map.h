@@ -6771,7 +6771,11 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_CT_CS_ADD_DUP  469		/* CT already contains a CS with that name. */
 #define cs_CT_DICT		  470		/* CT dictionary open failed. */
 
-#define cs_ERROR_MAX	  cs_CT_DICT
+#define cs_DICT_INV		  471		/* Dictionary contains invalid at least 1 invalid entry */
+#define cs_DICT_DUP_IDS   472		/* Dictionary contains duplicate IDs */
+
+
+#define cs_ERROR_MAX	  cs_DICT_DUP_IDS
 
 /*
 	The following casts are used to eliminate warnings from

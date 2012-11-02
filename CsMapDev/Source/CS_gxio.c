@@ -126,28 +126,14 @@ int EXP_LVL3 CS_gxdel (struct cs_GeodeticTransform_ *gx_def)
 }
 
 
-int CS_gxwrtchk(struct cs_GeodeticTransform_ *gx_target, Const struct cs_GeodeticTransform_ *gx_source, int* isProtected)
+int CS_gxGridOvrly(struct cs_GeodeticTransform_ *gx_target, Const struct cs_GeodeticTransform_ *gx_source)
 {
 	__ALIGNMENT__1
 	struct csGeodeticXformParmsGridFiles_ updatedGridFiles;
 
-	if (NULL == isProtected)
-		return -1;
-
-	if (FALSE == *isProtected) //nothing we'd wanted to change here; it's write enabled already
-		return 0;
-
-	/* The definition is protected and the transformation method
-	type is grid interpolation.  We copy all of the grid file
-	information to the instance of the definition we just
-	read from the disk, and then write that out as our
-	"update".  We'll return a +2 in this case so that the
-	calling module will know that this is what happened, if
-	it cares to know. */
-
 	//keep this definition write protected; if it's not a transformation using grid files
 	if (cs_DTCMTH_GFILE != gx_source->methodCode)
-		return 0;
+		return 1; //we didn't do any overlaying here
 
 	//we just update the potentially updated grid files information; everything else we
 	//take from the dictionary definition
@@ -155,7 +141,35 @@ int CS_gxwrtchk(struct cs_GeodeticTransform_ *gx_target, Const struct cs_Geodeti
 	*gx_target = *gx_source;
 	gx_target->parameters.fileParameters = updatedGridFiles;
 
-	*isProtected = FALSE;
+	return 0; //we've done some overlaying here
+}
+
+char Const* CS_gxkey(Const struct cs_GeodeticTransform_ *gx_def)
+{
+	if (NULL == gx_def)
+	{
+		CS_erpt(cs_INV_ARG1);
+		return NULL;
+	}
+
+	return gx_def->xfrmName;
+}
+
+int CS_gxwrtchk(struct cs_GeodeticTransform_ *gx_target, Const struct cs_GeodeticTransform_ *gx_source, int* isProtected)
+{
+	int overlayStatus;
+
+	if (NULL == isProtected)
+		return -1;
+
+	if (FALSE == *isProtected) //nothing we'd wanted to change here; it's write enabled already
+		return 0;
+
+	overlayStatus = CS_gxGridOvrly(gx_target, gx_source);
+	if (0 == overlayStatus) //gx_target has been overlaid with gx_source, i.e. the definition can be updated in the dictionaries
+	{
+		*isProtected = FALSE;
+	}
 	return 0;
 }
 
@@ -303,14 +317,14 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 
 	char tmpKeyName [64];
 
-    __ALIGNMENT__1				/* For some versions of Sun compiler. */
+	__ALIGNMENT__1				/* For some versions of Sun compiler. */
 	struct cs_GeodeticTransform_ gx_rec;
 
-    /* Prepare for the potential error condition. */
+	/* Prepare for the potential error condition. */
 	strm = NULL;
 	gx_def = NULL;
 
-    globalFoundForward = 0;
+	globalFoundForward = 0;
 	globalFoundBackward = 0;
 
 	/* Make sure the provided names are OK. */

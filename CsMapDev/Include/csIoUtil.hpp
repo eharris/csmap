@@ -29,7 +29,10 @@
 #define __CS_IO_UTIL_HPP__
 
 #include <vector>
+#include <map>
+#include <set>
 #include <stdio.h>
+#include <memory>
 
 extern "C" 
 {
@@ -146,6 +149,14 @@ void CSFileClose(csFILE* pFile)
 typedef CS_AutoPtr<csFILE, CSFileClose> CSFileAutoPtr;
 typedef CS_AutoPtr<void, CS_free> CSAutoPtr;
 
+struct CsMapKeyCompare
+{
+	bool operator()(char const* a, char const* b) const
+	{
+		return (CS_stricmp(a, b) < 0);
+	}
+};
+
 template<class TCsMapStruct>
 int CS_IsWriteProtectedT(const TCsMapStruct *const def, bool& isProtected)
 {
@@ -208,7 +219,7 @@ int CS_SetCurrentTimeT(TCsMapStruct* def)
 }
 
 template<class TCsMapStruct>
-int CS_DescribeT(csFILE *strm, TCsMapStruct const* def, bool& exists, bool& isProtected, TCsMapStruct*& dictionaryDef,
+int CS_DescribeT(csFILE *strm, TCsMapStruct *const def, bool& exists, bool& isProtected, TCsMapStruct*& dictionaryDef,
 	int (*TRead)(csFILE*, TCsMapStruct*),
 	int (*TReadCrypt)(csFILE*, TCsMapStruct*, int*),
 	int (*TCompare)(TCsMapStruct const* pp, TCsMapStruct const* qq))
@@ -283,6 +294,9 @@ int CS_DescribeT(csFILE *strm, TCsMapStruct const* def, bool& exists, bool& isPr
 
 		return -1;
 	}
+
+	//take the [protect] information from the dictionary definition
+	def->protect = pLocalDef->protect;
 
 	/* Here when the definition already exists. See
 		if it is OK to write it. If cs_Protect is less than
@@ -492,7 +506,9 @@ template<class TCsMapStruct>
 int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 	csFILE* (*TOpen)(const char* mode),
 	int (*TRead)(csFILE*, TCsMapStruct*),
-	int (*TReadCrypt)(csFILE*, TCsMapStruct*, int*))
+	int (*TReadCrypt)(csFILE*, TCsMapStruct*, int*),
+	char const* (*TGetKey)(TCsMapStruct const*) = NULL,
+	std::map<char const*, std::vector<TCsMapStruct *>, CsMapKeyCompare> *pDuplicatesMap = NULL)
 {
 	cs_Error = 0;
 
@@ -513,6 +529,12 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 		return -1;
 	}
 
+	//in case we encounter duplicates, we'll put them into pDuplicatesMap, in which case,
+	//the entries will not be put into [pAllDefs]
+	const bool checkDuplicates = (NULL != pDuplicatesMap && NULL != TGetKey);
+	typedef std::map<char const*, TCsMapStruct *, CsMapKeyCompare> EntriesKeyNameMap;
+	EntriesKeyNameMap allEntries; //this will be getting hold of all entries we read from the dictionary; just the pointers(!)
+
 	CsdDictionaryIterator dictionaryIterator(TOpen);
 	std::vector<TCsMapStruct*> allDefs;
 
@@ -532,17 +554,88 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 			readStatus = (readCrypt) ? TReadCrypt(dictionaryFile, pDef, &wasCrypted) :
 										TRead(dictionaryFile, pDef);
 			if (readStatus > 0)
-				allDefs.push_back(pDef);
+			{
+				if (!checkDuplicates)
+				{
+					//we're not supposed to do any checking; so add the definition to the vector below
+					allDefs.push_back(pDef);
+					continue;
+				}
+				
+				//in case we've to check duplicates, don't add this [pDef] to the list of definitions in [allDefs] for now
+				//we'll do this later on
+				char const* pId = TGetKey(pDef);
+				if (NULL == pId || '\0' == *pId)
+				{
+					CS_erpt(cs_DICT_INV);
+					goto error;
+				}
+
+				//do we have encountered an item with the ID already?
+				typename EntriesKeyNameMap::const_iterator const& knownIdEntry = allEntries.find(pId);
+				if (allEntries.end() != knownIdEntry)
+				{
+					//yes - make sure, we log it into the vector we've in [pDuplicatesMap]
+					//note, that we'll leave the entry in [allEntries], too
+					typename std::vector<TCsMapStruct *>& defDuplicateVector = (*pDuplicatesMap)[pId];
+					defDuplicateVector.push_back(pDef);
+				}
+				else
+				{
+					//No - so log this definition along with it's key...
+					allEntries[pId] = pDef;
+				}
+			}
 			else
+			{
 				CS_free(pDef);
+				pDef = NULL;
+			}
 
 		} while(readStatus > 0);
 
-		if (readStatus)
+		if (readStatus) //the last read status must be 0, i.e. EOF
 			goto error;
 	}
 
+	if (checkDuplicates)
+	{
+		//in case we were checking for duplicates above, we now have our entries a bit mixed
+		//for sure 1 is in [allEntries]; but there might be a list of additional duplicates
+		//which is in [pDuplicatesMap]; for sure, we haven't put anything into [allDefs].
+		//this we'll do now
+		_ASSERT(0 == allDefs.size());
+
+		for(typename EntriesKeyNameMap::iterator allEntriesIterator = allEntries.begin();
+			allEntriesIterator != allEntries.end();
+			++allEntriesIterator)
+		{
+			TCsMapStruct *pDef = allEntriesIterator->second;
+
+			typename std::map<char const*, std::vector<TCsMapStruct *>, CsMapKeyCompare>::iterator duplicateMapIterator;
+			duplicateMapIterator = pDuplicatesMap->find(TGetKey(pDef));
+			if (pDuplicatesMap->end() == duplicateMapIterator)
+			{
+				//the entry isn't a duplicate, i.e. we can put it directly into [allDefs]
+				allDefs.push_back(pDef);
+			}
+			else
+			{
+				//here, the entry has duplicates - as such, it must not be added to the [allDefs] list
+				//instead, all the duplicates will be reported to the caller via [pDuplicatesMap]
+				std::vector<TCsMapStruct *>& defDuplicateVector = duplicateMapIterator->second;
+				_ASSERT(1 == defDuplicateVector.size()); //everything else should be considered a bug - unless the dictionaries are corrupted
+				defDuplicateVector.push_back(pDef); //make sure, we're also reporting the first entry
+			}
+
+			//now that we've moved everything into either [pDuplicatesMap] or [allDefs],
+			//make sure, we don't reference it from [allEntriesIterator], too
+			allEntriesIterator->second = NULL;
+		}
+	}
+
 	arraySize = allDefs.size() * sizeof(TCsMapStruct*);
+
 	(*pAllDefs) = (TCsMapStruct**)CS_malc(arraySize);
 	if (NULL == *pAllDefs)
 	{
@@ -555,7 +648,7 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 	memset(*pAllDefs, 0x0, arraySize);
 	memcpy(*pAllDefs, pFirstEntry, arraySize);
 
-	return allDefs.size();
+	return (int)allDefs.size();
 
 error:
 	for(typename std::vector<TCsMapStruct*>::const_iterator defIterator = allDefs.begin(); 
@@ -564,6 +657,29 @@ error:
 		CS_free(*defIterator);
 	}
 	allDefs.clear();
+
+	if (NULL != pDuplicatesMap)
+	{
+		for(typename std::map<char const*, std::vector<TCsMapStruct *>, CsMapKeyCompare>::const_iterator defIterator = pDuplicatesMap->begin(); 
+			defIterator != pDuplicatesMap->end(); ++defIterator)
+		{
+			std::vector<TCsMapStruct *> const& defDuplicateVector = defIterator->second;
+			for(size_t i = 0; i < defDuplicateVector.size(); ++i)
+			{
+				CS_free(defDuplicateVector[i]);
+			}
+
+			pDuplicatesMap->clear(); //report an emtpy map to the caller
+		}
+	}
+
+	for(typename EntriesKeyNameMap::iterator allEntriesIterator = allEntries.begin();
+			allEntriesIterator != allEntries.end();
+			++allEntriesIterator)
+	{
+		TCsMapStruct *pDef = allEntriesIterator->second;
+		CS_free(pDef);
+	}
 
 	return -1;
 }
