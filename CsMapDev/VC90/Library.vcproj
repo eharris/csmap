@@ -356,6 +356,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Include\cs_ioUtil.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Include\cs_Japan.h"
 				>
 			</File>
@@ -405,6 +409,18 @@
 			</File>
 			<File
 				RelativePath="..\Include\csepsgstuff.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\csIoUtilAutoPtr.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\csIoUtilDirIterator.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Include\csIoUtilDirSwitch.hpp"
 				>
 			</File>
 			<File
@@ -671,6 +687,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\CS_csWktLoc.c"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\cs_ctio.c"
 				>
 			</File>
 			<File
@@ -1955,6 +1975,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\CSgxcomp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\csIoUtil.cpp"
 				>
 			</File>
 			<File
