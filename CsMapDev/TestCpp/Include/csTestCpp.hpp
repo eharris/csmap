@@ -11,6 +11,14 @@
 // DESCRIPTION:
 //
 
+#include <ctype.h>
+#include <time.h>
+#include <locale.h>
+
+#include "cs_map.h"
+#include "cs_Legacy.h"
+#include "cs_wkt.h"
+
 #include "csCsvFileSupport.hpp"
 #include "csNameMapperSupport.h"
 #include "csEpsgStuff.h"

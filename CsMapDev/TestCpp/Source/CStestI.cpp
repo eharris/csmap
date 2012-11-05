@@ -25,9 +25,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <locale.h>
-#include "cs_map.h"
-#include "cs_wkt.h"
 #include "csTestCpp.hpp"
 
 extern "C"

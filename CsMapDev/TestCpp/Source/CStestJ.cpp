@@ -28,9 +28,6 @@
 //lint -esym(534,CS_stncp,setlocale,CS_trim,CS_ll2cs)
 //lint -esym(752,cs_Doserr,cs_Errno,cs_Error,cs_ErrSup,csErrlng,csErrlat)
 
-#include <locale.h>
-#include "cs_map.h"
-#include "cs_wkt.h"
 #include "csTestCpp.hpp"
 
 extern "C"
