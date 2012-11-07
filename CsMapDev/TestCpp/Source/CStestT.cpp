@@ -28,8 +28,6 @@
 //lint -esym(715,verbose,duration)
 //lint -esym(752,cs_Doserr,cs_Error,cs_Errno,cs_ErrSup,csErrlng,csErrlat)
 
-#include "cs_map.h"
-#include "cs_wkt.h"
 #include "csTestCpp.hpp"
 
 extern "C"

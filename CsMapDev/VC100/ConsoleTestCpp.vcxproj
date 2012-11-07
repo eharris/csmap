@@ -93,6 +93,8 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csTestCpp.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>
@@ -118,6 +120,8 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csTestCpp.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>
@@ -137,6 +141,8 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csTestCpp.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>
@@ -161,6 +167,8 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csTestCpp.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>
@@ -189,7 +197,16 @@
     <ClCompile Include="..\TestCpp\Source\CStestA.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestB.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestC.cpp" />
-    <ClCompile Include="..\TestCpp\Source\csTestCpp.cpp" />
+    <ClCompile Include="..\TestCpp\Source\csTestCpp.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">csTestCpp.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">csTestCpp.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">csTestCpp.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">csTestCpp.hpp</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="..\TestCpp\Source\CStestD.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestE.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestF.cpp" />

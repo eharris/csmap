@@ -51,13 +51,6 @@
 // a defect in this code.
 //
 
-#include <ctype.h>
-#include <time.h>
-#include <locale.h>
-
-#include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_wkt.h"
 #include "csTestCpp.hpp"
 
 extern "C"

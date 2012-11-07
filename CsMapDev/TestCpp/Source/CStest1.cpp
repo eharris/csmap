@@ -25,7 +25,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "cs_map.h"
 #include "csTestCpp.hpp"
 
 // The following table is an arbitrary list of ellipsoids that are used in
