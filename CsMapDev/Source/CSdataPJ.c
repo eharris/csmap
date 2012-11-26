@@ -338,11 +338,13 @@
 							 cs_PRJFLG_SCALK  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_FLAT   | \
+                             cs_PRJFLG_SCLRED | \
 							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_NZLND 	(cs_PRJFLG_ELLIPS | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_FLAT   | \
+                             cs_PRJFLG_SCLRED | \
 							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_SINUS	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
@@ -459,8 +461,7 @@
 							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
 							 cs_PRJFLG_CNFRM  | \
 							 cs_PRJFLG_CONIC  | cs_PRJFLG_OBLQ   | \
-							 cs_PRJFLG_SCLRED | cs_PRJFLG_ORGLNG | \
-							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGFLS | \
+							 cs_PRJFLG_SCLRED | \
 							 cs_PRJFLG_RNTRNT)
 
 #define cs_PRJFLGS_TRMERAF	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
