@@ -797,8 +797,8 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 	}
 	bTime = CS_fileModTime (binaryPath);
 
-	/* Build a new binary file if appropriate. */
-	if (bTime == 0 || bTime <= aTime)
+	/* Build a new binary file if it doesn't exist yet. */
+	if (bTime == 0)
 	{
 		/* Here to create a, possibly new, binary version of the Jgd2k file,
 		   typically named "TKY2JGD.par".  To follow the general design

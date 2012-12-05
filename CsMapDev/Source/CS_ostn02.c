@@ -507,7 +507,7 @@ int CSmkBinaryOstn02 (struct cs_Ostn02_ *__This)
 	}
 
 	bTime = CS_fileModTime (binaryPath);
-	if (bTime == 0 || bTime <= aTime)
+	if (bTime == 0)
 	{
 		/* Here to create a, possibly new, binary version of the
 		   OSTN02??.txt file.  We write a file which has two longs
