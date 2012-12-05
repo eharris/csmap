@@ -468,7 +468,7 @@ int CSmkBinaryOstn97 (struct cs_Ostn97_ *__This)
 	}
 
 	bTime = CS_fileModTime (binaryPath);
-	if (bTime == 0 || bTime <= aTime)
+	if (bTime == 0)
 	{
 		/* Here to create a, possibly new, binary version of the
 		   OSGB97.txt file.  We write a file which has two floats
