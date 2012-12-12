@@ -53,6 +53,7 @@
 //				form.
 ///////////////////////////////////////////////////////////////////////////////
 // Static Constants, Variables, and Member Functions
+const double TcsDefLine::InvalidDouble = -1.0E+64;
 void TcsDefLine::Pad (char* array,int padCnt,unsigned arraySize)
 {
 	if (padCnt > 0 && static_cast<unsigned>(padCnt) < (arraySize - 1))
@@ -249,6 +250,17 @@ const char* TcsDefLine::GetValue (void) const
 {
 	return Value;
 }
+double TcsDefLine::GetValueAsDouble (long32_t& format) const
+{
+	double rtnValue;
+
+	format = CS_atof (&rtnValue,Value);
+	if (format < 0)
+	{
+		rtnValue = InvalidDouble;
+	}
+	return rtnValue;
+}
 const char* TcsDefLine::GetComment (void) const
 {
 	return Comment;
@@ -265,6 +277,44 @@ const char* TcsDefLine::GetCmntWs (void) const
 {
 	return CmntWs;
 }
+
+unsigned TcsDefLine::GetLineNbr (void)
+{
+	return LineNbr;
+}
+unsigned TcsDefLine::GetInsertNbr (void)
+{
+	return InsertNbr;
+}
+EcsAscLineType TcsDefLine::GetType (void)
+{
+	return Type;
+}
+char* TcsDefLine::GetLabel (void)
+{
+	return Label;
+}
+char* TcsDefLine::GetValue (void)
+{
+	return Value;
+}
+char* TcsDefLine::GetComment (void)
+{
+	return Comment;
+}
+char* TcsDefLine::GetLeadWs (void)
+{
+	return LeadWs;
+}
+char* TcsDefLine::GetSepWs (void)
+{
+	return SepWs;
+}
+char* TcsDefLine::GetCmntWs (void)
+{
+	return CmntWs;
+}
+
 bool TcsDefLine::Matches (const TcsDefLine& thisOne,bool fileScope) const
 {
 	bool matches;
@@ -614,6 +664,7 @@ TcsAscDefinition::TcsAscDefinition (EcsDictType type,unsigned& lineNbr,std::istr
 {
 	bool ok;
 
+	memset (DefName,0,sizeof (DefName));
 	ok = ReadFromStream (lineNbr,inStrm);
 }
 TcsAscDefinition::TcsAscDefinition (const TcsAscDefinition& source) : Type        (source.Type),
@@ -682,6 +733,13 @@ TcsAscDefinition& TcsAscDefinition::operator- (const TcsDefLine& oldLine)
 		Definition.erase (lineItr);
 	}
 	return *this;
+}
+bool TcsAscDefinition::IsDefinition (void) const
+{
+	bool isDef;
+
+	isDef = (DefName [0] != '\0');
+	return isDef;
 }
 bool TcsAscDefinition::ReadFromStream (unsigned& lineNbr,std::istream& inStrm)
 {
@@ -830,6 +888,43 @@ double TcsAscDefinition::GetValueAsDouble (const char* label,long32_t& format) c
 	if (valPtr != 0)
 	{
 		format = CS_atof (&rtnValue,valPtr);
+	}
+	return rtnValue;
+}
+// The following is used to determine the location of a specific
+// label/value pair within a definition so that it can be inserted
+// into a new definition in the same place.
+const char* TcsAscDefinition::GetNextLabel (const char* labelName) const
+{
+	EcsAscLineType lineType;
+	const char* lblPtr;
+	const char* rtnValue = 0;
+	TcsDefLnItrK lineItr;
+
+	// Locate the label/value line.
+	for (lineItr = Definition.begin ();lineItr != Definition.end ();lineItr++)
+	{
+		lineType = lineItr->GetType ();
+		if (lineType == ascTypLblVal || lineType == ascTypDefName)
+		{
+			lblPtr = lineItr->GetLabel ();
+			if (!stricmp (lblPtr,labelName))
+			{
+				break;
+			}
+		}
+	}
+
+	// We've located the search line.  Skip to the next label/value
+	// line (i.e. skip comments and blank lines.
+	for (lineItr++;lineItr != Definition.end ();lineItr++)
+	{
+		lineType = lineItr->GetType ();
+		if (lineType == ascTypLblVal || lineType == ascTypDefName)
+		{
+			rtnValue = lineItr->GetLabel ();
+			break;
+		}
 	}
 	return rtnValue;
 }
@@ -993,6 +1088,103 @@ bool TcsAscDefinition::WriteToStream (std::ostream& outStrm) const
 	}
 	return ok;	
 }
+// Swap a specific value element between two definitions.  Elementary logic, but
+// implementation details are laborious.
+bool ValueSwap (TcsAscDefinition& first,TcsAscDefinition& second,const char* lblName)
+{
+	bool ok (false);
+
+	TcsDefLine* firstLinePtr;
+	TcsDefLine* secondLinePtr;
+
+	const char* tmpNamePtr;
+
+	char swpBufr [512];
+	
+	firstLinePtr = first.GetLine (lblName);
+	secondLinePtr = second.GetLine (lblName);
+
+	if (firstLinePtr == 0 && secondLinePtr == 0)
+	{
+		// Neither definition has a line with the supplied label.
+		// Nothing to do really, don't think this should be
+		// considered failure.
+		ok = true;
+	}
+	else if (firstLinePtr != 0 && secondLinePtr == 0)
+	{
+		// The second definition does not have a line with the
+		// supplied label.  Extract the value from the first
+		// group and insert it into the second group at a
+		// similar location.
+
+		// Decide where to insert the line into the second definition.
+		TcsDefLine insertLine (*firstLinePtr);
+		tmpNamePtr = first.GetNextLabel (lblName);
+		if (tmpNamePtr != 0)
+		{
+			ok = second.InsertBefore (tmpNamePtr,insertLine);
+		}
+		if (tmpNamePtr == 0 || !ok)
+		{
+			ok = second.Append (insertLine);
+		}
+		if (ok)
+		{
+			ok = first.RemoveLine (lblName);
+		}
+	}
+	else if (firstLinePtr == 0 && secondLinePtr != 0)
+	{
+		// The first definition does not have a line with the
+		// supplied label.
+		TcsDefLine insertLine (*secondLinePtr);
+		tmpNamePtr = second.GetNextLabel (lblName);
+		if (tmpNamePtr != 0)
+		{
+			ok = first.InsertBefore (tmpNamePtr,insertLine);
+		}
+		if (tmpNamePtr == 0 || !ok)
+		{
+			ok = first.Append (insertLine);
+		}
+		if (ok)
+		{
+			ok = second.RemoveLine (lblName);
+		}
+	}
+	else
+	{
+		// Both definitions have a line with the supplied label.
+		if (firstLinePtr->GetType () == ascTypDefName)
+		{
+			// Special processing if we are swapping the name of the definition.
+			tmpNamePtr = first.GetDefinitionName ();
+			CS_stncp (swpBufr,tmpNamePtr,sizeof (swpBufr));
+			ok = first.RenameDef (second.GetDefinitionName ());
+			if (ok)
+			{
+				second.RenameDef (swpBufr);
+			}
+		}
+		else
+		{
+			char* firstValuePtr;
+			char* secondValuePtr;
+
+			// Not the definition name, normal swap processing.
+			firstValuePtr = firstLinePtr->GetValue ();
+			secondValuePtr = secondLinePtr->GetValue ();
+
+			CS_stncp (swpBufr,firstValuePtr,sizeof (swpBufr));
+			firstLinePtr->SetValue (secondValuePtr);
+			secondLinePtr->SetValue (swpBufr);
+			ok = true;
+		}
+	}
+	return ok;
+}
+
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
 // TcsDefFile  -- An object which represents a complete .ASC definition file
@@ -1107,6 +1299,38 @@ size_t TcsDefFile::GetDefinitionCount (void) const
 	size_t rtnValue = Definitions.size ();
 	return rtnValue;
 }
+bool TcsDefFile::InitializeFromFile (const char* filePath)
+{
+	bool ok (false);
+
+	unsigned lineNbr (0U);
+
+	Definitions.clear ();
+
+	std::ifstream inStrm (filePath,std::ios_base::in);
+	ok = inStrm.is_open ();
+	if (ok)
+	{
+		// Should add a loop here which parses lines into a Header collection,
+		// until the first non-comment line is encountered.  This would separate
+		// the initial comment from the initial definition.  The WriteToStream
+		// member function would then need to be modified to write the Header
+		// collection prior to the following.
+		while (inStrm.good ())
+		{
+			TcsAscDefinition newDef (DictType,lineNbr,inStrm);
+			Definitions.push_back (newDef);
+		}
+		// Do we have a problem with stuff on the end of the file???
+		// What we need to do here is modify the TcsAscDefinition
+		// constructor so that it reseeks the file back to where it
+		// started in the event that it doesn't find a definition name
+		// line in the stream.  This implies we have some way of checking
+		// the results of the construction; i.e. a status value in the
+		// the object itself.
+	}
+	return ok;
+}
 const char* TcsDefFile::GetDefinitionName (size_t index) const
 {
 	const char* defName = 0;
@@ -1118,6 +1342,26 @@ const char* TcsDefFile::GetDefinitionName (size_t index) const
 		defName = defPtr->GetDefinitionName ();
 	}
 	return defName;
+}
+bool TcsDefFile::GetIndexOf (size_t& index,const char* defName) const
+{
+	bool ok (false);
+
+	const char* defNamePtr;
+	std::vector<TcsAscDefinition>::const_iterator itr;
+
+	index = 0;
+	for (itr = Definitions.begin ();itr != Definitions.end ();itr++)
+	{
+		defNamePtr = itr->GetDefinitionName ();
+		if (!stricmp (defNamePtr,defName))
+		{
+			index = itr - Definitions.begin();
+			ok = true;
+			break;
+		}
+	}
+	return ok;
 }
 const TcsAscDefinition* TcsDefFile::GetDefinition (size_t index) const
 {
@@ -1147,6 +1391,25 @@ TcsAscDefinition* TcsDefFile::GetDefinition (const char* defName)
 		}
 	}
 	return rtnValue;
+}
+bool TcsDefFile::ExtractDefinition (TcsAscDefinition& definition,const char* defName)
+{
+	bool ok (false);
+
+	const char* defNamePtr;
+	std::vector<TcsAscDefinition>::iterator itr;
+
+	for (itr = Definitions.begin ();itr != Definitions.end ();itr++)
+	{
+		defNamePtr = itr->GetDefinitionName ();
+		if (!stricmp (defNamePtr,defName))
+		{
+			definition = *itr;
+			ok = true;
+			break;
+		}
+	}
+	return ok;
 }
 const TcsAscDefinition* TcsDefFile::GetDefinition (const char* defName) const
 {
@@ -1211,6 +1474,41 @@ bool TcsDefFile::RenameDef (const char* oldName,const char* newName)
 	{
 		defPtr->RenameDef (newName);
 		ok = true;
+	}
+	return ok;
+}
+bool TcsDefFile::CopyDef (const char* oldName,const char* newName,const char* insertBefore)
+{
+	bool ok (false);
+
+	const TcsAscDefinition* oldDefPtr;
+	TcsAscDefinition* newDefPtr = 0;
+	
+	oldDefPtr = GetDefinition (oldName);
+	ok = (oldDefPtr != 0);
+	if (ok)
+	{
+		newDefPtr = new TcsAscDefinition (*oldDefPtr);
+		ok = (newDefPtr != 0);
+		if (ok)
+		{
+			ok = newDefPtr->RenameDef (newName);		
+		}
+	}
+	if (ok)
+	{
+		if (insertBefore == 0)
+		{
+			ok = Append (*newDefPtr);
+		}
+		else
+		{
+			ok = InsertBefore (insertBefore,*newDefPtr);
+		}
+	}
+	if (newDefPtr != 0)
+	{
+		delete newDefPtr;
 	}
 	return ok;
 }
@@ -1299,6 +1597,59 @@ bool TcsDefFile::Replace (const TcsAscDefinition& newDef)
 	}
 	return ok;
 }
+bool TcsDefFile::ReplaceWith (const char* existingName,const TcsAscDefinition& newDef)
+{
+	bool ok (false);
+	const char* itrNamePtr;
+	std::vector<TcsAscDefinition>::iterator rplItr;
+	std::vector<TcsAscDefinition>::iterator loopItr;
+
+	rplItr = Definitions.end ();
+	for (loopItr = Definitions.begin ();loopItr != Definitions.end ();loopItr++)
+	{
+		itrNamePtr = loopItr->GetDefinitionName ();
+		if (!stricmp (existingName,itrNamePtr))
+		{
+			rplItr = loopItr;
+			break;
+		}
+	}
+	if (rplItr != Definitions.end ())
+	{
+		*rplItr = newDef;		// Presumably this calls the copy constructor, nicht whar???
+		ok = true;
+	}
+	return ok;
+}
+bool TcsDefFile::ReplaceAt (size_t index,const TcsAscDefinition& newDef)
+{
+	bool ok;
+
+	std::vector<TcsAscDefinition>::iterator rplItr;
+	std::vector<TcsAscDefinition>::iterator loopItr;
+
+	ok = (index < Definitions.size());
+	if (ok)
+	{
+		rplItr = Definitions.begin () + index;
+		*rplItr = newDef;
+	}
+	return ok;
+}
+bool TcsDefFile::InsertBefore (size_t index,const TcsAscDefinition& newDef)
+{
+	bool ok (false);
+	std::vector<TcsAscDefinition>::iterator itr;
+	std::vector<TcsAscDefinition>::iterator newItr;
+
+	if (index < Definitions.size ())
+	{
+		itr = Definitions.begin () + index;	
+		Definitions.insert (itr,newDef);
+		ok = true;
+	}
+	return ok;
+}
 bool TcsDefFile::InsertBefore (const char* defName,const TcsAscDefinition& newDef)
 {
 	bool ok (false);
@@ -1349,6 +1700,23 @@ bool TcsDefFile::WriteToStream (std::ostream& outStrm) const
 	for (itr = Definitions.begin ();ok && itr != Definitions.end ();itr++)
 	{
 		ok = itr->WriteToStream (outStrm);
+	}
+	return ok;
+}
+// Write the possibly modified content to a file with the given name and
+// location.
+bool TcsDefFile::WriteToFile (const char* pathName) const
+{
+	bool ok;
+	
+	std::ofstream outStrm;
+
+	outStrm.open (pathName,std::ios_base::out | std::ios_base::trunc);
+	ok = outStrm.is_open ();
+	if (ok)
+	{
+		ok = WriteToStream (outStrm);
+		outStrm.close ();
 	}
 	return ok;
 }

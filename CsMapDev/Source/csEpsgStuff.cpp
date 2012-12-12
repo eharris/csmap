@@ -2225,6 +2225,10 @@ bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& 
 					ok = dtmOpCode.IsValid ();
 				}
 			}
+			if (ok)
+			{
+				datum.fill03 = static_cast<short>(dtmOpCode);
+			}
 
 			// OK, construct a CS-MAP datum definition based on the specific
 			// operation code determined above.
@@ -2254,10 +2258,10 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 	{
 		to84_via = DetermineCsMapDatumMethod (operationCode,coordFrame);
 		ok = (to84_via != 0);
-		if (!ok)
-		{
-			to84_via = DetermineCsMapDatumMethod (operationCode,coordFrame);
-		}
+		//if (!ok)
+		//{
+		//	to84_via = DetermineCsMapDatumMethod (operationCode,coordFrame);
+		//}
 	}
 
 	if (ok)
@@ -2269,6 +2273,7 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 	// Determine the number and nature of the parameters required.
 	if (ok)
 	{
+		datum.fill04 = static_cast<short>(opMthCode);
 		switch (opMthCode) {
 		case 9603:				// Geocentric Translation
 			to84_via = cs_DTCTYP_GEOCTR;

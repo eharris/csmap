@@ -92,9 +92,9 @@ extern "C" double cs_One;
 // problems.  That is to simply not test them.  The following array
 // contains the EPSG code value of such datums.
 //
-// The messages suppressed by nbot testiung these datums represent distractions
+// The messages suppressed by not testing these datums represent distractions
 // from real errors; encouraging ignoring all messages which _MAY_ include a
-// real one.   To tempoarily activate the messages supporessed by this gimmick,
+// real one.  To tempoarily activate the messages supporessed by this gimmick,
 // simply uncomment the first entry in the array.
 //
 unsigned long KcsSkippedDatums [] =
@@ -226,7 +226,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			// not universially precise.  For these, we increase the tolerance
 			// slightly.  See the commnets in the Elipsoid.asc file for a
 			// more information on these ellipsoids.  There are many sources
-			// which put the equatorial readius at the 6378293.645 value which
+			// which put the equatorial radius at the 6378293.645 value which
 			// appears in our dictionary file at this writing (01/2011).
 			double qTolerance = 5.0E-03;
 			if (epsgElDef.epsgNbr == 7007 ||		// Clarke 1858
@@ -254,6 +254,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 	printf ("\tEllipsoid Test: ok = %d, different = %d, noCvt = %d, failed = %d\n",okCnt,diffCnt,cvtCnt,failCnt);
 	errCnt += (diffCnt + failCnt);
 
+	// Initialize for the datum equivalence test report. 
 	okCnt = 0;
 	mapCnt = 0;
 	diffCnt = 0;
@@ -272,6 +273,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		ok = epsgV6.GetCodeByIndex (epsgCode,epsgTblDatum,epsgFldDatumCode,index);
 		if (!ok)
 		{
+			// Not supposed to happen, a bug in the epsgV6 code most likely.
 			failCnt += 1;
 			continue;
 		}
@@ -285,8 +287,11 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 
 		// For certain datums we increase the qValTolerance to account for the fact
 		// that certain definitions have been verified as being valid, even though
-		// they differen from EPSG by a non-trivial amount.
-		// Added the one datum of this type to the ignore list.
+		// they differ from EPSG by a non-trivial amount.
+		
+		// The above described code has been removed as the one datum of this
+		// type was added to the ignore list.  The comment is left as an indication
+		// where code of the type described should be added.
 
 		// We only do EPSG datums of the "geodetic" type.
 		ok = epsgV6.GetFieldByCode (fldData,epsgTblDatum,epsgFldDatumType,epsgCode);
@@ -303,7 +308,8 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 
 		// There are several datums which we do not attempt to check as the
 		// differences between EPSG and CS-MAP for the transformation types
-		// involved with thiese datums are very different.
+		// involved with these datums are very different.  Thus, we skip all
+		// codes listed in the ignore list defined above.
 		for (idx = 0;KcsSkippedDatums [idx] != 0UL;idx += 1)
 		{
 			if ((unsigned long)epsgCode == KcsSkippedDatums [idx])
@@ -315,7 +321,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		{
 			continue;
 		}
-		
+
 		// Get the EPSG Datum name for reporting purposes.
 		ok = epsgV6.GetFieldByCode (fldData,epsgTblDatum,epsgFldDatumName,epsgCode);
 		if (!ok)
@@ -361,13 +367,13 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			TcsEpsgCode geographicBase;
 
 			// Locate the base CRS for this datum.  That is, the geographic
-			// CRS which references this datum.
+			// CRS which references this datum.  Should be only one.
 			lclVariant = 1;						// in case non of this works.
 			lclOk = epsgV6.LocateGeographicBase (geographicBase,epsgCrsTypGeographic2D,epsgCode);
 			if (lclOk)
 			{
 				// We have the base geographic system.  Create a collection of
-				// transofrmations which convert from the base to WGS84.  Another
+				// transformations which convert from the base to WGS84.  Another
 				// complication here:  EPSG considers WGS84 to be most current
 				// realization.  Thus, it considers HARN and WGS84 to be the same
 				// thing, while NAD83 and WGS84 are different.  Not so in CS-MAP.
@@ -378,7 +384,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				if (variantCount == 1U)
 				{
 					// There is only one transformation of this datum to WGS84.
-					// No need for all this nonsense; there is only one variant.
+					// No need for all this nonsense.
 					variantPtr = opVariants.GetVariantPtr (0U);
 					if (variantPtr != 0)
 					{
@@ -388,19 +394,19 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				}
 				else if (opVariants.GetVariantCount () > 1U)
 				{
-					// There are more than one variants for this transformation.
+					// There are more than one variant for this transformation.
 					// Note that any of these may be concatenated operations,
 					// thus there may be as many as three transformations
 					// involved in any given transformations.  This issue is
-					// delat with in the TcsOpVariants implementation.
+					// dealt with in the TcsOpVariants implementation.
 					
-					// Since we need to select on of the variants, we need
+					// Since we need to select one of the variants, we need
 					// something to compare to.
 					csMapDtDef = CS_dtdef (csMapKeyName);
 					lclOk = (csMapDtDef != 0);
 					if (lclOk)
 					{
-						double bestQValue = 9.0E+99;
+						double bestQValue = 9.0E+99;	// until we have tested the first one
 						unsigned bestVariant = 1;		// in case all this all goes to pot
 						
 						// For each variant, we extract from EPSG a datum
@@ -411,7 +417,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 						// In the process, we choose the variant which produces
 						// the smallest qFactor.  See CS_dtDefCmpEx to see the
 						// current definition of what the qFactor really is.
-						// Is has been pretty dynamic through all this
+						// This has been pretty dynamic through all this
 						// development.
 						for (unsigned idx = 0;idx < variantCount;idx++)
 						{
@@ -426,6 +432,32 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 								lclOk = true;
 								continue;
 							}
+							
+							// EPSG does not support the Seven Parameter, only Bursa/Wolf.
+							if (csMapDtDef->to84_via == cs_DTCTYP_7PARM && epsgDtDef.to84_via == cs_DTCTYP_BURS)
+							{
+								// CS-MAP definition is the 7PARAMETER, so we set the EPSG
+								// code to 7PARAMETER as well.  This works as the use and
+								// nature of the parameters are the same.  There should not be
+								// any major difference.  We may want to increase the
+								// comparison tolerance levels in this case.
+								epsgDtDef.to84_via = cs_DTCTYP_7PARM;
+
+								// Correct a major flaw.  Previously, it was assumed that the
+								// Seven Parameter transformation was of the Position Vector
+								// form.  Turns out it has been of the Coordinate Frame
+								// variety for many years.  Thus, in this case we must flip
+								// the signs of the rotations of one of these definitions if
+								// we are to compare the parameters in the definitions.
+								// We flip the epsgDtDef parameters values as we have just
+								// changed the method specification in that definition.
+								epsgDtDef.rot_X *= -1.0;
+								epsgDtDef.rot_Y *= -1.0;
+								epsgDtDef.rot_Z *= -1.0;
+							}					
+							
+							/* OK, now we can do the comparison to see if this variant is
+							   the best match of those available to us. */
 							/* int st = */ CS_dtDefCmpEx (&qValue,csMapDtDef,&epsgDtDef,0,0);
 							if (qValue < bestQValue)
 							{
@@ -453,6 +485,9 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		// Using whatever variant might have been selected by all the above,
 		// we get the EPSG version in CS-MAP form and compare it to the CS-MAP
 		// definition to which it is mapped.
+
+		// In the case of a Coordinate Frame method, the return is a BusraWolf
+		// with the rotation signs appropriately flipped.
 		ok = epsgV6.GetCsMapDatum (epsgDtDef,epsgElDef,epsgCode,variant);
 		if (!ok)
 		{
@@ -466,9 +501,26 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			// EPSG does not support the Seven Parameter, only Bursa/Wolf.
 			if (csMapDtDef->to84_via == cs_DTCTYP_7PARM && epsgDtDef.to84_via == cs_DTCTYP_BURS)
 			{
+				// CS-MAP definition is the 7PARAMETER, so we set the EPSG
+				// code to 7PARAMETER as well.  This works as the use and
+				// nature of the parameters are the same.  There should not be
+				// any major difference.  We may want to increase the
+				// comparison tolerance levels in this case.
 				epsgDtDef.to84_via = cs_DTCTYP_7PARM;
+
+				// Correct a major flaw.  Previously, it was assumed that the
+				// Seven Parameter transformation was of the Position Vector
+				// form.  Turns out it has been of the Coordinate Frame
+				// variety for many years.  Thus, in this case we must flip
+				// the signs of the rotations of one of these definitions if
+				// we are to compare the parameters in the definitions.
+				// We flip the epsgDtDef parameters values as we have just
+				// changed the method specification in that definition.
+				epsgDtDef.rot_X *= -1.0;
+				epsgDtDef.rot_Y *= -1.0;
+				epsgDtDef.rot_Z *= -1.0;
 			}
-			
+
 			// Molodensky, GeoCentric, and Three Parameter are essentially the same.
 			// GeoCentric is the prefered, so we switch to that for comparison
 			// purposes.
@@ -493,8 +545,6 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				csMapDtDef->to84_via = cs_DTCTYP_GEOCTR;
 			}
 
-			// Perhaps we should use the CS_dtDefCMpEx() function here.  We'll
-			// see how this all works out and then decide.
 			/*int st =*/ CS_dtDefCmpEx (&qValue,csMapDtDef,&epsgDtDef,message,sizeof (message));
 			if (qValue <= qValTolerance)
 			{
@@ -559,7 +609,7 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 //??//TODO//
 // There is a disagreement on code 2057 which I have not been able to
 // resolve at this time.  It has to do with which actual variation of
-// the Oblique Mercator is the coorect one.  I believe the current
+// the Oblique Mercator is the correct one.  I believe the current
 // CsMap specification of RSKEW to be wrong, but can't determine which
 // is the correct one.  Since this system is only used for the terminal
 // area of a single oil refinerary in Iran, I'm not going to lose any

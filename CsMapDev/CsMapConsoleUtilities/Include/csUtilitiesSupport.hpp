@@ -200,10 +200,12 @@ public:
 	TcsCategory* FetchCategory (const char* categoryName);
 	void AddCategory (const TcsCategory& newCategory);
 	bool ReadFromStream (std::istream& inStrm);
+	bool InitializeFromFile (const char* categoryPathName);
 	bool TcsCategoryFile::DeprecateCrs (const char* oldCrsName,const char* newCrsName,
 															   const char* deprNote,
 															   const char* newCrsDescription = 0);
 	bool WriteToStream (std::ostream& outStrm);
+	bool WriteToFile (const char* categoryPathName);
 private:
 	///////////////////////////////////////////////////////////////////////////
 	// Private Data Members
@@ -357,3 +359,42 @@ private:
 	std::list<TcsKeyName> KeyNameList;
 };
 std::wostream& operator<< (std::wostream& outStrm,const TcsKeyNameList& keyNameList);
+//newPage//
+class TcsNameMapperSource : public TcsCsvFileBase
+{
+	static const short IdntFld = 0;
+	static const short TypeFld = 1;
+	static const short FlvrFld = 2;
+	static const short NameFld = 4;
+public:
+	//=========================================================================
+	// Construction, Destruction, and Assignment
+	TcsNameMapperSource (void);
+	TcsNameMapperSource (const TcsNameMapperSource& source);
+	virtual ~TcsNameMapperSource (void);
+	TcsNameMapperSource& operator= (const TcsNameMapperSource& rhs);
+	//=========================================================================
+	// Operator Overrides
+	//=========================================================================
+	// Public Named Member Functions
+	bool IsOk (void) const {return Ok; }
+	bool ReadFromFile (const char* csvSourceFile);
+	bool RenameObject (EcsMapObjType nameSpace,EcsNameFlavor flavor,const char* currentName,
+																	const char* newName);
+	bool WriteToFile (const char* csvSourceFile,bool overwrite = true);
+protected:
+	//=========================================================================
+	// Protected Named Member Functions
+	//=========================================================================
+	// Protected Data Members
+private:
+	//=========================================================================
+	// Private Member Functions
+	bool InitializeFlavors ();
+	bool GetFieldAsUlong (unsigned long& rtnValue,unsigned recordNbr,short fieldNbr);
+	//=========================================================================
+	// Private Data Members
+	bool Ok;
+	wchar_t FlavorNames [32][32];
+	unsigned long FlavorIdValues [32];
+};

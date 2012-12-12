@@ -31,7 +31,6 @@
 #include "csepsgstuff.h"
 #include "csUtilitiesSupport.hpp"
 
-
 #ifndef wcCount
 #	define wcCount(array) (sizeof (array) / sizeof (wchar_t))
 #endif
@@ -55,6 +54,8 @@ bool csGenerateRegressTestFile (const wchar_t* csFileName,const wchar_t* csDataD
 bool ReplaceOldHpgnCrsNames (const wchar_t* dataDir,const wchar_t* resultDir);
 bool Epsg706Updates (const wchar_t* srcDictDir,const wchar_t* dataDir,const wchar_t* trgDictDir);
 bool csCrsNamesToSource (const wchar_t* csvPath,const wchar_t* csvCrsNames,const wchar_t* srcFileName);
+bool SevenParameterFix (const wchar_t* csDictTrgDir,const wchar_t* csDataTrgDir,const wchar_t* csDictSrcDir,const wchar_t* csDataSrcDir);
+bool SevenParameterFlipList (std::wostream& listStrm,const wchar_t* dictDir);
 
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be
