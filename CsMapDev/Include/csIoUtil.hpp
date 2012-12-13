@@ -1036,7 +1036,7 @@ int CS_DefinitionUpdate (TCsMapStruct *toUpdate, char (&keyName)[_KeyNameSize],
 
 		userDictionaryClose.Reset(userFileStream);
 
-		if (CS_DescribeT<TCsMapStruct>(systemFileStream, toUpdate, targetDefExists, targetDefProtected, dictionaryDef, TRead, TReadCrypt, TCompare))
+		if (CS_DescribeT<TCsMapStruct>(userFileStream, toUpdate, targetDefExists, targetDefProtected, dictionaryDef, TRead, TReadCrypt, TCompare))
 			return -1;
 
 		localDefRelease.Reset(dictionaryDef);
