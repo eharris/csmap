@@ -181,6 +181,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\cs7ParameterFlipList.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddEpsgData.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle10Mappings.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle9Mappings.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\GeocentricFix.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ListDuplicateDefinitions.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ListUnmappedEpsgCodes.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\SevenParameterFixVersion2.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ThreeParameterFix.cpp" />
   </ItemGroup>
   <ItemGroup>
