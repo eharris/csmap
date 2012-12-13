@@ -1222,7 +1222,8 @@ int EXP_LVL3 CSdelCategory(Const char* catName)
 	extern char csErrnam [];
 	extern int cs_Protect;
 
-	struct cs_Ctdef_* pCategory = NULL;
+	int unlinkStatus = 0;
+    struct cs_Ctdef_* pCategory = NULL;
 
 	cs_Error = 0;
 
@@ -1254,7 +1255,13 @@ int EXP_LVL3 CSdelCategory(Const char* catName)
 		}
 	}
 
-	return UnlinkCategory(pCategory, TRUE);
+	unlinkStatus = UnlinkCategory(pCategory, TRUE);
+    if (unlinkStatus)
+    {
+        return unlinkStatus;
+    }
+
+    return CSupdCategories(NULL);
 }
 
 /**********************************************************************
