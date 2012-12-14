@@ -47,16 +47,34 @@ extern char cs_MeFunc [];
 extern double cs_Coords [];
 
 /*
-	The following test is a duplicate of the previous
-	test.  However, in this case we restrict test
-	coordinates to be more firmly rooted to the
-	useful area of the projection, and therefore,
-	can increase the tolerance level by an order
-	of magnitude.
+	The following test is a duplicate of the previous test.  However, in this
+	case we restrict test coordinates to be more firmly rooted to the useful
+	area of the projection, and therefore, can increase the tolerance level
+	by an order of magnitude.
+	
+	Note that we have a list of coordinate systems which are real stretches
+	of the useful range of the projection.  For these specifically coded
+	coordinate systems, we reduce the range of testing even further.
 */
+
+const char KcsTestEspecialList [][cs_KEYNM_DEF] =
+{
+//	"\0",						// Uncomment this line to temporarily turn this feature off.
+	"SWEREF-99-TM",				// Used for all of Sweden which extends from 8 to 24 degrees
+								// of east longitude, way beyond what one would normally use
+								// the Transverse Mercator for.
+	"\0"
+};														
+
+
+extern "C" double cs_Half;
+extern "C" double cs_One;
 
 int CStestE (bool verbose,long32_t duration)
 {
+	bool special;
+
+	int index;
 	int status;
 	int err_cnt;
 	int isPseudo;
@@ -129,6 +147,17 @@ int CStestE (bool verbose,long32_t duration)
 			}
 			strcpy (cs_MeKynm,csprm->csdef.key_nm);
 
+			/* Is this one on the "special" list? */
+			special = false;
+			for (index = 0;KcsTestEspecialList [index][0] != '\0';index += 1)
+			{
+				if (!CS_stricmp (csprm->csdef.key_nm,KcsTestEspecialList [index]))
+				{
+					special = true;
+					break;
+				}
+			}
+
 			isPseudo = FALSE;
 			if (csprm->prj_code == cs_PRJCOD_MRCATPV)
 			{
@@ -137,12 +166,37 @@ int CStestE (bool verbose,long32_t duration)
 
 			/* Get the useful range of the coordinate system and reduce it
 			   by about one half. */
+			if (special)
+			{
+				/* here to reduce by two thirds. */
+				low_lng = csprm->cent_mer + csprm->min_ll [LNG] + fabs (csprm->min_ll [LNG] * 0.6666);
+				hi_lng =  csprm->cent_mer + csprm->max_ll [LNG] - fabs (csprm->min_ll [LNG] * 0.6666);
+				lat_del = csprm->max_ll [LAT] - csprm->min_ll [LAT]; 
+				low_lat = csprm->min_ll [LAT] + lat_del * 0.333333;
+				hi_lat  = csprm->max_ll [LAT] - lat_del * 0.333333;
+			}
+			else
+			{
+				/* Code that has been used for testE for many years before the "special fix", unedited. */
+				low_lng = csprm->cent_mer + csprm->min_ll [LNG] + fabs (csprm->min_ll [LNG] * 0.5);
+				hi_lng =  csprm->cent_mer + csprm->max_ll [LNG] - fabs (csprm->min_ll [LNG] * 0.5);
+				lat_del = csprm->max_ll [LAT] - csprm->min_ll [LAT]; 
+				low_lat = csprm->min_ll [LAT] + lat_del * 0.5;
+				hi_lat  = csprm->max_ll [LAT] - lat_del * 0.5;
+			}
+			
+			/* insure that there is a range of some sort. */
+			if ((hi_lng - low_lng) < cs_One)
+			{
+				low_lng = csprm->cent_mer - cs_Half;
+				hi_lng = csprm->cent_mer + cs_Half;
+			}
+			if ((hi_lat - low_lat) < cs_One)
+			{
+				low_lat = ((csprm->max_ll [LAT] + csprm->min_ll [LAT]) * cs_Half) - cs_Half;
+				hi_lat = low_lat + cs_One;
+			}
 
-			low_lng = csprm->cent_mer + csprm->min_ll [LNG] + fabs (csprm->min_ll [LNG] * 0.5);
-			hi_lng =  csprm->cent_mer + csprm->max_ll [LNG] - fabs (csprm->min_ll [LNG] * 0.5);
-			lat_del = csprm->max_ll [LAT] - csprm->min_ll [LAT]; 
-			low_lat = csprm->min_ll [LAT] + lat_del * 0.25;
-			hi_lat  = csprm->max_ll [LAT] - lat_del * 0.25;
 			for (il = 0;il < duration;il += 1)
 			{
 				ll [LNG] = CStestRN (low_lng,hi_lng);

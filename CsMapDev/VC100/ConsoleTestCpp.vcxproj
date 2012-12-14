@@ -236,6 +236,10 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\TestCpp\TEST.DAT" />
+    <None Include="..\TestCpp\TEST_All.DAT" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

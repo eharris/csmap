@@ -382,6 +382,14 @@ void TcsNameMap::SetRemarks (const wchar_t* remarks)
 {
 	Remarks = remarks;
 }
+void TcsNameMap::SetNameId (const wchar_t* newNameId)
+{
+	Name = newNameId;
+}
+void TcsNameMap::SetNumericId (unsigned long newNumericId)
+{
+	NumericId = newNumericId;
+}
 void TcsNameMap::WriteAsCsv (std::wostream& outStrm,bool flvrLbls) const
 {
 	int type;
@@ -430,6 +438,83 @@ void TcsNameMap::WriteAsCsv (std::wostream& outStrm,bool flvrLbls) const
 			<< comments;
 	outStrm << std::endl;
 	return;
+}
+//newPage//
+//=========================================================================
+// TcsNameList  --  A collection of const TcsNameMap pointers.
+//					Typically used as means of returning a selection of
+//					names and/or ID's.
+//=========================================================================
+// Construction,  Assignment,  Destruction
+TcsNameMapList::TcsNameMapList (void) : NameMapList ()
+{
+}
+TcsNameMapList::TcsNameMapList (const TcsNameMapList& source) : NameMapList (source.NameMapList)
+{
+}
+TcsNameMapList::~TcsNameMapList (void)
+{
+}
+TcsNameMapList& TcsNameMapList::operator= (const TcsNameMapList& rhs)
+{
+	NameMapList = rhs.NameMapList;
+	return *this;
+}
+//=========================================================================
+// Operator Overrides
+TcsNameMapList& TcsNameMapList::operator+= (const TcsNameMap* newNameMapPtr)
+{
+	if (newNameMapPtr != 0)
+	{
+		NameMapList.push_back (newNameMapPtr);
+	}
+	return *this;
+}
+TcsNameMapList& TcsNameMapList::operator-= (const TcsNameMap* existingNameMapPtr)
+{
+	(void)RemoveNameMap (existingNameMapPtr);
+	return *this;
+}
+//=========================================================================
+// Public Named Member Functions
+void TcsNameMapList::AddNameMap (const TcsNameMap* newNameMapPtr)
+{
+	if (newNameMapPtr != 0)
+	{
+		NameMapList.push_back (newNameMapPtr);
+	}
+}
+bool TcsNameMapList::RemoveNameMap (const TcsNameMap* existingNameMapPtr)
+{
+	bool ok = false;
+	std::vector<const TcsNameMap*>::iterator itr;
+	
+	for (itr = NameMapList.begin ();itr != NameMapList.end ();itr++)
+	{
+		if (*itr == existingNameMapPtr)
+		{
+			NameMapList.erase (itr);
+			ok = true;
+			break;
+		}
+	}
+	return ok;
+}
+const TcsNameMap* TcsNameMapList::GetNameMapPtr (size_t index) const
+{
+	std::vector<const TcsNameMap*>::iterator itr;
+
+	const TcsNameMap* rtnValue = 0;
+	
+	if (index < NameMapList.size ())
+	{
+		rtnValue = *(itr + index);
+	}
+	return rtnValue;
+}
+void TcsNameMapList::Erase (void)
+{
+	NameMapList.clear ();
 }
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
@@ -529,6 +614,9 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& 
 	std::wstring lineBufr;
 	TcsNameMap nextItem;
 
+nextChar = inStrm.get ();
+inStrm.seekg (0L);
+
 	firstChar = inStrm.peek ();
 	if (firstChar != WEOF && !iswdigit (firstChar))
 	{
@@ -614,6 +702,25 @@ bool TcsNameMapper::Replace (const TcsNameMap& newItem)
 	}
 	insertStatus = DefinitionSet.insert (newItem);
 	return insertStatus.second;
+}
+bool TcsNameMapper::ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType type,
+																   EcsNameFlavor flavor,
+   																   const wchar_t* name)	 
+{
+	bool ok (false);
+
+	iterator itr;
+	std::pair<iterator,bool> insertStatus;
+
+	TcsNameMap searchObject (type,flavor,name);
+	itr = DefinitionSet.find (searchObject);
+	if (itr != DefinitionSet.end ())
+	{
+		extractedNameMap = *itr;
+		DefinitionSet.erase (itr);
+		ok = true;
+	}
+	return ok;
 }
 // The implication here is that we are to locate an item by name.  Thus, we
 // call the LocateNameMap function which will include aliases in its search.
@@ -1056,6 +1163,32 @@ const wchar_t* TcsNameMapper::LocateNameByIdx (EcsMapObjType type,EcsNameFlavor 
 	return rtnValue;
 }
 ///////////////////////////////////////////////////////////////////////////////
+// Enumerator function.
+TcsNameMapList* TcsNameMapper::Enumerate (EcsMapObjType type,EcsNameFlavor flavor,bool deprecated)
+{
+	const TcsNameMap *nmMapPtr = 0;
+	const_iterator beginItr;
+	const_iterator endItr;
+	const_iterator searchItr;
+
+	TcsNameMapList* nameMapList = new TcsNameMapList ();
+
+	TcsNameMap beginSearchObj (type,flavor,FirstName,0,0);
+	TcsNameMap endSearchObj (type,flavor,LastName,9999,9999);
+
+	beginItr = DefinitionSet.lower_bound (beginSearchObj);
+	endItr   = DefinitionSet.upper_bound (endSearchObj);
+	for (searchItr = beginItr;searchItr != endItr;searchItr++)
+	{
+		nmMapPtr = &(*searchItr);
+		if (!deprecated ^ (nmMapPtr->DeprecatedBy()).IsNotKnown ())
+		{
+			nameMapList->AddNameMap (nmMapPtr);
+		}
+	}
+	return nameMapList;
+}
+///////////////////////////////////////////////////////////////////////////////
 // Manufacturing Functions
 bool TcsNameMapper::AddKeyNameMap (EcsMapObjType mapType,const wchar_t* mapFilePath)
 {
@@ -1236,4 +1369,3 @@ unsigned long TcsNameMapper::KeyMapGenericId (const TcsKeyNameMapFile& mapFileOb
     }
 	return genericId;
 }
-

@@ -450,6 +450,26 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<Filter
+			Name="TestData"
+			Filter="*.dat"
+			>
+			<File
+				RelativePath="..\TestCpp\TEST.DAT"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\TestCpp\TEST_All.DAT"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

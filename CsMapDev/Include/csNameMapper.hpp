@@ -81,13 +81,21 @@ const wchar_t* cmFlavorToName (EcsNameFlavor flavor);
 // number.  For ESRI, values will be between KcsNameMapBias (100 million) and
 // 199999999UL.
 //
-// Generic ID are used to map one flavor of name/number to another in a
+// Generic ID's are used to map one flavor of name/number to another in a
 // generic way (hence the name).  That is, one obtains the generic ID of the
 // item which is to be mapped (be it a name or number), and then uses the
 // generic ID to obtain the item desired (be it name or number).  Thus, a
 // totally generic mapping system becomes available, and new flavors can
 // be added by simply adding to the flavor enumeration above.
 //
+// It is the specific intent of the design of this group of objects that the
+// numeric value of a generic ID is not used externally.  That is, you must
+// not rely on the GenericID numeric value assigned to a specific object in
+// one Name Mapper table or object will be the same in another.  The actual
+// numeric value associated with a Generic ID should never in any be used
+// for any purpose with a different Name Mapper object than that from which
+// it was obtained.
+
 class TcsGenericId
 {
 public:
@@ -119,7 +127,7 @@ private:
 //
 // An instance of this object establishes the existence of a name, and
 // optionally an associated numeric ID value.  The Type member defines the name
-// scope too which the name and/or numeric ID belongs, and the Flavor defines
+// scope to which the name and/or numeric ID belongs, and the Flavor defines
 // the flavor to which it belongs.
 //
 // The primary premise of this object is that these objects will be maintained
@@ -143,8 +151,8 @@ private:
 // 2> Within a type and flavor, the same name may be used for different
 //    items.  ESRI, for example, will use the name Lambert_Conformal_Conic
 //    for both the single and double parallel variations.  (Presumably,
-//    the specific variation is to be determined by examining the number
-//    of standard parallel parameters are present.)  To handle this case,
+//    the specific variation is to be determined by determining the number
+//    of standard parallel parameters present.)  To handle this case,
 //    the DupSort member is added.  When duplicate names are added, the
 //    DupSort member is used to make each entry unique.  This is done
 //    for three purposes.  First, it enables us to have duplicate names
@@ -159,13 +167,13 @@ private:
 //
 // It is difficult to imagine a case where there are duplicate aliases.
 // After all, the idea of an alias is to simply introduce a new and
-// different name for an item; therefor, the name should not duplicate
+// different name for an item; therefore, the name should not duplicate
 // another.  Since (initially anyway) the mapping table will be maintained
 // manually, it is possible for this to happen.  The code is written
 // (intended anyway) to handle this and produce the expected results.
 //
 // The short version of this is simple:  When reading a WKT file (or similar
-// file where the Name Mapper is beingused) aliases are active and will be
+// file where the Name Mapper is being used) aliases are active and will be
 // mapped to the appropriate object while duplicate names will consisently
 // map to the same object.  When writing a WKT file, aliases are ignored, and
 // duplicate names are available for output as required.
@@ -228,7 +236,10 @@ public:
 	void WriteAsCsv (std::wostream& outStrm,bool flvrLbls = false) const;
 
 	void SetGenericId (const TcsGenericId& newId) {GenericId = newId; }
-	TcsGenericId DeprecatedBy (const TcsGenericId& genericId);
+	void SetNameId (const wchar_t* newNameId);
+	void SetNumericId (unsigned long newNumericId);
+	TcsGenericId DeprecatedBy (void) {return Deprecated; };
+	TcsGenericId DeprecatedBy (void) const {return Deprecated; };
 private:
 	TcsGenericId GenericId;				// Flavor independent ID
 	EcsMapObjType Type;					// Type (namespace) of this definition
@@ -238,7 +249,7 @@ private:
 	short DupSort;						// Used to set priority order on
 										// duplicate names
 	short AliasFlag;					// Set to non-zero if this is an alias
-	// The above are stright forward, and all that are populated in the normal
+	// The above are straight forward, and all that are populated in the normal
 	// case.  The following are used to handle the strange stuff.
 	unsigned long Flags;				// Flags used to provide legacy
 	                                    // consistency.
@@ -256,13 +267,55 @@ private:
 										// matching techniques, etc.  I.e.
 										// programmer type stuff.
 };
+
+///////////////////////////////////////////////////////////////////////////////
+// TcsNameMapList  --  An ordered collection of TcsNameMap objects
+//
+// It is often desirable to obtain an ordered list of all names, or numbers,
+// which belong to a specific group or meet an arbitrary selection criteria.
+// Generaing a list (i.e. an enumeration) of Oracle name, perhaps with
+// associated SRID values, is an example.  The algoirthms used in the Name
+// Mapper, being designed to perform single item mappings, are rather
+// inefficient for this purpose.  Thus, the TcsNameMapList object, and related
+// functions, are provided to support generating such an enumeration in an
+// efficient manner.
+// 
+// This object is a simple collection (currently, a vector is used) of constant
+// pointers to TcsNameMap objects which carry the identification information
+// for all objects which meet the provided  criteria.  A simple interface to
+// iterate through the list is included.
+class TcsNameMapList
+{
+public:
+    //=========================================================================
+    // Construction,  Assignment,  Destruction
+	TcsNameMapList (void);
+	TcsNameMapList (const TcsNameMapList& source);
+	virtual ~TcsNameMapList (void);
+	TcsNameMapList& operator= (const TcsNameMapList& rhs);
+    //=========================================================================
+    // Operator Overrides
+    TcsNameMapList& operator+= (const TcsNameMap* newNameMapPtr);
+    TcsNameMapList& operator-= (const TcsNameMap* existingNameMapPtr);
+    //=========================================================================
+    // Public Named Member Functions
+    size_t GetCount (void) const {NameMapList.size (); };
+	void AddNameMap (const TcsNameMap* newNameMapPtr);
+	bool RemoveNameMap (const TcsNameMap* existingNameMapPtr);
+	const TcsNameMap* GetNameMapPtr (size_t index) const;
+	void Erase (void);
+private:
+    //=========================================================================
+    // Private Data Members
+	std::vector<const TcsNameMap*> NameMapList;    
+};
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
 // TcsKeyNameMapFile  --  Represents an in-memory form of a name mapping table
 //
 // Objects of this type are used to represent in a memory resident, easily
 // accessible, form a mapping table as one might use to maintain name mappings
-// in an Excel spreadsheet.  The data is expect6ed to be exported in CSV form
+// in an Excel spreadsheet.  The data is expected to be exported in CSV form
 // before use.
 class TcsKeyNameMapFile : public TcsCsvFileBase
 {
@@ -313,6 +366,7 @@ private:
     unsigned CurrentRecord;
     mutable TcsCsvStatus Status;
 };
+
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
 // TcsNameMapper  --  A collection of TcsNameMap objects.
@@ -392,12 +446,18 @@ public:
 	                                                                     unsigned* count = 0) const;
 	const wchar_t* LocateNameByIdx (EcsMapObjType type,EcsNameFlavor flavor,unsigned index,
 	                                                                        unsigned* count = 0) const;
+	TcsNameMapList* Enumerate (EcsMapObjType type,EcsNameFlavor flavor,bool deprecated = false);
+	///////////////////////////////////////////////////////////////////////////
+	// Updating functions.
+   	bool ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType type,EcsNameFlavor flavor,
+   																		   const wchar_t* name);	 
 	///////////////////////////////////////////////////////////////////////////
 	// Manufacturing functions.
 	bool AddKeyNameMap (EcsMapObjType mapType,const wchar_t* mapFilePath);
 	bool AddKeyMapFields (EcsMapObjType mapType,unsigned long genericId,const TcsKeyNameMapFile& mapFileObj);
     EcsNameFlavor KeyMapFlavor (const TcsKeyNameMapFile& mapFileObj) const;
     unsigned long KeyMapGenericId (const TcsKeyNameMapFile& mapFileObj) const;
+
 private:
 	///////////////////////////////////////////////////////////////////////////
 	// Private Support Member Functions
@@ -407,49 +467,6 @@ private:
 	const TcsNameMap* LocateNameMap (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id) const;
 	TcsNameMap* LocateNameMap (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* name);
 	const TcsNameMap* LocateNameMap (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* name,short dupSort = 0) const;
-	///////////////////////////////////////////////////////////////////////////
-	// EPSG Support Functions
-	//bool UpdateEpsgNames (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgParameters (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgOprMethods (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgUnits (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgPrimeMeridians (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgEllipsoids (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgGeodeticXfrms (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgHorizontalDatums (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgVerticalDatums (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgProjected (const TcmEpsgVersion6* epsgDbPtr);
-	//bool AddEpsgGeographic (const TcmEpsgVersion6* epsgDbPtr);
-
-	///////////////////////////////////////////////////////////////////////////
-	// CS-MAP Support Functions
-	//bool UpdateCsMapName (const TcmPath& csMapDirectory);
-	//bool AddCsMapProjParameters (const TcmPath& csMapDirectory);
-	//bool AddCsMapProjections (const TcmPath& csMapDirectory);
-	//bool AddCsMapGeodeticMethods (const TcmPath& csMapDirectory);
-	//bool AddCsMapUnits (const TcmPath& csMapDirectory);
-	//bool AddCsMapPrimeMeridians (const TcmPath& csMapDirectory);
-	//bool AddCsMapEllipsoids (const TcmPath& csMapDirectory);
-
-	///////////////////////////////////////////////////////////////////////////
-	// Well Known Text (WKT) Support Functions
-	//bool UpdateWktNames (EcsNameFlavor wktFlavor,const TcmPath& wktFilePath);
-	//bool AddWktUnit (EcsNameFlavor flavor,const TcmWktUnit& wktUnit);
-	//bool AddWktPrimeMeridian (EcsNameFlavor flavor,const TcmWktPrimeMeridian& wktPrimeMeridian);
-	//bool AddWktSpheroid (EcsNameFlavor flavor,const TcmWktSpheroid& wktSpheroid);
-	//bool AddWktDatum (EcsNameFlavor flavor,const TcmWktDatum& wktDatum);
-	//bool AddWktParameter (EcsNameFlavor flavor,const TcmWktParameter& wktParameter);
-	//bool AddWktParameters (EcsNameFlavor flavor,const TcmWktParameters& wktParameters);
-	//bool AddWktProjection (EcsNameFlavor flavor,const TcmWktProjection& wktProjection);
-	//bool AddWktProjectionAndParms (EcsNameFlavor flavor,const TcmWktProjection& wktProjection,
-	//													const TcmWktParameters& wktParamaters);
-	//bool AddWktGeogCSys (EcsNameFlavor flavor,const TcmWktGeogCSys& wktGeogCSys,long numericId);
-	//bool AddWktProjected (EcsNameFlavor flavor,const TcmWktProjCSys& wktPrjCSys,long numericId);
-
-	// The uniqueness of the "key" is determined by the TcsNameMap::operator<
-	// override.  Thus, there is a lot of stuff in the object which is not part
-	// of the key.  Note that std::set quietly ignores requests to add objects
-	// with a duplicate key; very convenient for us here.
 	///////////////////////////////////////////////////////////////////////////
 	// Private Data Members
 	bool RecordDuplicates;

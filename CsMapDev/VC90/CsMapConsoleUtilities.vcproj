@@ -320,6 +320,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\cs7ParameterFlipList.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csAddEpsgData.cpp"
 				>
 			</File>
@@ -429,6 +433,10 @@
 			</File>
 			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\ListUnmappedEpsgCodes.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\SevenParameterFixVersion2.cpp"
 				>
 			</File>
 			<File

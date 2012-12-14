@@ -19,14 +19,18 @@
 #include "csConsoleUtilities.hpp"
 
 const wchar_t csTempDir [] = L"C:\\TEMP";
-wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_06\\CSV";
-const wchar_t csDataDir [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Data";
-const wchar_t csDictDir [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Dictionaries";
-const wchar_t csDictSrc [] = L"C:\\Development\\Perforce\\Map\\Trunk\\Components\\MgDev\\OS\\Oem\\CsMap\\Dictionaries";
+wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_11\\CSV";
+const wchar_t csDataDir [] = L"C:\\Users\\CrsMagic\\Development\\OpenSource\\CsMap\\trunk\\CsMapDev\\Data";
+const wchar_t csDictDir [] = L"C:\\Users\\CrsMagic\\Development\\OpenSource\\CsMap\\trunk\\CsMapDev\\Dictionaries";
+const wchar_t csDictSrc [] = L"C:\\Users\\CrsMagic\\Development\\OpenSource\\CsMap\\trunk\\CsMapDev\\Dictionaries";
 
 int main (int argc,char* argv [])
 {
 	bool ok;
+
+	std::wofstream woutStrm;
+
+	wchar_t wStrmName [512];
 
 #if defined (_MSC_VER) && _MSC_VER >= 1400
 	// This is a Microsoft specific function call.  It forces the exponential
@@ -36,7 +40,21 @@ int main (int argc,char* argv [])
 #endif
 
 	// Manufacture NameMapper.csv
-	ok = ManufactureNameMapperCsv (csDictDir,csDataDir);
+	// ok = ManufactureNameMapperCsv (csDictDir,csDataDir);
+
+	// Seven Parameter Flip List
+	//wcscpy (wStrmName,csDataDir);
+	//wcscat (wStrmName,L"\\7ParameterFlip.cpp");
+	//woutStrm.open (wStrmName,std::ios_base::out | std::ios_base::trunc);
+	//ok = woutStrm.is_open ();
+	//if (ok)
+	//{
+	//	ok = SevenParameterFlipList (woutStrm,csDictSrc);
+	//	woutStrm.close ();
+	//}
+
+	// Seven Parameter Fix
+	ok = SevenParameterFix (csDictDir,csDictDir,csDictDir,csDictDir);
 
 	// Perform EPSG 7.06 Update synchronization.
 	//ok = csCrsNamesToSource (L"C:\\TMP",L"Epsg7-06UpdateWrkB.csv",L"csrRenameTable.cpp");

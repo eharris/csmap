@@ -230,6 +230,7 @@ const wchar_t* csGetNamesByIdx (enum EcsMapObjType type,enum EcsNameFlavor flavo
 enum EcsMapSt csGetNamesByIdxC (char* nextName,size_t nameSize,enum EcsMapObjType type,
                                                                enum EcsNameFlavor flavor,
                                                                unsigned index);
+                                                              
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
 // The following functions provide a generic means of mapping names to a

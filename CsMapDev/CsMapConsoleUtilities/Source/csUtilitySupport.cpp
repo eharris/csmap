@@ -779,6 +779,23 @@ bool TcsCategoryFile::ReadFromStream (std::istream& inStrm)
 	}
 	return ok;
 }
+bool TcsCategoryFile::InitializeFromFile (const char* categoryPathName)
+{
+	bool ok;
+	std::ifstream inStrm;
+	
+	CopyrightNotice = "";
+	Categories.clear ();
+
+	inStrm.open (categoryPathName,std::ios_base::in);
+	ok = inStrm.is_open ();
+	if (ok)
+	{
+		ok = ReadFromStream (inStrm);
+		inStrm.close ();
+	}
+	return ok;
+}
 bool TcsCategoryFile::DeprecateCrs (const char* oldCrsName,const char* newCrsName,
 														   const char* deprNote,
 														   const char* newCrsDescription)
@@ -856,6 +873,19 @@ bool TcsCategoryFile::WriteToStream (std::ostream& outStrm)
 			ok = catItr->WriteToStream (outStrm);
 		}
 		outStrm << std::endl;
+	}
+	return ok;
+}
+bool TcsCategoryFile::WriteToFile (const char* categoryPathName)
+{
+	bool ok;
+	std::ofstream outStrm;
+	outStrm.open (categoryPathName,std::ios_base::out | std::ios_base::trunc);
+	ok = outStrm.is_open ();
+	if (ok)
+	{
+		ok = WriteToStream (outStrm);
+		outStrm.close ();
 	}
 	return ok;
 }
@@ -1611,4 +1641,220 @@ void TcsKeyNameList::WriteToStream (std::wostream& listStream)
 				   << *listItrn;
 	}
 	listStream << L"    }," << std::endl;
+}
+//newPage//
+//=========================================================================
+// Construction, Destruction, and Assignment
+TcsNameMapperSource::TcsNameMapperSource (void) : TcsCsvFileBase (true,9,11),
+												  Ok (true)
+{
+	unsigned index;
+
+	for (index = 0;index < 32;index += 1)
+	{
+		FlavorNames [index][0] = '\0';
+		FlavorIdValues [index] = 0UL;
+	}
+}
+TcsNameMapperSource::TcsNameMapperSource (const TcsNameMapperSource& source)
+											:
+										  TcsCsvFileBase (source)
+{
+}
+TcsNameMapperSource::~TcsNameMapperSource (void)
+{
+	// Nothing to do, yet!
+}
+TcsNameMapperSource& TcsNameMapperSource::operator= (const TcsNameMapperSource& rhs)
+{
+	if (&rhs != this)
+	{
+		TcsCsvFileBase::operator= (rhs);
+	}
+	return *this;
+}
+//=========================================================================
+// Operator Overrides
+//=========================================================================
+// Public Named Member Functions
+bool TcsNameMapperSource::ReadFromFile (const char* csvSourceFile)
+{
+	bool ok;
+
+	std::wifstream wiStrm;
+
+	TcsCsvStatus csvStatus;
+
+	wiStrm.open (csvSourceFile,std::ios_base::in);
+	ok = wiStrm.is_open ();
+	if (ok)
+	{
+		ok = ReadFromStream (wiStrm,true,csvStatus);
+		if (ok)
+		{
+			ok = InitializeFlavors ();
+		}
+		wiStrm.close ();
+	}
+	return ok;
+}
+bool TcsNameMapperSource::RenameObject (EcsMapObjType nameSpace,EcsNameFlavor flavor,
+																const char* currentName,
+																const char* newName)
+{
+	bool ok;
+
+	unsigned long recordIdx;
+	const wchar_t* flvrPtr;
+
+	wchar_t wOldName [256];
+	wchar_t wNewName [256];
+
+	std::wstring field;
+	std::wstring flvrName;
+	std::wstring objtName;
+
+	TcsCsvStatus status;
+
+	ok = true;
+	mbstowcs (wOldName,currentName,wcCount (wOldName));
+	flvrPtr = FlavorNames [static_cast<int>(flavor)];
+	for (recordIdx = 0;ok && recordIdx < RecordCount ();recordIdx += 1)
+	{
+		ok = GetField (flvrName,recordIdx,FlvrFld,status);
+		if (ok && wcsicmp (flvrName.c_str(),flvrPtr))
+		{
+			continue;
+		}
+		// Flavor matches, see if the old name matches.
+		if (ok)
+		{
+			ok = GetField (objtName,recordIdx,NameFld,status);
+			if (ok && wcsicmp (flvrName.c_str(),wOldName))
+			{
+				// We have found it, make the change.
+				mbstowcs (wNewName,newName,wcCount (wNewName));
+				field = wNewName;
+				ok = ReplaceField (field,recordIdx,NameFld,status);
+				break;
+			}
+		}		
+	}
+	return ok;
+}
+bool TcsNameMapperSource::WriteToFile (const char* csvSourceFile,bool overwrite)
+{
+	bool ok;
+
+	std::wofstream woStrm;
+
+	TcsCsvStatus csvStatus;
+
+	if (overwrite)
+	{
+		woStrm.open (csvSourceFile,std::ios_base::out | std::ios_base::trunc);
+	}
+	else
+	{
+		woStrm.open (csvSourceFile,std::ios_base::out | std::ios_base::trunc);
+	}
+	ok = woStrm.is_open ();
+	if (ok)
+	{
+		ok = WriteToStream (woStrm,true,csvStatus);
+		woStrm.close ();
+		woStrm.flush ();
+	}
+	return ok;
+}
+//=========================================================================
+// Protected Named Member Functions
+bool TcsNameMapperSource::InitializeFlavors ()
+{
+	bool ok;
+
+	unsigned index;
+	unsigned recordCount;
+
+	unsigned long idntValue;
+	unsigned long typeValue;
+	unsigned long flvrIdx;
+	
+	std::wstring field;
+	TcsCsvStatus status;
+
+	for (index = 0;index < 32;index += 1)
+	{
+		FlavorNames [index][0] = '\0';
+		FlavorIdValues [index] = 0UL;
+	}
+
+	ok = true;
+	recordCount = RecordCount ();
+	for (index = 0;ok && (index < recordCount);index += 1)
+	{
+		ok = GetFieldAsUlong (typeValue,index,TypeFld);
+		if (ok)
+		{
+			flvrIdx = 0UL;				// to keep lint happy
+			if (typeValue == 1UL)
+			{
+				ok = GetField (field,index,NameFld,status);
+				if (ok)
+				{
+					ok = GetFieldAsUlong (flvrIdx,index,FlvrFld);
+				}
+				if (ok)
+				{
+					wcsncpy (FlavorNames [flvrIdx],field.c_str (),32);
+					FlavorNames [flvrIdx][31] = L'\0';
+				}
+			}
+			else if (typeValue > 1)
+			{
+				idntValue = 0UL;			// to keep lint happy
+				ok = GetField (field,index,FlvrFld,status);
+				if (ok)
+				{
+					ok = GetFieldAsUlong (idntValue,index,IdntFld);
+				}
+				if(ok)
+				{
+					for (flvrIdx = 0;flvrIdx < 32;flvrIdx += 1)
+					{
+						if (!wcsicmp (FlavorNames [flvrIdx],field.c_str ()))
+						{
+							if (idntValue > FlavorIdValues [flvrIdx])
+							{
+								FlavorIdValues [flvrIdx] = idntValue;
+								break; 
+							}
+						}	
+					}
+				}
+			}
+		}
+	}
+	return ok;
+}
+bool TcsNameMapperSource::GetFieldAsUlong (unsigned long& rtnValue,unsigned recordNbr,
+																   short fieldNbr)
+{
+	bool ok (false);
+
+	wchar_t* dummy;
+	std::wstring field;
+	TcsCsvStatus status;
+	
+	ok = GetField (field,recordNbr,fieldNbr,status);
+	if (ok)
+	{
+		wchar_t firstChar = *field.c_str();
+		ok = iswdigit (firstChar);
+		if (ok)
+		{
+			rtnValue = wcstoul (field.c_str(),&dummy,10);
+		}
+	}
+	return ok;
 }

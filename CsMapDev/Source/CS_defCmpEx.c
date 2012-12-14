@@ -176,7 +176,7 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 
 	/* First we see if both of the datums are the null transformation.  If so
 	   we consider them to be the same.  We do not attempt to compare the
-	   ellsipoid specification.  Doing so could make this function unusable
+	   ellipsoid specification.  Doing so could make this function unusable
 	   for many applications as comparing the names of the ellipsoids in the
 	   definitions may not be CS-MAP ellipsoid names.
 
@@ -225,8 +225,8 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 	if (orgIsNull && revIsNull)
 	{
 		/* The datums both look like one of the variations used to implement
-		   the null transformation.  For this to be valis, in some cases, the
-		   provided thatthe ellipsoids need to be the same. */
+		   the null transformation.  For this to be valid, in some cases, the
+		   ellipsoids need to be the same. */
 		if ((original->to84_via == cs_DTCTYP_GEOCTR ||
 			 original->to84_via == cs_DTCTYP_3PARM  ||
 			 original->to84_via == cs_DTCTYP_MOLO) &&
@@ -264,11 +264,12 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 			}
 			errCnt += 1;
 		}
-		// Convert a "MULREG" on either side to be the same as other side,
-		// unless of course, they are both MULREGs.  If they are both MULREG's,
-		// the code below will work.  It will compare the parameters associated
-		// with the definition and report if they are the same or not.  There's
-		// not much else we can do with MULREG's.
+
+		/* Convert a "MULREG" on either side to be the same as other side,
+		   unless of course, they are both MULREGs.  If they are both MULREG's,
+		   the code below will work.  It will compare the parameters associated
+		   with the definition and report if they are the same or not.  There's
+		   not much else we can do with MULREG's. */
 		if (orgVia == cs_DTCTYP_MREG && (revVia == cs_DTCTYP_GEOCTR ||
 										 revVia == cs_DTCTYP_3PARM  ||
 										 revVia == cs_DTCTYP_MOLO))
@@ -301,13 +302,15 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 		}
 		else if (orgVia == cs_DTCTYP_MREG && revVia == cs_DTCTYP_MREG)
 		{
-			// It could very well be that we don't want to even try in this
-			// case.  We don't have access to the MULREG definition in this
-			// function, so there is nothing to chack other than what the
-			// fallback will; be.  So, you may want to uncomment the code
-			// provided.
-			//*qValuePtr = cs_Zero;
-			//return 0;
+			/* It could very well be that we don't want to even try in this
+			   case.  We don't have access to the MULREG definition in this
+			   function, so there is nothing to check other than what the
+			   fallback will be.  So, you may want to uncomment the code
+			   provided. */
+			/*
+			  *qValuePtr = cs_Zero;
+			  return 0;
+			*/
 		}
 
 		// OK, see if we have an equivalent method, or at least roughly
@@ -900,7 +903,7 @@ error:
    system definitions assumed to be of the same projection (and variation).
    It returns a TRUE value if the two parameters are within a tolerance which
    varied by the kind (i.e. logical type) of parameter.  Further, it returns
-   a double which provides an indication (a rough guess) as tto the degree
+   a double which provides an indication (a rough guess) as to the degree
    coordinate calculations will differ because of the parameter difference.
    This value is provided in meters, and is calculated and returned regardless
    of the return value.

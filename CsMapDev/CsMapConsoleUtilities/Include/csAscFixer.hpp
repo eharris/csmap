@@ -72,6 +72,7 @@ class TcsDefLine
 	// Static Constants, Variables, and Member Functions
 	static void Pad (char* array,int padCnt,unsigned arraySize);
 public:
+	static const double InvalidDouble;
 	///////////////////////////////////////////////////////////////////////////
 	// Construction,  Destruction,  Assignment
 	TcsDefLine (unsigned lineNbr,const char* lineText,EcsDictType dictType);
@@ -91,10 +92,22 @@ public:
 	EcsAscLineType GetType (void) const;
 	const char* GetLabel (void) const;
 	const char* GetValue (void) const;
+	double GetValueAsDouble (long32_t& format) const;
 	const char* GetComment (void) const;
 	const char* GetLeadWs (void) const;
 	const char* GetSepWs (void) const;
 	const char* GetCmntWs (void) const;
+
+	unsigned GetLineNbr (void);
+	unsigned GetInsertNbr (void);
+	EcsAscLineType GetType (void);
+	char* GetLabel (void);
+	char* GetValue (void);
+	char* GetComment (void);
+	char* GetLeadWs (void);
+	char* GetSepWs (void);
+	char* GetCmntWs (void);
+	
 	bool Matches (const TcsDefLine& thisOne,bool fileScope = false) const;
 	bool WriteToStream (std::ostream& outStrm) const;
 	void SetLineNbr (unsigned newLineNbr);
@@ -167,6 +180,7 @@ public:
 	TcsAscDefinition& operator- (const TcsDefLine& oldLine);
 	///////////////////////////////////////////////////////////////////////////
 	// Public Named Member Functions
+	bool IsDefinition (void) const;
 	bool ReadFromStream (unsigned& lineNbr,std::istream& inStrm);	// inStrm must be seek'able
 	size_t GetLineCount (void) const {return Definition.size (); }
 	const TcsDefLine* GetLine (size_t index) const;
@@ -176,6 +190,7 @@ public:
 	bool RenameDef (const char* newName);
 	const char* GetValue (const char* label) const;
 	double GetValueAsDouble (const char* label,long32_t& format) const;
+	const char* GetNextLabel (const char* labelName) const;
 	bool SetValue (const char* label,const char* newValue);
 	bool PrependLine (const TcsDefLine& newLine);
 	bool InsertBefore (const char* label,const TcsDefLine& newLine);
@@ -192,6 +207,7 @@ private:
 	char DefName [64];
 	TcsDefLineVctr Definition;
 };
+bool ValueSwap (TcsAscDefinition& first,TcsAscDefinition& second,const char* grpName);
 
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
@@ -223,23 +239,30 @@ public:
 	// Public Named Member Functions
 	EcsDictType GetDictType (void);
 	size_t GetDefinitionCount (void) const;
+	bool InitializeFromFile (const char* filePath);
 	const char* GetDefinitionName (size_t index) const;
+	bool GetIndexOf (size_t& index,const char* defName) const;
 	const TcsAscDefinition* GetDefinition (size_t index) const;
 	const TcsAscDefinition* GetDefinition (const char* defName) const;
 	TcsAscDefinition* GetDefinition (const char* defName);
+	bool ExtractDefinition (TcsAscDefinition& definition,const char* defName);
 	std::vector<TcsAscDefinition>::iterator Locate (const char* defName);
 	std::vector<TcsAscDefinition>::const_iterator Locate (const char* defName) const;
 	bool RenameDef (const char* oldName,const char* newName);
-//	bool CopyDef (const char* oldname,const char* newName,const char* insertBefore = 0);
+	bool CopyDef (const char* oldname,const char* newName,const char* insertBefore = 0);
 	const char* GetValue (const char* defName,const char* label) const;
 	double GetValueAsDouble (const char* defName,const char* label,long32_t& format) const;
 	bool SetValue (const char* defName,const char* label,const char* newValue);
 	bool DeprecateDef (const char* defName,const char* description,const char* source);
 	bool Replace (const TcsAscDefinition& newDef);
+	bool ReplaceWith (const char* existingName,const TcsAscDefinition& newDef);
+	bool ReplaceAt (size_t index,const TcsAscDefinition& newDef);
+	bool InsertBefore (size_t index,const TcsAscDefinition& newDef);
 	bool InsertBefore (const char* defName,const TcsAscDefinition& newDef);
 	bool Append (const TcsAscDefinition& newDef);
 	bool MakeLast (const char* defName);
 	bool WriteToStream (std::ostream& outStrm) const;
+	bool WriteToFile (const char* pathName) const;
 private:
 	///////////////////////////////////////////////////////////////////////////
 	// Private Support Functions
@@ -250,3 +273,4 @@ private:
 	// Probably should use std::list<>, rather than a std::vector<>, here.
 	std::vector<TcsAscDefinition> Definitions;
 };
+
