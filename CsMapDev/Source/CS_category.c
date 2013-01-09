@@ -1223,7 +1223,7 @@ int EXP_LVL3 CSdelCategory(Const char* catName)
 	extern int cs_Protect;
 
 	int unlinkStatus = 0;
-    struct cs_Ctdef_* pCategory = NULL;
+	struct cs_Ctdef_* pCategory = NULL;
 
 	cs_Error = 0;
 
@@ -1256,12 +1256,12 @@ int EXP_LVL3 CSdelCategory(Const char* catName)
 	}
 
 	unlinkStatus = UnlinkCategory(pCategory, TRUE);
-    if (unlinkStatus)
-    {
-        return unlinkStatus;
-    }
+	if (unlinkStatus)
+	{
+		return unlinkStatus;
+	}
 
-    return CSupdCategories(NULL);
+	return CSupdCategories(NULL);
 }
 
 /**********************************************************************
@@ -1877,8 +1877,8 @@ struct cs_Ctdef_* EXP_LVL3 CSrdCatFile ()
 	
 	//first look into the directory first where we're storing the system CSD files in.
 	//note, that this is different to all other types of dictionaries.
-	CS_stncp(targetPaths[0], currentDir, sizeof(targetPaths[1]));
-	CS_stncp(targetPaths[1], cs_UserDir, sizeof(targetPaths[0]));
+	CS_stncp(targetPaths[0], currentDir, sizeof(targetPaths[0]));
+	CS_stncp(targetPaths[1], cs_UserDir, sizeof(targetPaths[1]));
 
 	for (i = 0; i < (sizeof(targetPaths) / sizeof(targetPaths[0])); ++i)
 	{
@@ -1921,7 +1921,6 @@ struct cs_Ctdef_* EXP_LVL3 CSrdCatFile ()
 			//So, no matter whether this was the user-defined file or
 			//the "system" file, we don't continue if there was an error reading
 			//from the file
-			ctLastDefPtr = ctDefPtr;
 			ctDefPtr = CSrdCategory (stream);
 			if (ctDefPtr == NULL)
 			{
@@ -1962,7 +1961,11 @@ struct cs_Ctdef_* EXP_LVL3 CSrdCatFile ()
 							goto error;
 					}
 
-					//and skip the part below; continue with the next entry; a head we already have
+					//we've copied all names over - now, make sure, we don't use this unlinked category instance...
+					CSrlsCategory(ctDefPtr);
+					ctDefPtr = NULL;
+
+					//...and skip the part below; continue with the next entry; a head we already have
 					continue;
 				}
 				//else:
@@ -1977,6 +1980,7 @@ struct cs_Ctdef_* EXP_LVL3 CSrdCatFile ()
 			}
 			else
 			{
+				//get the last category in the list
 				if (NULL == ctLastDefPtr)
 				{
 					ctLastDefPtr = ctDefHead;
@@ -1990,6 +1994,8 @@ struct cs_Ctdef_* EXP_LVL3 CSrdCatFile ()
 				ctLastDefPtr->next = ctDefPtr;
 				ctDefPtr->previous = ctLastDefPtr;
 			}
+
+			ctLastDefPtr = ctDefPtr; //keep track of the last cs_Ctdef_ instance we linked in
 
 		} //for (;;)
 	}
