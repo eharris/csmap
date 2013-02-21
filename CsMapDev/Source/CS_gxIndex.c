@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include "cs_ioUtil.h"
 
 /* cs_GxIndex --> Geodetic Transformation Index
 
@@ -175,7 +176,7 @@ int CS_locateGxFromDatum (int* direction,Const char* srcDtmName)
 					}
 				}
 				if (entry->inverseSupported &&
-				    CS_stricmp (entry->trgDatum,srcDtmName) == 0)
+					CS_stricmp (entry->trgDatum,srcDtmName) == 0)
 				{
 					if (result == cs_GXIDX_NOXFRM)
 					{
@@ -234,7 +235,7 @@ int CS_locateGxToDatum (int* direction,Const char* trgDtmName)
 					}
 				}
 				if (entry->inverseSupported &&
-				    CS_stricmp (entry->srcDatum,trgDtmName) == 0)
+					CS_stricmp (entry->srcDatum,trgDtmName) == 0)
 				{
 					if (result == cs_GXIDX_NOXFRM)
 					{
@@ -402,74 +403,83 @@ void CSgenerateGxIndex (void)
 	extern struct cs_GxIndex_* cs_GxIndex;
 	extern unsigned cs_GxIndexCount;
 
-	int status;
+	int i;
+	int gxCount;
 
-	unsigned idxCount;
-
-	long fPos;
-	long fileSize;
-
-	csFILE* gxStrm;
 	struct cs_GxIndex_* gxIdxPtr;
 
-	struct cs_GeodeticTransform_ lclGxDef;
+	struct cs_GeodeticTransform_* pGxDef;
+	struct cs_GeodeticTransform_** pAllGxDefs;
 
-	gxStrm = NULL;
+	pAllGxDefs = NULL;
+	gxCount = 0;
 
-	CS_releaseGxIndex ();
+	CS_releaseGxIndex();
 
-	/* Open up the Geodetic Transformation dictionary. */\
-	gxStrm = CS_gxopn (_STRM_BINRD);
-	if (gxStrm == NULL)
+	gxCount = CS_gxDefinitionAll(&pAllGxDefs);
+	if (gxCount < 0)
 	{
 		goto error;
 	}
 
-	fPos = CS_ftell (gxStrm);
-	status = CS_fseek (gxStrm,0L,SEEK_END);
-	if (status != 0)
+	//malloc' the array of [cs_GxIndex] entries - note, that this included 1 more padding item
+	cs_GxIndex = (struct cs_GxIndex_*)CS_malc (sizeof (struct cs_GxIndex_) * (gxCount + 1));
+	if (NULL == cs_GxIndex)
 	{
-		CS_erpt (cs_IOERR);
+		CS_erpt (cs_NO_MEM);
 		goto error;
 	}
-	fileSize = CS_ftell (gxStrm);
-	status = CS_fseek (gxStrm,fPos,SEEK_SET);
-	idxCount = fileSize / sizeof (struct cs_GeodeticTransform_);
-	cs_GxIndex = (struct cs_GxIndex_*)CS_malc (sizeof (struct cs_GxIndex_) * (idxCount + 1));
 
-	cs_GxIndexCount = 0;
-	while (CS_gxrd (gxStrm,&lclGxDef) && (cs_GxIndexCount < idxCount))
+	//get hold onto the first index entry in the array...
+	gxIdxPtr = cs_GxIndex;
+	for(i = 0; i < gxCount; ++i)
 	{
-		gxIdxPtr = cs_GxIndex + cs_GxIndexCount;
-		CS_stncp (gxIdxPtr->xfrmName,lclGxDef.xfrmName,sizeof (gxIdxPtr->xfrmName));
-		CS_stncp (gxIdxPtr->srcDatum,lclGxDef.srcDatum,sizeof (gxIdxPtr->srcDatum));
-		CS_stncp (gxIdxPtr->trgDatum,lclGxDef.trgDatum,sizeof (gxIdxPtr->trgDatum));
-		gxIdxPtr->accuracy = lclGxDef.accuracy;
-		gxIdxPtr->inverseSupported = lclGxDef.inverseSupported;
-		gxIdxPtr->methodCode = lclGxDef.methodCode;
-		cs_GxIndexCount += 1;
+		//...and fill it with the information we've got from the dictionaries
+		pGxDef = pAllGxDefs[i];
+		CS_stncp (gxIdxPtr->xfrmName,pGxDef->xfrmName,sizeof (gxIdxPtr->xfrmName));
+		CS_stncp (gxIdxPtr->srcDatum,pGxDef->srcDatum,sizeof (gxIdxPtr->srcDatum));
+		CS_stncp (gxIdxPtr->trgDatum,pGxDef->trgDatum,sizeof (gxIdxPtr->trgDatum));
+		gxIdxPtr->accuracy = pGxDef->accuracy;
+		gxIdxPtr->inverseSupported = pGxDef->inverseSupported;
+		gxIdxPtr->methodCode = pGxDef->methodCode;
+		++gxIdxPtr; //forward our pointer to the next entry in the array
 	}
-	gxIdxPtr = cs_GxIndex + cs_GxIndexCount;
+
+	//zero out the last [cs_GxIndex_] entry
+	//if [gxCount] had been 0, [gxIdxPtr] still points to the beginning of [cs_GxIndex]
 	gxIdxPtr->xfrmName [0] = '\0';
 	gxIdxPtr->srcDatum [0] = '\0';
 	gxIdxPtr->trgDatum [0] = '\0';
 	gxIdxPtr->accuracy = 0.0;
 	gxIdxPtr->inverseSupported = 0;
 	
-	CS_fclose (gxStrm);
-	gxStrm = NULL;
+	cs_GxIndexCount = (unsigned) gxCount;
+
+	if (NULL != pAllGxDefs)
+	{
+		for(i = 0; i < gxCount; ++i)
+		{
+			CS_free((pAllGxDefs)[i]);
+		}
+
+		CS_free(pAllGxDefs);
+		pAllGxDefs = NULL;
+	}
+
 	return;
 
 error:
-	if (gxStrm != NULL)
+	if (NULL != pAllGxDefs)
 	{
-		CS_fclose (gxStrm);
-		gxStrm = NULL;
+		for(i = 0; i < gxCount; ++i)
+		{
+			CS_free((pAllGxDefs)[i]);
+		}
+
+		CS_free(pAllGxDefs);
+		pAllGxDefs = NULL;
 	}
-	if (cs_GxIndex != NULL)
-	{
-		CS_free (cs_GxIndex);
-		cs_GxIndex = NULL;
-	}
+
+	CS_releaseGxIndex ();
 	return;
 }

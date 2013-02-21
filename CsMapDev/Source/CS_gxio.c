@@ -195,7 +195,7 @@ int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 {
 	int result = CS_gxUpdate(gx_def);
 
-	if (0 == result)
+	if (result >= 0)
 	{
 		//looks like we've added a geodetic transformation;
 		//if we did just update an existing definition, we don't have to release the index here; the code is the same anyway
