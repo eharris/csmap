@@ -211,8 +211,12 @@ int EXP_LVL1 CS_usrdr (Const char *usr_dir)
 exit:
 	//now that a new directory has been setup, we've to cleanup all of our internal "definition" caches
 	CS_free(cs_CsKeyNames);
+	cs_CsKeyNames = NULL;
 	CS_free(cs_DtKeyNames);
+	cs_DtKeyNames = NULL;
 	CS_free(cs_ElKeyNames);
+	cs_ElKeyNames = NULL;
+
 	CSrlsCategories();
 
 	return 0;
