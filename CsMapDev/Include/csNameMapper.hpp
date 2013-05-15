@@ -299,7 +299,7 @@ public:
     TcsNameMapList& operator-= (const TcsNameMap* existingNameMapPtr);
     //=========================================================================
     // Public Named Member Functions
-    size_t GetCount (void) const {NameMapList.size (); };
+    size_t GetCount (void) const { return NameMapList.size (); };
 	void AddNameMap (const TcsNameMap* newNameMapPtr);
 	bool RemoveNameMap (const TcsNameMap* existingNameMapPtr);
 	const TcsNameMap* GetNameMapPtr (size_t index) const;

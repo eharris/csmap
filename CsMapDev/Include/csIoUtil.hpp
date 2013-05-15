@@ -157,16 +157,28 @@ struct CsMapKeyCompare
 	}
 };
 
+/***************************************************************************************
+Checks, whether [def] is write protected as per CSMAP's protection schema, i.e.
+	-1 ... failure
+	 0 ... success -->    isProtectedType contains the current type of protection
+						DEF_PROTECTED_NONE (0):  definition is (currently) not protected and can be modified in any way, incl. deleted;
+						DEF_PROTECTED_SYSTEM_DEF (1):  definition is a system definition that cannot be modified
+						DEF_PROTECTED_USER_DEF (2):     (now) protected user definition
+***************************************************************************************/
+#define DEF_PROTECTED_NONE      0
+#define DEF_PROTECTED_SYSTEM_DEF  1
+#define DEF_PROTECTED_USER_DEF    2
 template<class TCsMapStruct>
-int CS_IsWriteProtectedT(const TCsMapStruct *const def, bool& isProtected)
+int CS_IsWriteProtectedT(const TCsMapStruct *const def, int& isProtectedType)
 {
 	CS_CHECK_NULL_ARG(def, 1);
 
-	isProtected = true;
+	//assume the definition to be a protected system definition
+	isProtectedType = DEF_PROTECTED_SYSTEM_DEF;
 
 	if (cs_Protect < 0) //system dictionary files are protected
 	{
-		isProtected = false;
+		isProtectedType = DEF_PROTECTED_NONE;
 		return 0;
 	}
 
@@ -174,12 +186,15 @@ int CS_IsWriteProtectedT(const TCsMapStruct *const def, bool& isProtected)
 	if (0 == cs_Protect) //system dictionary files are protected
 	{
 		//all system definitions have their [protect] field set to 1 by default
-		isProtected = (1 == def->protect);
+		if (1 == def->protect)
+			isProtectedType = DEF_PROTECTED_SYSTEM_DEF;
+		else
+			isProtectedType = DEF_PROTECTED_NONE;
 	}
 	else if (cs_Protect > 0)
 	{
 		CS_GET_CURRENT_IO_TIME(cs_time);
-		isProtected = false;
+		isProtectedType = DEF_PROTECTED_NONE;
 
 		//definitions becomes protected after a given amount of days, aka...
 		/*  We protect user defined systems only
@@ -192,7 +207,7 @@ int CS_IsWriteProtectedT(const TCsMapStruct *const def, bool& isProtected)
 					days since this coordinate system
 					has been twiddled, we consider it
 					to be protected. */
-				isProtected = true;
+				isProtectedType = DEF_PROTECTED_USER_DEF;
 			}
 		}
 	}
@@ -219,7 +234,7 @@ int CS_SetCurrentTimeT(TCsMapStruct* def)
 }
 
 template<class TCsMapStruct>
-int CS_DescribeT(csFILE *strm, TCsMapStruct *const def, bool& exists, bool& isProtected, TCsMapStruct*& dictionaryDef,
+int CS_DescribeT(csFILE *strm, TCsMapStruct *const def, bool& exists, int& protectType, TCsMapStruct*& dictionaryDef,
 	int (*TRead)(csFILE*, TCsMapStruct*),
 	int (*TReadCrypt)(csFILE*, TCsMapStruct*, int*),
 	int (*TCompare)(TCsMapStruct const* pp, TCsMapStruct const* qq))
@@ -232,7 +247,7 @@ int CS_DescribeT(csFILE *strm, TCsMapStruct *const def, bool& exists, bool& isPr
 	dictionaryDef = NULL;
 
 	exists = false;
-	isProtected = true;
+	protectType = DEF_PROTECTED_SYSTEM_DEF;
 
 
 	long32_t fpos;
@@ -301,7 +316,7 @@ int CS_DescribeT(csFILE *strm, TCsMapStruct *const def, bool& exists, bool& isPr
 	/* Here when the definition already exists. See
 		if it is OK to write it. If cs_Protect is less than
 		zero, all protection has been turned off. */
-	if (CS_IsWriteProtectedT(def, isProtected)) //if non-0, something went wrong
+	if (CS_IsWriteProtectedT(def, protectType)) //if non-0, something went wrong
 	{
 		return -1;
 	}
@@ -756,8 +771,19 @@ int CS_DefinitionWrite (csFILE *& strm, TCsMapStruct *& def, const char* const s
 	return FALSE;
 }
 
+/************************************************
+Deletes the definitions from the targeted dictionary file.
+Returns the following values:
+
+	(-1):               General (IO) error.
+	(0):                Success - The definition has been removed from the targeted dictionary.
+
+Additional error information is stored in [cs_Error]
+*************************************************/
 template<class TCsMapStruct,
 	cs_magic_t const _MagicHeader,
+	int const _SysDefProtectError,
+	int const _UserDefProtectError,
 	size_t _KeyNameSize>
 int CS_DefinitionDelete(TCsMapStruct const* def, char (&keyName)[_KeyNameSize],
 	csFILE* (*TOpen)(const char* mode),
@@ -768,6 +794,8 @@ int CS_DefinitionDelete(TCsMapStruct const* def, char (&keyName)[_KeyNameSize],
 	int (*TWriteCrypt) (csFILE *strm, TCsMapStruct const*, int),
 	int (*TCompare)(TCsMapStruct const* pp, TCsMapStruct const* qq))
 {
+	cs_Error = 0;
+
 	CS_CHECK_NULL_ARG(def, 1);
 
 	CSDictionarySwitch dictionarySwitch;
@@ -794,10 +822,26 @@ int CS_DefinitionDelete(TCsMapStruct const* def, char (&keyName)[_KeyNameSize],
 
 	CSAutoPtr myPtrDelete(my_ptr);
 
-	bool isWriteProtected = false;
-	if (CS_IsWriteProtectedT(my_ptr, isWriteProtected)) //if non-0, something went wrong
+	int isWriteProtectedType;
+	if (CS_IsWriteProtectedT(my_ptr, isWriteProtectedType)) //if non-0, something went wrong
 	{
 		return -1;
+	}
+
+	if (isWriteProtectedType > 0)
+	{
+		switch(isWriteProtectedType)
+		{
+		case DEF_PROTECTED_SYSTEM_DEF:
+			CS_erpt(_SysDefProtectError);
+			return -1;
+		case DEF_PROTECTED_USER_DEF:
+			CS_erpt(_UserDefProtectError);
+			return -1;
+		default:
+			_ASSERT(false);
+			return -1;
+		}
 	}
 
 	/* 
@@ -902,8 +946,21 @@ int CS_DefinitionDelete(TCsMapStruct const* def, char (&keyName)[_KeyNameSize],
 }
 
 
+
+/************************************************
+Updates or adds the definitions in the targeted dictionary file.
+Returns the following values:
+
+	(0):                Success - The definition has been added to the targeted dictionary
+	(1):                Success - The definition existed in the targeted dictionary and has been updated
+	(-1):               General (IO) error.
+
+Additional error information is stored in [cs_Error]
+*************************************************/
 template<class TCsMapStruct, 
 	cs_magic_t const _MagicHeader,
+	int const _SysDefProtectError,
+	int const _UserDefProtectError,
 	char * _Filename,
 	size_t _KeyNameSize>
 int CS_DefinitionUpdate (TCsMapStruct *toUpdate, char (&keyName)[_KeyNameSize],
@@ -913,9 +970,11 @@ int CS_DefinitionUpdate (TCsMapStruct *toUpdate, char (&keyName)[_KeyNameSize],
 	int (*TWrite)(csFILE*, TCsMapStruct const*),
 	int (*TWriteCrypt)(csFILE*, TCsMapStruct const*, int),
 	int (*TCompare)(TCsMapStruct const*, TCsMapStruct const*),
-	int (*TDescribeOverride)(TCsMapStruct*, TCsMapStruct const*, bool, bool&),
+	int (*TDescribeOverride)(TCsMapStruct*, TCsMapStruct const*, bool, int&),
 	bool encrypt = false)
 {
+	cs_Error = 0;
+
 	CS_CHECK_NULL_ARG(toUpdate, 1);
 
 	/*  Adjust the name and make sure it is proper.
@@ -984,33 +1043,28 @@ int CS_DefinitionUpdate (TCsMapStruct *toUpdate, char (&keyName)[_KeyNameSize],
 	CSFileAutoPtr systemDictionaryClose(systemFileStream);
 
 	bool systemDefExists = false;
-	bool systemDefProtected = true;
+	int systemDefProtectType = DEF_PROTECTED_SYSTEM_DEF;
 	bool targetDefExists = false;
-	bool targetDefProtected = true;
+	int targetDefProtectedType = DEF_PROTECTED_SYSTEM_DEF;
 
 	TCsMapStruct* dictionaryDef = NULL;
 	//now check what we can do with the definition, if there's any found, in the system's CSD file
-	if (CS_DescribeT<TCsMapStruct>(systemFileStream, toUpdate, systemDefExists, systemDefProtected, dictionaryDef, TRead, TReadCrypt, TCompare))
+	if (CS_DescribeT<TCsMapStruct>(systemFileStream, toUpdate, systemDefExists, systemDefProtectType, dictionaryDef, TRead, TReadCrypt, TCompare))
 		return -1;
 
 	CSAutoPtr localDefRelease(dictionaryDef);
 
 	if (systemDefExists && NULL != TDescribeOverride)
 	{
-		if (TDescribeOverride(toUpdate, dictionaryDef, true /* system definition */, systemDefProtected))
+		if (TDescribeOverride(toUpdate, dictionaryDef, true /* system definition */, systemDefProtectType))
 			return -1;
 	}
 
 	//system definitions we cannot update - regardless of whether there's a user defined CSD file all
 	//custom stuff should go into
-	if (systemDefExists && systemDefProtected)
+	if (systemDefExists
+		&& (DEF_PROTECTED_NONE != systemDefProtectType)) //note, that also definitions in the default dir can be user defs which became protected
 	{
-		CS_stncp (csErrnam, keyName, MAXPATH);
-		if (1 == toUpdate->protect)
-			CS_erpt (cs_GP_PROT);
-		else
-			CS_erpt (cs_GP_UPROT);
-
 		return -1;
 	}
 
@@ -1023,7 +1077,7 @@ int CS_DefinitionUpdate (TCsMapStruct *toUpdate, char (&keyName)[_KeyNameSize],
 		pTargetFileStream = systemFileStream; //file has already been opened in update mode
 
 		targetDefExists = systemDefExists;
-		targetDefProtected = systemDefProtected;
+		targetDefProtectedType = systemDefProtectType;
 	}
 	else
 	{
@@ -1036,26 +1090,30 @@ int CS_DefinitionUpdate (TCsMapStruct *toUpdate, char (&keyName)[_KeyNameSize],
 
 		userDictionaryClose.Reset(userFileStream);
 
-		if (CS_DescribeT<TCsMapStruct>(userFileStream, toUpdate, targetDefExists, targetDefProtected, dictionaryDef, TRead, TReadCrypt, TCompare))
+		if (CS_DescribeT<TCsMapStruct>(userFileStream, toUpdate, targetDefExists, targetDefProtectedType, dictionaryDef, TRead, TReadCrypt, TCompare))
 			return -1;
 
 		localDefRelease.Reset(dictionaryDef);
 		if (targetDefExists && NULL != TDescribeOverride)
 		{
-			if (TDescribeOverride(toUpdate, dictionaryDef, false /* user defined definition */, targetDefProtected))
+			if (TDescribeOverride(toUpdate, dictionaryDef, false /* user defined definition */, targetDefProtectedType))
 				return -1;
 		}
 
 		//check, whether we can overwrite the definition in the user's file;
 		//we handle the files in [cs_UserDir] exactly like anything in [cs_Dir], incl.
 		//honoring [cs_Protect]
-		if (targetDefExists && targetDefProtected)
+		if (targetDefExists && DEF_PROTECTED_NONE != targetDefProtectedType)
 		{
-			CS_stncp (csErrnam, keyName, MAXPATH);
-			if (1 == toUpdate->protect)
-				CS_erpt (cs_GP_PROT); //system dictionaries we cannot update
-			else
-				CS_erpt (cs_GP_UPROT);
+			switch(targetDefProtectedType)
+			{
+			case DEF_PROTECTED_SYSTEM_DEF:
+				CS_erpt(_SysDefProtectError);
+				return -1;
+			case DEF_PROTECTED_USER_DEF:
+				CS_erpt(_UserDefProtectError);
+				return -1;
+			}
 
 			return -1;
 		}

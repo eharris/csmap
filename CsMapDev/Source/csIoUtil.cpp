@@ -148,7 +148,8 @@ int CS_csWrite(csFILE *strm, Const struct cs_Csdef_ *cs_def, int crypt)
 
 int CS_csDelete(struct cs_Csdef_ *cs_def)
 {
-	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_Csdef_, cs_CSDEF_MAGIC>(cs_def, cs_def->key_nm,
+	CS_CHECK_NULL_ARG(cs_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_Csdef_, cs_CSDEF_MAGIC, cs_CS_PROT, cs_CS_UPROT>(cs_def, cs_def->key_nm,
 		CS_csopn,
 		CS_csdef2,
 		NULL,
@@ -160,8 +161,9 @@ int CS_csDelete(struct cs_Csdef_ *cs_def)
 
 int CS_csUpdate(struct cs_Csdef_ *cs_def, int)
 {
-	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_Csdef_, cs_CSDEF_MAGIC, cs_Csname>(cs_def, cs_def->key_nm,
-		CS_csopn, NULL, CS_csrd, NULL, CS_cswr, CS_cscmp, NULL)));
+	CS_CHECK_NULL_ARG(cs_def, 1);
+	return CS_DefinitionUpdate<cs_Csdef_, cs_CSDEF_MAGIC, cs_CS_PROT, cs_CS_UPROT, cs_Csname>(cs_def, cs_def->key_nm,
+		CS_csopn, NULL, CS_csrd, NULL, CS_cswr, CS_cscmp, NULL);
 }
 
 struct cs_Csdef_* CS_csDefinition(Const char *csName, char* pszDirPath, int* isUsrDef)
@@ -200,7 +202,8 @@ int CS_dtWrite(csFILE *strm, Const struct cs_Dtdef_ *dt_def, int crypt)
 
 int CS_dtDelete(struct cs_Dtdef_ *dt_def)
 {
-	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_Dtdef_, cs_DTDEF_MAGIC>(dt_def, dt_def->key_nm,
+	CS_CHECK_NULL_ARG(dt_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_Dtdef_, cs_DTDEF_MAGIC, cs_DT_PROT, cs_DT_UPROT>(dt_def, dt_def->key_nm,
 		CS_dtopn,
 		CS_dtdef2,
 		NULL,
@@ -212,7 +215,8 @@ int CS_dtDelete(struct cs_Dtdef_ *dt_def)
 
 int CS_dtUpdate(struct cs_Dtdef_ *dt_def, int)
 {
-	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_Dtdef_, cs_DTDEF_MAGIC, cs_Dtname>(dt_def, dt_def->key_nm,
+	CS_CHECK_NULL_ARG(dt_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_Dtdef_, cs_DTDEF_MAGIC, cs_DT_PROT, cs_DT_UPROT, cs_Dtname>(dt_def, dt_def->key_nm,
 		CS_dtopn, NULL, CS_dtrd, NULL, CS_dtwr, CS_dtcmp, NULL)));
 }
 
@@ -252,7 +256,8 @@ int CS_elWrite(csFILE *strm, Const struct cs_Eldef_ *el_def, int crypt)
 
 int CS_elDelete(struct cs_Eldef_ *el_def)
 {
-	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_Eldef_, cs_ELDEF_MAGIC>(el_def, el_def->key_nm, CS_elopn,
+	CS_CHECK_NULL_ARG(el_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_Eldef_, cs_ELDEF_MAGIC, cs_EL_PROT, cs_EL_UPROT>(el_def, el_def->key_nm, CS_elopn,
 		CS_eldef2,
 		NULL,
 		CS_elrd,
@@ -263,7 +268,8 @@ int CS_elDelete(struct cs_Eldef_ *el_def)
 
 int CS_elUpdate(struct cs_Eldef_ *el_def, int)
 {
-	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_Eldef_, cs_ELDEF_MAGIC, cs_Elname>(el_def, el_def->key_nm,
+	CS_CHECK_NULL_ARG(el_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_Eldef_, cs_ELDEF_MAGIC, cs_EL_PROT, cs_EL_UPROT, cs_Elname>(el_def, el_def->key_nm,
 		CS_elopn, NULL, CS_elrd, NULL, CS_elwr, CS_elcmp, NULL)));
 }
 
@@ -303,7 +309,8 @@ int CS_gpWrite(csFILE *strm, Const struct cs_GeodeticPath_ * gp_def)
 
 int CS_gpDelete(struct cs_GeodeticPath_ * gp_def)
 {
-	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_GeodeticPath_, cs_GPDEF_MAGIC>(gp_def, gp_def->pathName,
+	CS_CHECK_NULL_ARG(gp_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_GeodeticPath_, cs_GPDEF_MAGIC, cs_GP_PROT, cs_GP_UPROT>(gp_def, gp_def->pathName,
 		CS_gpopn,
 		CS_gpdef2,
 		CS_gprd,
@@ -315,7 +322,8 @@ int CS_gpDelete(struct cs_GeodeticPath_ * gp_def)
 
 int CS_gpUpdate(struct cs_GeodeticPath_ *gp_def)
 {
-	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_GeodeticPath_, cs_GPDEF_MAGIC, cs_Gpname>(gp_def, gp_def->pathName,
+	CS_CHECK_NULL_ARG(gp_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_GeodeticPath_, cs_GPDEF_MAGIC, cs_GP_PROT, cs_GP_UPROT, cs_Gpname>(gp_def, gp_def->pathName,
 		CS_gpopn, CS_gprd, NULL, CS_gpwr, NULL, CS_gpcmp, NULL)));
 }
 
@@ -355,7 +363,8 @@ int CS_gxWrite(csFILE *strm, Const struct cs_GeodeticTransform_ * gx_def)
 
 int CS_gxDelete(struct cs_GeodeticTransform_ *gx_def)
 {
-	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_GeodeticTransform_, cs_GXDEF_MAGIC>(gx_def, gx_def->xfrmName,
+	CS_CHECK_NULL_ARG(gx_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionDelete<cs_GeodeticTransform_, cs_GXDEF_MAGIC, cs_GX_PROT, cs_GX_UPROT>(gx_def, gx_def->xfrmName,
 		CS_gxopn,
 		CS_gxdef2,
 		CS_gxrd,
@@ -375,20 +384,31 @@ cs_GeodeticTransform_* CS_gxDefinition(Const char *xfrmName, char* pszDirPath)
 }
 
 int CS_gxwrtchk(struct cs_GeodeticTransform_ *gx_target, Const struct cs_GeodeticTransform_ *gx_source, int* isProtected);
-int CS_gxIsWriteProtected(cs_GeodeticTransform_* pToUpdate, cs_GeodeticTransform_ const* pDictionaryDef, bool, bool& gxIsProtectedByDefault)
+int CS_gxIsWriteProtected(cs_GeodeticTransform_* pToUpdate, cs_GeodeticTransform_ const* pDictionaryDef, bool, int& gxIsProtectedByDefaultType)
 {
-	int isProtected = gxIsProtectedByDefault;
+	//this is the 'override' function which checks, whether a geodetic transformation definition can
+	//be updated, even if it's a 'system' definition
+	int isProtected = (DEF_PROTECTED_NONE == gxIsProtectedByDefaultType) ? FALSE : TRUE;
 	int error = CS_gxwrtchk(pToUpdate, pDictionaryDef, &isProtected);
 	if (error)
 		return error;
 
-	gxIsProtectedByDefault = (TRUE == isProtected);
+	if (FALSE == isProtected)
+	{
+		gxIsProtectedByDefaultType = DEF_PROTECTED_NONE;
+	}
+	else if (DEF_PROTECTED_NONE == gxIsProtectedByDefaultType)
+	{
+		gxIsProtectedByDefaultType = DEF_PROTECTED_SYSTEM_DEF;
+	}
+	//else: leave the value of [gxIsProtectedByDefaultType] unchanged, i.e. either [DEF_PROTECTED_SYSTEM_DEF] or [DEF_PROTECTED_USER_DEF]
 	return 0;
 }
 
 int CS_gxUpdate(struct cs_GeodeticTransform_* gx_def)
 {
-	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_GeodeticTransform_, cs_GXDEF_MAGIC, cs_Gxname>(gx_def, gx_def->xfrmName,
+	CS_CHECK_NULL_ARG(gx_def, 1);
+	Q_RETURN(int, -1, (CS_DefinitionUpdate<cs_GeodeticTransform_, cs_GXDEF_MAGIC, cs_GX_PROT, cs_GX_UPROT, cs_Gxname>(gx_def, gx_def->xfrmName,
 		CS_gxopn, CS_gxrd, NULL, CS_gxwr, NULL, CS_gxcmp, CS_gxIsWriteProtected)));
 }
 
@@ -517,11 +537,13 @@ int CS_ctWrite(csFILE *strm, Const struct cs_Ctdef_ *ct_def)
 
 int CS_ctDelete(struct cs_Ctdef_ *ct_def)
 {
+	CS_CHECK_NULL_ARG(ct_def, 1);
 	Q_RETURN(int, -1, CSdelCategory(ct_def->ctName));
 }
 
 int CS_ctUpdate(Const struct cs_Ctdef_ *ct_def)
 {
+	CS_CHECK_NULL_ARG(ct_def, 1);
 	Q_RETURN(int, -1, CSupdCategory(ct_def));
 }
 
