@@ -49,12 +49,12 @@
 	from latitude and longitude.  Painful.
 
 	3> In addition to a construction/destruction this module provides
-	both a forward anda n inverse function which will provide the
-	approriate translations.  Note that these functions are expected
+	both a forward and an inverse function which will provide the
+	appropriate translations.  Note that these functions are expected
 	to be used in conjunction with the normal Transverse Mercator
 	functions which would normally implement OSGB36 and OSTN02.
 
-	4> Some of the stuff in the ogject may look strnage in this
+	4> Some of the stuff in the ogject may look strange in this
 	implementation.  This is due to the fact that the code is constructed
 	with an eye to a future C++ implementation.  The C++ object will be
 	derived from certain base classes and certain virtual functions will
@@ -63,17 +63,17 @@
 
 	5> The following pointer is used to maintain a single cs_Ostn02_ object.
 	It is "created" by the first function that needs it.  It is only
-	detroyed explicitly by an application call:
+	destroyed explicitly by an application call:
 		
 		CSdeleteOstn02 (cs_Ostn02Ptr);
 		cs_Ostn0297Ptr = NULL;
 
-	or by calling the CS_recvr () function.  That is, once one of these
+	or by calling the CS_recvr () function. That is, once one of these
 	is actually constructed, we keep it around in case we need it
 	again.  This is for performance purposes.
 
 	6> The shifts in the data file are the shifts from ETRF89 to OSGB36
-	coordinates.  The shifts are in the ofrm of cartesian coordinates,
+	coordinates.  The shifts are in the form of cartesian coordinates,
 	i.e. delta X and delta Y in meters.
 
 	7> Thus the shifts extracted from this file must be applied to
@@ -218,7 +218,7 @@ int CSprivateOstn02 (struct cs_Ostn02_ *__This,double result [2],const double et
 
 	/* Return now if out of range. */
 	if (recNbr < 0 || recNbr >= (__This->recordCount  - 1) ||
-	    eleNbr < 0 || eleNbr >= (__This->elementCount - 1)
+		eleNbr < 0 || eleNbr >= (__This->elementCount - 1)
 	   )
 	{
 		result [0] = result [1] = cs_Zero;
@@ -498,17 +498,18 @@ int CSmkBinaryOstn02 (struct cs_Ostn02_ *__This)
 	}
 	CS_stcpy ((cp + 1),"_02");
 
-	aTime = CS_fileModTime (__This->filePath);
-	if (aTime == 0)
-	{
-		CS_stncp (csErrnam,__This->filePath,MAXPATH);
-		CS_erpt (cs_DTC_FILE);
-		goto error;
-	}
-
+	//check, whether the binary file already exists; if it does, don't re-create it
 	bTime = CS_fileModTime (binaryPath);
 	if (bTime == 0)
 	{
+		aTime = CS_fileModTime (__This->filePath);
+		if (aTime == 0)
+		{
+			CS_stncp (csErrnam,__This->filePath,MAXPATH);
+			CS_erpt (cs_DTC_FILE);
+			goto error;
+		}
+
 		/* Here to create a, possibly new, binary version of the
 		   OSTN02??.txt file.  We write a file which has two longs
 		   for each line of text that we read. */

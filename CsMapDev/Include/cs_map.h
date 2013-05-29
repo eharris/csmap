@@ -1887,7 +1887,9 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_CH1903_NAME       "Ch1903ToPlus.gdc"
 
 #define cs_OSTN97_NAME       "OSTN97.TXT"
+#define cs_OSTN97_NAME_BIN   "OSTN97._nt"
 #define cs_OSTN02_NAME       "OSTN02.txt"
+#define cs_OSTN02_NAME_BIN   "OSTN02._02"
 
 /*
 	The following defines the environmental variable which CS_altdr

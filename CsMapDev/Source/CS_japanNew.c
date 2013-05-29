@@ -30,6 +30,7 @@
 int CSjapanQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
 	extern char cs_DirsepC;
+	extern char cs_ExtsepC;
 
 	int err_cnt;
 
@@ -68,18 +69,32 @@ int CSjapanQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,i
 		strm = NULL;
 
 		if (!CS_stristr (line1Buffer,meshCode) &&
-		    !CS_stristr (line2Buffer,meshCode) &&
-		    !CS_stristr (line3Buffer,meshCode))
+			!CS_stristr (line2Buffer,meshCode) &&
+			!CS_stristr (line3Buffer,meshCode))
 		{
-			/* The pohrase meshcode was not found anywhjere on the first three
+			/* The pohrase meshcode was not found anywhere on the first three
 			   lines, we assume this is not a ".par" file. */
 			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FORMAT;
 		}
 	}
 	else
 	{
-		if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FILE;
+		//the txt file didn't exist - so, check whether at least the binary file does
+		cp = strrchr (pathBuffer,cs_ExtsepC);
+		if (cp == NULL) 
+		{
+			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FILE;
+		}
+		else
+		{
+			CS_stcpy ((cp + 1),"_par");
+			if (0 != CS_access(pathBuffer, 4))
+			{
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FILE;
+			}
+		}
 	}
+
 	return (err_cnt + 1);
 }
 int CSjapanS  (struct cs_GridFile_ *gridFile)
@@ -784,22 +799,22 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 	}
 	CS_stcpy ((cp1 + 1),"_par");
 
-	/* Determine the last modification time for the two files.  Zero time value
-	   means the file does not exist. */
-	aTime = CS_fileModTime (thisPtr->filePath);
-	if (aTime == 0)
-	{
-		/* The indicated source file does not exist, not uncommon among the
-		   error conditions possible. */
-		CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
-		CS_erpt (cs_DTC_FILE);
-		goto error;
-	}
 	bTime = CS_fileModTime (binaryPath);
-
-	/* Build a new binary file if it doesn't exist yet. */
-	if (bTime == 0)
+	/* Build a new binary file only if it doesn't exist yet. */
+	if (0 == bTime)
 	{
+		/* Determine the last modification time for the two files.  Zero time value
+		   means the file does not exist. */
+		aTime = CS_fileModTime (thisPtr->filePath);
+		if (aTime == 0)
+		{
+			/* The indicated source file does not exist, not uncommon among the
+			   error conditions possible. */
+			CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
+			CS_erpt (cs_DTC_FILE);
+			goto error;
+		}
+
 		/* Here to create a, possibly new, binary version of the Jgd2k file,
 		   typically named "TKY2JGD.par".  To follow the general design
 		   theme, we assume there can be several files, and there is no fixed
@@ -813,7 +828,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 		if (aStrm == NULL)
 		{
 			/* This could happen if the file exists, but for some reason we
-			   are denied permission to read the file. */
+			   are denied permission to read the file.*/
 			CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
 			CS_erpt (cs_DTC_FILE);
 			goto error;

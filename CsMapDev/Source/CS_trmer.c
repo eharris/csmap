@@ -75,22 +75,32 @@ int EXP_LVL9 CStrmerQ (	Const struct cs_Csdef_ *cs_def,unsigned short prj_code,i
 
 	if (prj_code == cs_PRJCOD_OSTN97)
 	{
-		/* Verify that the file exists and is readable.  All the other
-		   parameters are hard coded into the projection. */
+		/* First check, whether the txt representation of the OST97 file exists. If it doesn't, look for
+		the binary file (which might have been compiled before).
+		All the other parameters are hard coded into the projection. */
 		CS_stcpy (cs_DirP,cs_OSTN97_NAME);
 		if (CS_access (cs_Dir,4) != 0)
 		{
-			if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_OSTN97;			
+			CS_stcpy (cs_DirP,cs_OSTN97_NAME_BIN);
+			if (CS_access (cs_Dir,4) != 0)
+			{
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_OSTN97;
+			}
 		}
 	}
 	else if (prj_code == cs_PRJCOD_OSTN02)
 	{
-		/* Verify that the file exists and is readable.  All the other
-		   parameters are hard coded into the projection. */
+		/* First check, whether the txt representation of the OST02 file exists. If it doesn't, look for
+		the binary file (which might have been compiled before).
+		All the other parameters are hard coded into the projection. */
 		CS_stcpy (cs_DirP,cs_OSTN02_NAME);
-		if (CS_access (cs_Dir,4) != 0)
+		if (CS_access (cs_Dir,4) != 0) //txt file...
 		{
-			if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_OSTN02;			
+			CS_stcpy (cs_DirP,cs_OSTN02_NAME_BIN); //...binary file
+			if (CS_access (cs_Dir,4) != 0)
+			{
+				if (++err_cnt < list_sz) err_list [err_cnt] = cs_CSQ_OSTN02;
+			}
 		}
 	}
 	else if (prj_code != cs_PRJCOD_UTM)
@@ -384,8 +394,8 @@ void EXP_LVL9 CStrmerS (struct cs_Csprm_ *csprm)
 		/* Now we can compute M0, the meridonal distance
 		   from the equator to the origin latitude. */
 		trmer->M0 = CSmmFcal (&trmer->mmcofF,trmer->org_lat,
-					      sin_org_lat,
-					      cos (trmer->org_lat));
+						  sin_org_lat,
+						  cos (trmer->org_lat));
 
 		if (trmer->kruger != 0)
 		{
@@ -417,14 +427,14 @@ void EXP_LVL9 CStrmerS (struct cs_Csprm_ *csprm)
 							(    2.0 /      3.0) * nTerm2 +
 							(   37.0 /     96.0) * nTerm3 -
 							(    1.0 /    360.0) * nTerm4;
-						    
+							
 			trmer->delta2 = (    1.0 /     48.0) * nTerm2 +
 							(    1.0 /     15.0) * nTerm3 -
 							(  437.0 /   1440.0) * nTerm4;
-						    
+							
 			trmer->delta3 = (   17.0 /    480.0) * nTerm3 -
 							(   37.0 /    840.0) * nTerm4;
-						    
+							
 			trmer->delta4 = ( 4397.0 / 161280.0) * nTerm4; 
 
 			/* Set up the conformal latitude series calculations. */
@@ -500,7 +510,7 @@ void EXP_LVL9 CStrmerS (struct cs_Csprm_ *csprm)
 	   meridian. */
 	csprm->cent_mer = trmer->cent_lng * cs_Radian;
 	if (csprm->csdef.ll_min [LNG] == 0.0 && csprm->csdef.ll_min [LAT] == 0.0 &&
-	    csprm->csdef.ll_max [LNG] == 0.0 && csprm->csdef.ll_max [LAT] == 0.0)
+		csprm->csdef.ll_max [LNG] == 0.0 && csprm->csdef.ll_max [LAT] == 0.0)
 	{
 		/* Here to calculate a useful range for this coordinate system. */
 		if (csprm->prj_code == cs_PRJCOD_UTM)
@@ -810,7 +820,7 @@ int EXP_LVL9 CStrmerF (Const struct cs_Trmer_ *trmer,double xy [2],Const double 
 	{
 		rtn_val = cs_CNVRT_RNG;
 		if (fabs (fabs (del_lng) - cs_Pi_o_2) < cs_AnglTest &&
-		    fabs (cos_lat) > cs_AnglTest1)
+			fabs (cos_lat) > cs_AnglTest1)
 		{
 			/* Opps!!! We're in never never land. */
 
@@ -1228,7 +1238,7 @@ int EXP_LVL9 CStrmerI (Const struct cs_Trmer_ *trmer,double ll [2],Const double 
 			del_lng = cs_Zero;
 			if (rtn_val == cs_CNVRT_NRML)
 			{
-			    rtn_val = cs_CNVRT_INDF;
+				rtn_val = cs_CNVRT_INDF;
 			}
 		}
 	}
@@ -1402,10 +1412,10 @@ int EXP_LVL9 CStrmerI (Const struct cs_Trmer_ *trmer,double ll [2],Const double 
 
 	if (fabs (del_lng) > cs_Pi)
 	{
-        if (rtn_val == cs_CNVRT_NRML)
-        {
-            rtn_val = cs_CNVRT_RNG;
-        }
+		if (rtn_val == cs_CNVRT_NRML)
+		{
+			rtn_val = cs_CNVRT_RNG;
+		}
 		del_lng = CS_adj2pi (del_lng);
 	}
 
@@ -1700,7 +1710,7 @@ static int CStrmerLP (Const struct cs_Trmer_ *trmer,Const double ll [3])
 
 	del_lng = fabs (CS_adj2pi (my_lng - trmer->cent_lng));
 	if (my_lat < cs_AnglTest &&
-	    fabs (del_lng - cs_Pi_o_2) < cs_AnglTest)
+		fabs (del_lng - cs_Pi_o_2) < cs_AnglTest)
 	{
 		return (cs_CNVRT_DOMN);
 	}
@@ -1769,12 +1779,12 @@ int EXP_LVL9 CStrmerL (Const struct cs_Trmer_ *trmer,int cnt,Const double pnts [
 		   The great circle between the two singularity points
 		   is a 180 degree segment of the equator.  We should
 		   1) use the technique described for the line case
-		      to see if any segment of the region actually
-		      goes through either of the singularity points.
+			  to see if any segment of the region actually
+			  goes through either of the singularity points.
 		   2) count the intersections of all segments in the
-		      boundary with the equator segment between the
-		      two singularity points.  If the count is even
-		      (or zero) we are OK.  Otherwise, we have a problem.
+			  boundary with the equator segment between the
+			  two singularity points.  If the count is even
+			  (or zero) we are OK.  Otherwise, we have a problem.
 
 		   WHAT WE DO NOW:
 		   We simply see if any of the points has a longitude

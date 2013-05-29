@@ -63,7 +63,7 @@
 
 struct csThread cs_Ostn97_ *cs_Ostn97Ptr = NULL;
 
-struct cs_Ostn97_ *CSnewOstn97 (const char *filePath)
+struct cs_Ostn97_ *CSnewOstn97 (const char *filePath /* path to the txt file */)
 {
 	extern char cs_DirsepC;
 	extern char cs_ExtsepC;
@@ -459,17 +459,18 @@ int CSmkBinaryOstn97 (struct cs_Ostn97_ *__This)
 		goto error;
 	}
 	CS_stcpy ((cp + 1),"_nt");
-	aTime = CS_fileModTime (__This->filePath);
-	if (aTime == 0)
-	{
-		CS_stncp (csErrnam,__This->filePath,MAXPATH);
-		CS_erpt (cs_DTC_FILE);
-		goto error;
-	}
 
 	bTime = CS_fileModTime (binaryPath);
 	if (bTime == 0)
 	{
+		aTime = CS_fileModTime (__This->filePath);
+		if (aTime == 0)
+		{
+			CS_stncp (csErrnam,__This->filePath,MAXPATH);
+			CS_erpt (cs_DTC_FILE);
+			goto error;
+		}
+
 		/* Here to create a, possibly new, binary version of the
 		   OSGB97.txt file.  We write a file which has two floats
 		   for each line of text that we read. */
