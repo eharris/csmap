@@ -18,9 +18,9 @@
 
 #include "csTestCpp.hpp"
 
-extern const wchar_t csDataDir [] = L"C:\\Developement\\SVN\\MgDev\\OS\\Oem\\CsMap\\Data";
-extern const char csDictDir [] = "C:\\Developement\\SVN\\MgDev\\OS\\Oem\\CsMap\\dictionaries";
-extern const wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-v7_09\\CSV";
+extern const wchar_t csDataDir [] = L"C:\\Users\\CrsMagic\\Development\\OpenSource\\CsMap\\trunk\\CsMapDev\\Data";
+extern const char csDictDir [] = "C:\\Users\\CrsMagic\\Development\\OpenSource\\CsMap\\trunk\\CsMapDev\\Dictionaries";
+extern const wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-V8_01\\CSV";
 extern const TcsEpsgDataSetV6* KcsEpsgDataSetV6Ptr = 0;
 
 extern "C"

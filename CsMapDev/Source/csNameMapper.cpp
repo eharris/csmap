@@ -613,10 +613,7 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& 
     EcsCsvStatus csvStatus = csvOk;
 	std::wstring lineBufr;
 	TcsNameMap nextItem;
-
-nextChar = inStrm.get ();
-inStrm.seekg (0L);
-
+	
 	firstChar = inStrm.peek ();
 	if (firstChar != WEOF && !iswdigit (firstChar))
 	{
@@ -658,6 +655,10 @@ bool TcsNameMapper::Add (TcsNameMap& newItem,bool addDupName,const wchar_t* objS
 	// Record all duplicates, even if we eventually add it.
 	if (RecordDuplicates && !insertStatus.second)
 	{
+		if (objSrcId == 0)
+		{
+			objSrcId = L"?";
+		}
 		TcsNameMap dupItem (newItem);
 		dupItem.SetComments (objSrcId);
 		Duplicates.push_back (dupItem);

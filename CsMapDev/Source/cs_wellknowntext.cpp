@@ -313,7 +313,7 @@ int CS_isWkt (const char *wellKnownText)
 	{
 		if (left == right)
 		{
-			/* The brakets balance, we say it is a valid WKT. */
+			/* The brackets balance, we say it is a valid WKT. */
 			rtnValue = 1;
 		}
 		else
@@ -1114,7 +1114,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		CS_stncp (dtDef->ell_knm,csMapElName,cs_KEYNM_DEF);
 		CS_stncp (elDef->key_nm,csMapElName,cs_KEYNM_DEF);
 		st &= ~(static_cast<int>(cs_DT2WKT_NMTRUNC | cs_EL2WKT_NMTRUNC));
-                st &= ~(static_cast<int>(cs_CS2WKT_NMTRUNC));
+		st &= ~(static_cast<int>(cs_CS2WKT_NMTRUNC));
 	}
 	else if (mapNames && csMapElName [0] != '\0' &&
 						 csMapDtName [0] == '\0' &&
@@ -1123,11 +1123,11 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		// Map all three names.
 		CS_stncp (csDef->key_nm,csMapCsName,cs_KEYNM_DEF);
 		CS_stncp (csDef->dat_knm,"",cs_KEYNM_DEF);
-        CS_stncp (csDef->elp_knm,csMapElName,cs_KEYNM_DEF);
+		CS_stncp (csDef->elp_knm,csMapElName,cs_KEYNM_DEF);
 		CS_stncp (dtDef->key_nm,"",cs_KEYNM_DEF);
 		CS_stncp (dtDef->ell_knm,"",cs_KEYNM_DEF);
 		CS_stncp (elDef->key_nm,csMapElName,cs_KEYNM_DEF);
-        st &= ~(static_cast<int>(cs_DT2WKT_NMTRUNC | cs_EL2WKT_NMTRUNC));
+		st &= ~(static_cast<int>(cs_DT2WKT_NMTRUNC | cs_EL2WKT_NMTRUNC));
 		st &= ~(static_cast<int>(cs_CS2WKT_NMTRUNC));
 	}
 	if (st >= 0)
@@ -1387,15 +1387,15 @@ int CSwktToCs (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Eldef_ 
 	// extracted from the WKT is the null string, it will have been reset to
 	// <unknown>.  The unitsFactor local variable will have been set to the
 	// value extracted from the WKT.
-    if (unitsFactor != 0.0)
-    {
+	if (unitsFactor != 0.0)
+	{
 		// We go with the value of unitsName, whtever it is at this point.
-        CS_stncp (csDef->unit,unitName,sizeof (csDef->unit));
-    }
-    else // if (unitsFactor == 0.0)
-    {
+		CS_stncp (csDef->unit,unitName,sizeof (csDef->unit));
+	}
+	else // if (unitsFactor == 0.0)
+	{
 		// Couldn't extract a meaningful unit specification from the WKT.
-        CS_stncp (csErrnam,unitName,sizeof (csErrnam));
+		CS_stncp (csErrnam,unitName,sizeof (csErrnam));
 		CS_erpt (cs_WKT_INVUNIT);
 		goto error;
 	}
@@ -2105,20 +2105,20 @@ int CSwktToNerth (struct cs_Csdef_ *csDef,struct cs_Eldef_ *elDef,ErcWktFlavor f
 	unitsFactor = cs_Zero;
 	cp = unit->GetElementNameC ();
 	CS_wktUnitNameFix (unitName,sizeof (unitName),flavor,cp);
-    if(CS_stricmp (unitName,"<unknown>") == 0)
+	if(CS_stricmp (unitName,"<unknown>") == 0)
 	{
-        // Unit name is not known to CS-MAP.  See if the WKT name without
-        // flavor mapping works.
+		// Unit name is not known to CS-MAP.  See if the WKT name without
+		// flavor mapping works.
 		CS_stncp (unitName,cp,sizeof (unitName));
-	    unitsFactor = CS_unitlu (unitType,unitName);
+		unitsFactor = CS_unitlu (unitType,unitName);
 	}
-    else
-    {
-	    unitsFactor = CS_unitlu (unitType,unitName);
-    }
-    
-    if (unitsFactor == 0.0)
-    {
+	else
+	{
+		unitsFactor = CS_unitlu (unitType,unitName);
+	}
+
+	if (unitsFactor == 0.0)
+	{
 		// Still no match.  Lets try matching up by the factor value.
 		unitsFactor = unit->GetFieldDouble (0);
 		cp = CS_unitluByFactor (unitType,unitsFactor);

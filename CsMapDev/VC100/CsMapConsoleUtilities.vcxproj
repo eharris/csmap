@@ -201,6 +201,7 @@
     </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csManufactureNameMapperCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csOrgTransformations.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csResortNameMapperCsv.cpp.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csRplOldHpgnCrsNames.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csUtilitySupport.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\DeprecateDuplicateDefs.cpp" />

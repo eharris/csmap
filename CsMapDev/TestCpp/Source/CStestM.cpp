@@ -67,7 +67,7 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 	printf ("[ M]Auditing the NameMapper table\n");
 
 	unsigned recordCount = epsgV6.GetRecordCount (epsgTblEllipsoid);
-	for (unsigned index = 0;index < recordCount;++index)
+	for (unsigned index = 0;index < recordCount;++index)\
 	{
 		csMapKeyName [0] = '\0';
 		epsgKeyName [0] = '\0';
@@ -99,12 +99,6 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			{
 				mapCnt += 1;
 				printf ("EPSG ellipsoid '%s' [%lu] not mapped to a CS-MAP ellipsoid.\n",
-						 epsgKeyName,
-						 static_cast<unsigned long>(epsgCode));
-			}
-			else if (verbose)
-			{
-				printf ("Deprecated EPSG ellipsoid '%s' [%lu] not mapped to a CS-MAP ellipsoid.\n",
 						 epsgKeyName,
 						 static_cast<unsigned long>(epsgCode));
 			}
@@ -240,12 +234,6 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 							 static_cast<unsigned long>(epsgCode));
 				}
 			}
-			else if (verbose)
-			{
-				printf ("Deprecated EPSG datum '%s' [%lu] not mapped to a CS-MAP datum.\n",
-						 epsgKeyName,
-						 static_cast<unsigned long>(epsgCode));
-			}
 			continue;
 		}
 		else
@@ -338,6 +326,15 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			continue;
 		}
 
+		// There are a ton of CRS definitions in EPSG which have a code number
+		// greater than 32,767 all of which have been deprecated.  We simply skip
+		// over these because they are all deprecated and CS-MAP has never
+		// definied equivalents for any of these.
+		if (epsgCode >= 32768UL)
+		{
+			continue;
+		}
+
 		// We only do EPSG reference systems of the "projected" or "geographic2D" type.
 		ok = epsgV6.GetFieldByCode (fldData,epsgTblReferenceSystem,epsgFldCoordRefSysKind,epsgCode);
 		if (ok)
@@ -363,10 +360,24 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		wcstombs (epsgKeyName,fldData.c_str (),sizeof (epsgKeyName));
 		epsgKeyName [sizeof (epsgKeyName) - 1] = '\0';
 
-		// For now, we skip any and all systems referenced to NRS2007.  We don't
-		// support that datum and there are a ton of systems referenced to it.
+		// For now, we skip any and all systems referenced to NRS2007.  We
+		// don't support that datum and there are a ton of systems in EPSG
+		// referenced to it.
 		if (CS_stristr (epsgKeyName,"NSRS2007") != 0)
 		{
+			continue;
+		}
+		
+		// We skip the following specific EPSG codes for the reasons given in
+		// the comments.
+		if (epsgCode == 2192UL)
+		{
+			// We skip this one as EPSG has deprectaed the definition giving
+			// the reason: "Withdrawn and replaced before being put into use."
+			// It appears to us that this is a valid system and quite likely
+			// to be of value to users; thus we are reluctant to deprecate
+			// definition.  So, fo now, we just skip this test for this
+			// specific definition.
 			continue;
 		}
 
@@ -382,19 +393,13 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				mapCnt += 1;
 				if (verbose)
 				{
-					// There's a tin of these.  We suppress reporting them
+					// There's a ton of these.  We suppress reporting them
 					// individually until we get the real problems isolated
 					// and straightened out.
 					printf ("EPSG CRS '%s' [%lu] not mapped to a CS-MAP CRS.\n",
 							 epsgKeyName,
 							 static_cast<unsigned long>(epsgCode));
 				}
-			}
-			else if (verbose)
-			{
-				printf ("Deprecated EPSG CRS '%s' [%lu] not mapped to a CS-MAP CRS.\n",
-						 epsgKeyName,
-						 static_cast<unsigned long>(epsgCode));
 			}
 			continue;
 		}

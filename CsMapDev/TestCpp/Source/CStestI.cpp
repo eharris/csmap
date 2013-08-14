@@ -185,7 +185,7 @@ int CStestI (bool verbose,long32_t duration)
 
 			if (verbose)
 			{
-				printf ("Testing WKT import/export using %s.              \r",gp->key_nm);
+				printf ("Testing WKT import/export using %s::%s.              \r",tp->group,gp->key_nm);
 			}
 
 			/* We do not attempt to convert anything that is cartographically

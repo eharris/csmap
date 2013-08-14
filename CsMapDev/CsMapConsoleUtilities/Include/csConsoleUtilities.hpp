@@ -38,6 +38,7 @@
 // Decalre various utility functions.  Several are obsolete and
 // should be removed as their future value is nil.
 bool ManufactureNameMapperCsv (const wchar_t* resultDir,const wchar_t* dataDir);
+bool ResortNameMapperCsv (const wchar_t* resultDir,const wchar_t* dataDir,bool duplicates = false);
 bool AddOracle9Mappings (const wchar_t* csDataDir,TcsCsvStatus& status);
 bool AddOracle10Mappings (const wchar_t* csDataDir,TcsCsvStatus& status);
 bool AddSequenceNumbers (const wchar_t* dataDir);

@@ -26,7 +26,7 @@ const wchar_t csDictSrc [] = L"C:\\Users\\CrsMagic\\Development\\OpenSource\\CsM
 
 int main (int argc,char* argv [])
 {
-	bool ok;
+	bool ok (false);
 
 	std::wofstream woutStrm;
 
@@ -38,6 +38,13 @@ int main (int argc,char* argv [])
 	// generic form of this, but I don't know about it.
 	_set_output_format(_TWO_DIGIT_EXPONENT);
 #endif
+
+	// Resort a manually edited NameMapper.csv file to standard order.
+	// Also, this procedure will match the quoting on data file as
+	// maintained in SVN.  This process is often required so that a
+	// diff between old and manually edited (exspecially if you
+	// use Excel to do the editing) will produce useable results.
+	// ok = ResortNameMapperCsv (csTempDir,csDictSrc,true);
 
 	// Manufacture NameMapper.csv
 	// ok = ManufactureNameMapperCsv (csDictDir,csDataDir);
@@ -54,7 +61,7 @@ int main (int argc,char* argv [])
 	//}
 
 	// Seven Parameter Fix
-	ok = SevenParameterFix (csDictDir,csDictDir,csDictDir,csDictDir);
+	// ok = SevenParameterFix (csDictDir,csDictDir,csDictDir,csDictDir);
 
 	// Perform EPSG 7.06 Update synchronization.
 	//ok = csCrsNamesToSource (L"C:\\TMP",L"Epsg7-06UpdateWrkB.csv",L"csrRenameTable.cpp");
