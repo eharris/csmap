@@ -367,7 +367,9 @@ struct cs_NTv2_
 									/* Since the header tells us how many
 									   of these things there are, we use
 									   a malloc'ed array of these things. */
-	csFILE *Stream;					/* Provides access to the data file. */
+	char* fileImage;				/* Entire .gsb file copied into memory for
+									   performance. */
+	long32_t fileImageSize;			/* Size of the copied .gsb file. */
 	long32_t HdrRecCnt;				/* Number of 16 byte records in the
 									   file header.  In the Australian
 									   version, not all records are 16
