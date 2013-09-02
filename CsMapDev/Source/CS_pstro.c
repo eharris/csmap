@@ -167,17 +167,24 @@ void EXP_LVL9 CSpstroS (struct cs_Csprm_ *csprm)
 	}
 	else if (csprm->prj_code == cs_PRJCOD_PSTROSL)
 	{
+		latc = csprm->csdef.prj_prm1 * cs_Degree;
+		if (pstro->org_lat < 0)
+		{
+			// South pole variant. The formulas below compute the scale from the
+			// north pole perspective. The latc variable is not used after that.
+			// So we reverse the sign here.
+			latc = -latc;
+		}
+
 		if (pstro->ecent == 0.0)
 		{
 			// Here for a sphere.
-			latc = csprm->csdef.prj_prm1 * cs_Degree;
 			sinlatc = sin (latc);
 			scaleFactor = cs_Half * (cs_One + sinlatc);
 		}
 		else
 		{
 			// Here for an ellipsoid.
-			latc = csprm->csdef.prj_prm1 * cs_Degree;
 			sinlatc = sin (latc);
 			coslatc = cos (latc);
 			esinlatc = pstro->ecent * sinlatc;
