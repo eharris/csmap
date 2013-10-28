@@ -552,11 +552,22 @@ void EXP_LVL9 CStrmerS (struct cs_Csprm_ *csprm)
 			}
 
 			/* Now for the latitude, which is kind of interesting. */
-			csprm->min_ll [LAT] = trmer->org_lat * cs_Radian;
-			csprm->min_ll [LAT] -= trmer->y_off / 111000.000;
-			if (csprm->min_ll [LAT] < cs_Km90) csprm->min_ll [LAT] = cs_Km90;
-			csprm->max_ll [LAT] = csprm->min_ll [LAT] + cs_K90;
-			if (csprm->max_ll [LAT] > cs_K90) csprm->max_ll [LAT] = cs_K90;
+            if (csprm->prj_code == cs_PRJCOD_SOTRM) /* This is a south oriented variation. The expectation is that this projection SOTRM is used on the south hemisphere. */
+            {
+                csprm->max_ll [LAT] = trmer->org_lat * cs_Radian;
+			    csprm->max_ll [LAT] += trmer->y_off / 111000.000;
+			    if (csprm->max_ll [LAT] > cs_K90) csprm->max_ll [LAT] = cs_K90;
+			    csprm->min_ll [LAT] = csprm->max_ll [LAT] - cs_K90;
+			    if (csprm->min_ll [LAT] < cs_Km90) csprm->min_ll [LAT] = cs_Km90;
+            }
+            else
+            {
+			    csprm->min_ll [LAT] = trmer->org_lat * cs_Radian;
+			    csprm->min_ll [LAT] -= trmer->y_off / 111000.000;
+			    if (csprm->min_ll [LAT] < cs_Km90) csprm->min_ll [LAT] = cs_Km90;
+			    csprm->max_ll [LAT] = csprm->min_ll [LAT] + cs_K90;
+			    if (csprm->max_ll [LAT] > cs_K90) csprm->max_ll [LAT] = cs_K90;
+            }
 		}
 	}
 	else
