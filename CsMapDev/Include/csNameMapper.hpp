@@ -424,6 +424,7 @@ public:
 	bool IsInitialized (void) const;
 	bool SetRecordDuplicates (bool recordDuplicates);
 	void ClearDuplicateList (void);
+    EcsCsvStatus ReadFromStream (char* pBuffer, size_t const bufferSize);
 	EcsCsvStatus ReadFromStream (std::wistream& inStrm);
 	EcsCsvStatus ReadFromStream (std::wistream& inStrm,TcsCsvStatus& status);
 	bool Add (TcsNameMap& newItem,bool addDupName = false,const wchar_t* objSrcId = 0);

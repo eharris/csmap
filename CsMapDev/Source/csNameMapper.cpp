@@ -26,6 +26,7 @@
 */
 
 #include <fstream>
+#include <sstream>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -268,7 +269,7 @@ EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csv
 {
 	wint_t firstChar;
 	unsigned long ulTmp;
-	std::vector<std::wstring> fields;
+	std::vector<std::wstring> fields(16);
 	std::wstring lineBufr;
 
 	// We do not allow for comments as whatever the comment character would
@@ -606,6 +607,136 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm)
     rtnStatus = ReadFromStream (inStrm,csvStatus);
 	return rtnStatus;
 }
+
+EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSize)
+{
+	if (NULL == pBuffer)
+		return csvNoFile;
+
+    EcsCsvStatus csvStatus  = csvOk;
+
+    size_t const lastIndex = bufferSize - 1; // Last index of the stream buffer (file)
+
+    // Temporary line buffer
+	size_t lineBufferLength = 300; // Expected maximum length of a line
+	char* pLineBuffer = (char*) CS_malc (lineBufferLength);
+	if (NULL == pLineBuffer)
+	{
+		CS_erpt(cs_NO_MEM);
+		return csvInternal;
+	}
+
+	size_t lineStart = 0; // Start index of the line
+    bool isEOF = false;
+	size_t i = 0; // Current index in the stream buffer (file)
+	while(i < bufferSize && !isEOF)
+	{
+        // Current character from the buffer
+		char const* curChar = &pBuffer[i];
+        
+        // Advance [i] to next line breaking character
+		if ('\n' != *curChar && '\r' != *curChar)
+		{
+			// Pass any non-line breaking character;
+			// [lineStart] we still keep at the line start position
+			if (i != lastIndex)
+			{
+				++i;
+				continue;
+			}
+
+            // Last line. Last line need to be processed. EOF is handled below.
+		}
+
+        // Line length
+		// If the buffer did start with empty lines only, we're getting an 0-size length here
+        size_t lineLength = i - lineStart;
+		
+		// Advance [i] beyond all ine breaking characters (\n & \r)
+		while(i < bufferSize)
+		{
+			curChar = &pBuffer[i];
+			if ('\n' == *curChar || '\r' == *curChar)
+			{
+				++i;
+				continue;
+			}
+
+            break;
+		}
+        // Handle the end of the file
+        if (i >= bufferSize - 1)
+            isEOF = true;
+
+		// Resize the temp line buffer if it is too small
+		if (lineBufferLength < lineLength)
+		{
+			lineBufferLength = lineLength + (1 << 6);
+			char* pReBuffered = (char*) CS_ralc (pLineBuffer, lineBufferLength);
+			if (NULL == pReBuffered)
+			{
+				CS_erpt(cs_NO_MEM); //pLineBuffer still has to be free - see below
+				return csvNoFile;
+			}
+			pLineBuffer = pReBuffered;
+		}
+
+        // Fill up temp line buffer with current line
+		memset(pLineBuffer, '\0', lineBufferLength);
+		memcpy(pLineBuffer, &pBuffer[lineStart], lineLength);
+
+        // Next line starting position
+		lineStart = i; //our next potential start; EOF doesn't matter here
+
+		// Temporary line buffer (wide char)
+        wchar_t wcharBuffer[1 << 10] = { L'\0' };
+        mbstowcs(wcharBuffer, pLineBuffer, lineLength);
+        wcharBuffer[lineLength] = L'\n'; // Add a newline character. This will be needed below in the csv support class.
+
+        // Prepare a line stream
+        std::wstringstream inStrm(wcharBuffer);
+        inStrm.seekg(0);
+
+		// Skip the line if it looks like a label line. Note that we
+		// require a label line to be a valid CSV record, even though we
+		// ignore the contents.
+        // A data line need to start with a digit otherwise it is expected to be a label/comment line and we skip
+		if (!isdigit(pLineBuffer[0]))
+		{
+            //// Validate the record
+            //std::wstring lineBufferUnused;
+            //csvStatus = csGetCsvRecord (lineBufferUnused, inStrm, Delimiters);
+		    //if (csvOk != csvStatus)
+			//    break;
+
+            // Skip the line
+            // Note that [i] and [lineStart] point already to the beginning of the next line, or EOF...
+            continue;
+		}
+        
+        // Create name map item (Data of one line)
+        TcsNameMap nextItem;
+        TcsCsvStatus status;
+        // Read the data from the line
+		csvStatus= nextItem.ReadFromStream (inStrm, status);
+		if (csvStatus == csvOk)
+		{
+            // Add new item to mapping collection
+			Add (nextItem);
+		}
+		else
+		{
+			continue;
+		}
+	}
+
+    // Free temp line buffer
+	CS_free(pLineBuffer);
+	pLineBuffer = NULL;
+	
+	return csvStatus;
+}
+
 EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& status)
 {
 	wint_t firstChar;

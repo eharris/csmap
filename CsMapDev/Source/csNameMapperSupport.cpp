@@ -26,6 +26,7 @@
 */
 
 #include "cs_map.h"
+#include <memory>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -202,28 +203,72 @@ TcsNameMapper* cmGetNameMapperPtr (bool release)
     }
     else if (KcsNameMapperPtr == 0)
     {
+        // Load data from name mapper file
+        // Load complete file at once into a memory buffer, then parse the information from there.
         TcsCsvStatus csvStatus;
+        // Open name mapper file
         strcpy (cs_DirP,cs_NameMapperName);
-        std::wifstream iStrm (cs_Dir,std::ios_base::in);
-        if (iStrm.is_open ())
+        csFILE* pNameMapperFile = CS_fopen(cs_Dir, "rb");
+        if (NULL != pNameMapperFile)
         {
-            TcsNameMapper* nameMapperPtr = new TcsNameMapper ();
-            if (nameMapperPtr != 0)
+            // Create new name mapper instance
+            std::auto_ptr<TcsNameMapper> nameMapperPtr(new TcsNameMapper());
+            if (0 == CS_fseek(pNameMapperFile, 0, SEEK_END))
             {
-                EcsCsvStatus status = nameMapperPtr->ReadFromStream (iStrm,csvStatus);
-                if (status == csvOk)
+                // Get name mapper file size
+                size_t fileSize = (size_t) CS_ftell(pNameMapperFile);
+                if (-1 != fileSize)
                 {
-                    KcsNameMapperPtr = nameMapperPtr;
+                    // Allocate temporary memory buffer for the name mapper file content
+                    char* pBuffer = (char*) CS_malc(fileSize);
+                    if (NULL != pBuffer)
+                    {
+                        if (0 == CS_fseek(pNameMapperFile, 0, SEEK_SET))
+                        {
+                            // Copy complete name mapper file into the memory
+                            CS_fread(pBuffer, sizeof(char), fileSize, pNameMapperFile);
+                            if (CS_ferror(pNameMapperFile))
+			                {
+				                CS_erpt (cs_IOERR);
+			                }
+                            else
+                            {
+                                // Close first name mapper file. The content is already in the memory buffer.
+                                CS_fclose(pNameMapperFile);
+                                pNameMapperFile = NULL;
+
+                                // Fill up the name mapper with the in memory name mapper file buffer
+                                EcsCsvStatus status = nameMapperPtr->ReadFromStream (pBuffer, fileSize); // Note: Time consuming
+                                if (status == csvOk)
+                                {
+                                    // Assign the name mapper
+                                    KcsNameMapperPtr = nameMapperPtr.release();
+                                }
+                                else
+                                {
+                                    // Failed to fill up the name mapper
+                                    char msgBufr [2048];
+                                    CS_sprintf (msgBufr,"%s [%lu]",cs_NameMapperName,csvStatus.LineNbr);
+                                    CS_stncp (csErrnam,msgBufr,MAXPATH);
+                                    CS_erpt (cs_NMMAP_FAIL2);
+                                }
+                            }
+                        }
+                        // Clean up temporary file buffer
+                        CS_free(pBuffer);
+                        pBuffer = NULL;
+                    }
+                    else
+                    {
+                        CS_erpt(cs_NO_MEM);
+                    }
                 }
-                else
-                {
-                    char msgBufr [2048];
-                    delete nameMapperPtr;
-                    sprintf (msgBufr,"%s [%lu]",cs_NameMapperName,csvStatus.LineNbr);
-                    CS_stncp (csErrnam,msgBufr,MAXPATH);
-                    CS_erpt (cs_NMMAP_FAIL2);
-                }
-                iStrm.close ();
+            }
+            // Close name mapper file if it is not already done above
+            if (NULL != pNameMapperFile)
+            {
+                CS_fclose(pNameMapperFile);
+                pNameMapperFile = NULL;
             }
         }
         else
