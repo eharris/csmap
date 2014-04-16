@@ -517,14 +517,37 @@ TCsMapStruct* DefinitionGet(
 	return NULL;
 }
 
+/***************************************************************************************
+Get all definitions out of the dictionaries (system and user).
+First the user dictionary definitions will come, followed by the system definitions.
+Parameters:
+    pAllDefs        Array with all definitions read. User dictionary definitions first, followed by
+                    the system definitions. The caller needs to free the containing definitions.
+    TOpen           File open function.
+    TRead           Function to read dictionaries non encrypted.
+    TReadCrypt      Optional. Function to read encrypted dictionaries.
+    TGetKey         Optional. Function to get the key, id of the definition. This is required for 
+                    the duplicate check.
+    pDuplicatesMap  Optional. Map with duplicate definitions (Definition key compare). The first
+                    definition of a duplicate is part of the 'pAllDefs' collection. The caller needs
+                    to free the duplicate definitions in the vector.
+
+Return the total of definitions read.
+	-1 ... failure
+	>0 ... success
+***************************************************************************************/
 template<class TCsMapStruct>
 int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 	csFILE* (*TOpen)(const char* mode),
 	int (*TRead)(csFILE*, TCsMapStruct*),
 	int (*TReadCrypt)(csFILE*, TCsMapStruct*, int*),
 	char const* (*TGetKey)(TCsMapStruct const*) = NULL,
-	std::map<char const*, std::vector<TCsMapStruct *>, CsMapKeyCompare> *pDuplicatesMap = NULL)
+	std::map<char const*, std::pair<TCsMapStruct * const, std::vector<TCsMapStruct *>>, CsMapKeyCompare> *pDuplicatesMap = NULL)
 {
+    typedef std::vector<TCsMapStruct *> TCsMapStructVector;
+    typedef std::pair<TCsMapStruct * const, TCsMapStructVector> DuplicateItem;
+    typedef std::map<char const*, DuplicateItem, CsMapKeyCompare> DuplicateMap;
+
 	cs_Error = 0;
 
 	CS_CHECK_NULL_ARG_RETURN(pAllDefs, 1, -1);
@@ -545,7 +568,7 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 	}
 
 	//in case we encounter duplicates, we'll put them into pDuplicatesMap, in which case,
-	//the entries will not be put into [pAllDefs]
+	//the entries will not be put into [pAllDefs]. Only the first definition of a duplicate will be put into [pAllDefs].
 	const bool checkDuplicates = (NULL != pDuplicatesMap && NULL != TGetKey);
 	typedef std::map<char const*, TCsMapStruct *, CsMapKeyCompare> EntriesKeyNameMap;
 	EntriesKeyNameMap allEntries; //this will be getting hold of all entries we read from the dictionary; just the pointers(!)
@@ -590,15 +613,31 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 				typename EntriesKeyNameMap::const_iterator const& knownIdEntry = allEntries.find(pId);
 				if (allEntries.end() != knownIdEntry)
 				{
-					//yes - make sure, we log it into the vector we've in [pDuplicatesMap]
-					//note, that we'll leave the entry in [allEntries], too
-					typename std::vector<TCsMapStruct *>& defDuplicateVector = (*pDuplicatesMap)[pId];
-					defDuplicateVector.push_back(pDef);
+                    // We have a duplicate. Get the related duplicate item.
+                    typename DuplicateMap::iterator defDuplicateEntry = pDuplicatesMap->find(pId);
+				    if (pDuplicatesMap->end() == defDuplicateEntry)
+                    {
+                        // No related duplicat item is available, create one and set the first duplicate definition.
+                        typename DuplicateItem defDuplicate(knownIdEntry->second, TCsMapStructVector());
+                        std::pair<DuplicateMap::iterator, bool> insertResult = pDuplicatesMap->insert(std::make_pair(pId, defDuplicate));
+                        if (!insertResult.second)
+                        {
+                            // Not expected
+		                    CS_erpt(cs_ISER);
+		                    return -1;
+	                    }
+                        defDuplicateEntry = insertResult.first;
+                    }
+                    typename DuplicateItem& defDuplicate = defDuplicateEntry->second;
+                    typename TCsMapStructVector& defDuplicateVector = defDuplicate.second;
+                    defDuplicateVector.push_back(pDef);
 				}
 				else
 				{
 					//No - so log this definition along with it's key...
 					allEntries[pId] = pDef;
+                    // Add definition also into all definition collection
+                    allDefs.push_back(pDef);
 				}
 			}
 			else
@@ -611,42 +650,6 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 
 		if (readStatus) //the last read status must be 0, i.e. EOF
 			goto error;
-	}
-
-	if (checkDuplicates)
-	{
-		//in case we were checking for duplicates above, we now have our entries a bit mixed
-		//for sure 1 is in [allEntries]; but there might be a list of additional duplicates
-		//which is in [pDuplicatesMap]; for sure, we haven't put anything into [allDefs].
-		//this we'll do now
-		_ASSERT(0 == allDefs.size());
-
-		for(typename EntriesKeyNameMap::iterator allEntriesIterator = allEntries.begin();
-			allEntriesIterator != allEntries.end();
-			++allEntriesIterator)
-		{
-			TCsMapStruct *pDef = allEntriesIterator->second;
-
-			typename std::map<char const*, std::vector<TCsMapStruct *>, CsMapKeyCompare>::iterator duplicateMapIterator;
-			duplicateMapIterator = pDuplicatesMap->find(TGetKey(pDef));
-			if (pDuplicatesMap->end() == duplicateMapIterator)
-			{
-				//the entry isn't a duplicate, i.e. we can put it directly into [allDefs]
-				allDefs.push_back(pDef);
-			}
-			else
-			{
-				//here, the entry has duplicates - as such, it must not be added to the [allDefs] list
-				//instead, all the duplicates will be reported to the caller via [pDuplicatesMap]
-				std::vector<TCsMapStruct *>& defDuplicateVector = duplicateMapIterator->second;
-				_ASSERT(1 == defDuplicateVector.size()); //everything else should be considered a bug - unless the dictionaries are corrupted
-				defDuplicateVector.push_back(pDef); //make sure, we're also reporting the first entry
-			}
-
-			//now that we've moved everything into either [pDuplicatesMap] or [allDefs],
-			//make sure, we don't reference it from [allEntriesIterator], too
-			allEntriesIterator->second = NULL;
-		}
 	}
 
 	arraySize = allDefs.size() * sizeof(TCsMapStruct*);
@@ -675,10 +678,11 @@ error:
 
 	if (NULL != pDuplicatesMap)
 	{
-		for(typename std::map<char const*, std::vector<TCsMapStruct *>, CsMapKeyCompare>::const_iterator defIterator = pDuplicatesMap->begin(); 
+        for(typename DuplicateMap::const_iterator defIterator = pDuplicatesMap->begin(); 
 			defIterator != pDuplicatesMap->end(); ++defIterator)
 		{
-			std::vector<TCsMapStruct *> const& defDuplicateVector = defIterator->second;
+            typename const DuplicateItem& defDuplicate = defIterator->second;
+			TCsMapStructVector const& defDuplicateVector = defDuplicate.second;
 			for(size_t i = 0; i < defDuplicateVector.size(); ++i)
 			{
 				CS_free(defDuplicateVector[i]);
@@ -688,13 +692,7 @@ error:
 		}
 	}
 
-	for(typename EntriesKeyNameMap::iterator allEntriesIterator = allEntries.begin();
-			allEntriesIterator != allEntries.end();
-			++allEntriesIterator)
-	{
-		TCsMapStruct *pDef = allEntriesIterator->second;
-		CS_free(pDef);
-	}
+    // No need to free allEntries. They are also part of allDefs
 
 	return -1;
 }
