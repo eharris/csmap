@@ -293,6 +293,24 @@ int CS_locateGxByDatum (unsigned startAt,Const char* srcDtmName,Const char* trgD
 	return result;
 }
 
+// Select the better suitable geodetic transformation out of two.
+// Selection is related on the lower index. It is expected that a user defined definition comes with
+// a lower index then a system one.
+int CS_selectAccurateGxIndex(unsigned indexGxA, unsigned indexGxB)
+{
+    unsigned indexCount;
+
+    indexCount = CS_getGxIndexCount ();
+    if (indexGxA >= indexCount)
+        return cs_GXIDX_ERROR;
+    if (indexGxB >= indexCount)
+        return cs_GXIDX_ERROR;
+
+    // In a later step maybe select the one with lower accuracy.
+    // Get entry with lower index
+    return (indexGxA <= indexGxB) ? indexGxA : indexGxB;
+}
+
 int CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDtmName)
 {
 	extern char csErrnam [MAXPATH];
@@ -332,12 +350,18 @@ int CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDt
 			{
 				chosenResult = result;
 			}
+            else
+            {
+                // When more than one suitable geodetic transformation is found the best one is selected.
+                chosenResult = CS_selectAccurateGxIndex(chosenResult, result);
+                if (chosenResult < 0) goto error;
+            }
 			startAt = (unsigned)result + 1;
 		}
 	}
 	if (chosenResult >= 0)
 	{
-		if (xfrmCount == 1)
+		if (xfrmCount >= 1)
 		{
 			*direction = cs_DTCDIR_FWD;
 		}
@@ -371,13 +395,19 @@ int CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDt
 					{
 						chosenResult = result;
 					}
+                    else
+                    {
+                        // When more than one suitable geodetic transformation is found the best one is selected.
+                        chosenResult = CS_selectAccurateGxIndex(chosenResult, result);
+                        if (chosenResult < 0) goto error;
+                    }
 				}
 				startAt = (unsigned)result + 1;
 			}
 		}
 		if (chosenResult >= 0)
 		{
-			if (xfrmCount == 1)
+			if (xfrmCount >= 1)
 			{
 				*direction = cs_DTCDIR_INV;
 			}
@@ -393,7 +423,7 @@ int CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDt
 	}
 	return chosenResult;
 error:
-	return (xfrmCount > 1) ? cs_GXIDX_DUPXFRM : cs_GXIDX_ERROR;
+	return cs_GXIDX_ERROR;
 }
 
 /* This function actually generates the index.  It is not intended for use by
