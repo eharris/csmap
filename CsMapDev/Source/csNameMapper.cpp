@@ -75,6 +75,10 @@ wchar_t TcsNameMapper::DefaultFlavorNames [KcsNameMapFlvrCnt][32] =
 	L"Legacy",		// Index = 31
 };
 
+// An instance of a Generic ID object with an unknown value, occasionally
+// useful when passing generic ID's as function arguments.
+const TcsGenericId KcsGenericIdNull;
+
 // The following are used as bounds for a search of the set.  FirstName
 // is set to a value that will collate before any legitimate name;
 // LastName is set to a value which collates after any legitmate name
@@ -284,68 +288,87 @@ EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csv
 		status = csCsvFieldParse (fields,lineBufr,TcsNameMapper::Delimiters);
 		if (status == csvOk)
 		{
-		    size_t fldCnt = fields.size ();
-		    if (fldCnt >= 7 && fldCnt <= 16)
-		    {
-		        ulTmp = wcstoul (fields [0].c_str (),0,10);
-		        GenericId = TcsGenericId (ulTmp);
+			// We have big problems if we try to process an empty field.
+			// We could check each field individually, but that would be
+			// slow.  Perhaps sometime in the future.
+			size_t emptyCount = 0;
+			for (size_t idx = 0;idx < 7;idx += 1)
+			{
+				if (fields [idx].empty ())
+				{
+					emptyCount += 1;
+				}
+			}
+			if (emptyCount != 0)
+			{
+				status = csvEmpty;
+			}
+		}
+		if (status == csvOk)
+		{
+			size_t fldCnt = fields.size ();
+			if (fldCnt >= 7 && fldCnt <= 16)
+			{
+				size_t fldCnt = fields.size ();
+				ulTmp = wcstoul (fields [0].c_str (),0,10);
+				GenericId = TcsGenericId (ulTmp);
 
-		        ulTmp = wcstoul (fields [1].c_str (),0,10);
-		        Type = EcsMapObjType (static_cast<int>(ulTmp));
+				ulTmp = wcstoul (fields [1].c_str (),0,10);
+				Type = EcsMapObjType (static_cast<int>(ulTmp));
 
 				firstChar = fields[2].at(0);
 				if (iswdigit (firstChar))
 				{
 					ulTmp = wcstoul (fields [2].c_str (),0,10);
-			        Flavor = EcsNameFlavor (static_cast<int>(ulTmp));
+					Flavor = EcsNameFlavor (static_cast<int>(ulTmp));
 				}
 				else
 				{
 					Flavor = TcsNameMapper::FlvrNameToNbr (fields [2].c_str ()); 
 				}
 
-		        NumericId = wcstoul (fields [3].c_str (),0,10);
-		        Name = fields [4];
+				NumericId = wcstoul (fields [3].c_str (),0,10);
+				Name = fields [4];
 				DupSort = static_cast<short>(wcstol (fields [5].c_str (),0,10));
 				AliasFlag = static_cast<short>(wcstol (fields [6].c_str (),0,10));
 
-		        if (fldCnt > 7)
-		        {
-			        Flags = wcstoul (fields [7].c_str (),0,10);
-		        }
-		        if (fldCnt > 8)
-		        {
-			        ulTmp = wcstoul (fields [8].c_str (),0,10);
-			        Deprecated = TcsGenericId (ulTmp);
-		        }
-		        if (fldCnt > 9)
-		        {
-			        Remarks = fields [9];
-		        }
-		        if (fldCnt > 10)
-		        {
-			        Comments = fields [10];
-		        }
-		    }
-		    else if (fldCnt < 7)
-		    {
-		        status = csvTooFewFields;
-		        csvStatus.SetStatus (status);
-		    }
-		    else
-		    {
-		        status = csvTooManyFields;
-		        csvStatus.SetStatus (status);
-		    }
+				if (fldCnt > 7)
+				{
+					Flags = wcstoul (fields [7].c_str (),0,10);
+				}
+				if (fldCnt > 8)
+				{
+					ulTmp = wcstoul (fields [8].c_str (),0,10);
+					Deprecated = TcsGenericId (ulTmp);
+				}
+				if (fldCnt > 9)
+				{
+					Remarks = fields [9];
+				}
+				if (fldCnt > 10)
+				{
+					Comments = fields [10];
+				}
+			}
+			else if (fldCnt < 7)
+			{
+				status = csvTooFewFields;
+				csvStatus.SetStatus (status);
+			}
+			else
+			{
+				status = csvTooManyFields;
+				csvStatus.SetStatus (status);
+			}
 		}
 		else
 		{
-            csvStatus.SetStatus (status);
+			csvStatus.SetStatus (status);
 		}
 	}
 	else
 	{
-        csvStatus.SetStatus (status);
+		csvStatus.SetStatus (status);
 	}
 	return status;
 }
@@ -541,6 +564,18 @@ const wchar_t* TcsNameMapper::FlvrNbrToName (EcsNameFlavor flvrNbr)
 		rtnValue = DefaultFlavorNames [flvrNbr];
 	}
 	return rtnValue;
+}
+bool TcsNameMapper::AnalyzeGenericId (EcsNameFlavor& flavor,unsigned long& flvrId,
+															TcsGenericId& genericId)
+{
+	bool isDefault (false);
+	unsigned long numericId;
+
+	flavor = genericId.ExtractFlavorId (numericId);
+	isDefault = (numericId >= KcsNameMapInitial) && (numericId >= KcsNameMapFinal);
+
+	flvrId = numericId;
+	return isDefault;
 }
 ///////////////////////////////////////////////////////////////////////////////
 // Construction  /  Destruction  /  Assignment
@@ -758,13 +793,13 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& 
 		csvStatus= nextItem.ReadFromStream (inStrm,status);
 		if (csvStatus == csvOk)
 		{
-	    	Add (nextItem);
-	    }
-	    nextChar = inStrm.peek ();
-	    if (nextChar == WEOF)
-	    {
+			Add (nextItem);
+		}
+		nextChar = inStrm.peek ();
+		if (nextChar == WEOF)
+		{
 			break;
-	    }
+		}
 	}
 	return csvStatus;
 }
@@ -835,16 +870,145 @@ bool TcsNameMapper::Replace (const TcsNameMap& newItem)
 	insertStatus = DefinitionSet.insert (newItem);
 	return insertStatus.second;
 }
-bool TcsNameMapper::ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType type,
-																   EcsNameFlavor flavor,
-   																   const wchar_t* name)	 
+bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* oldName,
+																			   const wchar_t* newName,
+																			   const wchar_t* comment,
+																			   const TcsGenericId& deprecatedBy)
 {
 	bool ok (false);
 
 	iterator itr;
 	std::pair<iterator,bool> insertStatus;
 
-	TcsNameMap searchObject (type,flavor,name);
+	TcsNameMap searchObject (type,flavor,oldName);
+	itr = DefinitionSet.find (searchObject);
+	if (itr != DefinitionSet.end ())
+	{
+		// OK, we found it.  Should usually be the case.  The intent of this
+		// function is to update a mapping to the newest valid name, while
+		// preserving the old name as an alias.  If the entry we found is
+		// already marked as an alias, then this function is not being used
+		// as intended and we simply report failure by returning false.
+		if (itr->GetAliasFlag () == 0)
+		{
+			// We need to make two copies of this entry, modify them so that
+			// the old name remains as an alias, the new one has the new name.
+			// Then delete the existing entry and add the two new ones back.
+			// We need to do this as the alias flag and the name are part of
+			// the std::set<> key. It is not nice to fool with the std::set's
+			// key behind its back.
+			
+			// First, we get two copies of thew existing entry.
+			TcsNameMap oldEntry (*itr);
+			TcsNameMap newEntry (*itr);
+			
+			// Erase the old entry we are replacing.
+			DefinitionSet.erase (itr);
+
+			// Modify the two copies as appropriate.
+			oldEntry.SetAliasFlag (1);
+			if (deprecatedBy.IsKnown ())
+			{
+				oldEntry.SetDeprecated (deprecatedBy);
+			}
+			if (comment != 0 && *comment != L'\0')
+			{
+				oldEntry.SetComments (comment);
+			}
+			newEntry.SetNameId (newName);
+			newEntry.SetAliasFlag (0);		// redundant???
+			newEntry.SetComments (L"");
+
+			// Add both modified entries back into the set.
+			ok = Add (newEntry);
+			if (ok)
+			{
+				ok = Add (oldEntry);
+			}
+		}
+	}
+	return ok;
+}
+bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id,
+																			   const wchar_t* newName,
+																			   const wchar_t* comment,
+																			   const TcsGenericId& deprecatedBy)
+{
+	bool ok (false);
+	iterator entryItr;
+
+	entryItr = LocateNameMapItr (type,flavor,id);
+	if (entryItr != DefinitionSet.end ())
+	{
+		// OK, we found it.  Should usually be the case.  The intent of this
+		// function is to update a mapping to the newest valid name, while
+		// preserving the old name as an alias.  If the entry we found is
+		// already marked as an alias, then this function is not being used
+		// as intended and we simply report failure by returning false.
+		if (entryItr->GetAliasFlag () == 0)
+		{
+			// We need to make two copies of this entry, modify them so that
+			// the old name remains as an alias, the new one has the new name.
+			// Then delete the existing entry and add the two new ones back.
+			// I believe we need to do this as the alias flag and the name are
+			// part of the std::set<> key. I would imagine that it is not nice
+			// to fool with the std::set's key behind its back.
+			
+			// First, we get two copies of thew existing entry.
+			TcsNameMap oldEntry (*entryItr);
+			TcsNameMap newEntry (*entryItr);
+			
+			// Erase the old entry we are replacing.
+			DefinitionSet.erase (entryItr);
+
+			// Modify the two copies as appropriate.
+			oldEntry.SetAliasFlag (1);
+			if (deprecatedBy.IsKnown ())
+			{
+				oldEntry.SetDeprecated (deprecatedBy);
+			}
+			if (comment != 0 && *comment != L'\0')
+			{
+				oldEntry.SetComments (comment);
+			}
+			newEntry.SetNameId (newName);
+			newEntry.SetAliasFlag (0);		// redundant???
+			newEntry.SetComments (L"");
+
+			// Add both modified entries back into the set.
+			ok = Add (newEntry);
+			if (ok)
+			{
+				ok = Add (oldEntry);
+			}
+		}
+	}
+	return ok;
+}
+// The following extracts the specific record from the NameMapper's
+// DefinitionSet ans removes it from the std::set<> object.  The idea here
+// is that having removed the tiem from the set, the item can be modified
+// and added back without having to concern oneself with whether any of the
+// set's key fields were modified.
+bool TcsNameMapper::ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType type,
+																   EcsNameFlavor flavor,
+																   const wchar_t* name,
+																   short aliasFlag,
+																   short dupSort)
+{
+	bool ok (false);
+
+	iterator itr;
+	std::pair<iterator,bool> insertStatus;
+
+	// Note that the dupSort and aliasFlag arguments have default
+	// values of 0.  This is the typical case, and these are the
+	// values which are provided by TcsNameMap constructor which
+	// is being used here.  This might display some strnage effects.
+	// At this point, it is a good idea to provide all elements of
+	// the std::set<>'s key to assure you're getting the correct
+	// entry.
+	TcsNameMap searchObject (type,flavor,name,dupSort,aliasFlag);
 	itr = DefinitionSet.find (searchObject);
 	if (itr != DefinitionSet.end ())
 	{
@@ -890,7 +1054,7 @@ const wchar_t* TcsNameMapper::LocateName (EcsMapObjType type,EcsNameFlavor flavo
 	const_iterator beginItr;
 	const_iterator endItr;
 	const_iterator searchItr;
-	
+
 	TcsNameMap beginSearchObj (type,flavor,FirstName,0,0);
 	TcsNameMap endSearchObj (type,flavor,LastName,9999,9999);
 	
@@ -1129,11 +1293,9 @@ TcsNameMap* TcsNameMapper::LocateNameMap (EcsMapObjType type,EcsNameFlavor flavo
 	}
 	return nmMapPtr;
 }
-// Same as above, but works on constant map objects.  This is necessary (???)
-// as the iterators need to be const_iterators for a constant object.
 const TcsNameMap* TcsNameMapper::LocateNameMap (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id) const
 {
-	const TcsNameMap *nmMapPtr = 0;
+	TcsNameMap *nmMapPtr = 0;
 	const_iterator beginItr;
 	const_iterator endItr;
 	const_iterator searchItr;
@@ -1147,11 +1309,63 @@ const TcsNameMap* TcsNameMapper::LocateNameMap (EcsMapObjType type,EcsNameFlavor
 	{
 		if (searchItr->GetNumericId () == id)
 		{
-			nmMapPtr = &(*searchItr);
+//			nmMapPtr = &(*searchItr);
+//	Change required to achieve compilation on Linux, gcc 3.2.2
+//  I can't see why the const_cast is necessary.
+			nmMapPtr = const_cast<TcsNameMap*>(&(*searchItr));
 			break;
 		}
 	}
 	return nmMapPtr;
+}
+// Similar to the above, but returns an iterator rather than a pointer.
+// Sometimes an iterator is more convenient, sometimes a pointer is more
+// convenient.
+TcsNameMapper::iterator TcsNameMapper::LocateNameMapItr (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id)
+{
+	iterator beginItr;
+	iterator endItr;
+	iterator searchItr;
+	iterator returnItr;
+
+	returnItr = DefinitionSet.end ();
+	TcsNameMap beginSearchObj (type,flavor,FirstName,0,0);
+	TcsNameMap endSearchObj (type,flavor,LastName,9999,9999);
+
+	beginItr = DefinitionSet.lower_bound (beginSearchObj);
+	endItr   = DefinitionSet.upper_bound (endSearchObj);
+	for (searchItr = beginItr;searchItr != endItr;searchItr++)
+	{
+		if (searchItr->GetNumericId () == id)
+		{
+			returnItr = searchItr;
+			break;
+		}
+	}
+	return returnItr;
+}
+TcsNameMapper::const_iterator TcsNameMapper::LocateNameMapItr (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id) const
+{
+	const_iterator beginItr;
+	const_iterator endItr;
+	const_iterator searchItr;
+	const_iterator returnItr;
+
+	returnItr = DefinitionSet.end ();
+	TcsNameMap beginSearchObj (type,flavor,FirstName,0,0);
+	TcsNameMap endSearchObj (type,flavor,LastName,9999,9999);
+
+	beginItr = DefinitionSet.lower_bound (beginSearchObj);
+	endItr   = DefinitionSet.upper_bound (endSearchObj);
+	for (searchItr = beginItr;searchItr != endItr;searchItr++)
+	{
+		if (searchItr->GetNumericId () == id)
+		{
+			returnItr = searchItr;
+			break;
+		}
+	}
+	return returnItr;
 }
 ///////////////////////////////////////////////////////////////////////////////
 // Given a name, locate the first member of the std::set of the same type and

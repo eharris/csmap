@@ -26,6 +26,8 @@ void ReleaseEpsgObjectPtr (void);
 bool CS_strrpl (char* string1,size_t strSize,const char* find,const char* rplWith);
 int CS_nmMprRplName (TcsCsvFileBase& csvFile,short fldNnr,const char* oldName,const char* newName,bool once);
 
+
+
 void csWriteProjectionCsv (std::wostream& oStrm);
 void csWriteParameterCsv (std::wostream& oStrm);
 void csWriteLinearUnitCsv (std::wostream& oStrm);
@@ -360,13 +362,29 @@ private:
 };
 std::wostream& operator<< (std::wostream& outStrm,const TcsKeyNameList& keyNameList);
 //newPage//
+// The following object is useful for maintaining the Name Mapper Source
+// file in its version controlled .CSV file format.  It has been used
+// sparingly; largely repolaced by the TcsNameMapperVector object below,
+// which supports maintaining the Name Mapper Source data file in the form
+// of an internal std::vector<TcsNameMap> form.
 class TcsNameMapperSource : public TcsCsvFileBase
 {
-	static const short IdntFld = 0;
-	static const short TypeFld = 1;
-	static const short FlvrFld = 2;
-	static const short NameFld = 4;
+	static const short IdentFld  = 0;
+	static const short TypeFld   = 1;
+	static const short FlvrFld   = 2;
+	static const short FlvrIdFld = 3;
+	static const short NameFld   = 4;
+	static const short DupSrtFld = 5;
+	static const short AliasFld  = 6;
+	static const short FlagsFld  = 7;
+	static const short DeprctFld = 8;
+	static const short RemrksFld = 8;
+	static const short CommntFld = 8;
+
+	static const short FlavorCount = 32;
+	static const short FlavorSize = 32;
 public:
+	static const unsigned long UlErrorValue = 1999999999UL;
 	//=========================================================================
 	// Construction, Destruction, and Assignment
 	TcsNameMapperSource (void);
@@ -379,12 +397,46 @@ public:
 	// Public Named Member Functions
 	bool IsOk (void) const {return Ok; }
 	bool ReadFromFile (const char* csvSourceFile);
+	unsigned long GetIdent (unsigned recNbr) const;
+	unsigned long GetType (unsigned recNbr) const;
+	EcsNameFlavor GetFlavor (unsigned recNbr) const;
+	unsigned long GetFlavorIdent (unsigned recNbr) const;
+	const wchar_t* GetName (unsigned recNbr) const;
+	unsigned long GetDupSort (unsigned recNbr) const;
+	unsigned long GetAliasFlag (unsigned recNbr) const;
+	unsigned long GetFlags (unsigned recNbr) const;
+	unsigned long GetDeprecation (unsigned recNbr) const;
+	const wchar_t* GetRemarks (unsigned recNbr) const;
+	const wchar_t* GetComment (unsigned recNbr) const;
+	bool SetIdent (unsigned recNbr,unsigned long newIdent);
+	bool SetType (unsigned recNbr,unsigned long newType);
+	bool SetFlavor (unsigned recNbr,EcsNameFlavor newFlavor);
+	bool SetFlavorIdent (unsigned recNbr,unsigned long newFlavorIdent);
+	bool SetName (unsigned recNbr,const wchar_t* newName);
+	bool SetDupSort (unsigned recNbr,unsigned long newDupSort);
+	bool SetAliasFlag (unsigned recNbr,unsigned long newAliasFlag);
+	bool SetFlags (unsigned recNbr,unsigned long newFlags);
+	bool SetDeprecation (unsigned recNbr,unsigned long newDeprecation);
+	bool SetRemarks (unsigned recNbr,const wchar_t* newRemarks);
+	bool SetComment (unsigned recNbr,const wchar_t* newComment);
+	bool Locate (unsigned& recNbr,unsigned long type,EcsNameFlavor flavor,const wchar_t* name) const;
+	bool Locate (unsigned& recNbr,unsigned long type,EcsNameFlavor flavor,const char* name);
+	bool Locate (unsigned& recNbr,unsigned long type,EcsNameFlavor flavor,unsigned long flvrId);
+	bool GetNameMap (TcsNameMap& result,unsigned recNbr);
+	bool LocateNameMap (unsigned& recNbr,TcsNameMap& locator,bool byId = false);
+	bool ReplaceNameMap (unsigned recNbr,TcsNameMap& updatedNameMap);
+	bool AddNameMap (TcsNameMap& newNameMap);
+	bool DeleteNameMap (unsigned recNbr);
 	bool RenameObject (EcsMapObjType nameSpace,EcsNameFlavor flavor,const char* currentName,
 																	const char* newName);
 	bool WriteToFile (const char* csvSourceFile,bool overwrite = true);
 protected:
 	//=========================================================================
 	// Protected Named Member Functions
+	unsigned long GetFieldAsUlong (unsigned recNbr,short fldNbr) const;
+	const wchar_t* GetFieldAsString (unsigned recNbr,short fldNbr) const;
+	bool SetUlongField (unsigned recNbr,short fldNbr,unsigned long newValue);
+	bool SetStringField (unsigned recNbr,short fldNbr,const wchar_t* newString);
 	//=========================================================================
 	// Protected Data Members
 private:
@@ -395,6 +447,54 @@ private:
 	//=========================================================================
 	// Private Data Members
 	bool Ok;
-	wchar_t FlavorNames [32][32];
-	unsigned long FlavorIdValues [32];
+	wchar_t FlavorNames [FlavorCount][FlavorSize];
+	unsigned long FlavorIdValues [FlavorCount];
+	wchar_t NameBuffer [256];
+};
+class TcsNameMapperVector 
+{
+	static const short FlavorCount = 32;
+	static const short FlavorSize = 32;
+public:
+	//=========================================================================
+	// Construction, Destruction, and Assignment
+	TcsNameMapperVector (void);
+	TcsNameMapperVector (const TcsNameMapperVector& source);
+	virtual ~TcsNameMapperVector (void);
+	TcsNameMapperVector& operator= (const TcsNameMapperVector& rhs);
+	//=========================================================================
+	// Operator Overrides
+	//=========================================================================
+	// Public Named Member Functions
+	bool IsOk (void) const {return Ok; }
+	bool ReadFromFile (const char* csvSourceFile);
+
+	const TcsNameMap& Locate (unsigned long type,EcsNameFlavor flavor,const wchar_t* name) const;
+	TcsNameMap& Locate (unsigned long type,EcsNameFlavor flavor,const wchar_t* name);
+	const TcsNameMap& Locate (unsigned long type,EcsNameFlavor flavor,const char* name) const;
+	TcsNameMap& Locate (unsigned long type,EcsNameFlavor flavor,const char* name);
+	const TcsNameMap& Locate (unsigned long type,EcsNameFlavor flavor,unsigned long flvrId) const;
+	TcsNameMap& Locate (unsigned long type,EcsNameFlavor flavor,unsigned long flvrId);
+	bool AddNameMap (TcsNameMap& newNameMap);
+	bool DeleteNameMap (TcsNameMap& nameMap);
+	bool RenameObject (EcsMapObjType type,EcsNameFlavor flavor,const char* currentName,const char* newName);
+	bool RenameObject (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* currentName,const wchar_t* newName);
+	bool Deprecate (TcsNameMap& deprecatedNameMap,const TcsGenericId& deprecatedBy);
+	bool ResortVector (void);
+	bool WriteToFile (const char* csvSourceFile,bool overwrite = true);
+protected:
+	//=========================================================================
+	// Protected Named Member Functions
+	//=========================================================================
+	// Protected Data Members
+private:
+	//=========================================================================
+	// Private Member Functions
+	bool InitializeFlavors ();
+	//=========================================================================
+	// Private Data Members
+	bool Ok;
+	wchar_t FlavorNames [FlavorCount][FlavorSize];
+	unsigned long FlavorIdValues [FlavorCount];
+	std::vector<TcsNameMap> NameMapVector;
 };

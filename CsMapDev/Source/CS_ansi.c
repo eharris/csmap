@@ -42,6 +42,7 @@
 #	include <sys/stat.h>
 #	if _RUN_TIME < _rt_UNIXPCC
 #		include <io.h>
+#		include <float.h>
 #	else
 #		define _stat stat
 #	endif
@@ -80,9 +81,23 @@ static time_t CStmToTime_ (SYSTEMTIME *sysTime)
 	return rtnValue;
 }
 #endif
+
+/* For some strange reason, isnan() sems to be controversial. */
+#if _RUN_TIME == _rt_MSDOTNET || _RUN_TIME == _rt_MSWIN64
+int EXP_LVL3 CS_isnan (double xxx)
+{
+	return _isnan (xxx);
+}
+#else
+int CS_isnan (double xxx)
+{
+	return isnan (xxx);
+}
+#endif
+
 /* Having that as a resource, we code some very useful functions which the
-   pinheads on the ANSI committee dumped. */
-Const char * EXP_LVL1 CS_ecvt (double value,int count,int *dec,int *sign)
+   the ANSI committee dumped. */
+Const char * EXP_LVL3 CS_ecvt (double value,int count,int *dec,int *sign)
 {
 	static char result [24];
 
@@ -130,7 +145,7 @@ Const char * EXP_LVL1 CS_ecvt (double value,int count,int *dec,int *sign)
 	}
 	return result;
 }
-int EXP_LVL3 CS_stricmp (Const char* cp1,Const char *cp2)
+int EXP_LVL6 CS_stricmp (Const char* cp1,Const char *cp2)
 {
 	char cc1, cc2;
 	int result;

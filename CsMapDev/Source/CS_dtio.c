@@ -298,7 +298,7 @@ error:
 **	That is, count will be >= 0 in case of success and a negative value
 **	otherwise in which case [pDefArray] must not be examined by the caller.
 **********************************************************************/
-int CS_dtdefAll (struct cs_Dtdef_ **pDefArray[])
+int EXP_LVL3 CS_dtdefAll (struct cs_Dtdef_ **pDefArray[])
 {
 	return CS_dtDefinitionAll(pDefArray);
 }

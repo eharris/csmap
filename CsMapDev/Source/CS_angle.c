@@ -1125,7 +1125,7 @@ baseMeridian,  relativeLongitude, deltaLongitude,  Case
       -179.0,             +179.0,         +358.0, special case 2
       +179.0,             -179.0,         -358.0, special case 3
 */
-double EXP_LVL7 CS_deltaLongitude (double baseMeridian,double relativeLongitude)
+double EXP_LVL3 CS_deltaLongitude (double baseMeridian,double relativeLongitude)
 {
 	extern double cs_K180;
 	extern double cs_Km180;

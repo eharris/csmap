@@ -188,6 +188,7 @@ static struct cs_GxCmpT_ cs_GxFrmtT [] =
 	{   "\005ATS77",     cs_DTCFRMT_ATS77},
 	{   "\006OSTN97",    cs_DTCFRMT_OST97},
 	{   "\006OSTN02",    cs_DTCFRMT_OST02},
+	{   "\006GEOCON",    cs_DTCFRMT_GEOCN},
 	{   "",              cs_DTCFRMT_NONE}
 };
 #if defined (_MSC_VER) && _MSC_VER >= 800	/* MS Visual C++ 1.0 or later */
@@ -382,7 +383,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 		while ((cp = strchr (cp,'#')) != NULL)
 		{
 			if (*(cp + 1) != '#' &&
-				*(cp - 1) != '\\')
+				*(cp - 1) != '\\')				/* backslash character here is the escape character */
 			{
 				*cp = '\0';
 				break;

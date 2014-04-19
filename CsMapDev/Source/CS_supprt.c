@@ -1354,7 +1354,6 @@ Const void * EXP_LVL9 CS_tpars (char **pntr,Const void *table,int tab_size)
 **								Result returned in same location.
 **	int len;					returns the length of the result.
 **********************************************************************/
-
 int EXP_LVL7 CS_trim (char *string)
 {
 	cs_Register char *pp;
@@ -1388,6 +1387,43 @@ int EXP_LVL7 CS_trim (char *string)
 	   in the string. */
 
 	*++qq = '\0';
+
+	return (int)(qq - string);
+}
+int EXP_LVL7 CS_trimWc (wchar_t *string)
+{
+	cs_Register wchar_t *pp;
+	cs_Register wchar_t *qq;
+
+	pp = qq = string;
+
+	/* Skip over any leading white space. */
+
+	while (*pp != L'\0' && (*pp == L' '  ||
+							*pp == L'\t' ||
+							*pp == L'\n' ||
+							*pp == L'\r')) pp++;
+
+	/* pp now points to the first non-white space
+	   character, which could very well be the null
+	   character which terminates the string.  Copy
+	   the remainder to front of the array. */
+	do {} while ((*qq++ = *pp++) != L'\0');
+	qq -= 2;
+
+	/* qq now points to the last character of the string.
+	   We now need to skip over any trailing white space
+	   and insert a null character to terminate the string
+	   before the trailing white space. */
+
+	while (qq >= string && (*qq == L' ' || *qq == L'\t' ||
+										   *qq == L'\n' ||
+										   *qq == L'\r')) qq--;
+
+	/* qq now points to the last non-white space character
+	   in the string. */
+
+	*++qq = L'\0';
 
 	return (int)(qq - string);
 }
@@ -1483,4 +1519,249 @@ int EXP_LVL1 CS_cmpDbls (double first,double second)
 	/* If the exponents are equal, then we can simply compare the mantissas.
 	   We ignore any difference in the last few bits. */
 	return (int)(fabs (mant1 - mant2) < 5.0E-7);
+}
+/* Environment variable substitution.  This function will replace references
+   to environmental variables in strings in place. The return value is zero
+   if no subsitutions took place, 1 if one or more substitutions took place,
+   and -1 if some sort of error (string buffer overflow most common) took
+   place. Note, for performance and simplicity reasons, it is considered
+   an error to provide a string buffer whose size exceeds MAXPATH bytes.
+
+   THIS FUNCTION DOES NOT DO RECURSIVE SUBSTITUTIONS.  If you need/want
+   that, you need to call this function multiple times until you get a
+   zero return value. */
+int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
+{
+	extern char cs_EnvchrC;
+	extern char cs_EnvStartC;
+	extern char cs_EnvEndC;
+	extern char csErrnam [MAXPATH];
+
+	enum envSubState {	envSubBegin = 0,
+						envSubCopy,
+						envSubExtractL1,
+						envSubExtractL2,
+						envSubExtractW,
+						envSubGetValue,
+						envSubValueCopy,
+						envSubComplete,
+						envSubDone,
+						envSubError
+					 } state;
+
+	int subCount = 0;
+	int envNameCount = 0;
+	int trgBufrCount = 0;
+
+	char* srcPtr;
+	char* trgPtr;
+	char* envNamePtr;
+	char* envValPtr;
+
+	char envNameBufr [MAXPATH + 16];
+	char wrkBufr [MAXPATH + 16];
+
+	if ((stringBufr == 0) || (strlen (stringBufr) >= MAXPATH))
+	{
+		CS_erpt (cs_INV_ARG1);
+		goto error;
+	}
+	if (bufrSize > MAXPATH)
+	{
+		CS_erpt (cs_INV_ARG2);
+		goto error;
+	}
+
+	state = envSubBegin;
+	srcPtr = stringBufr;			// To kep lint happy.
+	while (state != envSubDone && state != envSubError)
+	{
+		switch (state)	{
+		case envSubBegin:
+			subCount = 0;
+			envNameCount = 0;
+			trgBufrCount = 0;
+			srcPtr = stringBufr;
+			trgPtr = wrkBufr;
+			state = envSubCopy;
+			break;
+		case envSubCopy:
+			if (*srcPtr != cs_EnvchrC)
+			{
+				trgBufrCount += 1;
+				if (!(*trgPtr++ = *srcPtr++))
+				{
+					state = envSubComplete;
+				}
+			}
+			else
+			{
+				/* Prepare to capture the environmental variable name. */
+				envNamePtr = envNameBufr;
+				*envNamePtr = '\0';
+
+				/* Skip the intro character, whatever it is. */
+				srcPtr += 1;
+				if (cs_EnvchrC == '$')
+				{
+					/* Here in the case of Lunix/Unix/et al.  The environmental
+					   variable name may be enclosed within brackets, and
+					   maybe not. */
+					if (*srcPtr == cs_EnvStartC)
+					{
+						srcPtr += 1;
+						state = envSubExtractL2;
+					}
+					else
+					{
+						state = envSubExtractL1;
+					}
+				}
+				else
+				{
+					state = envSubExtractW;
+				}
+			}
+			break;
+
+		case envSubExtractL1:
+			if (CS_isalnum (*srcPtr) || *srcPtr == '_' || *srcPtr == '\0')
+			{
+				/* A name character, copy it to the variable name buffer. */
+				*envNamePtr++ = *srcPtr++;
+				envNameCount += 1;
+			}
+			else
+			{
+				/* A character which terminates the environmental variable
+				   name. */
+				*envNamePtr = '\0';
+				envNameCount += 1;
+				state = envSubGetValue;
+			}
+			break;
+		case envSubExtractL2:
+			/* Here to extract the environmental variable name, terminated
+			   by the cs_EnvEndC character. */
+			if (*srcPtr == '\0')
+			{
+				CS_stncp (csErrnam,stringBufr,32);
+				CS_erpt (cs_ENV_FORMAT);
+				state = envSubError;
+			}
+			else if (*srcPtr != cs_EnvEndC)
+			{
+				*envNamePtr++ = *srcPtr++;
+			}
+			else
+			{
+				*envNamePtr = '\0';
+				envNameCount += 1;
+				srcPtr += 1;
+				state = envSubGetValue;
+			}
+			break;
+		case envSubExtractW:
+			/* Here to extract a variable name surrounded by the cs_EnvchrC
+			   character, as in windows using cs_EnvchrC = '%'. */
+			if (*srcPtr == '\0')
+			{
+				CS_stncp (csErrnam,stringBufr,32);
+				CS_erpt (cs_ENV_FORMAT);
+				state = envSubError;
+			}
+			else if (*srcPtr != cs_EnvchrC)
+			{
+				*envNamePtr++ = *srcPtr++;
+				envNameCount += 1;
+			}
+			else
+			{
+				*envNamePtr = '\0';
+				envNameCount += 1;
+				srcPtr += 1;
+				state = envSubGetValue;
+			}
+			break;
+		case envSubGetValue:
+			envValPtr = CS_getenv (envNameBufr);
+			if (envValPtr == 0)
+			{
+				CS_stncp (csErrnam,envNameBufr,32);
+				CS_erpt (cs_ENV_NOVAR);
+				state = envSubError;
+			}
+			else
+			{
+				state = envSubValueCopy;
+			}
+			break;
+		case envSubValueCopy:
+			if (*envValPtr != '\0')
+			{
+				*trgPtr++ = *envValPtr++;
+				trgBufrCount += 1;
+			}
+			else
+			{
+				subCount += 1;
+				state = envSubCopy;
+			}
+			break;
+		case envSubComplete:
+			CS_stncp (stringBufr,wrkBufr,bufrSize);
+			state = envSubDone;
+			break;
+		case envSubDone:
+			/* Should never get here.  Primarily here to keep lint
+			   happy. */
+			CS_stncp (csErrnam,"CS_supprt:8",MAXPATH);
+			CS_erpt (cs_ISER);
+		case envSubError:
+		default:
+			goto error;
+			break;
+		}
+		if (trgBufrCount >= (MAXPATH - 1))
+		{
+			CS_erpt (cs_ENV_TOOLONG);
+			state = envSubError;
+		}
+		if (envNameCount >= (MAXPATH - 1))
+		{
+			CS_stncp (csErrnam,stringBufr,32);
+			CS_erpt (cs_ENV_FORMAT);
+			state = envSubError;
+		}
+	}
+	return subCount;
+error:
+	return -1;
+}
+int CS_envsubWc (wchar_t* stringBufr,size_t bufrSize /*in chars*/)
+{
+	int subCount;
+	char workBufr [MAXPATH];
+
+	if ((stringBufr == 0) || (wcslen (stringBufr) >= MAXPATH))
+	{
+		CS_erpt (cs_INV_ARG1);
+		goto error;
+	}
+	if (bufrSize > MAXPATH)
+	{
+		CS_erpt (cs_INV_ARG2);
+		goto error;
+	}
+
+	wcstombs (workBufr,stringBufr,MAXPATH);
+	workBufr [MAXPATH - 1] = '\0';
+	subCount = CS_envsub (workBufr,MAXPATH);
+	if (subCount > 0)
+	{
+		mbstowcs (stringBufr,workBufr,bufrSize);
+	}
+	return subCount;
+error:
+	return -1;
 }

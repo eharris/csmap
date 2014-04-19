@@ -17,23 +17,34 @@
 //
 
 #include "csTestCpp.hpp"
+#include <errno.h>
 
-extern const wchar_t csDataDir [] = L"C:\\Users\\CrsMagic\\Development\\OpenSource\\CsMap\\trunk\\CsMapDev\\Data";
-extern const char csDictDir [] = "C:\\Users\\CrsMagic\\Development\\OpenSource\\CsMap\\trunk\\CsMapDev\\Dictionaries";
-extern const wchar_t csEpsgDir [] = L"C:\\ProgramData\\GeodeticData\\EPSG\\EPSG-V8_01\\CSV";
+#if (_RUN_TIME < _rt_UNIXPCC)
+extern const wchar_t csDataDir [] = L"%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Data";
+extern const char csDictDir [] = "%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Dictionaries";
+extern const wchar_t csEpsgDir [] = L"%GEODETIC_DATA%\\EPSG\\CSV";
+#else
+extern const wchar_t csDataDir [] = L"${OPEN_SOURCE}/CsMap/trunk/CsMapDev\Data";
+extern const char csDictDir [] = "$OPEN_SOURCE/CsMap/trunk/CsMapDev/Dictionaries";
+extern const wchar_t csEpsgDir [] = L"$GEODETIC_DATA/Epsg/CSV";
+#endif
+
 extern const TcsEpsgDataSetV6* KcsEpsgDataSetV6Ptr = 0;
 
 extern "C"
 {
+	extern char cs_DirK [];
 	extern char cs_Dir [];
 	extern char *cs_DirP;
-	extern char cs_OptchrC;
 	extern union cs_Bswap_ cs_BswapU;
 	extern short cs_Protect;
 	extern char cs_Unique;
 	extern int cs_Error;
 	extern int cs_Errno;
+	extern char cs_OptchrC;
 	extern char cs_DirsepC;
+	extern wchar_t cs_OptchrWC;
+	extern wchar_t cs_DirsepWC;
 	extern double cs_Zero;
 
 	extern double cs_ERadMin;
@@ -119,16 +130,27 @@ int main (int argc,char* argv [])
 	// and other data files.  This only works under MS-DOS unless they've
 	// changed UNIX since this old fart last worked on a UNIX system.  The
 	// /d option overrides this selection if present on the command line.
-#if _OPR_SYSTEM != _os_UNIX
+	st = -1;
+	cs_Dir [0] = '\0';
+	cs_DirP = NULL;
+#if (_RUN_TIME < _rt_UNIXPCC)
 	strncpy (alt_dir,argv [0],sizeof (alt_dir));
 	alt_dir [sizeof (alt_dir) - 1] = '\0';
 	cp = strrchr (alt_dir,cs_DirsepC);
 	if (cp != NULL)
 	{
 		*cp = '\0';
-		CS_altdr (alt_dir);
+		st = CS_altdr (alt_dir);
 	}
 #endif
+	if (st != 0)
+	{
+		st = CS_altdr (cs_DirK);
+	}
+	if (st != 0)
+	{
+		CS_altdr (NULL);
+	}
 
 	// Analyze the arguments and extract all options.  First, we set the
 	// default values.
@@ -150,8 +172,6 @@ int main (int argc,char* argv [])
 	cs_TestFile [0] = '\0';
 	cs_TestDir [0] = '\0';
 	cs_TestDirP = 0;
-
-	cs_DirP = CS_stcpy (cs_Dir,"C:\\Program Files\\Common Files\\GeodeticData\\");
 
 	int posArgCnt = 0;
 	for (idx = 1;idx < argc;idx++)
@@ -360,7 +380,7 @@ int main (int argc,char* argv [])
 		st = CS_altdr (alt_dir);
 		if (st != 0)
 		{
-			printf ("CS_altdr did not succeed.  Either CS_altdr is broke, or\n");
+			printf ("CS_altdr did not succeed.  Either CS_altdr is broken, or\n");
 			printf ("the path %s is not a valid data directory path.\n",alt_dir);
 			usage (batch);
 		}
@@ -428,9 +448,12 @@ int main (int argc,char* argv [])
 	if (cp == NULL) cp = strchr (tests,'N');
 	if (cp != NULL)
 	{
-		KcsEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (csEpsgDir,L"7.05");
+		wchar_t filePath [MAXPATH];
+		wcsncpy (filePath,csEpsgDir,wcCount (filePath));
+		CS_envsubWc (filePath,wcCount (filePath));
+		KcsEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (filePath);
 	}
-	
+
 	// Close/delete any remnants.
 	CS_reset ();
 

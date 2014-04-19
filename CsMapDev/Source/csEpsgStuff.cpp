@@ -1343,7 +1343,7 @@ const wchar_t* GetEpsgTableName (EcsEpsgTable tblId)
 
 EcsEpsgTable GetEpsgTableId (const wchar_t* tableName)
 {
-    EcsEpsgTable tableId = epsgTblUnknown;
+	EcsEpsgTable tableId = epsgTblUnknown;
 	const TcsEpsgTblMap* tblPtr;
 	
 	for (tblPtr = KcsEpsgTblMap;tblPtr->TableId != epsgTblUnknown;++tblPtr)
@@ -1357,18 +1357,31 @@ EcsEpsgTable GetEpsgTableId (const wchar_t* tableName)
 	return tableId;
 }
 
-short GetEpsgCodeFieldNbr (EcsEpsgTable tableId)
+EcsEpsgField GetEpsgCodeFieldId (EcsEpsgTable tableId)
 {
-	short fldNbr (-1);
+	EcsEpsgField codeFieldId (epsgFldUnknown);
+
 	const TcsEpsgTblMap* tblPtr;
 	
 	for (tblPtr = KcsEpsgTblMap;tblPtr->TableId != epsgTblUnknown;++tblPtr)
 	{
 		if (tblPtr->TableId == tableId)
 		{
-		    fldNbr = GetEpsgFieldNumber (tableId,tblPtr->CodeKeyFieldId);
+		    codeFieldId = tblPtr->CodeKeyFieldId;
 			break;
 		}
+	}
+	return codeFieldId;
+}
+
+short GetEpsgCodeFieldNbr (EcsEpsgTable tableId)
+{
+	short fldNbr (-1);
+	
+	EcsEpsgField codeFieldId = GetEpsgCodeFieldId (tableId);
+	if (codeFieldId != epsgFldUnknown)
+	{
+		fldNbr = GetEpsgFieldNumber (tableId,codeFieldId);
 	}
 	return fldNbr;
 }
@@ -1541,7 +1554,6 @@ short TcsEpsgDataSetV6::GetFldName (std::wstring& fieldName,EcsEpsgTable tableId
 // Construction, Destruction, & Assignment
 TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t* revLevel)
 																	:
-																  RevisionLevel  (revLevel),
 																  DatabaseFolder (databaseFolder),
 																  EpsgTables     ()
 {
@@ -1551,6 +1563,14 @@ TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t*
 	{
 		TcsEpsgTable* nextTable = new TcsEpsgTable (*tblPtr,DatabaseFolder.c_str ());
 		EpsgTables.insert (std::make_pair(tblPtr->TableId,nextTable));			//lint !e534 (ignoring return value)
+	}
+	if (revLevel == 0)
+	{
+		DetermineRevisionLevel ();
+	}
+	else
+	{
+		RevisionLevel = revLevel;
 	}
 }
 TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const TcsEpsgDataSetV6& source) : RevisionLevel  (source.RevisionLevel),
@@ -1610,6 +1630,13 @@ TcsEpsgTable* TcsEpsgDataSetV6::GetTablePtr (EcsEpsgTable tableId)
 }
 //=============================================================================
 // High Level API Functions
+const wchar_t* TcsEpsgDataSetV6::GetRevisionLevel (void) const
+{
+	const wchar_t* wcPtr;
+	
+	wcPtr = RevisionLevel.c_str ();
+	return wcPtr;
+}
 unsigned TcsEpsgDataSetV6::GetRecordCount (EcsEpsgTable tableId) const
 {
 	unsigned recordCount (0);
@@ -2361,6 +2388,28 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 	if (ok)
 	{
 		datum.to84_via = to84_via;
+	}
+	return ok;
+}
+// The following extracts the revision level field from the last record in
+// the Version History table.  Should be the revision of the dataset we are
+// actually using, regardless of the file name(s) or their location.
+bool TcsEpsgDataSetV6::DetermineRevisionLevel (void)
+{
+	bool ok (false);
+	unsigned recNbr;
+	std::wstring fieldData;
+	TcsCsvStatus csvStatus;
+
+	const TcsEpsgTable* tblPtr = GetTablePtr (epsgTblVersionHistory);
+	if (tblPtr != 0)
+	{
+		recNbr = tblPtr->RecordCount() - 1;
+		ok = static_cast<const TcsCsvFileBase*>(tblPtr)->GetField (fieldData,recNbr,epsgFldVersionNumber,csvStatus);
+		if (ok)
+		{
+			RevisionLevel = fieldData;
+		}
 	}
 	return ok;
 }

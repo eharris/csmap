@@ -767,6 +767,14 @@ EcsNameFlavor TcsGenericId::GetInternalIdFlavor (void) const
 	rtnValue = static_cast<EcsNameFlavor>(value);
 	return rtnValue;
 }
+EcsNameFlavor TcsGenericId::ExtractFlavorId (unsigned long& flvrId) const
+{
+	EcsNameFlavor rtnValue (csMapFlvrUnknown);
+
+	rtnValue = static_cast<EcsNameFlavor>(Id / TcsNameMapper::KcsNameMapBias);
+	flvrId = static_cast<unsigned long>(Id % TcsNameMapper::KcsNameMapBias);
+	return rtnValue;
+}
 //newPage//
 const unsigned TcsKeyNameMapFile::BogusNbr = 0xFFFFFFFF;
 

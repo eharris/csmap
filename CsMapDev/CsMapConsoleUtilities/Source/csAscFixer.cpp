@@ -1054,6 +1054,57 @@ bool TcsAscDefinition::Append (const TcsDefLine& newLine)
 	}
 	return ok;
 }
+// Trim comments lines from the beginning and end of the definition.
+// Note, only complete comment lines are deleted, and then only
+// from the beginning and the end.
+int TcsAscDefinition::TrimLineComments (void)
+{
+	int trimCount (0);
+	int index;
+
+	TcsDefLnItr lineItr;
+
+	// Remove comment lines from the end of the definition.
+	index = Definition.size () - 1;		// last line
+	while (index >0)
+	{
+		lineItr = Definition.begin () + index;
+		if (lineItr->GetType () == ascTypComment)
+		{
+			// A comment, we remove it.  lineItr becomes invalid.
+			Definition.erase (lineItr);
+			trimCount += 1;
+		}
+		else if (lineItr->GetType () != ascTypBlank)
+		{
+			// Something other than a blank or comment, we're done.
+			break;
+		}
+		index -= 1;
+	}
+
+	index = 0;
+	while (index < static_cast<int>(Definition.size ()))
+	{
+		lineItr = Definition.begin () + index;
+		if (lineItr->GetType ()== ascTypBlank)
+		{
+			index += 1;
+		}
+		else if (lineItr->GetType () == ascTypComment)
+		{
+			// A comment, we remove it.  lineItr becomes invalid.
+			Definition.erase (lineItr);
+			trimCount += 1;
+		}
+		else
+		{
+			// Something other than a blank or comment, we're done.
+			break;
+		}
+	}
+	return trimCount;
+}
 bool TcsAscDefinition::RemoveLine (const char* label)
 {
 	bool ok (false);
@@ -1633,6 +1684,60 @@ bool TcsDefFile::ReplaceAt (size_t index,const TcsAscDefinition& newDef)
 	{
 		rplItr = Definitions.begin () + index;
 		*rplItr = newDef;
+	}
+	return ok;
+}
+bool TcsDefFile::InsertAfter (size_t index,const TcsAscDefinition& newDef)
+{
+	bool ok;
+	size_t vectorSize;
+	std::vector<TcsAscDefinition>::iterator itr;
+	std::vector<TcsAscDefinition>::iterator newItr;
+
+	vectorSize = Definitions.size ();
+
+	if (index >= Definitions.size ())
+	{
+		ok = false;
+	}
+	else if (index == (vectorSize - 1))
+	{
+		Definitions.push_back (newDef);
+		ok = true;
+	}
+	else
+	{
+		itr = Definitions.begin () + index + 1;	
+		Definitions.insert (itr,newDef);
+		ok = true;
+	}
+	return ok;
+}
+bool TcsDefFile::InsertAfter (const char* defName,const TcsAscDefinition& newDef)
+{
+	bool ok (false);
+	std::vector<TcsAscDefinition>::iterator itr;
+	std::vector<TcsAscDefinition>::iterator newItr;
+	
+	itr = Locate (defName);
+	if (itr != Definitions.end ())
+	{
+		// The name exists, but it could be the last element in the vector.
+		itr += 1;
+		if (itr == Definitions.end ())
+		{
+			// It was the last element in the vector, we add the new element
+			// to the end of the vector.
+			Definitions.push_back (newDef);
+			ok = true;
+		}
+		else
+		{
+			// It wasn't the last one in the vector, we can to an
+			// InsertBefore the next element, whatever it is.
+			Definitions.insert (itr,newDef);
+			ok = true;
+		}
 	}
 	return ok;
 }

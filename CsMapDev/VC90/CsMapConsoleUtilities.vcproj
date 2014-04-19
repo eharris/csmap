@@ -324,6 +324,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csAdd2007and2011.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csAddEpsgData.cpp"
 				>
 			</File>
@@ -344,6 +348,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csBlueBook.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csConsoleUtilities.cpp"
 				>
 			</File>
@@ -357,6 +365,10 @@
 			</File>
 			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csEpsg706Update.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csGenerateBlueBookTestData.cpp"
 				>
 			</File>
 			<File
@@ -420,6 +432,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csUpdateNameMapperFromCsv.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csUsefulRangeReport.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csUtilitySupport.cpp"
 				>
 			</File>
@@ -458,7 +478,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Include\csBlueBook.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Include\csConsoleUtilities.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\CsMapConsoleUtilities\Include\csUsefulRangeReport.hpp"
 				>
 			</File>
 			<File

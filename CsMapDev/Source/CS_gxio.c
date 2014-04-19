@@ -524,7 +524,7 @@ void EXP_LVL1 CS_gxfnm (Const char *new_name)
 	return;
 }
 
-int EXP_LVL1 CS_gxswp (struct cs_GeodeticTransform_* gx_def)
+int EXP_LVL5 CS_gxswp (struct cs_GeodeticTransform_* gx_def)
 {
 	int swap;
 
@@ -561,7 +561,7 @@ int EXP_LVL1 CS_gxswp (struct cs_GeodeticTransform_* gx_def)
 /* Normalize the path name with the current platform.  Specifically,
    switch the directory separator character to what is appropriate
    for the current platform. */
-void EXP_LVL1 CS_gxsep (struct cs_GeodeticTransform_* gx_def)
+void EXP_LVL3 CS_gxsep (struct cs_GeodeticTransform_* gx_def)
 {
 	short idx;
 	short pathCount;

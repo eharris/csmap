@@ -85,7 +85,7 @@ void * EXP_LVL1 CS_calc (size_t blk_count,size_t blk_size)
 }
 #endif
 
-void EXP_LVL1 CS_free (void *ptr)
+void EXP_LVL3 CS_free (void *ptr)
 {
 #ifndef _csFree
 #	define _csFree(_m) {if (_m) {free(_m); _m = 0;} }

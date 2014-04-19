@@ -304,7 +304,7 @@ int EXP_LVL9 CSdtcomp (	Const char *inpt,
 		while ((cp = strchr (cp,'#')) != NULL)
 		{
 			if (*(cp + 1) != '#' &&
-			    *(cp - 1) != '\\')
+				*(cp - 1) != '\\')				/* backslash here is the escape character */
 			{
 				*cp = '\0';
 				break;

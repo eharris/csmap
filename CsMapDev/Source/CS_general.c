@@ -490,9 +490,8 @@ double EXP_LVL9 CS_un2d (Const char *name)
 
 void EXP_LVL1 CS_init (int keepers)
 {
-#if _FILE_SYSTEM == _fs_UNIX
 	extern char cs_DirsepC;
-#endif
+
 	extern char cs_DirK [];
 	extern csThread char cs_Dir [];
 	extern csThread char *cs_DirP;
@@ -536,10 +535,10 @@ void EXP_LVL1 CS_init (int keepers)
 	   there is something valid there.  Depending on the
 	   file system: */
 
-#if _FILE_SYSTEM == _fs_UNIX
+#if _RUN_TIME >= _rt_UNIXPCC
 	if (cs_Dir [0] == cs_DirsepC)
 #else
-	if (cs_Dir [1] == ':' || (cs_Dir [0] == '\\' && cs_Dir [1] == '\\'))
+	if (cs_Dir [1] == ':' || (cs_Dir [0] == cs_DirsepC && cs_Dir [1] == cs_DirsepC))
 #endif
 	{
 		/* cs_Dir contents appear to be valid. */

@@ -497,7 +497,15 @@ TcsOsGeoTestFile::TcsOsGeoTestFile (const wchar_t* dataFilePath)
 {
 	bool firstIsLabels (false);
 
+#if (_RUN_TIME >= _rt_UNIXPCC)
+	// Linux/gcc does not support a wide character version of the
+	// std:wifstream constructor.  Strange, but true.
+	char dataFilePathChr [MAXPATH];
+	wcstombs (dataFilePathChr,dataFilePath,sizeof (dataFilePathChr));
+	std::wifstream inStrm (dataFilePathChr,std::ios_base::in);
+#else
 	std::wifstream inStrm (dataFilePath,std::ios_base::in);
+#endif
 	if (inStrm.is_open ())
 	{
 		Ok = ReadFromStream (inStrm,firstIsLabels,Status);        

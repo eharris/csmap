@@ -41,23 +41,41 @@
 */
 
 #if _RUN_TIME < _rt_UNIXPCC
-char cs_DirK [MAXPATH] = "C:\\MAPPING\\";
+char cs_DirK [MAXPATH] = "C:\\ProgramData\\GeodeticData";
 csThread char cs_Dir [MAXPATH] = "";
 csThread char *cs_DirP = NULL;
 csThread char cs_UserDir [MAXPATH] = "";
 char cs_DirsepC = '\\';
 char cs_ExtsepC = '.';
 char cs_OptchrC = '/';
+char cs_EnvchrC = '%';
+char cs_EnvStartC = '%';
+char cs_EnvEndC = '%';
+wchar_t cs_DirsepWC = L'\\';
+wchar_t cs_ExtsepWC = L'.';
+wchar_t cs_OptchrWC = L'/';
+wchar_t cs_EnvchrWC = L'%';
+wchar_t cs_EnvStartWC = L'%';
+wchar_t cs_EnvEndWC = L'%';
 csThread char cs_NameMapperName [MAXPATH] = "NameMapper.csv";
 #else
-char cs_DirK [MAXPATH] = "/usr/MAPPING/data/";
-char cs_Dir [MAXPATH] = "/usr/MAPPING/data/";
+char cs_DirK [MAXPATH] = "/usr/etc/GeodeticData/";
+char cs_Dir [MAXPATH] = "";
 char *cs_DirP = NULL;
 char cs_UserDir [MAXPATH] = "";
 char cs_DirsepC = '/';
 char cs_ExtsepC = '.';
 char cs_OptchrC = '-';
-char cs_NameMapperName [MAXPATH] = "NameMapper.csv";
+char cs_EnvchrC = '$';
+char cs_EnvStartC = '{';
+char cs_EnvEndC = '}';
+wchar_t cs_DirsepWC = L'/';
+wchar_t cs_ExtsepWC = L'.';
+wchar_t cs_OptchrWC = L'-';
+wchar_t cs_EnvchrWC = L'$';
+wchar_t cs_EnvStartWC = L'{';
+wchar_t cs_EnvEndWC = L'}';
+wchar_t cs_NameMapperName [MAXPATH] = "NameMapper.csv";
 #endif
 
 /*
@@ -256,7 +274,7 @@ csThread double csGeoCtrEsq = 0.0;
    at MAXPATH (i.e. a minimum value). */
    
 csThread char csErrnam [MAXPATH] = "???";
-csThread char csErrmsg [256] = "???";
+csThread char csErrmsg [cs_ERRMSG_SIZE] = "???";
 
 /* The following carries a pointer to the category list. */
 struct cs_Ctdef_* cs_CtDefHead = NULL;
@@ -308,6 +326,7 @@ Const double cs_Fifth    =   (1.0 / 5.0);
 Const double cs_Fourth   =   (1.0 / 4.0);
 Const double cs_Third    =   (1.0 / 3.0);
 Const double cs_Half     =   0.5;
+Const double cs_Mhalf    =  -0.5;
 Const double cs_One      =   1.0;
 Const double cs_Two      =   2.0;
 Const double cs_Three    =   3.0;
@@ -578,49 +597,61 @@ Const short cs_QuadMapSO [] =
 
 Const struct cs_Grptbl_ cs_CsGrptbl [] =
 {
-	{  "SPCS27","State Planes, NAD27 Based, US Foot"          ,cs_GRPTBL_ACTIVE},
-	{  "SPCS83","State Planes, NAD83 Based, Meters"           ,cs_GRPTBL_ACTIVE},
-	{ "SPCS83F","State Planes, NAD83 Based, US Foot"          ,cs_GRPTBL_ACTIVE},
-	{ "SPCS83I","State Planes, NAD83 Based, Intn'l Foot"      ,cs_GRPTBL_ACTIVE},
-	{  "SPCSHP","State Planes, HARN (HPGN) Based, Meters"     ,cs_GRPTBL_ACTIVE},
-	{ "SPCSHPF","State Planes, HARN (HPGN) Based, US Foot"    ,cs_GRPTBL_ACTIVE},
-	{ "SPCSHPI","State Planes, HARN (HPGN) Based, Intn'l Foot",cs_GRPTBL_ACTIVE},
-	{      "LL","Latitude/Longitude"                          ,cs_GRPTBL_ACTIVE},
-	{   "UTM27","UTM Zones, NAD27 Based, Meters"              ,cs_GRPTBL_ACTIVE},
-	{  "UTM27F","UTM Zones, NAD27 Based, US Foot"             ,cs_GRPTBL_ACTIVE},
-	{  "UTM27I","UTM Zones, NAD27 Based, Intn'l Foot"         ,cs_GRPTBL_ACTIVE},
-	{   "UTM83","UTM Zones, NAD83 Based, Meters"              ,cs_GRPTBL_ACTIVE},
-	{  "UTM83F","UTM Zones, NAD83 Based, US Foot"             ,cs_GRPTBL_ACTIVE},
-	{  "UTM83I","UTM Zones, NAD83 Based, Intn'l Foot"         ,cs_GRPTBL_ACTIVE},
-	{   "UTMHP","UTM Zones, HARN (HPGN) Based, Meters"        ,cs_GRPTBL_ACTIVE},
-	{  "UTMHPF","UTM Zones, HARN (HPGN) Based, US Foot"       ,cs_GRPTBL_ACTIVE},
-	{  "UTMHPI","UTM Zones, HARN (HPGN) Based, Intn'l Foot"   ,cs_GRPTBL_ACTIVE},
-	{ "OTHR-US","Other US Coordinate Systems"                 ,cs_GRPTBL_ACTIVE},
-	{  "CANADA","Canadian Coordinate Systems"                 ,cs_GRPTBL_ACTIVE},
-	{ "OTHR-NA","Other North American Coordinate Systems"     ,cs_GRPTBL_ACTIVE},
-	{    "UTMN","UTM Zones, Northern Hemisphere, Meters"      ,cs_GRPTBL_ACTIVE},
-	{    "UTMS","UTM Zones, Southern Hemisphere, Meters"      ,cs_GRPTBL_ACTIVE},
-	{   "WORLD","World/Continent Coordinate Systems"          ,cs_GRPTBL_ACTIVE},
-	{  "EUROPE","European Coordinate Systems"                 ,cs_GRPTBL_ACTIVE},
-	{   "AUSNZ","Australia/New Zealand Coordinate Systems"    ,cs_GRPTBL_ACTIVE},
-	{   "SAMER","South American Coordinate Systems"           ,cs_GRPTBL_ACTIVE},
-	{   "CAMER","Central American Coordinate Systems"         ,cs_GRPTBL_ACTIVE},
-	{  "AFRICA","African Coordinate Systems"                  ,cs_GRPTBL_ACTIVE},
-	{    "ASIA","Asian Coordinate Systems"                    ,cs_GRPTBL_ACTIVE},
-	{  "RUSSIA","Russian Coordinate Systems"                  ,cs_GRPTBL_ACTIVE},
-	{ "PACIFIC","Other Pacific Coordinate Systems"            ,cs_GRPTBL_ACTIVE},
-	{"ATLANTIC","Other Atlantic Coordinate Systems"           ,cs_GRPTBL_ACTIVE},
-	{   "POLAR","Polar Coordinate Systems"                    ,cs_GRPTBL_ACTIVE},
-	{ "EPSGPRJ","Projected defs from EPSG, area undetermined" ,cs_GRPTBL_ACTIVE},
-	{  "EPSGLL","Geographic defs from EPSG, area undetermined",cs_GRPTBL_ACTIVE},
-	{    "TEST","Test Coordinate Systems"                     ,cs_GRPTBL_ACTIVE},
-	{    "USER","User Defined Coordinate Systems"             ,cs_GRPTBL_ACTIVE},
-	{"WKTSUPPT","Well Known Text Support"                     ,cs_GRPTBL_ACTIVE},
-	{   "CARIB","Caribean/Gulf of Mexico and Vicinity"        ,cs_GRPTBL_ACTIVE},
-	{ "MIDEAST","Mideast/Holy Land"                           ,cs_GRPTBL_ACTIVE},
-	{  "INDIAN","Indian Ocean"                                ,cs_GRPTBL_ACTIVE},
-	{   "NERTH","Non geospatial (non-Earth) transformations"  ,cs_GRPTBL_ACTIVE},
-	{    "NONE","No group specified in definition"            ,cs_GRPTBL_ACTIVE},
-	{  "LEGACY","Obsolete/Incorrect; for legacy use only"     ,cs_GRPTBL_ACTIVE},
-	{        "",""                                            ,cs_GRPTBL_END}
+	{     "SPCS27","State Planes, NAD27 Based, US Foot"           ,cs_GRPTBL_ACTIVE},
+	{     "SPCS83","State Planes, NAD83 Based, Meters"            ,cs_GRPTBL_ACTIVE},
+	{    "SPCS83F","State Planes, NAD83 Based, US Foot"           ,cs_GRPTBL_ACTIVE},
+	{    "SPCS83I","State Planes, NAD83 Based, Intn'l Foot"       ,cs_GRPTBL_ACTIVE},
+	{     "SPCSHP","State Planes, HARN (HPGN) Based, Meters"      ,cs_GRPTBL_ACTIVE},
+	{    "SPCSHPF","State Planes, HARN (HPGN) Based, US Foot"     ,cs_GRPTBL_ACTIVE},
+	{    "SPCSHPI","State Planes, HARN (HPGN) Based, Intn'l Foot" ,cs_GRPTBL_ACTIVE},
+	{   "SPNSRS07","State Planes, NSRS 2007 Based, Meters"        ,cs_GRPTBL_ACTIVE},
+	{  "SPNSRS07F","State Planes, NSRS 2007 Based, US Foot"       ,cs_GRPTBL_ACTIVE},
+	{  "SPNSRS07I","State Planes, NSRS 2007 Based, Intn'l Foot"   ,cs_GRPTBL_ACTIVE},
+	{   "SPNSRS11","State Planes, NSRS 2011 Based, Meters"        ,cs_GRPTBL_ACTIVE},
+	{  "SPNSRS11F","State Planes, NSRS 2011 Based, US Foot"       ,cs_GRPTBL_ACTIVE},
+	{  "SPNSRS11I","State Planes, NSRS 2011 Based, Intn'l Foot"   ,cs_GRPTBL_ACTIVE},
+	{         "LL","Latitude/Longitude"                           ,cs_GRPTBL_ACTIVE},
+	{      "UTM27","UTM Zones, NAD27 Based, Meters"               ,cs_GRPTBL_ACTIVE},
+	{     "UTM27F","UTM Zones, NAD27 Based, US Foot"              ,cs_GRPTBL_ACTIVE},
+	{     "UTM27I","UTM Zones, NAD27 Based, Intn'l Foot"          ,cs_GRPTBL_ACTIVE},
+	{      "UTM83","UTM Zones, NAD83 Based, Meters"               ,cs_GRPTBL_ACTIVE},
+	{     "UTM83F","UTM Zones, NAD83 Based, US Foot"              ,cs_GRPTBL_ACTIVE},
+	{     "UTM83I","UTM Zones, NAD83 Based, Intn'l Foot"          ,cs_GRPTBL_ACTIVE},
+	{      "UTMHP","UTM Zones, HARN (HPGN) Based, Meters"         ,cs_GRPTBL_ACTIVE},
+	{     "UTMHPF","UTM Zones, HARN (HPGN) Based, US Foot"        ,cs_GRPTBL_ACTIVE},
+	{     "UTMHPI","UTM Zones, HARN (HPGN) Based, Intn'l Foot"    ,cs_GRPTBL_ACTIVE},
+	{  "UTMNSRS07","UTM Zones, NSRS 2007 Based, Meters"           ,cs_GRPTBL_ACTIVE},
+	{ "UTMNSRS07F","UTM Zones, NSRS 2007 Based, US Foot"          ,cs_GRPTBL_ACTIVE},
+	{ "UTMNSRS07I","UTM Zones, NSRS 2007 Based, Intn'l Foot"      ,cs_GRPTBL_ACTIVE},
+	{  "UTMNSRS11","UTM Zones, NSRS 2011 Based, Meters"           ,cs_GRPTBL_ACTIVE},
+	{ "UTMNSRS11F","UTM Zones, NSRS 2011 Based, US Foot"          ,cs_GRPTBL_ACTIVE},
+	{ "UTMNSRS11I","UTM Zones, NSRS 2011 Based, Intn'l Foot"      ,cs_GRPTBL_ACTIVE},
+	{    "OTHR-US","Other US Coordinate Systems"                  ,cs_GRPTBL_ACTIVE},
+	{     "CANADA","Canadian Coordinate Systems"                  ,cs_GRPTBL_ACTIVE},
+	{    "OTHR-NA","Other North American Coordinate Systems"      ,cs_GRPTBL_ACTIVE},
+	{       "UTMN","UTM Zones, Northern Hemisphere, Meters"       ,cs_GRPTBL_ACTIVE},
+	{       "UTMS","UTM Zones, Southern Hemisphere, Meters"       ,cs_GRPTBL_ACTIVE},
+	{      "WORLD","World/Continent Coordinate Systems"           ,cs_GRPTBL_ACTIVE},
+	{     "EUROPE","European Coordinate Systems"                  ,cs_GRPTBL_ACTIVE},
+	{      "AUSNZ","Australia/New Zealand Coordinate Systems"     ,cs_GRPTBL_ACTIVE},
+	{      "SAMER","South American Coordinate Systems"            ,cs_GRPTBL_ACTIVE},
+	{      "CAMER","Central American Coordinate Systems"          ,cs_GRPTBL_ACTIVE},
+	{     "AFRICA","African Coordinate Systems"                   ,cs_GRPTBL_ACTIVE},
+	{       "ASIA","Asian Coordinate Systems"                     ,cs_GRPTBL_ACTIVE},
+	{     "RUSSIA","Russian Coordinate Systems"                   ,cs_GRPTBL_ACTIVE},
+	{    "PACIFIC","Other Pacific Coordinate Systems"             ,cs_GRPTBL_ACTIVE},
+	{   "ATLANTIC","Other Atlantic Coordinate Systems"            ,cs_GRPTBL_ACTIVE},
+	{      "POLAR","Polar Coordinate Systems"                     ,cs_GRPTBL_ACTIVE},
+	{    "EPSGPRJ","Projected defs from EPSG, area undetermined"  ,cs_GRPTBL_ACTIVE},
+	{     "EPSGLL","Geographic defs from EPSG, area undetermined ",cs_GRPTBL_ACTIVE},
+	{       "TEST","Test Coordinate Systems"                      ,cs_GRPTBL_ACTIVE},
+	{       "USER","User Defined Coordinate Systems"              ,cs_GRPTBL_ACTIVE},
+	{   "WKTSUPPT","Well Known Text Support"                      ,cs_GRPTBL_ACTIVE},
+	{      "CARIB","Caribean/Gulf of Mexico and Vicinity"         ,cs_GRPTBL_ACTIVE},
+	{    "MIDEAST","Mideast/Holy Land"                            ,cs_GRPTBL_ACTIVE},
+	{     "INDIAN","Indian Ocean"                                 ,cs_GRPTBL_ACTIVE},
+	{      "NERTH","Non geospatial (non-Earth) transformations"   ,cs_GRPTBL_ACTIVE},
+	{       "NONE","No group specified in definition"             ,cs_GRPTBL_ACTIVE},
+	{     "LEGACY","Obsolete/Incorrect; for legacy use only"      ,cs_GRPTBL_ACTIVE},
+	{           "",""                                             ,cs_GRPTBL_END}
 };

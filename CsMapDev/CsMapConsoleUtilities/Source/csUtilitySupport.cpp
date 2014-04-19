@@ -75,7 +75,7 @@ const wchar_t* dbl2wcs (double dblVal)
 // elimiate the possibility of having two of these floating around as
 // it is quite time consuming to buyild one of these things.
 
-// The following should be const, by the dumb Micros??t linker can't find it if it is.
+// The following should be const, but the dumb Micros??t linker can't find it if it is.
 extern wchar_t csEpsgDir [];
 TcsEpsgDataSetV6* csEpsgDataSetV6Ptr = 0;
 
@@ -83,7 +83,7 @@ const TcsEpsgDataSetV6* GetEpsgObjectPtr ()
 {
 	if (csEpsgDataSetV6Ptr == 0)
 	{
-		csEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (csEpsgDir,L"7.05");
+		csEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (csEpsgDir);
 	}
 	return csEpsgDataSetV6Ptr;
 }
@@ -1644,6 +1644,20 @@ void TcsKeyNameList::WriteToStream (std::wostream& listStream)
 }
 //newPage//
 //=========================================================================
+// TcsNameMapperSource -- An object which contains the NameMapper .csv
+// source file as a plain old .csv file.  Useful when doing maintenance.
+// Doing maintenance on the NameMapper when implemented in it natural
+// form, i.e. a std::set<TcsNameMap>, is quite restrictive as you can't
+// change data in the individual TcsNameMap elements which are a part of
+// the key for std::set<TcsNameMap>.  SInce most all elements are part
+// of the key, this limitation can be quite daunting.
+//
+// A the NameMapper carries nmemonics for the flavor, rather than the
+// numeric value actually used internally, this object necessarily
+// maintains a table of the nmemonic names assigned to the various flavors.
+// Otherwise, it's pretty much a simple shell in top the the
+// TcsCsvFileBase object which contains the actual NameMapper data.
+//=========================================================================
 // Construction, Destruction, and Assignment
 TcsNameMapperSource::TcsNameMapperSource (void) : TcsCsvFileBase (true,9,11),
 												  Ok (true)
@@ -1655,11 +1669,21 @@ TcsNameMapperSource::TcsNameMapperSource (void) : TcsCsvFileBase (true,9,11),
 		FlavorNames [index][0] = '\0';
 		FlavorIdValues [index] = 0UL;
 	}
+	memset (NameBuffer,'\0',sizeof (NameBuffer));
 }
 TcsNameMapperSource::TcsNameMapperSource (const TcsNameMapperSource& source)
 											:
-										  TcsCsvFileBase (source)
+										  TcsCsvFileBase (source),
+										  Ok             (source.Ok)
 {
+	for (int idx = 0;idx < FlavorCount;idx += 1)
+	{
+		wcsncpy (FlavorNames [idx],source.FlavorNames [idx],FlavorSize);
+		FlavorNames [idx][FlavorSize - 1] = L'\0';
+		FlavorIdValues [idx] = source.FlavorIdValues [idx];
+	}
+	wcsncpy (NameBuffer,source.NameBuffer,wcCount (NameBuffer));
+	NameBuffer [wcCount (NameBuffer) - 1] = L'\0';
 }
 TcsNameMapperSource::~TcsNameMapperSource (void)
 {
@@ -1670,6 +1694,15 @@ TcsNameMapperSource& TcsNameMapperSource::operator= (const TcsNameMapperSource& 
 	if (&rhs != this)
 	{
 		TcsCsvFileBase::operator= (rhs);
+		Ok = rhs.Ok;
+		for (int idx = 0;idx < FlavorCount;idx += 1)
+		{
+			wcsncpy (FlavorNames [idx],rhs.FlavorNames [idx],FlavorSize);
+			FlavorNames [idx] [FlavorSize - 1] = L'\0';
+			FlavorIdValues [idx] = rhs.FlavorIdValues [idx];
+		}
+		wcsncpy (NameBuffer,rhs.NameBuffer,wcCount (NameBuffer));
+		NameBuffer [wcCount (NameBuffer) - 1] = L'\0';
 	}
 	return *this;
 }
@@ -1698,47 +1731,272 @@ bool TcsNameMapperSource::ReadFromFile (const char* csvSourceFile)
 	}
 	return ok;
 }
-bool TcsNameMapperSource::RenameObject (EcsMapObjType nameSpace,EcsNameFlavor flavor,
-																const char* currentName,
-																const char* newName)
+unsigned long TcsNameMapperSource::GetIdent (unsigned recNbr) const
+{
+	return GetFieldAsUlong (recNbr,IdentFld);
+}
+unsigned long TcsNameMapperSource::GetType (unsigned recNbr) const
+{
+	return GetFieldAsUlong (recNbr,IdentFld);
+}
+EcsNameFlavor TcsNameMapperSource::GetFlavor (unsigned recNbr) const
 {
 	bool ok;
-
-	unsigned long recordIdx;
-	const wchar_t* flvrPtr;
-
-	wchar_t wOldName [256];
-	wchar_t wNewName [256];
-
-	std::wstring field;
-	std::wstring flvrName;
-	std::wstring objtName;
-
+	
+	unsigned long ulValue;
+	EcsNameFlavor result (csMapFlvrUnknown);
+	std::wstring fieldData;
 	TcsCsvStatus status;
 
-	ok = true;
-	mbstowcs (wOldName,currentName,wcCount (wOldName));
-	flvrPtr = FlavorNames [static_cast<int>(flavor)];
-	for (recordIdx = 0;ok && recordIdx < RecordCount ();recordIdx += 1)
+	ok = (recNbr < RecordCount ());
+	if (ok)
 	{
-		ok = GetField (flvrName,recordIdx,FlvrFld,status);
-		if (ok && wcsicmp (flvrName.c_str(),flvrPtr))
+		ok = GetField (fieldData,recNbr,FlvrFld,status);
+		if (ok)
+		{
+			wchar_t firstChar = *fieldData.c_str();
+			if (iswdigit (firstChar))
+			{
+				// The flavor field is numeric, this is easy.
+				ulValue = wcstoul (fieldData.c_str(),0,10);
+				result = static_cast<EcsNameFlavor>(ulValue);
+			}
+			else
+			{
+				// The flavor field is a nmemonic.  Need to work through
+				// the nmomonc table to get a numeric value.
+				for (int idx = 0;idx < FlavorCount;idx += 1)
+				{
+					if (!wcsicmp (FlavorNames [idx],fieldData.c_str ()))
+					{
+						result = static_cast<EcsNameFlavor>(FlavorIdValues [idx]);
+						break;
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+unsigned long TcsNameMapperSource::GetFlavorIdent (unsigned recNbr) const
+{
+	return GetFieldAsUlong (recNbr,IdentFld);
+}
+const wchar_t* TcsNameMapperSource::GetName (unsigned recNbr) const
+{
+	return GetFieldAsString (recNbr,NameFld);
+}
+unsigned long TcsNameMapperSource::GetDupSort (unsigned recNbr) const
+{
+	return GetFieldAsUlong (recNbr,IdentFld);
+}
+unsigned long TcsNameMapperSource::GetAliasFlag (unsigned recNbr) const
+{
+	return GetFieldAsUlong (recNbr,IdentFld);
+}
+unsigned long TcsNameMapperSource::GetFlags (unsigned recNbr) const
+{
+	return GetFieldAsUlong (recNbr,IdentFld);
+}
+unsigned long TcsNameMapperSource::GetDeprecation (unsigned recNbr) const
+{
+	return GetFieldAsUlong (recNbr,IdentFld);
+}
+const wchar_t* TcsNameMapperSource::GetRemarks (unsigned recNbr) const
+{
+	return GetFieldAsString (recNbr,RemrksFld);
+}
+const wchar_t* TcsNameMapperSource::GetComment (unsigned recNbr) const
+{
+	return GetFieldAsString (recNbr,CommntFld);
+}
+bool TcsNameMapperSource::SetIdent (unsigned recNbr,unsigned long newIdent)
+{
+	return SetUlongField (recNbr,IdentFld,newIdent);
+}
+bool TcsNameMapperSource::SetType (unsigned recNbr,unsigned long newType)
+{
+	return SetUlongField (recNbr,IdentFld,newType);
+}
+bool TcsNameMapperSource::SetFlavor (unsigned recNbr,EcsNameFlavor newFlavor)
+{
+	bool ok (false);
+	int idx;
+
+	// If the record number is greater than Flavor count, we write
+	// the nmemonic value.  Otherwise we wrtie as an integer.
+	if (recNbr < FlavorCount)
+	{
+		ok = SetUlongField (recNbr,FlvrFld,newFlavor);
+	}
+	else
+	{
+		for (idx = 0;idx < FlavorCount;idx += 1)
+		{
+			if (FlavorIdValues [idx] == static_cast<unsigned long>(newFlavor))
+			{
+				ok = SetStringField (recNbr,FlvrFld,FlavorNames [idx]);
+				break;
+			}
+		}
+		ok = (idx < FlavorCount);	
+	}
+	return ok;
+}
+bool TcsNameMapperSource::SetFlavorIdent (unsigned recNbr,unsigned long newFlavorIdent)
+{
+	return SetUlongField (recNbr,FlvrIdFld,newFlavorIdent);
+}
+bool TcsNameMapperSource::SetName (unsigned recNbr,const wchar_t* newName)
+{
+	return SetStringField (recNbr,NameFld,newName);
+}
+bool TcsNameMapperSource::SetDupSort (unsigned recNbr,unsigned long newDupSort)
+{
+	return SetUlongField (recNbr,DupSrtFld,newDupSort);
+}
+bool TcsNameMapperSource::SetAliasFlag (unsigned recNbr,unsigned long newAliasFlag)
+{
+	return SetUlongField (recNbr,AliasFld,newAliasFlag);
+}
+bool TcsNameMapperSource::SetFlags (unsigned recNbr,unsigned long newFlags)
+{
+	return SetUlongField (recNbr,FlagsFld,newFlags);
+}
+bool TcsNameMapperSource::SetDeprecation (unsigned recNbr,unsigned long newDeprecation)
+{
+	return SetUlongField (recNbr,DeprctFld,newDeprecation);
+}
+bool TcsNameMapperSource::SetRemarks (unsigned recNbr,const wchar_t* newRemarks)
+{
+	return SetStringField (recNbr,RemrksFld,newRemarks);
+}
+bool TcsNameMapperSource::SetComment (unsigned recNbr,const wchar_t* newComment)
+{
+	return SetStringField (recNbr,CommntFld,newComment);
+}
+bool TcsNameMapperSource::Locate (unsigned& result,unsigned long type,EcsNameFlavor flavor,const wchar_t* name) const
+{
+	bool ok (false);
+	unsigned recordCount;
+	unsigned recNbr (UlErrorValue);
+
+	recordCount = RecordCount ();
+	for (recNbr = 0;recNbr < recordCount;recNbr += 1)
+	{
+		if ((GetType (recNbr) != type) || (GetFlavor (recNbr) != flavor))
 		{
 			continue;
 		}
-		// Flavor matches, see if the old name matches.
-		if (ok)
+		if (wcsicmp (GetName (recNbr),name))
 		{
-			ok = GetField (objtName,recordIdx,NameFld,status);
-			if (ok && wcsicmp (flvrName.c_str(),wOldName))
-			{
-				// We have found it, make the change.
-				mbstowcs (wNewName,newName,wcCount (wNewName));
-				field = wNewName;
-				ok = ReplaceField (field,recordIdx,NameFld,status);
-				break;
-			}
-		}		
+			continue;
+		}
+		ok = true;
+		break;
+	}
+	result = ok ? recNbr : UlErrorValue;
+	return ok;
+}
+bool TcsNameMapperSource::Locate (unsigned& result,unsigned long type,EcsNameFlavor flavor,unsigned long flvrId)
+{
+	bool ok (false);
+	unsigned recordCount;
+	unsigned recNbr;
+
+	recordCount = RecordCount ();
+	for (recNbr = 0;recNbr < recordCount;recNbr += 1)
+	{
+		if ((GetType (recNbr) != type) || (GetFlavor (recNbr) != flavor))
+		{
+			continue;
+		}
+		if (GetFlavorIdent (recNbr) != flvrId)
+		{
+			continue;
+		}
+		ok = true;
+		break;
+	}
+	result = ok ? recNbr : UlErrorValue;
+	return ok;
+}
+bool TcsNameMapperSource::Locate (unsigned& result,unsigned long type,EcsNameFlavor flavor,const char* name)
+{
+	bool ok;
+	
+	wchar_t wcName [256];
+	
+	mbstowcs (wcName,name,wcCount (wcName));
+	wcName [255] = L'\0';
+	ok = TcsNameMapperSource::Locate (result,type,flavor,wcName);
+	return ok;
+}
+bool TcsNameMapperSource::LocateNameMap (unsigned& result,TcsNameMap& locator,bool byId)
+{
+	bool ok (false);
+	unsigned recNbr;
+	unsigned long type;
+	EcsNameFlavor flavor;
+	unsigned long flvrId;
+	const wchar_t* namePtr;
+
+	type = locator.GetMapClass ();
+	flavor = locator.GetFlavor ();
+
+	if (byId)
+	{
+		flvrId = locator.GetNumericId ();
+		ok = Locate (recNbr,type,flavor,flvrId);
+	}
+	else
+	{
+		namePtr = locator.GetNamePtr ();
+		ok = Locate (recNbr,type,flavor,namePtr);
+	}
+	result = ok ? recNbr : UlErrorValue;
+	return ok;
+}
+bool TcsNameMapperSource::ReplaceNameMap (unsigned recNbr,TcsNameMap& updatedNameMap)
+{
+	bool ok;
+	
+	        ok = SetIdent (recNbr,updatedNameMap.GetGenericId ());
+	if (ok) ok = SetType (recNbr,updatedNameMap.GetMapClass ());
+	if (ok) ok = SetType (recNbr,updatedNameMap.GetMapClass ());
+	if (ok) ok = SetFlavor (recNbr,updatedNameMap.GetFlavor ());
+	if (ok) ok = SetFlavorIdent (recNbr,updatedNameMap.GetNumericId ());
+	if (ok) ok = SetName (recNbr,updatedNameMap.GetNamePtr ());
+	if (ok) ok = SetDupSort(recNbr,updatedNameMap.GetDupSort ());
+	if (ok) ok = SetAliasFlag (recNbr,updatedNameMap.GetAliasFlag ());
+	if (ok) ok = SetFlags (recNbr,(unsigned long)updatedNameMap.GetUserValue ());
+	if (ok) ok = SetDeprecation (recNbr,updatedNameMap.DeprecatedBy ());
+	if (ok) ok = SetRemarks (recNbr,updatedNameMap.GetRemarks ());
+	if (ok) ok = SetComment (recNbr,updatedNameMap.GetComments ());
+	return ok;
+}
+bool TcsNameMapperSource::AddNameMap (TcsNameMap& newNameMap)
+{
+	return false;
+}
+bool TcsNameMapperSource::DeleteNameMap (unsigned recNbr)
+{
+	return false;
+}
+bool TcsNameMapperSource::RenameObject (EcsMapObjType type,EcsNameFlavor flavor,
+														   const char* currentName,
+														   const char* newName)
+{
+	bool ok;
+	unsigned recNbr;
+	wchar_t wcNewName [256];
+
+	ok = Locate (recNbr,type,flavor,currentName);
+	if (ok)
+	{
+		mbstowcs (wcNewName,newName,wcCount (wcNewName));
+		wcNewName [255] = L'\0';
+		ok = SetName (recNbr,wcNewName);
 	}
 	return ok;
 }
@@ -1756,7 +2014,7 @@ bool TcsNameMapperSource::WriteToFile (const char* csvSourceFile,bool overwrite)
 	}
 	else
 	{
-		woStrm.open (csvSourceFile,std::ios_base::out | std::ios_base::trunc);
+		woStrm.open (csvSourceFile,std::ios_base::out | std::ios_base::app);
 	}
 	ok = woStrm.is_open ();
 	if (ok)
@@ -1780,7 +2038,7 @@ bool TcsNameMapperSource::InitializeFlavors ()
 	unsigned long typeValue;
 	unsigned long flvrIdx;
 	
-	std::wstring field;
+	std::wstring fieldData;
 	TcsCsvStatus status;
 
 	for (index = 0;index < 32;index += 1)
@@ -1793,43 +2051,37 @@ bool TcsNameMapperSource::InitializeFlavors ()
 	recordCount = RecordCount ();
 	for (index = 0;ok && (index < recordCount);index += 1)
 	{
-		ok = GetFieldAsUlong (typeValue,index,TypeFld);
-		if (ok)
+		typeValue = GetFieldAsUlong (index,TypeFld);
+		if (typeValue == 1UL)
 		{
-			flvrIdx = 0UL;				// to keep lint happy
-			if (typeValue == 1UL)
+			// Its a flavor name definition record.  Extract the nmemonic and
+			// save it in the proper place.
+			ok = GetField (fieldData,index,NameFld,status);
+			if (ok)
 			{
-				ok = GetField (field,index,NameFld,status);
-				if (ok)
-				{
-					ok = GetFieldAsUlong (flvrIdx,index,FlvrFld);
-				}
-				if (ok)
-				{
-					wcsncpy (FlavorNames [flvrIdx],field.c_str (),32);
-					FlavorNames [flvrIdx][31] = L'\0';
-				}
+				flvrIdx = GetFieldAsUlong (index,FlvrFld);
+				wcsncpy (FlavorNames [flvrIdx],fieldData.c_str (),FlavorSize);
+				FlavorNames [flvrIdx][FlavorSize - 1] = L'\0';
 			}
-			else if (typeValue > 1)
+		}
+		else if (typeValue > 1)
+		{
+			// It is not a flavor nmemonic definition.  What we need to do
+			// here is accumulate the highest currently used Generic ID for
+			// each flavor.
+			ok = GetField (fieldData,index,FlvrFld,status);
+			if (ok)
 			{
-				idntValue = 0UL;			// to keep lint happy
-				ok = GetField (field,index,FlvrFld,status);
-				if (ok)
+				idntValue = GetFieldAsUlong (index,IdentFld);
+				for (flvrIdx = 0;flvrIdx < FlavorCount;flvrIdx += 1)
 				{
-					ok = GetFieldAsUlong (idntValue,index,IdntFld);
-				}
-				if(ok)
-				{
-					for (flvrIdx = 0;flvrIdx < 32;flvrIdx += 1)
+					if (!wcsicmp (FlavorNames [flvrIdx],fieldData.c_str ()))
 					{
-						if (!wcsicmp (FlavorNames [flvrIdx],field.c_str ()))
+						if (idntValue > FlavorIdValues [flvrIdx])
 						{
-							if (idntValue > FlavorIdValues [flvrIdx])
-							{
-								FlavorIdValues [flvrIdx] = idntValue;
-								break; 
-							}
-						}	
+							FlavorIdValues [flvrIdx] = idntValue;
+							break; 
+						}
 					}
 				}
 			}
@@ -1837,23 +2089,87 @@ bool TcsNameMapperSource::InitializeFlavors ()
 	}
 	return ok;
 }
-bool TcsNameMapperSource::GetFieldAsUlong (unsigned long& rtnValue,unsigned recordNbr,
-																   short fieldNbr)
+unsigned long TcsNameMapperSource::GetFieldAsUlong (unsigned recNbr,short fldNbr) const
 {
-	bool ok (false);
-
-	wchar_t* dummy;
-	std::wstring field;
+	bool ok;
+	unsigned long result (UlErrorValue);
+	std::wstring fieldData;
 	TcsCsvStatus status;
-	
-	ok = GetField (field,recordNbr,fieldNbr,status);
+
+	ok = (recNbr < RecordCount ());
 	if (ok)
 	{
-		wchar_t firstChar = *field.c_str();
-		ok = iswdigit (firstChar);
+		ok = GetField (fieldData,recNbr,fldNbr,status);
 		if (ok)
 		{
-			rtnValue = wcstoul (field.c_str(),&dummy,10);
+			wchar_t firstChar = *fieldData.c_str();
+			ok = iswdigit (firstChar);
+			if (ok)
+			{
+				result = wcstoul (fieldData.c_str(),0,10);
+			}
+		}
+	}
+	return result;
+}
+// This function should return a pointer to the actual string in the .CSV file
+// object.  That is the indent.  We need high performance to the name for
+// simple comparison purposes, so we deisre very much to avoid copying the
+// string.
+const wchar_t* TcsNameMapperSource::GetFieldAsString (unsigned recNbr,short fldNbr) const
+{
+	bool ok;
+	const wchar_t* result (0);
+	std::wstring fieldData;
+	TcsCsvStatus status;
+
+	ok = (recNbr < RecordCount ());
+	if (ok)
+	{
+		ok = GetField (fieldData,recNbr,fldNbr,status);
+		if (ok)
+		{
+			result = fieldData.c_str();
+		}
+	}
+	return result;
+}
+bool TcsNameMapperSource::SetUlongField (unsigned recNbr,short fldNbr,unsigned long newValue)
+{
+	bool ok;
+
+	wchar_t buffer [256]; 	
+	std::wstring fieldData;
+	TcsCsvStatus status;
+	
+	ok = (recNbr < RecordCount ());
+	if (ok)
+	{
+		ok = (fldNbr < FieldCount (recNbr));
+		if (ok)
+		{
+			swprintf (buffer,wcCount (buffer),L"%lu",newValue);
+			fieldData = buffer;
+			ok = ReplaceField (fieldData,recNbr,fldNbr,status);
+		}
+	}
+	return ok;
+}
+bool TcsNameMapperSource::SetStringField (unsigned recNbr,short fldNbr,const wchar_t* newString)
+{
+	bool ok;
+
+	std::wstring fieldData;
+	TcsCsvStatus status;
+	
+	ok = (recNbr < RecordCount ());
+	if (ok)
+	{
+		ok = (fldNbr < FieldCount (recNbr));
+		if (ok)
+		{
+			fieldData = newString;
+			ok = ReplaceField (fieldData,recNbr,fldNbr,status);
 		}
 	}
 	return ok;

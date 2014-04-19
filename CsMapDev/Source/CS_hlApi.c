@@ -78,10 +78,10 @@ int EXP_LVL1 CS_cnvrt (Const char *src_cs,Const char *dst_cs,double coord [3])
 	int status;
 	int dt_st;
 
+	char msgBufr [MAXPATH];
 	double my_ll [3];
 
 	status = 0;
-
 
 	/* Get a pointer to the two coordinate systems involved. */
 if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %s->%s\n",modl_name,__LINE__,src_cs,dst_cs);
@@ -123,6 +123,11 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,st
 	return (status);
 
 error:
+	if (csDiagnostic != 0)
+	{
+		CS_errmsg (msgBufr,sizeof (msgBufr));
+		fprintf (csDiagnostic,"Error detected in %s: %s\n",modl_name,msgBufr);
+	}
 	return (-cs_Error);
 }
 
@@ -154,6 +159,7 @@ int EXP_LVL1 CS_cnvrt3D (Const char *src_cs,Const char *dst_cs,double coord [3])
 	int status;
 	int dt_st;
 
+	char msgBufr [MAXPATH];
 	double my_ll [3];
 
 	status = 0;
@@ -198,6 +204,11 @@ if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,st
 	return (status);
 
 error:
+	if (csDiagnostic != 0)
+	{
+		CS_errmsg (msgBufr,sizeof (msgBufr));
+		fprintf (csDiagnostic,"Error detected in %s: %s\n",modl_name,msgBufr);
+	}
 	return (-cs_Error);
 }
 
@@ -674,7 +685,6 @@ double EXP_LVL1 CS_scalh (Const char *cs_nam,double ll [2])
 	else		    hh = cs_Mone;
 	return (hh);
 }
-
 /**********************************************************************
 	The following function releases all resources acquired by the
 	functions defined in this module.
@@ -815,7 +825,6 @@ void EXP_LVL1 CS_recvr (void)
 int EXP_LVL1 CS_mgrsSetUp (const char* ellipsoid,short bessel)
 {
 	extern struct cs_Mgrs_ *cs_MgrsPtr;
-
 
 	if (cs_MgrsPtr != NULL)
 	{

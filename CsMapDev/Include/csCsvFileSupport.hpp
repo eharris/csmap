@@ -25,6 +25,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#if !defined (csCsvFileSupportHpp)
+#define csCsvFileSupportHpp
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -290,3 +293,5 @@ private:
 	std::vector<TcsCsvRecord> Records;
 	std::map<std::wstring,unsigned> Index;
 };
+
+#endif

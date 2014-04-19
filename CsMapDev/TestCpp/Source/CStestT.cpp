@@ -49,7 +49,7 @@ extern "C"
    module environment.  That is, write some quick code and get it compiled and
    run it without all the hassels of establishing a solution, a project, set
    all the parameters, etc. etc.
-   
+
    Case in point, I needed to generate a list of test points for a specific
    conversion before a major change so that I could verify that the change
    did not produce any regressions.  Thus, I simply add the code here and
@@ -61,6 +61,34 @@ extern "C" char csErrmsg [256];
 int CStestT (bool verbose,long32_t duration)
 {
 	int err_cnt = 0;
+
+#ifndef __SKIP__
+
+	double llhIn  [3];
+	double llhOk  [3];
+	double llhDel [3];
+
+	llhIn [0] = -105.0;
+	llhIn [1] =   39.0;
+	llhIn [2] =  100.0;
+
+	llhOk [0] = -105.0000001305;
+	llhOk [1] =   38.99999999166666666666666666666667;
+	llhOk [2] =   99.974;
+
+	int st = CS_cnvrt3D ("LL-HPGN","NSRS2007.LL",llhIn);
+	if (st != 0)
+	{
+		err_cnt += 1;
+	}
+	
+	llhDel [0] = fabs (llhIn [0] - llhOk [0]);
+	llhDel [1] = fabs (llhIn [1] - llhOk [1]);
+	llhDel [2] = fabs (llhIn [2] - llhOk [2]);
+	
+	printf ("Deltas: %g %g %g\n",llhDel [0],llhDel [1], llhDel [2]); 
+
+#endif
 
 #ifdef __SKIP__
 
@@ -77,7 +105,7 @@ int CStestT (bool verbose,long32_t duration)
 	}
 #endif
 
-#ifndef __SKIP__
+#ifdef __SKIP__
 
 	char wktOne   [1024] = "GEOGCS [ \"NAD83\", DATUM [\"NAD 83\", SPHEROID [\"GRS 80\", 6378137.000000, 298.257222]], PRIMEM [ \"Greenwich\", 0.000000 ], UNIT [\"Degrees\", 0.01745329251994330]]";
 //	char wktOne   [1024] = "PROJCS[\"DHDN / Gauss-Kruger zone 5\",GEOGCS[\"DHDN\",DATUM[\"Deutsches_Hauptdreiecksnetz\",SPHEROID[\"Bessel 1841\",6377397.155,299.1528128,AUTHORITY[\"EPSG\",\"7004\"]],AUTHORITY[\"EPSG\",\"6314\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4314\"]],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",15],PARAMETER[\"scale_factor\",1],PARAMETER[\"false_easting\",5500000],PARAMETER[\"false_northing\",0],AUTHORITY[\"EPSG\",\"31469\"]]";

@@ -32,7 +32,7 @@
    Transformation from the dictionary and then use that definition to
    create a fully initialized cs_GxXform_ structure which can actually
    be used to perform Geodetic Transformations in a generic way. */
-struct cs_GxXform_ *CS_gxloc (Const char* gxDefName, short userDirection)
+struct cs_GxXform_* EXP_LVL1 CS_gxloc (Const char* gxDefName, short userDirection)
 {
     struct cs_GeodeticTransform_* xfrmDefPtr;
     struct cs_GxXform_* transform;
@@ -183,7 +183,7 @@ error:
 }
 
 /* A fallback for strange situations. */
-struct cs_GxXform_*	CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt)
+struct cs_GxXform_*	EXP_LVL3 CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt)
 {
 	extern double cs_Zero;
 	extern double cs_Three;
@@ -318,35 +318,35 @@ error:
 	}
 	return NULL;
 }
-int CS_gxFrwrd3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
+int EXP_LVL1 CS_gxFrwrd3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
 {
 	int gxStatus;
 	
 	gxStatus = (*xform->frwrd3D)(&xform->xforms,trgLl,srcLl);
 	return gxStatus;
 }
-int CS_gxFrwrd2D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
+int EXP_LVL1 CS_gxFrwrd2D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
 {
 	int gxStatus;
 	
 	gxStatus = (*xform->frwrd2D)(&xform->xforms,trgLl,srcLl);
 	return gxStatus;
 }
-int CS_gxInvrs3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
+int EXP_LVL1 CS_gxInvrs3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
 {
 	int gxStatus;
 	
 	gxStatus = (*xform->invrs3D)(&xform->xforms,trgLl,srcLl);
 	return gxStatus;
 }
-int CS_gxInvrs2D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
+int EXP_LVL1 CS_gxInvrs2D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3])
 {
 	int gxStatus;
 	
 	gxStatus = (*xform->invrs2D)(&xform->xforms,trgLl,srcLl);
 	return gxStatus;
 }
-int CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFlg,int err_list [],int list_sz)
+int EXP_LVL1 CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFlg,int err_list [],int list_sz)
 {
 	extern struct cs_XfrmTab_ cs_XfrmTab[];
 	extern char csErrnam [MAXPATH];
@@ -447,7 +447,7 @@ int CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFl
 	}
 	return (err_cnt + 1);
 }
-int CS_gxIsNull (struct cs_GxXform_ *xfrmPtr)
+int EXP_LVL1 CS_gxIsNull (struct cs_GxXform_ *xfrmPtr)
 {
 	extern struct cs_XfrmTab_ cs_XfrmTab[];
 
@@ -471,7 +471,7 @@ int CS_gxIsNull (struct cs_GxXform_ *xfrmPtr)
 	}
 	return isNull;
 }
-void CS_gxDisable (struct cs_GxXform_ *xfrmPtr)
+void EXP_LVL1 CS_gxDisable (struct cs_GxXform_ *xfrmPtr)
 {
 	xfrmPtr->isNullXfrm = TRUE;
 }

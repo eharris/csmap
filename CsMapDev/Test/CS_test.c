@@ -127,7 +127,9 @@ char* cs_TestDirP;
 int main (int argc,char *argv [])
 {
 	extern char cs_Dir [];
+	extern char cs_DirK [];
 	extern char *cs_DirP;
+	extern char cs_DirsepC;
 	extern char cs_OptchrC;
 	extern union cs_Bswap_ cs_BswapU;
 
@@ -223,6 +225,7 @@ int main (int argc,char *argv [])
 	   overrides this selection if present on the command
 	   line. */
 
+	st = -1;
 #if _OPR_SYSTEM != _os_UNIX
 	strncpy (alt_dir,argv [0],sizeof (alt_dir));
 	alt_dir [sizeof (alt_dir) - 1] = '\0';
@@ -230,9 +233,18 @@ int main (int argc,char *argv [])
 	if (cp != NULL)
 	{
 		*cp = '\0';
-		CS_altdr (alt_dir);
+		st = CS_altdr (alt_dir);
 	}
+#else
+	strncpy (alt_dir,cs_DirK,sizeof (alt_dir));
+	alt_dir [sizeof (alt_dir) - 1] = '\0';
+	st = CS_altdr (alt_dir);
 #endif
+	if (st != 0)
+	{
+		cs_DirP = CS_stcpy (cs_Dir,cs_DirK);
+		st = CS_altdr (alt_dir);
+	}
 
 	/* Analyze the arguments and extract all options. */
 
@@ -247,7 +259,6 @@ int main (int argc,char *argv [])
 	cs_TestFile [0] = '\0';
 	cs_TestDir [0] = '\0';
 	cs_TestDirP = cs_TestDir;
-	cs_DirP = CS_stcpy (cs_Dir,"C:\\Program Files\\Common Files\\GeodeticData\\");
 
 	for (ii = 1;ii < argc;ii++)
 	{

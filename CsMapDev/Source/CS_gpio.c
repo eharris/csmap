@@ -437,7 +437,7 @@ error:
 	return NULL;
 }
 
-int CS_gpchk (Const struct cs_GeodeticPath_ *gpPath,unsigned short gpChkFlg,int err_list [],int list_sz)
+int EXP_LVL1 CS_gpchk (Const struct cs_GeodeticPath_ *gpPath,unsigned short gpChkFlg,int err_list [],int list_sz)
 {
 	short gpIdx;
 	

@@ -509,7 +509,7 @@ int ExtendCsNameBlock(struct cs_Ctdef_* pCategoryIn, size_t byCount)
 
 	//now update the struct...
 	pCategoryIn->csNames = allocatedBlock;
-	pCategoryIn->allocCnt = totalRequiredCount;
+	pCategoryIn->allocCnt = (ulong32_t)totalRequiredCount;
 	//...and zero out everything, that's beyond the last CS name
 	memset(&pCategoryIn->csNames[pCategoryIn->nameCnt], '\0', (totalRequiredCount - pCategoryIn->nameCnt) * blockSize);
 	return 0;
@@ -2044,7 +2044,7 @@ int EXP_LVL3 CSwrtCatFile (csFILE* stream,Const struct cs_Ctdef_ *ctDefPtr)
 	};
 	return st;
 }
-void CSrlsCategory (struct cs_Ctdef_ *ctDefPtr)
+void EXP_LVL3 CSrlsCategory (struct cs_Ctdef_ *ctDefPtr)
 {
 	if (ctDefPtr != NULL)
 	{
@@ -2100,6 +2100,7 @@ int EXP_LVL9 CSctcomp (	Const char *inpt,Const char *outp,int flags,Const char *
 																		  int (*err_func)(char *mesg))
 {
 	extern struct cs_Ctdef_* cs_CtDefHead;
+	extern char cs_DirsepC;
 
 	int st;
 	int demo;
@@ -2212,7 +2213,7 @@ int EXP_LVL9 CSctcomp (	Const char *inpt,Const char *outp,int flags,Const char *
 		while ((cp = strchr (cp,';')) != NULL)
 		{
 			if (*(cp + 1) != ';' &&
-				*(cp - 1) != '\\')
+				*(cp - 1) != cs_DirsepC)
 			{
 				*cp = '\0';
 				break;

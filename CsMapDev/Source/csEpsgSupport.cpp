@@ -339,7 +339,7 @@ char pathBufr [1024];
 	SetObjectName (objName);
 	
 	std::wstring filePath (databaseFldr);
-	filePath += L"\\";
+	filePath += L"/";
 	filePath += tblMap.TableName;
 	filePath += L".csv";
 wcstombs (pathBufr,filePath.c_str (),sizeof (pathBufr));
@@ -421,50 +421,62 @@ unsigned TcsEpsgTable::LocateRecordByEpsgCode (const TcsEpsgCode& epsgCode) cons
 	}
 	return recordNumber;
 }
+// Note that the following function returns the code associated with the first
+// occurence of the specified locator value.  This may or may not be what you
+// want.  Take advantage of the convenience of this function only in cases
+// where the locator value can be assumed to be unique within the
+// non-deprecated table entries.
 bool TcsEpsgTable::EpsgLocateCode (TcsEpsgCode& epsgCode,EcsEpsgField fieldId,const wchar_t* fldValue) const
 {
 	bool ok;
 	bool deprecated;
 	std::wstring fldData;
 
-	short deprecatedFldNbr = GetEpsgFieldNumber (TableId,epsgFldDeprecated);
-	short locateFldNbr = GetEpsgFieldNumber (TableId,fieldId);
-	short codeFldNbr = GetEpsgCodeFieldNbr (TableId);
-
+	// Prepare for an error of some sort.
 	epsgCode = 0UL;
-	ok = (locateFldNbr >= 0);
+
+	// The field containing the EPSG code is almost always field number 0, but
+	// the actual EcsEpsgField of the EPSG code varies from one table to
+	// another.
+	EcsEpsgField codeFldId = GetEpsgCodeFieldId (TableId);
+
+	// We don't really need the fieldNbr, but we do the following to verify
+	// that the provided fieldId is valid for the current table.
+	short fldNbr = GetEpsgFieldNumber (TableId,fieldId);
+	ok = (fldNbr >= 0);
+
+	// OK, we search the table for the provided search value, skipping
+	// all deprecated entries.
+	deprecated = false;
 	unsigned recCnt = RecordCount ();
 	for (unsigned recNbr = 0; ok && recNbr < recCnt;++recNbr)
 	{
-		if (deprecatedFldNbr >= 0)
+		// epsgFldDeprecated is defined for all tables.  Note, if
+		// this fails, we assume that the record is not deprecated
+		// and continue with the search.
+		if (GetField (fldData,recNbr,epsgFldDeprecated))
 		{
-			ok = GetField (fldData,recNbr,deprecatedFldNbr);
-			if (ok)
+			deprecated = (CS_wcsicmp (fldData.c_str (),LogicalTrue) == 0);
+			if (deprecated)
 			{
-				deprecated = (CS_wcsicmp (fldData.c_str (),LogicalTrue) == 0);
-				if (deprecated)
-				{
-					continue;
-				}
+				continue;
 			}
 		}
+		ok = GetField (fldData,recNbr,fieldId);
 		if (ok)
 		{
-			ok = GetField (fldData,recNbr,locateFldNbr);
-			if (ok)
+			if (CS_wcsicmp (fldData.c_str (),fldValue) == 0)
 			{
-				if (CS_wcsicmp (fldData.c_str (),fldValue) == 0)
+				ok = GetField (fldData,recNbr,codeFldId);
+				if (ok)
 				{
-					ok = GetField (fldData,recNbr,codeFldNbr);
-					if (ok)
-					{
-						epsgCode = TcsEpsgCode (fldData);
-					}
+					epsgCode = TcsEpsgCode (fldData);
+					break;
 				}
 			}
 		}
 	}
-	return ok;
+	return (epsgCode.IsValid ());
 }
 // LocateFirst functions presume the field ID is not the index field and not
 // the primary sort key.  That is, these 'LocateFirst' functions do a linear
@@ -682,7 +694,7 @@ bool TcsEpsgTable::GetAsReal (double& result,const TcsEpsgCode& epsgCode,EcsEpsg
 	}
 	return ok;
 }
-bool TcsEpsgTable::GetField (std::wstring& result,unsigned recNbr,EcsEpsgField fieldId) const
+bool TcsEpsgTable::GetField (std::wstring& result,unsigned int recNbr,EcsEpsgField fieldId) const
 {
 	bool ok (false);
 	TcsCsvStatus status;
@@ -766,7 +778,6 @@ bool TcsEpsgTable::GetAsReal (double& result,unsigned recNbr,EcsEpsgField fieldI
 	result = myResult;
 	return ok;
 }
-
 const TcsCsvStatus& TcsEpsgTable::GetCsvStatus () const
 {
     return CsvStatus;

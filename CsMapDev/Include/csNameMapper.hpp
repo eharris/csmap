@@ -36,6 +36,7 @@
 // copy of all that stuff.
 #include "csNameMapperSupport.h"
 
+class TcsGenericId;
 class TcsNameMap;
 class TcsNameMapper;
 
@@ -112,15 +113,19 @@ public:
 	bool operator< (const TcsGenericId& rhs) const;
 	bool operator== (const TcsGenericId& rhs) const;
 	bool operator!= (const TcsGenericId& rhs) const;
+	operator unsigned long () const {return Id; };
 	///////////////////////////////////////////////////////////////////////////
 	// Named Member functions
 	bool IsKnown (void) const {return (Id != 0UL); }
 	bool IsNotKnown (void) const {return (Id == 0UL); }
 	unsigned long GetGenericId (void) const {return Id; }
 	EcsNameFlavor GetInternalIdFlavor (void) const;
+	EcsNameFlavor ExtractFlavorId (unsigned long& flvrId) const;
 private:
 	unsigned long Id;
 };
+extern const TcsGenericId KcsGenericIdNull;
+
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
 // TcsNameMap  --  A specific name/ID map entry.
@@ -228,18 +233,18 @@ public:
 	void GetComments (std::wstring& comments) const;
 	const wchar_t* GetRemarks (void) const;
 	void GetRemarks (std::wstring& remarks) const;
-	void SetDupSort (short dupSort) {DupSort = dupSort; }
-	void SetAliasFlag (short aliasFlag) {AliasFlag = aliasFlag; }
-	void* SetUserValue (void* userValue);
-	void SetComments (const wchar_t* comments);
-	void SetRemarks (const wchar_t* remarks);
-	void WriteAsCsv (std::wostream& outStrm,bool flvrLbls = false) const;
-
-	void SetGenericId (const TcsGenericId& newId) {GenericId = newId; }
+	void SetGenericId (const TcsGenericId& newId) {GenericId = newId; };
 	void SetNameId (const wchar_t* newNameId);
 	void SetNumericId (unsigned long newNumericId);
+	void SetDupSort (short dupSort) {DupSort = dupSort; };
+	void SetAliasFlag (short aliasFlag) {AliasFlag = aliasFlag; };
+	void* SetUserValue (void* userValue);
+	void SetDeprecated (const TcsGenericId& deprecatedBy) {Deprecated = deprecatedBy; };
+	void SetRemarks (const wchar_t* remarks);
+	void SetComments (const wchar_t* comments);
 	TcsGenericId DeprecatedBy (void) {return Deprecated; };
 	TcsGenericId DeprecatedBy (void) const {return Deprecated; };
+	void WriteAsCsv (std::wostream& outStrm,bool flvrLbls = false) const;
 private:
 	TcsGenericId GenericId;				// Flavor independent ID
 	EcsMapObjType Type;					// Type (namespace) of this definition
@@ -252,9 +257,10 @@ private:
 	// The above are straight forward, and all that are populated in the normal
 	// case.  The following are used to handle the strange stuff.
 	unsigned long Flags;				// Flags used to provide legacy
-	                                    // consistency.
-	void* User;                         // Pointer sized variable for use by
-	                                    // the consumer.
+										// consistency.
+	void* User;							// Pointer sized variable for use by
+										// the consumer, typically for
+										// maintenance purposes.
 	TcsGenericId Deprecated;			// If set to a valid value (i.e. not
 										// zero, this name/number entry has
 										// been deprecated and replaced by the
@@ -408,6 +414,8 @@ public:
 	static const unsigned long KcsNameMapBias = 100000000UL;
 	static EcsNameFlavor FlvrNameToNbr (const wchar_t* flvrName);
 	static const wchar_t* FlvrNbrToName (EcsNameFlavor flvrNbr);
+	static bool AnalyzeGenericId (EcsNameFlavor& flavor,unsigned long& flvrId,
+														TcsGenericId& genericId);
 	///////////////////////////////////////////////////////////////////////////
 	// Construction  /  Destruction  /  Assignment
 	TcsNameMapper (void);
@@ -450,8 +458,19 @@ public:
 	TcsNameMapList* Enumerate (EcsMapObjType type,EcsNameFlavor flavor,bool deprecated = false);
 	///////////////////////////////////////////////////////////////////////////
 	// Updating functions.
-   	bool ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType type,EcsNameFlavor flavor,
-   																		   const wchar_t* name);	 
+	bool AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* oldName,
+																	const wchar_t* newName,
+																	const wchar_t* comment = 0,
+																	const TcsGenericId& deprecatedBy = KcsGenericIdNull);
+	bool AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id,
+																	const wchar_t* newName,
+																	const wchar_t* comment = 0,
+																	const TcsGenericId& deprecatedBy = KcsGenericIdNull);
+	bool ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType type,EcsNameFlavor flavor,
+																		   const wchar_t* name,
+																		   short aliasFlag = 0,
+																		   short dupSort = 0);
+
 	///////////////////////////////////////////////////////////////////////////
 	// Manufacturing functions.
 	bool AddKeyNameMap (EcsMapObjType mapType,const wchar_t* mapFilePath);
@@ -468,6 +487,9 @@ private:
 	const TcsNameMap* LocateNameMap (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id) const;
 	TcsNameMap* LocateNameMap (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* name);
 	const TcsNameMap* LocateNameMap (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* name,short dupSort = 0) const;
+	iterator LocateNameMapItr (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id);
+	const_iterator LocateNameMapItr (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id) const;
+
 	///////////////////////////////////////////////////////////////////////////
 	// Private Data Members
 	bool RecordDuplicates;

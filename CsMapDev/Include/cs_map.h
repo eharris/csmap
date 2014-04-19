@@ -604,7 +604,7 @@
 
 	EXP_LVL3	Highest Performance Interface, what used to
 				be called the Three/Six Function interface.
-				Usually used inside of heveay duty applications.
+				Usually used inside of heavy duty applications.
 
 	EXP_LVL5	Support functions accessible to, but not
 				normally used by users.
@@ -622,7 +622,10 @@
 #		define EXP_LVL1 _pascal
 #		define EXP_DATA
 #	elif defined (DLL_32)
-#		define EXP_LVL1 _stdcall
+#		define EXP_LVL1 __stdcall
+#		define EXP_DATA __declspec(dllimport)
+#	elif defined (DLL_64)
+#		define EXP_LVL1 __stdcall
 #		define EXP_DATA __declspec(dllimport)
 #	else
 #		define EXP_LVL1
@@ -635,8 +638,6 @@
 #ifndef EXP_LVL3
 #	if defined (DLL_16)
 #		define EXP_LVL3 _pascal
-#	elif defined (DLL_32)
-#		define EXP_LVL3 _stdcall
 #	else
 #		define EXP_LVL3
 #	endif
@@ -6773,8 +6774,13 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_CT_CS_ADD_DUP  469		/* CT already contains a CS with that name. */
 #define cs_CT_DICT		  470		/* CT dictionary open failed. */
 
-#define cs_DICT_INV		  471		/* Dictionary contains invalid at least 1 invalid entry */
+#define cs_DICT_INV		  471		/* Dictionary contains at least 1 invalid entry */
 #define cs_DICT_DUP_IDS   472		/* Dictionary contains duplicate IDs */
+
+#define cs_ENV_TOOLONG    473		/* String presented for environmental subsitution is too long. */
+#define cs_ENV_NOVAR      474		/* A referenced environmental variable did not exist. */
+#define cs_ENV_FORMAT     475		/* The format of the string presented fro environmental
+									   variable subsitution is improperly formatted. */
 
 
 #define cs_ERROR_MAX	  cs_DICT_DUP_IDS
@@ -6854,8 +6860,8 @@ double		EXP_LVL3	CS_cscnv (Const struct cs_Csprm_ *csprm,Const double ll [3]);
 struct cs_Csdef_* EXP_LVL3	CS_csdef (Const char *cs_nam);
 struct cs_Csdef_ * EXP_LVL3 CS_csdef2 (Const char *cs_nam, char* pszDirPath);
 int			EXP_LVL3	CS_csdefAll (struct cs_Csdef_ **pDefArray[]);
-int			EXP_LVL1	CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize);
-int			EXP_LVL1	CS_csDefCmpEx (double* qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize);
+int			EXP_LVL3	CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize);
+int			EXP_LVL3	CS_csDefCmpEx (double* qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_csdel (struct cs_Csdef_ *csdef);
 int			EXP_LVL5	CS_csDiff (FILE *rptStrm,struct cs_Csdef_ *was,struct cs_Csdef_ *is);
 int			EXP_LVL1	CS_csEnum (int index,char *key_name,int size);
@@ -6929,6 +6935,8 @@ int			EXP_LVL3	CS_elrd (csFILE *strm,struct cs_Eldef_ *el_def,int *crypt);
 int			EXP_LVL3	CS_elrup (Const char *distrb,Const char *bkupnm);
 int			EXP_LVL3	CS_elupd (struct cs_Eldef_ *eldef,int crypt);
 int			EXP_LVL3	CS_elwr (csFILE *strm,Const struct cs_Eldef_ *el_def,int crypt);
+int			EXP_LVL3	CS_envsub (char* stringBufr,size_t bufrSize);
+int			EXP_LVL3	CS_envsubWc (wchar_t* stringBufr,size_t bufrSize);	/* bufrSize === # of characters */
 int			EXP_LVL1	CS_epsg2msi (long32_t epsgNbr,char* msiKeyName,int size);
 Const char* EXP_LVL1	CS_epsgDtmNbr2EsriName (long32_t epsgNbr,unsigned short* flags);
 Const char* EXP_LVL1	CS_epsgDtmNbr2OracleName (long32_t epsgNbr,unsigned short* flags);
@@ -6941,7 +6949,7 @@ void		EXP_LVL1	CS_errmsg (char *user_bufr,int buf_size);
 void		EXP_LVL1	CS_fast (int fast);
 void		EXP_LVL3	CS_fillIn (struct cs_Csdef_ *cs_def);
 cs_Time_	EXP_LVL7	CS_fileModTime (Const char *filePath);
-void		EXP_LVL1	CS_free (void *ptr);
+void		EXP_LVL3	CS_free (void *ptr);
 long32_t	EXP_LVL1	CS_ftoa (char *bufr,int size,double value,long32_t frmt);
 
 int			EXP_LVL3	CS_gdcDisable (enum cs_GdcCatalogs ident);
@@ -7044,6 +7052,7 @@ int			EXP_LVL3	CS_isalpha (int chr);
 int			EXP_LVL3	CS_isupper (int chr);
 int			EXP_LVL3	CS_islower (int chr);
 int			EXP_LVL3	CS_isdigit (int chr);
+int			EXP_LVL3	CS_isnan (double xxx);
 int			EXP_LVL3	CS_isxdigit (int chr);
 int			EXP_LVL3	CS_isspace (int chr);
 int			EXP_LVL3	CS_isalnum (int chr);
@@ -7118,7 +7127,7 @@ const char*	EXP_LVL3	CS_stateEnum (int index);
 char *		EXP_LVL3	CS_stncat (char *dest,Const char *source,int count);
 char *		EXP_LVL3	CS_stcpy (char *dest,Const char *source);
 char *		EXP_LVL3	CS_stncp (char *dest,Const char *source,int count);
-int			EXP_LVL3	CS_stricmp (Const char *cp1,Const char *cp2);
+int			EXP_LVL6	CS_stricmp (Const char *cp1,Const char *cp2);
 Const char*	EXP_LVL3	CS_stristr (Const char *str1,Const char *str2);
 int			EXP_LVL9	CS_strnicmp (Const char *cp1,Const char *cp2,size_t count);
 char*		EXP_LVL3	CS_strrchr (Const char *cPtr, int chr);
@@ -7134,6 +7143,7 @@ int			EXP_LVL3	CS_tolower (int chr);
 int			EXP_LVL3	CS_toupper (int chr);
 Const void*	EXP_LVL9	CS_tpars (char **pntr,Const void *table,int tab_size);
 int			EXP_LVL7	CS_trim (char *string);
+int			EXP_LVL7	CS_trimWc (wchar_t *string);
 
 double		EXP_LVL9	CS_un2d (Const char *name);
 int			EXP_LVL1	CS_unEnum (int index,int type,char *un_name,int un_size);

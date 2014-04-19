@@ -1,20 +1,29 @@
-//===========================================================================
-// $Header$
-//
-//    (C) Copyright 2007 by Autodesk, Inc.
-//
-// The information contained herein is confidential, proprietary
-// to Autodesk, Inc., and considered a trade secret as defined 
-// in section 499C of the penal code of the State of California.  
-// Use of this information by anyone other than authorized employees
-// of Autodesk, Inc. is granted only under a written non-disclosure 
-// agreement, expressly prescribing the scope and manner of such use.       
-//
-// CREATED BY:
-//      Norm Olsen
-//
-// DESCRIPTION:
-//
+/*
+ * Copyright (c) 2008, Autodesk, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Autodesk, Inc. nor the names of its
+ *       contributors may be used to endorse or promote products derived
+ *       from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY Autodesk, Inc. ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL Autodesk, Inc. OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #include <iostream>
 #include <iomanip>
@@ -23,12 +32,13 @@
 #pragma warning(disable:4702)
 #include <set>
 #pragma warning(default:4702)
+#include <string>
 
 #include "cs_map.h"
 #include "cs_Legacy.h"
-#include "cs_wkt.h"
-#include "csNameMapper.hpp"
+#include "csCsvFileSupport.hpp"
 #include "csepsgstuff.h"
+#include "csNameMapper.hpp"
 #include "csUtilitiesSupport.hpp"
 
 #ifndef wcCount
@@ -39,6 +49,8 @@
 // should be removed as their future value is nil.
 bool ManufactureNameMapperCsv (const wchar_t* resultDir,const wchar_t* dataDir);
 bool ResortNameMapperCsv (const wchar_t* resultDir,const wchar_t* dataDir,bool duplicates = false);
+bool csWriteNsrsList (const wchar_t* csDictSrcDir,const wchar_t* csTrgDataFileDir);
+bool csAddNsrs07Nsrs11 (const wchar_t* csDictSrcDir,const wchar_t* csDictTrgDir);
 bool AddOracle9Mappings (const wchar_t* csDataDir,TcsCsvStatus& status);
 bool AddOracle10Mappings (const wchar_t* csDataDir,TcsCsvStatus& status);
 bool AddSequenceNumbers (const wchar_t* dataDir);
@@ -52,12 +64,16 @@ bool csAddEpsgCodes (const wchar_t* csDictSrcDir,const wchar_t* epsgDir,const wc
 //bool csGenerateHpgnTable (const wchar_t* tablePath,const wchar_t* dictDir);
 bool csOrgTransformations (const wchar_t* csDictDir,const wchar_t* csDictTrgDir);
 bool csGenerateRegressTestFile (const wchar_t* csFileName,const wchar_t* csDataDir,const wchar_t* csDictDir);
+bool csGenerateBlueBookTestData (const wchar_t* testDataDir,bool phaseTwo);
 bool ReplaceOldHpgnCrsNames (const wchar_t* dataDir,const wchar_t* resultDir);
 bool Epsg706Updates (const wchar_t* srcDictDir,const wchar_t* dataDir,const wchar_t* trgDictDir);
 bool csCrsNamesToSource (const wchar_t* csvPath,const wchar_t* csvCrsNames,const wchar_t* srcFileName);
 bool SevenParameterFix (const wchar_t* csDictTrgDir,const wchar_t* csDataTrgDir,const wchar_t* csDictSrcDir,const wchar_t* csDataSrcDir);
 bool SevenParameterFlipList (std::wostream& listStrm,const wchar_t* dictDir);
-
+bool csUsefulRangeReport (const wchar_t* reportDir,const wchar_t* csDictDir);
+bool csWriteEsriWktTestFile (const wchar_t* csDataSrcDir,const wchar_t* csDataTrgDir);
+bool csWriteNsrsAudit (const wchar_t* csDictSrcDir,const wchar_t* csTrgDataFileDir);
+bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDictSrcDir,const wchar_t* srcCsvFullPath);
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be
 // removed.

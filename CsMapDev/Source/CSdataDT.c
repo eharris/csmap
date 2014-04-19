@@ -64,6 +64,7 @@ struct cs_GridFormatTab_ cs_GridFormatTab [] =
 	{        "ATS77",CSats77S,CSats77Q,cs_DTCFRMT_ATS77,cs_FRMTFLGS_ATS77,9634UL,"Maritime Provinces Polynomial Interpolation"},
 	{       "OSTN97",CSost97S,CSost97Q,cs_DTCFRMT_OST97,cs_FRMTFLGS_OST97,   0UL,"Ordnance Survey National Transformation ala 1997"},
 	{       "OSTN02",CSost02S,CSost02Q,cs_DTCFRMT_OST02,cs_FRMTFLGS_OST02,9633UL,"Ordnance Survey National Transformation ala 2002"},
+	{       "GEOCON",CSgeocnS,CSgeocnQ,cs_DTCFRMT_GEOCN,cs_FRMTFLGS_GEOCN,   0UL,"US NAD83(2007/2011) (del??.b pair (+ dev?.b)"},
 	{             "",NULL,    NULL,    cs_DTCFRMT_NONE, 0,                   0UL,"End of table marker"}
 };
 

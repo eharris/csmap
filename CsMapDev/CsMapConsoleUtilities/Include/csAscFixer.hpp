@@ -197,6 +197,7 @@ public:
 	bool InsertAfter (const char* label,const TcsDefLine& newLine);
 	bool Append (const TcsDefLine& newLine);
 	bool RemoveLine (const char* label);
+	int TrimLineComments (void);
 	bool WriteToStream (std::ostream& outStrm) const;
 private:
 	///////////////////////////////////////////////////////////////////////////
@@ -257,6 +258,8 @@ public:
 	bool Replace (const TcsAscDefinition& newDef);
 	bool ReplaceWith (const char* existingName,const TcsAscDefinition& newDef);
 	bool ReplaceAt (size_t index,const TcsAscDefinition& newDef);
+	bool InsertAfter (size_t index,const TcsAscDefinition& newDef);
+	bool InsertAfter (const char* defName,const TcsAscDefinition& newDef);
 	bool InsertBefore (size_t index,const TcsAscDefinition& newDef);
 	bool InsertBefore (const char* defName,const TcsAscDefinition& newDef);
 	bool Append (const TcsAscDefinition& newDef);

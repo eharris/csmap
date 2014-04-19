@@ -68,7 +68,6 @@
 #define cs_CANNT_GSB   "GSB"
 #define cs_MULREG_EXT  "MRT"
 
-
 /* The following transformation "methods" are supported by the
    Geodetic Transformation facility.  The methods are grouped by
    a method class; the method class distinguishing the type of
@@ -94,6 +93,7 @@
 #define cs_DTCFRMT_ATS77    0x06
 #define cs_DTCFRMT_OST97    0x07
 #define cs_DTCFRMT_OST02    0x08
+#define cs_DTCFRMT_GEOCN    0x09
 
 /* Standalone methods are (i.e. noparameters): */
 #define cs_DTCMTH_NULLX       (cs_DTCPRMTYP_STANDALONE + 0x0001)
@@ -125,6 +125,7 @@
 #define cs_DTCMTH_ATS77       (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_ATS77)
 #define cs_DTCMTH_OST97       (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_OST97)
 #define cs_DTCMTH_OST02       (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_OST02)
+#define cs_DTCMTH_GEOCN       (cs_DTCPRMTYP_GRIDINTP + cs_DTCFRMT_GEOCN)
 
 /* For programming convenience: */
 #define cs_DTCMTH_NONE        (0x0000)
@@ -185,6 +186,7 @@
 #define cs_FRMTFLGS_ATS77  cs_FRMTFLG_NONE			/* Don't really know about this one. */
 #define cs_FRMTFLGS_OST97  cs_FRMTFLG_NONE			/* Not implemented yet as a geodetic transformation, which it should be. */
 #define cs_FRMTFLGS_OST02  cs_FRMTFLG_NONE			/* Not implemented yet as a geodetic transformation, which it should be. */
+#define cs_FRMTFLGS_GEOCN  cs_FRMTFLG_NONE			/* Files are typically 28MB in binary form; unlikely to be made reentrant. */
 
 /*
 	The following defines define possible values of the bit mapped
@@ -865,6 +867,21 @@ struct csGridi_
 
 /******************************************************************************
 *******************************************************************************
+**             GEOCON Horizontal Datum and Geod Height Grid Files            **
+**                                                                           **
+**     Used for NAD83(2007), NAD83(2011), and Geoid99, Geoid03,              **
+**     and Geoid12 geoid height grid data files.                             **
+**                                                                           **
+**     Note that the NAD83(2007) and NAD83(2011) implementations include     **
+**     a vertical datum shift file inaddition to the two horizontal grid     **
+**     data files.                                                           **
+**                                                                           **
+*******************************************************************************
+******************************************************************************/
+#include "cs_Geocon.h"
+
+/******************************************************************************
+*******************************************************************************
 **                                                                           **
 **           General  Grid   Interpolation   File   Object                   **
 **                                                                           **
@@ -906,6 +923,7 @@ struct cs_GridFile_
 		struct cs_Ats77_* Ats77Xfrm;
 		struct cs_Ost97_* Ostn97;
 		struct cs_Ost02_* Ostn02;
+		struct cs_Geocn_* Geocon;
 	} fileObject;
 };
 
@@ -1672,6 +1690,17 @@ int			EXP_LVL9	  CSost02Q  (struct csGeodeticXfromParmsFile_* fileParms,Const ch
 int			EXP_LVL9	  CSost02R  (struct cs_Ost02_ *ost02);
 int			EXP_LVL9	  CSost02S  (struct cs_GridFile_ *ost02);
 double		EXP_LVL9	  CSost02T  (struct cs_Ost02_ *ost02,double *ll_src,short direction);
+
+int			EXP_LVL9	  CSgeocnD  (struct cs_Geocn_ *geocn);
+int			EXP_LVL9	  CSgeocnF2 (struct cs_Geocn_ *geocn,double *ll_trg,Const double *ll_src);
+int			EXP_LVL9	  CSgeocnF3 (struct cs_Geocn_ *geocn,double *ll_trg,Const double *ll_src);
+int			EXP_LVL9	  CSgeocnI2 (struct cs_Geocn_ *geocn,double *ll_trg,Const double *ll_src);
+int			EXP_LVL9	  CSgeocnI3 (struct cs_Geocn_ *geocn,double *ll_trg,Const double *ll_src);
+int			EXP_LVL9	  CSgeocnL  (struct cs_Geocn_ *geocn,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSgeocnQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz);
+int			EXP_LVL9	  CSgeocnR  (struct cs_Geocn_ *geocn);
+int			EXP_LVL9	  CSgeocnS  (struct cs_GridFile_ *geocn);
+double		EXP_LVL9	  CSgeocnT  (struct cs_Geocn_ *geocn,double *ll_src,short direction);
 
 #ifdef __cplusplus
 }

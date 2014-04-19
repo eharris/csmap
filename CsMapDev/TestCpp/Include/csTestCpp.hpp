@@ -21,7 +21,7 @@
 
 #include "csCsvFileSupport.hpp"
 #include "csNameMapperSupport.h"
-#include "csEpsgStuff.h"
+#include "csepsgstuff.h"
 
 // A structure used in several tests.
 struct tst_lst_
@@ -102,7 +102,7 @@ public:
 	bool IsComment (unsigned recordNbr);
 	bool GetTestName (std::wstring& testName,unsigned recordNbr);
 	EcsTestMethod GetTestMethod (unsigned recordNbr);
-	EcsCrsAuthority TcsOsGeoTestFile::GetCrsKey (unsigned recordNbr,bool target);
+	EcsCrsAuthority GetCrsKey (unsigned recordNbr,bool target);
 	EcsCrsAuthority GetSrcCrsKey (std::wstring& srcKey,unsigned recordNbr);
 	EcsCrsAuthority GetTrgCrsKey (std::wstring& srcKey,unsigned recordNbr);
     bool GetSourceCoordinates (double sourceCoord [3],unsigned recordNbr);

@@ -331,13 +331,13 @@ int CStest4 (bool verbose,char *test_file)
 		if (del [0] > tol [0] || del [1] > tol [1])
 		{
 			(void)printf ("Verification failure (line %d):\n",line_nbr);
-			(void)printf ("\t%-23.23s %-16.16s %-16.16s\n",
+			(void)printf ("\t%-23.23s %-17.17s %-17.17s\n",
 							src_nm,src_x,src_y);
-			(void)printf ("\t%-23.23s %-16.16s %-16.16s\n",
+			(void)printf ("\t%-23.23s %-17.17s %-17.17s\n",
 							dest_nm,dest_x,dest_y);
-			CS_ftoa (bufrX,17,rslt [0],frmt_DX);
-			CS_ftoa (bufrY,17,rslt [1],frmt_DY);
-			(void)printf ("\t                   CALC %-16.16s %-16.16s\n",
+			CS_ftoa (bufrX,18,rslt [0],frmt_DX);
+			CS_ftoa (bufrY,18,rslt [1],frmt_DY);
+			(void)printf ("\t                   CALC %-17.17s %-17.17s\n",
 								bufrX,bufrY);
 			fail_cnt += 1;
 		}
