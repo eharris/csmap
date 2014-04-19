@@ -1,0 +1,58 @@
+;CsMapDll.def : Declares the module parameters for the CsMapDll DLL.
+
+LIBRARY      "CsMapDll"
+DESCRIPTION  'CS-MAP Dynamic Link Library (VB)'
+
+EXPORTS
+	CS_altdr
+	CS_atof
+	CS_azddll
+	CS_azsphr
+	CS_cnvrg
+	CS_cnvrt
+	CS_cnvrt3D
+	CS_cmpDbls
+	CS_csfnm
+	CS_csIsValid
+	CS_dtfnm
+	CS_dtIsValid
+	CS_elfnm
+	CS_elIsValid
+	CS_errmsg
+	CS_fast
+	CS_ftoa
+	CS_geoctrSetUp
+	CS_geoctrGetLlh
+	CS_geoctrGetXyz
+	CS_gpfnm
+	CS_gxfnm
+	CS_isgeo
+	CS_llazdd
+	CS_mgrsSetUp
+	CS_recvr
+	CS_scale
+	CS_scalh
+	CS_scalk
+	CS_unitlu
+	CS_usrdr
+
+; Special functions specifically for VB/VBA
+	GetCsErrorAsString
+	CS_ftoaVB
+	CS_getEllipsoidOfVB
+	CS_mgrsFromLlVB
+
+; Data constants.  Don't know how to access them from VB/VBA, but easily done
+; from C/C++.
+	cs_Unique	DATA
+	cs_Errno	DATA
+	cs_Error	DATA
+	cs_Doserr	DATA
+
+	cs_OptchrC	DATA
+	cs_DecpntC	DATA
+	cs_DigsepC	DATA
+	cs_LngDir	DATA
+	cs_LatDir	DATA
+	cs_Envvar	DATA
+	cs_Protect	DATA
