@@ -542,7 +542,7 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 	int (*TRead)(csFILE*, TCsMapStruct*),
 	int (*TReadCrypt)(csFILE*, TCsMapStruct*, int*),
 	char const* (*TGetKey)(TCsMapStruct const*) = NULL,
-	std::map<char const*, std::pair<TCsMapStruct * const, std::vector<TCsMapStruct *>>, CsMapKeyCompare> *pDuplicatesMap = NULL)
+	std::map<char const*, std::pair<TCsMapStruct * const, std::vector<TCsMapStruct *> >, CsMapKeyCompare> *pDuplicatesMap = NULL)
 {
     typedef std::vector<TCsMapStruct *> TCsMapStructVector;
     typedef std::pair<TCsMapStruct * const, TCsMapStructVector> DuplicateItem;
@@ -618,8 +618,8 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 				    if (pDuplicatesMap->end() == defDuplicateEntry)
                     {
                         // No related duplicat item is available, create one and set the first duplicate definition.
-                        typename DuplicateItem defDuplicate(knownIdEntry->second, TCsMapStructVector());
-                        std::pair<DuplicateMap::iterator, bool> insertResult = pDuplicatesMap->insert(std::make_pair(pId, defDuplicate));
+                        DuplicateItem defDuplicate(knownIdEntry->second, TCsMapStructVector());
+                        std::pair<typename DuplicateMap::iterator, bool> insertResult = pDuplicatesMap->insert(std::make_pair(pId, defDuplicate));
                         if (!insertResult.second)
                         {
                             // Not expected
@@ -628,8 +628,8 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
 	                    }
                         defDuplicateEntry = insertResult.first;
                     }
-                    typename DuplicateItem& defDuplicate = defDuplicateEntry->second;
-                    typename TCsMapStructVector& defDuplicateVector = defDuplicate.second;
+                    DuplicateItem& defDuplicate = defDuplicateEntry->second;
+                    TCsMapStructVector& defDuplicateVector = defDuplicate.second;
                     defDuplicateVector.push_back(pDef);
 				}
 				else
@@ -681,7 +681,7 @@ error:
         for(typename DuplicateMap::const_iterator defIterator = pDuplicatesMap->begin(); 
 			defIterator != pDuplicatesMap->end(); ++defIterator)
 		{
-            typename const DuplicateItem& defDuplicate = defIterator->second;
+            const DuplicateItem& defDuplicate = defIterator->second;
 			TCsMapStructVector const& defDuplicateVector = defDuplicate.second;
 			for(size_t i = 0; i < defDuplicateVector.size(); ++i)
 			{

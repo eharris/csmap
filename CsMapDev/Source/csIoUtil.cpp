@@ -417,7 +417,7 @@ char Const* CS_gxkey(Const struct cs_GeodeticTransform_ *gx_def);
 int CS_gxDefinitionAll(struct cs_GeodeticTransform_** pAllDefs[])
 {
 	int newDefCount = -1;
-    typedef std::pair<struct cs_GeodeticTransform_ * const, std::vector<struct cs_GeodeticTransform_ *>> GxDuplicatesPair;
+    typedef std::pair<struct cs_GeodeticTransform_ * const, std::vector<struct cs_GeodeticTransform_ *> > GxDuplicatesPair;
     typedef std::map<char const*, GxDuplicatesPair, CsMapKeyCompare> GxDuplicatesMap;
     
 	GxDuplicatesMap gxDuplicates;
