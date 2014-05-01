@@ -442,9 +442,6 @@ char * EXP_LVL9 CScsKeyNames (void)
 {
 	extern csThread char *cs_CsKeyNames;
 
-	int st;
-	int crypt;
-
 	size_t len;
 	size_t malc_size;
 	size_t used_size;
@@ -452,10 +449,8 @@ char * EXP_LVL9 CScsKeyNames (void)
 	char *cp;
 	char *new_ptr;
 	char *tmp_ptr;
-	csFILE *strm;
 
  	__ALIGNMENT__1		/* Required by some Sun compilers. */
-	struct cs_Csdef_ cs_def;
 
 	/* If cs_CsKeyNames is not NULL, we already have a list, simply return it. */
 
@@ -470,16 +465,21 @@ char * EXP_LVL9 CScsKeyNames (void)
 		}
 		else
 		{
-			strm = CS_csopn (_STRM_BINRD);
-			if (strm != NULL)
+            struct cs_Csdef_** pDefArray = NULL; // first entry in the array of pointers
+            // Read all cs definitons
+            int csCount = CS_csdefAll(&pDefArray);
+
+			if (csCount >=0 )
 			{
-				while ((st = CS_csrd (strm,&cs_def,&crypt)) > 0)
+                struct cs_Csdef_** pNext = pDefArray;
+                int ii;
+                for(ii = 0; ii < csCount; ++ii)
 				{
 					/* Make sure we have enough room for the new
 					   entry, its terminating null character, AND
 					   the extra null which terminates the whole list. */
 
-					len = strlen (cs_def.key_nm);
+                    len = strlen ((*pNext)->key_nm);
 					if ((used_size + len + 2) >= malc_size)
 					{
 						malc_size += 2048;
@@ -498,24 +498,26 @@ char * EXP_LVL9 CScsKeyNames (void)
 					   in case the realloc has moved the list to new memory. */
 
 					cp = new_ptr + used_size;
-					cp = CS_stcpy (cp,cs_def.key_nm);
+					cp = CS_stcpy (cp,(*pNext)->key_nm);
 					used_size += len + 1;
+                    pNext++;
 				}
-				CS_csDictCls (strm);
-				if (st != 0)
-				{
-					/* Here if the above loop terminated due to an
-					   error, rather than a simple EOF. */
-
-					CS_free (new_ptr);
-					new_ptr = NULL;
-				}
+                // Clean up
+                pNext = pDefArray;
+                for(ii = 0; ii < csCount; ++ii)
+			    {
+                    CS_free(*pNext); // release the definition
+                    pNext++;
+                }
 			}
 			else
 			{
 				CS_free (new_ptr);
 				new_ptr = NULL;
 			}
+            // Clean up
+            CS_free(pDefArray); //free the array, but not the pointers
+            pDefArray = NULL;
 		}
 
 		if (new_ptr != NULL)
