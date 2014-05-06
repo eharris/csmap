@@ -182,15 +182,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\cs7ParameterFlipList.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAdd2007and2011.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddEpsgData.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle10Mappings.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle9Mappings.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddSequenceNbrs.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAscFixer.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csBlueBook.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csConsoleUtilities.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCrsNamesToSource.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsMapToCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csEpsg706Update.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerateBlueBookTestData.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csIprmRegressionTestFile.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csListEpsgCodes.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csListHpgnCS.cpp">
@@ -201,8 +204,9 @@
     </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csManufactureNameMapperCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csOrgTransformations.cpp" />
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csResortNameMapperCsv.cpp.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csResortNameMapperCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csRplOldHpgnCrsNames.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csUpdateNameMapperFromCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csUtilitySupport.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\DeprecateDuplicateDefs.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\GeocentricFix.cpp" />
@@ -213,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CsMapConsoleUtilities\Include\csAscFixer.hpp" />
+    <ClInclude Include="..\CsMapConsoleUtilities\Include\csBlueBook.hpp" />
     <ClInclude Include="..\CsMapConsoleUtilities\Include\csConsoleUtilities.hpp" />
     <ClInclude Include="..\CsMapConsoleUtilities\Include\csUtilitiesSupport.hpp" />
   </ItemGroup>

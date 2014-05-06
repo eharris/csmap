@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\Source\CS_alber.c" />
@@ -238,6 +238,7 @@
     </ClCompile>
     <ClCompile Include="..\Source\csIoUtil.cpp" />
     <ClCompile Include="..\Source\cs_ctio.c" />
+    <ClCompile Include="..\Source\CS_geocn.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\cs_Ats77.h">
@@ -319,6 +320,9 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\csIoUtilDirSwitch.hpp">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\cs_Geocon.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>

@@ -222,6 +222,7 @@
     <ClInclude Include="..\Include\cs_Ats77.h" />
     <ClInclude Include="..\Include\cs_clientBeg.h" />
     <ClInclude Include="..\Include\cs_clientEnd.h" />
+    <ClInclude Include="..\Include\cs_Geocon.h" />
     <ClInclude Include="..\Include\cs_ioUtil.h" />
     <ClInclude Include="..\Include\cs_Frnch.h" />
     <ClInclude Include="..\Include\cs_Geodetic.h" />
@@ -397,6 +398,7 @@
     <ClCompile Include="..\Source\CS_frnch.c" />
     <ClCompile Include="..\Source\CS_gauss.c" />
     <ClCompile Include="..\Source\CS_general.c" />
+    <ClCompile Include="..\Source\CS_geocn.c" />
     <ClCompile Include="..\Source\CS_geoct.c" />
     <ClCompile Include="..\Source\CS_geoid96.c" />
     <ClCompile Include="..\Source\CS_geoid99.c" />
