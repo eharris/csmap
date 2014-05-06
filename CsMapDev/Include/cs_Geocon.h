@@ -329,7 +329,7 @@ struct cs_GeoconFileHdr_
 
 struct cs_GeoconFile_
 {
-	enum csGeoconFileType type;			/* Type of file. */
+	enum csGeocnFileType type;			/* Type of file. */
 
 	double latMin;						/* Latitude of the the southwest corner
 										   of the grid in decimal degrees. */

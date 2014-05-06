@@ -75,7 +75,7 @@ wchar_t cs_OptchrWC = L'-';
 wchar_t cs_EnvchrWC = L'$';
 wchar_t cs_EnvStartWC = L'{';
 wchar_t cs_EnvEndWC = L'}';
-wchar_t cs_NameMapperName [MAXPATH] = "NameMapper.csv";
+wchar_t cs_NameMapperName [MAXPATH] = L"NameMapper.csv";
 #endif
 
 /*
