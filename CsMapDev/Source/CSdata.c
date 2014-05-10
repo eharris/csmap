@@ -41,6 +41,8 @@
 */
 
 #if _RUN_TIME < _rt_UNIXPCC
+/* Rather arbitrary, an CS-MAP Open Source choice. However, there are several
+   applications which require access to many of these same files. */
 char cs_DirK [MAXPATH] = "C:\\ProgramData\\GeodeticData";
 csThread char cs_Dir [MAXPATH] = "";
 csThread char *cs_DirP = NULL;
@@ -57,8 +59,9 @@ wchar_t cs_OptchrWC = L'/';
 wchar_t cs_EnvchrWC = L'%';
 wchar_t cs_EnvStartWC = L'%';
 wchar_t cs_EnvEndWC = L'%';
-csThread char cs_NameMapperName [MAXPATH] = "NameMapper.csv";
 #else
+/* Rather arbitrary, an CS-MAP Open Source choice. However, there are several
+   applications which require access to many of these same files. */
 char cs_DirK [MAXPATH] = "/usr/etc/GeodeticData/";
 char cs_Dir [MAXPATH] = "";
 char *cs_DirP = NULL;
@@ -75,8 +78,9 @@ wchar_t cs_OptchrWC = L'-';
 wchar_t cs_EnvchrWC = L'$';
 wchar_t cs_EnvStartWC = L'{';
 wchar_t cs_EnvEndWC = L'}';
-wchar_t cs_NameMapperName [MAXPATH] = L"NameMapper.csv";
 #endif
+/* This is an 8 bit char on both platforms.  Trac Ticket #174. */
+char cs_NameMapperName [MAXPATH] = "NameMapper.csv";
 
 /*
 	The following are used in CS_atof and CS_ftoa for the
