@@ -249,6 +249,12 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 			   it as it is. */
 			CS_stncp (gridFilePtr->filePath,fileDefPtr->fileName,sizeof (gridFilePtr->filePath));
 		}
+
+		/* Force directory separator to the correct character for this run time
+		   environment.  Trac Ticket #175. */
+		CSrplDirSep (gridFilePtr->filePath);
+
+		// Set up the remainder of the transformation. */
 		gridFilePtr->bufferSize = 0L;	/* Zero says use format based default value. */
 		gridFilePtr->flags = 0UL;		/* Legacy feature, currently unused. */
 		gridFilePtr->density = 0.0;
