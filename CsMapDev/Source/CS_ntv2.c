@@ -365,6 +365,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 															  double density)
 {
 	extern double cs_Sec2Deg;
+	extern double cs_K360;
 	extern char cs_DirsepC;
 	extern char csErrnam [];
 
@@ -478,7 +479,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 	else if (fileHdr.Australian.titl02 [0] == 'N' &&
 			 fileHdr.Australian.titl02 [1] == 'U')
 	{
-		/* It appears to be an Australian file. */
+		/* It appears to be a legacy Australian file. */
 		thisPtr->IntType = csNTv2TypeAustralia;
 		skipAmount = sizeof (struct csNTv2HdrAu_);
 		CS_bswap (&fileHdr.Australian,cs_BSWP_NTv2HdrAu);
@@ -531,17 +532,17 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 		subPtr = &thisPtr->SubGridDir [idx];
 
 		/* Initialize to a boundary which will not match anything. */
-		subPtr->SouthWest [LNG] = 180.0;
-		subPtr->SouthWest [LAT] = 90.0;
-		subPtr->NorthEast [LNG] = -180.0;
-		subPtr->NorthEast [LAT] = -90.0;
+		subPtr->SouthWest [LNG] =  cs_K360;
+		subPtr->SouthWest [LAT] =  cs_K360;
+		subPtr->NorthEast [LNG] = -cs_K360;
+		subPtr->NorthEast [LAT] = -cs_K360;
 
 		/* Remember, these values as extracted from the file itself are
 		   WEST positive. */
-		subPtr->SeReference [LNG] =  180.0;
-		subPtr->SeReference [LAT] =   90.0;
-		subPtr->NwReference [LNG] = -180.0;
-		subPtr->NwReference [LAT] =  -90.0;
+		subPtr->SeReference [LNG] =  cs_K360;
+		subPtr->SeReference [LAT] =  cs_K360;
+		subPtr->NwReference [LNG] = -cs_K360;
+		subPtr->NwReference [LAT] = -cs_K360;
 
 		subPtr->DeltaLng  = 0.0;
 		subPtr->DeltaLat  = 0.0;
@@ -557,6 +558,13 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 		subPtr->Name [0] = '\0';
 		subPtr->Parent [0] = '\0';
 	}
+
+	/* Prepare for accumulating the east positive extrema for
+	   optimum coverage evaluations. */
+	thisPtr->swExtents [LNG] =  cs_K360;
+	thisPtr->swExtents [LAT] =  cs_K360;
+	thisPtr->neExtents [LNG] = -cs_K360;
+	thisPtr->neExtents [LAT] = -cs_K360;
 
 	/* Once for each sub-grid in the file; read in the header.  At this point,
 	   we just read them in.  Later on, we peruse the array and figure out
@@ -647,8 +655,14 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 		   not necessarily data files covering Australian geography.
 		   
 		   In the case of the Spanish variation, parent grids overlap, and
-		   therefore none of the sub-grids are cacheable. */
-//???? 	subPtr->Cacheable = (short)((thisPtr->IntType == csNTv2TypeCanada) && (thisPtr->SubOverlap == 0));
+		   therefore none of the sub-grids are cacheable.
+
+		   NOTE: with the advent of RFC-2, the grid cache system is essentially
+		   deactivated.  In the Canadian NTv2 file, there were two subgrids 
+		   which did not adhere to the original standard and thus were not
+		   cacheable.  As there is no cache anymore, the Cacheable element has
+		   no use and should be removed from the structure.  For now, the value
+		   is simply forced to FALSE in all cases.*/
 		subPtr->Cacheable = FALSE;
 
 		/* Skip over the data records in the file. */
@@ -659,13 +673,36 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 			CS_erpt (cs_INV_FILE);
 			goto error;
 		}
+
+		/* Accumulate the "whole file" coverage boundaries in East Positive
+		   form. */
+		if (subPtr->SouthWest [LNG] < thisPtr->swExtents [LNG])
+		{
+			thisPtr->swExtents [LNG] = subPtr->SouthWest [LNG];
+		}
+		if (subPtr->SouthWest [LAT] < thisPtr->swExtents [LAT])
+		{
+			thisPtr->swExtents [LAT] = subPtr->SouthWest [LAT];
+		}
+
+		if (subPtr->NorthEast [LNG] > thisPtr->neExtents [LNG])
+		{
+			thisPtr->neExtents [LNG] = subPtr->NorthEast [LNG];
+		}
+		if (subPtr->NorthEast [LAT] > thisPtr->neExtents [LAT])
+		{
+			thisPtr->neExtents [LAT] = subPtr->NorthEast [LAT];
+		}
 	}
 
 	/* Now we figure out who the mammas and the pappas are.  Note, all we have
 	   to work with are parent names.  Therefore, we have to work bassackwards.
 
 	   End result of all of this, is that each child needs to have the index
-	   of its parent; and each sub-grid that has a child needs to be so marked. */
+	   of its parent; and each sub-grid that has a child needs to be so marked.
+	   Of course, all of this is of no value for files which do not adhere to
+	   the original NTv2 standard.  Most notably, the Spanish file does not
+	   adhere.  */
 	for (idx =  0;idx < thisPtr->SubCount;idx += 1)
 	{
 		kidPtr = &thisPtr->SubGridDir [idx];
@@ -690,13 +727,13 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 		} 
 	}
 
-	/* To accomodate the Spanish (and perhaps others in the future, we check the
-	   parent grids in the list of sub-grids for overlap.  If overlap exists,
-	   we turn on the SubOverlap flag.  Of course, if this flag is already on,
-	   we have nothing to do.  If we did indeed turn on the SubOverlap flag,
-	   we need to cruise through all the sub-grids and set the Cacheable flag
-	   to false to assure that no data from this file makes it to the grid cell
-	   cache. */
+	/* To accomodate the Spanish (and perhaps others in the future), we check
+	   the parent grids in the list of sub-grids for overlap.  If overlap 
+	   exists, we turn on the SubOverlap flag.  Of course, if this flag is
+	   already on, we have nothing to do.  If we did indeed turn on the
+	   SubOverlap flag, we need to cruise through all the sub-grids and set the
+	   Cacheable flag to false to assure that no data from this file makes it
+	   to the grid cell cache. */
 	if (thisPtr->SubOverlap == 0)
 	{
 		for (parIdx = 0;parIdx < thisPtr->SubCount && thisPtr->SubOverlap == 0;parIdx += 1)
@@ -1331,16 +1368,34 @@ error:
    selecting one grid object over another. */
 double CStestNTv2 (Const struct cs_NTv2_* thisPtr,Const double location [2])
 {
- 	extern double cs_Zero;
+	extern double cs_Zero;
+
+	double density = cs_Zero;
 
 	struct csNTv2SubGrid_* cvtPtr;
 
-	/* Locate the sub-grid which covers the provided location, if any. */
-	cvtPtr = CSlocateSubNTv2 (thisPtr,location);
-	
+	/* Note, the whole file extents which we use here carry East Positive
+	   longitude; expressly to help make this function perfrom well.
+
+	   The strange way this is coded is that testing strongly indicated that
+	   the ">=" operator applied to doubles is much more CPU time consuming
+	   that a simple '<' operator.  Thus, the more complex boolean expression
+	   than one might ordinarily expect. */
+	if (!(location [LAT] < thisPtr->swExtents [LAT] ||
+		  location [LAT] > thisPtr->neExtents [LAT] ||
+		  location [LNG] < thisPtr->swExtents [LNG] ||
+		  location [LNG] > thisPtr->neExtents [LNG]))
+	{
+		/* Locate the sub-grid which covers the provided location, if any. */
+		cvtPtr = CSlocateSubNTv2 (thisPtr,location);
+		if (cvtPtr != NULL)
+		{
+			density = cvtPtr->Density;
+		}
+	}
 	/* Return the grid density of the sub-grid covering this point. If no
 	   coverage, return zero. */
-	return (cvtPtr == NULL) ? cs_Zero : cvtPtr->Density;
+	return density;
 }
 /*
 	The following returns a pointer to the file which would be used to

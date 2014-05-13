@@ -409,6 +409,26 @@ struct cs_NTv2_
 									   a string which includes the file name,
 									   and the actual sub-grid used to do
 									   a calculation. */
+	/* Two items of note with regard to the folowing two elements.
+	   1> These are of the normal CS-MAP east longitude is positive, west
+		  longitude is negative variety.  These are computed to optimumize
+		  coverage validation performance.
+	   2> There may be holes of no coverage within this range.  Specifically,
+		  NTv2 data files which do not adhere to the original standard (such
+		  as the Spanish file) have subgrids which overlap and when combined
+		  do not form a complete rectangle.  The following two values will
+		  only indicate is coverage is likely.  A complete scan of the
+		  subgrids is necessary to accurately determine coverage.
+	   These values are for performance purposes only.  To quickly determine
+	   the possibility of coverage for the specific case of geography which
+	   normally falls within the NAD83 area of coverage, but where an NTv2
+	   file will only cover a rather small portion of the geography. */
+	double swExtents [2];			/* East positive geographical coordinates
+									   of the Southwest extents of the entire
+									   file coverage. */
+	double neExtents [2];			/* East positive geographical coordinates
+									   of the Northwest extents of the entire
+									   file coverage. */
 	double errorValue;
 	double cnvrgValue;
 	short maxIterations;
