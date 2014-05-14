@@ -473,6 +473,7 @@ public:
 	// the TcsCsvFileBase base object.  The contents are highly dependent
 	// on the context and last operation.  Probably should be a protected
 	// function.
+	TcsCsvStatus& GetCsvStatus (void);
 	const TcsCsvStatus& GetCsvStatus (void) const;
 private:
 	//=========================================================================
@@ -524,12 +525,15 @@ public:
 	// Implementation of these functions can be found in csEpsgStuff.cpp
 	//=========================================================================
 	//		Basic Support Functions
+	bool IsOk (void);
+	bool IsOk (void) const;
 	TcsEpsgTable* GetTablePtr (EcsEpsgTable tableId);
 	const TcsEpsgTable* GetTablePtr (EcsEpsgTable tableId) const;
 	unsigned GetRecordCount (EcsEpsgTable tableId) const;
 	bool ConvertUnits (double& result,TcsEpsgCode trgUomCode,double value,
 															 TcsEpsgCode srcUomCode) const;
 	const wchar_t* GetRevisionLevel (void) const;
+	std::wstring GetFailMessage (void) const;
 	//=========================================================================
 	// Some general access functions:
 	// Step through an EPSG table one record at a time.
@@ -605,8 +609,10 @@ private:
 													   const TcsEpsgCode& horzUomCode) const;
 	//=========================================================================
 	// Private Data Members
+	bool Ok;
 	std::wstring RevisionLevel;				// The revision level of the EPSG data in this object
 	std::wstring DatabaseFolder;			// The folder in which the .CSV files reside.
+	std::wstring FailMessage;
 	std::map<EcsEpsgTable,TcsEpsgTable*> EpsgTables;
 											// The individual tables of the EPSG dataset.
 };

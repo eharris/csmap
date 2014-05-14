@@ -24,12 +24,12 @@ extern const wchar_t csDataDir [] = L"%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Dat
 extern const char csDictDir [] = "%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Dictionaries";
 extern const wchar_t csEpsgDir [] = L"%GEODETIC_DATA%\\EPSG\\CSV";
 #else
-extern const wchar_t csDataDir [] = L"${OPEN_SOURCE}/CsMap/trunk/CsMapDev\Data";
+extern const wchar_t csDataDir [] = L"${OPEN_SOURCE}/CsMap/trunk/CsMapDev/Data";
 extern const char csDictDir [] = "$OPEN_SOURCE/CsMap/trunk/CsMapDev/Dictionaries";
 extern const wchar_t csEpsgDir [] = L"$GEODETIC_DATA/Epsg/CSV";
 #endif
 
-extern const TcsEpsgDataSetV6* KcsEpsgDataSetV6Ptr = 0;
+const TcsEpsgDataSetV6* KcsEpsgDataSetV6Ptr = 0;
 
 extern "C"
 {
@@ -52,6 +52,7 @@ extern "C"
 	extern double cs_PRadMin;
 	extern double cs_PRadMax;
 
+	extern char cs_NameMapperName [];
 }
 
 // The following global variables are used to report math exceptions.
@@ -81,6 +82,9 @@ int main (int argc,char* argv [])
 
 	time_t startTime;
 
+	clock_t startClock;
+	clock_t doneClock;
+
 	char *cp;
 	char *cp1;
 	csFILE *chk_fs;
@@ -92,6 +96,8 @@ int main (int argc,char* argv [])
 	char cTemp [MAXPATH + MAXPATH];
 	
 	struct tm* tmPtr;
+
+	double execTime;
 
 ///////////////////////////////////////////////////////////////////////////////
 // The following activates the memory leak detector on MS Visual C++ 7.01
@@ -442,16 +448,45 @@ int main (int argc,char* argv [])
 		}
 	}
 
-	// If the test sequence includes any of the tests which use the EPSG database,
-	// we make sure it exists before plunging into the entire thing.
-	cp = strchr (tests,'M');
+	// If the test sequence includes any of the tests which use the NameMapper
+	// database, we make sure we can load it before processing a bunch of stuff.
+	cp = strchr (tests,'I');
+	if (cp == NULL) cp = strchr (tests,'J');
+	if (cp == NULL) cp = strchr (tests,'K');
+	if (cp == NULL) cp = strchr (tests,'L');
+	if (cp == NULL) cp = strchr (tests,'M');
 	if (cp == NULL) cp = strchr (tests,'N');
 	if (cp != NULL)
 	{
-		wchar_t filePath [MAXPATH];
-		wcsncpy (filePath,csEpsgDir,wcCount (filePath));
-		CS_envsubWc (filePath,wcCount (filePath));
-		KcsEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (filePath);
+		TcsNameMapper* nameMapperPtr = cmGetNameMapperPtr (false);
+		if (nameMapperPtr == NULL)
+		{
+			strcpy (cs_DirP,cs_NameMapperName);
+			printf ("NameMapper (%s) loading failed.\n\n",cs_Dir);
+			usage (batch);
+		}
+	}
+
+	// If the test sequence includes any of the tests which use the EPSG database,
+	// we make sure it exists before plunging into the entire thing.
+	if (KcsEpsgDataSetV6Ptr == 0)
+	{
+		cp = strchr (tests,'M');
+		if (cp == NULL) cp = strchr (tests,'N');
+		if (cp != NULL)
+		{
+			wchar_t filePath [MAXPATH];
+			wcsncpy (filePath,csEpsgDir,wcCount (filePath));
+			CS_envsubWc (filePath,wcCount (filePath));
+			KcsEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (filePath);
+			if (!KcsEpsgDataSetV6Ptr->IsOk ())
+			{
+				std::wstring epsgFailMesg = KcsEpsgDataSetV6Ptr->GetFailMessage ();
+				printf ("EPSG Parameter Dataset (%S) loading failed.\n",filePath);
+				printf ("%S\n",epsgFailMesg.c_str ());
+				usage (batch);
+			}
+		}
 	}
 
 	// Close/delete any remnants.
@@ -515,6 +550,9 @@ int main (int argc,char* argv [])
 		// We use the standard distribution values.
 		cs_Protect = protectSave;
 		cs_Unique = uniqueSave;
+
+		// Time each test for performance comparison purposes.
+		startClock = clock ();
 
 		// Do the current test.
 		switch (*cp) {
@@ -701,6 +739,9 @@ int main (int argc,char* argv [])
 			printf ("Test case %c not known.\n",*cp);
 			break;
 		}
+		// Cature finish time and calculate execution time.
+		doneClock = clock ();
+		execTime = (double)(doneClock - startClock) / (double)CLOCKS_PER_SEC;
 
 		// Analyze the results of the test.
 		if (test_st != 0)
@@ -720,10 +761,9 @@ int main (int argc,char* argv [])
 			ok_cnt += 1;
 			if (verbose)
 			{
-				printf ("Test %c succeeded!!!\n",*cp);
+				printf ("Test %c succeeded [%.3f]!!!\n",*cp,execTime);
 			}
 		}
-
 		// On to the next test.
 	}
 

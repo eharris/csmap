@@ -70,8 +70,16 @@ enum EcsCsvStatus {    csvOk = 0,          // Unremarkable completion
 					   csvNoFldLabels,     // No field labels in this CsvFile object. 
 					   csvLblsOnAppend,    // Labels no allowed on append.
 					   csvBogusValue,      // A bogus value was presented as a field value.
-					   csvDupIndex
+					   csvDupIndex,        // INdex creation encountered a dup[;icate value
+					   csvEndOfTable = 999 // Used to mark the end of tables, etc.
 				  };
+
+struct TcsCsvMsgTbl
+{
+	EcsCsvStatus StatusValue;
+	wchar_t Message [80];
+};
+
 //newPage//
 // Standalone function support.
 //	csGetCsvRecord: extracts a csvRecord from a stream, allowing for new lines in a quoted field.
@@ -110,6 +118,7 @@ public:
 	void SetFieldNbr (short fieldNbr);
 	void SetFieldId (const std::wstring& fieldId);
 	void SetObjectName (const std::wstring& objectName);
+	std::wstring GetMessage (void);
 	//=========================================================================
 	// Public Named Data Members
 	EcsCsvStatus StatusValue;

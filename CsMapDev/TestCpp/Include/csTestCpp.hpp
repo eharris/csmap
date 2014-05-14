@@ -20,7 +20,7 @@
 #include "cs_wkt.h"
 
 #include "csCsvFileSupport.hpp"
-#include "csNameMapperSupport.h"
+#include "csNameMapper.hpp"
 #include "csepsgstuff.h"
 
 // A structure used in several tests.

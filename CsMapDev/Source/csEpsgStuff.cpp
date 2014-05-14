@@ -1554,7 +1554,9 @@ short TcsEpsgDataSetV6::GetFldName (std::wstring& fieldName,EcsEpsgTable tableId
 // Construction, Destruction, & Assignment
 TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t* revLevel)
 																	:
+																  Ok             (true),
 																  DatabaseFolder (databaseFolder),
+																  FailMessage    (),
 																  EpsgTables     ()
 {
 	const TcsEpsgTblMap* tblPtr = KcsEpsgTblMap;
@@ -1562,18 +1564,33 @@ TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t*
 	for (tblPtr = KcsEpsgTblMap;tblPtr->TableId != epsgTblUnknown;++tblPtr)
 	{
 		TcsEpsgTable* nextTable = new TcsEpsgTable (*tblPtr,DatabaseFolder.c_str ());
-		EpsgTables.insert (std::make_pair(tblPtr->TableId,nextTable));			//lint !e534 (ignoring return value)
+		if (nextTable->IsOk ())
+		{
+			EpsgTables.insert (std::make_pair(tblPtr->TableId,nextTable));	//lint !e534 (ignoring return value)
+		}
+		else
+		{
+			std::wstring csvStMesg;
+			TcsCsvStatus& csvStatus = nextTable->GetCsvStatus ();
+			csvStMesg = csvStatus.GetMessage ();
+			FailMessage += csvStMesg + L"\n";
+			Ok = false;
+		}
 	}
-	if (revLevel == 0)
+	if (Ok)
 	{
-		DetermineRevisionLevel ();
-	}
-	else
-	{
-		RevisionLevel = revLevel;
+		if (revLevel == 0)
+		{
+			DetermineRevisionLevel ();
+		}
+		else
+		{
+			RevisionLevel = revLevel;
+		}
 	}
 }
-TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const TcsEpsgDataSetV6& source) : RevisionLevel  (source.RevisionLevel),
+TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const TcsEpsgDataSetV6& source) : Ok             (source.Ok),
+																	  RevisionLevel  (source.RevisionLevel),
 																	  DatabaseFolder (source.DatabaseFolder),
 																	  EpsgTables     (source.EpsgTables)
 {
@@ -1592,6 +1609,7 @@ TcsEpsgDataSetV6& TcsEpsgDataSetV6::operator= (const TcsEpsgDataSetV6& rhs)
 {
 	if (&rhs != this)
 	{
+		Ok             = rhs.Ok;
 		RevisionLevel  = rhs.RevisionLevel;
 		DatabaseFolder = rhs.DatabaseFolder;
 		EpsgTables     = rhs.EpsgTables;		// ouch!!!
@@ -1630,6 +1648,18 @@ TcsEpsgTable* TcsEpsgDataSetV6::GetTablePtr (EcsEpsgTable tableId)
 }
 //=============================================================================
 // High Level API Functions
+bool TcsEpsgDataSetV6::IsOk (void) const
+{
+	return Ok;
+}
+bool TcsEpsgDataSetV6::IsOk (void)
+{
+	return Ok;
+}
+std::wstring TcsEpsgDataSetV6::GetFailMessage (void) const
+{
+	return FailMessage;
+}
 const wchar_t* TcsEpsgDataSetV6::GetRevisionLevel (void) const
 {
 	const wchar_t* wcPtr;

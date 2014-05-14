@@ -40,6 +40,35 @@
 #include "cs_map.h"
 #include "csCsvFileSupport.hpp"
 
+static const TcsCsvMsgTbl KcsCsvMsgTbl [] =
+{
+	{            csvOk, L"OK!"                                                                              },
+	{           csvEof, L"Eod encountered in a quoted field"                                                },
+	{        csvNoFile, L"CSV file open failed"                                                             },
+	{         csvEmpty, L"Requested field is empty"                                                         },
+	{    csvEndInQuote, L"Record ended within a quoted field"                                               },
+	{    csvInvLineBrk, L"Unquoted new line in what was presented as a parsed CSV record"                   },
+	{    csvLastWasEsc, L"Text form of CSV record ended with an escape character"                           },
+	{    csvAmbigQuote, L"Non-whitespace character(s) after end of quoted field"                            },
+	{      csvInternal, L"Internal software error, please report to developer"                              },
+	{   csvInvRecordId, L"Invalid key presented for indexed fetch"                                          },
+	{     csvNoRecords, L"The CSV file object is empty, no data records present"                            },
+	{      csvNoFields, L"The indicated reocrd does not have any data fields"                               },
+	{  csvInvRecordNbr, L"Record number provided in request is invalid"                                     },
+	{    csvInvFieldId, L"Field name provided in request is invalid"                                        },
+	{   csvInvFieldNbr, L"Field number provided in request is invalid"                                      },
+	{     csvInvRecord, L"What was presented as a CSV record is not properly formatted"                     },
+	{ csvRecordTooLong, L"Record is too long, suspect a CSV format error"                                   },
+	{  csvFieldTooLong, L"Field is too long, suspect a CSV format error"                                    },
+	{ csvTooManyFields, L"Record has too many fields for a valid record, pssoble CSV format error"          },
+	{  csvTooFewFields, L"Record has less than the required number of fields for a valid record"            },
+	{   csvNoFldLabels, L"Current file does not have field labels, request is invalid"                      },
+	{  csvLblsOnAppend, L"Attempt to add a label record to a non-empty CSV file object"                     },
+	{    csvBogusValue, L"Value presented for field is invalid"                                             },
+	{      csvDupIndex, L"Index creation/update encountered a duplicate key value"                          },
+	{    csvEndOfTable, L"Software error: no message coded for CSV file exceptional condition"              }
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 // csGetCsvRecord -- Extracts a record from a .csv file as a wstring.
 //
@@ -785,6 +814,39 @@ void TcsCsvStatus::SetFieldId (const std::wstring& fieldId)
 void TcsCsvStatus::SetObjectName (const std::wstring& objectName)
 {
     ObjectName = objectName;
+}
+std::wstring TcsCsvStatus::GetMessage (void)
+{
+	const TcsCsvMsgTbl* tblPtr;
+	const wchar_t* statusMsgPtr;
+	std::wstring message;
+	wchar_t msgBuffer [256];
+	wchar_t fldDesignation [128];
+
+	for (tblPtr = KcsCsvMsgTbl;tblPtr->StatusValue != csvEndOfTable;tblPtr += 1)
+	{
+		if (StatusValue == tblPtr->StatusValue)
+		{
+			break;
+		}
+	}
+	statusMsgPtr = tblPtr->Message;
+	if (FieldId.empty ())
+	{
+		swprintf (fldDesignation,wcCount (fldDesignation),L"%d",FieldNbr);
+	}
+	else
+	{
+		swprintf (fldDesignation,wcCount (fldDesignation),L"%S",FieldId.c_str ());
+	}
+
+	swprintf (msgBuffer,wcCount (msgBuffer),L"Obj: %S; Line %lu; Field %S; Reason: %S.",
+											ObjectName.c_str (),
+											LineNbr,
+											fldDesignation,
+											statusMsgPtr);
+	message = msgBuffer;
+	return message;
 }
 //=============================================================================
 // TcsCsvRecord Object -- Encapsulates the functionality of a Comma Separated
@@ -1821,6 +1883,10 @@ bool TcsCsvFileBase::ReadFromStream (std::wistream& iStrm,bool firstIsLabels,Tcs
 		if (firstIsLabels)
 		{
 			ok =Labels.ReplaceRecord (iStrm,status,delimiters);
+			if (ok)
+			{
+				lineNbr += 1;
+			}
 		}
 
 		// Read the rest of the input stream.

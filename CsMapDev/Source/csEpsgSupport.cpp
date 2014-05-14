@@ -322,8 +322,8 @@ TcsEpsgTable::TcsEpsgTable (const TcsEpsgTblMap& tblMap,const wchar_t* databaseF
 														CodeIndex        (),
 														CsvStatus        ()
 {
-// Seems gcc 3.2.2 wifstream::open requires an 8 bit character path.  NOT NICE!!!
-char pathBufr [1024];
+	// Seems gcc 3.2.2 wifstream::open requires an 8 bit character path.  NOT NICE!!!
+	char pathBufr [1024];
 	// Set the min and max fild counts.
 	TableId = tblMap.TableId;
 	CodeKeyField = tblMap.CodeKeyFieldId;
@@ -342,11 +342,14 @@ char pathBufr [1024];
 	filePath += L"/";
 	filePath += tblMap.TableName;
 	filePath += L".csv";
-wcstombs (pathBufr,filePath.c_str (),sizeof (pathBufr));
-std::wifstream iStrm (pathBufr,std::ios_base::in);
-//	std::wifstream iStrm (filePath.c_str (),std::ios_base::in);
+	wcstombs (pathBufr,filePath.c_str (),sizeof (pathBufr));
+	std::wifstream iStrm (pathBufr,std::ios_base::in);
 	if (iStrm.is_open ())
 	{
+		// My Linux box (CentOS 6.3) requires a locale specification in order
+		// to read the EPSG .csv files.
+		std::locale epsgLocale("en_US",LC_ALL);
+		iStrm.imbue(epsgLocale);
 		Ok = ReadFromStream (iStrm,true,CsvStatus);
 	}
 	if (Ok)
@@ -777,6 +780,10 @@ bool TcsEpsgTable::GetAsReal (double& result,unsigned recNbr,EcsEpsgField fieldI
 	}
 	result = myResult;
 	return ok;
+}
+TcsCsvStatus& TcsEpsgTable::GetCsvStatus ()
+{
+	return CsvStatus;
 }
 const TcsCsvStatus& TcsEpsgTable::GetCsvStatus () const
 {
