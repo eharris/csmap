@@ -49,6 +49,10 @@ TcsEpsgCode::TcsEpsgCode () : EpsgCode (InvalidValue)
 TcsEpsgCode::TcsEpsgCode (unsigned long epsgCode) : EpsgCode (epsgCode)
 {
 }
+TcsEpsgCode::TcsEpsgCode (unsigned int epsgCode)
+{
+	EpsgCode = static_cast <unsigned long>(epsgCode);
+}
 TcsEpsgCode::TcsEpsgCode (const wchar_t* epsgCode)
 {
 	EpsgCode = StrToEpsgCode (epsgCode);
@@ -89,6 +93,11 @@ bool TcsEpsgCode::operator< (const std::wstring& epsgCode) const
 bool TcsEpsgCode::operator== (unsigned long epsgCode) const
 {
 	bool equal = (EpsgCode == epsgCode);
+	return equal;
+}
+bool TcsEpsgCode::operator== (unsigned int epsgCode) const
+{
+	bool equal = (EpsgCode == static_cast<unsigned long>(epsgCode));
 	return equal;
 }
 bool TcsEpsgCode::operator== (const std::wstring& epsgCode) const
@@ -347,8 +356,14 @@ TcsEpsgTable::TcsEpsgTable (const TcsEpsgTblMap& tblMap,const wchar_t* databaseF
 	if (iStrm.is_open ())
 	{
 		// My Linux box (CentOS 6.3) requires a locale specification in order
-		// to read the EPSG .csv files.
+		// to read the EPSG .csv files.  Windows needs two parameters to this
+		// function call; best I can tell, the C++ standard says one should
+		// be sufficient.  Anyway, the following seems to work on my systems.
+#if (_RUN_TIME < _rt_UNIXPCC)
 		std::locale epsgLocale("en_US",LC_ALL);
+#else
+		std::locale epsgLocale("en_US");
+#endif
 		iStrm.imbue(epsgLocale);
 		Ok = ReadFromStream (iStrm,true,CsvStatus);
 	}

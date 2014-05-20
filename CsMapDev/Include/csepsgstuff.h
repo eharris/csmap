@@ -331,6 +331,7 @@ public:
 	// Construction  /  Destruction  /  Assignment
 	TcsEpsgCode (void);
 	TcsEpsgCode (unsigned long epsgCode);
+	TcsEpsgCode (unsigned int epsgCode);
 	TcsEpsgCode (const wchar_t* epsgCode);
 	TcsEpsgCode (const std::wstring& epsgCode);
 	TcsEpsgCode (const TcsEpsgCode& source);
@@ -342,6 +343,7 @@ public:
 	bool operator< (unsigned long epsgCode) const;
 	bool operator< (const std::wstring& epsgCode) const;
 	bool operator== (unsigned long epsgCode) const;
+	bool operator== (unsigned int epsgCode) const;
 	bool operator== (const std::wstring& epsgCode) const;
 	bool operator> (unsigned long epsgCode) const;
 	bool operator> (const std::wstring& epsgCode) const;
