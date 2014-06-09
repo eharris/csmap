@@ -7885,8 +7885,33 @@ struct csZGridCellCache_
 	struct csZGridCell_ *listHead;
 };
 
-/* The following is the header on a Geoid 99 file.  We define it here to
-   take advanatge of whatever packing is currently in place. */
+/* Set the maximum packing available situation for the following
+   structures.  We do not write them to disk, but we read them and
+   use sizeof to detemine the size of the entire structure on disk.
+
+   Code should be rewritten to read each individual element from the
+   binary file and not rely on reading an entire structure from the
+   file; especially if one is relying on sizeof to determine how much
+   data to read. */
+#if   _RUN_TIME == _rt_BORLAND16 || _RUN_TIME == _rt_BORLAND32
+#	pragma option -a1
+#elif _RUN_TIME == _rt_METAWARE
+#	pragma Align_members (1)
+#elif _RUN_TIME == _rt_MSC16 || _RUN_TIME == _rt_MSVC16 || _RUN_TIME == _rt_MSDOTNET || \
+														   _RUN_TIME == _rt_MSWIN64 ||  \
+														   _RUN_TIME == _rt_MSVC32 ||   \
+														   _RUN_TIME == _rt_WINCE
+#	pragma pack (1)
+#elif _RUN_TIME == _rt_HPUX
+#	pragma pack 1
+#elif _RUN_TIME == _rt_AIX
+#	pragma options align=packed
+#elif _RUN_TIME >= _rt_UNIXPCC
+#	pragma pack (1)
+#else
+	/* I don't know what would work for WATCOM. */
+#endif
+
 struct csGeoid99Hdr_
 {
 	double latMin;			/* Lowest latitude covered in the file,
@@ -7949,6 +7974,31 @@ struct csBynGridFileHdr_
 	char unused [28];		/* Fill out to 80 bytes. */
 };
 #define cs_BSWP_BynFileHDR "llllssssdssdssss28c"
+
+/*
+	We've finished defining all structures which get read from
+	disk. We return packing to whatever the user needs.  Thus,
+	hopefully, you can use whatever packing you need for your
+	application, while I've specified what I need for mine.
+*/
+#if   _RUN_TIME == _rt_BORLAND16 || _RUN_TIME == _rt_BORLAND32
+#	pragma option -a.
+#elif _RUN_TIME == _rt_METAWARE
+#	pragma Align_members ()
+#elif _RUN_TIME == _rt_MSC16 || _RUN_TIME == _rt_MSVC16 || _RUN_TIME == _rt_MSDOTNET || \
+														   _RUN_TIME == _rt_MSWIN64 ||  \
+														   _RUN_TIME == _rt_MSVC32 ||   \
+														   _RUN_TIME == _rt_WINCE
+#	pragma pack ()
+#elif _RUN_TIME == _rt_HPUX
+#	pragma pack
+#elif _RUN_TIME == _rt_AIX
+#	pragma options align=reset
+#elif _RUN_TIME >= _rt_UNIXPCC
+#	pragma pack ()
+#else
+	/* I don't know what would work for WATCOM. */
+#endif
 
 /******************************************************************************
 	US Geoid 96 file object.  Essentially the same as a csGridFileUS.  However,
@@ -8090,7 +8140,7 @@ struct cs_Osgm91_
 
 	As we did with the 97 version, we assume that there is one file, and
 	that it won't change (famous last words).  Since the file does not
-	have anyheader on it, we hard code the values which would normally
+	have any header on it, we hard code the values which would normally
 	be coded in a file header if the file had one.
 */
 struct cs_Ostn02_
@@ -8121,8 +8171,8 @@ struct cs_Ostn02_
 	conversion between the two is rather simple, as the text file is a long
 	list of doubles, and the binary version is also a long list of doubles
 	in binary format.  In the binary case, there is the possibility of a 
-	byte swapping problem.  We assume all distributions are in the little
-	endian form.
+	byte swapping problem.  We assume all binary distributions are in the
+	little endian form.
 	
 	Essentially, the data file consists of a six double header which defines
 	the coverage of the file and the density of (cell size) of the grid.

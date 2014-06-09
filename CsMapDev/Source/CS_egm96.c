@@ -238,8 +238,18 @@ int CScalcEgm96 (struct cs_Egm96_ *__This,double *geoidHgt,const double wgs84 [2
 
 	   Note, that the file is to proceed from North to South, then East to West.
 	   that is the specification.  Note, first record = 0, and first element = 0. */
-	recNbr = (long32_t)(((__This->northEast [LAT] - lclLat) / __This->density [LAT]) + 1.0E-12);
-	eleNbr = (long32_t)(((lclLng - __This->southWest [LNG]) / __This->density [LNG]) + 1.0E-12);
+
+	/* Trac Ticket 100: Removing the small constant added to the real portion of
+	   the calculation of the element and record numbers.  This constant is
+	   appropriate in situations where the density is not a "nice" number.
+	   Cell widths like 5 minutes yield rather awkward numbers when converted
+	   to degrees.  In this case, 15 minutes converts to a nice binary number
+	   in degrees.  It is considered very unlikely that we'll ever encounter a
+	   geoid height file in this format where the density is something other
+	   than 15 minutes; so we removed the addition of the 1.0E-012 constant */
+	recNbr = (long32_t)((__This->northEast [LAT] - lclLat) / __This->density [LAT]);
+	eleNbr = (long32_t)((lclLng - __This->southWest [LNG]) / __This->density [LNG]);
+
 	/* Redundant; defensive purposes only. */
 	if (recNbr < 0L || recNbr >= __This->recordCount ||
 		eleNbr < 0L || eleNbr >= __This->elementCount)
@@ -247,7 +257,7 @@ int CScalcEgm96 (struct cs_Egm96_ *__This,double *geoidHgt,const double wgs84 [2
 		*geoidHgt = cs_Zero;
 		return 1;
 	}
-	
+
 	/* Are we on an edge? A corner? */
 	edge = none;
 	if (recNbr == 0) edge |= north;
@@ -405,10 +415,6 @@ int CScalcEgm96 (struct cs_Egm96_ *__This,double *geoidHgt,const double wgs84 [2
 	}
 
 	/* OK, do the calculation. */
-	//*geoidHgt = southWest +
-	//			tt * (southEast - southWest) +
-	//			uu * (northWest - southWest) +
-	//			tt * uu * (southWest - southEast - northWest + northEast);
 	*geoidHgt = northWest +
 				tt * (northEast - northWest) +
 				uu * (southWest - northWest) +

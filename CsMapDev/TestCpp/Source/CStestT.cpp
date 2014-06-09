@@ -63,6 +63,44 @@ int CStestT (bool verbose,long32_t duration)
 	int err_cnt = 0;
 
 #ifndef __SKIP__
+	int status;
+	double geoidHeight;
+	double ll84 [2];
+
+	/* Working Trac ticket 100.  We build a scenario which reliably
+	   replicates the problem in order to be sure we fix the real
+	   problem.
+
+	   OK, modified the GeoidHeight.gdc file to list the WW15MGH.GRD file
+	   first.  Having done that, the rest is fairly simple:
+	    */
+	ll84 [0] = (269.779155 - 360.00);
+	ll84 [1] = 38.6281550;
+	status = CS_geoidHgt (ll84,&geoidHeight);
+	if (status != 0)
+	{
+		char errMessage [MAXPATH];
+		CS_errmsg (errMessage,MAXPATH);
+		printf ("Failure: st = %d.  Reason: %s.\n",status,errMessage);
+		err_cnt += 1;
+	}
+	/* geoidHgt should equal ~-31.628   Egm84 numbers */
+
+	ll84 [0] = (305.0211140 - 360.0000);
+	ll84 [1] = -14.6212170;
+	status = CS_geoidHgt (ll84,&geoidHeight);
+	if (status != 0)
+	{
+		char errMessage [MAXPATH];
+		CS_errmsg (errMessage,MAXPATH);
+		printf ("Failure: st = %d.  Reason: %s.\n",status,errMessage);
+		err_cnt += 1;
+	}
+	/* geoidHgt should equal ~-2.969   Egm84 numbers */
+
+#endif
+
+#ifdef __SKIP__
 
 	double llhIn  [3];
 	double llhOk  [3];
