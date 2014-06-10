@@ -58,11 +58,71 @@ extern "C"
 */
   
 extern "C" char csErrmsg [256];
+extern "C" double cs_LlNoise;
 int CStestT (bool verbose,long32_t duration)
 {
 	int err_cnt = 0;
 
 #ifndef __SKIP__
+	int status;
+
+	/* Working Trac ticket 102. */
+
+	double delta;
+	double xy [2];
+	double ll [2];
+	
+	struct cs_Csprm_ *csPrm;
+
+	delta = cs_LlNoise;
+	ll [0] = 171.37625;
+	ll [1] = 7.0872222;
+	csPrm = CS_csloc ("MAJURO");
+	if (csPrm != NULL)
+	{
+		for (int i = 0;i <= 100;i+= 1)
+		{
+			status = CS_ll2cs (csPrm,xy,ll);
+			if (status != 0)
+			{
+				err_cnt += 1;
+			}
+			printf ("%13.10f::%13.10f == %13.5f::%13.5f\n",ll [0],ll[1],xy[0],xy[1]);
+			ll [0] += delta * 10.0;
+			ll [1] += delta * 10.0;
+		}
+		status = CS_ll2cs (csPrm,xy,ll);
+	}
+#endif
+#ifdef __SKIP__
+	ll84 [0] = (269.779155 - 360.00);
+	ll84 [1] = 38.6281550;
+	status = CS_geoidHgt (ll84,&geoidHeight);
+	if (status != 0)
+	{
+		char errMessage [MAXPATH];
+		CS_errmsg (errMessage,MAXPATH);
+		printf ("Failure: st = %d.  Reason: %s.\n",status,errMessage);
+		err_cnt += 1;
+	}
+	/* geoidHgt should equal ~-31.628   Egm84 numbers */
+
+	ll84 [0] = (305.0211140 - 360.0000);
+	ll84 [1] = -14.6212170;
+	status = CS_geoidHgt (ll84,&geoidHeight);
+	if (status != 0)
+	{
+		char errMessage [MAXPATH];
+		CS_errmsg (errMessage,MAXPATH);
+		printf ("Failure: st = %d.  Reason: %s.\n",status,errMessage);
+		err_cnt += 1;
+	}
+	/* geoidHgt should equal ~-2.969   Egm84 numbers */
+
+#endif
+
+
+#ifdef __SKIP__
 	int status;
 	double geoidHeight;
 	double ll84 [2];
