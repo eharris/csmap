@@ -25,7 +25,7 @@ wchar_t csDictSrc [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\
 wchar_t csEpsgDir [MAXPATH] = L"%GEODETIC_DATA%\\EPSG\\CSV";
 wchar_t csTempDir [MAXPATH] = L"C:\\TEMP";
 #else
-const wchar_t csDataDir [] = L"$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev\Data";
+const wchar_t csDataDir [] = L"$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Data";
 const char csDictDir [] = "$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Dictionaries";
 wchar_t csEpsgDir [] = L"${GeodeticData}/Epsg/CSV";
 const wchar_t csTempDir [] = L"/usr/tmp";

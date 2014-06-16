@@ -85,18 +85,15 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FloatingPointExceptions>true</FloatingPointExceptions>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <PrecompiledHeaderFile>cs_map.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csConsoleUtilities.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>csmapd.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjDir)..\lib100\$(Configuration)\</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -138,17 +135,14 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)../CsMapConsoleUtilities/Include;$(ProjectDir)../Include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <PrecompiledHeaderFile>cs_map.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csConsoleUtilities.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>csmap.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjDir)..\lib100\$(Configuration)\</AdditionalLibraryDirectories>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -189,8 +183,12 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddSequenceNbrs.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAscFixer.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csBlueBook.cpp" />
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csConsoleUtilities.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csConsoleUtilities.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCrsNamesToSource.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsdToCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsMapToCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csEpsg706Update.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerateBlueBookTestData.cpp" />

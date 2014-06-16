@@ -89,9 +89,8 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FloatingPointExceptions>true</FloatingPointExceptions>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <PrecompiledHeaderFile>cs_map.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csConsoleUtilities.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -118,9 +117,8 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FloatingPointExceptions>true</FloatingPointExceptions>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <PrecompiledHeaderFile>cs_map.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csConsoleUtilities.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
@@ -142,9 +140,8 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)../CsMapConsoleUtilities/Include;$(ProjectDir)../Include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <PrecompiledHeaderFile>cs_map.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csConsoleUtilities.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
     </ClCompile>
     <Link>
@@ -166,9 +163,8 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)../CsMapConsoleUtilities/Include;$(ProjectDir)../Include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <PrecompiledHeaderFile>cs_map.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>csConsoleUtilities.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level4</WarningLevel>
     </ClCompile>
     <Link>
@@ -193,8 +189,14 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddSequenceNbrs.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAscFixer.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csBlueBook.cpp" />
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csConsoleUtilities.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csConsoleUtilities.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCrsNamesToSource.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsdToCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsMapToCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csEpsg706Update.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerateBlueBookTestData.cpp" />

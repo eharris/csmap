@@ -16,10 +16,8 @@
 // DESCRIPTION:
 //
 
-#include "cs_map.h"
-#include "rcWellKnownText.hpp"
-#include "cs_wkt.h"
 #include "csConsoleUtilities.hpp"
+
 #include <iomanip>
 
 extern "C" unsigned long KcsNmInvNumber;

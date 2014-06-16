@@ -47,8 +47,8 @@
 				PreprocessorDefinitions="_DEBUG"
 				RuntimeLibrary="3"
 				FloatingPointExceptions="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="cs_map.h"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="csConsoleUtilities.hpp"
 				WarningLevel="4"
 				DebugInformationFormat="3"
 			/>
@@ -123,8 +123,8 @@
 				PreprocessorDefinitions="_DEBUG"
 				RuntimeLibrary="3"
 				FloatingPointExceptions="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="cs_map.h"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="csConsoleUtilities.hpp"
 				WarningLevel="4"
 				DebugInformationFormat="3"
 			/>
@@ -196,8 +196,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="$(ProjectDir)../CsMapConsoleUtilities/Include;$(ProjectDir)../Include"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="cs_map.h"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="csConsoleUtilities.hpp"
 				WarningLevel="4"
 			/>
 			<Tool
@@ -266,8 +266,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="$(ProjectDir)../CsMapConsoleUtilities/Include;$(ProjectDir)../Include"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="cs_map.h"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="csConsoleUtilities.hpp"
 				WarningLevel="4"
 			/>
 			<Tool
@@ -354,6 +354,38 @@
 			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csConsoleUtilities.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csCrsNamesToSource.cpp"

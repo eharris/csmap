@@ -11,17 +11,27 @@
 // DESCRIPTION:
 //
 
-#include <ctype.h>
-#include <time.h>
-#include <locale.h>
+// Now comes May 21, 2014 
+// The following list, and the order of their listing, has been optimized for
+// the use of pre-compiled headers.  Some of these files are unreferenced in
+// this module, a small price paid for the efficiency affored by pre-compiled
+// headers.
+/*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
 
 #include "cs_map.h"
 #include "cs_Legacy.h"
+#include "cs_WktObject.hpp"
 #include "cs_wkt.h"
+#include "cs_NameMapper.hpp"
+//  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
+//  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_EpsgStuff.h"
 
-#include "csCsvFileSupport.hpp"
-#include "csNameMapper.hpp"
-#include "csepsgstuff.h"
+/* These inclues moved here to give the cs_map.h header control over some
+   debug defines, specifically _ITERATOR_DEBUG_LEVEL. */
+#include <ctype.h>
+#include <time.h>
+#include <locale.h>
 
 // A structure used in several tests.
 struct tst_lst_

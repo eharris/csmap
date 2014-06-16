@@ -15,8 +15,7 @@
 //
 // DESCRIPTION:
 //
-#include "cs_map.h"
-#include "cs_wkt.h"
+
 #include "csConsoleUtilities.hpp"
 
 struct csWktPrjNameMap_ csWktPrjNameMap [] =

@@ -1,13 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Express 2012 for Windows Desktop
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{80DBC263-3A23-4037-A2D8-B10FB38B4757}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Compiler", "Compiler.vcxproj", "{3E777628-BB4A-4BA6-ABF3-13418B2D3A7A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F36FF087-3739-4458-96F3-56799FC3E3D2} = {F36FF087-3739-4458-96F3-56799FC3E3D2}
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest.vcxproj", "{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTestCpp", "ConsoleTestCpp.vcxproj", "{C1373A1E-E433-44C7-A0F1-425BCD7A3874}"
 EndProject
@@ -31,14 +29,6 @@ Global
 		{3E777628-BB4A-4BA6-ABF3-13418B2D3A7A}.Release|Win32.Build.0 = Release|Win32
 		{3E777628-BB4A-4BA6-ABF3-13418B2D3A7A}.Release|x64.ActiveCfg = Release|x64
 		{3E777628-BB4A-4BA6-ABF3-13418B2D3A7A}.Release|x64.Build.0 = Release|x64
-		{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}.Debug|Win32.ActiveCfg = Debug|Win32
-		{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}.Debug|Win32.Build.0 = Debug|Win32
-		{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}.Debug|x64.ActiveCfg = Debug|x64
-		{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}.Debug|x64.Build.0 = Debug|x64
-		{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}.Release|Win32.ActiveCfg = Release|Win32
-		{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}.Release|Win32.Build.0 = Release|Win32
-		{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}.Release|x64.ActiveCfg = Release|x64
-		{4BFE9CF5-5670-41B6-B39E-6F3507CD38CF}.Release|x64.Build.0 = Release|x64
 		{C1373A1E-E433-44C7-A0F1-425BCD7A3874}.Debug|Win32.ActiveCfg = Debug|Win32
 		{C1373A1E-E433-44C7-A0F1-425BCD7A3874}.Debug|Win32.Build.0 = Debug|Win32
 		{C1373A1E-E433-44C7-A0F1-425BCD7A3874}.Debug|x64.ActiveCfg = Debug|x64

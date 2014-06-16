@@ -1,0 +1,97 @@
+#
+# Set these variables to controlthe version, configutation, and 
+# processor.  The values are passed to the individual makefiles
+# for each component of the CS_MAP distribution. Alternatives to
+# passing the macros on the command line were tried, but this
+# produces the desired results.  That is, having the individual
+# makefiles run on their own.
+#
+# Setting these variable in your environment, and then invoking
+# NMAKE with the /E option is an alternative.  The /E option
+# works in mysterious ways, so results are not always what you
+# would expect.
+#
+VERSION = 100
+CONFIGURATION = Release
+PROCESSOR = x64
+CSMAP_LIB_NAME = CsMap
+CC_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
+CPP_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
+#
+Release :
+	cd $(MAKEDIR)/Source
+	$(MAKE) /fLibrary.nmk "VERSION=$(VERSION)" \
+						  "CONFIGURATION=$(CONFIGURATION)" \
+						  "PROCESSOR=$(PROCESSOR)" \
+						  "CC_FLG=$(CC_FLG)" \
+						  "CPP_FLG=$(CPP_FLG)" \
+						  Library
+	cd $(MAKEDIR)/Dictionaries
+	$(MAKE) /fCompiler.nmk "VERSION=$(VERSION)" \
+						   "CONFIGURATION=$(CONFIGURATION)" \
+						   "PROCESSOR=$(PROCESSOR)" \
+						   "CC_FLG=$(CC_FLG)" \
+						   "CPP_FLG=$(CPP_FLG)" \
+						   ALL
+	cd $(MAKEDIR)/TestCpp
+	$(MAKE) /fTestCpp.nmk "VERSION=$(VERSION)" \
+						  "CONFIGURATION=$(CONFIGURATION)" \
+						  "PROCESSOR=$(PROCESSOR)" \
+						  "CC_FLG=$(CC_FLG)" \
+						  "CPP_FLG=$(CPP_FLG)" \
+						  ALL
+	cd $(MAKEDIR)
+
+CleanRelease :
+	cd $(MAKEDIR)\Source
+	$(MAKE) /fLibrary.nmk "VERSION=$(VERSION)" \
+						  "CONFIGURATION=$(CONFIGURATION)" \
+						  "PROCESSOR=$(PROCESSOR)" \
+						  "CC_FLG=$(CC_FLG)" \
+						  "CPP_FLG=$(CPP_FLG)" \
+						  clean
+	cd $(MAKEDIR)\Dictionaries
+	$(MAKE) /fCompiler.nmk "VERSION=$(VERSION)" \
+						   "CONFIGURATION=$(CONFIGURATION)" \
+						   "PROCESSOR=$(PROCESSOR)" \
+						   "CC_FLG=$(CC_FLG)" \
+						   "CPP_FLG=$(CPP_FLG)" \
+						   clean
+	cd $(MAKEDIR)/TestCpp
+	$(MAKE) /fTestCpp.nmk "VERSION=$(VERSION)" \
+						  "CONFIGURATION=$(CONFIGURATION)" \
+						  "PROCESSOR=$(PROCESSOR)" \
+						  "CC_FLG=$(CC_FLG)" \
+						  "CPP_FLG=$(CPP_FLG)" \
+						  clean
+	cd $(MAKEDIR)
+
+RebuildRelease :
+	cd $(MAKEDIR)\Source
+	$(MAKE) /fLibrary.nmk "VERSION=$(VERSION)" \
+						  "CONFIGURATION=$(CONFIGURATION)" \
+						  "PROCESSOR=$(PROCESSOR)" \
+						  "CC_FLG=$(CC_FLG)" \
+						  "CPP_FLG=$(CPP_FLG)" \
+						  rebuild
+	cd $(MAKEDIR)\Dictionaries
+	$(MAKE) /fCompiler.nmk "VERSION=$(VERSION)" \
+						   "CONFIGURATION=$(CONFIGURATION)" \
+						   "PROCESSOR=$(PROCESSOR)" \
+						   "CC_FLG=$(CC_FLG)" \
+						   "CPP_FLG=$(CPP_FLG)" \
+						   rebuild
+	cd $(MAKEDIR)/TestCpp
+	$(MAKE) /fTestCpp.nmk "VERSION=$(VERSION)" \
+						  "CONFIGURATION=$(CONFIGURATION)" \
+						  "PROCESSOR=$(PROCESSOR)" \
+						  "CC_FLG=$(CC_FLG)" \
+						  "CPP_FLG=$(CPP_FLG)" \
+						  rebuild
+	cd $(MAKEDIR)
+Test :
+	.\bin$(VERSION)\$(CONFIGURATION)\csTestCpp /d.\Dictionaries /e /b .\TestCpp\TEST.DAT
+
+QuickTest :
+	.\bin$(VERSION)\$(CONFIGURATION)\csTestCpp /d.\Dictionaries /e /b /t12345 .\TestCpp\TEST.DAT
+

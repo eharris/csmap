@@ -29,6 +29,7 @@
     <ClCompile Include="..\TestCpp\Source\CStestSupport.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestT.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestZ.cpp" />
+    <ClCompile Include="..\TestCpp\Source\CStest0.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\TestCpp\Include\csTestCpp.hpp" />

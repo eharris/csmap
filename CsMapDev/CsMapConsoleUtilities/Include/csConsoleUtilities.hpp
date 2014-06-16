@@ -25,22 +25,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+
+// The following list of include files includes one or more files which
+// are not really referenced in all modules.  This list, and the specific
+// order thereof, isoptimized for the use of pre-compiled headers.  As
+// these modules will compiled hunreds of times more freequently than they
+// are changed, a small price to pay for build efficiency which is significant.
+/*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
+
+#include "cs_map.h"
+#include "cs_Legacy.h"
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
+#include "cs_NameMapper.hpp"
+//  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
+//  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_EpsgStuff.h"
+#include "csUtilitiesSupport.hpp"
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <vector>
-#pragma warning(disable:4702)
+#pragma warning(disable:4702)			// unreachable code
 #include <set>
 #pragma warning(default:4702)
 #include <string>
-
-#include "cs_map.h"
-#include "cs_Legacy.h"
-#include "csCsvFileSupport.hpp"
-#include "csepsgstuff.h"
-#include "csNameMapper.hpp"
-#include "csUtilitiesSupport.hpp"
-#include "cs_IoUtil.h"
 
 #ifndef wcCount
 #	define wcCount(array) (sizeof (array) / sizeof (wchar_t))

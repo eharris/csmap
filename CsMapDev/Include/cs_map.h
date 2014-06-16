@@ -186,6 +186,21 @@
 #undef _MFC_VERSION
 #undef _PROCESSOR
 
+/* I found the following information on the Web; thought capturing it and
+   permanently recording it here may be helpful.
+
+	MSVC++ 12.0 _MSC_VER == 1800 (Visual Studio 2013)
+	MSVC++ 11.0 _MSC_VER == 1700 (Visual Studio 2012)
+	MSVC++ 10.0 _MSC_VER == 1600 (Visual Studio 2010)
+	MSVC++ 9.0  _MSC_VER == 1500 (Visual Studio 2008)
+	MSVC++ 8.0  _MSC_VER == 1400 (Visual Studio 2005)
+	MSVC++ 7.1  _MSC_VER == 1310 (Visual Studio 2003)
+	MSVC++ 7.0  _MSC_VER == 1300
+	MSVC++ 6.0  _MSC_VER == 1200
+	MSVC++ 5.0  _MSC_VER == 1100
+
+*/
+
 /*******************************************************************************
 	In all CS-MAP code, we use __WINCE__ as the constant to control
 	compilation for Windows CE.  We define it once here so that users
@@ -463,7 +478,6 @@
 #endif
 
 #if _RUN_TIME == _rt_MSWIN64
-//#	define _CRT_SECURE_NO_DEPRECATE 
 #	if defined (__MFC__)
 #		define _WIN32_WINDOWS 0x0410
 #		define WINVER 0x0410
@@ -917,6 +931,26 @@
 	/* It appears that a long is 32 bits. */
 	typedef long long32_t;
 	typedef unsigned long ulong32_t;
+#endif
+
+/* I found the following necessary to maintain compatibility between Microsoft
+   compilers.  I don't believe we want/need iterator checking, whatever that
+   is. */
+
+#if defined (_MSC_VER)
+#	if (_MSC_VER < 1600)
+		// Compile the following prior to VC++ 2010 (version 10.0)
+#		define _CRT_SECURE_NO_DEPRECATE
+#		define _CRT_NONSTDC_NO_DEPRECATE
+#	else
+		// Compile the following for VC++ 2010 (v10.0) and later.
+#		if defined(_ITERATOR_DEBUG_LEVEL)
+#			undef _ITERATOR_DEBUG_LEVEL
+#		endif
+#		define _ITERATOR_DEBUG_LEVEL 0
+#		undef _HAS_ITERATOR_DEBUGGING
+#		undef _SECURE_SCL
+#	endif
 #endif
 
 /******************************************************************************
