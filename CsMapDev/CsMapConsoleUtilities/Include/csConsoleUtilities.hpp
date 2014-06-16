@@ -40,6 +40,7 @@
 #include "csepsgstuff.h"
 #include "csNameMapper.hpp"
 #include "csUtilitiesSupport.hpp"
+#include "cs_IoUtil.h"
 
 #ifndef wcCount
 #	define wcCount(array) (sizeof (array) / sizeof (wchar_t))
@@ -74,6 +75,13 @@ bool csUsefulRangeReport (const wchar_t* reportDir,const wchar_t* csDictDir);
 bool csWriteEsriWktTestFile (const wchar_t* csDataSrcDir,const wchar_t* csDataTrgDir);
 bool csWriteNsrsAudit (const wchar_t* csDictSrcDir,const wchar_t* csTrgDataFileDir);
 bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDictSrcDir,const wchar_t* srcCsvFullPath);
+bool csCsdToCsvEL (const wchar_t* csDictDir,bool incLegacy = false);
+bool csCsdToCsvDT (const wchar_t* csDictDir,bool incLegacy = false);
+bool csCsdToCsvCS (const wchar_t* csDictDir,bool incLegacy = false);
+bool csCsdToCsvCT (const wchar_t* csDictDir,bool incLegacy = false);
+bool csCsdToCsvGX (const wchar_t* csDictDir,bool incLegacy = false);
+bool csCsdToCsvGP (const wchar_t* csDictDir,bool incLegacy = false);
+
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be
 // removed.

@@ -360,6 +360,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csCsdToCsv.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csCsMapToCsv.cpp"
 				>
 			</File>
@@ -433,6 +437,10 @@
 			</File>
 			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csUpdateNameMapperFromCsv.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csUsefulRangeReport.cpp"
 				>
 			</File>
 			<File
