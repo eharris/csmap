@@ -409,6 +409,9 @@
     <ClCompile Include="..\Source\CS_wktObjKonstants.cpp">
       <Filter>SourceCpp</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\CSsys34KMS.c">
+      <Filter>SourceC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\cs_Ats77.h">

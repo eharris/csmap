@@ -246,6 +246,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)cs_mapCpp.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
+    <ClCompile Include="..\Source\CSsys34KMS.c" />
     <ClCompile Include="..\Source\CS_alber.c" />
     <ClCompile Include="..\Source\CS_angle.c" />
     <ClCompile Include="..\Source\CS_ansi.c" />

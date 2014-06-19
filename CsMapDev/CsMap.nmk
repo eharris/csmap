@@ -1,5 +1,5 @@
 #
-# Set these variables to controlthe version, configutation, and 
+# Set these variables to control the version, configuration, and 
 # processor.  The values are passed to the individual makefiles
 # for each component of the CS_MAP distribution. Alternatives to
 # passing the macros on the command line were tried, but this

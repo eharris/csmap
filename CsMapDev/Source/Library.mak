@@ -270,7 +270,9 @@ CSMAP_SRC_CC = 	CS_alber.c \
 	CSgpcomp.c \
 	CSgxcomp.c \
 	CSmrcomp.c \
+	CSsys34KMS.c \
 	CSwktFlavors.c
+	
 
 # A hard coded list of the 'C++' modules required to exist in the library.
 CSMAP_SRC_CPP = csIoUtil.cpp \

@@ -6,7 +6,7 @@ libCsmap_la_SOURCES = \
   Source/CS_alber.c \
   Source/CS_angle.c \
   Source/CS_ansi.c \
-  Source/CS_ats77New.c \
+  Source/CS_ats77.c \
   Source/CS_azmea.c \
   Source/CS_azmed.c \
   Source/CS_badekas.c \
@@ -18,7 +18,9 @@ libCsmap_la_SOURCES = \
   Source/CS_csini.c \
   Source/CS_csio.c \
   Source/CS_csprm.c \
+  Source/CS_csvFileSupport.cpp \
   Source/CS_csWktLoc.c \
+  Source/CS_ctio.c \
   Source/CS_datum.c \
   Source/CS_defaults.c \
   Source/CS_defCmp.c \
@@ -33,6 +35,8 @@ libCsmap_la_SOURCES = \
   Source/CS_ekrt6.c \
   Source/CS_elCalc.c \
   Source/CS_elio.c \
+  Source/CS_epsgStuff.cpp \
+  Source/CS_epsgSupport.cpp \
   Source/CS_erpt.c \
   Source/CS_error.c \
   Source/CS_fips.c \
@@ -56,11 +60,10 @@ libCsmap_la_SOURCES = \
   Source/CS_hlApi.c \
   Source/CS_hmlsn.c \
   Source/CS_hpApi.c \
-  Source/CS_japanNew.c \
+  Source/CS_japan.c \
   Source/CS_krovk.c \
   Source/CS_lmbrt.c \
   Source/CS_lmtan.c \
-  Source/CS_mfc.cpp \
   Source/CS_mgrs.c \
   Source/CS_millr.c \
   Source/CS_modpc.c \
@@ -71,6 +74,8 @@ libCsmap_la_SOURCES = \
   Source/CS_mulrg.c \
   Source/CS_nacyl.c \
   Source/CS_nadcn.c \
+  Source/CS_nameMapper.cpp \
+  Source/CS_nameMapperSupport.cpp \
   Source/CS_nerth.c \
   Source/CS_ntv1.c \
   Source/CS_ntv2.c \
@@ -107,14 +112,14 @@ libCsmap_la_SOURCES = \
   Source/CS_vdgrn.c \
   Source/CS_VertconUS.c \
   Source/CS_vrtcon.c \
-  Source/cs_wellknowntext.cpp \
+  Source/CS_wellknowntext.cpp \
   Source/CS_wgs72.c \
   Source/CS_winkelTripel.c \
+  Source/CS_wktObject.cpp \
+  Source/CS_wktObjKonstants.cpp \
   Source/CS_zones.c \
-  Source/csBrowser.cpp \
   Source/CScs2Wkt.cpp \
   Source/cscscomp.c \
-  Source/csCsvFileSupport.cpp \
   Source/CSdata.c \
   Source/csDataDir.cpp \
   Source/CSdataDT.c \
@@ -124,23 +129,14 @@ libCsmap_la_SOURCES = \
   Source/CSdictDiff.c \
   Source/CSdt2Wkt.cpp \
   Source/CSdtcomp.c \
-  Source/csDualBrowse.cpp \
   Source/CSel2Wkt.cpp \
   Source/CSelcomp.c \
-  Source/csEpsgStuff.cpp \
-  Source/csEpsgSupport.cpp \
   Source/CSgeodeticSupport.c \
   Source/CSgpcomp.c \
   Source/CSgxcomp.c \
-  Source/csKeyNm.cpp \
   Source/CSmrcomp.c \
-  Source/csNameMapper.cpp \
-  Source/csNameMapperSupport.cpp \
   Source/CSsys34KMS.c \
-  Source/CSwinHlp.cpp \
   Source/CSwktFlavors.c \
-  Source/rcWellKnownText.cpp \
-  Source/rcWktKonstants.cpp \
   Source/csIoUtil.cpp
 
 noinst_HEADERS = \
@@ -149,26 +145,23 @@ noinst_HEADERS = \
   Include/csIoUtilDirSwitch.hpp \
   Include/csIoUtil.hpp \
   Include/cs_ioUtil.h \
-  Include/csCsvFileSupport.hpp \
-  Include/csCsvFileSupport.hpp \
-  Include/csepsgstuff.h \
-  Include/csNameMapper.hpp \
-  Include/csNameMapperSupport.h \
+  Include/cs_CsvFileSupport.hpp \
+  Include/cs_CsvFileSupport.hpp \
+  Include/cs_EpsgStuff.h \
+  Include/cs_NameMapper.hpp \
+  Include/cs_NameMapperSupport.h \
   Include/cs_clientBeg.h \
   Include/cs_clientEnd.h \
   Include/cs_Geodetic.h \
-  Include/cs_hlp.h \
   Include/cs_Legacy.h \
   Include/cs_map.h \
-  Include/cs_mfc.h \
   Include/cs_Nadcon.h \
   Include/cs_NTv1.h \
   Include/cs_NTv2.h \
   Include/cs_OpenSource.h \
-  Include/cs_res.h \
   Include/cs_Wchar.hpp \
   Include/cs_wkt.h \
-  Include/rcWellKnownText.hpp
+  Include/cs_WktObject.hpp
 
 INCLUDES = -IInclude 
 
