@@ -28,26 +28,6 @@
 #ifndef __CS_IO_UTIL_HPP__
 #define __CS_IO_UTIL_HPP__
 
-/* I found the following necessary to maintain compatibility between Microsoft
-   compilers.  I don't believe we want/need iterator checking, whatever that
-   is. */
-
-#if defined (_MSC_VER)
-#	if (_MSC_VER < 1600)
-		// Compile the following prior to VC++ 2010 (version 10.0)
-#		define _CRT_SECURE_NO_DEPRECATE
-#		define _CRT_NONSTDC_NO_DEPRECATE
-#	else
-		// Compile the following for VC++ 2010 (v10.0) and later.
-#		if defined(_ITERATOR_DEBUG_LEVEL)
-#			undef _ITERATOR_DEBUG_LEVEL
-#		endif
-#		define _ITERATOR_DEBUG_LEVEL 0
-#		undef _HAS_ITERATOR_DEBUGGING
-#		undef _SECURE_SCL
-#	endif
-#endif
-
 #include <vector>
 #include <map>
 #include <set>
