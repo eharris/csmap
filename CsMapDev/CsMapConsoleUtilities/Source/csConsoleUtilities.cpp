@@ -23,11 +23,13 @@ wchar_t csDataDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\
 wchar_t csDictDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
 wchar_t csDictSrc [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
 wchar_t csEpsgDir [MAXPATH] = L"%GEODETIC_DATA%\\EPSG\\CSV";
+wchar_t csEpsgPolyDir [] = L"%GEODETIC_DATA%\\EPSG\\EPSG-Polygon-package-20130626";
 wchar_t csTempDir [MAXPATH] = L"C:\\TEMP";
 #else
 const wchar_t csDataDir [] = L"$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Data";
 const char csDictDir [] = "$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Dictionaries";
 wchar_t csEpsgDir [] = L"${GeodeticData}/Epsg/CSV";
+const wchar_t csDataDir [] = L"$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Data";
 const wchar_t csTempDir [] = L"/usr/tmp";
 #endif
 
@@ -67,8 +69,8 @@ int main (int argc,char* argv [])
 	// Resort a manually edited NameMapper.csv file to standard order.  Also,
 	// this utility will match the quoting in the sorted  data file as
 	// maintained in SVN.  This feature is often required so that a "diff"
-	// between old and manually edited (exspecially if you use Excel to do the
-	// editing) will produce useable results.
+	// between old and manually edited (especially if you use Excel to do the
+	// editing) will produce usable results.
 	// ok = ResortNameMapperCsv (csTempDir,csDictSrc,true);
 
 	// Note that the Resort utility will overwrite the source file if the same

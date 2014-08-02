@@ -27,7 +27,7 @@
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
 #include "cs_EpsgStuff.h"
 
-/* These inclues moved here to give the cs_map.h header control over some
+/* These includes moved here to give the cs_map.h header control over some
    debug defines, specifically _ITERATOR_DEBUG_LEVEL. */
 #include <ctype.h>
 #include <time.h>

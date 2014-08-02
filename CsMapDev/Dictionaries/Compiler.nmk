@@ -51,7 +51,7 @@ DICTIONARY_SRC = $(DICTIONARY_SRC_DIR)\coordsys.asc \
 				 $(DICTIONARY_SRC_DIR)\category.asc
 #
 # The following options are chosen to be rather generic; something that
-# should work in any UNIX/Linux type environment.  More sophisticated
+# should work in any Windows type environment.  More sophisticated
 # specifications can/should be coded in the parent make file.
 #
 CC_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
@@ -77,7 +77,7 @@ $(OUT_DIR)\$(TRG_NAME) : $(INT_DIR)\$(TRG_BASE).obj $(LIB_DIR)\$(CSMAP_LIB_NAME)
 	cl $(CC_FLG) /Fe$(OUT_DIR)\$(TRG_NAME) $(INT_DIR)\$(TRG_BASE).obj $(LIB_DIR)\$(CSMAP_LIB_NAME).lib
 
 $(DICTIONARIES) :: $(DICTIONARY_SRC)
-	$(OUT_DIR)\$(TRG_BASE) /b $(INCLUDE_TEST) $(DICTIONARY_SRC_DIR) $(DICTIONARY_TRG_DIR)
+	$(OUT_DIR)\$(TRG_NAME) /b $(INCLUDE_TEST) $(DICTIONARY_SRC_DIR) $(DICTIONARY_TRG_DIR)
 #
 # As long as the actual compile functions remain in the Library, it makes
 # sense to have this dependency rule here.
@@ -92,10 +92,10 @@ $(LIB_DIR)\$(CSMAP_LIB_NAME).lib :
 
 clean :
 	del /F $(INT_DIR)\*.obj
-	del /F $(OUT_DIR)\$(TRG_BASE)
+	del /F $(OUT_DIR)\$(TRG_NAME)
 	del /F $(DICTIONARIES)
 
-rebuild: clean $(OUT_DIR)\$(TRG_BASE) $(DICTIONARIES)
+rebuild: clean $(OUT_DIR)\$(TRG_NAME) $(DICTIONARIES)
 
 #
 # The following create directories as necessary if they don't already exist.

@@ -16,7 +16,6 @@
 // DESCRIPTION:
 //
 
-#include <iomanip>
 #include "csConsoleUtilities.hpp"
 
 extern "C"

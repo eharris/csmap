@@ -17,6 +17,10 @@ PROCESSOR = x64
 CSMAP_LIB_NAME = CsMap
 CC_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
 CPP_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
+EXE_DIR = .\bin$(VERSION)\$(CONFIGURATION)
+!IF ("$(PROCESSOR)" == "x64")
+EXE_DIR = $(EXE_DIR)64
+!ENDIF
 #
 Release :
 	cd $(MAKEDIR)/Source
@@ -89,9 +93,10 @@ RebuildRelease :
 						  "CPP_FLG=$(CPP_FLG)" \
 						  rebuild
 	cd $(MAKEDIR)
+
 Test :
-	.\bin$(VERSION)\$(CONFIGURATION)\csTestCpp /d.\Dictionaries /e /b .\TestCpp\TEST.DAT
+	$(EXE_DIR)\csTestCpp.exe /d.\Dictionaries /e /b .\TestCpp\TEST.DAT
 
 QuickTest :
-	.\bin$(VERSION)\$(CONFIGURATION)\csTestCpp /d.\Dictionaries /e /b /t12345 .\TestCpp\TEST.DAT
+	$(EXE_DIR)\csTestCpp.exe /d.\Dictionaries /e /b /t12345 .\TestCpp\TEST.DAT
 

@@ -346,9 +346,6 @@
     <ClCompile Include="..\Source\CSgeodeticSupport.c">
       <Filter>SourceC</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\CSmrcomp.c">
-      <Filter>SourceC</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\CSwktFlavors.c">
       <Filter>SourceC</Filter>
     </ClCompile>
@@ -408,9 +405,6 @@
     </ClCompile>
     <ClCompile Include="..\Source\CS_wktObjKonstants.cpp">
       <Filter>SourceCpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\CSsys34KMS.c">
-      <Filter>SourceC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

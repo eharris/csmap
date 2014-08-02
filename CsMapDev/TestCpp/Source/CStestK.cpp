@@ -69,17 +69,18 @@ extern char* cs_TestDirP;
 struct csTestKIgnores_
 {
 	ErcWktFlavor flavor;
-	char csMapName [32];	
-	char* comment [128];
+	char csMapName [32];
+	char comment [128];
 } csTestKIgnores [] =
 {
 	// The ESRI WKT data we have been using for testing is more than a decade old.  It is unlikely
 	// that the discrepancies listed in the following table still exist in any ESRI product.  But
 	// the discrepancies do still exist in the ancient test data file we are using.
 	{ wktFlvrEsri,        "Carthage.TM-11NE", "ESRI GCS unit is grad, should be degree?  Affects interpretation of central meridian."                           },
+	{ wktFlvrEsri,             "Carthage.LL", "ESRI GCS unit is grad, but the name does not indicate that as it does with newer versions."                      },
 	{ wktFlvrEsri,   "Dabola1981.UTM-28N/01", "ESRI Has incorrect ellipsoid.  Is Clrk_1880-RGN, should be(?) Clrk-IGN."                                         },
 	{ wktFlvrEsri,   "Dabola1981.UTM-29N/01", "ESRI Has incorrect ellipsoid.  Is Clrk_1880-RGN, should be(?) Clrk-IGN."                                         },
-	{ wktFlvrEsri,            "HUN-EOV72-7P", "ESRI uses Hotine approximation to the Oblique Cynlindrical."                                                     },
+	{ wktFlvrEsri,            "HUN-EOV72-7P", "ESRI uses Hotine approximation to the Oblique Cylindrical."                                                     },
 	{ wktFlvrEsri,                 "IND-0/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
 	{ wktFlvrEsri,                 "IND-I/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
 	{ wktFlvrEsri,               "IND-IIA/a", "ESRI uses datum variant EPSG Operation code 1533; we use 1155 (ellipsoid different)."                            },
@@ -99,11 +100,13 @@ struct csTestKIgnores_
 	{ wktFlvrEsri,  "Rassadiran_1.NakhlTaqi", "ESRI says org_lat == 27 34 7.7837; EPSG & CS_MAP say org_lat == 27 31 7.7837."                                   },
 	{ wktFlvrEsri,  "RGN/91-93.NewCaledonia", "ESRI ellipsoid is International 1924; should be GRS 1980?."                                                      },
 	{ wktFlvrEsri,      "ST87/Ouvea.UTM-58S", "ESRI ellipsoid is International 1924; should be GRS WGS84?."                                                     },
-	{ wktFlvrEsri,    "TMBLI-B.RSOBorneo.ch", "ESRI says false arigin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
-	{ wktFlvrEsri,    "TMBLI-B.RSOBorneo.ft", "ESRI says false arigin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
-	{ wktFlvrEsri,     "TMBLI-B.RSOBorneo.m", "ESRI says false arigin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
+	{ wktFlvrEsri,    "TMBLI-B.RSOBorneo.ch", "ESRI says false origin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
+	{ wktFlvrEsri,    "TMBLI-B.RSOBorneo.ft", "ESRI says false origin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
+	{ wktFlvrEsri,     "TMBLI-B.RSOBorneo.m", "ESRI says false origin is zero:zero;; CS-MAP and EPSG say otherwise."                                            },
 	{ wktFlvrEsri,            "WGS84.TM-6NE", "ESRI says false northing is 10,000,000.0; EPSG says zero.  We go with EPSG."                                     },
 	{ wktFlvrEsri,            "HD72/7Pa.EOV", "Does not appear that ESRI has a parameter for Standard parallel as CS-MAP does"                                  },
+	{ wktFlvrEsri,             "Merchich/01", "ESRI GCS unit is grad, but the name does not indicate that as it does with newer versions."                      },
+	{ wktFlvrEsri,         "Voirol1875_1.LL", "ESRI GCS unit is grad, but the name does not indicate that as it does with newer versions."                      },
 	{ wktFlvrNone,                        "", "End of table marker."                                                                                            }
 };
 int CStestK (bool verbose,long32_t duration)
@@ -250,7 +253,7 @@ int CStestK (bool verbose,long32_t duration)
 			wktCS = CS_csloc (csWktBufr);
 #else
 			/* Verify that what we have been given is indeed a WKT string.  If
-			   it isn't, we can promptly issue an error rteport and continue on
+			   it isn't, we can promptly issue an error report and continue on
 			   to the next WKT string. */
 			st = CS_isWkt (csWktBufr);
 			if (st < 0)
@@ -265,7 +268,7 @@ int CStestK (bool verbose,long32_t duration)
 			{
 				/* It isn't a WKT string, and really doesn't come close.  So we
 				   assume this is just extra stuff in the test data file and
-				   silebntly ignore it. */
+				   silently ignore it. */
 				continue;		
 			}
 
@@ -391,16 +394,16 @@ int CStestK (bool verbose,long32_t duration)
 						{
 							if (cmpReport != 0)
 							{
-								fprintf (cmpReport,"Line %ld: Comparision of WKT '%s' and CS-MAP '%s' failed [%f  %f].\n",lineNbr,wktCS->csdef.desc_nm,dictName,deltaX,deltaY);
+								fprintf (cmpReport,"Line %ld: Comparison of WKT '%s' and CS-MAP '%s' failed [%f  %f].\n",lineNbr,wktCS->csdef.desc_nm,dictName,deltaX,deltaY);
 							}
-							printf ("Comparision of WKT '%s' and MSI '%s' failed.\n",wktCS->csdef.desc_nm,dictName);
+							printf ("Comparison of WKT '%s' and MSI '%s' failed.\n",wktCS->csdef.desc_nm,dictName);
 							err_cnt += 1;
 
 							// For debugging convenience.
 							CS_ll2cs (msiCS,msiResult,testInput);
 							CS_ll2cs (wktCS,wktResult,testInput);
 						}
-						// For debugging cvonvenience.
+						// For debugging convenience.
 						//status = CScs2WktEx (csWktBufr,sizeof (csWktBufr),flavor,msiCS,0,0,1);
 						CS_free (wktCS);
 						CS_free (msiCS);

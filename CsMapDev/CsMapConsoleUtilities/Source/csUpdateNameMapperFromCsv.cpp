@@ -39,7 +39,7 @@ extern "C" double cs_Zero;
 // If time, energy, and money are sufficient, we may try also verifying that
 // All geographic references, datum references, ellipsoid references, and
 // unit references are also updated to the degree possible.  This gets rather
-// iffy as there is no direct collelation bwteen the names and a definition.
+// iffy as there is no direct correlation between the names and a definition.
 // With regard to the system name; well the name is essentially defined by the
 // WKT system definition provided.
 
@@ -169,9 +169,9 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 		EcsNameFlavor flavor (csMapFlvrUnknown);
 		EcsMapObjType objType (csMapNone);
 	
-		TcsGenericId srchCode;		// Deafult constructor initializes to 0UL, we're counting on that.
-		TcsGenericId wkidCode;		// Deafult constructor initializes to 0UL, we're counting on that.
-		TcsGenericId epsgId;		// Deafult constructor initializes to 0UL, we're counting on that.
+		TcsGenericId srchCode;		// Default constructor initializes to 0UL, we're counting on that.
+		TcsGenericId wkidCode;		// Default constructor initializes to 0UL, we're counting on that.
+		TcsGenericId epsgId;		// Default constructor initializes to 0UL, we're counting on that.
 		TcsEpsgCode epsgCode;		// Default constructor initializes to TcsEpsgCode::InvalidValue, we're counting on that.
 
 		char wktText [2048];
@@ -232,7 +232,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 				wktRlsLevel [wcCount (wktRlsLevel) - 1] = L'\0';
 			}
 		}
-		// Extract the WKT, and the parse it with the imsple WKT parser.
+		// Extract the WKT, and the parse it with the simple WKT parser.
 		if (ok)
 		{
 			ok = crsWktCsv.GetField (fieldData,recNbr,4,csvStatus);
@@ -326,7 +326,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 			}
 		}
 
-		// Data capture is done.  Now to put the captured dats into the right places.
+		// Data capture is done.  Now to put the captured data into the right places.
 		// We start by updating the EPSG name for all systems for which we are given
 		// an EPSG code.  The assumption here is that if flavor 'X' did something,
 		// maybe EPSG did so as well.
@@ -375,7 +375,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 #endif
 	}
 
-	// If all of that succeedded, we write a new NameMapper.csv source
+	// If all of that succeeded, we write a new NameMapper.csv source
 	// file out.
 	if (ok)
 	{
@@ -441,7 +441,7 @@ bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	}
 
 	// See if the NameMapper already has this particular name on
-	// record.  If the current EPSG datsbase name is already in the
+	// record.  If the current EPSG database name is already in the
 	// NameMapper, we assume that we should not try to update the
 	// name (even if the name exists in the form of an alias).
 	srchCode = nameMapper.Locate (objType,csMapFlvrEpsg,fieldData.c_str ());
@@ -498,7 +498,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	wcPtrK = nameMapper.LocateName (objType,flavor,epsgId);
 	if (wcPtrK == 0)
 	{
-		// No flavored name exists related to the item identifide by the EPSG
+		// No flavored name exists related to the item identified by the EPSG
 		// code.  There are two possible causes which are frequent enough
 		// to deal with here:
 		//  1> There is no entry at all for this particular item.
@@ -529,7 +529,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 			if (!ok)
 			{
 				// Given how weird these data sets are, I suppose its likely
-				// for this operation to fail ocassionally.
+				// for this operation to fail occasionally.
 				wcPtrK = TcsNameMapper::FlvrNbrToName (flavor);
 				std::wcerr << L"Add failed: "
 						   << wcPtrK
@@ -592,7 +592,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	}
 	return ok;
 }
-// This updates a a flavoed entry for which we do not have a matching EPSG code.
+// This updates a a flavored entry for which we do not have a matching EPSG code.
 // Only difference is we need to generate an appropriate generic ID.
 bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& nameMapper,
 															 EcsMapObjType objType,
@@ -619,7 +619,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	if (wkidCode != 0 && hasName)
 	{
 		// We have both a name and an ID.  Search the NameMapper
-		// for an existing entry; prefering to use Name over ID.
+		// for an existing entry; preferring to use Name over ID.
 		srchCodeNm = nameMapper.Locate (objType,flavor,crsName);
 		srchCodeCd = nameMapper.Locate (objType,flavor,wkidCode);
 		if (srchCodeNm.IsNotKnown() && srchCodeCd.IsNotKnown ())
@@ -653,7 +653,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 			// use.  GenericID's must be unique, and we like to generate them
 			// such that they contain flavor information in the new unique
 			// code.  If a flavor ID has been given in the source data, we use
-			// that to generate a generid ID to be used when creatings the
+			// that to generate a generic ID to be used when creating the
 			// new record.
 			if (wkidCode == 0UL)
 			{
@@ -720,7 +720,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 		else if (!ok)
 		{
 				wcPtrK = TcsNameMapper::FlvrNbrToName (flavor);
-				std::wcerr << L"Out of synch: "
+				std::wcerr << L"Out of sync: "
 						   << wcPtrK
 						   << L":"
 						   << wkidCode

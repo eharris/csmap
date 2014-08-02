@@ -199,6 +199,7 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsdToCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsMapToCsv.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csEpsg706Update.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerate48Hpgn.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerateBlueBookTestData.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csIprmRegressionTestFile.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csListEpsgCodes.cpp" />

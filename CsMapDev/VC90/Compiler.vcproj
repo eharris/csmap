@@ -398,10 +398,6 @@
 				RelativePath="..\Dictionaries\GeodeticTransformation.asc"
 				>
 			</File>
-			<File
-				RelativePath="..\Dictionaries\mreg.asc"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

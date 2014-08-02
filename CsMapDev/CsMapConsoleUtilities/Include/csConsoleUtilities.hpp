@@ -85,6 +85,8 @@ bool csUsefulRangeReport (const wchar_t* reportDir,const wchar_t* csDictDir);
 bool csWriteEsriWktTestFile (const wchar_t* csDataSrcDir,const wchar_t* csDataTrgDir);
 bool csWriteNsrsAudit (const wchar_t* csDictSrcDir,const wchar_t* csTrgDataFileDir);
 bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDictSrcDir,const wchar_t* srcCsvFullPath);
+bool csGenerate48Hpgn (const wchar_t* csDictDir,const wchar_t* epsgPolygonDir,bool verbose = false);
+bool csGenerate48HpgnTest (const wchar_t* csDictDir);
 bool csCsdToCsvEL (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvDT (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvCS (const wchar_t* csDictDir,bool incLegacy = false);

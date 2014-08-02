@@ -10,7 +10,7 @@
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
  *     * Neither the name of the Autodesk, Inc. nor the names of its
- *       contr butors may be used to endorse or promote products derived
+ *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY Autodesk, Inc. ``AS IS'' AND ANY
@@ -88,7 +88,7 @@
 						_rt_HPUX		Hewlett Packard UNIX
 						_rt_AIX			IBM AIX versionof UNIX
 
-		_PROCESSOR		the processor/acrhitecture for which the compiled code is to run on:
+		_PROCESSOR		the processor/architecture for which the compiled code is to run on:
 						_pc_GENERIC		Not known, generate generic code
 						_pc_IX86		Intel 86 processor
 						_pc_IA64		Itanium 64 bit processor
@@ -160,8 +160,8 @@
 	With regard to the following list, we will refer to ranges of the value
 	at times.  Values less than 400 are reserved for 32 bit processors including
 	WinTel and Motorola type processors.  Values between, and including, 401 thru
-	599 are reserved for 64 bit processors.  Values bewteen, and including, 601
-	thru 799 are reserved for hand held, pocket PC type processor acrhitectures.
+	599 are reserved for 64 bit processors.  Values between, and including, 601
+	thru 799 are reserved for hand held, pocket PC type processor architectures.
 	
 	Currently, the processor is a concern only for structure alignment issues.
 */
@@ -205,7 +205,7 @@
 	In all CS-MAP code, we use __WINCE__ as the constant to control
 	compilation for Windows CE.  We define it once here so that users
 	can choose how to turn it on or off.  It is not clear to me that
-	Microsoft has choosen a standard define, so we try to make it easy
+	Microsoft has chosen a standard define, so we try to make it easy
 	to deal with this issue.
 *******************************************************************************/
 #if defined (UNDER_CE) || defined (_WINCE)
@@ -551,7 +551,7 @@
 #endif
 
 /*
-	The following are used in an attempt to solve alignemnt
+	The following are used in an attempt to solve alignment
 	problems experienced on certain Sun compilers. Essentially,
 	they are used to force a double alignment before the
 	definition of a structure or union, either static or
@@ -687,7 +687,7 @@
 	for your compiler.
 
 	Note, also, we now include all files for all modules.
-	We have choosen to do this as precompiled headers
+	We have chosen to do this as precompiled headers
 	is a common feature and thus including all of them
 	actually speeds things up.  Why is it that the
 	slowest compilers, i.e. the ones that need pre-compiled
@@ -6874,8 +6874,8 @@ double		EXP_LVL3	CS_cscnv (Const struct cs_Csprm_ *csprm,Const double ll [3]);
 struct cs_Csdef_* EXP_LVL3	CS_csdef (Const char *cs_nam);
 struct cs_Csdef_ * EXP_LVL3 CS_csdef2 (Const char *cs_nam, char* pszDirPath);
 int			EXP_LVL3	CS_csdefAll (struct cs_Csdef_ **pDefArray[]);
-int			EXP_LVL3	CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize);
-int			EXP_LVL3	CS_csDefCmpEx (double* qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize);
+int			EXP_LVL1	CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize);
+int			EXP_LVL1	CS_csDefCmpEx (double* qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_csdel (struct cs_Csdef_ *csdef);
 int			EXP_LVL5	CS_csDiff (FILE *rptStrm,struct cs_Csdef_ *was,struct cs_Csdef_ *is);
 int			EXP_LVL1	CS_csEnum (int index,char *key_name,int size);
@@ -6963,7 +6963,7 @@ void		EXP_LVL1	CS_errmsg (char *user_bufr,int buf_size);
 void		EXP_LVL1	CS_fast (int fast);
 void		EXP_LVL3	CS_fillIn (struct cs_Csdef_ *cs_def);
 cs_Time_	EXP_LVL7	CS_fileModTime (Const char *filePath);
-void		EXP_LVL3	CS_free (void *ptr);
+void		EXP_LVL1	CS_free (void *ptr);
 long32_t	EXP_LVL1	CS_ftoa (char *bufr,int size,double value,long32_t frmt);
 
 int			EXP_LVL3	CS_gdcDisable (enum cs_GdcCatalogs ident);
@@ -7141,7 +7141,7 @@ const char*	EXP_LVL3	CS_stateEnum (int index);
 char *		EXP_LVL3	CS_stncat (char *dest,Const char *source,int count);
 char *		EXP_LVL3	CS_stcpy (char *dest,Const char *source);
 char *		EXP_LVL3	CS_stncp (char *dest,Const char *source,int count);
-int			EXP_LVL6	CS_stricmp (Const char *cp1,Const char *cp2);
+int			EXP_LVL3	CS_stricmp (Const char *cp1,Const char *cp2);
 Const char*	EXP_LVL3	CS_stristr (Const char *str1,Const char *str2);
 int			EXP_LVL9	CS_strnicmp (Const char *cp1,Const char *cp2,size_t count);
 char*		EXP_LVL3	CS_strrchr (Const char *cPtr, int chr);
@@ -7901,7 +7901,7 @@ struct csZGridCellCache_
 
 /* Set the maximum packing available situation for the following
    structures.  We do not write them to disk, but we read them and
-   use sizeof to detemine the size of the entire structure on disk.
+   use sizeof to determine the size of the entire structure on disk.
 
    Code should be rewritten to read each individual element from the
    binary file and not rely on reading an entire structure from the

@@ -158,7 +158,7 @@ int main (int argc,char* argv [])
 		CS_altdr (NULL);
 	}
 
-	// Analyze the arguments and extract all options.  First, we set the
+	// Analyse the arguments and extract all options.  First, we set the
 	// default values.
 	bool verbose = false;
 	bool batch = false;

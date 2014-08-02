@@ -168,9 +168,9 @@ $(LIB_DIR)\$(CSMAP_LIB_NAME).lib :
 clean :
 	del /F $(INT_DIR)\*.obj
 	del /F $(INT_DIR)\*.pch
-	del /F $(OUT_DIR)\$(TRG_BASE)
+	del /F $(OUT_DIR)\$(TRG_NAME)
 
-rebuild: clean $(OUT_DIR)\$(TRG_BASE)
+rebuild: clean $(OUT_DIR)\$(TRG_NAME)
 
 #
 # Create the intermediary and output directories if they don't exist.
@@ -179,7 +179,7 @@ rebuild: clean $(OUT_DIR)\$(TRG_BASE)
 $(INT_DIR)\CStest0.obj : $(INT_DIR)
 $(INT_DIR)\$(TRG_BASE).obj : $(INT_DIR)
 
-$(OUT_DIR)\$(TRG_BASE) : $(OUT_DIR)
+$(OUT_DIR)\$(TRG_NAME) : $(OUT_DIR)
 
 $(INT_DIR) :
 	mkdir $(INT_DIR)
