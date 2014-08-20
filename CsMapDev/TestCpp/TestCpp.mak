@@ -32,10 +32,15 @@ DICTIONARY_DIR ?= ../Dictionaries
 #
 # The following options are chosen to be rather generic; something that
 # should work in any UNIX/Linux type environment.  More sophisticated
-# specifications could/should be coded in the parent make file.
+# specifications could/should be coded in the parent make file.  It
+# appears that we cannot modify variable which are in the environment,
+# so we use our own local variables (LCL_C_FLG, LCL_CXX_FLG) so we
+# modify as required by the PROCESSOR specification.
 #
 C_FLG ?= -c -w -O2 -I./Include -I../Include
 CXX_FLG ?= -c -w -O2 -I./Include -I../Include
+LCL_C_FLG = $(C_FLG)
+LCL_CXX_FLG = $(CXX_FLG)
 #
 # Adjust the above defines for the various processors, currently only
 # two: x86 (32 bits) and x64 (64 bit x86)
@@ -44,8 +49,8 @@ ifeq ($(PROCESSOR),x64)
 	OUT_DIR := $(OUT_DIR)64
 	INT_DIR := $(INT_DIR)64
 	LIB_DIR := $(LIB_DIR)64
-	C_FLG += -m64
-	CXX_FLG += -m64
+	LCL_C_FLG += -m64 -fIPC
+	LCL_CXX_FLG += -m64 -fIPC
 endif
 
 ifeq ($(PROCESSOR),x86)
@@ -62,7 +67,7 @@ endif
 ALL : $(OUT_DIR)/$(TRG_NAME)
 
 $(INT_DIR)/$(TRG_NAME).o : Source/$(TRG_NAME).cpp
-	$(CXX) $(CXX_FLG) -o $(INT_DIR)/$(TRG_NAME).o Source/$(TRG_NAME).cpp
+	$(CXX) $(LCL_CXX_FLG) -o $(INT_DIR)/$(TRG_NAME).o Source/$(TRG_NAME).cpp
 
 $(OUT_DIR)/$(TRG_NAME) : $(INT_DIR)/$(TRG_NAME).o $(LIB_DIR)/$(LIB_NAME).a $(LIB_DIR)/$(CSMAP_LIB_NAME).a
 	$(CXX) -o $(OUT_DIR)/$(TRG_NAME) $(INT_DIR)/$(TRG_NAME).o $(LIB_DIR)/$(LIB_NAME).a $(LIB_DIR)/$(CSMAP_LIB_NAME).a -lm -lc -lgcc -lstdc++

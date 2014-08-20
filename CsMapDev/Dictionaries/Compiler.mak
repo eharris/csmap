@@ -50,10 +50,15 @@ DICTIONARY_SRC := $(DICTIONARY_SRC_DIR)/coordsys.asc \
 #
 # The following options are chosen to be rather generic; something that
 # should work in any UNIX/Linux type environment.  More sophisticated
-# specifications can/should be coded in the parent make file.
+# specifications can/should be coded in the parent make file.  It appears
+# that this makefile cannot modify the environmental variables.  So, we
+# need to use our own local variables for flags so that we can tweak as
+# necessary per the PROCESSOR specification.
 #
 C_FLG ?= -c -w -O2 -I../Include
 CXX_FLG ?= -c -w -O2 -I../Include
+LCL_C_FLG = $(C_FLG)
+LCL_CXX_FLG = $(CXX_FLG)
 #
 # Adjust the above defines for the various processors, currently only
 # two: x86 (32 bits) and x64 (64 bit x86)
@@ -62,16 +67,16 @@ ifeq ($(PROCESSOR),x64)
 	OUT_DIR := $(OUT_DIR)64
 	INT_DIR := $(INT_DIR)64
 	LIB_DIR := $(LIB_DIR)64
-	C_FLG += -m64
-	CXX_FLG += -m64
+	LCL_C_FLG += -m64 -fPIC
+	LCL_CXX_FLG += -m64 -fPIC
 endif
 
 ifeq ($(PROCESSOR),x86)
 	OUT_DIR := $(OUT_DIR)32
 	INT_DIR := $(INT_DIR)32
 	LIB_DIR := $(LIB_DIR)32
-	C_FLG += -m32
-	CXX_FLG += -m32
+	LCL_C_FLG += -m32
+	LCL_CXX_FLG += -m32
 endif
 
 #
@@ -80,7 +85,7 @@ endif
 ALL : $(OUT_DIR)/$(TRG_BASE) $(DICTIONARIES)
 
 $(INT_DIR)/$(TRG_BASE).o : CS_COMP.c
-	$(CC) $(C_FLG) -o $(INT_DIR)/$(TRG_BASE).o CS_COMP.c
+	$(CC) $(LCL_C_FLG) -o $(INT_DIR)/$(TRG_BASE).o CS_COMP.c
 
 $(OUT_DIR)/$(TRG_BASE) : $(INT_DIR)/$(TRG_BASE).o $(LIB_DIR)/$(CSMAP_LIB_NAME).a
 	gcc -I../Include -o $(OUT_DIR)/$(TRG_BASE) $(INT_DIR)/$(TRG_BASE).o $(LIB_DIR)/$(CSMAP_LIB_NAME).a -lm -lc -lgcc -lstdc++

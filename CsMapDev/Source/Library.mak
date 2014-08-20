@@ -98,18 +98,20 @@ SRC_DIR ?= $(MAKEDIR)
 C_FLG ?= -c -w -O2 -I../Include
 CXX_FLG ?= -c -w -O2 -I../Include
 
+LCL_C_FLG = $(C_FLG)
+LCL_CXX_FLG = $(CXX_FLG)
 ifeq ($(PROCESSOR),x64)
 	OUT_DIR := $(OUT_DIR)64
 	INT_DIR := $(INT_DIR)64
-	C_FLG += -m64
-	CXX_FLG += -m64
+	LCL_C_FLG += -m64 -fPIC
+	LCL_CXX_FLG += -m64 -fPIC
 endif
 
 ifeq ($(PROCESSOR),x86)
 	OUT_DIR := $(OUT_DIR)32
 	INT_DIR := $(INT_DIR)32
-	C_FLG += -m32
-	CXX_FLG += -m32
+	LCL_C_FLG += -m32
+	LCL_CXX_FLG += -m32
 endif
 #
 # The -o option on the compiler is used to get the objects written to the
@@ -122,10 +124,10 @@ endif
 # single set of source files, which is a major objective of this makefile.
 #
 $(INT_DIR)/%.o:$(SRC_DIR)%.c
-	$(CC) $(C_FLG) -o$(INT_DIR)/$(<:.c=.o) $<
+	$(CC) $(LCL_C_FLG) -o$(INT_DIR)/$(<:.c=.o) $<
 
 $(INT_DIR)/%.o:$(SRC_DIR)%.cpp
-	$(CXX) $(CXX_FLG) -o$(INT_DIR)/$(<:.cpp=.o) $<
+	$(CXX) $(LCL_CXX_FLG) -o$(INT_DIR)/$(<:.cpp=.o) $<
 
 # Note that the following causes all .c and .cpp files in the Source
 # directory to be included in the csmap.lib target. This is often helpful,

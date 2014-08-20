@@ -20,7 +20,7 @@ export VERSION := 47
 export CONFIGURATION := Linux
 export PROCESSOR := x64
 export C_FLG = -c -w -O2 -I../Include
-export CPP_FLG = -c -w -O2 -I../Include
+export CXX_FLG = -c -w -O2 -I../Include
 
 Linux64 : 
 	$(MAKE) -e -C ./Source -f Library.mak

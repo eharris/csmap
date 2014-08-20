@@ -46,8 +46,8 @@ ifeq ($(PROCESSOR),x64)
 	OUT_DIR := $(OUT_DIR)64
 	INT_DIR := $(INT_DIR)64
 	LIB_DIR := $(LIB_DIR)64
-	C_FLG += -m64
-	CXX_FLG += -m64
+	C_FLG += -m64 -fPIC
+	CXX_FLG += -m64 -fPIC
 endif
 
 ifeq ($(PROCESSOR),x86)
