@@ -33,14 +33,13 @@ int CSjapanQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,i
 	extern char cs_ExtsepC;
 
 	int err_cnt;
+	int foundMeshCode;
 
 	char *cp;
 	csFILE* strm;
 
 	char meshCode [] = "Meshcode";
-	char line1Buffer [256];
-	char line2Buffer [256];
-	char line3Buffer [256];
+	char lineBuffer [256];
 	char pathBuffer [MAXPATH];
 
 	cp = fileParms->fileName;
@@ -62,18 +61,28 @@ int CSjapanQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,i
 	strm = CS_fopen (pathBuffer,_STRM_TXTRD);
 	if (strm != NULL)
 	{
-		CS_fgets (line1Buffer,sizeof (line1Buffer),strm);	
-		CS_fgets (line2Buffer,sizeof (line2Buffer),strm);	
-		CS_fgets (line3Buffer,sizeof (line3Buffer),strm);	
+		foundMeshCode = 0;
+		while (CS_fgets (lineBuffer,sizeof (lineBuffer),strm))
+		{
+			if (CS_stristr(lineBuffer, meshCode))
+			{
+				/* Line contains "MeshCode", so we are satisfied.
+				   Probably only want lines that start with MeshCode, but we
+				   don't have a spec and the original implementation was similarly
+				   loose.  If we tighten things up we'll also have to consider lines
+				   too long to fit in lineBuffer.*/
+				foundMeshCode = 1;
+				break;
+			}
+		}
+
 		CS_fclose (strm);
 		strm = NULL;
 
-		if (!CS_stristr (line1Buffer,meshCode) &&
-			!CS_stristr (line2Buffer,meshCode) &&
-			!CS_stristr (line3Buffer,meshCode))
+		if (!foundMeshCode)
 		{
-			/* The pohrase meshcode was not found anywhere on the first three
-			   lines, we assume this is not a ".par" file. */
+			/* The phrase "meshcode" was not found, so we assume this is not a ".par"
+			   file. */
 			if (++err_cnt < list_sz) err_list [err_cnt] = cs_DTQ_FORMAT;
 		}
 	}
@@ -746,6 +755,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 	extern double cs_Zero;
 
 	int st;
+	int foundMeshcode;
 	cs_Time_ aTime, bTime;
 
 	size_t wrCnt;
@@ -848,17 +858,27 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 		   form as we do.  While doing so, we'll convert each mesh code to
 		   latitude and longitude form and accumulate an estimate of the
 		   coverage of the file. */
+		foundMeshcode = 0;
 		while (CS_fgets (lineBufr,sizeof (lineBufr),aStrm) != NULL)
 		{
+			// Skip lines till we've advanced past the header
+			if (!foundMeshcode)
+			{
+				if (CS_stristr(lineBufr, "meshcode"))
+				{
+					foundMeshcode = 1;
+				}
+				continue;
+			}
+
 			/* Parse the information is in a record. */
 			meshCode = CS_strtoul (lineBufr,&cp1,10);
-			
-			/* The first two lines of the files we've seen contain labels and
-			   other data.  We use the following to filter these out.  This may
-			   need to be improved should new versions of the file include some
-			   other form of header. */
+
+			/* This method of filtering header lines was not sufficient for the
+			   JGD2011 .par file.  Hopefully there will be no data after the header
+			   (skipped above) that will trigger this filtering. */
 			if (meshCode == 0 || meshCode == 0xffffffffUL) continue;
-			
+
 			/* Accumulate a bounding box (or minimum and maximum as us old
 			   farts used to call it) so we have a rough estimate of the
 			   coverage of the file. */
