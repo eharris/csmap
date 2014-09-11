@@ -75,8 +75,8 @@ ifeq ($(PROCESSOR),x86)
 	OUT_DIR := $(OUT_DIR)32
 	INT_DIR := $(INT_DIR)32
 	LIB_DIR := $(LIB_DIR)32
-	LCL_C_FLG += -m32
-	LCL_CXX_FLG += -m32
+#	LCL_C_FLG += -m32
+#	LCL_CXX_FLG += -m32
 endif
 
 #
@@ -84,8 +84,8 @@ endif
 #
 ALL : $(OUT_DIR)/$(TRG_BASE) $(DICTIONARIES)
 
-$(INT_DIR)/$(TRG_BASE).o : CS_COMP.c
-	$(CC) $(LCL_C_FLG) -o $(INT_DIR)/$(TRG_BASE).o CS_COMP.c
+$(INT_DIR)/$(TRG_BASE).o : $(TRG_BASE).c
+	$(CC) $(LCL_C_FLG) -o $(INT_DIR)/$(TRG_BASE).o $(TRG_BASE).c
 
 $(OUT_DIR)/$(TRG_BASE) : $(INT_DIR)/$(TRG_BASE).o $(LIB_DIR)/$(CSMAP_LIB_NAME).a
 	gcc -I../Include -o $(OUT_DIR)/$(TRG_BASE) $(INT_DIR)/$(TRG_BASE).o $(LIB_DIR)/$(CSMAP_LIB_NAME).a -lm -lc -lgcc -lstdc++

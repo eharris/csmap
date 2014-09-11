@@ -1588,6 +1588,7 @@ struct cs_Prjprm_ csPrjprm [] =
 	the uninitialized entries.
 */
 
+/*lint -e785  too few initializers, refering to most all entries with less than 24 params */
 struct cs_PrjprmMap_ cs_PrjprmMap [] =
 {
 	{ cs_PRJCOD_UNITY, { cs_PRMCOD_WESTLL, cs_PRMCOD_EASTLL }},
@@ -1686,3 +1687,4 @@ struct cs_PrjprmMap_ cs_PrjprmMap [] =
 
 	{   cs_PRJCOD_END, { 0 }}
 };
+/*lint +e785 */

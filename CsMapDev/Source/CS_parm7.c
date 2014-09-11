@@ -27,6 +27,8 @@
 
 #include "cs_map.h"
 
+/*lint -esym(613,err_list)  possible use of null pointer, but not really */
+
 static short csMaxIterations = 20;
 static double csCnvrgValue = 1.0E-09;
 static double csErrorValue = 1.0E-06;

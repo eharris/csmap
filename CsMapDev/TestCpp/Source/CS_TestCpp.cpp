@@ -158,7 +158,7 @@ int main (int argc,char* argv [])
 		CS_altdr (NULL);
 	}
 
-	// Analyse the arguments and extract all options.  First, we set the
+	// Analyze the arguments and extract all options.  First, we set the
 	// default values.
 	bool verbose = false;
 	bool batch = false;
@@ -458,12 +458,24 @@ int main (int argc,char* argv [])
 	if (cp == NULL) cp = strchr (tests,'N');
 	if (cp != NULL)
 	{
+		clock_t nmStartClock;
+		clock_t nmDoneClock;
+		double nmLoadTime;
+
+		nmStartClock = clock ();
 		TcsNameMapper* nameMapperPtr = cmGetNameMapperPtr (false);
+		nmDoneClock = clock ();
+
 		if (nameMapperPtr == NULL)
 		{
 			strcpy (cs_DirP,cs_NameMapperName);
 			printf ("NameMapper (%s) loading failed.\n\n",cs_Dir);
 			usage (batch);
+		}
+		else
+		{
+			nmLoadTime = (double)(nmDoneClock - nmStartClock) / (double)CLOCKS_PER_SEC;
+			printf ("NameMapper loaded in %.3f seconds.\n",nmLoadTime);
 		}
 	}
 
@@ -475,11 +487,24 @@ int main (int argc,char* argv [])
 		if (cp == NULL) cp = strchr (tests,'N');
 		if (cp != NULL)
 		{
+			clock_t epsgStartClock;
+			clock_t epsgDoneClock;
+			double epsgLoadTime;
+			const wchar_t* epsgRevLevel;
 			wchar_t filePath [MAXPATH];
+
 			wcsncpy (filePath,csEpsgDir,wcCount (filePath));
 			CS_envsubWc (filePath,wcCount (filePath));
+			epsgStartClock = clock ();
 			KcsEpsgDataSetV6Ptr = new TcsEpsgDataSetV6 (filePath);
-			if (!KcsEpsgDataSetV6Ptr->IsOk ())
+			epsgDoneClock = clock ();
+			if (KcsEpsgDataSetV6Ptr->IsOk ())
+			{
+				epsgRevLevel = KcsEpsgDataSetV6Ptr->GetRevisionLevel ();
+				epsgLoadTime = (double)(epsgDoneClock - epsgStartClock) / (double)CLOCKS_PER_SEC;
+				printf ("EPSG %S Dataset loaded in %.3f seconds.\n",epsgRevLevel,epsgLoadTime);
+			}
+			else
 			{
 				std::wstring epsgFailMesg = KcsEpsgDataSetV6Ptr->GetFailMessage ();
 				printf ("EPSG Parameter Dataset (%S) loading failed.\n",filePath);

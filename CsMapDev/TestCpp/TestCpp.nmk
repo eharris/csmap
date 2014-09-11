@@ -7,7 +7,7 @@
 #	$(MAKE) -fTestCpp.mak
 #
 PRJ_NAME = ConsoleTestCpp
-TRG_BASE = csTestCpp
+TRG_BASE = CS_TestCpp
 TRG_EXT = .exe
 TRG_NAME = $(TRG_BASE)$(TRG_EXT)
 #
@@ -17,7 +17,7 @@ TRG_NAME = $(TRG_BASE)$(TRG_EXT)
 #
 VERSION = 90
 CONFIGURATION = Release
-PROCESSOR = x86
+PROCESSOR = x64
 CSMAP_LIB_NAME = CsMap
 #
 # The following definitions are instituted to facilitate building and
@@ -37,8 +37,8 @@ DICTIONARY_DIR = $(MAKEDIR)\..\Dictionaries
 # should work in any Windows type environment.  More sophisticated
 # specifications could/should be coded in the parent make file.
 #
-CC_FLG = /nologo /I..\Include /MT /O2 /W3 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
-CPP_FLG = /nologo /I..\Include /MT /O2 /W3 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
+CC_FLG = /nologo /I..\Include /MD /O2 /W3 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
+CPP_FLG = /nologo /I..\Include /MD /O2 /W3 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
 #
 # Adjust the above defines for the various processors, currently only
 # two: x86 (32 bits) and x64 (64 bit x86).  The author has tried without
@@ -149,11 +149,10 @@ $(INT_DIR)\$(TRG_BASE).obj : $(SRC_DIR)\$(TRG_BASE).cpp $(INT_DIR)\CStest0.obj
 												   /YucsTestCpp.hpp \
 												   $(SRC_DIR)\$(TRG_BASE).cpp
 
-$(OUT_DIR)\$(TRG_NAME) : $(INT_DIR)\$(TRG_BASE).obj $(INT_DIR)\CStest0.obj \
-													$(TRG_OBJECTS) \
+$(OUT_DIR)\$(TRG_NAME) : $(INT_DIR)\$(TRG_BASE).obj	$(TRG_OBJECTS) \
 													$(LIB_DIR)\$(CSMAP_LIB_NAME).lib
 	cl /Fe$(OUT_DIR)\$(TRG_NAME) $(INT_DIR)\$(TRG_BASE).obj \
-								  $(TRG_OBJECTS) \
+				 				  $(TRG_OBJECTS) \
 								  $(LIB_DIR)\$(CSMAP_LIB_NAME).lib
 
 $(LIB_DIR)\$(CSMAP_LIB_NAME).lib :

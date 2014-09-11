@@ -2111,7 +2111,6 @@ bool csWriteNsrsList (const wchar_t* csDictSrcDir,const wchar_t* csTrgDataFileDi
 	TcsDefLine* defLinePtr;
 	TcsAscDefinition* ascDefPtr;
 	cs_RplTable_* descRplTblPtr;
-	cs_RplTable_* srcRplTblPtr;
 
 	std::wofstream oStream;
 

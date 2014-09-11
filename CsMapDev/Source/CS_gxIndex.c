@@ -293,9 +293,9 @@ int CS_locateGxByDatum (unsigned startAt,Const char* srcDtmName,Const char* trgD
 	return result;
 }
 
-// Select the better suitable geodetic transformation out of two.
-// Selection is related on the lower index. It is expected that a user defined definition comes with
-// a lower index then a system one.
+/* Select the better suitable geodetic transformation out of two.
+   Selection is related on the lower index. It is expected that a user defined definition comes with
+   a lower index then a system one. */
 int CS_selectAccurateGxIndex(unsigned indexGxA, unsigned indexGxB)
 {
     unsigned indexCount;
@@ -326,14 +326,14 @@ int CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDt
 	char errMsg [256];
 
 	/* We haven't found anything yet. */
-	chosenResult = cs_GXIDX_NOXFRM;
+	chosenResult = cs_GXIDX_NOXFRM;		/* Code below requires this to be negative */
 	*direction = cs_DTCDIR_NONE;
 
 	/* Make a linear search through the Geodetic Path dictionary looking
 	   for an entry where the source and target match the provided names.
 	   We look for transformations in the forward direction first; and use
 	   any unique definition which we locate this way.
-	   
+
 	   We always search the entire dictionary and count all the matching
 	   entries.  Thus, we know if the entry we found was indeed unique
 	   or not. */
@@ -350,12 +350,12 @@ int CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDt
 			{
 				chosenResult = result;
 			}
-            else
-            {
-                // When more than one suitable geodetic transformation is found the best one is selected.
-                chosenResult = CS_selectAccurateGxIndex(chosenResult, result);
-                if (chosenResult < 0) goto error;
-            }
+			else
+			{
+				// When more than one suitable geodetic transformation is found the best one is selected.
+				chosenResult = CS_selectAccurateGxIndex((unsigned int)chosenResult,(unsigned int)result);
+				if (chosenResult < 0) goto error;
+			}
 			startAt = (unsigned)result + 1;
 		}
 	}
@@ -377,7 +377,7 @@ int CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDt
 	else
 	{
 		/* Here if the above search didn't pan out.  We look for reversible
-		   transformations where aource and target datums provided match
+		   transformations where the source and target datums provided match
 		   target and source datums in the transformations. */
 		result = 0;
 		startAt = 0;
@@ -387,20 +387,23 @@ int CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDt
 			result = CS_locateGxByDatum (startAt,trgDtmName,srcDtmName);
 			if (result >= 0)
 			{
+				/* Since a positive result value indicates that the entry
+				   does indeed exist, the following function cannot fail to
+				   produce a valid pointer. */
 				gxIdxPtr = CS_getGxIndexEntry ((unsigned)result);
-				if (gxIdxPtr->inverseSupported)
+				if (gxIdxPtr->inverseSupported)		/*lint !e613  possible use of null pointer */
 				{
 					xfrmCount += 1;
 					if (chosenResult < 0)
 					{
 						chosenResult = result;
 					}
-                    else
-                    {
-                        // When more than one suitable geodetic transformation is found the best one is selected.
-                        chosenResult = CS_selectAccurateGxIndex(chosenResult, result);
-                        if (chosenResult < 0) goto error;
-                    }
+					else
+					{
+						/* When more than one suitable geodetic transformation is found the best one is selected. */
+						chosenResult = CS_selectAccurateGxIndex((unsigned int)chosenResult,(unsigned int)result);
+						if (chosenResult < 0) goto error;
+					}
 				}
 				startAt = (unsigned)result + 1;
 			}

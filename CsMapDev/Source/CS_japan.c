@@ -27,6 +27,8 @@
 
 #include "cs_map.h"
 
+/*lint -esym(613,err_list)  possible use of null pointer; but not really */
+/*lint -esym(534,fgets)   ignoring return value */
 int CSjapanQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
 	extern char cs_DirsepC;
@@ -106,6 +108,8 @@ int CSjapanQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,i
 
 	return (err_cnt + 1);
 }
+/*lint +esym(534,fgets) */
+
 int CSjapanS  (struct cs_GridFile_ *gridFile)
 {
 	int status;
@@ -219,6 +223,8 @@ int CSjapanF3 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 }
 int CSjapanI2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 {
+	extern double cs_Zero;
+
 	short lng_ok;
 	short lat_ok;
 	int ii;
@@ -229,6 +235,8 @@ int CSjapanI2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 	double newResult [3];
 
 	status = csGRIDI_ST_OK;
+	epsilon [0] = epsilon [1] = cs_Zero;		/* keep lint happy */
+
 	guess [LNG] = ll_src [LNG];
 	guess [LAT] = ll_src [LAT];
 	guess [HGT] = ll_src [HGT];
@@ -393,7 +401,7 @@ struct cs_Japan_* CSnewJgd2kGridFile (Const char *path,long32_t bufferSize,ulong
 
 	thisPtr->strm = NULL;
 	thisPtr->bufferSize = 64 * sizeof (struct csJgd2kGridRecord_);
-	if (bufferSize > 0UL) thisPtr->bufferSize = bufferSize;
+	if (bufferSize > 0L) thisPtr->bufferSize = bufferSize;
 	thisPtr->dataBuffer = NULL;
 	CSinitGridCell (&thisPtr->lngCell);
 	CSinitGridCell (&thisPtr->latCell);
@@ -901,9 +909,13 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 			if (tempL > maxRec.deltaLat) maxRec.deltaLat = tempL; 
 
 			/* Separate the two data values.  We avoid strtod as it is
-			   locale dependent and the data file is not. */			
+			   locale dependent and the data file is not. */
 			while (*cp1 == ' ') cp1++;
 			cp2 = strchr (cp1,' ');
+			if (cp2 == NULL)
+			{
+				goto error;
+			}
 			*cp2++ = '\0';
 			while (*cp2 == ' ') cp2++;
 

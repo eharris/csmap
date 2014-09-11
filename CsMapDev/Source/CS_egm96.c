@@ -28,8 +28,6 @@
 
 #include "cs_map.h"
 
-struct csThread cs_Egm96_ *cs_Egm96Ptr = NULL;
-
 /*
 	This file contains the implementation of the Egm96 object.
 

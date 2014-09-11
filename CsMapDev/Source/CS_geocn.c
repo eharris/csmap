@@ -27,6 +27,8 @@
 
 #include "cs_map.h"
 
+/*lint -esym(613,err_list)  possible use of a null pointer; but not really. */
+
 long32_t csGeocnBufrSize = 434176;			/* This buffer size ensures that for
 											   any typical Geocon file, dsla.b
 											   for example, the buffer will
@@ -87,9 +89,6 @@ int CSgeocnQ  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,i
    a complete transformation object be the CS-MAP csGridFile envirnment. */
 int CSgeocnS (struct cs_GridFile_ *gridFile)
 {
-	extern char cs_DirsepC;
-	extern char cs_ExtsepC;
-
 	int status;
 
 	struct cs_Geocn_ *geocnPtr = NULL;
@@ -141,22 +140,22 @@ int CSgeocnS (struct cs_GridFile_ *gridFile)
 	if (geocnPtr->hgtShift == NULL) goto error;
 
 	/* Verify that the three files are consistent. */
-	if (geocnPtr->lngShift->latMin       != geocnPtr->latShift->latMin ||
-		geocnPtr->lngShift->lngMin       != geocnPtr->latShift->lngMin ||
+	if (!CS_cmpDbls (geocnPtr->lngShift->latMin,geocnPtr->latShift->latMin) ||
+		!CS_cmpDbls (geocnPtr->lngShift->lngMin,geocnPtr->latShift->lngMin) ||
+		!CS_cmpDbls (geocnPtr->lngShift->deltaLng,geocnPtr->latShift->deltaLng) ||
+		!CS_cmpDbls (geocnPtr->lngShift->deltaLat,geocnPtr->latShift->deltaLat) ||
 		geocnPtr->lngShift->elementCount != geocnPtr->latShift->elementCount ||
-		geocnPtr->lngShift->recordCount  != geocnPtr->latShift->recordCount ||
-		geocnPtr->lngShift->deltaLng     != geocnPtr->latShift->deltaLng ||
-		geocnPtr->lngShift->deltaLat     != geocnPtr->latShift->deltaLat)
+		geocnPtr->lngShift->recordCount  != geocnPtr->latShift->recordCount)
 	{
 		CS_erpt (cs_NADCON_CONS);
 		goto error;
 	}
-	if (geocnPtr->lngShift->latMin       != geocnPtr->hgtShift->latMin ||
-		geocnPtr->lngShift->lngMin       != geocnPtr->hgtShift->lngMin ||
+	if (!CS_cmpDbls (geocnPtr->lngShift->latMin,geocnPtr->hgtShift->latMin) ||
+		!CS_cmpDbls (geocnPtr->lngShift->lngMin,geocnPtr->hgtShift->lngMin) ||
+		!CS_cmpDbls (geocnPtr->lngShift->deltaLng,geocnPtr->hgtShift->deltaLng) ||
+		!CS_cmpDbls (geocnPtr->lngShift->deltaLat,geocnPtr->hgtShift->deltaLat) ||
 		geocnPtr->lngShift->elementCount != geocnPtr->hgtShift->elementCount ||
-		geocnPtr->lngShift->recordCount  != geocnPtr->hgtShift->recordCount ||
-		geocnPtr->lngShift->deltaLng     != geocnPtr->hgtShift->deltaLng ||
-		geocnPtr->lngShift->deltaLat     != geocnPtr->hgtShift->deltaLat)
+		geocnPtr->lngShift->recordCount  != geocnPtr->hgtShift->recordCount)
 	{
 		CS_erpt (cs_NADCON_CONS);
 		goto error;
@@ -182,7 +181,7 @@ int CSgeocnS (struct cs_GridFile_ *gridFile)
 error:
 	if (geocnPtr != NULL)
 	{
-		CSgeocnD (geocnPtr);
+		CSgeocnD (geocnPtr);		/*lint !e534  ignoring return value */
 		geocnPtr = NULL;
 	}
 	return -1;
@@ -336,6 +335,8 @@ int CSgeocnF3 (struct cs_Geocn_ *geocn,double *ll_trg,Const double *ll_src)
 }
 int CSgeocnI2 (struct cs_Geocn_ *geocn,double *ll_trg,Const double *ll_src)
 {
+	extern double cs_Zero;
+
 	short lng_ok;
 	short lat_ok;
 
@@ -347,6 +348,7 @@ int CSgeocnI2 (struct cs_Geocn_ *geocn,double *ll_trg,Const double *ll_src)
 	double newResult [3];
 
 	status = -1;			/* Defensive, until we know differently. */
+	epsilon [0] = epsilon [1] = cs_Zero;		/* kep lint happy */
 
 	guess [LNG] = ll_src [LNG];
 	guess [LAT] = ll_src [LAT];
@@ -820,10 +822,17 @@ int CSpathsGeoconFile (char *pathBufferLng,char *pathBufferLat,char *pathBufferH
 	{
 		/* Get a local copy of the provided geocon path specification where we
 		   can freely work with it.*/
-		cp = CS_stncp (lclBuffer,pathBuffer,sizeof (lclBuffer));
+		CS_stncp (lclBuffer,pathBuffer,sizeof (lclBuffer));
 
 		/* Locate the '?' which is the key our algorithm. */
 		cp = strrchr (lclBuffer,'?');
+		if (cp == NULL)
+		{
+			/* Defensive programming and to keep lint happy. */
+			CS_stncp (csErrnam,"CS_geocn.c:1",sizeof (csErrnam));
+			CS_erpt (cs_ISER);
+			goto error;
+		}
 
 		/* Check for the existence and readability of the indicated longitude
 		   file. */
@@ -847,8 +856,16 @@ int CSpathsGeoconFile (char *pathBufferLng,char *pathBufferLat,char *pathBufferH
 	   sans comments. */
 	if (pathBufferLat != NULL)
 	{
-		cp = CS_stncp (lclBuffer,pathBuffer,sizeof (lclBuffer));
+		CS_stncp (lclBuffer,pathBuffer,sizeof (lclBuffer));
 		cp = strrchr (lclBuffer,'?');
+		if (cp == NULL)
+		{
+			/* Defensive programming and to keep lint happy. */
+			CS_stncp (csErrnam,"CS_geocn.c:2",sizeof (csErrnam));
+			CS_erpt (cs_ISER);
+			goto error;
+		}
+
 		*cp = (ccL) == 'L' ? 'A' : 'a';
 		fstat = CS_access (lclBuffer,4);
 		if (fstat != 0)
@@ -871,8 +888,15 @@ int CSpathsGeoconFile (char *pathBufferLng,char *pathBufferLat,char *pathBufferH
 	   character: 'v'. */
 	if (pathBufferHgt != NULL)
 	{
-		cp = CS_stncp (lclBufferHgt,pathBuffer,sizeof (lclBufferHgt));
+		CS_stncp (lclBufferHgt,pathBuffer,sizeof (lclBufferHgt));
 		cp = strrchr (lclBufferHgt,'?');
+		if (cp == NULL)
+		{
+			/* Defensive programming and to keep lint happy. */
+			CS_stncp (csErrnam,"CS_geocn.c:3",sizeof (csErrnam));
+			CS_erpt (cs_ISER);
+			goto error;
+		}
 		cc1 = (ccL == 'L') ? 'V' : 'v';
 		*(cp - 1) = '%';
 		*cp = 'c';
@@ -901,7 +925,6 @@ error:
    so as to avoid structure packing issues between different compilers. */
 int CSheaderGeoconFile (struct cs_GeoconFileHdr_ *thisPtr,csFILE *fstr)
 {
-	extern int cs_Errno;
 	extern double cs_Zero;
 	extern char csErrnam [MAXPATH];
 
@@ -912,7 +935,6 @@ int CSheaderGeoconFile (struct cs_GeoconFileHdr_ *thisPtr,csFILE *fstr)
 	union
 	{
 		long32_t tmpInt;
-		float tmpFlt;
 		double tmpDbl;
 	} readBuffer;
 
@@ -973,7 +995,7 @@ int CSheaderGeoconFile (struct cs_GeoconFileHdr_ *thisPtr,csFILE *fstr)
 	}
 	if (swapped)
 	{
-		CSbswap ((void*)&readBuffer,"d");
+		CSbswap ((void*)&readBuffer,"d");		/*lint !e534  ignoring return value */
 	}
 	thisPtr->latMin = readBuffer.tmpDbl;
 
@@ -1093,30 +1115,26 @@ int CSchkHdrGeoconFile (struct cs_GeoconFileHdr_ *thisPtr)
 	extern double cs_MaxLat;
 	extern double cs_MinLngFz;
 	extern double cs_Sec2Deg;
-	extern double cs_One;
-
-	int status;
 
 	/* Here to check the validity of a GEOCON file header.  We assume
 	   it is valid until we know different. */
-	status = 0;
 	if (CS_isnan (thisPtr->latMin) || thisPtr->latMin < cs_MinLat
-								|| thisPtr->latMin > cs_MaxLat)
+								   || thisPtr->latMin > cs_MaxLat)
 	{
 		return -1;
 	}
 	if (CS_isnan (thisPtr->lngMin) || thisPtr->lngMin < cs_MinLngFz
-								|| thisPtr->lngMin > cs_K360)
+								   || thisPtr->lngMin > cs_K360)
 	{
 		return -1;
 	}
 	if (CS_isnan (thisPtr->latDelta) || thisPtr->latDelta < cs_Sec2Deg
-								  || thisPtr->latDelta > cs_One)
+									 || thisPtr->latDelta > cs_One)
 	{
 		return -1;
 	}
 	if (CS_isnan (thisPtr->lngDelta) || thisPtr->lngDelta < cs_Sec2Deg
-								  || thisPtr->lngDelta > cs_One)
+									 || thisPtr->lngDelta > cs_One)
 	{
 		return -1;
 	}
@@ -1136,7 +1154,7 @@ void CSinitGeoconFile (struct cs_GeoconFile_ *thisPtr)
 {
 	extern double cs_Zero;
 
-	thisPtr->type                = nadconTypeNoneYet;
+	thisPtr->type                = geocnTypeNoneYet;
 	thisPtr->latMin              = cs_Zero;
 	thisPtr->lngMin              = cs_Zero;
 	thisPtr->latMax              = cs_Zero;
@@ -1238,9 +1256,6 @@ double CStestGeoconFile (struct cs_GeoconFile_* thisPtr,Const double *sourceLL)
 }
 int CScalcGeoconFile (struct cs_GeoconFile_* thisPtr,double *result,Const double* sourceLL)
 {
-	extern int cs_Errno;
-	extern char csErrnam [MAXPATH];
-
 	extern double cs_Half;
 	extern double cs_LlNoise;			/* 1.0E-12 */
 	extern double cs_Huge;
@@ -1656,7 +1671,7 @@ int CSreadGeoconGridFile (struct cs_GeoconFile_* thisPtr,long32_t recNbr)
 	   fails, please look elswhere for a problem. */
 	if (recNbr < 1L || recNbr >= thisPtr->recordCount)
 	{
-		CS_stncp (csErrnam,"CS_geocn.c:5",sizeof (csErrnam));
+		CS_stncp (csErrnam,"CS_geocn.c:4",sizeof (csErrnam));
 		CS_erpt (cs_ISER);
 		goto error;
 	}
@@ -1722,7 +1737,7 @@ int CSreadGeoconGridFile (struct cs_GeoconFile_* thisPtr,long32_t recNbr)
 
 		/* Compute the starting position of the actual read. First we see if we
 		   can read in the entire file into the buffer. */
-		readCount = thisPtr->recordCount * thisPtr->recordSize;
+		readCount = (size_t)(thisPtr->recordCount * thisPtr->recordSize);
 		if ((size_t)thisPtr->bufferSize >= readCount)
 		{
 			/* The buffer is big enough to hold the entire file,
@@ -1739,7 +1754,7 @@ int CSreadGeoconGridFile (struct cs_GeoconFile_* thisPtr,long32_t recNbr)
 			   and lend som robustness to this code. */
 			thisPtr->bufferBeginPosition = fposBegin;
 			thisPtr->bufferEndPosition = fposEnd;
-			readCount = thisPtr->bufferEndPosition - thisPtr->bufferBeginPosition;
+			readCount = (size_t)(thisPtr->bufferEndPosition - thisPtr->bufferBeginPosition);
 
 			/* In this section, lngTmp is the number of additional records
 			   which can fit in the buffer. */
@@ -1760,7 +1775,7 @@ int CSreadGeoconGridFile (struct cs_GeoconFile_* thisPtr,long32_t recNbr)
 				{
 					thisPtr->bufferBeginPosition = thisPtr->fileSize;
 				}
-				readCount = thisPtr->bufferEndPosition - thisPtr->bufferBeginPosition;
+				readCount = (size_t)(thisPtr->bufferEndPosition - thisPtr->bufferBeginPosition);
 			}
 
 			/* In the rare cases where we are working at or very near the
@@ -1779,14 +1794,14 @@ int CSreadGeoconGridFile (struct cs_GeoconFile_* thisPtr,long32_t recNbr)
 					thisPtr->bufferEndPosition += thisPtr->recordSize;
 					lngTmp -= 1;
 				}
-				readCount = thisPtr->bufferEndPosition - thisPtr->bufferBeginPosition;
+				readCount = (size_t)(thisPtr->bufferEndPosition - thisPtr->bufferBeginPosition);
 			}
 			
 			/* Defensive programming */
 			if (readCount != (size_t)thisPtr->bufferSize)
 			{
 				/* Oops!!! All that stuff above has a bug in it. */
-				CS_stncp (csErrnam,"CS_geocn::2",MAXPATH);
+				CS_stncp (csErrnam,"CS_geocn::6",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
@@ -1800,7 +1815,7 @@ int CSreadGeoconGridFile (struct cs_GeoconFile_* thisPtr,long32_t recNbr)
 			CS_erpt (cs_IOERR);
 			goto error;
 		}
-		checkCount = (long32_t)CS_fread (thisPtr->dataBuffer,1,(size_t)readCount,thisPtr->strm);
+		checkCount = (size_t)CS_fread (thisPtr->dataBuffer,1,(size_t)readCount,thisPtr->strm);
 		if (checkCount != readCount)
 		{
 			CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
@@ -1919,18 +1934,16 @@ int CSedgeGeocnGridCell (struct csGeocnGridCell_ *cellPtr,struct cs_GeoconFile_*
 	status = csGRIDI_ST_SYSTEM;
 	cellPtr->isValid = FALSE;
 
-#ifdef _DEBUG
 	if (edge == geocnEdgeNone || edge == geocnEdgeUnknown)
 	{
 		/* Oops!!! Edge conditions are supposed to be determined elswhere, and
 		   this function called only after a successful determination of the
 		   edge complexity.  If this test fails, an improper call to this
 		   function has been made. */
-		CS_stncp (csErrnam,"CS_geocn.c:5",sizeof (csErrnam));
+		CS_stncp (csErrnam,"CS_geocn.c:7",sizeof (csErrnam));
 		CS_erpt (cs_ISER);
 		goto error;
 	}
-#endif
 
 	/* Edge processing is a very rare situation, thus we do not concern
 	   ourselves with performance in this function.
@@ -1946,94 +1959,90 @@ int CSedgeGeocnGridCell (struct csGeocnGridCell_ *cellPtr,struct cs_GeoconFile_*
 	/* The following local variables help keep the code clean and readable. */
 	lastElement = filePtr->elementCount - 1;
 	lastRecord = filePtr->recordCount - 1;
+
 	/* Populate as is appropriate for the specific edge condition we have
 	   been given. */
-	if (status == csGRIDI_ST_OK)
-	{
-		switch (edge) {
-		default:
-		case geocnEdgeNone:
-		case geocnEdgeUnknown:
-			status = csGRIDI_ST_SYSTEM;
-			cellPtr->isValid = FALSE;		/* Yeah! Redundant. */
-			break;
+	switch (edge) {
+	default:
+	case geocnEdgeNone:
+	case geocnEdgeUnknown:
+		status = csGRIDI_ST_SYSTEM;
+		cellPtr->isValid = FALSE;		/* Yeah! Redundant. */
+		break;
 
-		case geocnEdgeSouthwest:
-			/* Hard corner, i.e. first data element in the grid file. */
-			cellPtr->cellData [0][0] = CSvalueGeoconGridFile (filePtr,0L,0L); 
-			break;
+	case geocnEdgeSouthwest:
+		/* Hard corner, i.e. first data element in the grid file. */
+		cellPtr->cellData [0][0] = CSvalueGeoconGridFile (filePtr,0L,0L); 
+		break;
 
-		case geocnEdgeSoutheast:
-			/* Hard corner, i.e. first data record, last data element. */
-			cellPtr->cellData [0][2] = CSvalueGeoconGridFile (filePtr,lastElement,0L); 
-			break;
+	case geocnEdgeSoutheast:
+		/* Hard corner, i.e. first data record, last data element. */
+		cellPtr->cellData [0][2] = CSvalueGeoconGridFile (filePtr,lastElement,0L); 
+		break;
 
-		case geocnEdgeNorthwest:
-			/* Hard corner, i.e. last data record, first data element. */
-			cellPtr->cellData [2][0] = CSvalueGeoconGridFile (filePtr,0L,lastRecord); 
-			break;
+	case geocnEdgeNorthwest:
+		/* Hard corner, i.e. last data record, first data element. */
+		cellPtr->cellData [2][0] = CSvalueGeoconGridFile (filePtr,0L,lastRecord); 
+		break;
 
-		case geocnEdgeNortheast:
-			/* Hard corner, i.e. last data record, last data element. */
-			cellPtr->cellData [2][2] = CSvalueGeoconGridFile (filePtr,lastElement,lastRecord); 
-			break;
+	case geocnEdgeNortheast:
+		/* Hard corner, i.e. last data record, last data element. */
+		cellPtr->cellData [2][2] = CSvalueGeoconGridFile (filePtr,lastElement,lastRecord); 
+		break;
 
-		case geocnEdgeSouth:
-			/* Along the south edge, we need three values of which the specific
-			   value referenced is the westernmost element. */
-			cellPtr->cellData [0][0] = CSvalueGeoconGridFile (filePtr,eleNbr,0L); 
-			cellPtr->cellData [0][1] = CSvalueGeoconGridFile (filePtr,(eleNbr + 1L),0L); 
-			cellPtr->cellData [0][2] = CSvalueGeoconGridFile (filePtr,(eleNbr + 2L),0L); 
-			break;
+	case geocnEdgeSouth:
+		/* Along the south edge, we need three values of which the specific
+		   value referenced is the westernmost element. */
+		cellPtr->cellData [0][0] = CSvalueGeoconGridFile (filePtr,eleNbr,0L); 
+		cellPtr->cellData [0][1] = CSvalueGeoconGridFile (filePtr,(eleNbr + 1L),0L); 
+		cellPtr->cellData [0][2] = CSvalueGeoconGridFile (filePtr,(eleNbr + 2L),0L); 
+		break;
 
-		case geocnEdgeEast:
-			/* Along the east edge, we need three values of which the specific
-			   value referenced is the southernmost element. */
-			cellPtr->cellData [0][2] = CSvalueGeoconGridFile (filePtr,lastElement,recNbr); 
-			cellPtr->cellData [1][2] = CSvalueGeoconGridFile (filePtr,lastElement,(recNbr + 1L)); 
-			cellPtr->cellData [2][2] = CSvalueGeoconGridFile (filePtr,lastElement,(recNbr + 2L)); 
-			break;
-		
-		case geocnEdgeNorth:
-			/* Along the north edge, we need three values of which the specific
-			   value referenced is the westernmost element. */
-			cellPtr->cellData [2][0] = CSvalueGeoconGridFile (filePtr,eleNbr,lastRecord); 
-			cellPtr->cellData [2][1] = CSvalueGeoconGridFile (filePtr,(eleNbr + 1L),lastRecord); 
-			cellPtr->cellData [2][2] = CSvalueGeoconGridFile (filePtr,(eleNbr + 2L),lastRecord); 
-			break;
+	case geocnEdgeEast:
+		/* Along the east edge, we need three values of which the specific
+		   value referenced is the southernmost element. */
+		cellPtr->cellData [0][2] = CSvalueGeoconGridFile (filePtr,lastElement,recNbr); 
+		cellPtr->cellData [1][2] = CSvalueGeoconGridFile (filePtr,lastElement,(recNbr + 1L)); 
+		cellPtr->cellData [2][2] = CSvalueGeoconGridFile (filePtr,lastElement,(recNbr + 2L)); 
+		break;
+	
+	case geocnEdgeNorth:
+		/* Along the north edge, we need three values of which the specific
+		   value referenced is the westernmost element. */
+		cellPtr->cellData [2][0] = CSvalueGeoconGridFile (filePtr,eleNbr,lastRecord); 
+		cellPtr->cellData [2][1] = CSvalueGeoconGridFile (filePtr,(eleNbr + 1L),lastRecord); 
+		cellPtr->cellData [2][2] = CSvalueGeoconGridFile (filePtr,(eleNbr + 2L),lastRecord); 
+		break;
 
-		case geocnEdgeWest:
-			/* Along the west edge, we need three values of which the specific
-			   value referenced is the southernmost element. */
-			cellPtr->cellData [0][0] = CSvalueGeoconGridFile (filePtr,0L,recNbr); 
-			cellPtr->cellData [1][0] = CSvalueGeoconGridFile (filePtr,0L,(recNbr + 1L)); 
-			cellPtr->cellData [2][0] = CSvalueGeoconGridFile (filePtr,0L,(recNbr + 2L)); 
-			break;
-		}
-
-		/* Finish up the creation of the grid cell. */
-		cellPtr->isValid  = TRUE;
-		cellPtr->cellAge  = 0;
-		cellPtr->edge     = edge;
-		cellPtr->lngIdx   = eleNbr;
-		cellPtr->latIdx   = recNbr;
-		cellPtr->swLng    = filePtr->lngMin + (filePtr->deltaLng * (double)(eleNbr));
-		cellPtr->swLat    = filePtr->latMin + (filePtr->deltaLat * (double)(recNbr));
-		cellPtr->deltaLng = filePtr->deltaLng;
-		cellPtr->deltaLat = filePtr->deltaLat;
-		CS_stncp (cellPtr->sourceId,filePtr->fileName,sizeof (cellPtr->sourceId));
-
-		status = csGRIDI_ST_OK;
+	case geocnEdgeWest:
+		/* Along the west edge, we need three values of which the specific
+		   value referenced is the southernmost element. */
+		cellPtr->cellData [0][0] = CSvalueGeoconGridFile (filePtr,0L,recNbr); 
+		cellPtr->cellData [1][0] = CSvalueGeoconGridFile (filePtr,0L,(recNbr + 1L)); 
+		cellPtr->cellData [2][0] = CSvalueGeoconGridFile (filePtr,0L,(recNbr + 2L)); 
+		break;
 	}
+
+	/* Finish up the creation of the grid cell. */
+	cellPtr->isValid  = TRUE;
+	cellPtr->cellAge  = 0;
+	cellPtr->edge     = edge;
+	cellPtr->lngIdx   = eleNbr;
+	cellPtr->latIdx   = recNbr;
+	cellPtr->swLng    = filePtr->lngMin + (filePtr->deltaLng * (double)(eleNbr));
+	cellPtr->swLat    = filePtr->latMin + (filePtr->deltaLat * (double)(recNbr));
+	cellPtr->deltaLng = filePtr->deltaLng;
+	cellPtr->deltaLat = filePtr->deltaLat;
+	CS_stncp (cellPtr->sourceId,filePtr->fileName,sizeof (cellPtr->sourceId));
+
+	status = csGRIDI_ST_OK;
 	return status;
 
-#ifdef _DEBUG
 error:
 	CSinitGeocnGridCell (cellPtr);
 	status = csGRIDI_ST_SYSTEM;
 	CSreleaseGeoconFile (filePtr);	
 	return status;
-#endif
 }
 //short CSageGeoconGridCells (struct cs_GeoconFile_* thisPtr)
 //{
@@ -2089,11 +2098,10 @@ void CSinitGeocnGridCell (struct csGeocnGridCell_* thisPtr)
 }
 /* The following function assumes that the provided longitude has already
    been adjusted to the range convention of GEOCON data files. */
+/*lint -esym(752,cs_Half,cs_Huge)   used only on debug builds */
 double CScalcGeocnGridCell (struct csGeocnGridCell_* thisPtr,Const double *sourceLL)
 {
-	extern double cs_Zero;
 	extern double cs_Half;
-	extern double cs_Mhalf;
 	extern double cs_Huge;
 	extern char csErrnam [MAXPATH];
 
@@ -2123,7 +2131,7 @@ double CScalcGeocnGridCell (struct csGeocnGridCell_* thisPtr,Const double *sourc
 	if ((sourceDelta [LNG] <= cs_Half || sourceDelta [LNG] > 1.5) ||
 		(sourceDelta [LAT] <= cs_Half || sourceDelta [LAT] > 1.5))
 	{
-		CS_stncp (csErrnam,"CS_geoid99:2",sizeof (csErrnam));
+		CS_stncp (csErrnam,"CS_geocn.c:8",sizeof (csErrnam));
 		CS_erpt (cs_ISER);
 		rtnValue = cs_Huge;
 		return rtnValue;
@@ -2134,7 +2142,7 @@ double CScalcGeocnGridCell (struct csGeocnGridCell_* thisPtr,Const double *sourc
 	
 	default:
 	case geocnEdgeUnknown:
-		CS_stncp (csErrnam,"CS_geocn::9",sizeof (csErrnam));
+		CS_stncp (csErrnam,"CS_geocn:9",sizeof (csErrnam));
 		CS_erpt (cs_ISER);
 		rtnValue = csGEOCON_SHIFT_ERROR;
 		break;
@@ -2191,6 +2199,7 @@ double CScalcGeocnGridCell (struct csGeocnGridCell_* thisPtr,Const double *sourc
 	}
 	return rtnValue;
 }
+/*lint +esym(752,cs_Half,cs_Huge) */
 const char *CSsourceGeocnGridCell (struct csGeocnGridCell_* thisPtr)
 {
 	const char* rtnValue = NULL;

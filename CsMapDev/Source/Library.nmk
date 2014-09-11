@@ -34,18 +34,18 @@ TRG_NAME = $(TRG_BASE)$(TRG_EXT)
 # three variables.  These setting enable this makefile to be used
 # op its own.  Especially useful when debugging this makefile.
 #
-# Ooops!!! Micrtosoft lies again.  The /E option does not alter
+# Ooops!!! Microsoft lies again.  The /E option does not alter
 # the precedence of macro definitions in favor of environmental
 # variables upon which the original design of this relied upon.
-# Thus, we have a bunch of pre-processor ugliness i order to
+# Thus, we have a bunch of pre-processor ugliness in order to
 # get this to work.
 #
-# The author currently uses Visual Studioo 2008 (i.e. version 9)
+# The author currently uses Visual Studio 2008 (i.e. version 9)
 # to maintain the library.  Thus, VERSION is set to 90.
 #
 VERSION = 90
 CONFIGURATION = Release
-PROCESSOR = x86
+PROCESSOR = x64
 #
 # The following definitions are instituted to facilitate building multiple
 # versions of the Library. The variables referenced by these definitions
@@ -66,16 +66,16 @@ SRC_INC_DIR = $(MAKEDIR)\..\Include
 # variables can be set in a parent makefile.  These settings are rather
 # generic; thus generally useful for makefile testing and debugging.
 #
-CC_FLG = /nologo /I..\Include /MT /O2 /W3 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
-CPP_FLG = /nologo /I..\Include /MT /O2 /W3 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
+CC_FLG = /nologo /I..\Include /MD /O2 /W3 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
+CPP_FLG = /nologo /I..\Include /MD /O2 /W3 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
 #
 # Deal with the various processors this make file may be used to generate
 # object modules for.  If $(PROCESSOR) is set to anything other than "x64",
 # it is considered to be the equivalent of "x86",, i.e. 32 bit build.
 #
 # I'm unaware of any command line switch for a 64 bit processor in the
-# Microsoft Visual Studio commpilers (cl).  If there is one,, add it here
-# to the CC_FLG amd CPP_FLG variables.
+# Microsoft Visual Studio compilers (cl).  If there is one,, add it here
+# to the CC_FLG and CPP_FLG variables.
 #
 !IF ("$(PROCESSOR)" == "x64")
 OUT_DIR = $(OUT_DIR)64
@@ -83,10 +83,10 @@ INT_DIR = $(INT_DIR)64
 !ENDIF
 #
 # The definitions of the  following six macros are _NOT_ used in the remainder
-# of this makefile.  They were generated in the early stages of deveopment of
-# this makefile, and turned out to be unuseful in the NMAKE environment.
+# of this makefile.  They were generated in the early stages of development of
+# this makefile, and turned out not to be useful in the NMAKE environment.
 # Other developers, maybe you, may be able to use these macros in an manner
-# which excaped the author to remove some of the ugliness which appears below.
+# which escaped the author to remove some of the ugliness which appears below.
 # COntemplating this possibility, we leave these definitions in the makefile.
 #
 CSMAP_SRC_CC =  CS_alber.c \
@@ -113,7 +113,6 @@ CSMAP_SRC_CC =  CS_alber.c \
 				CS_dtcalc.c \
 				CS_dtio.c \
 				CS_dtmBridge.c \
-				CS_ed50.c \
 				CS_edcnc.c \
 				CS_edcyl.c \
 				CS_egm96.c \
@@ -132,7 +131,7 @@ CSMAP_SRC_CC =  CS_alber.c \
 				CS_geoct.c \
 				CS_geoid96.c \
 				CS_geoid99.c \
-				CS_GeoidHeight.c \
+				CS_geoidHeight.c \
 				CS_gissupprt.c \
 				CS_gnomc.c \
 				CS_gpio.c \
@@ -193,12 +192,12 @@ CSMAP_SRC_CC =  CS_alber.c \
 				CS_units.c \
 				CS_unity.c \
 				CS_vdgrn.c \
-				CS_VertconUS.c \
+				CS_vertconUS.c \
 				CS_vrtcon.c \
 				CS_wgs72.c \
 				CS_winkelTripel.c \
 				CS_zones.c \
-				cscscomp.c \
+				CScscomp.c \
 				CSdata.c \
 				CSdataDT.c \
 				CSdataPJ.c \
@@ -210,8 +209,6 @@ CSMAP_SRC_CC =  CS_alber.c \
 				CSgeodeticSupport.c \
 				CSgpcomp.c \
 				CSgxcomp.c \
-				CSmrcomp.c \
-				CSsys34KMS.c \
 				CSwktFlavors.c
 
 CSMAP_SRC_CPP = CS_csvFileSupport.cpp \
@@ -278,7 +275,6 @@ $(INT_DIR)\CS_defCmpEx.obj       : $(SRC_DIR)\CS_defCmpEx.c
 $(INT_DIR)\CS_dtcalc.obj         : $(SRC_DIR)\CS_dtcalc.c
 $(INT_DIR)\CS_dtio.obj           : $(SRC_DIR)\CS_dtio.c
 $(INT_DIR)\CS_dtmBridge.obj      : $(SRC_DIR)\CS_dtmBridge.c
-$(INT_DIR)\CS_ed50.obj           : $(SRC_DIR)\CS_ed50.c
 $(INT_DIR)\CS_edcnc.obj          : $(SRC_DIR)\CS_edcnc.c
 $(INT_DIR)\CS_edcyl.obj          : $(SRC_DIR)\CS_edcyl.c
 $(INT_DIR)\CS_egm96.obj          : $(SRC_DIR)\CS_egm96.c
@@ -297,7 +293,7 @@ $(INT_DIR)\CS_geocn.obj          : $(SRC_DIR)\CS_geocn.c
 $(INT_DIR)\CS_geoct.obj          : $(SRC_DIR)\CS_geoct.c
 $(INT_DIR)\CS_geoid96.obj        : $(SRC_DIR)\CS_geoid96.c
 $(INT_DIR)\CS_geoid99.obj        : $(SRC_DIR)\CS_geoid99.c
-$(INT_DIR)\CS_GeoidHeight.obj    : $(SRC_DIR)\CS_GeoidHeight.c
+$(INT_DIR)\CS_geoidHeight.obj    : $(SRC_DIR)\CS_geoidHeight.c
 $(INT_DIR)\CS_gissupprt.obj      : $(SRC_DIR)\CS_gissupprt.c
 $(INT_DIR)\CS_gnomc.obj          : $(SRC_DIR)\CS_gnomc.c
 $(INT_DIR)\CS_gpio.obj           : $(SRC_DIR)\CS_gpio.c
@@ -358,12 +354,12 @@ $(INT_DIR)\CS_trmrs.obj          : $(SRC_DIR)\CS_trmrs.c
 $(INT_DIR)\CS_units.obj          : $(SRC_DIR)\CS_units.c
 $(INT_DIR)\CS_unity.obj          : $(SRC_DIR)\CS_unity.c
 $(INT_DIR)\CS_vdgrn.obj          : $(SRC_DIR)\CS_vdgrn.c
-$(INT_DIR)\CS_VertconUS.obj      : $(SRC_DIR)\CS_VertconUS.c
+$(INT_DIR)\CS_vertconUS.obj      : $(SRC_DIR)\CS_vertconUS.c
 $(INT_DIR)\CS_vrtcon.obj         : $(SRC_DIR)\CS_vrtcon.c
 $(INT_DIR)\CS_wgs72.obj          : $(SRC_DIR)\CS_wgs72.c
 $(INT_DIR)\CS_winkelTripel.obj   : $(SRC_DIR)\CS_winkelTripel.c
 $(INT_DIR)\CS_zones.obj          : $(SRC_DIR)\CS_zones.c
-$(INT_DIR)\cscscomp.obj          : $(SRC_DIR)\cscscomp.c
+$(INT_DIR)\CScscomp.obj          : $(SRC_DIR)\CScscomp.c
 $(INT_DIR)\CSdata.obj            : $(SRC_DIR)\CSdata.c
 $(INT_DIR)\CSdataDT.obj          : $(SRC_DIR)\CSdataDT.c
 $(INT_DIR)\CSdataPJ.obj          : $(SRC_DIR)\CSdataPJ.c
@@ -375,8 +371,6 @@ $(INT_DIR)\CSelcomp.obj          : $(SRC_DIR)\CSelcomp.c
 $(INT_DIR)\CSgeodeticSupport.obj : $(SRC_DIR)\CSgeodeticSupport.c
 $(INT_DIR)\CSgpcomp.obj          : $(SRC_DIR)\CSgpcomp.c
 $(INT_DIR)\CSgxcomp.obj          : $(SRC_DIR)\CSgxcomp.c
-$(INT_DIR)\CSmrcomp.obj          : $(SRC_DIR)\CSmrcomp.c
-$(INT_DIR)\CSsys34KMS.obj        : $(SRC_DIR)\CSsys34KMS.c
 $(INT_DIR)\CSwktFlavors.obj      : $(SRC_DIR)\CSwktFlavors.c
 #
 # 'C++' object module dependencies.
@@ -408,9 +402,9 @@ $(INT_DIR)\CSel2Wkt.obj             : $(SRC_DIR)\CSel2Wkt.cpp
 	cl /c $(CC_FLG) /Fp$(INT_DIR)\cs_map.pch /Yucs_map.h /Fo$(INT_DIR)\ $<
 
 {$(SRC_DIR)}.cpp{$(INT_DIR)}.obj::
-	cl /c $(CPP_FLG) /Fp$(INT_DIR)\cs_mapCpp.pch /Yucs_NameMapper.hpp /Fo$(INT_DIR)\ $<
+	cl /c $(CPP_FLG) /Fp$(INT_DIR)\cs_mapCpp.pch /Yucs_wkt.h /Fo$(INT_DIR)\ $<
 #
-# Agin, a large naount of "ugly".  The following instructs NMAKE to add
+# Again, a large amount of "ugly".  The following instructs NMAKE to add
 # the appropriate object modules to the "need to make target" list. It
 # also enables the LIB command to garner the objects from the
 # intermediary directory without having to mess around with changing
@@ -443,7 +437,6 @@ $(OUT_DIR)/$(TRG_NAME) : $(INT_DIR)/CS_stdhdrC.obj \
 						 $(INT_DIR)\CS_dtcalc.obj \
 						 $(INT_DIR)\CS_dtio.obj \
 						 $(INT_DIR)\CS_dtmBridge.obj \
-						 $(INT_DIR)\CS_ed50.obj \
 						 $(INT_DIR)\CS_edcnc.obj \
 						 $(INT_DIR)\CS_edcyl.obj \
 						 $(INT_DIR)\CS_egm96.obj \
@@ -462,7 +455,7 @@ $(OUT_DIR)/$(TRG_NAME) : $(INT_DIR)/CS_stdhdrC.obj \
 						 $(INT_DIR)\CS_geoct.obj \
 						 $(INT_DIR)\CS_geoid96.obj \
 						 $(INT_DIR)\CS_geoid99.obj \
-						 $(INT_DIR)\CS_GeoidHeight.obj \
+						 $(INT_DIR)\CS_geoidHeight.obj \
 						 $(INT_DIR)\CS_gissupprt.obj \
 						 $(INT_DIR)\CS_gnomc.obj \
 						 $(INT_DIR)\CS_gpio.obj \
@@ -523,12 +516,12 @@ $(OUT_DIR)/$(TRG_NAME) : $(INT_DIR)/CS_stdhdrC.obj \
 						 $(INT_DIR)\CS_units.obj \
 						 $(INT_DIR)\CS_unity.obj \
 						 $(INT_DIR)\CS_vdgrn.obj \
-						 $(INT_DIR)\CS_VertconUS.obj \
+						 $(INT_DIR)\CS_vertconUS.obj \
 						 $(INT_DIR)\CS_vrtcon.obj \
 						 $(INT_DIR)\CS_wgs72.obj \
 						 $(INT_DIR)\CS_winkelTripel.obj \
 						 $(INT_DIR)\CS_zones.obj \
-						 $(INT_DIR)\cscscomp.obj \
+						 $(INT_DIR)\CScscomp.obj \
 						 $(INT_DIR)\CSdata.obj \
 						 $(INT_DIR)\CSdataDT.obj \
 						 $(INT_DIR)\CSdataPJ.obj \
@@ -540,8 +533,6 @@ $(OUT_DIR)/$(TRG_NAME) : $(INT_DIR)/CS_stdhdrC.obj \
 						 $(INT_DIR)\CSgeodeticSupport.obj \
 						 $(INT_DIR)\CSgpcomp.obj \
 						 $(INT_DIR)\CSgxcomp.obj \
-						 $(INT_DIR)\CSmrcomp.obj \
-						 $(INT_DIR)\CSsys34KMS.obj \
 						 $(INT_DIR)\CSwktFlavors.obj \
 						 $(INT_DIR)\CS_csvFileSupport.obj \
 						 $(INT_DIR)\CS_epsgStuff.obj \
@@ -556,7 +547,7 @@ $(OUT_DIR)/$(TRG_NAME) : $(INT_DIR)/CS_stdhdrC.obj \
 						 $(INT_DIR)\CSel2Wkt.obj
 	LIB /out:$(OUT_DIR)/$(TRG_NAME) $?
 #
-# Special rules to getthe pre-compiled headers created for use by all
+# Special rules to get the pre-compiled headers created for use by all
 # other 'C' and 'C++' modules.
 #
 $(INT_DIR)/CS_stdhdrC.obj : $(SRC_DIR)\CS_stdhdrC.c $(SRC_INC_DIR)\cs_map.h
@@ -568,7 +559,7 @@ $(INT_DIR)\CS_stdhdrCpp.obj : $(SRC_DIR)\CS_stdhdrCpp.cpp \
 							  $(SRC_INC_DIR)\cs_WktObject.hpp \
 							  $(SRC_INC_DIR)\cs_wkt.h \
 							  $(SRC_INC_DIR)\cs_NameMapper.hpp
-	cl /c $(CPP_FLG) /Fp$(INT_DIR)\cs_mapCpp.pch /Yccs_NameMapper.hpp /Fo$(INT_DIR)\ $(SRC_DIR)\CS_stdhdrCpp.cpp
+	cl /c $(CPP_FLG) /Fp$(INT_DIR)\cs_mapCpp.pch /Yccs_wkt.h /Fo$(INT_DIR)\ $(SRC_DIR)\CS_stdhdrCpp.cpp
 #
 # The following module is large and takes a long time to compile. Also, it
 # will not benefit from pre-compiled headers.  Thus, we deal with this module
@@ -578,7 +569,7 @@ $(INT_DIR)/csIoUtil.obj : $(SRC_DIR)\csIoUtil.cpp
 	cl /c $(CPP_FLG) /Y- /Fo$(INT_DIR)\ $**
 #
 # Some dependencies to force the creation of the output and intermediary
-# directroies.  These 'mkdir' operations require the "extended" mode of the
+# directories.  These 'mkdir' operations require the "extended" mode of the
 # Windows command shell.  To achieve this, add the "/e:on" option to the
 # command line which starts the command line process.  Once the directories
 # have been created, this is no longer required.

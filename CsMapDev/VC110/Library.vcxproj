@@ -321,7 +321,7 @@
     <ClCompile Include="..\Source\CS_geoct.c" />
     <ClCompile Include="..\Source\CS_geoid96.c" />
     <ClCompile Include="..\Source\CS_geoid99.c" />
-    <ClCompile Include="..\Source\CS_GeoidHeight.c" />
+    <ClCompile Include="..\Source\CS_geoidHeight.c" />
     <ClCompile Include="..\Source\CS_gissupprt.c" />
     <ClCompile Include="..\Source\CS_gnomc.c" />
     <ClCompile Include="..\Source\CS_gpio.c" />
@@ -422,7 +422,7 @@
     <ClCompile Include="..\Source\CS_units.c" />
     <ClCompile Include="..\Source\CS_unity.c" />
     <ClCompile Include="..\Source\CS_vdgrn.c" />
-    <ClCompile Include="..\Source\CS_VertconUS.c" />
+    <ClCompile Include="..\Source\CS_vertconUS.c" />
     <ClCompile Include="..\Source\CS_vrtcon.c" />
     <ClCompile Include="..\Source\CS_wellknowntext.cpp">
       <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)cs_mapCpp.pch</PrecompiledHeaderOutputFile>

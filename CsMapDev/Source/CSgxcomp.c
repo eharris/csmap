@@ -27,10 +27,14 @@
 
 #include "cs_map.h"
 
-/* Entire module skipped if this is an Embedded compile for project management
-   convenience.  Don't think it likely that we'll need to compile dictionaries
-   in the Embedded environment. */
-#if !defined (__WINCE__)
+/*lint -esym(767,GX_NAME,SRC_DTM,TRG_DTM,GROUP,DESC_NM,SOURCE,METHOD,EPSG_NBR,EPSG_VAR,INVERSE)  possibly different values in other modules */
+/*lint -esym(767,MAX_ITR,CNVRG_VAL,ERROR_VAL,ACCURACY,MIN_LNG,MAX_LNG,MIN_LAT,MAX_LAT,FALLBACK)  possibly different values in other modules */
+/*lint -esym(767,DELTA_X,DELTA_Y,DELTA_Z,ROT_X,ROT_Y,ROT_Z,BWSCALE,XLATE_X,XLATE_Y,XLATE_Z)      possibly different values in other modules */
+/*lint -esym(767,VALIDATION,TEST_LNG,TEST_LAT,RSLT_DELTA_LNG,RSLT_DELTA_LAT,RSLT_DELTA_HGT)      possibly different values in other modules */
+/*lint -esym(767,SRC_LAT_OFF,SRC_LNG_OFF,SRC_HGT_OFF,TRG_LAT_OFF,TRG_LNG_OFF,TRG_HGT_OFF)        possibly different values in other modules */
+/*lint -esym(767,NRML_KK,LAT_COEF,LNG_COEF,HGT_COEF)  different values in other modules */
+/*lint -esym(534,err_func)   ignoring return value */
+/*lint -esym(754,cs_GxCmpT_::label)  not referenced directly, only indirectly */
 
 /* Common attributes of a Geodetic Transform */
 #define GX_NAME     1
@@ -227,6 +231,10 @@ int CSgxdefwr (	csFILE *outStrm,
 **	to license LEX/YACC.
 **********************************************************************/
 
+/*lint -esym(550,mulregCount)      variable not accessed; but could valuable in future */
+/*lint -esym(550,gridFileCount)    variable not accessed; but could valuable in future */
+/*lint -esym(550,geocentricCount)  variable not accessed; but could valuable in future */
+/*lint -esym(550,currentMethod)    variable not accessed; but could valuable in future */
 int EXP_LVL9 CSgxcomp (	Const char *inpt,
 						Const char *outp,
 						int flags,
@@ -741,7 +749,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			}
 
 			gxdef.parameters.fileParameters.fileNames [idx].fileFormat = (unsigned char)gridFileFormat;
-			gxdef.parameters.fileParameters.fileNames [idx].direction = *cpDir;
+			gxdef.parameters.fileParameters.fileNames [idx].direction = *cpDir;			/*lint !e732  loss of sign */
 			CS_stncp (gxdef.parameters.fileParameters.fileNames [idx].fileName,cpFile,sizeof (gxdef.parameters.fileParameters.fileNames[0].fileName));
 			gxdef.parameters.fileParameters.fileReferenceCount += 1;
 			break;
@@ -791,7 +799,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 
 	/* Check for duplicate names. */
 	CS_fseek (outStrm,(long)sizeof (magic),SEEK_SET);
-	CS_gxrd (outStrm,&gxdef);
+	CS_gxrd (outStrm,&gxdef);			/*lint !e534  ignoring return value */
 	CS_stncp (last_name,gxdef.xfrmName,sizeof (last_name));
 	while (!cancel && CS_gxrd (outStrm,&gxdef))
 	{
@@ -878,7 +886,7 @@ int CSgxdefwr (	csFILE *outStrm,
 	if (dtmStrm != NULL)
 	{
 		CS_stncp (dt_def.key_nm,gxdef->srcDatum,sizeof (dt_def.key_nm));
-		CS_nampp (dt_def.key_nm);
+		CS_nampp (dt_def.key_nm);				/*lint !e534   ignoring return value */
 		dt_def.fill [0] = '\0';
 		dt_def.fill [1] = '\0';
 		flag = CS_bins (dtmStrm,(long32_t)sizeof (cs_magic_t),(long32_t)-1,sizeof (dt_def),&dt_def,(CMPFUNC_CAST)CS_dtcmp);
@@ -916,7 +924,7 @@ int CSgxdefwr (	csFILE *outStrm,
 	if (dtmStrm != NULL)
 	{
 		CS_stncp (dt_def.key_nm,gxdef->trgDatum,sizeof (dt_def.key_nm));
-		CS_nampp (dt_def.key_nm);
+		CS_nampp (dt_def.key_nm);				/*lint !e534   ignoring return value */
 		dt_def.fill [0] = '\0';
 		dt_def.fill [1] = '\0';
 		flag = CS_bins (dtmStrm,(long32_t)sizeof (cs_magic_t),(long32_t)-1,sizeof (dt_def),&dt_def,(CMPFUNC_CAST)CS_dtcmp);
@@ -962,7 +970,13 @@ int CSgxdefwr (	csFILE *outStrm,
 		}
 
 		/* Write this definition to the distionary file. */
-		CS_gxwr (outStrm,gxdef);
+		st = CS_gxwr (outStrm,gxdef);
+		if (st != 0)
+		{
+			CS_errmsg (err_msg,sizeof (err_msg));
+			cancel = (*err_func)(err_msg);
+			err_cnt += 1;
+		}
 	}
 	if (warn && gxdef->description [0] == '\0')
 	{
@@ -977,4 +991,3 @@ int CSgxdefwr (	csFILE *outStrm,
 	if (cancel && err_cnt == 0) err_cnt = 1;
 	return (cancel ? -err_cnt : err_cnt);
 }
-#endif

@@ -389,6 +389,7 @@ error:
 	regard to byte swapping.  This is done dynamically.
 */
 
+/*lint -e708  union initialization; primary purpose of this variable. */
 union cs_Bswap_ cs_BswapU =
 {
 	{'\0','\01','\02','\03'}
@@ -612,13 +613,14 @@ void EXP_LVL5 CS_iimul (Const struct cs_Cmplx_ *aa,Const struct cs_Cmplx_ *bb,st
 
 void EXP_LVL5 CS_iidiv (Const struct cs_Cmplx_ *aa,Const struct cs_Cmplx_ *bb,struct cs_Cmplx_ *cc)
 {
+	extern double cs_Huge;			/* +1.0E+32 */
 	double rnum;
 	double inum;
 	double denom;
 
 	if (bb->real == 0.0 && bb->img == 0.0)
 	{
-		cc->real = cc->img = INFINITY;
+		cc->real = cc->img = cs_Huge;
 		return;
 	}
 
@@ -1053,12 +1055,13 @@ char * EXP_LVL3 CS_stcpy (char *dest,Const char *source)
 	return (--dest);
 #else
 
+	/* Note, strcpy always returns its first argument, which could
+	   be null, I suppose. */
 	char* result = strcpy(dest, source);
-	if (NULL != result)
+	if (NULL != result)					/*lint !e774  boolean always evaluates to true */
 	{
 		return dest + strlen(source);
 	}
-
 	return NULL;
 
 #endif
@@ -1484,7 +1487,11 @@ void EXP_LVL5 CSasciiToXml (char *xml,const char *ascii)
 }
 
 /* Double comparison.  Compares doubles regardless of their magnitude.
-   Ignores noise in the two or three least significant bits of the mantissa. */
+   Ignores noise in the two or three least significant bits of the mantissa.
+   Returns TRUE if the two values are essentially equal.  Note that the
+   sign of the values comes into play when comparing the mantissas.  Thus
+   a very very small negative value will successfully compare with a
+   very very small positive value. */
 int EXP_LVL1 CS_cmpDbls (double first,double second)
 {
 	int exp1, exp2;
@@ -1517,8 +1524,10 @@ int EXP_LVL1 CS_cmpDbls (double first,double second)
 	if (exp1 != exp2) return FALSE;
 
 	/* If the exponents are equal, then we can simply compare the mantissas.
-	   We ignore any difference in the last few bits. */
-	return (int)(fabs (mant1 - mant2) < 5.0E-7);
+	   We ignore any difference in the last few bits.  We use 5.0E-12 as
+	   we assume there are 12 digits of precision in a 'double'.  We would
+	   use a much larger value if we were comparing 'float's. */
+	return (int)(fabs (mant1 - mant2) < 5.0E-12);
 }
 /* Environment variable substitution.  This function will replace references
    to environmental variables in strings in place. The return value is zero
@@ -1530,6 +1539,8 @@ int EXP_LVL1 CS_cmpDbls (double first,double second)
    THIS FUNCTION DOES NOT DO RECURSIVE SUBSTITUTIONS.  If you need/want
    that, you need to call this function multiple times until you get a
    zero return value. */
+   
+/*lint -esym(613,envValPtr)  possible use of null pointer; I don't think so. */
 int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
 {
 	extern char cs_EnvchrC;
@@ -1572,6 +1583,10 @@ int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
 		goto error;
 	}
 
+	trgPtr = wrkBufr;				// Redundant, to preclude uninitialized warning.
+	envNamePtr = envNameBufr;		// Redundant, to preclude uninitialized warning.
+	envValPtr = 0;					// Redundant, to preclude uninitialized warning.
+
 	state = envSubBegin;
 	srcPtr = stringBufr;			// To kep lint happy.
 	while (state != envSubDone && state != envSubError)
@@ -1589,7 +1604,7 @@ int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
 			if (*srcPtr != cs_EnvchrC)
 			{
 				trgBufrCount += 1;
-				if (!(*trgPtr++ = *srcPtr++))
+				if ((*trgPtr++ = *srcPtr++) == '\0')
 				{
 					state = envSubComplete;
 				}
@@ -1699,7 +1714,7 @@ int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
 		case envSubValueCopy:
 			if (*envValPtr != '\0')
 			{
-				*trgPtr++ = *envValPtr++;
+				*trgPtr++ = *envValPtr++;		/*lint !e613  null pointer? I don't think so. */
 				trgBufrCount += 1;
 			}
 			else
@@ -1709,7 +1724,7 @@ int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
 			}
 			break;
 		case envSubComplete:
-			CS_stncp (stringBufr,wrkBufr,bufrSize);
+			CS_stncp (stringBufr,wrkBufr,(int)bufrSize);
 			state = envSubDone;
 			break;
 		case envSubDone:
@@ -1717,10 +1732,10 @@ int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
 			   happy. */
 			CS_stncp (csErrnam,"CS_supprt:8",MAXPATH);
 			CS_erpt (cs_ISER);
-		case envSubError:
+		case envSubError:			/*lint !e616  deliberate flow through */
 		default:
 			goto error;
-			break;
+			break;					/*lint !e527  unreachable code. */
 		}
 		if (trgBufrCount >= (MAXPATH - 1))
 		{
@@ -1737,7 +1752,10 @@ int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
 	return subCount;
 error:
 	return -1;
+
 }
+
+/*lint +esym(613,envValPtr) */
 int CS_envsubWc (wchar_t* stringBufr,size_t bufrSize /*in chars*/)
 {
 	int subCount;
@@ -1754,12 +1772,12 @@ int CS_envsubWc (wchar_t* stringBufr,size_t bufrSize /*in chars*/)
 		goto error;
 	}
 
-	wcstombs (workBufr,stringBufr,MAXPATH);
+	wcstombs (workBufr,stringBufr,MAXPATH);				/*lint !e534  ignoring return value */
 	workBufr [MAXPATH - 1] = '\0';
 	subCount = CS_envsub (workBufr,MAXPATH);
 	if (subCount > 0)
 	{
-		mbstowcs (stringBufr,workBufr,bufrSize);
+		mbstowcs (stringBufr,workBufr,bufrSize);		/*lint !e534  ignoring return value */
 	}
 	return subCount;
 error:

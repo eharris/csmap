@@ -25,21 +25,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+//lint -esym(766,..\Include\cs_wkt.h)				unreferenced header, needed for pre-compiled headers
+//lint -esym(1540,TcsNameMap::User)					pointer not freed or zeroed in destructor
+//lint -esym(1554,TcsNameMap::User)					copying a pointer directly
+//lint -esym(1555,TcsNameMap::User)					copying a pointer directly
+//lint -esym(1763,TcsNameMap::GetUserValue)			modifies const object indirectly?
 
 // Now comes May 21, 2014
 // The following list, and the order of their listing, has been optimized for
 // the use of pre-compiled headers.  Some of these files are unreferenced in
 // this module, a small price paid for the efficiency affored by pre-compiled
 // headers.
-/*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
 
 #include <fstream>
 #include <sstream>
@@ -138,15 +141,15 @@ bool TcsNameMap::CsvSort (const TcsNameMap& lhs,const TcsNameMap& rhs)
 ///////////////////////////////////////////////////////////////////////////////
 // Construction  /  Destruction  /  Assignment
 TcsNameMap::TcsNameMap () : GenericId (0UL),Type (csMapNone),Flavor     (csMapFlvrNone),
-													         NumericId  (0UL),
-													         Name       (),
-													         DupSort    (0),
-													         AliasFlag  (0),
-													         Flags      (0UL),
-													         User       (0),
-													         Deprecated (0UL),
-													         Remarks    (),
-													         Comments   ()
+															 NumericId  (0UL),
+															 Name       (),
+															 DupSort    (0),
+															 AliasFlag  (0),
+															 Flags      (0UL),
+															 User       (0),
+															 Deprecated (0UL),
+															 Remarks    (),
+															 Comments   ()
 {
 }
 TcsNameMap::TcsNameMap (const TcsGenericId& genericId,EcsMapObjType type,
@@ -159,8 +162,8 @@ TcsNameMap::TcsNameMap (const TcsGenericId& genericId,EcsMapObjType type,
 													  Flavor     (flavor),
 													  NumericId  (numericId),
 													  Name       (name),
-											          DupSort    (0),
-											          AliasFlag  (0),
+													  DupSort    (0),
+													  AliasFlag  (0),
 													  Flags      (0UL),
 													  User       (0),
 													  Deprecated (),
@@ -176,13 +179,13 @@ TcsNameMap::TcsNameMap (EcsMapObjType type,EcsNameFlavor flavor,unsigned long nu
 																Flavor     (flavor),
 																NumericId  (numericId),
 																Name       (name),
-														        DupSort    (0),
-														        AliasFlag  (0),
-        			                                            Flags      (0UL),
-		        									            User       (0),
-			        					                        Deprecated (),
-					        					                Remarks    (),
-						        		                        Comments   ()
+																DupSort    (0),
+																AliasFlag  (0),
+																Flags      (0UL),
+																User       (0),
+																Deprecated (),
+																Remarks    (),
+																Comments   ()
 {
 	if (NumericId != 0)
 	{
@@ -198,10 +201,10 @@ TcsNameMap::TcsNameMap (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* n
 																Flavor     (flavor),
 																NumericId  (0UL),
 																Name       (name),
-														        DupSort    (dupSort),
-														        AliasFlag  (aliasFlag),
-						                                        Flags      (0UL),
-				                                                User       (0),
+																DupSort    (dupSort),
+																AliasFlag  (aliasFlag),
+																Flags      (0UL),
+																User       (0),
 																Deprecated (),
 																Remarks    (),
 																Comments   ()
@@ -212,8 +215,8 @@ TcsNameMap::TcsNameMap (const TcsNameMap& source) : GenericId  (source.GenericId
 													Flavor     (source.Flavor),
 													NumericId  (source.NumericId),
 													Name       (source.Name),
-											        DupSort    (source.DupSort),
-											        AliasFlag  (source.AliasFlag),
+													DupSort    (source.DupSort),
+													AliasFlag  (source.AliasFlag),
 													Flags      (source.Flags),
 													User       (source.User),
 													Deprecated (source.Deprecated),
@@ -277,11 +280,11 @@ bool TcsNameMap::operator< (const TcsNameMap& rhs) const
 }
 EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm)
 {
-    EcsCsvStatus rtnStatus;
-    TcsCsvStatus csvStatus;
+	EcsCsvStatus rtnStatus;
+	TcsCsvStatus csvStatus;
 
-    rtnStatus = ReadFromStream (inStrm,csvStatus);
-    return rtnStatus;
+	rtnStatus = ReadFromStream (inStrm,csvStatus);
+	return rtnStatus;
 }
 EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csvStatus)
 {
@@ -292,9 +295,9 @@ EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csv
 
 	// We do not allow for comments as whatever the comment character would
 	// be might end up in a name somewhere.
-    Name.clear ();
-    Remarks.clear ();
-    Comments.clear ();
+	Name.clear ();
+	Remarks.clear ();
+	Comments.clear ();
 
 	EcsCsvStatus status = csGetCsvRecord (lineBufr,inStrm,TcsNameMapper::Delimiters);
 	if (status == csvOk)
@@ -323,7 +326,6 @@ EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csv
 			size_t fldCnt = fields.size ();
 			if (fldCnt >= 7 && fldCnt <= 16)
 			{
-				size_t fldCnt = fields.size ();
 				ulTmp = wcstoul (fields [0].c_str (),0,10);
 				GenericId = TcsGenericId (ulTmp);
 
@@ -495,7 +497,10 @@ TcsNameMapList::~TcsNameMapList (void)
 }
 TcsNameMapList& TcsNameMapList::operator= (const TcsNameMapList& rhs)
 {
-	NameMapList = rhs.NameMapList;
+	if (&rhs != this)
+	{
+		NameMapList = rhs.NameMapList;
+	}
 	return *this;
 }
 //=========================================================================
@@ -531,7 +536,7 @@ bool TcsNameMapList::RemoveNameMap (const TcsNameMap* existingNameMapPtr)
 	{
 		if (*itr == existingNameMapPtr)
 		{
-			NameMapList.erase (itr);
+			NameMapList.erase (itr);		//lint !e534   ignoring return value
 			ok = true;
 			break;
 		}
@@ -580,7 +585,7 @@ const wchar_t* TcsNameMapper::FlvrNbrToName (EcsNameFlavor flvrNbr)
 	return rtnValue;
 }
 bool TcsNameMapper::AnalyzeGenericId (EcsNameFlavor& flavor,unsigned long& flvrId,
-															TcsGenericId& genericId)
+															const TcsGenericId& genericId)
 {
 	bool isDefault (false);
 	unsigned long numericId;
@@ -628,15 +633,15 @@ TcsNameMapper& TcsNameMapper::operator+= (const TcsNameMap& newItem)
 	// We assume that if this fails, it is only because an equivalent
 	// object already exists in the set.  This is an essential element
 	// of the design of this object.
-	DefinitionSet.insert (newItem);
+	DefinitionSet.insert (newItem);		//lint !e534  ignoring return value
 	return *this;
 }
 ///////////////////////////////////////////////////////////////////////////
 // Named Member functions
 bool TcsNameMapper::IsInitialized () const
 {
-    bool initialized = (DefinitionSet.size () > 32);
-    return initialized;
+	bool initialized = (DefinitionSet.size () > 32);
+	return initialized;
 }
 bool TcsNameMapper::SetRecordDuplicates (bool recordDuplicates)
 {
@@ -650,10 +655,10 @@ void TcsNameMapper::ClearDuplicateList (void)
 }
 EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm)
 {
-    EcsCsvStatus rtnStatus;
+	EcsCsvStatus rtnStatus;
 	TcsCsvStatus csvStatus;
 
-    rtnStatus = ReadFromStream (inStrm,csvStatus);
+	rtnStatus = ReadFromStream (inStrm,csvStatus);
 	return rtnStatus;
 }
 
@@ -662,11 +667,11 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSi
 	if (NULL == pBuffer)
 		return csvNoFile;
 
-    EcsCsvStatus csvStatus  = csvOk;
+	EcsCsvStatus csvStatus  = csvOk;
 
-    size_t const lastIndex = bufferSize - 1; // Last index of the stream buffer (file)
+	size_t const lastIndex = bufferSize - 1; // Last index of the stream buffer (file)
 
-    // Temporary line buffer
+	// Temporary line buffer
 	size_t lineBufferLength = 300; // Expected maximum length of a line
 	char* pLineBuffer = (char*) CS_malc (lineBufferLength);
 	if (NULL == pLineBuffer)
@@ -676,14 +681,14 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSi
 	}
 
 	size_t lineStart = 0; // Start index of the line
-    bool isEOF = false;
+	bool isEOF = false;
 	size_t i = 0; // Current index in the stream buffer (file)
 	while(i < bufferSize && !isEOF)
 	{
-        // Current character from the buffer
+		// Current character from the buffer
 		char const* curChar = &pBuffer[i];
-        
-        // Advance [i] to next line breaking character
+
+		// Advance [i] to next line breaking character
 		if ('\n' != *curChar && '\r' != *curChar)
 		{
 			// Pass any non-line breaking character;
@@ -694,12 +699,12 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSi
 				continue;
 			}
 
-            // Last line. Last line need to be processed. EOF is handled below.
+			// Last line. Last line need to be processed. EOF is handled below.
 		}
 
-        // Line length
+		// Line length
 		// If the buffer did start with empty lines only, we're getting an 0-size length here
-        size_t lineLength = i - lineStart;
+		size_t lineLength = i - lineStart;
 		
 		// Advance [i] beyond all ine breaking characters (\n & \r)
 		while(i < bufferSize)
@@ -711,11 +716,11 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSi
 				continue;
 			}
 
-            break;
+			break;
 		}
-        // Handle the end of the file
-        if (i >= bufferSize - 1)
-            isEOF = true;
+		// Handle the end of the file
+		if (i >= bufferSize - 1)
+			isEOF = true;
 
 		// Resize the temp line buffer if it is too small
 		if (lineBufferLength < lineLength)
@@ -730,48 +735,48 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSi
 			pLineBuffer = pReBuffered;
 		}
 
-        // Fill up temp line buffer with current line
+		// Fill up temp line buffer with current line
 		memset(pLineBuffer, '\0', lineBufferLength);
 		memcpy(pLineBuffer, &pBuffer[lineStart], lineLength);
 
-        // Next line starting position
+		// Next line starting position
 		lineStart = i; //our next potential start; EOF doesn't matter here
 
 		// Temporary line buffer (wide char)
-        wchar_t wcharBuffer[1 << 10] = { L'\0' };
-        mbstowcs(wcharBuffer, pLineBuffer, lineLength);
-        wcharBuffer[lineLength] = L'\n'; // Add a newline character. This will be needed below in the csv support class.
+		wchar_t wcharBuffer[1 << 10] = { L'\0' };
+		mbstowcs(wcharBuffer, pLineBuffer, lineLength);
+		wcharBuffer[lineLength] = L'\n'; // Add a newline character. This will be needed below in the csv support class.
 
-        // Prepare a line stream
-        std::wstringstream inStrm(wcharBuffer);
-        inStrm.seekg(0);
+		// Prepare a line stream
+		std::wstringstream inStrm(wcharBuffer);
+		inStrm.seekg(0);			//lint !e534   ignoring return value
 
 		// Skip the line if it looks like a label line. Note that we
 		// require a label line to be a valid CSV record, even though we
 		// ignore the contents.
-        // A data line need to start with a digit otherwise it is expected to be a label/comment line and we skip
+		// A data line need to start with a digit otherwise it is expected to be a label/comment line and we skip
 		if (!isdigit(pLineBuffer[0]))
 		{
-            //// Validate the record
-            //std::wstring lineBufferUnused;
-            //csvStatus = csGetCsvRecord (lineBufferUnused, inStrm, Delimiters);
-		    //if (csvOk != csvStatus)
+			//// Validate the record
+			//std::wstring lineBufferUnused;
+			//csvStatus = csGetCsvRecord (lineBufferUnused, inStrm, Delimiters);
+			//if (csvOk != csvStatus)
 			//    break;
 
-            // Skip the line
-            // Note that [i] and [lineStart] point already to the beginning of the next line, or EOF...
-            continue;
+			// Skip the line
+			// Note that [i] and [lineStart] point already to the beginning of the next line, or EOF...
+			continue;
 		}
-        
-        // Create name map item (Data of one line)
-        TcsNameMap nextItem;
-        TcsCsvStatus status;
-        // Read the data from the line
+
+		// Create name map item (Data of one line)
+		TcsNameMap nextItem;
+		TcsCsvStatus status;
+		// Read the data from the line
 		csvStatus= nextItem.ReadFromStream (inStrm, status);
 		if (csvStatus == csvOk)
 		{
-            // Add new item to mapping collection
-			Add (nextItem);
+			// Add new item to mapping collection
+			Add (nextItem);		//lint !e534   ignoring return value
 		}
 		else
 		{
@@ -779,7 +784,7 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSi
 		}
 	}
 
-    // Free temp line buffer
+	// Free temp line buffer
 	CS_free(pLineBuffer);
 	pLineBuffer = NULL;
 	
@@ -790,7 +795,7 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& 
 {
 	wint_t firstChar;
 	wint_t nextChar;
-    EcsCsvStatus csvStatus = csvOk;
+	EcsCsvStatus csvStatus = csvOk;
 	std::wstring lineBufr;
 	TcsNameMap nextItem;
 	
@@ -807,7 +812,7 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& 
 		csvStatus= nextItem.ReadFromStream (inStrm,status);
 		if (csvStatus == csvOk)
 		{
-			Add (nextItem);
+			Add (nextItem);		//lint !e534   ignoring return value
 		}
 		nextChar = inStrm.peek ();
 		if (nextChar == WEOF)
@@ -879,7 +884,7 @@ bool TcsNameMapper::Replace (const TcsNameMap& newItem)
 	itr = DefinitionSet.find (searchObject);
 	if (itr != DefinitionSet.end ())
 	{
-		DefinitionSet.erase (itr);
+		DefinitionSet.erase (itr);		//lint !e534   ignoring return value
 	}
 	insertStatus = DefinitionSet.insert (newItem);
 	return insertStatus.second;
@@ -892,7 +897,6 @@ bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,c
 	bool ok (false);
 
 	iterator itr;
-	std::pair<iterator,bool> insertStatus;
 
 	TcsNameMap searchObject (type,flavor,oldName);
 	itr = DefinitionSet.find (searchObject);
@@ -917,7 +921,7 @@ bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,c
 			TcsNameMap newEntry (*itr);
 			
 			// Erase the old entry we are replacing.
-			DefinitionSet.erase (itr);
+			DefinitionSet.erase (itr);		//lint !e534   ignoring return value
 
 			// Modify the two copies as appropriate.
 			oldEntry.SetAliasFlag (1);
@@ -973,7 +977,7 @@ bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,u
 			TcsNameMap newEntry (*entryItr);
 			
 			// Erase the old entry we are replacing.
-			DefinitionSet.erase (entryItr);
+			DefinitionSet.erase (entryItr);		//lint !e534   ignoring return value
 
 			// Modify the two copies as appropriate.
 			oldEntry.SetAliasFlag (1);
@@ -1013,7 +1017,6 @@ bool TcsNameMapper::ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType
 	bool ok (false);
 
 	iterator itr;
-	std::pair<iterator,bool> insertStatus;
 
 	// Note that the dupSort and aliasFlag arguments have default
 	// values of 0.  This is the typical case, and these are the
@@ -1027,7 +1030,7 @@ bool TcsNameMapper::ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType
 	if (itr != DefinitionSet.end ())
 	{
 		extractedNameMap = *itr;
-		DefinitionSet.erase (itr);
+		DefinitionSet.erase (itr);		//lint !e534   ignoring return value
 		ok = true;
 	}
 	return ok;
@@ -1157,7 +1160,7 @@ void TcsNameMapper::WriteAsCsv (std::wostream& outStrm,bool flvrLbls) const
 	}
 	// Second thing: sort the resulting vector into an order that will make
 	// sense to a human observer.
-	std::sort (sortedVector.begin (),sortedVector.end (),TcsNameMap::CsvSort);
+	std::sort (sortedVector.begin (),sortedVector.end (),TcsNameMap::CsvSort);		//lint !e864    result may depend upon order of evaluation
 
 	// We always label the Name Mapper file.
 	WriteLabelLine (outStrm);
@@ -1201,7 +1204,7 @@ bool TcsNameMapper::SetUserByNbr (EcsMapObjType type,EcsNameFlavor flavor,unsign
 	TcsNameMap* mapPtr = LocateNameMap (type,flavor,id);
 	if (mapPtr != 0)
 	{
-		mapPtr->SetUserValue (userValue);
+		mapPtr->SetUserValue (userValue);		//lint !e534   ignoring return value
 		ok = true;
 	}
 	return ok;
@@ -1225,7 +1228,7 @@ bool TcsNameMapper::SetUserByName (EcsMapObjType type,EcsNameFlavor flavor,const
 	TcsNameMap* mapPtr = LocateNameMap (type,flavor,name);
 	if (mapPtr != 0)
 	{
-		mapPtr->SetUserValue (userValue);
+		mapPtr->SetUserValue (userValue);		//lint !e534   ignoring return value
 		ok = true;
 	}
 	return ok;
@@ -1243,10 +1246,10 @@ void TcsNameMapper::InitializeFlavors (void)
 		{
 			TcsGenericId flvrId (idx,0);
 			TcsNameMap flvrMap (flvrId,csMapFlavorName,idx,0UL,wcPtr);
-			Add (flvrMap);
+			Add (flvrMap);		//lint !e534   ignoring return value
 		}
 	}
-}
+}									//lint !e1565    this initializer does not initialize ALL class members (eg RecordDuplicates)
 void TcsNameMapper::AdjustDefaultIDs (void)
 {
 	EcsNameFlavor flavor;
@@ -1271,7 +1274,7 @@ void TcsNameMapper::AdjustDefaultIDs (void)
 			}
 		}
 	}
-}
+}									//lint !e1565    this initializer does not initialize ALL class members (eg RecordDuplicates)
 ///////////////////////////////////////////////////////////////////////////////
 // Given a generic ID (as an unsigned long) locate the first record in the set
 // sequence which has the given generic ID.  Due to the ordering of the set,
@@ -1450,10 +1453,10 @@ const TcsNameMap* TcsNameMapper::LocateNameMap (EcsMapObjType type,EcsNameFlavor
 // Entries in the set are not sorted by numeric ID, so the values returned by
 // this function WILL NOT be in any kind of sorted order.
 unsigned long TcsNameMapper::LocateIdByIdx (EcsMapObjType type,EcsNameFlavor flavor,
-                                                               unsigned index,
-                                                               unsigned* count) const
+															   unsigned index,
+															   unsigned* count) const
 {
-    unsigned counter = 0;
+	unsigned counter = 0;
 	unsigned long rtnValue = 0xFFFFFFFFUL;
 	const_iterator beginItr;
 	const_iterator endItr;
@@ -1475,23 +1478,23 @@ unsigned long TcsNameMapper::LocateIdByIdx (EcsMapObjType type,EcsNameFlavor fla
 			}
 			++counter;
 		}
-	    ++searchItr;
+		++searchItr;
 	}
 	if (searchItr != endItr)
 	{
-	    rtnValue = searchItr->GetNumericId ();
+		rtnValue = searchItr->GetNumericId ();
 	}
 	if (count != 0)
 	{
-	    *count = counter;
+		*count = counter;
 	}
 	return rtnValue;
 }
 const wchar_t* TcsNameMapper::LocateNameByIdx (EcsMapObjType type,EcsNameFlavor flavor,
-                                                                  unsigned index,
-                                                                  unsigned* count) const
+																  unsigned index,
+																  unsigned* count) const
 {
-    unsigned counter = 0;
+	unsigned counter = 0;
 	const wchar_t* rtnValue = 0;
 	const_iterator beginItr;
 	const_iterator endItr;
@@ -1505,20 +1508,20 @@ const wchar_t* TcsNameMapper::LocateNameByIdx (EcsMapObjType type,EcsNameFlavor 
 	searchItr = beginItr;
 	while (searchItr != endItr)
 	{
-	    if (counter == index)
-	    {
-	        break;
-	    }
-	    ++counter;
-	    ++searchItr;
+		if (counter == index)
+		{
+			break;
+		}
+		++counter;
+		++searchItr;
 	}
 	if (searchItr != endItr)
 	{
-	    rtnValue = searchItr->GetNamePtr ();
+		rtnValue = searchItr->GetNamePtr ();
 	}
 	if (count != 0)
 	{
-	    *count = counter;
+		*count = counter;
 	}
 	return rtnValue;
 }
@@ -1553,15 +1556,15 @@ TcsNameMapList* TcsNameMapper::Enumerate (EcsMapObjType type,EcsNameFlavor flavo
 bool TcsNameMapper::AddKeyNameMap (EcsMapObjType mapType,const wchar_t* mapFilePath)
 {
 	bool ok = true;
-    EcsNameFlavor flavor;
-    unsigned long genericId;
-    TcsCsvStatus csvStatus;
+	EcsNameFlavor flavor;
+	unsigned long genericId;
+	TcsCsvStatus csvStatus;
 
-    TcsKeyNameMapFile mapFileObj (mapFilePath,28);
-    ok = (mapFileObj.GetStatus (csvStatus) == csvOk);
+	TcsKeyNameMapFile mapFileObj (mapFilePath,28);
+	ok = (mapFileObj.GetStatus (csvStatus) == csvOk);
 
 	if (ok)
-	{        
+	{
 		// Loop once for each record in the mapping table.
 		do
 		{
@@ -1584,50 +1587,47 @@ bool TcsNameMapper::AddKeyNameMap (EcsMapObjType mapType,const wchar_t* mapFileP
 }
 bool TcsNameMapper::AddKeyMapFields (EcsMapObjType mapType,unsigned long genericId,const TcsKeyNameMapFile& mapFileObj)
 {
-    bool ok;
-    bool addDups;
-    unsigned long itmNbr;
-    EcsNameFlavor flavor = csMapFlvrNone;
-    EcsMapTableFields nbrItmId;
-    EcsMapTableFields nameItmId;
+	bool ok;
+	bool addDups;
+	unsigned long itmNbr;
+	EcsNameFlavor flavor = csMapFlvrNone;
+	EcsMapTableFields nbrItmId;
+	EcsMapTableFields nameItmId;
 	std::wstring sourceId;
-    std::wstring itmName;
-    std::pair<iterator,bool> setStatus;
- 
-    
+	std::wstring itmName;
+
 	addDups = (mapType == csMapParameterKeyName) ||
 			  (mapType == csMapProjectionKeyName) ||
 			  (mapType == csMapLinearUnitKeyName) ||
 			  (mapType == csMapAngularUnitKeyName);
 
-    ++flavor;
-    for (;flavor != csMapFlvrUnknown;++flavor)
-    {
-        ok = true;
-        itmNbr = 0UL;
-        nbrItmId = mapFileObj.GetNbrFldId (flavor);
-        if (nbrItmId != csMapFldUnknown)
-        {
-            // Numbers are optional.
-            itmNbr = mapFileObj.GetFieldAsUL (nbrItmId);
-            ok = (itmNbr != mapFileObj.GetErrorValue ());
-        }
-        if (ok)
-        {
-            // Names are not optional.
-            nameItmId = mapFileObj.GetNameFldId (flavor);
-            ok = nameItmId != csMapFldUnknown;
-            if (ok)
-            {
-                ok = mapFileObj.GetField (itmName,nameItmId);
-                if (ok)
-                {
-                    ok = !itmName.empty ();
-                }
-            }
-            
-            if (ok)
-            {
+	++flavor;
+	for (;flavor != csMapFlvrUnknown;++flavor)
+	{
+		ok = true;
+		itmNbr = 0UL;
+		nbrItmId = mapFileObj.GetNbrFldId (flavor);
+		if (nbrItmId != csMapFldUnknown)
+		{
+			// Numbers are optional.
+			itmNbr = mapFileObj.GetFieldAsUL (nbrItmId);
+			ok = (itmNbr != mapFileObj.GetErrorValue ());
+		}
+		if (ok)
+		{
+			// Names are not optional.
+			nameItmId = mapFileObj.GetNameFldId (flavor);
+			ok = nameItmId != csMapFldUnknown;
+			if (ok)
+			{
+				ok = mapFileObj.GetField (itmName,nameItmId);
+				if (ok)
+				{
+					ok = !itmName.empty ();
+				}
+			}
+			if (ok)
+			{
 				// If we have some aliases, they will be present in the item name,
 				// separated by vertical bar characters.  The first name is always
 				// the real name.
@@ -1642,90 +1642,90 @@ bool TcsNameMapper::AddKeyMapFields (EcsMapObjType mapType,unsigned long generic
 					}
 					std::wstring nextName = itmName.substr (start,end - start);
 
-	                TcsNameMap newItem (genericId,mapType,flavor,itmNbr,nextName.c_str ());
-	                if (start != 0)
-	                {
+					TcsNameMap newItem (genericId,mapType,flavor,itmNbr,nextName.c_str ());
+					if (start != 0)
+					{
 						newItem.SetAliasFlag (1);
-	                }
-	                
-	                // We obtain a string which identifies the source.  The Add
-	                // overload that we use here will add the source to the
-	                // comments field if the record is added to the Duplicates
-	                // name map.
+					}
+
+					// We obtain a string which identifies the source.  The Add
+					// overload that we use here will add the source to the
+					// comments field if the record is added to the Duplicates
+					// name map.
 					mapFileObj.GetFileRecordId (sourceId);
-	                ok = Add (newItem,addDups,sourceId.c_str ());
+					ok = Add (newItem,addDups,sourceId.c_str ());
 					start = end + 1;
-	            } while (end < itmName.length ());
-            }
-         }
-    }
-    return true;
+				} while (end < itmName.length ());
+			}
+		}
+	}
+	return true;
 }
 EcsNameFlavor TcsNameMapper::KeyMapFlavor (const TcsKeyNameMapFile& mapFileObj) const
 {
-    EcsNameFlavor flavor = csMapFlvrNone;
-    unsigned long itmNbr;
-    EcsMapTableFields nbrItmId;
-    EcsMapTableFields nameItmId;
-    std::wstring itmName;
+	EcsNameFlavor flavor = csMapFlvrNone;
+	unsigned long itmNbr;
+	EcsMapTableFields nbrItmId;
+	EcsMapTableFields nameItmId;
+	std::wstring itmName;
 
-    ++flavor;
-    for (;flavor != csMapFlvrUnknown;++flavor)
-    {
-        // Check for the presence of a number for this flavor.
-        nbrItmId = mapFileObj.GetNbrFldId (flavor);
-        if (nbrItmId != csMapFldUnknown)
-        {
-            itmNbr = mapFileObj.GetFieldAsUL (nbrItmId);
-            if (itmNbr != mapFileObj.GetErrorValue () && itmNbr != 0UL)
-            {
-                break;
-            }
-        }
+	++flavor;
+	for (;flavor != csMapFlvrUnknown;++flavor)
+	{
+		// Check for the presence of a number for this flavor.
+		nbrItmId = mapFileObj.GetNbrFldId (flavor);
+		if (nbrItmId != csMapFldUnknown)
+		{
+			itmNbr = mapFileObj.GetFieldAsUL (nbrItmId);
+			if (itmNbr != mapFileObj.GetErrorValue () && itmNbr != 0UL)
+			{
+				break;
+			}
+		}
 
-        // Check for the presence of a name for this flavor.
-        nameItmId = mapFileObj.GetNameFldId (flavor);
-        if (nameItmId != csMapFldUnknown)
-        {
-            bool ok = mapFileObj.GetField (itmName,nameItmId);
-            if (ok && !itmName.empty ())
-            {
-                break;
-            }
-        }
+		// Check for the presence of a name for this flavor.
+		nameItmId = mapFileObj.GetNameFldId (flavor);
+		if (nameItmId != csMapFldUnknown)
+		{
+			bool ok = mapFileObj.GetField (itmName,nameItmId);
+			if (ok && !itmName.empty ())
+			{
+				break;
+			}
+		}
 	}
 	return flavor;
 }
 unsigned long TcsNameMapper::KeyMapGenericId (const TcsKeyNameMapFile& mapFileObj) const
 {
-    EcsNameFlavor flavor = csMapFlvrNone;
-    EcsMapTableFields nbrItmId;
-    unsigned long itmNbr;
+	EcsNameFlavor flavor = csMapFlvrNone;
+	EcsMapTableFields nbrItmId;
+	unsigned long itmNbr;
 	unsigned long genericId = 0UL;
 
-    ++flavor;
-    for (;flavor != csMapFlvrUnknown;++flavor)
-    {
-        if (flavor == csMapFlvrNone)
-        {
-            continue;
-        }
-        // Check for the presence of a number for this flavor.
-        nbrItmId = mapFileObj.GetNbrFldId (flavor);
-        if (nbrItmId != csMapFldUnknown)
-        {
-            // There is a number field for this flavor in the key map file.
-            itmNbr = mapFileObj.GetFieldAsUL (nbrItmId);
-            if (itmNbr != mapFileObj.GetErrorValue () && itmNbr != 0UL)
-            {
-                // There is a non-zero number in that field.  It becomes the
-                // genericId, after suitable flavoring.
-                long bias = static_cast<int>(flavor) - 1;
-                bias *= KcsNameMapBias;
-        		genericId = itmNbr + bias;
-                break;
-            }
-        }
-    }
+	++flavor;
+	for (;flavor != csMapFlvrUnknown;++flavor)
+	{
+		if (flavor == csMapFlvrNone)
+		{
+			continue;
+		}
+		// Check for the presence of a number for this flavor.
+		nbrItmId = mapFileObj.GetNbrFldId (flavor);
+		if (nbrItmId != csMapFldUnknown)
+		{
+			// There is a number field for this flavor in the key map file.
+			itmNbr = mapFileObj.GetFieldAsUL (nbrItmId);
+			if (itmNbr != mapFileObj.GetErrorValue () && itmNbr != 0UL)
+			{
+				// There is a non-zero number in that field.  It becomes the
+				// genericId, after suitable flavoring.
+				long bias = static_cast<int>(flavor) - 1;
+				bias *= KcsNameMapBias;
+				genericId = itmNbr + bias;
+				break;
+			}
+		}
+	}
 	return genericId;
 }

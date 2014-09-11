@@ -29,15 +29,17 @@
 // the use of pre-compiled headers.  Some of these files are unreferenced in
 // this module, a small price paid for the efficiency affored by pre-compiled
 // headers.
-/*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
+
+//lint -esym(766,..\Include\cs_wkt.h)          inreferenced header file (included for pre-compiled headers)
+//lint -esym(1927,TcsGenericId::Id)            not initialized in formal initializer list (occasionally).
+//lint -e1929                                  operator++ on enumerators returns a reference
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
 
 #include <memory>
 #include <fstream>
@@ -45,7 +47,6 @@
 #include <string>
 #include <vector>
 #include <set>
-#include <list>
 
 extern "C" char cs_Dir [];
 extern "C" char* cs_DirP;
@@ -94,7 +95,7 @@ EcsMapTableFields& operator++ (EcsMapTableFields& field)
 	}
 	return field;
 }
-EcsMapSt& operator|= (EcsMapSt& primary,const EcsMapSt& rhs)
+EcsMapSt& operator|= (EcsMapSt& primary,const EcsMapSt& rhs)		//lint !e714  not referenced
 {
 	primary = static_cast<EcsMapSt>(static_cast<int>(primary) | static_cast<int>(rhs));
 	return primary;
@@ -177,6 +178,7 @@ enum ErcWktFlavor csCsMapFlvrToWktFlvr (enum EcsNameFlavor csMap)
     case csMapFlvrGeoTiff:   result = wktFlvrGeoTiff;   break;
     case csMapFlvrGeoTools:  result = wktFlvrGeoTools;  break;
     case csMapFlvrOracle9:   result = wktFlvrOracle9;   break;
+    case csMapFlvrIBM:       result = wktFlvrNone;      break;
     case csMapFlvrOem:       result = wktFlvrNone;      break;
     case csMapFlvrAnon01:    result = wktFlvrNone;      break;
     case csMapFlvrAnon02:    result = wktFlvrNone;      break;
@@ -228,17 +230,17 @@ TcsNameMapper* cmGetNameMapperPtr (bool release)
             if (0 == CS_fseek(pNameMapperFile, 0, SEEK_END))
             {
                 // Get name mapper file size
-                size_t fileSize = (size_t) CS_ftell(pNameMapperFile);
-                if (-1 != fileSize)
+                long fileSize = CS_ftell(pNameMapperFile);
+                if (fileSize > 0L)
                 {
                     // Allocate temporary memory buffer for the name mapper file content
-                    char* pBuffer = (char*) CS_malc(fileSize);
+                    char* pBuffer = (char*) CS_malc((size_t)fileSize);
                     if (NULL != pBuffer)
                     {
                         if (0 == CS_fseek(pNameMapperFile, 0, SEEK_SET))
                         {
                             // Copy complete name mapper file into the memory
-                            CS_fread(pBuffer, sizeof(char), fileSize, pNameMapperFile);
+                            CS_fread(pBuffer, sizeof(char),(size_t)fileSize, pNameMapperFile);		//lint !e534  ignoring return value
                             if (CS_ferror(pNameMapperFile))
 			                {
 				                CS_erpt (cs_IOERR);
@@ -250,7 +252,7 @@ TcsNameMapper* cmGetNameMapperPtr (bool release)
                                 pNameMapperFile = NULL;
 
                                 // Fill up the name mapper with the in memory name mapper file buffer
-                                EcsCsvStatus status = nameMapperPtr->ReadFromStream (pBuffer, fileSize); // Note: Time consuming
+                                EcsCsvStatus status = nameMapperPtr->ReadFromStream (pBuffer,(size_t)fileSize); // Note: Time consuming
                                 if (status == csvOk)
                                 {
                                     // Assign the name mapper
@@ -293,7 +295,7 @@ TcsNameMapper* cmGetNameMapperPtr (bool release)
 }
 void csReleaseNameMapper (void)
 {
-	cmGetNameMapperPtr (true);
+	cmGetNameMapperPtr (true);//lint !e534   ignoring return value
 }
 ///////////////////////////////////////////////////////////////////////////////
 unsigned long csMapNameToId (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsNameFlavor srcFlavor,
@@ -487,7 +489,7 @@ EcsMapSt csMapIdToNameC (EcsMapObjType type,char* trgName,size_t trgSize,
     return status;
 }
 unsigned long csMapNameToIdC (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsNameFlavor srcFlavor,
-						                                                 const char* srcName)
+																		 const char* srcName)
 {
     unsigned long rtnValue;
     wchar_t wcName [256];
@@ -755,7 +757,7 @@ TcsGenericId& TcsGenericId::operator= (const TcsGenericId& rhs)
 {
 	Id = rhs.Id;
 	return *this;
-}
+}								//lint !e1529   not checking for (this == &rhs)
 TcsGenericId::~TcsGenericId (void)
 {
 	// Nothing to do here.  This is not virtual.
@@ -882,7 +884,7 @@ std::wifstream iStrm (pathBufr,std::ios_base::in);
 //  std::wifstream iStrm (mapFilePath,std::ios_base::in);
     if (iStrm.is_open ())
     {
-        ReadFromStream (iStrm,true,Status);
+        ReadFromStream (iStrm,true,Status);		//lint !e534  ignoring return value
     }
     else
     {
@@ -1028,7 +1030,7 @@ void TcsKeyNameMapFile::GetFileRecordId (std::wstring& fileRecId) const
 		fileRecId.clear ();
 	}
 }
-bool TcsKeyNameMapFile::ReplaceField (EcsMapTableFields fieldId,std::wstring& fieldValue)
+bool TcsKeyNameMapFile::ReplaceField (EcsMapTableFields fieldId,const std::wstring& fieldValue)
 {
     bool ok;
     std::wstring fieldName;
@@ -1048,8 +1050,8 @@ bool TcsKeyNameMapFile::ReplaceField (EcsMapTableFields fieldId,unsigned long fi
     if (fieldValue < BogusNbr)
     {
         swprintf (wcArray,wcCount (wcArray),L"%lu",fieldValue);
-        std::wstring fieldValue (wcArray);
-        ok = ReplaceField (fieldId,fieldValue);
+        std::wstring tmpWstr (wcArray);
+        ok = ReplaceField (fieldId,tmpWstr);
     }
     else
     {
@@ -1087,7 +1089,7 @@ bool TcsKeyNameMapFile::MapFieldIdToName (std::wstring& fieldName,EcsMapTableFie
 //=============================================================================
 const char* CSepsg2adskCS (long epsgNbr)
 {
-    /******* NOTE *****88  static array could cause multi-thread problems */
+    /* NOTE ** static array could cause multi-thread problems */
     static char staticBufr [256];
 
     enum EcsMapSt csMapSt;

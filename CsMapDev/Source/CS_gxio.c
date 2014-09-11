@@ -286,18 +286,16 @@ int EXP_LVL3 CS_gxdefAll (struct cs_GeodeticTransform_ **pDefArray[])
 **								definition geodetic transformation
 **								structure.
 **********************************************************************/
+/*lint -esym(550,direction)   not used in this module, retained to assist in debugging */
 struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 													Const char *trgDatum)
 {
 	extern char csErrnam [];
 	extern char cs_UserDir[];
-	extern char cs_Dir[];
-	extern char* cs_DirP;
-
 	extern int cs_Error;
 
 	char currentDir[MAXPATH] = { '\0' };
-	char targetPaths[2][MAXPATH] = { '\0', '\0' };
+	char targetPaths[2][MAXPATH] = { {'\0'}, {'\0'} };
 	char const* pTargetPath;
 
 	int globalFoundForward;
@@ -305,7 +303,7 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 
 	
 	int st;
-	int i;
+	size_t i;
 	int direction;
 
 	long fwdFpos;
@@ -335,7 +333,11 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 	st = CS_nampp (tmpKeyName);
 	if (st != 0) goto error;
 
-	CS_getdr(currentDir);
+	st = CS_getdr(currentDir);
+	if (st != 0)
+	{
+		goto error;
+	}
 
 	CS_stncp(targetPaths[0], cs_UserDir, sizeof(targetPaths[0]));
 	CS_stncp(targetPaths[1], currentDir, sizeof(targetPaths[1]));
@@ -470,12 +472,11 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 			}
 		}
 		
-		if (strm != NULL)
+		if (strm != NULL)			/*lint !e774  boolean always evaluates to true */
 		{
 			CS_fclose (strm);
 			strm = NULL;
 		}
-
 	}
 
 	if (NULL == gx_def)
@@ -489,7 +490,11 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdefEx (Const char *srcDatum,
 		goto error;
 	}
 
-	CS_setdr(currentDir, NULL);
+	st = CS_setdr(currentDir, NULL);
+	if (st != 0)
+	{
+		goto error;
+	}
 
 	/* Return a pointer to the malloc'ed geodetic path definition to the
 	   user. */
@@ -503,10 +508,11 @@ error:
 		gx_def = NULL;
 	}
 
-	CS_setdr(currentDir, NULL);
+	CS_setdr(currentDir, NULL);			/*lint !e534  ignoring return value, can't do much here on failure */
 
 	return (gx_def);
 }
+/*lint +esym(550,direction) */
 
 /**********************************************************************
 **	CS_gxfnm (new_name);

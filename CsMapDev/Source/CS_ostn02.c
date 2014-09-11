@@ -85,7 +85,7 @@
 	FUN!!!   FUN!!!   FUN!!!
 */ 
 
-struct csThread cs_Ostn02_ *cs_Ostn02Ptr = NULL;
+struct cs_Ostn02_ *cs_Ostn02Ptr = NULL;
 
 /* The file path here is a path to the ASCII text file which carries
    all the shift data.  For example, "OSTN02_OSGM02_GB.txt" */

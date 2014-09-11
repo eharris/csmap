@@ -27,8 +27,6 @@
 
 #include "cs_map.h"
 
-struct csThread cs_Osgm91_ *cs_Osgm91Ptr = NULL;
-
 /*
 	This file contains the implementation of the Osgm91 object.
 
@@ -202,7 +200,7 @@ int CScalcOsgm91 (struct cs_Osgm91_ *__This,double *geoidHgt,const double etrs89
 	   coordinates.  Essentially, we apply the OS British National Grid
 	   Transformation, using the GRS1980 ellipsoid, to produce the necessary
 	   cartesian coordinates. */
-	CStrmerF (&__This->osgb36Trmer,xy,etrs89);
+	CStrmerF (&__This->osgb36Trmer,xy,etrs89);				/*lint !e534  ignoring return value */
 
 	/* Given the ETRS89 OSGB coordinates, return the translation values necessary to
 	   produce official OSGB36 coordinates.  Returns zero on normal completion, +1 if

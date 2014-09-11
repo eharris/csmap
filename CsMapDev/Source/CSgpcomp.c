@@ -27,10 +27,9 @@
 
 #include "cs_map.h"
 
-/* Entire module skipped if this is an Embedded compile for project management
-   convenience.  Don't think it likely that we'll need to compile dictionaries
-   in the Embedded environment. */
-#if !defined (__WINCE__)
+/*lint -esym(767,GP_NAME,DESC_NM,SOURCE,SRC_DTM,TRG_DTM,XFORM,GROUP,EPSG_NBR,ACCURACY)  possibly different values in other modules */
+/*lint -esym(534,err_func)   ignoring return value */
+/*lint -esym(754,cs_GpcmpT_::label)  not referenced directly, only indirectly */
 
 #define GP_NAME  1
 #define DESC_NM  2
@@ -463,7 +462,7 @@ int EXP_LVL9 CSgpcomp (	Const char *inpt,
 		{
 			CS_fclose (xfrmStrm);
 		}
-				return (err_cnt);
+		return (err_cnt);
 	}
 
 	/* Sort the output file. */
@@ -472,7 +471,7 @@ int EXP_LVL9 CSgpcomp (	Const char *inpt,
 
 	/* Check for duplicate names. */
 	CS_fseek (outStrm,(long)sizeof (magic),SEEK_SET);
-	CS_gprd (outStrm,&gpdef);
+	CS_gprd (outStrm,&gpdef);				/*lint !e534  ignorin return value */
 	CS_stncp (last_name,gpdef.pathName,sizeof (last_name));
 	while (!cancel && CS_gprd (outStrm,&gpdef))
 	{
@@ -531,22 +530,23 @@ int CSgpdefwr (	csFILE *outStrm,
 	err_cnt = 0;
 	cancel = FALSE;
 
-	if (err_cnt == 0)
-	{
-		gpdef->protect = TRUE;
-		/* The following sets the "creation date" to Jan 1, 2002 (approx) for
-		   all test coordinate systems.  This enables the protection system to
-		   be tested.  Normally, distribution definitions are protected from
-		   any kind of change. */
-		if (!CS_stricmp (gpdef->group,"TEST")) gpdef->protect = 4383;
+	gpdef->protect = TRUE;
+	/* The following sets the "creation date" to Jan 1, 2002 (approx) for
+	   all test coordinate systems.  This enables the protection system to
+	   be tested.  Normally, distribution definitions are protected from
+	   any kind of change. */
+	if (!CS_stricmp (gpdef->group,"TEST")) gpdef->protect = 4383;
 
-		CS_gpwr (outStrm,gpdef);
+	st = CS_gpwr (outStrm,gpdef);
+	if (st != 0)
+	{
+		err_cnt += 1;
 	}
-	
+
 	/* Verify  that all of the referenced geodetic transformations
 	   do indeed exist in the provided Geodetic Transformation
 	   Dictionary. */
-	if (xfrmStrm != NULL)
+	if (xfrmStrm != NULL && err_cnt == 0)
 	{
 		count = gpdef->elementCount;
 		for (index = 0;index < count;index += 1)
@@ -585,7 +585,7 @@ int CSgpdefwr (	csFILE *outStrm,
 				err_cnt += 1;
 			}
 		}
-	}	
+	}
 
 	if (warn && gpdef->description [0] == '\0')
 	{
@@ -600,4 +600,3 @@ int CSgpdefwr (	csFILE *outStrm,
 	if (cancel && err_cnt == 0) err_cnt = 1;
 	return (cancel ? -err_cnt : err_cnt);
 }
-#endif

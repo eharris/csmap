@@ -129,7 +129,7 @@ struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrm
 	CS_stncp (xfrmPtr->source,xfrmDefPtr->source,sizeof (xfrmPtr->source));
 
 	xfrmPtr->methodCode = xfrmDefPtr->methodCode;
-	xfrmPtr->epsgNbr = xfrmDefPtr->epsgCode;
+	xfrmPtr->epsgNbr = (xfrmDefPtr->epsgCode >= 0) ? (unsigned long)xfrmDefPtr->epsgCode : 0UL;		/*lint !e571  suspicious cast */
 	xfrmPtr->epsgVar = xfrmDefPtr->epsgVariation;
 	xfrmPtr->inverseSupported = xfrmDefPtr->inverseSupported;
 	xfrmPtr->maxIterations = xfrmDefPtr->maxIterations;
@@ -161,17 +161,17 @@ struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrm
 	return xfrmPtr;
 
 error:
-	if (xfrmPtr != NULL)
+	if (xfrmPtr != NULL)		/*lint !e774  boolean always evaluates to true */
 	{
 		CS_free (xfrmPtr);
 		xfrmPtr = NULL;
 	}
-	if (srcDtPtr != NULL)
+	if (srcDtPtr != NULL)		/*lint !e774  boolean always evaluates to true */
 	{
 		CS_free (srcDtPtr);
 		srcDtPtr = NULL;
 	}
-	if (trgDtPtr != NULL)
+	if (trgDtPtr != NULL)		/*lint !e774  boolean always evaluates to true */
 	{
 		CS_free (trgDtPtr);
 		trgDtPtr = NULL;
@@ -191,7 +191,6 @@ struct cs_GxXform_*	EXP_LVL3 CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const s
 	extern double cs_Five;
 	extern double cs_Eight;
 
-	extern short cs_Protect;
 	extern char csErrnam [];
 	extern struct cs_XfrmTab_ cs_XfrmTab [];
 
@@ -527,16 +526,17 @@ int	EXP_LVL1 CS_isGxfrmReentrant (Const struct cs_GxXform_ *gxXform)
 					   worse.
 
 					   So, we simply need to convert the enumerator in the cs_GridFile_
-					   sturcture to the appropriate which exists in the cs_GridFormatTab. */
+					   structure to the appropriate which exists in the cs_GridFormatTab. */
 					switch (fileDefPtr->format) {
-					case gridFrmtNTv1:  tblFormatCode = cs_DTCFRMT_CNTv1; break; 
-					case gridFrmtNTv2:  tblFormatCode = cs_DTCFRMT_CNTv2; break; 
-					case gridFrmtNadcn: tblFormatCode = cs_DTCFRMT_NADCN; break; 
-					case gridFrmtFrnch: tblFormatCode = cs_DTCFRMT_FRNCH; break; 
-					case gridFrmtJapan: tblFormatCode = cs_DTCFRMT_JAPAN; break; 
-					case gridFrmtAts77: tblFormatCode = cs_DTCFRMT_ATS77; break; 
-					case gridFrmtOst97: tblFormatCode = cs_DTCFRMT_OST97; break; 
-					case gridFrmtOst02: tblFormatCode = cs_DTCFRMT_OST02; break; 
+					case gridFrmtNTv1:  tblFormatCode = cs_DTCFRMT_CNTv1; break;
+					case gridFrmtNTv2:  tblFormatCode = cs_DTCFRMT_CNTv2; break;
+					case gridFrmtNadcn: tblFormatCode = cs_DTCFRMT_NADCN; break;
+					case gridFrmtFrnch: tblFormatCode = cs_DTCFRMT_FRNCH; break;
+					case gridFrmtJapan: tblFormatCode = cs_DTCFRMT_JAPAN; break;
+					case gridFrmtAts77: tblFormatCode = cs_DTCFRMT_ATS77; break;
+					case gridFrmtOst97: tblFormatCode = cs_DTCFRMT_OST97; break;
+					case gridFrmtOst02: tblFormatCode = cs_DTCFRMT_OST02; break;
+					case gridFrmtGeocn: tblFormatCode = cs_DTCFRMT_GEOCN; break;
 					case gridFrmtNone:
 					case gridFrmtUnknown:
 					default:

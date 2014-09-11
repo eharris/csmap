@@ -74,6 +74,8 @@ int CStestZ (bool verbose,char *test_file)
 	
 	std::wstring fieldData;
 
+	stInv = stDtc = stFwd = 0;		// to preclude uninitialized variable warnings.
+
 	errCount = 0;
 
 	printf ("Checking all test cases in %s.\n",test_file);

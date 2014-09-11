@@ -216,17 +216,15 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 {
 	extern char csErrnam [];
 	extern char cs_UserDir[];
-	extern char cs_Dir[];
-	extern char* cs_DirP;
 
 	extern int cs_Error;
 
 	char currentDir[MAXPATH] = { '\0' };
-	char targetPaths[2][MAXPATH] = { '\0', '\0' };
+	char targetPaths[2][MAXPATH] = { { '\0'}, {'\0'} };
 	char const* pTargetPath;
 	
 	int st;
-	int i;
+	size_t i;
 
 	long curFpos;
 	long fwdFpos;
@@ -260,12 +258,13 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 	st = CS_nampp (tmpKeyName);
 	if (st != 0) goto error;
 
-	CS_getdr(currentDir);
+	st = CS_getdr(currentDir);
+	if (st != 0) goto error;
 
 	CS_stncp(targetPaths[0], cs_UserDir, sizeof(targetPaths[0]));
 	CS_stncp(targetPaths[1], currentDir, sizeof(targetPaths[1]));
 
-	//go through all directories we've
+	/* go through all directories we've */
 	for (i = 0; i < (sizeof(targetPaths) / sizeof(targetPaths[0])); ++i)
 	{
 		if (NULL != strm)
@@ -400,15 +399,15 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 			}
 		}
 		
-		if (strm != NULL)
+		if (strm != NULL)			/*lint !e774  always evaluates to true */
 		{
 			CS_fclose (strm);
 			strm = NULL;
 		}
 	}
 
-	//report a failure after we've gone through the 2 directories and we still haven't found
-	//any good entry
+	/* report a failure after we've gone through the 2 directories and we still haven't found
+	   any good entry */
 	if (NULL == gp_def)
 	{
 		sprintf (errMsg,"'%s' to '%s'",srcDatum,trgDatum);
@@ -418,7 +417,11 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 		goto error;
 	}
 
-	CS_setdr(currentDir, NULL);
+	st = CS_setdr(currentDir, NULL);
+	if (st != 0)
+	{
+		goto error;
+	}
 
 	/* Return a pointer to the malloc'ed geodetic path definition to the
 	   user. */
@@ -432,7 +435,7 @@ error:
 		gp_def = NULL;
 	}
 
-	CS_setdr(currentDir, NULL);
+	CS_setdr(currentDir, NULL);		/*lint !e534  ignoring return value, not much we can do about it here */
 
 	return NULL;
 }

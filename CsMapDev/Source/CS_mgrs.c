@@ -290,7 +290,7 @@ struct cs_Mgrs_ *CSnewMgrs (double e_rad,double e_sq,short bessel)
 	__This->SouthHemi.delta4 = cs_Zero;
 
 	/* North polar UPS */
-	__This->NorthPole.org_lng =  0.0 * cs_Degree;
+	__This->NorthPole.org_lng =  0.0;
 	__This->NorthPole.org_lat = 90.0 * cs_Degree;
 	__This->NorthPole.k = 0.994;
 	__This->NorthPole.x_off = 2000000.0;
@@ -314,7 +314,7 @@ struct cs_Mgrs_ *CSnewMgrs (double e_rad,double e_sq,short bessel)
 	__This->NorthPole.quad = 0;
 
 	/* South polar UPS */
-	__This->SouthPole.org_lng =  0.0 * cs_Degree;
+	__This->SouthPole.org_lng =  0.0;
 	__This->SouthPole.org_lat = -90.0 * cs_Degree;
 	__This->SouthPole.k = 0.994;
 	__This->SouthPole.x_off = 2000000.0;

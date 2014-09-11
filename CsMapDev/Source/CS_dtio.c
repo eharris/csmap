@@ -276,7 +276,7 @@ struct cs_Dtdef_ * EXP_LVL3 CS_dtdef2 (Const char *dat_nam, char* pszDirPath)
 	return (dtptr);
 
 error:
-	if (dtptr != NULL)
+	if (dtptr != NULL)			/*lint !e774  boolean always evaluates to true */
 	{
 		CS_free (dtptr);
 		dtptr = NULL;

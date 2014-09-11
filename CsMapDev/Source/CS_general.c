@@ -55,9 +55,6 @@ int EXP_LVL1 CS_altdr (Const char *alt_dir)
 	extern char cs_Dir [];
 	extern char *cs_DirP;
 
-	extern char cs_UserDir [];
-	extern char *cs_UserDirP;
-
 	extern char cs_Csname [];
 	extern char cs_Envvar [];
 	extern char cs_DirsepC;
@@ -87,11 +84,7 @@ int EXP_LVL1 CS_altdr (Const char *alt_dir)
 	/* See if the Coordinate System Dictionary exists in the
 	   proposed alternate directory. If alt_dir is the NULL
 	   pointer, we use the value of the environmental variable
-	   whose name is defined in the cs_Envvar global variabele.
-	   
-	   There is no "getenv" in the NS VC++ Version 8 embedded
-	   environment. */
-#if !defined (__WINCE__)
+	   whose name is defined in the cs_Envvar global variable. */
 	if (alt_dir == NULL)
 	{
 		cp = CS_getenv (cs_Envvar);
@@ -135,7 +128,6 @@ int EXP_LVL1 CS_altdr (Const char *alt_dir)
 		ctemp [2] = '\0';
 		cp = &ctemp [2];
 	}
-#endif
 
 	/* See if the coordinate system dictionary resides in the
 	   desired location.  Note, we only use the name here, we
@@ -426,198 +418,6 @@ double EXP_LVL9 CS_un2d (Const char *name)
 
 {
 	return (CS_unitlu (cs_UTYP_LEN,name));
-}
-
-/**********************************************************************
-**	CS_init (keep_dflts);
-**
-**	int keep_dflts;				bitmap of flags indicating what is
-**								to be kept fropm previous thread.
-**
-**	This function exists specifically for the multi-threaded
-**	environment of Windows 32/95/NT.  Threads are quite different
-**	from UNIX processes in that they share the same data address
-**	space as the parent (and all colleague) threads.  Thus, in
-**	a multi-threaded program using CS-MAP, two threads would
-**	quite normally be modifying the same data.
-**
-**	Since each thread has it's own stack space all automatic
-**	variables are safe.  We need only concern ourselves with the
-**	static/global variables in use.  There are several of these
-**	in CS-MAP.
-**
-**	This function is the result of our initial effort to make CS-MAP
-**	thread safe.  We currently rely on the compiler's ability
-**	(Microsoft and Borland provide this, not sure about Watcom)
-**	to declare a variable as being thread local.  While the
-**	documentation is rather obscure, we assume this means that
-**	all variable declared as thread local are assign addresses in
-**	a data segment for which a unique copy is generated for each
-**	new thread.  It is not clear from the documentation, but we
-**	also assume that each new thread will get an uninitialized
-**	copy of whatever was present in the parent thread.
-**
-**	The primary purpose of this module is to initialize all variables
-**	declared as thread local to appropriate start up values. The
-**	one argument indicates if the default values for datums,
-**	ellipsoids, and units are to be preserved from the parent
-**	thread.
-**
-**	If all of our assumptions are correct, and we have properly
-**	isolated all the appropriate variables, you should be able
-**	to use CS-MAP safely in a multi-threaded environment by:
-**
-**	1) Recompiling CS-MAP assuring that the csThread define actually
-**	   maps to the correct stuff for you compiler.
-**	2) Calling this function in the new thread code, immedaitely
-**	   after the new thread is created.
-**
-**	If there are problems with multi-threaded use, the problems
-**	will be in one of two areas:
-**
-**	1) File names and the muliple use of the cs_Dir character array.
-**	2) The use of the NAD27/83 and HPGN datum shift caches.  These
-**	   are malloc'ed, but the pointer to same is in a global static
-**	   variable.  Thus, it is possible for two different threads to
-**	   be manipulating the same stack without knowledge of what
-**	   the other is doing.
-**
-**	If any of this doesn't work, we'll have to do some major
-**	surgery to several functions, and change the calling sequence
-**	of some.  Stick to the higher level Application Program
-**	Interfaces and you wll be insulated from these changes.
-**********************************************************************/
-
-void EXP_LVL1 CS_init (int keepers)
-{
-	extern char cs_DirsepC;
-
-	extern char cs_DirK [];
-	extern csThread char cs_Dir [];
-	extern csThread char *cs_DirP;
-
-	extern csThread char cs_Csname [];
-	extern csThread char cs_Dtname [];
-	extern csThread char cs_Elname [];
-
-	extern csThread char csDtDflt [];
-	extern csThread char csElDflt [];
-	extern csThread char csLuDflt [];
-	extern csThread char csAuDflt [];
-
-	extern csThread int cs_Sortbs;
-
-	extern csThread int cs_Error;
-	extern csThread int cs_Errno;
-	extern csThread int csErrlng;
-	extern csThread int csErrlat;
-	extern csThread unsigned short cs_ErrSup;
-
-	extern csThread char csErrnam [];
-	extern csThread char csErrmsg [];
-
-	extern csThread struct csCscach_ *csCscachP;
-	extern csThread int csCscachI;
-	extern csThread struct csDtcach_ *csDtcachP;
-	extern csThread int csDtcachI;
-
-	extern csThread char *cs_CsKeyNames;
-	extern csThread char *cs_DtKeyNames;
-	extern csThread char *cs_ElKeyNames;
-	extern csThread struct cs_Csgrplst_ *cs_CsGrpList;
-
-	int status;
-
-	char chr_tmp [MAXPATH];
-
-	/* First, we attempt to preserve the location of the
-	   data directory.  First we attempt to assure that
-	   there is something valid there.  Depending on the
-	   file system: */
-
-#if _RUN_TIME >= _rt_UNIXPCC
-	if (cs_Dir [0] == cs_DirsepC)
-#else
-	if (cs_Dir [1] == ':' || (cs_Dir [0] == cs_DirsepC && cs_Dir [1] == cs_DirsepC))
-#endif
-	{
-		/* cs_Dir contents appear to be valid. */
-
-		*cs_DirP = '\0';
-		CS_stncp (chr_tmp,cs_Dir,sizeof (chr_tmp));
-		status = CS_altdr (chr_tmp);
-	}
-	else
-	{
-		/* cs_Dir contents appear to be invalid. */
-
-		status = CS_altdr (NULL);
-	}
-
-	/* If we haven't located a valid directory, we establish
-	   a default name.  While probably invalid, it is at least
-	   it is the same value which was initially established
-	   at compile time. */
-
-	if (status != 0)
-	{
-		cs_DirP = CS_stcpy (cs_Dir,cs_DirK);
-	}
-
-	/* Initialize the dictionary file names. */
-
-	CS_stcpy (cs_DirP,(char *)cs_Csname);
-	if (CS_access (cs_Dir,0) || (keepers & cs_THRD_CSNAME) == 0)
-	{
-		CS_stcpy ((char *)cs_Csname,cs_CS_NAME);
-	}
-	CS_stcpy (cs_DirP,(char *)cs_Dtname);
-	if (CS_access (cs_Dir,0) || (keepers & cs_THRD_DTNAME) == 0)
-	{
-		CS_stcpy ((char *)cs_Dtname,cs_DAT_NAME);
-	}
-	CS_stcpy (cs_DirP,(char *)cs_Elname);
-	if (CS_access (cs_Dir,0) || (keepers & cs_THRD_ELNAME) == 0)
-	{
-		CS_stcpy ((char *)cs_Elname,cs_ELL_NAME);
-	}
-
-	/* Initialize the defaults. */
-
-	if ((keepers & cs_THRD_DTDFLT) == 0) csDtDflt [0] = '\0';
-	if ((keepers & cs_THRD_ELDFLT) == 0) csElDflt [0] = '\0';
-	if ((keepers & cs_THRD_LUDFLT) == 0) csLuDflt [0] = '\0';
-	if ((keepers & cs_THRD_AUDFLT) == 0) csAuDflt [0] = '\0';
-
-	/* The remainder are always initialized.  Application programs
-	   can re-initalize as they like when this function returns. */
-
-#if _MEM_MODEL == _mm_VIRTUAL || _MEM_MODEL == _mm_FLAT
-	cs_Sortbs = 128 * 1024;
-#else
-	cs_Sortbs = 24 * 1024;
-#endif
-
-	cs_Error = 0;
-	cs_Errno = 0;
-	csErrlng = 0;
-	csErrlat = 0;
-	cs_ErrSup = 0;
-
-	csErrnam [0] = '\0';
-	csErrmsg [0] = '\0';
-
-	csCscachP = NULL;
-	csCscachI = cs_CSCACH_MAX;
-	csDtcachP = NULL;
-	csDtcachI = cs_DTCACH_MAX;
-
-	cs_CsKeyNames = NULL;
-	cs_DtKeyNames = NULL;
-	cs_ElKeyNames = NULL;
-	cs_CsGrpList = NULL;
-
-	return;
 }
 
 /**********************************************************************

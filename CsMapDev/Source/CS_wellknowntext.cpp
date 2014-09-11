@@ -30,15 +30,17 @@
 // the use of pre-compiled headers.  Some of these files are unreferenced in
 // this module, a small price paid for the efficiency affored by pre-compiled
 // headers.
-/*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
+//lint -esym(766,..\Include\cs_wkt.h)			Disable PC-Lint's warning of unreferenced headers 
+//lint -e571     suspicious cast
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
+
+#include "cs_Legacy.h"
 
 extern "C" const double cs_Zero;
 extern "C" const double cs_One;
@@ -97,8 +99,8 @@ int CSelDictWktCompare (const char* elKeyNamePtr,const struct cs_Eldef_ *wktElDe
 		same = (fabs (msiElDef->e_rad - wktElDef->e_rad) < 5.0E-03) &&
 			(fabs (msiElDef->p_rad - wktElDef->p_rad) < 5.0E-03);
 
-        CS_free(msiElDef);
-        msiElDef=NULL;
+		CS_free(msiElDef);
+		msiElDef=NULL;
 	}
 	return same ? 1 : 0;
 }
@@ -184,8 +186,8 @@ void CS_wktElNameFix (char *ellipsoidName,size_t rsltSize,const char *srcName)
 {
 	char reducedName [128];
 
-	CS_wktReduceKeyNm (reducedName,sizeof (reducedName),srcName,csAcronyms);
-	CS_wktReduceKeyNm (reducedName,sizeof (reducedName),reducedName,csElReduce);
+	CS_wktReduceKeyNm (reducedName,sizeof (reducedName),srcName,csAcronyms);		//lint !e534   ignoring return value
+	CS_wktReduceKeyNm (reducedName,sizeof (reducedName),reducedName,csElReduce);	//lint !e534   ignoring return value
 	CS_stncp (ellipsoidName,reducedName,static_cast<int>(rsltSize));
 }
 // Function processes WKT datum key names before passing on to CS-MAP.
@@ -194,8 +196,8 @@ void CS_wktDtNameFix (char *datumName,size_t rsltSize,const char *srcName)
 	char reducedName [128];
 
 	if (*srcName == 'D' && *(srcName + 1) == '_') srcName += 2;
-	CS_wktReduceKeyNm (reducedName,sizeof (reducedName),srcName,csAcronyms);
-	CS_wktReduceKeyNm (reducedName,sizeof (reducedName),reducedName,csDtReduce);
+	CS_wktReduceKeyNm (reducedName,sizeof (reducedName),srcName,csAcronyms);		//lint !e534   ignoring return value
+	CS_wktReduceKeyNm (reducedName,sizeof (reducedName),reducedName,csDtReduce);	//lint !e534   ignoring return value
 	CS_stncp (datumName,reducedName,static_cast<int>(rsltSize));
 }
 // Function processes WKT datum key names before passing on to CS-MAP.
@@ -204,8 +206,8 @@ void CS_wktCsNameFix (char *csysName,size_t rsltSize,const char *srcName)
 	char reducedName [128];
 
 	CS_stncp (reducedName,srcName,sizeof (reducedName));
-	while (CS_wktReduceKeyNm (reducedName,sizeof (reducedName),reducedName,csAcronyms));
-	while (CS_wktReduceKeyNm (reducedName,sizeof (reducedName),reducedName,csCsReduce));
+	while (CS_wktReduceKeyNm (reducedName,sizeof (reducedName),reducedName,csAcronyms));	//lint !e722   suspicious use of ';'
+	while (CS_wktReduceKeyNm (reducedName,sizeof (reducedName),reducedName,csCsReduce));	//lint !e722   suspicious use of ';'
 	CS_stncp (csysName,reducedName,static_cast<int>(rsltSize));
 }
 unsigned short CS_wktProjLookUp (ErcWktFlavor flavor,const char *wktName)
@@ -363,9 +365,9 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 									// CS-MAP names wherever possible.
 
 	EcsMapSt csMapSt;
-    EcsNameFlavor nmFlavor;
-    ErcWktFlavor myFlavor;
-    EcsMapObjType mapType;
+	EcsNameFlavor nmFlavor;
+	ErcWktFlavor myFlavor;
+	EcsMapObjType mapType;
 
 	int st;
 	long32_t epsgNbr;
@@ -376,6 +378,23 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 	char csMapElName [cs_KEYNM_DEF];
 	char csMapDtName [cs_KEYNM_DEF];
 	char csMapCsName [cs_KEYNM_DEF];
+
+	/* Establish a stable environment; mostly to keep lint happy. */
+	if (csDef == NULL)
+	{
+		CS_erpt (cs_INV_ARG1);
+		return -1;
+	}
+	if (dtDef == NULL)
+	{
+		CS_erpt (cs_INV_ARG2);
+		return -1;
+	}
+	if (elDef == NULL)
+	{
+		CS_erpt (cs_INV_ARG3);
+		return -1;
+	}
 
 	st = 0;
 	csMapElName [0] = '\0';
@@ -477,7 +496,6 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 						elDefPtr = CS_eldef (dtDefPtr->ell_knm);
 						if (elDefPtr != 0)
 						{
-
 							memcpy (csDef,csDefPtr,sizeof (*csDef));
 							memcpy (dtDef,dtDefPtr,sizeof (*dtDef));
 							memcpy (elDef,elDefPtr,sizeof (*elDef));
@@ -489,10 +507,9 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 				}
 				else if (csDefPtr->elp_knm [0] != '\0')
 				{
-					elDefPtr = CS_eldef (dtDefPtr->ell_knm);
+					elDefPtr = CS_eldef (csDefPtr->elp_knm);
 					if (elDefPtr != 0)
 					{
-						memcpy (csDef,csDefPtr,sizeof (*csDef));
 						memset (dtDef,'\0',sizeof (*dtDef));
 						memcpy (elDef,elDefPtr,sizeof (*elDef));
 						ok = true;
@@ -504,9 +521,10 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		}
 		if (ok)
 		{
+			/* This WKT was pretty normal, we simply return success status. */
 			return 0;
 		}
-    }
+	}
 
 	if (st < 0)
 	{
@@ -524,8 +542,8 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 															  elDef->name);
 	if (csMapSt == csMapOk)
 	{
-		// The name mapping was successful.  The proposed name is saved for
-		// possible replacement.
+		// Ellipsoid name mapping was successful.  The proposed name is saved
+		// for possible replacement.
 		CS_stncp (csMapElName,wrkBufr,cs_KEYNM_DEF);
 		CS_stncp (elDef->key_nm,csMapElName,cs_KEYNM_DEF);
 		CS_stncp (dtDef->ell_knm,csMapElName,cs_KEYNM_DEF);
@@ -535,14 +553,15 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 	}
 	if (csMapSt != csMapOk && elDef->epsgNbr != 0)
 	{
+		// There is an AUTHORITY element with (possibly) an EPSG number.
 		csMapSt = csMapIdToNameC (csMapEllipsoidKeyName,wrkBufr,sizeof (wrkBufr),
 																csMapFlvrAutodesk,
 																csMapFlvrEpsg,
 																(unsigned long)elDef->epsgNbr);
 		if (csMapSt == csMapOk)
 		{
-			// The name mapping was successful.  The proposed name is saved for
-			// possible replacement.
+			// Ellipsoid name mapping was successful.  The proposed name is saved
+			// for possible replacement.
 			CS_stncp (csMapElName,wrkBufr,cs_KEYNM_DEF);
 			CS_stncp (elDef->key_nm,csMapElName,cs_KEYNM_DEF);
 			CS_stncp (dtDef->ell_knm,csMapElName,cs_KEYNM_DEF);
@@ -582,7 +601,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		{
 			sprintf (wrkBufr,"EPSG::%d",(int)epsgNbr);
 			CS_stncp (elDef->key_nm,wrkBufr,cs_KEYNM_DEF);
-				
+
 			// Replace the ellipsoid key name in the dtDef structure with
 			// the new name as well. We leave the source name alone.
 			CS_stncp (dtDef->ell_knm,wrkBufr,cs_KEYNM_DEF);
@@ -591,7 +610,9 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			st &= ~cs_EL2WKT_NMTRUNC;
 		}
 	}
-
+	// Ellipsoid processing, to the degree possible, is complete.
+	
+	// Start processing dealing with the Datum name.
 	if ((st & cs_DT2WKT_NODEF) != 0)
 	{
 		struct cs_Dtdef_ *dtDefPtr = 0;
@@ -621,11 +642,11 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 		if (csMapSt == csMapOk)
 		{
 			// Yup!!! We'll go with this result.
-			CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));			
+			CS_stncp (csMapDtName,wrkBufr,sizeof (csMapDtName));
 		}
 		if (csMapSt != csMapOk && dtDef->epsgNbr != 0)
 		{
-			// If the WKT had an AUTHORITY element, and the authroity was EPSG,
+			// If the WKT had an AUTHORITY element, and the authority was EPSG,
 			// we'll have an EPSG number we can deal with.
 			csMapSt = csMapIdToNameC (csMapDatumKeyName,wrkBufr,sizeof (wrkBufr),
 																  csMapFlvrAutodesk,
@@ -678,6 +699,10 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			}
 		}
 
+		// We have used all our tricks to arrive at a CS-MAP datum key name.
+		// If we have a name, we get a pointer to the actual; definition.  If
+		// the name we arrived at is not valid (not supposed to happen), we
+		// will have a null pointer.
 		if (csMapDtName [0] != '\0')
 		{
 			// dtDefPtr is a pointer to the definition we obtain from the
@@ -687,11 +712,16 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			// we should use a std::auto_ptr.
 			dtDefPtr = CS_dtdef (csMapDtName);
 		}
-		
-        if(csDef->dat_knm[0] == '\0')
+
+		if(csDef->dat_knm[0] == '\0')
 		{
 			// Create an empty datum
 			dtDefPtr = (struct cs_Dtdef_ *)CS_malc (sizeof (struct cs_Dtdef_));
+			if (dtDefPtr == NULL)
+			{
+				CS_erpt (cs_NO_MEM);
+				goto error;
+			}
 			memset(dtDefPtr, 0, sizeof(cs_Dtdef_));
 
 			// Set the ellipsoid name 
@@ -772,7 +802,10 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 			// Use the source field to indicate where the definition came from.
 			CS_stncp (dtDef->source,"Obtained from dictionary by mapping the WKT datum name.",sizeof (dtDef->source));
 		}
-		CS_free (dtDefPtr);
+		if (dtDefPtr != NULL)
+		{
+			CS_free (dtDefPtr);
+		}
 	}
 	else
 	{
@@ -986,11 +1019,11 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 					// this is expensive but we failed all other methods anyway
 					strcpy(szCode, kpchCode);
 
-					CS_nampp (szCode);
+					CS_nampp (szCode);			//lint !e534  ignoing return value
 					cs_Csdef_ *pCsDefTarget = CS_csdef (szCode);
 					if (pCsDefTarget)
 					{
-        				// Check is coordinate system structures are identical
+						// Check is coordinate system structures are identical
  						if (0==CS_csDefCmp(csDef, pCsDefTarget, NULL, 0))
 						{
 							// wow! we found a match for the CSDEF
@@ -1006,7 +1039,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 							// check if how teh system we're trying to match is
 							// referenced.
 //??// hOIWEVER, WITH THIS CHANGE, PdTdEFtARGET CAN BE NULL AND WE HAVE A MEMORY EXCEPTION BELOW.
-							if (pCsDefTarget->dat_knm && *pCsDefTarget->dat_knm)
+							if (pCsDefTarget->dat_knm[0] != '\0')
 							//if (csDef->dat_knm [0] != '\0')
 							{
 								//load the datum
@@ -1040,7 +1073,7 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 							}
 
 							//check the ellipsoids
-							if (szElTargetName && *szElTargetName)
+							if (szElTargetName != 0 && (*szElTargetName) != '\0')
 							{
 								bool bIdentical=false;
 								//if names are identical, we're good
@@ -1079,18 +1112,18 @@ int CS_wktToCsEx (struct cs_Csdef_ *csDef,struct cs_Dtdef_ *dtDef,struct cs_Elde
 																											pCsDefTarget->key_nm);
 									}
 									CS_stncp (csDef->key_nm,pCsDefTarget->key_nm,cs_KEYNM_DEF);
-                                    CS_stncp (csMapCsName,pCsDefTarget->key_nm,cs_KEYNM_DEF);
+									CS_stncp (csMapCsName,pCsDefTarget->key_nm,cs_KEYNM_DEF);
 									CS_free(pCsDefTarget);
 									break;
 								}
 							}
 						}
+						CS_free(pCsDefTarget);
 					}
-					CS_free(pCsDefTarget);
 				}
-	        }
-	    }
-    }
+			}
+		}
+	}
 
 	if ((st & cs_CS2WKT_NMTRUNC) != 0)
 	{

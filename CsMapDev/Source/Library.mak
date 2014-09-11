@@ -95,8 +95,8 @@ OUT_DIR ?= ../lib$(VERSION)/$(CONFIGURATION)
 INT_DIR ?= ../obj$(VERSION)/$(PRJ_NAME)/$(CONFIGURATION)
 SRC_DIR ?= $(MAKEDIR)
 
-C_FLG ?= -c -w -O2 -I../Include
-CXX_FLG ?= -c -w -O2 -I../Include
+C_FLG ?= -c -Wall -O2 -I../Include
+CXX_FLG ?= -c -Wall -O2 -I../Include
 
 LCL_C_FLG = $(C_FLG)
 LCL_CXX_FLG = $(CXX_FLG)
@@ -110,8 +110,8 @@ endif
 ifeq ($(PROCESSOR),x86)
 	OUT_DIR := $(OUT_DIR)32
 	INT_DIR := $(INT_DIR)32
-	LCL_C_FLG += -m32
-	LCL_CXX_FLG += -m32
+#	LCL_C_FLG += -m32
+#	LCL_CXX_FLG += -m32
 endif
 #
 # The -o option on the compiler is used to get the objects written to the
@@ -193,7 +193,7 @@ CSMAP_SRC_CC = 	CS_alber.c \
 	CS_geoct.c \
 	CS_geoid96.c \
 	CS_geoid99.c \
-	CS_GeoidHeight.c \
+	CS_geoidHeight.c \
 	CS_gissupprt.c \
 	CS_gnomc.c \
 	CS_gpio.c \
@@ -254,12 +254,12 @@ CSMAP_SRC_CC = 	CS_alber.c \
 	CS_units.c \
 	CS_unity.c \
 	CS_vdgrn.c \
-	CS_VertconUS.c \
+	CS_vertconUS.c \
 	CS_vrtcon.c \
 	CS_wgs72.c \
 	CS_winkelTripel.c \
 	CS_zones.c \
-	cscscomp.c \
+	CScscomp.c \
 	CSdata.c \
 	CSdataDT.c \
 	CSdataPJ.c \
@@ -271,8 +271,6 @@ CSMAP_SRC_CC = 	CS_alber.c \
 	CSgeodeticSupport.c \
 	CSgpcomp.c \
 	CSgxcomp.c \
-	CSmrcomp.c \
-	CSsys34KMS.c \
 	CSwktFlavors.c
 	
 

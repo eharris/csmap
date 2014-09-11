@@ -27,6 +27,8 @@
 
 #include "cs_map.h"
 
+/*lint -esym(613,err_list)  possible use of a null pointer; but not really. */
+
 int EXP_LVL9 CSframeQ (struct cs_GeodeticTransform_ *gxDef,unsigned short xfrmCode,int err_list [],int list_sz)
 {
 	extern double cs_DelMax;
@@ -329,7 +331,6 @@ int EXP_LVL9 CSframeL (struct csFrame_ *frame,int cnt,Const double pnts [][3])
 }
 int EXP_LVL9 CSframeN (struct csFrame_ *frame)
 {
-	extern double cs_One;		/* 1.0 */
 	int isNull;
 	
 	isNull = (fabs (frame->deltaX) < 1.0E-03) &&

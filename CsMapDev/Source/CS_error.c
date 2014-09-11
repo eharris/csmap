@@ -856,16 +856,12 @@ unsigned short EXP_LVL7 CSerpt (char *mesg,int size,int err_num)
 	char ctemp [32];
 	char insert [32];
 
-#if _RUN_TIME == _rt_WINCE
-	cs_Errno = GetLastError ();
-	cs_Doserr = cs_Errno;
-#elif _RUN_TIME < _rt_UNIXPCC
+#if _RUN_TIME < _rt_UNIXPCC
 	cs_Errno = errno;
 	cs_Doserr = _doserrno;
 #else
 	cs_Errno = errno;
 #endif
-
 	cs_Error = err_num;
 
 	/* Locate the appropriate message. */

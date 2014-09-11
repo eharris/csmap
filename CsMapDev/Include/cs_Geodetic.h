@@ -244,9 +244,9 @@ enum csDtCvtType {	dtcTypeNone = 0,
 /*
 	An enumerator which enumerates all different grid interpolation file 
 	formats.  Generally, we have a set of functions which handles each of
-	the differing formtats.  This enumerator is used only for horizontal
+	the differing formats.  This enumerator is used only for horizontal
 	geodetic transformations (although some of these may include the vertical).
-	Some of these formats are used for other purposes, sucvh as vertical
+	Some of these formats are used for other purposes, such as vertical
 	datum shift and geoid height.  That does not concern us here.*/
 enum csGridFormat {	gridFrmtNone = 0,
 					gridFrmtNTv1,
@@ -257,6 +257,7 @@ enum csGridFormat {	gridFrmtNone = 0,
 					gridFrmtAts77,
 					gridFrmtOst97,
 					gridFrmtOst02,
+					gridFrmtGeocn,
 					gridFrmtUnknown = 9999
 				 };
 
@@ -1363,12 +1364,12 @@ struct cs_Dtcprm_
 	the code.
 */
 #if _RUN_TIME >= _rt_UNIXPCC
-#	define cs_TEST_CAST double(*)(void *,double *)
+#	define cs_TEST_CAST double(*)(void *,double *,short)
 #	define cs_FRWRD2D_CAST int(*)(void *,double *,double *)
 #	define cs_FRWRD3D_CAST int(*)(void *,double *,double *)
 #	define cs_INVRS2D_CAST int(*)(void *,double *,double *)
 #	define cs_INVRS3D_CAST int(*)(void *,double *,double *)
-#	define cs_INRANGE_CAST int(*)(void *,int,double [][3])
+#	define cs_INRANGE_CAST int(*)(void *,int,const double [][3])
 #	define cs_ISNULL_CAST  int(*)(void *)
 #	define cs_RELEASE_CAST int(*)(void *)
 #	define cs_DESTROY_CAST int(*)(void *)
@@ -1388,6 +1389,7 @@ struct cs_Dtcprm_
 extern "C" {
 #endif
 
+enum csGridFormat EXP_LVL9 CSgridFileFormatCvt (unsigned flagValue);
 struct cs_GxIndex_* EXP_LVL3 CS_getGxIndexPtr (void);
 unsigned EXP_LVL3 CS_getGxIndexCount ();
 Const struct cs_GxIndex_* EXP_LVL3 CS_getGxIndexEntry (unsigned index);

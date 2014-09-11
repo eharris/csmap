@@ -27,6 +27,8 @@
 
 #include "cs_map.h"
 
+/*lint -esym(613,err_list)  possible use of null pointer, but not really */
+
 int EXP_LVL9 CSparm3Q (struct cs_GeodeticTransform_ *gxDef,unsigned short xfrmCode,int err_list [],int list_sz)
 {
 	extern double cs_DelMax;
@@ -129,6 +131,7 @@ int EXP_LVL9 CSparm3F2 (struct csParm3_ *parm3,double* trgLl,Const double* srcLl
 	}
 	return status;
 }
+/*lint -esym(550,xx,yy,zz)   not accessed, but useful when debugging */
 int EXP_LVL9 CSparm3I3 (struct csParm3_ *parm3,double* trgLl,Const double* srcLl)
 {
 	int status;

@@ -11,15 +11,24 @@
 # works in mysterious ways, so results are not always what you
 # would expect.
 #
-VERSION = 100
+# This maintainer typically uses Visual STudio 2008 for most maintenance
+# work.  Thus, VERSION is set to 90.  Due tot he fact mentioned immediately
+# above, this specification is not propagated as expected in the original
+# design, and may need to be changed in the subservient .nmk files.
+# 
+VERSION = 90
 CONFIGURATION = Release
 PROCESSOR = x64
 CSMAP_LIB_NAME = CsMap
-CC_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
-CPP_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
+CC_FLG = /nologo /I..\Include /MD /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
+CPP_FLG = /nologo /I..\Include /MD /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
 EXE_DIR = .\bin$(VERSION)\$(CONFIGURATION)
 !IF ("$(PROCESSOR)" == "x64")
 EXE_DIR = $(EXE_DIR)64
+!ENDIF
+#
+!IF ("$(PROCESSOR)" == "x64")
+TEST_CONFIGURATION = $(CONFIGURATION)64
 !ENDIF
 #
 Release :
@@ -95,8 +104,7 @@ RebuildRelease :
 	cd $(MAKEDIR)
 
 Test :
-	$(EXE_DIR)\csTestCpp.exe /d.\Dictionaries /e /b .\TestCpp\TEST.DAT
+	$(EXE_DIR)\CS_TestCpp.exe /d.\Dictionaries /e /b .\TestCpp\TEST.DAT
 
 QuickTest :
-	$(EXE_DIR)\csTestCpp.exe /d.\Dictionaries /e /b /t12345 .\TestCpp\TEST.DAT
-
+	$(EXE_DIR)\CS_TestCpp.exe /d.\Dictionaries /e /b /t12345 .\TestCpp\TEST.DAT

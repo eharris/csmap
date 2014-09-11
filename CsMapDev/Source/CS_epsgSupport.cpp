@@ -25,16 +25,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-//lint -esym(534,TcsCsvFileBase::SetMinFldCnt,TcsCsvFileBase::SetMaxFldCnt)
-//lint -esym(534,wcstombs)
+//lint -esym(534,TcsCsvFileBase::SetMinFldCnt,TcsCsvFileBase::SetMaxFldCnt)  ignoring retun value
+//lint -esym(1536,TcsEpsgTable::CsvStatus)              exposing low access member
+//lint -esym(766,..\Include\cs_wkt.h)                   unreferenced header, needed for pre-compiled headers)
+//lint -esym(1927,TcsEpsgCode::EpsgCode)                not initialized in formal initializer list.
+//lint -e514                                            unusual use of boolean expression (e.g. ok &= )
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
+
+#include "cs_Legacy.h"
 #include "cs_EpsgStuff.h"
 
 //=============================================================================
@@ -216,7 +220,7 @@ std::wstring TcsEpsgCode::AsWstring () const
 	{
 		// Appears to be a change ID.
 		double realValue = (static_cast<double>(EpsgCode) / 1000.0);
-		swprintf (wcArray,wcCount (wcArray),L"%.3d",realValue);
+		swprintf (wcArray,wcCount (wcArray),L"%.3f",realValue);
 		wcPtr = wcArray + wcslen (wcArray) - 1;
 		if (*wcPtr == L'0') *--wcPtr = L'\0';
 		if (*wcPtr == L'0') *--wcPtr = L'\0';
@@ -313,12 +317,22 @@ const wchar_t TcsEpsgTable::LogicalFalse [] = L"FALSE";
 
 bool TcsEpsgTable::IsLogicalTrue (const wchar_t* logicalValue)
 {
-	int cmpValue = CS_wcsicmp (logicalValue,LogicalTrue);
+	wchar_t lclValue [16];
+
+	wcsncpy (lclValue,logicalValue,wcCount (lclValue));
+	lclValue [wcCount (lclValue) - 1] = L'\0';
+	CS_trimWc (lclValue);
+	int cmpValue = CS_wcsicmp (lclValue,LogicalTrue);
 	return (cmpValue == 0);
 }
 bool TcsEpsgTable::IsLogicalFalse (const wchar_t* logicalValue)
 {
-	int cmpValue = CS_wcsicmp (logicalValue,LogicalFalse);
+	wchar_t lclValue [16];
+
+	wcsncpy (lclValue,logicalValue,wcCount (lclValue));
+	lclValue [wcCount (lclValue) - 1] = L'\0';
+	CS_trimWc (lclValue);
+	int cmpValue = CS_wcsicmp (lclValue,LogicalFalse);
 	return (cmpValue == 0);
 }
 //=============================================================================
@@ -368,7 +382,7 @@ TcsEpsgTable::TcsEpsgTable (const TcsEpsgTblMap& tblMap,const wchar_t* databaseF
 #else
 		std::locale epsgLocale("en_US");
 #endif
-		iStrm.imbue(epsgLocale);
+		iStrm.imbue(epsgLocale);		//lint !e534  ignoring return value
 		Ok = ReadFromStream (iStrm,true,CsvStatus);
 	}
 	if (Ok)
@@ -506,7 +520,6 @@ bool TcsEpsgTable::EpsgLocateCode (TcsEpsgCode& epsgCode,EcsEpsgField fieldId,co
 unsigned TcsEpsgTable::EpsgLocateFirst (EcsEpsgField fieldId,const wchar_t* fldValue,bool honorCase) const
 {
 	unsigned recordNumber (InvalidRecordNbr);
-	std::wstring fldData;
 
 	short fieldNbr = GetEpsgFieldNumber (TableId,fieldId);
 	bool ok = (fieldNbr >= 0);
@@ -1239,8 +1252,6 @@ TcsOpVariants::TcsOpVariants (const	TcsEpsgDataSetV6& epsgDB,const TcsEpsgCode& 
 
 	TcsEpsgCode operationCode;
 	TcsEpsgCode recTrgCRS;
-
-	std::wstring fldData;
 
 	invalidRecNbr = TcsCsvFileBase::GetInvalidRecordNbr ();
 	recNbr = invalidRecNbr;			// to keep lint happy

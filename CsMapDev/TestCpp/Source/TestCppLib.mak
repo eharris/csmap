@@ -64,23 +64,23 @@ OUT_DIR ?= ../../lib$(VERSION)/$(CONFIGURATION)
 INT_DIR ?= ../../obj$(VERSION)/$(PRJ_NAME)/$(CONFIGURATION)
 SRC_DIR ?= $(MAKEDIR)
 
-C_FLG ?= -c -w -O2 -I../Include -I../../Include
-CXX_FLG ?= -c -w -O2 -I../Include -I../../Include
-LCL_C_FLG = $(C_FLG)
-LCL_CXX_FLG = $(CXX_FLG)
+C_FLG ?= -c -w -O2 -I../Include
+CXX_FLG ?= -c -w -O2 -I../Include
+LCL_C_FLG = $(C_FLG) -I../../Include
+LCL_CXX_FLG = $(CXX_FLG) -I../../Include
 
 ifeq ($(PROCESSOR),x64)
 	OUT_DIR := $(OUT_DIR)64
 	INT_DIR := $(INT_DIR)64
-	LCL_C_FLG += -m64 -fIPC
-	LCL_CXX_FLG += -m64 -fIPC
+	LCL_C_FLG += -m64 -fPIC
+	LCL_CXX_FLG += -m64 -fPIC
 endif
 
 ifeq ($(PROCESSOR),x86)
 	OUT_DIR := $(OUT_DIR)32
 	INT_DIR := $(INT_DIR)32
-	LCL_C_FLG += -m32
-	LCL_CXX_FLG += -m32
+#	LCL_C_FLG += -m32
+#	LCL_CXX_FLG += -m32
 endif
 #
 # The -o option on the compiler is used to get the objects written to the

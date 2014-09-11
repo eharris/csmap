@@ -33,12 +33,11 @@
 /*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // This array associates the WKT type enumerator with the identifying text
@@ -227,7 +226,7 @@ extern "C" const struct csKeyNmRed_ csCsReduce [] =
 // the extern.  Since this table is only used in one 'C' module, it
 // probably should be moved to that module to make the warning
 // go away.
-extern "C" struct cs_EpsgOpMthMap_ cs_EpsgOpMthMap [] =
+extern "C" struct cs_EpsgOpMthMap_ cs_EpsgOpMthMap [] =			//lint !e509   extern used with definition
 {
 	{ 10101, 10233,  cs_PRJCOD_TRMER},
 	{ 10301, 10408,  cs_PRJCOD_LM2SP},

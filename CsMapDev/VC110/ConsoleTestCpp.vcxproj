@@ -209,16 +209,6 @@
     <ClCompile Include="..\TestCpp\Source\CStestA.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestB.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestC.cpp" />
-    <ClCompile Include="..\TestCpp\Source\csTestCpp.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">csTestCpp.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">csTestCpp.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">csTestCpp.hpp</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">csTestCpp.hpp</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="..\TestCpp\Source\CStestD.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestE.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestF.cpp" />
@@ -234,6 +224,7 @@
     <ClCompile Include="..\TestCpp\Source\CStestSupport.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestT.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestZ.cpp" />
+    <ClCompile Include="..\TestCpp\Source\CS_TestCpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\TestCpp\Include\csTestCpp.hpp" />

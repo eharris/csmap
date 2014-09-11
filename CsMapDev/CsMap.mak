@@ -41,9 +41,9 @@ RebuildLinux64 :
 .PHONY : QuickTest
 
 Test :
-	./bin$(VERSION)/$(CONFIGURATION)64/csTestCpp -d./Dictionaries -e -b TestCpp/TEST.DAT
+	./bin$(VERSION)/$(CONFIGURATION)64/CS_TestCpp -d./Dictionaries -e -b TestCpp/TEST.DAT
 
 QuickTest :
-	./bin$(VERSION)/$(CONFIGURATION)64/csTestCpp -d./Dictionaries -e -b -t12345 TestCpp/TEST.DAT
+	./bin$(VERSION)/$(CONFIGURATION)64/CS_TestCpp -d./Dictionaries -e -b -t12345 TestCpp/TEST.DAT
 
 

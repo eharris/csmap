@@ -7,7 +7,7 @@
 #	$(MAKE) -e -C./TestCpp -fTestCpp.mak
 #
 PRJ_NAME = TestCpp
-TRG_NAME = csTestCpp
+TRG_BASE = CS_TestCpp
 LIB_NAME = TestCpp
 #
 # Set the following default values so that this makefile can be used at
@@ -37,10 +37,10 @@ DICTIONARY_DIR ?= ../Dictionaries
 # so we use our own local variables (LCL_C_FLG, LCL_CXX_FLG) so we
 # modify as required by the PROCESSOR specification.
 #
-C_FLG ?= -c -w -O2 -I./Include -I../Include
-CXX_FLG ?= -c -w -O2 -I./Include -I../Include
-LCL_C_FLG = $(C_FLG)
-LCL_CXX_FLG = $(CXX_FLG)
+C_FLG ?= -c -w -O2 -I../Include
+CXX_FLG ?= -c -w -O2 -I../Include
+LCL_C_FLG = $(C_FLG) -I../../Include
+LCL_CXX_FLG = $(CXX_FLG) -I../../Include
 #
 # Adjust the above defines for the various processors, currently only
 # two: x86 (32 bits) and x64 (64 bit x86)
@@ -49,28 +49,27 @@ ifeq ($(PROCESSOR),x64)
 	OUT_DIR := $(OUT_DIR)64
 	INT_DIR := $(INT_DIR)64
 	LIB_DIR := $(LIB_DIR)64
-	LCL_C_FLG += -m64 -fIPC
-	LCL_CXX_FLG += -m64 -fIPC
+	LCL_C_FLG += -m64 -fPIC
+	LCL_CXX_FLG += -m64 -fPIC
 endif
 
 ifeq ($(PROCESSOR),x86)
 	OUT_DIR := $(OUT_DIR)32
 	INT_DIR := $(INT_DIR)32
 	LIB_DIR := $(LIB_DIR)32
-	C_FLG += -m32
-	CXX_FLG += -m32
+#	C_FLG += -m32
+#	CXX_FLG += -m32
 endif
-
 #
 # Define the targets of this make file.
 #
-ALL : $(OUT_DIR)/$(TRG_NAME)
+ALL : $(OUT_DIR)/$(TRG_BASE)
 
 $(INT_DIR)/$(TRG_NAME).o : Source/$(TRG_NAME).cpp
 	$(CXX) $(LCL_CXX_FLG) -o $(INT_DIR)/$(TRG_NAME).o Source/$(TRG_NAME).cpp
 
-$(OUT_DIR)/$(TRG_NAME) : $(INT_DIR)/$(TRG_NAME).o $(LIB_DIR)/$(LIB_NAME).a $(LIB_DIR)/$(CSMAP_LIB_NAME).a
-	$(CXX) -o $(OUT_DIR)/$(TRG_NAME) $(INT_DIR)/$(TRG_NAME).o $(LIB_DIR)/$(LIB_NAME).a $(LIB_DIR)/$(CSMAP_LIB_NAME).a -lm -lc -lgcc -lstdc++
+$(OUT_DIR)/$(TRG_BASE) : $(INT_DIR)/$(TRG_BASE).o $(LIB_DIR)/$(LIB_NAME).a $(LIB_DIR)/$(CSMAP_LIB_NAME).a
+	$(CXX) -o $(OUT_DIR)/$(TRG_BASE) $(INT_DIR)/$(TRG_BASE).o $(LIB_DIR)/$(LIB_NAME).a $(LIB_DIR)/$(CSMAP_LIB_NAME).a -lm -lc -lgcc -lstdc++
 
 $(LIB_DIR)/$(LIB_NAME).a :
 	$(MAKE) -e -C ./Source -f TestCppLib.mak
@@ -82,13 +81,13 @@ $(LIB_DIR)/$(CS_LIB_NAME).a :
 clean :
 	rm -f $(INT_DIR)/.o
 	rm -f $(LIB_DIR)/$(LIB_NAME).a
-	rm -f $(OUT_DIR)/$(TRG_NAME)
+	rm -f $(OUT_DIR)/$(TRG_BASE)
 
-rebuild: clean $(OUT_DIR)/$(TRG_NAME)
+rebuild: clean $(OUT_DIR)/$(TRG_BASE)
 
-$(INT_DIR)/$(TRG_NAME).o : | $(INT_DIR)
+$(INT_DIR)/$(TRG_BASE).o : | $(INT_DIR)
 
-$(OUT_DIR)/$(TRG_NAME) : | $(OUT_DIR)
+$(OUT_DIR)/$(TRG_BASE) : | $(OUT_DIR)
 
 $(INT_DIR) :
 	mkdir -p $(INT_DIR)

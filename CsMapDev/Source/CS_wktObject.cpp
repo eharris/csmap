@@ -30,19 +30,18 @@
 // the use of pre-compiled headers.  Some of these files are unreferenced in
 // this module, a small price paid for the efficiency affored by pre-compiled
 // headers.
-/*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
+
+//lint -esym(766,..\Include\cs_wkt.h)         Disable PC-Lint's warning of unreferenced headers
+//lint -esym(766,..\Include\cs_Legacy.h)         Disable PC-Lint's warning of unreferenced headers
+//lint -e534                                  ignoring return value
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
 
-extern "C" struct csWktPrjNameMap_ csWktPrjNameMap [];
-extern "C" struct csWktPrmNameMap_ csWktPrmNameMap [];
-extern TrcWktUnitNameMap KrcWktUnitNameMap [];
 extern TrcWktEleTypeMap KrcWktEleTypeMap [];
 extern TrcWktAxisValueMap KrcWktAxisValueMap [];
 
@@ -94,10 +93,7 @@ std::string rcExtractWkt (std::istream& inStrm,unsigned& lineNbr,unsigned& start
 			if (isupper (curChar))
 			{
 				keyWordIdx = 0;
-				if (keyWordIdx < 60)
-				{
-					keyWord [keyWordIdx++] = static_cast<char>(curChar);
-				}
+				keyWord [keyWordIdx++] = static_cast<char>(curChar);
 				state = wktKeyword;
 			}
 			break;
@@ -160,7 +156,7 @@ std::string rcExtractWkt (std::istream& inStrm,unsigned& lineNbr,unsigned& start
 			}
 			else if (isspace (curChar))
 			{
-				if (whiteSpaceIdx < 100)
+				if (whiteSpaceIdx < (int)sizeof (whiteSpace))
 				{
 					whiteSpace [whiteSpaceIdx++] = static_cast<char>(curChar);
 				}
@@ -218,7 +214,7 @@ bool rcWktHasInitialName (ErcWktEleType type)
 ErcWktEleType rcWktNameToType (const char *name)
 {
 	TrcWktEleTypeMap *tblPtr;
-	for (tblPtr = KrcWktEleTypeMap;tblPtr->Type < rcWktUnknown;tblPtr += 1)
+	for (tblPtr = KrcWktEleTypeMap;tblPtr->Type < rcWktUnknown;tblPtr += 1)			//lint !e440    type of loop variable (tblPtr) is not same as conditional variable (rcWktUnknown)
 	{
 		if (!strcmp (tblPtr->Name,name)) break;
 	}
@@ -236,7 +232,7 @@ ErcWktAxisValue rcWktNameToAxisValue (const char *name)
 {
 	TrcWktAxisValueMap *tblPtr;
 
-	for (tblPtr = &KrcWktAxisValueMap [1];tblPtr->Value < rcWktAxisUnknown;tblPtr += 1)
+	for (tblPtr = &KrcWktAxisValueMap [1];tblPtr->Value < rcWktAxisUnknown;tblPtr += 1)			//lint !e440    type of loop variable (tblPtr) is not same as conditional variable (rcWktUnknown)
 	{
 		if (!CS_stricmp (tblPtr->Name,name)) break;
 	}
@@ -350,7 +346,7 @@ TrcWktElement::TrcWktElement (const TrcWktElement& source) :
 TrcWktElement::~TrcWktElement (void)
 {
 	// Nothing to do here, yet!
-}
+}											//lint !e1540    member pointer variable WktParent not free'd in destructor
 TrcWktElement& TrcWktElement::operator= (const TrcWktElement& rhs)
 {
 	if (&rhs != this)
@@ -535,6 +531,7 @@ void TrcWktElement::ReconstructValue (void)		// from possibly modified children
 	case rcWktDatum:
 	case rcWktFittedCS:
 	case rcWktGeoCCS:
+	case rcWktGeogCS:
 	case rcWktLocalCS:
 	case rcWktMethod:
 	case rcWktParameter:
@@ -561,6 +558,12 @@ void TrcWktElement::ReconstructValue (void)		// from possibly modified children
 		// These don't have a name or any sub-elements, so we
 		// don't really have anything to do here.
 		Value.erase ();
+		break;
+	case rcWktNone:
+	case rcWktGeogTran:
+	case rcWktLocalDatum:
+	case rcWktUnknown:
+		// These are not currently supported.
 		break;
 	}
 }
@@ -815,7 +818,7 @@ ErcWktEleType TrcWktElement::ParseWellKnownText (std::string& value,size_t& eleS
 			{
 				keyWordIdx = 0;
 				keyWord [keyWordIdx++] = curChar;
-				eleStrt = chPtr - wellKnownText - 1;
+				eleStrt = (unsigned)(chPtr - wellKnownText - 1);
 				state = wktKeyword;
 			}
 			break;
@@ -900,7 +903,7 @@ ErcWktEleType TrcWktElement::ParseWellKnownText (std::string& value,size_t& eleS
 					// Don't add the terminating bracket.
 					if (*chPtr == '\0')
 					{
-						eleTerm = chPtr - wellKnownText - 1;
+						eleTerm = (unsigned)(chPtr - wellKnownText - 1);
 						state = wktDone;
 					}
 					else
@@ -945,7 +948,7 @@ ErcWktEleType TrcWktElement::ParseWellKnownText (std::string& value,size_t& eleS
 		case wktTrim:
 			if (!isspace (curChar))
 			{
-				eleTerm = chPtr - wellKnownText - 2;
+				eleTerm = (unsigned)(chPtr - wellKnownText - 2);
 				state = wktDone;
 			}
 			break;
@@ -1372,7 +1375,7 @@ ErcWktFlavor TrcWktElement::DetermineFlavor (ErcWktFlavor preferredFlvr) const
 		if (preferredFlvr != wktFlvrNone)
 		{
 			prefFlvrNm = csWktFlvrToCsMapFlvr (preferredFlvr);
-			preferredBit = (1 << (prefFlvrNm - 1));
+			preferredBit = (1 << (prefFlvrNm - 1));					//lint !e701    left shift of a signed(?) integer
 			if ((flvrBitMap & preferredBit) != 0)
 			{
 				wktFlavor = preferredFlvr;

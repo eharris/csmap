@@ -75,7 +75,6 @@ void * EXP_LVL1 CS_ralc (void *ptr,size_t new_size)
 	return (_csRealloc (ptr,new_size));
 }
 
-#if _RUN_TIME != _rt_WINCE
 void * EXP_LVL1 CS_calc (size_t blk_count,size_t blk_size)
 {
 #ifndef _csCalloc
@@ -83,7 +82,6 @@ void * EXP_LVL1 CS_calc (size_t blk_count,size_t blk_size)
 #endif
 	return (_csCalloc (blk_count,blk_size));
 }
-#endif
 
 void EXP_LVL1 CS_free (void *ptr)
 {

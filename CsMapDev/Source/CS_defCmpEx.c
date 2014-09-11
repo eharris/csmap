@@ -66,6 +66,8 @@
    a pretty good match, a qValue will be returned.
 */
 
+/*lint -e774  Boolean within 'if' always evaluates to true (PC-Lint bug) */
+
 int EXP_LVL3 CS_elDefCmpEx (double* qValuePtr,Const struct cs_Eldef_ *original,
 											  Const struct cs_Eldef_ *revised,
 											  char* message,
@@ -85,6 +87,7 @@ int EXP_LVL3 CS_elDefCmpEx (double* qValuePtr,Const struct cs_Eldef_ *original,
 	char errMsg [256];
 
 	errCnt = 0;
+	memset (errMsg,'\0',sizeof (errMsg));
 	if (fabs (original->e_rad - revised->e_rad) > 6.0E-04)
 	{
 		if (errCnt == 0)
@@ -139,6 +142,13 @@ int EXP_LVL3 CS_elDefCmpEx (double* qValuePtr,Const struct cs_Eldef_ *original,
 	}	
 	return errCnt;
 }
+/*lint -esym(550,ellipsoidUse)  symbol not referenced. */
+/* ellipsoidUse is set to true in the event of a transformation method which
+   is dependent upon the ellispoid, implying that the ellipsoid needs to be
+   numerically the same for the datums to be numerically the same.  This
+   verification is not done in this module for whatever reason (I can think
+   of many).  Nevertheless, for now we ignore PC-Lint's reminding us of this
+   issue. */
 int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 											  Const struct cs_Dtdef_ *revised,
 											  char* message,
@@ -466,6 +476,8 @@ int EXP_LVL3 CS_dtDefCmpEx (double* qValuePtr,Const struct cs_Dtdef_ *original,
 	}
 	return errCnt;
 }
+/*lint +esym(550,ellipsoidUse) */
+
 int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize)
 {
 	extern struct cs_Prjtab_ cs_Prjtab [];		/* Projection Table */
@@ -569,7 +581,7 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 		/* csDefPtr points to a UTM definition which is now converted to
 		   a standard Transverse Mercator form. */
 		strcpy (csDefPtr->prj_knm,"TM");
-		csDefPtr->prj_prm1 = (double)(((int)csDefPtr->prj_prm1 * 6) - 183);
+		csDefPtr->prj_prm1 = (double)(((int)csDefPtr->prj_prm1 * 6) - 183);	/*lint !e790 */
 		csDefPtr->org_lng = csDefPtr->prj_prm1;
 		csDefPtr->org_lat = cs_Zero;
 		unitsFactor = CS_unitlu (cs_UTYP_LEN,csDefPtr->unit);
@@ -623,12 +635,12 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 
 	/* Gauss Kruger is essentially a Transverse Mercator with a scale
 	   reduction factor of 1.0. */
-	if (ppOrg->code == cs_PRJCOD_TRMER && lclOriginal.scl_red == cs_One && ppRev->code == cs_PRJCOD_GAUSSK)
+	if (ppOrg->code == cs_PRJCOD_TRMER && CS_cmpDbls (lclOriginal.scl_red,cs_One) && ppRev->code == cs_PRJCOD_GAUSSK)
 	{
 		CS_stncp (lclRevised.prj_knm,lclOriginal.prj_knm,sizeof (lclRevised.prj_knm));
 		lclRevised.scl_red = cs_One;
 	}
-	if (ppRev->code == cs_PRJCOD_TRMER && lclRevised.scl_red == cs_One && ppOrg->code == cs_PRJCOD_GAUSSK)
+	if (ppRev->code == cs_PRJCOD_TRMER && CS_cmpDbls(lclRevised.scl_red,cs_One) && ppOrg->code == cs_PRJCOD_GAUSSK)
 	{
 		CS_stncp (lclOriginal.prj_knm,lclRevised.prj_knm,sizeof (lclOriginal.prj_knm));
 		lclOriginal.scl_red = cs_One;

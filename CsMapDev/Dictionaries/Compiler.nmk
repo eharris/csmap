@@ -16,7 +16,7 @@ TRG_NAME = $(TRG_BASE)$(TRG_EXT)
 #
 VERSION = 90
 CONFIGURATION = Release
-PROCESSOR = x86
+PROCESSOR = x64
 CSMAP_LIB_NAME = CsMap
 #
 # The following definitions are instituted to facilitate building and
@@ -54,8 +54,8 @@ DICTIONARY_SRC = $(DICTIONARY_SRC_DIR)\coordsys.asc \
 # should work in any Windows type environment.  More sophisticated
 # specifications can/should be coded in the parent make file.
 #
-CC_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
-CPP_FLG = /nologo /I..\Include /MT /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
+CC_FLG = /nologo /I..\Include /MD /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS
+CPP_FLG = /nologo /I..\Include /MD /O2 /W4 /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /D__CPP__
 #
 # Adjust the above defines for the various processors, currently only
 # two: x86 (32 bits) and x64 (64 bit x86)
@@ -70,8 +70,8 @@ LIB_DIR = $(LIB_DIR)64
 #
 ALL : $(OUT_DIR)\$(TRG_NAME) $(DICTIONARIES)
 
-$(INT_DIR)\$(TRG_BASE).obj : CS_COMP.c
-	cl /c $(CC_FLG) /Fo$(INT_DIR)\$(TRG_BASE).obj CS_COMP.c
+$(INT_DIR)\$(TRG_BASE).obj : $(TRG_BASE).c
+	cl /c $(CC_FLG) /Fo$(INT_DIR)\$(TRG_BASE).obj $(TRG_BASE).c
 
 $(OUT_DIR)\$(TRG_NAME) : $(INT_DIR)\$(TRG_BASE).obj $(LIB_DIR)\$(CSMAP_LIB_NAME).lib
 	cl $(CC_FLG) /Fe$(OUT_DIR)\$(TRG_NAME) $(INT_DIR)\$(TRG_BASE).obj $(LIB_DIR)\$(CSMAP_LIB_NAME).lib
@@ -100,9 +100,14 @@ rebuild: clean $(OUT_DIR)\$(TRG_NAME) $(DICTIONARIES)
 #
 # The following create directories as necessary if they don't already exist.
 #
+$(LIB_DIR)\$(CSMAP_LIB_NAME).lib : $(LIB_DIR)
+
 $(INT_DIR)\$(TRG_BASE).obj : $(INT_DIR)
 
 $(OUT_DIR)\$(TRG_NAME) : $(OUT_DIR)
+
+$(LIB_DIR) :
+	mkdir $(LIB_DIR)
 
 $(INT_DIR) :
 	mkdir $(INT_DIR)

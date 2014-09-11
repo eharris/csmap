@@ -36,6 +36,8 @@
 
 #include "cs_map.h"
 
+/*lint -esym(613,err_list)  possible use of null pointer; but not really */
+
 long32_t csNTv2BufrSz = 32768L;
 
 int CScntv2Q (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
@@ -179,6 +181,8 @@ int CScntv2F3 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
    coverage of the file, and thus fail to converge. */
 int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 {
+	extern double cs_LlNoise;
+
 	short lng_ok;
 	short lat_ok;
 	int ii;
@@ -187,6 +191,8 @@ int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 	double guess [3];
 	double epsilon [2];
 	double newResult [3];
+
+	epsilon [0] = epsilon [1] = cntv2->errorValue + cs_LlNoise;
 
 	guess [LNG] = ll_src [LNG];
 	guess [LAT] = ll_src [LAT];
@@ -757,7 +763,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 				overlap |= subPtr->NwReference [LNG] > parPtr->SeReference [LNG] &&
 						   subPtr->NwReference [LAT] > parPtr->SeReference [LAT] &&
 						   subPtr->NwReference [LNG] < parPtr->NwReference [LNG] &&
-						   subPtr->NwReference [LAT] < parPtr->NwReference [LAT];
+						   subPtr->NwReference [LAT] < parPtr->NwReference [LAT];		/*lint !e514  usual use of a boolean; looks just fine */
 				if (overlap)
 				{
 					thisPtr->SubOverlap = TRUE;		/* for testing ease */
@@ -778,7 +784,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 	/* OK, we should be ready to rock and roll.  We close the Stream until
 	   we actually need it.  Often, we get constructed just so there is a
 	   record of the coverage afforded by the file. */
-	if (stream != NULL)
+	if (stream != NULL)			/*lint !e774  boolean always evalutaes to true */
 	{
 		CS_fclose (stream);
 		stream = NULL;
@@ -937,7 +943,7 @@ struct csNTv2SubGrid_* CSlocateSubNTv2 (struct cs_NTv2_* thisPtr,Const double so
 				idx = cvtPtr->ChildIndex - 1;
 			}
 		}
-	}
+	}			/*lint !e850   loop variable (idx) is modified within the loop body  (PC_Lint lin nbr is off by one) */
 	else
 	{
 		/* The Spanish variation.  We search all subgrids looking for
@@ -994,6 +1000,7 @@ struct csNTv2SubGrid_* CSlocateSubNTv2 (struct cs_NTv2_* thisPtr,Const double so
 	do, however, use a normal stream buffer of the size specified in the
 	main object.
 */
+/*lint -esym(550,readCnt)   not accessed, but very helpful when debugging */
 int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source [2])
 {
 	extern double cs_Zero;				/* 0.0 */
@@ -1092,7 +1099,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 			}
 
 			// Prepare memory
-			thisPtr->fileImage = (char*)CS_malc(thisPtr->fileImageSize);
+			thisPtr->fileImage = (char*)CS_malc((size_t)thisPtr->fileImageSize);
 			if (thisPtr->fileImage == NULL)
 			{
 				CS_erpt (cs_NO_MEM);
@@ -1100,10 +1107,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 			}
 
 			// Copy everything into the memory
-			readCnt = CS_fread(thisPtr->fileImage,
-				1,
-				thisPtr->fileImageSize,
-				stream);
+			readCnt = CS_fread(thisPtr->fileImage,1,(unsigned int)thisPtr->fileImageSize,stream);
 			if (CS_ferror(stream))
 			{
 				CS_erpt (cs_IOERR);
@@ -1159,7 +1163,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 			   Read the data into my record buffer. */
 			filePosition = cvtPtr->FirstRecord + rowNbr * cvtPtr->RowSize + eleNbr * thisPtr->RecSize;
 
-			if ((filePosition + sizeof(southEast) + sizeof(southWest)) > thisPtr->fileImageSize)
+			if ((long32_t)(filePosition + sizeof(southEast) + sizeof(southWest)) > thisPtr->fileImageSize)
 			{
 				CS_erpt (cs_INV_FILE);
 				goto error;
@@ -1174,7 +1178,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 			/* Read northeast shifts. */
 			filePosition += cvtPtr->RowSize;
 
-			if ((filePosition + sizeof(northEast) + sizeof(northWest)) > thisPtr->fileImageSize)
+			if ((long32_t)(filePosition + sizeof(northEast) + sizeof(northWest)) > thisPtr->fileImageSize)
 			{
 				CS_erpt (cs_INV_FILE);
 				goto error;
@@ -1215,7 +1219,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 			   virtual cell in the Canadian documentation.  */
 			filePosition = cvtPtr->FirstRecord + rowNbr * cvtPtr->RowSize + eleNbr * thisPtr->RecSize;
 
-			if ((filePosition + sizeof(southEast) + sizeof(southWest)) > thisPtr->fileImageSize)
+			if ((long32_t)(filePosition + sizeof(southEast) + sizeof(southWest)) > thisPtr->fileImageSize)
 			{
 				CS_erpt (cs_INV_FILE);
 				goto error;
@@ -1257,7 +1261,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 			/* Point is on the extreme western edge of the sub-grid. */
 			filePosition = cvtPtr->FirstRecord + rowNbr * cvtPtr->RowSize + eleNbr * thisPtr->RecSize;
 
-			if ((filePosition + sizeof(southEast)) > thisPtr->fileImageSize)
+			if ((long32_t)(filePosition + sizeof(southEast)) > thisPtr->fileImageSize)
 			{
 				CS_erpt (cs_INV_FILE);
 				goto error;
@@ -1269,7 +1273,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 
 			filePosition += cvtPtr->RowSize;
 
-			if ((filePosition + sizeof(northEast)) > thisPtr->fileImageSize)
+			if ((long32_t)(filePosition + sizeof(northEast)) > thisPtr->fileImageSize)
 			{
 				CS_erpt (cs_INV_FILE);
 				goto error;
@@ -1305,7 +1309,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 			/* Point is actually the northwestern corner of the sub-grid. */
 			filePosition = cvtPtr->FirstRecord + rowNbr * cvtPtr->RowSize + eleNbr * thisPtr->RecSize;
 
-			if ((filePosition + sizeof(southEast)) > thisPtr->fileImageSize)
+			if ((long32_t)(filePosition + sizeof(southEast)) > thisPtr->fileImageSize)
 			{
 				CS_erpt (cs_INV_FILE);
 				goto error;
@@ -1362,6 +1366,7 @@ error:
 	}
 	return csGRIDI_ST_SYSTEM;
 }
+/*lint +esym(550,readCnt) */
 
 /* Test function, used to determine if this object covers the provided point.
    If so, the "grid density" of the conversion is returned as a means of

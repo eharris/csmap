@@ -499,7 +499,7 @@ void EXP_LVL9 CStrmerS (struct cs_Csprm_ *csprm)
 
 	test_ll [LNG] = CS_adj2pi (trmer->cent_lng + cs_EETest) * cs_Radian;
 	test_ll [LAT] = cs_Zero;
-	CStrmerF (trmer,test_ll,test_ll);
+	CStrmerF (trmer,test_ll,test_ll);				/*lint !e534   ignoring return value */
 	trmer->xx_max = fabs (test_ll [XX] - trmer->x_off);
 
 	/* Set up the coordinate checking information.  If the user has
@@ -602,7 +602,7 @@ void EXP_LVL9 CStrmerS (struct cs_Csprm_ *csprm)
 		test_ll [LAT] = tmp1;
 
 		/* Convert the resulting point, and therby obtain the min/max in X. */
-		CStrmerF (trmer,test_xy,test_ll);
+		CStrmerF (trmer,test_xy,test_ll);				/*lint !e534   ignoring return value */
 		tmp1 = test_xy [XX] - trmer->x_off;
 		csprm->max_xy [XX] = tmp1;
 		csprm->min_xy [XX] = -tmp1;
@@ -611,11 +611,11 @@ void EXP_LVL9 CStrmerS (struct cs_Csprm_ *csprm)
 		   the points which you pick. */
 		test_ll [LNG] = csprm->cent_mer;
 		test_ll [LAT] = csprm->min_ll [LAT];
-		CStrmerF (trmer,test_xy,test_ll);
+		CStrmerF (trmer,test_xy,test_ll);				/*lint !e534   ignoring return value */
 		csprm->min_xy [YY] = test_xy [YY] - trmer->y_off;
 
 		test_ll [LAT] = csprm->max_ll [LAT];
-		CStrmerF (trmer,test_xy,test_ll);
+		CStrmerF (trmer,test_xy,test_ll);				/*lint !e534   ignoring return value */
 		csprm->max_xy [YY] = test_xy [YY] - trmer->y_off;
 
 		/* Apply quad processing, e.g. a left handed coordinate system. */

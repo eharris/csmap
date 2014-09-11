@@ -97,7 +97,9 @@
 **                                                                           **
 *******************************************************************************
 ******************************************************************************/
-#include "cs_map.h"			/* to keep precompiled header feature happy */
+
+/* NOTE: This file is not intended to be compiled independently.  It is
+   'include'ed in the appropriate code (see CS_sys34.c) */
 
 #define  S34JYMAX 0.0
 #define  S34JYMIN 0.0

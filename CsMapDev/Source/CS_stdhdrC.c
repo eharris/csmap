@@ -25,8 +25,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*lint -e766  cs-map.h is not used; well directly no, but used? YES */
 #include "cs_map.h"
 
 /* File used solely to control precompiled header operation. */
 
+int cs_LinkMePleaseC = 0;	// Unreferenced external to preclude linker warnings.
 

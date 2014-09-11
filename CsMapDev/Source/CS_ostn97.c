@@ -61,7 +61,7 @@
 	or by calling the CS_recvr () function.
 */ 
 
-struct csThread cs_Ostn97_ *cs_Ostn97Ptr = NULL;
+struct cs_Ostn97_ *cs_Ostn97Ptr = NULL;
 
 struct cs_Ostn97_ *CSnewOstn97 (const char *filePath /* path to the txt file */)
 {

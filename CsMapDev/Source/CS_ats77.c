@@ -56,7 +56,8 @@
    "means", whatevere it turns out to be caould also be used to provide a
    forward if only the inverse file is present.  So, things get a little
    screwy here. */
- 
+
+/*lint -esym(613,err_list)   possible use of bull pointer */
 int CSats77Q  (struct csGeodeticXfromParmsFile_* fileParms,Const char* dictDir,int err_list [],int list_sz)
 {
 	extern char cs_DirsepC;
@@ -148,9 +149,6 @@ double CSats77T (struct cs_Ats77_ *ats77,double *ll_src,short direction)
 }
 int CSats77F2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 {
-	extern double cs_Zero;				/* 0.0 */
-	extern char csErrnam [MAXPATH];
-
 	int status;
 	double ll_lcl [2];
 
@@ -176,7 +174,6 @@ int CSats77F2 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 int CSats77F3 (struct cs_Ats77_ *ats77,double *ll_trg,Const double *ll_src)
 {
 	extern double cs_Zero;				/* 0.0 */
-	extern char csErrnam [MAXPATH];
 
 	int status;
 	double lcl_ll [3];
@@ -501,7 +498,7 @@ struct cs_Ats77_ *CSnewAts77 (Const char *filePath,ulong32_t flags,double densit
 	n4 = (5 * np) + 1;
 	n5 = n4 + (2 * thisPtr->nf);
 	thisPtr->jMax = 5 * (np + thisPtr->nf) + (thisPtr->nf * thisPtr->nf);
-	thisPtr->coeffs = CS_malc (n5 * sizeof (double));
+	thisPtr->coeffs = CS_malc ((unsigned long)n5 * sizeof (double));
 	if (thisPtr->coeffs == NULL)
 	{
 		CS_erpt (cs_NO_MEM);
@@ -744,9 +741,6 @@ double CS_Ats77TestFunction ()
 {
 	extern char cs_Dir [];
 	extern char *cs_DirP;
-	extern char csErrnam [];
-	extern char cs_DirsepC;
-	extern char cs_ExtsepC;
 
 	/* These test values were obtained from execution of the TRANSFORM
 	   program itself.  Obviously, the results were transcribed by

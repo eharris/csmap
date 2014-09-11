@@ -25,12 +25,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*lint -esym(766,..\Include\cs_wkt.h)			Disable PC-Lint's warning of unreferenced headers */
+
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
 
 /* File used solely to control precompiled header operation. */
+
+int cs_LinkMePleaseCpp = 0;	// Unreferenced external to preclude linker warnings.
+

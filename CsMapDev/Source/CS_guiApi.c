@@ -29,10 +29,6 @@
 #include "cs_Legacy.h"
 
 extern int (*CS_usrCsDefPtr)(struct cs_Csdef_ *ptr,Const char *keyName);
-extern int (*CS_usrDtDefPtr)(struct cs_Dtdef_ *ptr,Const char *keyName);
-extern int (*CS_usrElDefPtr)(struct cs_Eldef_ *ptr,Const char *keyName);
-extern double (*CS_usrUnitPtr)(short type,Const char *unitName);
-
 
 int EXP_LVL1 CS_getcs (Const char *cs_name,struct cs_Csdef_ *bufr)
 {
@@ -369,7 +365,7 @@ int EXP_LVL1 CS_elIsValid (Const char *key_name)
 int EXP_LVL1 CS_csEnumByGroup (int index,Const char *grp_name,struct cs_Csgrplst_ *cs_descr)
 {
 	extern int cs_Error;
-	extern csThread struct cs_Csgrplst_ *cs_CsGrpList;
+	extern struct cs_Csgrplst_ *cs_CsGrpList;
 
 	static char cur_group [24] = "!!!";
 
@@ -440,7 +436,7 @@ int EXP_LVL1 CS_csGrpEnum (int index,char *grp_name,int name_sz,char *grp_dscr,i
 
 char * EXP_LVL9 CScsKeyNames (void)
 {
-	extern csThread char *cs_CsKeyNames;
+	extern char *cs_CsKeyNames;
 
 	size_t len;
 	size_t malc_size;
@@ -542,7 +538,7 @@ char * EXP_LVL9 CScsKeyNames (void)
 
 char * EXP_LVL9 CSdtKeyNames (void)
 {
-	extern csThread char *cs_DtKeyNames;
+	extern char *cs_DtKeyNames;
 
 	int st;
 	int crypt;
@@ -621,7 +617,7 @@ char * EXP_LVL9 CSdtKeyNames (void)
 
 char * EXP_LVL9 CSelKeyNames (void)
 {
-	extern csThread char *cs_ElKeyNames;
+	extern char *cs_ElKeyNames;
 
 	int st;
 	int crypt;
@@ -1342,7 +1338,7 @@ void EXP_LVL3 CS_fillIn (struct cs_Csdef_ *csPtr)
 	/* There are some things we do in general. */
 
 	if ((prjPtr->flags & cs_PRJFLG_SCLRED) == 0) csPtr->scl_red = 1.0;
-	if ((prjPtr->flags & cs_PRJFLG_ORGLAT) == 1) csPtr->org_lat = 0.0;
+	if ((prjPtr->flags & cs_PRJFLG_ORGLAT) != 0) csPtr->org_lat = 0.0;
 
 	switch (prjPtr->code) {
 	default:

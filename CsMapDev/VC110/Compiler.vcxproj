@@ -209,9 +209,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Dictionaries\CS_COMP.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\Include\cs_map.h" />
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +228,9 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Dictionaries\CS_Comp.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

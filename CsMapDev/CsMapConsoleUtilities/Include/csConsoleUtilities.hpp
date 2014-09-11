@@ -34,12 +34,13 @@
 /*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
+
+#include "cs_Legacy.h"
 #include "cs_EpsgStuff.h"
 #include "csUtilitiesSupport.hpp"
 

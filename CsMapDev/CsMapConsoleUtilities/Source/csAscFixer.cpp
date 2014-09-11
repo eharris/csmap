@@ -1065,7 +1065,7 @@ int TcsAscDefinition::TrimLineComments (void)
 	TcsDefLnItr lineItr;
 
 	// Remove comment lines from the end of the definition.
-	index = Definition.size () - 1;		// last line
+	index = (int)Definition.size () - 1;		// last line
 	while (index >0)
 	{
 		lineItr = Definition.begin () + index;

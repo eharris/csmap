@@ -65,6 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmapd.lib"
+				OutputFile="$(OutDir)\CS_TestCpp.exe"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\lib90\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -141,6 +142,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmapd.lib"
+				OutputFile="$(OutDir)\CS_TestCpp.exe"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\lib90\$(ConfigurationName)64&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
@@ -214,6 +216,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmap.lib"
+				OutputFile="$(OutDir)\CS_TestCpp.exe"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\lib90\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
@@ -290,6 +293,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmap.lib"
+				OutputFile="$(OutDir)\CS_TestCpp.exe"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\lib90\$(ConfigurationName)64&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
@@ -329,6 +333,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath="..\TestCpp\Source\CS_TestCpp.cpp"
+				>
+			</File>
 			<File
 				RelativePath="..\TestCpp\Source\CStest0.cpp"
 				>
@@ -414,10 +422,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\TestCpp\Source\csTestCpp.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\TestCpp\Source\CStestD.cpp"
 				>
 			</File>
@@ -487,12 +491,6 @@
 				RelativePath="..\TestCpp\Include\csTestCpp.hpp"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
 		</Filter>
 		<Filter
 			Name="TestData"

@@ -380,7 +380,7 @@ struct cs_Eldef_ * EXP_LVL3 CS_eldef2 (Const char *el_nam, char* pszDirPath)
 	return (el_ptr);
 
 error:
-	if (el_ptr != NULL)
+	if (el_ptr != NULL)			/*lint !e774  boolean expression always evaluates to true */
 	{
 		CS_free (el_ptr);
 		el_ptr = NULL;

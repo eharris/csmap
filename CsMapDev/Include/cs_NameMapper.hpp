@@ -361,7 +361,7 @@ public:
     bool GetField (std::wstring& fieldValue,EcsMapTableFields fieldId) const;
     unsigned long GetFieldAsUL (EcsMapTableFields fieldId) const;
     void GetFileRecordId (std::wstring& fileRecId) const;
-    bool ReplaceField (EcsMapTableFields fieldId,std::wstring& fieldValue);
+    bool ReplaceField (EcsMapTableFields fieldId,const std::wstring& fieldValue);
     bool ReplaceField (EcsMapTableFields fieldId,unsigned long fieldValue);
 private:
     //=========================================================================
@@ -415,7 +415,7 @@ public:
 	static EcsNameFlavor FlvrNameToNbr (const wchar_t* flvrName);
 	static const wchar_t* FlvrNbrToName (EcsNameFlavor flvrNbr);
 	static bool AnalyzeGenericId (EcsNameFlavor& flavor,unsigned long& flvrId,
-														TcsGenericId& genericId);
+														const TcsGenericId& genericId);
 	///////////////////////////////////////////////////////////////////////////
 	// Construction  /  Destruction  /  Assignment
 	TcsNameMapper (void);
@@ -475,8 +475,8 @@ public:
 	// Manufacturing functions.
 	bool AddKeyNameMap (EcsMapObjType mapType,const wchar_t* mapFilePath);
 	bool AddKeyMapFields (EcsMapObjType mapType,unsigned long genericId,const TcsKeyNameMapFile& mapFileObj);
-    EcsNameFlavor KeyMapFlavor (const TcsKeyNameMapFile& mapFileObj) const;
-    unsigned long KeyMapGenericId (const TcsKeyNameMapFile& mapFileObj) const;
+	EcsNameFlavor KeyMapFlavor (const TcsKeyNameMapFile& mapFileObj) const;
+	unsigned long KeyMapGenericId (const TcsKeyNameMapFile& mapFileObj) const;
 
 private:
 	///////////////////////////////////////////////////////////////////////////

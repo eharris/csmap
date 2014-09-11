@@ -26,15 +26,19 @@
 */
 
 /*lint -esym(715,dat_erf)     parameter not referenced */
+/*lint -esym(746,CS_getGxIndexCount)     mo prototype, lint bug??? */
 /*lint -e514                  unusual use of a Boolean expression */
 /*lint -e525	              negative indentation */
 /*lint -e539                  positive indentation */
 /*lint -e661                  out-of-bounds; these never really work in lint */
 /*lint -e662                  out-of-bounds; these never really work in lint */
+/*lint -e774                  boolean always evauates to true, defensive programming */
 /*lint -e788                  enumeration value not used in a switch */
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
+
+/*lint -esym(534,CSdtmBridgeAddTrgTransformation) ignoring return value */
+/*lint -esym(534,CSdtmBridgeAddSrcTransformation) ignoring return value */
 
 /******************************************************************************
 	The following code maps the steps included in a "to84_via" algorithm.
@@ -60,8 +64,6 @@
 	the three dimensional versions are not implemented.
 
 *******************************************************************************/
-
-static char modl_name [] = "CS_datum";
 
 /**********************************************************************
 **	dtc_ptr = CS_dtcsu (src_cs,dst_cs,dat_erf,blk_erf);
@@ -594,7 +596,7 @@ int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 
 	Const char* srcDtmName;
 	Const char* trgDtmName;
-	struct cs_GxIndex_ *xfrmPtr;
+	Const struct cs_GxIndex_ *xfrmPtr;
 	struct cs_GeodeticPath_* pathPtr;
 	struct cs_GeodeticPathElement_ *pathElePtr;
 
@@ -640,7 +642,7 @@ int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 					CS_erpt (cs_ISER);
 					goto error;
 				}
-				xfrmPtr = CS_getGxIndexEntry (gxIndex); 
+				xfrmPtr = CS_getGxIndexEntry ((unsigned int)gxIndex);
 				if (xfrmPtr == NULL)
 				{
 					CS_stncp (csErrnam,"CS_datum::3",MAXPATH);
@@ -666,7 +668,7 @@ int CSdtcsuPhaseOne (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 					CS_erpt (cs_ISER);
 					goto error;
 				}
-				xfrmPtr = CS_getGxIndexEntry (gxIndex); 
+				xfrmPtr = CS_getGxIndexEntry ((unsigned int)gxIndex); 
 				if (xfrmPtr == NULL)
 				{
 					CS_stncp (csErrnam,"CS_datum::5",MAXPATH);
@@ -722,8 +724,6 @@ error:
 */
 int CSdtcsuPhaseTwo (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 {
-	extern char csErrnam [MAXPATH];
-
 	int result;
 	int direction;
 	int bridgeStatus;
@@ -1031,8 +1031,6 @@ error:
    not.  If not, we go back and try phases one, two, and three again. */
 int CSdtcsuPhaseFour (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 {
-	extern char csErrnam [MAXPATH];
-
 	int gxIndex;
 	int direction;
 	int bridgeStatus;
@@ -1057,7 +1055,7 @@ int CSdtcsuPhaseFour (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 	if (gxIndex >= 0)
 	{
 		/* Yup, there is.  Add it to the source end of the bridge. */
-		gxIdxPtr = CS_getGxIndexEntry (gxIndex);
+		gxIdxPtr = CS_getGxIndexEntry ((unsigned int)gxIndex);
 		bridgeStatus = CSdtmBridgeAddSrcTransformation (bridgePtr,gxIdxPtr,(short)direction);
 	}
 
@@ -1067,7 +1065,7 @@ int CSdtcsuPhaseFour (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 	if (gxIndex >= 0)
 	{
 		/* Yup, there is.  Add it to the target end of the bridge. */
-		gxIdxPtr = CS_getGxIndexEntry (gxIndex);
+		gxIdxPtr = CS_getGxIndexEntry ((unsigned int)gxIndex);
 		bridgeStatus = CSdtmBridgeAddTrgTransformation (bridgePtr,gxIdxPtr,(short)direction);
 	}
 	return bridgeStatus;
@@ -1082,8 +1080,6 @@ int CSdtcsuPhaseFour (struct csDtmBridge_* bridgePtr,struct cs_Dtcprm_ *dtcPtr)
 **********************************************************************/
 void EXP_LVL3 CS_dtcls (struct cs_Dtcprm_ *dtcPrm)
 {
-	extern char csErrnam [];
-	
 	short idx;
 
 	struct cs_GxXform_ *xfrmPtr;

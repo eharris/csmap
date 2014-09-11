@@ -43,15 +43,15 @@
 // the use of pre-compiled headers.  Some of these files are unreferenced in
 // this module, a small price paid for the efficiency affored by pre-compiled
 // headers.
-/*lint -e766 */		/* Disable PC-Lint's warning of unreferenced headers */
+//lint -e766    Disable PC-Lint's warning of unreferenced headers.
+//lint -efile(*,xutility)   turn off messages from STL include files
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
 
 static const TcsCsvMsgTbl KcsCsvMsgTbl [] =
 {
@@ -104,9 +104,9 @@ static const TcsCsvMsgTbl KcsCsvMsgTbl [] =
 //lint -save -esym(788,done,error)  enumeration names not used in switch
 EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const wchar_t* delimiters)
 {
-    EcsCsvStatus csvStatus = csvOk;
+	EcsCsvStatus csvStatus = csvOk;
 
-    // This is a state machine, this enum defines the various states.
+	// This is a state machine, this enum defines the various states.
 	enum {error, preamble, copyingFields, copyingQuotedField, lastWasEscape, lastWasQuote, done} state;
 	wint_t wcAsInt;
 	wchar_t wc;
@@ -137,11 +137,17 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 	while (state != done && state != error)
 	{
 		wcAsInt = iStrm.get ();
-		if (wcAsInt == WEOF)
+		if (wcAsInt == WEOF)		/*lint !e1924   C style cast, in WEOF definition */
 		{
 			break;
 		}
 		wc = static_cast<wchar_t>(wcAsInt);
+		if (wc == L'\r')
+		{
+			// We choose not to try to deal with carriage returns; we see no
+			// value in that for anyone.
+			continue;
+		}
 
 		switch (state) {
 		case preamble:
@@ -222,33 +228,33 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 		}
 	}
 
-    switch (state) {
-    case error:
-        // csvStatus already set appropriately.
-        break;
-    case done:
-        csvStatus = csvOk;
-        break;
-    case preamble:
-        csvStatus = csvOk;
-        break;
-    case copyingFields:
-        csvStatus = csvOk;
-        break;
-    case copyingQuotedField:
-        csvStatus = csvEndInQuote;
-        break;
-    case lastWasEscape:
-        csvStatus = csvLastWasEsc;
-        break;
-    case lastWasQuote:
-        csvStatus = csvInvRecord;
-        break;
-    default:
-        csvStatus = csvInternal;
-        break;
-    }
-    return csvStatus;
+	switch (state) {
+	case error:
+		// csvStatus already set appropriately.
+		break;
+	case done:
+		csvStatus = csvOk;
+		break;
+	case preamble:
+		csvStatus = csvOk;
+		break;
+	case copyingFields:
+		csvStatus = csvOk;
+		break;
+	case copyingQuotedField:
+		csvStatus = csvEndInQuote;
+		break;
+	case lastWasEscape:
+		csvStatus = csvLastWasEsc;
+		break;
+	case lastWasQuote:
+		csvStatus = csvInvRecord;
+		break;
+	default:
+		csvStatus = csvInternal;
+		break;
+	}
+	return csvStatus;
 }
 //lint -restore
 ///////////////////////////////////////////////////////////////////////////////
@@ -376,6 +382,10 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 		{
 			// We have a non-null character to process, i.e. we are not done.
 			wc = *itr++;
+			if (wc == L'\r')
+			{
+					continue;
+			}
 			switch (state) {
 			case csvBegTrim:
 				// We are looking for the beginning of the field.
@@ -850,14 +860,14 @@ std::wstring TcsCsvStatus::GetMessage (void)
 	}
 	else
 	{
-		swprintf (fldDesignation,wcCount (fldDesignation),L"%S",FieldId.c_str ());
+		swprintf (fldDesignation,wcCount (fldDesignation),L"%S",FieldId.c_str ());		//lint !e559  parameter does not match format.
 	}
 
 	swprintf (msgBuffer,wcCount (msgBuffer),L"Obj: %S; Line %lu; Field %S; Reason: %S.",
-											ObjectName.c_str (),
+											ObjectName.c_str (),			//lint !e559   PC-Lint does not recognize %S in format */
 											LineNbr,
-											fldDesignation,
-											statusMsgPtr);
+											fldDesignation,					//lint !e559   PC-Lint does not recognize %S in format */
+											statusMsgPtr);					//lint !e559   PC-Lint does not recognize %S in format */
 	message = msgBuffer;
 	return message;
 }
@@ -1869,28 +1879,27 @@ unsigned TcsCsvFileBase::LowerBound (const TcsCsvRecord& searchRec,const TcsCsvS
 }
 bool TcsCsvFileBase::ReadFromStream (std::wistream& iStrm,bool firstIsLabels,TcsCsvStatus& status)
 {
-    bool ok = true;
-    unsigned long lineNbr = 0UL;
-    wchar_t delimiters [4];
-    std::wstring fldLabel;
-    TcsCsvRecord csvRecord;
+	bool ok = true;
+	unsigned long lineNbr = 0UL;
+	wchar_t delimiters [4];
+	TcsCsvRecord csvRecord;
 
-    if (firstIsLabels && Records.size () != 0)
-    {
-        ok = false;
-        status.SetStatus (csvLblsOnAppend);
-        status.SetObjectName (ObjectName);
-    }
-    else
-    {
-        csvRecord.SetMinFldCnt (MinFldCnt);
-        csvRecord.SetMaxFldCnt (MaxFldCnt);
-        csvRecord.Reserve (static_cast<unsigned>(MaxFldCnt));		//lint !e571   (suspicious cast)
+	if (firstIsLabels && Records.size () != 0)
+	{
+		ok = false;
+		status.SetStatus (csvLblsOnAppend);
+		status.SetObjectName (ObjectName);
+	}
+	else
+	{
+		csvRecord.SetMinFldCnt (MinFldCnt);
+		csvRecord.SetMaxFldCnt (MaxFldCnt);
+		csvRecord.Reserve (static_cast<unsigned>(MaxFldCnt));		//lint !e571   (suspicious cast)
 
-        delimiters [0] = Separator;
-        delimiters [1] = Quote;
-        delimiters [2] = Escape;
-        delimiters [3] = L'\0';
+		delimiters [0] = Separator;
+		delimiters [1] = Quote;
+		delimiters [2] = Escape;
+		delimiters [3] = L'\0';
 
 		// Read the labels if they're supposed to be there.
 		if (firstIsLabels)
@@ -1903,26 +1912,26 @@ bool TcsCsvFileBase::ReadFromStream (std::wistream& iStrm,bool firstIsLabels,Tcs
 		}
 
 		// Read the rest of the input stream.
-        while (ok && iStrm.good ())
-        {
-            // See if we are at the end of the file.
-            iStrm.peek ();					//lint !e534    (ignoring return value)
-            if (iStrm.eof ()) break;
-            
-            // OK, there should be more stuff out there.
-            lineNbr += 1;
-            status.BumpLineNbr ();
-            ok = csvRecord.ReplaceRecord (iStrm,status,delimiters);
-            if (!ok)
-            {
-                status.SetLineNbr (lineNbr);
-                status.SetObjectName (ObjectName);
-                continue;
-            }
-            Records.push_back (csvRecord);
-        }
-    }
-    return ok;
+		while (ok && iStrm.good ())
+		{
+			// See if we are at the end of the file.
+			iStrm.peek ();					//lint !e534    (ignoring return value)
+			if (iStrm.eof ()) break;
+
+			// OK, there should be more stuff out there.
+			lineNbr += 1;
+			status.BumpLineNbr ();
+			ok = csvRecord.ReplaceRecord (iStrm,status,delimiters);
+			if (!ok)
+			{
+				status.SetLineNbr (lineNbr);
+				status.SetObjectName (ObjectName);
+				continue;						//lint !e845   PC-Lint suggests break instead of continue as ok == false here
+			}
+			Records.push_back (csvRecord);
+		}
+	}
+	return ok;
 }
 bool TcsCsvFileBase::WriteToStream (std::wostream& oStrm,bool writeLabels,TcsCsvStatus& status) const
 {

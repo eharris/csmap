@@ -314,7 +314,7 @@ int main (int argc,char *argv [])
 
 
 	/* We're done. */
-	printf ("All dictionaries and multiple regressions compiled successfully.\n");
+	printf ("All dictionaries compiled successfully.\n");
 	if (!batch) acknowledge ();
 
 	return (0);

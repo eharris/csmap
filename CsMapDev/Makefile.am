@@ -44,10 +44,11 @@ libCsmap_la_SOURCES = \
   Source/CS_frnch.c \
   Source/CS_gauss.c \
   Source/CS_general.c \
+  Source/CS_geocn.c \
   Source/CS_geoct.c \
   Source/CS_geoid96.c \
   Source/CS_geoid99.c \
-  Source/CS_GeoidHeight.c \
+  Source/CS_geoidHeight.c \
   Source/CS_gissupprt.c \
   Source/CS_gnomc.c \
   Source/CS_gpio.c \
@@ -110,7 +111,7 @@ libCsmap_la_SOURCES = \
   Source/CS_units.c \
   Source/CS_unity.c \
   Source/CS_vdgrn.c \
-  Source/CS_VertconUS.c \
+  Source/CS_vertconUS.c \
   Source/CS_vrtcon.c \
   Source/CS_wellknowntext.cpp \
   Source/CS_wgs72.c \
@@ -119,9 +120,8 @@ libCsmap_la_SOURCES = \
   Source/CS_wktObjKonstants.cpp \
   Source/CS_zones.c \
   Source/CScs2Wkt.cpp \
-  Source/cscscomp.c \
+  Source/CScscomp.c \
   Source/CSdata.c \
-  Source/csDataDir.cpp \
   Source/CSdataDT.c \
   Source/CSdataPJ.c \
   Source/CSdataU.c \
@@ -134,8 +134,6 @@ libCsmap_la_SOURCES = \
   Source/CSgeodeticSupport.c \
   Source/CSgpcomp.c \
   Source/CSgxcomp.c \
-  Source/CSmrcomp.c \
-  Source/CSsys34KMS.c \
   Source/CSwktFlavors.c \
   Source/csIoUtil.cpp
 
@@ -146,12 +144,13 @@ noinst_HEADERS = \
   Include/csIoUtil.hpp \
   Include/cs_ioUtil.h \
   Include/cs_CsvFileSupport.hpp \
-  Include/cs_CsvFileSupport.hpp \
   Include/cs_EpsgStuff.h \
   Include/cs_NameMapper.hpp \
   Include/cs_NameMapperSupport.h \
+  Include/cs_Ats77.h \
   Include/cs_clientBeg.h \
   Include/cs_clientEnd.h \
+  Include/cs_Geocon.h \
   Include/cs_Geodetic.h \
   Include/cs_Legacy.h \
   Include/cs_map.h \
@@ -162,6 +161,7 @@ noinst_HEADERS = \
   Include/cs_Wchar.hpp \
   Include/cs_wkt.h \
   Include/cs_WktObject.hpp
+  Source/CSsys34KMS.c
 
 INCLUDES = -IInclude 
 

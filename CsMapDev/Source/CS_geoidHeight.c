@@ -129,7 +129,8 @@ struct csGeoidHeight_* CSnewGeoidHeight (Const char *catalog)
 		}
 		else
 		{
-			for (findPtr = __This->listHead;findPtr->next != NULL;findPtr = findPtr->next);
+			/* Find the last element in the list. */
+			for (findPtr = __This->listHead;findPtr->next != NULL;findPtr = findPtr->next);		/*lint !e722  suspicious ';' */
 			findPtr->next = ghEntryPtr;
 		}
 	}
@@ -467,9 +468,9 @@ double CStestGeoidHeightEntry (struct csGeoidHeightEntry_* __This,Const double* 
 		case csGeoidHgtTypeBynGridFile:
 			rtnValue = CStestBynGridFile (__This->pointers.bynGridFilePtr,ll84);
 			break;
-      case csGeoidHgtTypeEgm96:
-         rtnValue = CStestEgm96 (__This->pointers.egm96Ptr,ll84);
-         break;
+		case csGeoidHgtTypeEgm96:
+			rtnValue = CStestEgm96 (__This->pointers.egm96Ptr,ll84);
+			break;
 		case csGeoidHgtTypeWorld:
 		case csGeoidHgtTypeAustralia:
 		case csGeoidHgtTypeNone:

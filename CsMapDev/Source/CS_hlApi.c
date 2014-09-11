@@ -61,6 +61,12 @@ void EXP_LVL1 CS_fast (int mode)
 **	datum conversions.  These caches are searched for each
 **	conversion.
 **********************************************************************/
+/*lint -e539   unexpected indentation */
+
+/* TO DO Lint suggests that dereferencing a null pointer is a distinct
+   possibility here.  Decades of use suggest this is not likely.
+   This should be verified when resources permit. */
+/*lint -e794  possible use of a null pointer */
 
 int EXP_LVL1 CS_cnvrt (Const char *src_cs,Const char *dst_cs,double coord [3])
 
@@ -238,8 +244,8 @@ error:
 
 struct cs_Csprm_ * EXP_LVL9 CSbcclu (Const char *cs_name)
 {
-	extern csThread struct csCscach_ *csCscachP;
-	extern csThread int csCscachI;
+	extern struct csCscach_ *csCscachP;
+	extern int csCscachI;
 
 	cs_Register struct csCscach_ *ch_ptr;
 
@@ -385,7 +391,7 @@ error:
 **********************************************************************/
 void EXP_LVL1 CSbccDbg (char *results,int rsltSz)
 {
-	extern csThread struct csCscach_ *csCscachP;
+	extern struct csCscach_ *csCscachP;
 
 	int need;
 	char *cp;
@@ -442,8 +448,8 @@ struct cs_Dtcprm_ * EXP_LVL9 CSbdclu (	Const struct cs_Csprm_ *src_cs,
 										int dat_err,
 										int blk_err)
 {
-	extern csThread struct csDtcach_ *csDtcachP;
-	extern csThread int csDtcachI;
+	extern struct csDtcach_ *csDtcachP;
+	extern int csDtcachI;
 
 	unsigned short srcPrjCode;
 	unsigned short dstPrjCode;
@@ -576,7 +582,7 @@ error:
 **********************************************************************/
 void EXP_LVL1 CSbdcDbg (char *results,int rsltSz)
 {
-	extern csThread struct csDtcach_ *csDtcachP;
+	extern struct csDtcach_ *csDtcachP;
 
 	int need;
 	char *cp;
@@ -692,18 +698,18 @@ double EXP_LVL1 CS_scalh (Const char *cs_nam,double ll [2])
 
 void EXP_LVL1 CS_recvr (void)
 {
-	extern csThread struct cs_Ostn97_ *cs_Ostn97Ptr;
-	extern csThread struct cs_Ostn02_ *cs_Ostn02Ptr;
+	extern struct cs_Ostn97_ *cs_Ostn97Ptr;
+	extern struct cs_Ostn02_ *cs_Ostn02Ptr;
 
-	extern csThread struct csCscach_ *csCscachP;
-	extern csThread struct csDtcach_ *csDtcachP;
+	extern struct csCscach_ *csCscachP;
+	extern struct csDtcach_ *csDtcachP;
 
-	extern csThread char *cs_CsKeyNames;
-	extern csThread char *cs_DtKeyNames;
-	extern csThread char *cs_ElKeyNames;
-	extern csThread char *cs_CsLlEnum;
-	extern csThread struct cs_Csgrplst_ *cs_CsGrpList;
-	extern csThread struct cs_Mgrs_ *cs_MgrsPtr;
+	extern char *cs_CsKeyNames;
+	extern char *cs_DtKeyNames;
+	extern char *cs_ElKeyNames;
+	extern char *cs_CsLlEnum;
+	extern struct cs_Csgrplst_ *cs_CsGrpList;
+	extern struct cs_Mgrs_ *cs_MgrsPtr;
 
 	struct csDtcach_ *dtch_ptr;
 	struct csDtcach_ *dtch_tmp;

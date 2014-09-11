@@ -52,7 +52,7 @@ struct csDtmBridge_* CSnewDtmBridge (Const struct cs_Datum_* src_dt,
 	bridgePtr->trgIndex = csPATH_MAXXFRM;
 	return bridgePtr;
 error:
-	if (bridgePtr != NULL)
+	if (bridgePtr != NULL)			/*lint !e774  boolean always evaluates to true */
 	{	
 		CS_free (bridgePtr);
 		bridgePtr = NULL;
@@ -223,9 +223,9 @@ int CSdtmBridgeAddSrcPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 	unsigned idxCount;
 
 	Const struct cs_GxIndex_* xfrmPtr;
-	struct cs_GeodeticPathElement_* pathElePtr;
+	Const struct cs_GeodeticPathElement_* pathElePtr;
 
-	idxCount = pathPtr->elementCount;
+	idxCount = (unsigned)pathPtr->elementCount;		/*lint !e571  elementCount should be defined as unsigned */
 	if (direction == cs_DTCDIR_FWD)
 	{
 		for (idx = 0;idx < idxCount;idx += 1)
@@ -241,18 +241,18 @@ int CSdtmBridgeAddSrcPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 			gxIndex = CS_locateGxByName (pathElePtr->geodeticXformName);
 			if (gxIndex < 0)
 			{
-				CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
+				CS_stncp (csErrnam,"CS_dtmBridge:3",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
-			xfrmPtr = CS_getGxIndexEntry (gxIndex); 
+			xfrmPtr = CS_getGxIndexEntry ((unsigned int)gxIndex); 
 			if (xfrmPtr == NULL)
 			{
-				CS_stncp (csErrnam,"CS_datum::3",MAXPATH);
+				CS_stncp (csErrnam,"CS_dtmBridge:4",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
-			CSdtmBridgeAddSrcTransformation (thisPtr,xfrmPtr,direction);
+			CSdtmBridgeAddSrcTransformation (thisPtr,xfrmPtr,direction);	/*lint !e534  ignoring return value */
 		}
 	}
 	else if (direction == cs_DTCDIR_INV)
@@ -272,23 +272,23 @@ int CSdtmBridgeAddSrcPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 			gxIndex = CS_locateGxByName (pathElePtr->geodeticXformName);
 			if (gxIndex < 0)
 			{
-				CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
+				CS_stncp (csErrnam,"CS_dtmBridge:5",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
-			xfrmPtr = CS_getGxIndexEntry (gxIndex); 
+			xfrmPtr = CS_getGxIndexEntry ((unsigned int)gxIndex); 
 			if (xfrmPtr == NULL)
 			{
-				CS_stncp (csErrnam,"CS_datum::3",MAXPATH);
+				CS_stncp (csErrnam,"CS_dtmBridge:6",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
-			CSdtmBridgeAddSrcTransformation (thisPtr,xfrmPtr,direction);
+			CSdtmBridgeAddSrcTransformation (thisPtr,xfrmPtr,direction);	/*lint !e534  ignoring return value */
 		}
 	}
 	else
 	{
-		CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
+		CS_stncp (csErrnam,"CS_dtmBridge:7",MAXPATH);
 		CS_erpt (cs_ISER);
 		goto error;
 	}
@@ -318,7 +318,7 @@ int CSdtmBridgeAddSrcTransformation (struct csDtmBridge_* thisPtr,
 	}
 	thisPtr->srcIndex += 1;
 	bridgeXfrmPtr = &thisPtr->bridgeXfrms[thisPtr->srcIndex];
-	bridgeXfrmPtr->xfrmPtr = xfrmPtr;
+	bridgeXfrmPtr->xfrmPtr = xfrmPtr;			/*lint !e158  increases capability */
 	bridgeXfrmPtr->direction = direction;
 	
 	bridgeStatus = CSdtmBridgeIsComplete (thisPtr);
@@ -352,14 +352,14 @@ int CSdtmBridgeAddTrgPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 	Const struct cs_GxIndex_* xfrmPtr;
 	struct cs_GeodeticPathElement_* pathElePtr;
 
-	idxCount = pathPtr->elementCount;
+	idxCount = (unsigned)pathPtr->elementCount;		/*lint !e571  elementCount should be defined as unsigned */
 	if (direction == cs_DTCDIR_FWD)
 	{
 		for (idx = idxCount;idx > 0;idx -= 1)
 		{
 			/* Here once for each transformation in the provided Geodetic
 			   Path definition. */
-			pathElePtr = &pathPtr->geodeticPathElements [idx - 1];
+			pathElePtr = &pathPtr->geodeticPathElements [idx - 1];					/*lint !e158  increases capability */
 			
 			/* The direction as it applies to the entire path is forward.
 			   Thus, we copy the direction assigned to each element of the
@@ -368,18 +368,18 @@ int CSdtmBridgeAddTrgPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 			gxIndex = CS_locateGxByName (pathElePtr->geodeticXformName);
 			if (gxIndex < 0)
 			{
-				CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
+				CS_stncp (csErrnam,"CS_dtmBridge:8",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
-			xfrmPtr = CS_getGxIndexEntry (gxIndex); 
+			xfrmPtr = CS_getGxIndexEntry ((unsigned int)gxIndex); 
 			if (xfrmPtr == NULL)
 			{
-				CS_stncp (csErrnam,"CS_datum::3",MAXPATH);
+				CS_stncp (csErrnam,"CS_dtmBridge:9",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
-			CSdtmBridgeAddTrgTransformation (thisPtr,xfrmPtr,direction);
+			CSdtmBridgeAddTrgTransformation (thisPtr,xfrmPtr,direction);	/*lint !e534 ignoring return value */
 		}
 	}
 	else if (direction == cs_DTCDIR_INV)
@@ -390,7 +390,7 @@ int CSdtmBridgeAddTrgPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 		{
 			/* Here once for each transformation in the provided Geodetic
 			   Path definition. */
-			pathElePtr = &pathPtr->geodeticPathElements [idx];
+			pathElePtr = &pathPtr->geodeticPathElements [idx];			/*lint !e158  increases capability */
 
 			/* The direction as it applies to the entire path is inverse.
 			   Thus, we copy the opposite of the direction assigned to each
@@ -399,23 +399,23 @@ int CSdtmBridgeAddTrgPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 			gxIndex = CS_locateGxByName (pathElePtr->geodeticXformName);
 			if (gxIndex < 0)
 			{
-				CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
+				CS_stncp (csErrnam,"CS_dtmBridge:10",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
-			xfrmPtr = CS_getGxIndexEntry (gxIndex); 
+			xfrmPtr = CS_getGxIndexEntry ((unsigned int)gxIndex); 
 			if (xfrmPtr == NULL)
 			{
-				CS_stncp (csErrnam,"CS_datum::3",MAXPATH);
+				CS_stncp (csErrnam,"CS_dtmBridge:11",MAXPATH);
 				CS_erpt (cs_ISER);
 				goto error;
 			}
-			CSdtmBridgeAddTrgTransformation (thisPtr,xfrmPtr,direction);
+			CSdtmBridgeAddTrgTransformation (thisPtr,xfrmPtr,direction);	/*lint !e534 ignoring return value */
 		}
 	}
 	else
 	{
-		CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
+		CS_stncp (csErrnam,"CS_dtmBridge:12",MAXPATH);
 		CS_erpt (cs_ISER);
 		goto error;
 	}
@@ -445,7 +445,7 @@ int CSdtmBridgeAddTrgTransformation (struct csDtmBridge_* thisPtr,
 	}
 	thisPtr->trgIndex -= 1;
 	bridgeXfrmPtr = &thisPtr->bridgeXfrms[thisPtr->trgIndex];
-	bridgeXfrmPtr->xfrmPtr = xfrmPtr;
+	bridgeXfrmPtr->xfrmPtr = xfrmPtr;			/*lint !e158  increases capability */
 	bridgeXfrmPtr->direction = direction;
 
 	bridgeStatus = CSdtmBridgeIsComplete (thisPtr);
@@ -453,116 +453,3 @@ int CSdtmBridgeAddTrgTransformation (struct csDtmBridge_* thisPtr,
 error:
 	return cs_DTCBRG_ERROR;
 }
-//int CSdtmBridgeAddSrcPath (struct csDtmBridge_* thisPtr,Const struct cs_GeodeticPath_* pathPtr,
-//														short direction)
-//{
-//	extern char csErrnam [MAXPATH];
-//
-//	int gxIndex;
-//	int bridgeStatus;
-//
-//	unsigned idx;
-//	unsigned idxCount;
-//
-//	Const struct cs_GxIndex_* xfrmPtr;
-//	struct cs_GeodeticPathElement_* pathElePtr;
-//
-//	idxCount = pathPtr->elementCount;
-//	if (direction == cs_DTCDIR_FWD)
-//	{
-//		for (idx = 0;idx < idxCount;idx += 1)
-//		{
-//			/* Here once for each transformation in the provided Geodetic
-//			   Path definition. */
-//			pathElePtr = &pathPtr->geodeticPathElements [idx];
-//			
-//			/* The direction as it applies to the entire path is forward.
-//			   Thus, we copy the direction assigned to eaach element of the
-//			   provided path. */
-//			direction = pathElePtr->direction;
-//			gxIndex = CS_locateGxByName (pathElePtr->geodeticXformName);
-//			if (gxIndex < 0)
-//			{
-//				CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
-//				CS_erpt (cs_ISER);
-//				goto error;
-//			}
-//			xfrmPtr = CS_getGxIndexEntry (gxIndex); 
-//			if (xfrmPtr == NULL)
-//			{
-//				CS_stncp (csErrnam,"CS_datum::3",MAXPATH);
-//				CS_erpt (cs_ISER);
-//				goto error;
-//			}
-//			CSdtmBridgeAddSrcTransformation (thisPtr,xfrmPtr,direction);
-//		}
-//	}
-//	else if (direction == cs_DTCDIR_INV)
-//	{
-//		for (idx = 0;idx <idxCount;idx += 1)
-//		{
-//			/* Here once for each transformation in the provided Geodetic
-//			   Path definition. */
-//			pathElePtr = &pathPtr->geodeticPathElements [idx];
-//
-//			/* The direction as it applies to the entire path is inverse.
-//			   Thus, we copy the opposite direction assigned to eaach element
-//			   of the provided path. */
-//			direction = (pathElePtr->direction == cs_DTCDIR_FWD) ? cs_DTCDIR_INV : cs_DTCDIR_FWD;
-//			gxIndex = CS_locateGxByName (pathElePtr->geodeticXformName);
-//			if (gxIndex < 0)
-//			{
-//				CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
-//				CS_erpt (cs_ISER);
-//				goto error;
-//			}
-//			xfrmPtr = CS_getGxIndexEntry (gxIndex); 
-//			if (xfrmPtr == NULL)
-//			{
-//				CS_stncp (csErrnam,"CS_datum::3",MAXPATH);
-//				CS_erpt (cs_ISER);
-//				goto error;
-//			}
-//			CSdtmBridgeAddTrgTransformation (thisPtr,xfrmPtr,direction);
-//		}
-//	}
-//	else
-//	{
-//		CS_stncp (csErrnam,"CS_datum::2",MAXPATH);
-//		CS_erpt (cs_ISER);
-//		goto error;
-//	}
-//	bridgeStatus = CSdtmBridgeIsComplete (thisPtr);
-//	return bridgeStatus;
-//error:
-//	return cs_DTCBRG_ERROR;
-//}
-//int CSdtmBridgeAddSrcTransformation (struct csDtmBridge_* thisPtr,
-//									 Const struct cs_GxIndex_* xfrmPtr,
-//									 short direction)
-//{
-//	extern char csErrnam [MAXPATH];
-//
-//	int bridgeStatus;
-//
-//	struct csDtmBridgeXfrm_* bridgeXfrmPtr;
-//
-//	char errMsg [256];
-//
-//	if (CSdtmBridgeIsFull (thisPtr))
-//	{
-//		sprintf (errMsg,"%s to %s",thisPtr->srcDatumName,thisPtr->trgDatumName);
-//		CS_stncp (csErrnam,errMsg,MAXPATH);
-//		CS_erpt (cs_GX_TOOMANY);
-//		goto error;
-//	}
-//	thisPtr->srcIndex += 1;
-//	bridgeXfrmPtr = &thisPtr->bridgeXfrms[thisPtr->srcIndex];
-//	bridgeXfrmPtr->xfrmPtr = xfrmPtr;
-//	bridgeXfrmPtr->direction = direction;
-//	
-//	bridgeStatus = CSdtmBridgeIsComplete (thisPtr);
-//	return bridgeStatus;
-//error:
-//	return cs_DTCBRG_ERROR;
-//}

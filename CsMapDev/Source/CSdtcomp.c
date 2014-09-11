@@ -28,10 +28,9 @@
 #include "cs_map.h"
 #include "cs_Legacy.h"
 
-/* Entire module skipped if this is an Embedded compile for project management
-   convenience.  Don't think it likely that we'll need to compile dictionaries
-   in the Embedded environment. */
-#if !defined (__WINCE__)
+/*lint -esym(767,DT_NAME,DESC_NM,ELLP_NM,DELTA_X,DELTA_Y,DELTA_Z,ROT_X,ROT_Y,ROT_Z)  possibly different values in other modules */
+/*lint -esym(767,BWSCALE,LOCATION,COUNTRY,SOURCE,USE,GROUP,EPSG_NBR)                 possibly different values in other modules */
+/*lint -esym(754,cs_DtcmpT_::label)  not referenced directly, only indirectly */
 
 extern double cs_DelMax;
 extern double cs_RotMax;
@@ -803,4 +802,3 @@ int CSdtdefwr (	csFILE *outStrm,
 	if (cancel && err_cnt == 0) err_cnt = 1;
 	return (cancel ? -err_cnt : err_cnt);
 }
-#endif

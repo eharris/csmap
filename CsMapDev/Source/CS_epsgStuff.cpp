@@ -25,19 +25,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-//lint -esym(534,TcsCsvFileBase::SetMinFldCnt)		(ignoring return value)
-//lint -esym(534,TcsCsvFileBase::SetMaxFldCnt)		(ignoring return value)
-//lint -esym(534,wcstombs)							(ignoring return value)
-//lint -esym(534,wcscat)							(ignoring return value)
-//lint -save -esym(613,crsTblPtr,copTblPtr)			(possible use of null pointer, actually a PC-Lint bug)		
+//lint -esym(534,TcsCsvFileBase::SetMinFldCnt)  ignoring return value
+//lint -esym(534,TcsCsvFileBase::SetMaxFldCnt)  ignoring return value
+//lint -esym(766,..\Include\cs_wkt.h)           unreferenced header, needed for pre-compiled headers
+//lint -save -esym(613,crsTblPtr,copTblPtr)     possible use of null pointer, actually a PC-Lint bug
+//lint -e514                                    usuaul use of boolean expression (e.g. ok &= )
 
 #include "cs_map.h"
-#include "cs_Legacy.h"
-#include "cs_WktObject.hpp"
-#include "cs_wkt.h"
 #include "cs_NameMapper.hpp"
 //  cs_NameMapper.hpp includes cs_CsvFileSupport.hpp
 //  cs_NameMapper.hpp includes csNameMapperSupport.hpp
+#include "cs_WktObject.hpp"
+#include "cs_wkt.h"
+
+#include "cs_Legacy.h"
 #include "cs_EpsgStuff.h"
 
 extern "C" const double cs_Zero;
@@ -87,7 +88,7 @@ const TcsEpsgTblMap KcsEpsgTblMap [] =
 	{          epsgTblPrimeMeridian, 10,  epsgFldPrimeMeridianCode,    L"Prime Meridian",                       epsgFldPrimeMeridianCode,   epsgFldNone,              epsgFldNone,             epsgFldNone },
 	{           epsgTblSupercession,  7,  epsgFldSupersessionId,       L"Supersession",                         epsgFldObjectCode,          epsgFldObjectTableName,   epsgFldSupersessionYear, epsgFldNone },
 	{          epsgTblUnitOfMeasure, 12,  epsgFldUomCode,              L"Unit of Measure",                      epsgFldUomCode,             epsgFldNone,              epsgFldNone,             epsgFldNone },
-	{         epsgTblVersionHistory,  6,  epsgFldVersionHistoryCode,   L"Version History",                      epsgFldVersionNumber,       epsgFldNone,              epsgFldNone,             epsgFldNone },
+	{         epsgTblVersionHistory,  6,  epsgFldVersionHistoryCode,   L"Version History",                      epsgFldVersionHistoryCode,  epsgFldNone,              epsgFldNone,             epsgFldNone },
 	{                epsgTblUnknown,  0,  epsgFldNone,                 L"",                                     epsgFldNone,                epsgFldNone,              epsgFldNone,             epsgFldNone },
 };
 const TcsEpsgFldMap KcsEpsgFldMap [] =
@@ -1580,12 +1581,12 @@ TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t*
 			FailMessage += csvStMesg + L"\n";
 			Ok = false;
 		}
-	}
+	}							//lint !e593    cutodial pointer (newTable) not free'ed
 	if (Ok)
 	{
 		if (revLevel == 0)
 		{
-			DetermineRevisionLevel ();
+			DetermineRevisionLevel ();		//lint !e534
 		}
 		else
 		{
@@ -1596,9 +1597,10 @@ TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const wchar_t* databaseFolder,const wchar_t*
 TcsEpsgDataSetV6::TcsEpsgDataSetV6 (const TcsEpsgDataSetV6& source) : Ok             (source.Ok),
 																	  RevisionLevel  (source.RevisionLevel),
 																	  DatabaseFolder (source.DatabaseFolder),
+																	  FailMessage    (source.FailMessage),
 																	  EpsgTables     (source.EpsgTables)
 {
-}																	  
+}
 TcsEpsgDataSetV6::~TcsEpsgDataSetV6 (void)
 {
 	std::map<EcsEpsgTable,TcsEpsgTable*>::iterator itr;
@@ -1616,6 +1618,7 @@ TcsEpsgDataSetV6& TcsEpsgDataSetV6::operator= (const TcsEpsgDataSetV6& rhs)
 		Ok             = rhs.Ok;
 		RevisionLevel  = rhs.RevisionLevel;
 		DatabaseFolder = rhs.DatabaseFolder;
+		FailMessage    = rhs.FailMessage;
 		EpsgTables     = rhs.EpsgTables;		// ouch!!!
 	}
 	return *this;
@@ -1652,11 +1655,12 @@ TcsEpsgTable* TcsEpsgDataSetV6::GetTablePtr (EcsEpsgTable tableId)
 }
 //=============================================================================
 // High Level API Functions
-bool TcsEpsgDataSetV6::IsOk (void) const
-{
-	return Ok;
-}
 bool TcsEpsgDataSetV6::IsOk (void)
+{
+	// Is this really necessary???
+	return Ok;
+}	//lint !e1762
+bool TcsEpsgDataSetV6::IsOk (void) const
 {
 	return Ok;
 }
@@ -1854,7 +1858,7 @@ bool TcsEpsgDataSetV6::GetCsMapEllipsoid (struct cs_Eldef_& ellipsoid,const TcsE
 			}
 			else
 			{
-				flattening = 1.0 - (pRad / eRad);
+				flattening = 1.0 - (pRad / eRad);		//lint !e414   possible divide by zero
 				rFlattening = 1.0 / flattening;
 			}
 			eSq = (2.0 * flattening) - (flattening * flattening);
@@ -2022,7 +2026,7 @@ unsigned TcsEpsgDataSetV6::LocateParameterValue (const TcsEpsgCode& opCode,const
 	{
 		recordNumber = prmTblPtr->EpsgLocateFirst (epsgFldCoordOpCode,opCode);
 		ok = (recordNumber != invalidRecordNbr);
-		for (unsigned idx = recordNumber;ok;idx += 1)
+		for (unsigned idx = recordNumber;ok;idx += 1)			//lint !e440    loop variable (idx) does not appear in conditional expression
 		{
 			// I think this is superfluous.  I believe an operation code uniquely
 			// identifies a set of parameters; and the operation method code
@@ -2076,11 +2080,6 @@ bool TcsEpsgDataSetV6::GetParameterFileName (std::wstring& parameterFileName,con
 	unsigned recordNumber;
 	unsigned invalidRecordNbr;
 
-	TcsEpsgCode recOprCode;
-	TcsEpsgCode recMthCode;
-	TcsEpsgCode recPrmCode;
-	TcsEpsgCode recUomCode (0UL);
-
 	invalidRecordNbr = TcsCsvFileBase::GetInvalidRecordNbr ();
 	recordNumber = invalidRecordNbr;
 
@@ -2109,11 +2108,7 @@ bool TcsEpsgDataSetV6::GetParameterValue (double& parameterValue,const TcsEpsgCo
 	unsigned recordNumber;
 	unsigned invalidRecordNbr;
 
-	TcsEpsgCode recOprCode;
-	TcsEpsgCode recMthCode;
-	TcsEpsgCode recPrmCode;
 	TcsEpsgCode recUomCode (0UL);
-	TcsEpsgCode prmUomCode;
 
 	std::wstring fldData;
 
@@ -2141,7 +2136,6 @@ bool TcsEpsgDataSetV6::GetParameterValue (double& parameterValue,const TcsEpsgCo
 	}
 	return ok;
 }
-extern "C" struct cs_Datum_ *cs_Wgs84Ptr;
 bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& ellipsoid,
 															  const TcsEpsgCode& epsgDtmCode,
 															  unsigned variant) const
@@ -2152,11 +2146,7 @@ bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& 
 
 	TcsEpsgCode ellpCode;
 	TcsEpsgCode baseCode;
-	TcsEpsgCode pmerCode;
 	TcsEpsgCode dtmOpCode;
-	TcsEpsgCode operationCode (0UL);
-	TcsEpsgCode opMthCode (0UL);
-	TcsEpsgCode uomCode (0UL);
 
 	std::wstring dtmName;
 	std::wstring fldData;
@@ -2306,7 +2296,6 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 	short csPrmCount;
 
 	TcsEpsgCode opMthCode;
-	TcsEpsgCode uomCode;
 
 	double parmValue;
 
@@ -2433,13 +2422,12 @@ bool TcsEpsgDataSetV6::DetermineRevisionLevel (void)
 	bool ok (false);
 	unsigned recNbr;
 	std::wstring fieldData;
-	TcsCsvStatus csvStatus;
 
 	const TcsEpsgTable* tblPtr = GetTablePtr (epsgTblVersionHistory);
 	if (tblPtr != 0)
 	{
 		recNbr = tblPtr->RecordCount() - 1;
-		ok = static_cast<const TcsCsvFileBase*>(tblPtr)->GetField (fieldData,recNbr,epsgFldVersionNumber,csvStatus);
+		ok = GetFieldByIndex (fieldData,epsgTblVersionHistory,epsgFldVersionNumber,recNbr);
 		if (ok)
 		{
 			RevisionLevel = fieldData;
@@ -2484,7 +2472,7 @@ struct TcsGsbNameToCodeMap
 	{	"vic_0799.gsb",                   cs_DTCTYP_AGD66  },
 	{	"wa_0400.gsb",                    cs_DTCTYP_AGD84  },
 	{	"wa_0700.gsb",                    cs_DTCTYP_AGD84  },
-	{	"\0",                             cs_DTCTYP_NONE   }
+	{	"\0",                             cs_DTCTYP_NONE   }		//lint !e840    use of nul character with a string literal
 };
 short TcsEpsgDataSetV6::DetermineCsMapDatumMethod (const TcsEpsgCode& operationCode,bool& coordFrame) const
 {
@@ -2494,8 +2482,7 @@ short TcsEpsgDataSetV6::DetermineCsMapDatumMethod (const TcsEpsgCode& operationC
 	TcsEpsgCode opMthCode;
 
 	std::wstring fileName;
-	std::wstring fileName1;
-	
+
 	char fileNameC [64];
 
 	coordFrame = false;
@@ -2600,7 +2587,6 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 	EcsCrsType crsType (epsgCrsTypNone);
 
 	std::wstring crsName;
-	std::wstring fldData;
 
 	// Initialize the return values so there is no chance of
 	// confusion on an error condition.
@@ -2794,8 +2780,7 @@ bool TcsEpsgDataSetV6::GetReferenceDatum (TcsEpsgCode& dtmEpsgCode,const TcsEpsg
 	bool ok;
 	TcsEpsgCode baseCode;
 	EcsCrsType crsType (epsgCrsTypNone);
-	std::wstring fldData;
-	
+
 	const TcsEpsgTable* crsTblPtr = GetTablePtr (epsgTblReferenceSystem);
 	const TcsEpsgTable* dtmTblPtr = GetTablePtr (epsgTblDatum);
 
@@ -2885,16 +2870,7 @@ bool TcsEpsgDataSetV6::GeographicCoordsys (struct cs_Csdef_& coordsys,const TcsE
 
 	double uomFactor;
 
-	TcsEpsgCode dtmEpsgCode;
-	TcsEpsgCode sysEpsgCode;
-	TcsEpsgCode tmpHorzUom;
-	TcsEpsgCode tmpVertUom;
-	TcsEpsgCode pmrEpsgCode;
-	TcsEpsgCode baseCode;
-
 	double primeMeridian;			// in degrees
-	
-	std::wstring fldData;
 
 	// Here for Geographic specific stuff.
 	// Get pointers to the required tables.
@@ -2979,7 +2955,6 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 {
 	bool ok (false);
 
-	TcsEpsgCode sysEpsgCode;
 	TcsEpsgCode copEpsgCode;
 	TcsEpsgCode mthEpsgCode;
 	TcsEpsgCode areaOfUseCode;
@@ -2990,9 +2965,6 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 
 	double toMeters (cs_Zero);			// intentionally a really bogus value
 	double primeMeridian (5000.0);		// intentionally a really bogus value
-
-	std::wstring fldData;
-	std::wstring crsName;
 
 	// Here for Projective specific stuff.
 	// Get pointers to the required tables.
@@ -3321,7 +3293,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 					ok  = GetParameterValue (prmTemp,copEpsgCode,mthEpsgCode,8802UL,9102UL);
 					if (ok)
 					{
-						prmTemp = (double)((int)(prmTemp + 183.00001) / 6);			//lint !e653   (possible loss of fraction)
+						prmTemp = (double)((int)(prmTemp + 183.00001) / 6);		//lint !e653   (possible loss of fraction)
 					}
 					break;
 				case cs_PRMLTYP_HSNS:
@@ -3740,8 +3712,6 @@ bool TcsEpsgDataSetV6::FieldToReal (double& result,const TcsEpsgCode& trgUomCode
 	double trgFactor;
 	double degFactor;
 	
-	std::wstring tmpString;
-
 	result = 0.0;
 	srcType = GetUomFactor (srcFactor,srcUomCode);
 	trgType = GetUomFactor (trgFactor,trgUomCode);
@@ -4235,8 +4205,9 @@ bool TcsEpsgDataSetV6::FieldToDegrees (double& result,const wchar_t* field,const
 		double minutes;
 
 		// Get a copy of the field we are to convert in a place where we
-		// modify same.  Not really necessary, but whatthe heck.
-		wcsncpy (wrkBufr,field,64);
+		// modify same.  Not really necessary, but what the heck.
+		wcsncpy (wrkBufr,field,wcCount (wrkBufr));
+		wrkBufr[wcCount(wrkBufr) - 1] = L'\0';
 
 		// Need to extract the hemisphere (i.e. sign).  We'll skip any
 		// white space which may be there.

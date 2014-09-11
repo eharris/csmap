@@ -1125,6 +1125,8 @@ baseMeridian,  relativeLongitude, deltaLongitude,  Case
       -179.0,             +179.0,         +358.0, special case 2
       +179.0,             -179.0,         -358.0, special case 3
 */
+
+/*lint -esym(550,myBase,myRelative)    not accessed, but nice to have when debugging */
 double EXP_LVL3 CS_deltaLongitude (double baseMeridian,double relativeLongitude)
 {
 	extern double cs_K180;
@@ -1162,3 +1164,5 @@ double EXP_LVL3 CS_deltaLongitude (double baseMeridian,double relativeLongitude)
 	}
 	return deltaLongitude;
 }
+/*lint +esym(550,myBase,myRelative) */
+
