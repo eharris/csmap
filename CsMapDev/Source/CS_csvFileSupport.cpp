@@ -1030,7 +1030,7 @@ bool TcsCsvRecord::GetField (std::wstring& field,short fieldNbr,TcsCsvStatus& st
 {
     bool ok = true;
     
-    if (fieldNbr < 0 || static_cast<unsigned>(fieldNbr) < Fields.size ())		//lint !e571   (suspicious cast)
+    if (fieldNbr >= 0 && static_cast<unsigned>(fieldNbr) < Fields.size ())		//lint !e571   (suspicious cast)
     {
         field = Fields [static_cast<unsigned>(fieldNbr)];		//lint !e571   (suspicious cast)
     }

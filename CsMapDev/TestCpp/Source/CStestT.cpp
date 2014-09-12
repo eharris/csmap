@@ -64,6 +64,37 @@ int CStestT (bool verbose,long32_t duration)
 	int err_cnt = 0;
 
 #ifndef __SKIP__
+	// Working Trac Ticket 145.  Note, to execute this test,
+	// one needs to edit the GeoidHeight.gdc file and make
+	// the .\WW15MGH.GRD reference the first one in the file.
+
+	int status;
+	double geoidHeight;
+	double ll84 [3];
+
+	ll84 [0] = (359.875 - 360.00);
+	ll84 [1] = 89.875;
+	status = CS_geoidHgt (ll84,&geoidHeight);
+	if (status != 0)
+	{
+		char errMessage [MAXPATH];
+		CS_errmsg (errMessage,MAXPATH);
+		printf ("Failure: st = %d.  Reason: %s.\n",status,errMessage);
+		err_cnt += 1;
+	}
+
+	/* geoidHgt should equal ~13.75475 per author of the Trac Ticket 145 */
+	if (fabs (geoidHeight - 13.75475) > 0.00003)
+	{
+		printf ("Trac Ticket 145 test failed [%.6f]\n",geoidHeight);
+		err_cnt += 1;
+	}
+
+	CS_geoidCls ();
+
+#endif
+
+#ifdef __SKIP__
 	int status;
 
 	/* Working Trac ticket 102. */
@@ -94,33 +125,6 @@ int CStestT (bool verbose,long32_t duration)
 		status = CS_ll2cs (csPrm,xy,ll);
 	}
 #endif
-#ifdef __SKIP__
-	ll84 [0] = (269.779155 - 360.00);
-	ll84 [1] = 38.6281550;
-	status = CS_geoidHgt (ll84,&geoidHeight);
-	if (status != 0)
-	{
-		char errMessage [MAXPATH];
-		CS_errmsg (errMessage,MAXPATH);
-		printf ("Failure: st = %d.  Reason: %s.\n",status,errMessage);
-		err_cnt += 1;
-	}
-	/* geoidHgt should equal ~-31.628   Egm84 numbers */
-
-	ll84 [0] = (305.0211140 - 360.0000);
-	ll84 [1] = -14.6212170;
-	status = CS_geoidHgt (ll84,&geoidHeight);
-	if (status != 0)
-	{
-		char errMessage [MAXPATH];
-		CS_errmsg (errMessage,MAXPATH);
-		printf ("Failure: st = %d.  Reason: %s.\n",status,errMessage);
-		err_cnt += 1;
-	}
-	/* geoidHgt should equal ~-2.969   Egm84 numbers */
-
-#endif
-
 
 #ifdef __SKIP__
 	int status;

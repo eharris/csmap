@@ -448,6 +448,9 @@ int main (int argc,char* argv [])
 		}
 	}
 
+	// Close/delete any remnants.
+	CS_reset ();
+
 	// If the test sequence includes any of the tests which use the NameMapper
 	// database, we make sure we can load it before processing a bunch of stuff.
 	cp = strchr (tests,'I');
@@ -513,9 +516,6 @@ int main (int argc,char* argv [])
 			}
 		}
 	}
-
-	// Close/delete any remnants.
-	CS_reset ();
 
 	// If the heap check feature is activated, we walk the current heap and
 	// accumulate the amount of heap memory currently in use.  This is used
