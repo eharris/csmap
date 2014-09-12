@@ -318,7 +318,7 @@ int CScalcEgm96 (struct cs_Egm96_ *__This,double *geoidHgt,const double wgs84 [2
 	   we will always read in a complete cell even if the data point is on the
 	   edge of a cell. */
 	fposBegin = __This->headerCount + (recNbr * __This->recordSize) + (eleNbr * __This->elementSize);
-	fposEnd   = fposBegin + __This->recordSize + __This->elementSize;
+	fposEnd   = fposBegin + __This->recordSize + __This->elementSize + __This->elementSize;
 
 	/* Is the necessary data in the buffer already? */
 	if (fposBegin < __This->bufferBeginPosition || fposBegin > __This->bufferEndPosition ||
@@ -362,7 +362,7 @@ int CScalcEgm96 (struct cs_Egm96_ *__This,double *geoidHgt,const double wgs84 [2
 			CS_erpt (cs_ISER);
 			goto error;
 		}
-		__This->bufferBeginPosition = recFirst * __This->recordSize;
+		__This->bufferBeginPosition = __This->headerCount + (recFirst * __This->recordSize);
 		__This->bufferEndPosition = __This->bufferBeginPosition + readCount;
 
 		/* OK, read in the data. */
