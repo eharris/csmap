@@ -529,20 +529,27 @@ void EXP_LVL1 CS_gxfnm (Const char *new_name)
 	(void)CS_stncp (cs_Gxname,new_name,cs_FNM_MAXLEN);
 	return;
 }
-
-int EXP_LVL5 CS_gxswp (struct cs_GeodeticTransform_* gx_def)
+int EXP_LVL5 CS_gxswp (struct cs_GeodeticTransform_* gx_def,int writeFlag)
 {
 	int swap;
+
+	short lclMethodCode;
+
+	lclMethodCode = gx_def->methodCode;
 
 	/* Swap the elements which are common to all variations of this
 	   definition. */
 	swap = CS_bswap ((void *)gx_def,cs_BSWP_GXDEF_BASE);
+	if (writeFlag == 0)
+	{
+		lclMethodCode = gx_def->methodCode;
+	}
 	
 	/* If we are indeed swapping, swap the items which are variation
 	   dependent. */
 	if (swap)
 	{
-		switch (gx_def->methodCode & cs_DTCPRMTYP_MASK) {
+		switch (lclMethodCode & cs_DTCPRMTYP_MASK) {
 		
 		case cs_DTCPRMTYP_GEOCTR:
 			CS_bswap (&gx_def->parameters.geocentricParameters,cs_BSWP_GXDEF_GEOCTR);
@@ -563,6 +570,20 @@ int EXP_LVL5 CS_gxswp (struct cs_GeodeticTransform_* gx_def)
 		}
 	}
 	return swap;
+}
+int EXP_LVL5 CS_gxswpRd (struct cs_GeodeticTransform_* gx_def)
+{
+	int rtnValue;
+
+	rtnValue = CS_gxswp (gx_def,FALSE);
+	return rtnValue;
+}
+int EXP_LVL5 CS_gxswpWr (struct cs_GeodeticTransform_* gx_def)
+{
+	int rtnValue;
+
+	rtnValue = CS_gxswp (gx_def,TRUE);
+	return rtnValue;
 }
 /* Normalize the path name with the current platform.  Specifically,
    switch the directory separator character to what is appropriate

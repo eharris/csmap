@@ -6693,7 +6693,9 @@ void		EXP_LVL1	CS_gxfnm (Const char *new_name);
 csFILE *	EXP_LVL3	CS_gxopn (Const char *mode);
 int			EXP_LVL3	CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gp_def);
 void		EXP_LVL3	CS_gxsep (struct cs_GeodeticTransform_* gx_def);
-int			EXP_LVL5	CS_gxswp (struct cs_GeodeticTransform_* gx_def);
+int			EXP_LVL5	CS_gxswp (struct cs_GeodeticTransform_* gx_def,int writeFlag);
+int			EXP_LVL5	CS_gxswpRd (struct cs_GeodeticTransform_* gx_def);
+int			EXP_LVL5	CS_gxswpWr (struct cs_GeodeticTransform_* gx_def);
 int			EXP_LVL3	CS_gxupd (struct cs_GeodeticTransform_ *gp_def);
 int			EXP_LVL3	CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gp_def);
 

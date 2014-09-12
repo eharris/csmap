@@ -351,14 +351,14 @@ csFILE* CS_gxFileOpen(Const char* mode)
 
 int CS_gxRead (csFILE *strm, struct cs_GeodeticTransform_ *gx_def)
 {
-	Q_RETURN(int, -1, (CS_DefinitionRead<cs_GeodeticTransform_>(strm, gx_def, gx_def->xfrmName, NULL, NULL, NULL, CS_gxswp)));
+	Q_RETURN(int, -1, (CS_DefinitionRead<cs_GeodeticTransform_>(strm, gx_def, gx_def->xfrmName, NULL, NULL, NULL, CS_gxswpRd)));
 }
 
 int CS_gxWrite(csFILE *strm, Const struct cs_GeodeticTransform_ * gx_def)
 {
 	cs_GeodeticTransform_ localDef = *gx_def;
 	cs_GeodeticTransform_ *pLocalDef = &localDef;
-	Q_RETURN(int, -1, (CS_DefinitionWrite<cs_GeodeticTransform_>(strm, pLocalDef, NULL, NULL, CS_gxswp)));
+	Q_RETURN(int, -1, (CS_DefinitionWrite<cs_GeodeticTransform_>(strm, pLocalDef, NULL, NULL, CS_gxswpWr)));
 }
 
 int CS_gxDelete(struct cs_GeodeticTransform_ *gx_def)
