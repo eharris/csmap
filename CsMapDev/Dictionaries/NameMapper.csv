@@ -5660,7 +5660,7 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 4282,15,GeoTools,0,"Pointe Noire",0,0,0,0,,
 4283,15,EPSG,4283,"GDA94",0,0,0,0,,
 4283,15,ESRI,4283,"GCS_GDA_1994",0,0,0,0,,
-4283,15,Oracle,5807,"GDA94",0,0,0,0,,
+4283,15,Oracle,4283,"GDA94",0,0,0,0,,
 4283,15,Autodesk,0,"LL-GDA94",0,0,0,0,,
 4283,15,Ctmx,0,"GDA94.LL",0,0,0,0,,
 4283,15,CsMap,0,"LL-GDA94",0,0,0,0,,
