@@ -91,6 +91,9 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 bool csCsvQuoter (char* csvField,size_t csvSize,const char* delimiters = 0);
 bool csCsvQuoter (std::wstring& csvField,bool forceIt = false,const wchar_t* delimiters = 0);
 std::wstring csQuoteCsvField (const std::wstring& csvField,bool forceIt = false,const wchar_t* delimiters = 0);
+const char* CS_ccPad (int length);
+const wchar_t* CS_wcPad (int length);
+
 //newPage//
 //=============================================================================
 // TcsCsvStatus Object -- Encapsulates the functionality of a Comma Separated

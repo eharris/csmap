@@ -5,10 +5,10 @@
 //
 // The information contained herein is confidential, proprietary
 // to Autodesk, Inc., and considered a trade secret as defined 
-// in section 499C of the penal code of the State of California.  
+// in section 499C of the penal code of the State of California.
 // Use of this information by anyone other than authorized employees
 // of Autodesk, Inc. is granted only under a written non-disclosure 
-// agreement, expressly prescribing the scope and manner of such use.       
+// agreement, expressly prescribing the scope and manner of such use.
 //
 // CREATED BY:
 //      Norm Olsen
@@ -20,6 +20,9 @@
 extern "C" unsigned long KcsNmInvNumber;
 extern "C" unsigned long KcsNmMapNoNumber;
 extern "C" double cs_Zero;
+extern "C" double cs_LlNoise;
+extern "C" struct cs_Prjtab_ cs_Prjtab [];
+extern "C" struct cs_PrjprmMap_ cs_PrjprmMap [];
 
 const wchar_t* dbl2wcs (double dblVal)
 {
@@ -43,7 +46,7 @@ const wchar_t* dbl2wcs (double dblVal)
 	}
 	else
 	{
-		// A normal number.  COnvert at high precision, but trim trailing
+		// A normal number.  Convert at high precision, but trim trailing
 		// zeros.  Always leave one zero after the decimal point for
 		// integer values.
 		swprintf (wcBufr,128,L"%.12f",dblVal);
@@ -66,6 +69,50 @@ const wchar_t* dbl2wcs (double dblVal)
 		}
 	}
 	return wcBufr;
+}
+
+unsigned short CS_getPrjCode (const char* projKeyName)
+{
+	unsigned short projCode = cs_PRJCOD_END;
+	struct cs_Prjtab_ *pp;
+
+	for (pp = cs_Prjtab;*pp->key_nm != '\0';pp++)
+	{
+		if (!CS_stricmp (pp->key_nm,projKeyName))
+		{
+			projCode = pp->code;
+			break;
+		}
+	}
+	return projCode;
+}
+
+unsigned char CS_getParmCode (unsigned short projCode,unsigned parmNbr)
+{
+	unsigned char parmCode;
+	struct cs_PrjprmMap_* prmTblPtr;
+
+	parmCode = cs_PRMCOD_NOTUSED;
+	if (parmNbr >= 1 && parmNbr <= 24)
+	{
+		for (prmTblPtr = cs_PrjprmMap;prmTblPtr->prj_code != cs_PRJCOD_END;prmTblPtr += 1)
+		{
+			if (prmTblPtr->prj_code == projCode)
+			{
+				parmCode = prmTblPtr->prm_types [parmNbr - 1];
+				break;
+			}
+		}
+	}
+	return parmCode;
+}
+bool CS_crsHasUsefulRng (const struct cs_Csdef_& csDef)
+{
+	bool hasUsefulRange;
+	
+	hasUsefulRange = (csDef.ll_max [0] != 0.0) || (csDef.ll_max [1] != 0.0) ||
+					 (csDef.ll_min [0] != 0.0) || (csDef.ll_min [1] != 0.0);
+	return hasUsefulRange;
 }
 
 // Returns a pointer to a TcsEpsgDataSetV6 object.  Specifically, a
@@ -239,7 +286,7 @@ EcsIntersectionType CS_intersection2D (const double firstFrm  [2],
 
 	// Compute the intersection.
 	num = delX1 * delX2 * (secondFrm [1] - firstFrm [1]) +
-	      delX2 * delY1 *  firstFrm  [0] -
+		  delX2 * delY1 *  firstFrm  [0] -
 		  delX1 * delY2 *  secondFrm [0];
 	intersection [0] = num / denom;
 
@@ -340,12 +387,141 @@ EcsIntersectionType CS_intersection2D (const double firstFrm  [2],
 //
 // This object is used to access CS-MAP Coordsys files.
 //
+// Standard sort function. The constructor uses this function to sort the
+// array thus enabling use of binary search to get coordinate systems by
+// key name.
 bool TcsCoordsysFile::KeyNameLessThan (const cs_Csdef_& lhs,const cs_Csdef_& rhs)
 {
 	int cmpValue = CS_stricmp (lhs.key_nm,rhs.key_nm);
 	return (cmpValue < 0);
 }
+//
+// Function used to sort the dictionary image into "CRS" order.  That is,
+// to bring all CRS's which are identical as far as projection and basic
+// projection parameters together.  Originally devised to connect CRS
+// definitions without a useful range with "identical" CRS definitions
+// which did have a useful range.  Identical, in this case, implies that
+// datum and unit differences are ignored, as they would have minimal
+// effect on the the geographic useful range.
+// 
+int TcsCoordsysFile::ProjectionCompare (const cs_Csdef_& lhs,const cs_Csdef_& rhs)
+{
+	int cmpValue;
+	unsigned short lhsPrjCode;
+	unsigned short rhsPrjCode;
+	double tmpDbl;
+
+	lhsPrjCode = CS_getPrjCode (lhs.prj_knm);
+	rhsPrjCode = CS_getPrjCode (rhs.prj_knm);
+	cmpValue = lhsPrjCode - rhsPrjCode;
+	if (cmpValue == 0)
+	{
+		if (lhsPrjCode == 1)
+		{
+			cmpValue = CS_stricmp (lhs.dat_knm,rhs.dat_knm);
+		}
+		else
+		{
+			tmpDbl = lhs.org_lng - rhs.org_lng;
+			if (tmpDbl < -1.0E-05)
+			{
+				cmpValue = -1;
+			}
+			else if (tmpDbl > 1.0E-05)
+			{
+				cmpValue = 1;
+			}
+			if (cmpValue == 0)
+			{
+				tmpDbl = lhs.org_lat - rhs.org_lat;
+				if (tmpDbl < -1.0E-05)
+				{
+					cmpValue = -1;
+				}
+				else if (tmpDbl > 1.0E-05)
+				{
+					cmpValue = 1;
+				}
+			}
+		}
+		if (cmpValue == 0)
+		{
+			tmpDbl = lhs.prj_prm1 - rhs.prj_prm1;
+			if (tmpDbl < -1.0E-05)
+			{
+				cmpValue = -1;
+			}
+			else if (tmpDbl > 1.0E-05)
+			{
+				cmpValue = 1;
+			}
+		}
+		if (cmpValue == 0)
+		{
+			tmpDbl = lhs.prj_prm2 - rhs.prj_prm2;
+			if (tmpDbl < -1.0E-05)
+			{
+				cmpValue = -1;
+			}
+			else if (tmpDbl > 1.0E-05)
+			{
+				cmpValue = 1;
+			}
+		}
+		if (cmpValue == 0)
+		{
+			tmpDbl = lhs.prj_prm3 - rhs.prj_prm3;
+			if (tmpDbl < -1.0E-05)
+			{
+				cmpValue = -1;
+			}
+			else if (tmpDbl > 1.0E-05)
+			{
+				cmpValue = 1;
+			}
+		}
+		if (cmpValue == 0)
+		{
+			tmpDbl = lhs.prj_prm4 - rhs.prj_prm4;
+			if (tmpDbl < -1.0E-05)
+			{
+				cmpValue = -1;
+			}
+			else if (tmpDbl > 1.0E-05)
+			{
+				cmpValue = 1;
+			}
+		}
+	}
+	return cmpValue;
+}
+bool TcsCoordsysFile::ProjectionLessThan (const cs_Csdef_& lhs,const cs_Csdef_& rhs)
+{
+	int cmpValue;
+	
+	cmpValue = ProjectionCompare (lhs,rhs);
+
+	// If we are still the same at this point, we simply force a definition
+	// with a useful range to preceed a definition which does not have a
+	// useful range.
+	if (cmpValue == 0)
+	{
+		bool lhsHasRng = CS_crsHasUsefulRng (lhs);
+		bool rhsHasRng = CS_crsHasUsefulRng (rhs);
+		if (lhsHasRng && !rhsHasRng)
+		{
+			cmpValue = -1;
+		}
+		else if (rhsHasRng && !lhsHasRng)
+		{
+			cmpValue = +1;
+		}
+	}
+	return (cmpValue < 0);
+}
+
 TcsCoordsysFile::TcsCoordsysFile () : Ok                (false),
+									  SortedByName      (false),
 									  CurrentIndex      (0),
 									  CoordinateSystems ()
 {
@@ -362,6 +538,7 @@ TcsCoordsysFile::TcsCoordsysFile () : Ok                (false),
 
 		// Sort by key name to assure a binary searchable order.
 		std::sort (CoordinateSystems.begin (),CoordinateSystems.end (),KeyNameLessThan);
+		SortedByName = true;
 		CS_fclose (csStrm);
 		Ok = true;
 	}
@@ -383,15 +560,30 @@ const cs_Csdef_* TcsCoordsysFile::FetchCoordinateSystem (const char* keyName) co
 	const struct cs_Csdef_* csDefPtr = 0;
 	struct cs_Csdef_ locateValue;
 	std::vector<struct cs_Csdef_>::const_iterator locItr;
-	
+
+	memset (&locateValue,'\0',sizeof (locateValue));
 	CS_stncp (locateValue.key_nm,keyName,sizeof (locateValue.key_nm));
-	locItr = std::lower_bound (CoordinateSystems.begin (),CoordinateSystems.end (),locateValue,KeyNameLessThan);
-	if (locItr != CoordinateSystems.end ())
+	if (SortedByName)
 	{
-		csDefPtr = &(*locItr);
-		if (CS_stricmp (csDefPtr->key_nm,keyName))
+		locItr = std::lower_bound (CoordinateSystems.begin (),CoordinateSystems.end (),locateValue,KeyNameLessThan);
+		if (locItr != CoordinateSystems.end ())
 		{
-			csDefPtr = 0;
+			csDefPtr = &(*locItr);
+			if (CS_stricmp (csDefPtr->key_nm,keyName))
+			{
+				csDefPtr = 0;
+			}
+		}
+	}
+	else
+	{
+		for (locItr = CoordinateSystems.begin ();locItr != CoordinateSystems.end ();locItr++)
+		{
+			csDefPtr = &(*locItr);
+			if (!CS_stricmp (csDefPtr->key_nm,keyName))
+			{
+				break;
+			}
 		}
 	}
 	return csDefPtr;
@@ -405,6 +597,12 @@ const struct cs_Csdef_* TcsCoordsysFile::FetchNextCs (void)
 	}
 	return csDefPtr;
 }
+void TcsCoordsysFile::OrderByProjection (void)
+{
+	SortedByName = false;
+	std::sort (CoordinateSystems.begin (),CoordinateSystems.end (),ProjectionLessThan);
+}
+
 //newPage//
 ///////////////////////////////////////////////////////////////////////////////
 // TcsDatumsFile Object  --  Abstracts the CS-MAP Datums file.

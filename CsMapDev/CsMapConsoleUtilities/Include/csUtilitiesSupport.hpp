@@ -29,7 +29,9 @@ enum EcsIntersectionType {	isectParallel = -1,
 						 };
 
 const wchar_t* dbl2wcs (double dblVal);
-
+unsigned char CS_getParmCode (unsigned short projCode,unsigned parmNbr);	// first parm == 1
+unsigned short CS_getPrjCode (const char* projKeyName);
+bool CS_crsHasUsefulRng (const struct cs_Csdef_& csDef);
 const TcsEpsgDataSetV6* GetEpsgObjectPtr (void);
 void ReleaseEpsgObjectPtr (void);
 
@@ -50,13 +52,9 @@ void csWriteAngularUnitCsv (std::wostream& oStrm);
 ///////////////////////////////////////////////////////////////////////////////
 // Below, we define a class for each of the file types.  We use these objects
 // to open the file, check the magic number, and support the sequential
-// access to the contents of the file.  Of course, at some time in the
-// future, we could easily add random access to the records.  All of these
-// objects derive from TcsFile are read only, thus they are reasonably simple.
-// File opens on construction, and remains open until destruction.  An
-// exception is thrown if the file open fails, the magic number is wrong, or
-// a read error occurs.
-// 
+// access to the contents of the file.  Designed for high performance read
+// only access; thus no write member function is provided.
+//
 //	Coordinate System Dictionary File 
 //
 class TcsCoordsysFile
@@ -67,10 +65,11 @@ class TcsCoordsysFile
 	TcsCoordsysFile& operator= (const TcsCoordsysFile& rhs);	// not implemented
 public:
 	static bool KeyNameLessThan (const cs_Csdef_& lhs,const cs_Csdef_& rhs);
+	static bool ProjectionLessThan (const cs_Csdef_& lhs,const cs_Csdef_& rhs);
 	///////////////////////////////////////////////////////////////////////////
 	// Construction  /  Destruction  /  Assignment
 	TcsCoordsysFile (void);
-	virtual ~TcsCoordsysFile (void);							// closes the file
+	virtual ~TcsCoordsysFile (void);
 	///////////////////////////////////////////////////////////////////////////
 	// Public Named Member Functions
 	bool IsOk (void) const {return Ok; };
@@ -79,10 +78,13 @@ public:
 	const cs_Csdef_* FetchCoordinateSystem (size_t index) const;
 	const cs_Csdef_* FetchCoordinateSystem (const char* keyName) const;
 	const struct cs_Csdef_* FetchNextCs (void);			// returns 0 on EOF.
+	void OrderByProjection (void);
+	static int TcsCoordsysFile::ProjectionCompare (const cs_Csdef_& lhs,const cs_Csdef_& rhs);
 private:
 	///////////////////////////////////////////////////////////////////////////
 	// Private Data Members
 	bool Ok;
+	bool SortedByName;
 	size_t CurrentIndex;
 	std::vector<struct cs_Csdef_> CoordinateSystems;
 };

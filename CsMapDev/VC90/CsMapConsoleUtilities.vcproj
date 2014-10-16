@@ -476,6 +476,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csUsefulRangeReport.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csUtilitySupport.cpp"
 				>
 			</File>

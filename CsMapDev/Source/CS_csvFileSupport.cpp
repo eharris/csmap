@@ -754,6 +754,30 @@ std::wstring csQuoteCsvField (const std::wstring& csvField,bool forceIt,const wc
 	csCsvQuoter (rtnValue,forceIt,delimiters);			//lint !e534  (ignoring return value)
 	return rtnValue;
 }
+// Functions which return a pointer to null terminated strings of spaces,
+// useful when formatting string output.
+const char* CS_ccPad (int length)
+{
+	static char spaces [256];
+
+	if (length < 0) length = 0;
+	if (length >= sizeof (spaces)) length = sizeof (spaces) - 1;
+	memset (spaces,' ',sizeof (spaces));
+	spaces [length] = '\0';
+	return spaces;
+}
+
+const wchar_t* CS_wcPad (int length)
+{
+	static wchar_t spaces [256];
+
+	if (length < 0) length = 0;
+	if (length >= wcCount (spaces)) length = wcCount (spaces) - 1;
+	wmemset (spaces,L' ',wcCount (spaces));
+	spaces [length] = L'\0';
+	return spaces;
+}
+
 //lint -restore
 //newPage//
 //=============================================================================
