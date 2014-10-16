@@ -88,6 +88,10 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ThreeParameterFix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerate48Hpgn.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csUsefulRangeReport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CsMapConsoleUtilities\Include\csAscFixer.hpp">
