@@ -34,6 +34,8 @@ struct cs_Add2007And2011_
 	char nsrs11Desc      [64];
 	char nsrs11Source    [64];
 	ulong32_t nsrs11EpsgCode;
+	ulong32_t nsrs11EsriCode;			// newly added 8 Nov 2014
+	wchar_t nsrs11EpsgName [128];		// EPSG database size is 80
 } cs_Add2007And2011 [] =
 {
 	{               "HARN/AL.AL-E",    "HARN/AL",   2759,
@@ -602,7 +604,7 @@ struct cs_Add2007And2011_
 					                 "NSRS11.VT",  "NSRS 2011 Vermont State Planes, Meter",                              "CRS HARN/NE.VT with datum modified to NSRS11",                           0   },
 	{                "HARN/NE.VTF",    "HARN/NE",   5654,
 					                "NSRS07.VTF",  "NSRS 2007 Vermont State Planes, US Foot",                            "CRS HARN/NE.VTF with datum modified to NSRS07",                       5655,
-					                "NSRS11.VTF",  "NSRS 2011 Vermont State Planes, US Foot",                            "CRS HARN/NE.VTF with datum modified to NSRS11",                          0   },
+					                "NSRS11.VTF",  "NSRS 2011 Vermont State Planes, US Foot",                            "CRS HARN/NE.VTF with datum modified to NSRS11",                       6590   },	// There is no ESRI 2007 euivalent for this system, so this EPSG code has been hard coded.
 	{               "HARN/WO.WA-N",    "HARN/WO",   2855,
 					               "NSRS07.WA-N",  "NSRS 2007 Washington State Planes, North Zone, Meter",               "CRS HARN/WO.WA-N with datum modified to NSRS07",                      3689,
 					               "NSRS11.WA-N",  "NSRS 2011 Washington State Planes, North Zone, Meter",               "CRS HARN/WO.WA-N with datum modified to NSRS11",                         0   },
@@ -1589,7 +1591,7 @@ struct cs_Add2007And2011_
 					              "NSRS11.UT-CF",  "NSRS 2011 Utah State Planes, Central Zone, US Foot",                 "CRS HARN/UT.UT-CF with datum modified to NSRS11",                        0   },
 	{             "HARN/UT.UT-CIF",    "HARN/UT",   2922,
 					             "NSRS07.UT-CIF",  "NSRS 2007 Utah State Planes, Central Zone, Intnl Foot",              "CRS HARN/UT.UT-CIF with datum modified to NSRS07",                    3676,
-					             "NSRS11.UT-CIF",  "NSRS 2011 Utah State Planes, Central Zone, Intnl Foot",              "CRS HARN/UT.UT-CIF with datum modified to NSRS11",                       0   },
+					             "NSRS11.UT-CIF",  "NSRS 2011 Utah State Planes, Central Zone, Intnl Foot",              "CRS HARN/UT.UT-CIF with datum modified to NSRS11",                       1   },	// 1 here means a hard coded invalid value.  In this case, EPSG has not, as yet, assigned a code for this system (NSRS 2011).
 	{               "HARN/UT.UT-N",    "HARN/UT",   2849,
 					               "NSRS07.UT-N",  "NSRS 2007 Utah State Planes, North Zone, Meter",                     "CRS HARN/UT.UT-N with datum modified to NSRS07",                      3678,
 					               "NSRS11.UT-N",  "NSRS 2011 Utah State Planes, North Zone, Meter",                     "CRS HARN/UT.UT-N with datum modified to NSRS11",                         0   },
@@ -1598,7 +1600,7 @@ struct cs_Add2007And2011_
 					              "NSRS11.UT-NF",  "NSRS 2011 Utah State Planes, North Zone, US Foot",                   "CRS HARN/UT.UT-NF with datum modified to NSRS11",                        0   },
 	{             "HARN/UT.UT-NIF",    "HARN/UT",   2921,
 					             "NSRS07.UT-NIF",  "NSRS 2007 Utah State Planes, North Zone, Intnl Foot",                "CRS HARN/UT.UT-NIF with datum modified to NSRS07",                    3679,
-					             "NSRS11.UT-NIF",  "NSRS 2011 Utah State Planes, North Zone, Intnl Foot",                "CRS HARN/UT.UT-NIF with datum modified to NSRS11",                       0   },
+					             "NSRS11.UT-NIF",  "NSRS 2011 Utah State Planes, North Zone, Intnl Foot",                "CRS HARN/UT.UT-NIF with datum modified to NSRS11",                       1   },	// 1 here means a hard coded invalid value.  In this case, EPSG has not, as yet, assigned a code for this system (NSRS 2011).
 	{               "HARN/UT.UT-S",    "HARN/UT",   2851,
 					               "NSRS07.UT-S",  "NSRS 2007 Utah State Planes, Southern Zone, Meter",                  "CRS HARN/UT.UT-S with datum modified to NSRS07",                      3681,
 					               "NSRS11.UT-S",  "NSRS 2011 Utah State Planes, Southern Zone, Meter",                  "CRS HARN/UT.UT-S with datum modified to NSRS11",                         0   },
@@ -1607,7 +1609,7 @@ struct cs_Add2007And2011_
 					              "NSRS11.UT-SF",  "NSRS 2011 Utah State Planes, South Zone, US Foot",                   "CRS HARN/UT.UT-SF with datum modified to NSRS11",                        0   },
 	{             "HARN/UT.UT-SIF",    "HARN/UT",   2923,
 					             "NSRS07.UT-SIF",  "NSRS 2007 Utah State Planes, South Zone, Intnl Foot",                "CRS HARN/UT.UT-SIF with datum modified to NSRS07",                    3682,
-					             "NSRS11.UT-SIF",  "NSRS 2011 Utah State Planes, South Zone, Intnl Foot",                "CRS HARN/UT.UT-SIF with datum modified to NSRS11",                       0   },
+					             "NSRS11.UT-SIF",  "NSRS 2011 Utah State Planes, South Zone, Intnl Foot",                "CRS HARN/UT.UT-SIF with datum modified to NSRS11",                       1   },	// 1 here means a hard coded invalid value.  In this case, EPSG has not, as yet, assigned a code for this system (NSRS 2011).
 	{               "HARN/WV.WV-N",    "HARN/WV",   2857,
 					               "NSRS07.WV-N",  "NSRS 2007 West Virginia State Planes, North Zone, Meter",            "CRS HARN/WV.WV-N with datum modified to NSRS07",                      3693,
 					               "NSRS11.WV-N",  "NSRS 2011 West Virginia State Planes, North Zone, Meter",            "CRS HARN/WV.WV-N with datum modified to NSRS11",                         0   },
@@ -1643,7 +1645,7 @@ struct cs_Add2007And2011_
 	//				               "NSRS11.TREX",  "",                                                                   "CRS HARN/CO.TREX with datum modified to NSRS11",                         0   },
 	{        "HARN/WI.WisconsinTM",    "HARN/WI",   3071,
 					        "NSRS07.WisconsinTM",  "NSRS07 Wisconsin Transverse Mercator",                               "CRS HARN/WI.WisconsinTM with datum modified to NSRS07",               3701,
-					        "NSRS11.WisconsinTM",  "NSRS 2011 Wisconsin Transverse Mercator",                            "CRS HARN/WI.WisconsinTM with datum modified to NSRS11",                  1   },
+					        "NSRS11.WisconsinTM",  "NSRS 2011 Wisconsin Transverse Mercator",                            "CRS HARN/WI.WisconsinTM with datum modified to NSRS11",               6610   },
 	{             "HARN/ME.ME2K-E",    "HARN/ME",   3075,
 					             "NSRS07.ME2K-E",  "NSRS07 Maine CS2000 East",                                           "CRS HARN/ME.ME2K-E with datum modified to NSRS07",                    3555,
 					             "NSRS11.ME2K-E",  "NSRS 2011 Maine CS2000 East",                                        "CRS HARN/ME.ME2K-E with datum modified to NSRS11",                       0   },
@@ -1655,16 +1657,16 @@ struct cs_Add2007And2011_
 					             "NSRS11.ME2K-W",  "NSRS 2011 Maine CS2000 West",                                        "CRS HARN/ME.ME2K-W with datum modified to NSRS11",                       0   },
 	{     "HARN/MI.MichiganGeoRef",    "HARN/MI",   3079,
 					     "NSRS07.MichiganGeoRef",  "NSRS07 Michigan Oblique Mercator",                                   "CRS HARN/MI.MichiganGeoRef with datum modified to NSRS07",            3591,
-					     "NSRS11.MichiganGeoRef",  "NSRS 2011 Michigan Oblique Mercator",                                "CRS HARN/MI.MichiganGeoRef with datum modified to NSRS11",               1   },
+					     "NSRS11.MichiganGeoRef",  "NSRS 2011 Michigan Oblique Mercator",                                "CRS HARN/MI.MichiganGeoRef with datum modified to NSRS11",            6497   },	// There is no ESRI 2007 euivalent for this system, so this EPSG code has been hard coded.
 	{      "HARN/TX.Texas/Lambert",    "HARN/TX",   3084,
 					      "NSRS07.Texas/Lambert",  "NSRS07 Texas Centric Lambert Conformal",                             "CRS HARN/TX.Texas/Lambert with datum modified to NSRS07",             3666,
-					      "NSRS11.Texas/Lambert",  "NSRS 2011 Texas Centric Lambert Conformal",                          "CRS HARN/TX.Texas/Lambert with datum modified to NSRS11",                1   },
+					      "NSRS11.Texas/Lambert",  "NSRS 2011 Texas Centric Lambert Conformal",                          "CRS HARN/TX.Texas/Lambert with datum modified to NSRS11",             6580   },	// There is no ESRI 2007 euivalent for this system, so this EPSG code has been hard coded.
 	{       "HARN/TX.Texas/Albers",    "HARN/TX",   3085,
 					       "NSRS07.Texas/Albers",  "NSRS07 Texas Centric Albers Equal Area",                             "CRS HARN/TX.Texas/Albers with datum modified to NSRS07",              3665,
-					       "NSRS11.Texas/Albers",  "NSRS 2011 Texas Centric Albers Equal Area",                          "CRS HARN/TX.Texas/Albers with datum modified to NSRS11",                 1   },
+					       "NSRS11.Texas/Albers",  "NSRS 2011 Texas Centric Albers Equal Area",                          "CRS HARN/TX.Texas/Albers with datum modified to NSRS11",              6579   },	// There is no ESRI 2007 euivalent for this system, so this EPSG code has been hard coded.
 	{    "HARN/FL.FloridaGDL/Albr",    "HARN/FL",   3087,
 					    "NSRS07.FloridaGDL/Albr",  "NSRS07 Florida GDL Albers",                                          "CRS HARN/FL.FloridaGDL/Albr with datum modified to NSRS07",           3513,
-					    "NSRS11.FloridaGDL/Albr",  "NSRS 2011 Florida GDL Albers",                                       "CRS HARN/FL.FloridaGDL/Albr with datum modified to NSRS11",              1   },
+					    "NSRS11.FloridaGDL/Albr",  "NSRS 2011 Florida GDL Albers",                                       "CRS HARN/FL.FloridaGDL/Albr with datum modified to NSRS11",           6439   },	// There is no ESRI 2007 euivalent for this system, so this EPSG code has been hard coded.
 	{                 "HARN/KY.KY",    "HARN/KY",   3090,
 					                 "NSRS07.KY",  "NSRS07 Kentucky Single Zone",                                        "CRS HARN/KY.KY with datum modified to NSRS07",                        3546,
 					                 "NSRS11.KY",  "NSRS 2011 Kentucky Single Zone",                                     "CRS HARN/KY.KY with datum modified to NSRS11",                           0   },
@@ -1673,7 +1675,8 @@ struct cs_Add2007And2011_
 					                "NSRS11.KYF",  "NSRS 2011 Kentucky Single Zone (ftUS)",                              "CRS HARN/KY.KYF with datum modified to NSRS11",                          0   },
 	{           "HARN/CA.CA/Teale",    "HARN/CA",   3311,
 					           "NSRS07.CA/Teale",  "",                                                                   "CRS HARN/CA.CA/Teale with datum modified to NSRS07",                  3488,
-					           "NSRS11.CA/Teale",  "",                                                                   "CRS HARN/CA.CA/Teale with datum modified to NSRS11",                     1   },
+					           "NSRS11.CA/Teale",  "",                                                                   "CRS HARN/CA.CA/Teale with datum modified to NSRS11",                  6414  },	// There is no ESRI 2007 equivalent definition for this system; so the 2011 EPSG code is hard coded.
+																																																			// Of course, there is no ESRI 2011 euivalent either, but we still need to associate the EPSG code with the CS-MAP definition.
 	//{              "NVHRN.NCRS-LV",    "HARN/NV",      0,
 	//				             "NVHRN.NCRS-LV",  "NSRS 2007 NCRS, Las Vegas Zone, Meter",                              "CRS NVHRN.NCRS-LV with datum modified to NSRS07",                        0,
 	//				             "NVHRN.NCRS-LV",  "NSRS 2011 NCRS, Las Vegas Zone, Meter",                              "CRS NVHRN.NCRS-LV with datum modified to NSRS11",                        0   },
@@ -1810,6 +1813,14 @@ bool csAddNsrs07Nsrs11 (const wchar_t* csDictSrcDir,const wchar_t* csDictTrgDir)
 	if (!ok)
 	{
 		return false;
+	}
+
+	// The nsrs11EsriCode element in the above structure was added added after
+	// the original purpose of this module was completed.  We do the following
+	// simply make sure it gets initialized to an appropriate value.
+	for (addTblPtr = cs_Add2007And2011;ok && addTblPtr->harnKeyName[0] != '\0';addTblPtr += 1)
+	{
+		addTblPtr->nsrs11EsriCode = 0UL;
 	}
 
 	ok = true;					// Until we know differently.
@@ -2397,7 +2408,7 @@ bool CS_epsgHarnToNsrs (const TcsEpsgDataSetV6* epsgPtr,ulong32_t& epsg2007,ulon
 	if (ok)
 	{
 		wcstombs (ccHarnName,wsHarnName.c_str (),sizeof (ccHarnName));
-		ok = CS_strrpl (ccHarnName,sizeof (ccHarnName),"NAD83(HARN)","NAD83(NSRS2011)");
+		ok = CS_strrpl (ccHarnName,sizeof (ccHarnName),"NAD83(HARN)","NAD83(2011)");
 		if (ok)
 		{
 			// Locate a non-deprecated entry with this name and extract the
@@ -3037,5 +3048,515 @@ bool csWriteNsrsAudit (const wchar_t* csDictSrcDir,const wchar_t* csTrgDataFileD
 		}
 	}
 	oStream.close ();
+	return ok;
+}
+//
+// The following uses the current EPSG dataset to populate the
+// nsrs11EpsgCode element of the cs_Add2007And2011 table.  No
+// attempt is made to preserve these values.  Such will not be
+// worth much once we complete populating the Coordinate 
+// System Dictionary and the NameMapper.  Note this function
+// does not use the NameMapper, only the EPSG database.
+bool csGetNsrs2011EpsgCodes (const TcsEpsgDataSetV6* epsgPtr)
+{
+	bool ok;
+
+	TcsEpsgCode epsgCode;
+	TcsEpsgCode epsgCode2007;
+
+	struct cs_Add2007And2011_* addTblPtr;
+
+	char ccName [128];
+	wchar_t wc2011Name [128];
+	std::wstring ws2007Name;
+	std::wstring wsEpsgName;
+
+	ok = true;							// Until we know differently.
+	
+	// Loop once for each entry in the table.
+	for (addTblPtr = cs_Add2007And2011;ok && addTblPtr->harnKeyName[0] != '\0';addTblPtr += 1)
+	{
+		// If the 2011 EPSG code has been hard coded (as we did is a few very strange,
+		// cases) we have nothing to do here.  We need to do this for a few codes where
+		// there exists an ESRI 2011 system, but no corresponding 2007 System.  Looking
+		// up two codes and hard coding them was not a big deal.
+		if (addTblPtr->nsrs11EpsgCode >= 3UL && addTblPtr->nsrs11EpsgCode <= 32767UL)
+		{
+			// Already know the code, just need to get the EPSG name.
+			epsgCode = addTblPtr->nsrs11EpsgCode;
+			const TcsEpsgTable* crsTblPtr = epsgPtr->GetTablePtr (epsgTblReferenceSystem);
+			ok = (crsTblPtr != 0);
+			if (ok)
+			{
+				ok = epsgPtr->GetFieldByCode (wsEpsgName,epsgTblReferenceSystem,epsgFldCoordRefSysName,epsgCode);
+				if (ok)
+				{
+					wcsncpy (addTblPtr->nsrs11EpsgName,wsEpsgName.c_str (),wcCount (addTblPtr->nsrs11EpsgName));
+				}
+			}
+			continue;
+		}
+
+		// We use the otherwise invalie EPSG code value of 1 to indicate a system
+		// for which we know there is no EPSG code.  There are couple of them.
+		// We skip these so that they do not cause an error report.  We want to
+		// get through this without any reported errors to boost our confidence.
+		if (addTblPtr->nsrs11EpsgCode >= 1UL)
+		{
+			// A 2011 EPSG code is known not to exist, so no sense to trying to
+			// determine it.
+			continue;
+		}
+
+		// Extract the existing 2007 EPSG Code from the table.
+		epsgCode2007 = addTblPtr->nsrs07EpsgCode;
+		if (epsgCode2007.IsNotValid ())
+		{
+			continue;
+		}
+
+		// Extract the EPSG name of the definition associated with the 2007 EPSG code.
+		ok = epsgPtr->GetFieldByCode (ws2007Name,epsgTblReferenceSystem,epsgFldCoordRefSysName,epsgCode2007);
+		if (!ok)
+		{
+			return ok;
+		}
+
+		// Manipulate the name so as to get the name of the NSRS 2011 equivalent.
+		wcstombs (ccName,ws2007Name.c_str (),sizeof (ccName));
+		ok = CS_strrpl (ccName,sizeof (ccName),"NAD83(NSRS2007)","NAD83(2011)");
+		if (ok)
+		{
+			// Locate a non-deprecated EPSG entry with this name and extract
+			// the EPSG code value.
+			mbstowcs (wc2011Name,ccName,wcCount (wc2011Name));
+			const TcsEpsgTable* crsTblPtr = epsgPtr->GetTablePtr (epsgTblReferenceSystem);
+			ok = (crsTblPtr != 0);
+			if (ok)
+			{
+				bool lclOk = crsTblPtr->EpsgLocateCode (epsgCode,epsgFldCoordRefSysName,wc2011Name);
+				if (lclOk)
+				{
+					addTblPtr->nsrs11EpsgCode = epsgCode;
+					wcsncpy (addTblPtr->nsrs11EpsgName,wc2011Name,wcCount (addTblPtr->nsrs11EpsgName));
+				}
+				else
+				{
+					std::wcout << L"No 2011 EPSG entry for 2007 EPSG entry named "
+							   << ws2007Name
+							   << L", Code:"
+							   << addTblPtr->nsrs07EpsgCode
+							   << L"."
+							   << std::endl;
+				}
+			}
+		}
+	}
+	return ok;
+}
+//
+// The following uses the current NameMapper to populate the newly added
+// nsrs11EsriCode element of the cs_Add2007And2011 table.  We'll need this
+// code as it is our ticket to finding existing NameMapper entries which
+// need to be deprecated.  No  attempt is made to preserve these values.
+// Such will not be worth much once we complete populating the Coordinate
+// System Dictionary and the NameMapper.
+//
+// Note that this module uses the normal NameMapper support functions which
+// implies that the information is coming from a constant in memory copy
+/// of the NameMapper produced by the implied cmGetNameMapperPtr function
+// call in these modules.  To remove any possible contention, we release
+// the internal copy of the name mapper.  Performance wise, rather painful.
+// But after the final successful run, this code will never be used again.
+//
+bool csGetNsrs2011EsriCodes (void)
+{
+	bool ok;
+
+	unsigned long esri2011Code;
+	TcsEpsgCode epsgCode2007;
+
+	const wchar_t* esri2007NmPtr;
+	struct cs_Add2007And2011_* addTblPtr;
+
+	char ccName [256];
+	wchar_t esri2011Name [256];
+
+	ok = true;							// Until we know differently.
+
+	// Loop once for each entry in the table.
+	for (addTblPtr = cs_Add2007And2011;ok && addTblPtr->harnKeyName[0] != '\0';addTblPtr += 1)
+	{
+		// Using the existing 2007 EPSG Code in the table; extract the ESRI 2007 
+		// name from the NameMapper.  These are all known to exist.  If not,
+		// 'ok' will go false and we'll know right away.
+		epsgCode2007 = addTblPtr->nsrs07EpsgCode;
+		if (epsgCode2007.IsNotValid ())
+		{
+			continue;
+		}
+
+		// There are two systems for which we know that a ESRI 2007 definition
+		// does not exist.  We skip these:
+		//		EPSG::5655  --> NSRS07.VTF
+		
+		esri2007NmPtr = csMapIdToName (csMapProjGeoCSys,csMapFlvrEsri,csMapFlvrEpsg,epsgCode2007);
+		ok = (esri2007NmPtr != 0);
+		if (!ok)
+		{
+			std::wcout << L"No ESRI NameMapper entry for EPSG code "
+					   << static_cast<unsigned long>(epsgCode2007)
+					   << L"."
+					   << std::endl;
+			ok = true;
+			continue;
+		}
+
+		// Convert the ESRI name to the 2011 form.
+		if (ok)
+		{
+			wcstombs (ccName,esri2007NmPtr,sizeof (ccName));
+			ok = CS_strrpl (ccName,sizeof (ccName),"NAD_1983_NSRS2007","NAD_1983_2011");
+		}
+	
+		if (ok)
+		{
+			bool lclOk;
+
+			mbstowcs (esri2011Name,ccName,wcCount (esri2011Name));
+
+			// Extract the 2011 ESRI code (assigned by ESRI prior to EPSG's
+			// assignment of code values.
+			esri2011Code = csMapNameToId (csMapProjGeoCSys,csMapFlvrEsri,csMapFlvrEsri,esri2011Name);
+			lclOk = (esri2011Code != KcsNmInvNumber) && (esri2011Code != KcsNmMapNoNumber);
+			if (lclOk)
+			{
+				addTblPtr->nsrs11EsriCode = esri2011Code;
+			}
+			else
+			{
+				std::wcout << L"No NameMapper entry for ESRI (2011) name '"
+						   << esri2011Name
+						   << L"."
+						   << std::endl;
+			}
+		}
+	}
+
+	// Release the NameMapper copy we used so as not to interfere or
+	// obfuscgate the editting operation which follows this function
+	// call.
+
+	cmGetNameMapperPtr (true);
+	return ok;
+}
+//
+// The following function uses the dynamically added information now in the
+// cs_Add2007And2011 table to update the Coordinate System Dictionary and the
+// Name Mapper.
+bool csFixNsrs2011 (const wchar_t* csDictDir,const wchar_t* csTempDir)
+{
+	bool ok;
+
+	wchar_t* wcPtr;
+	const wchar_t* wcNmPtr;
+	TcsNameMapper* nmMapPtr;
+	struct cs_Add2007And2011_* addTblPtr;
+	const TcsEpsgDataSetV6* epsgPtr;
+
+	char ccWork [256];
+	char crsAscFilePath [260];
+
+	wchar_t nmMapFilePath [260];
+
+	EcsCsvStatus csvStatus;
+
+	TcsNameMap existingEsriNameMap;
+	TcsNameMap newEsriNameMap;
+	TcsNameMap newEpsgNameMap;
+
+	TcsNameMapper nameMapper;
+
+	// BUild a path to the NameMapper we will be modifying.
+	wcsncpy (nmMapFilePath,csDictDir,wcCount (nmMapFilePath));
+	wcPtr = nmMapFilePath + wcslen (nmMapFilePath) - 1;
+	if (*wcPtr != L'\\' && *wcPtr != L'/')
+	{
+		++wcPtr;
+		*wcPtr++ = L'\\';
+	}
+	wcscpy (wcPtr,L"NameMapper.csv");
+
+	// Read it in, so we have direct access to the NameMapper itself.
+	// We activate the Duplicate feature, as when we started this
+	// project, there were a buch of duplicates which needed to be
+	// dealt with such that a "diff" aftetr this operation would
+	// provide results which could be properly evaluated for success.
+	nameMapper.SetRecordDuplicates (true);
+	std::wifstream iStrm (nmMapFilePath,std::ios_base::in);
+	ok = iStrm.is_open ();
+	if (ok)
+	{
+		csvStatus = nameMapper.ReadFromStream (iStrm);
+		ok = (csvStatus == csvOk);
+	}
+	nmMapPtr = ok ? &nameMapper : 0;
+
+	// Make sure we have a valid dictionary directory which CS-MAP can
+	// access.  We'll be updating the "official" NameMapper copy which
+	// essentially resides there.
+	if (ok)
+	{
+		wcstombs (ccWork,csDictDir,sizeof (ccWork));
+		int status = CS_altdr (ccWork);
+		ok = (status == 0);
+	}
+
+	// We'll need accesss to the EPSG database.
+	epsgPtr = 0;				// Keep lint happy
+	if (ok)
+	{
+		epsgPtr = GetEpsgObjectPtr ();
+		ok = (epsgPtr != 0);
+	}
+
+	if (ok)
+	{
+		// Populate the "cs_Add2007And2011" table with the 2011 EPSG codes
+		// extracted from the latest EPSG dataset (8.05 as I write).
+		ok = csGetNsrs2011EpsgCodes (epsgPtr);
+	}
+	if (ok)
+	{
+		// ESRI assigned it own codes to the 2011 definitions as EPSG had
+		// not assigned codes to them.  We will need to know these code
+		// values in order to properly update the NameMapper.  These codes
+		// are known to be in the NameMapper.
+		ok = csGetNsrs2011EsriCodes ();
+	}
+	if (!ok)
+	{
+		return ok;
+	}
+
+	// We need to add the new EPSG code for the 2011 systems to the Coordinate
+	// System Dictionary. We need access to this object once created, so we
+	// can't do this within an if(ok)code block 
+	wcstombs (crsAscFilePath,csDictDir,sizeof (crsAscFilePath));
+	CS_stncat (crsAscFilePath,"\\coordsys.asc",sizeof (crsAscFilePath));
+	TcsDefFile coordsysAsc (dictTypCoordsys,crsAscFilePath);
+	ok = (coordsysAsc.GetDictType () == dictTypCoordsys);  // Valid dictionary type indicates success
+
+	for (addTblPtr = cs_Add2007And2011;ok && addTblPtr->harnKeyName[0] != '\0';addTblPtr += 1)
+	{
+		TcsAscDefinition * ascDefPtr;
+
+		TcsEpsgCode epsgCode2007 (addTblPtr->nsrs07EpsgCode);
+		if (epsgCode2007.IsNotValid ())
+		{
+			
+			continue;
+		}
+
+		// Set the NSRS 2011 EPSG code into the coordinate system definition.
+		ascDefPtr = coordsysAsc.GetDefinition (addTblPtr->nsrs11KeyName);
+		ok = (ascDefPtr != NULL);
+		if (ok)
+		{
+			bool lclOk;
+
+			sprintf (ccWork,"%ld",addTblPtr->nsrs11EpsgCode);
+			lclOk = ascDefPtr->SetValue ("EPSG:",ccWork);
+			if (!lclOk)
+			{
+				// Need to add a new line.
+				TcsDefLine newEpsgLine (dictTypCoordsys,"EPSG:",ccWork,0);
+				ok = ascDefPtr->InsertAfter ("SOURCE:",newEpsgLine);
+			}
+		}
+		if (!ok)
+		{
+			continue;
+		}
+
+		// While we're here, lets add the Oracle SRID number for the 2007
+		// version of this system.  THese are the same as the EPSG codes.
+		// Oracle now appears to support the 2007 set of systems, they
+		// didn't back when this was originally done.  At the time of this
+		// writing (Nov 8, 2014) there is no indication of Oracle support for
+		// the 2011 set of systems.  Note: at this time, the Oracle 2007
+		// NameMapper entries were already updated.
+		ascDefPtr = coordsysAsc.GetDefinition (addTblPtr->nsrs07KeyName);
+		ok = (ascDefPtr != NULL);
+		if (ok)
+		{
+			bool lclOk;
+
+			sprintf (ccWork,"%ld",addTblPtr->nsrs07EpsgCode);
+			lclOk = ascDefPtr->SetValue ("SRID:",ccWork);
+			if (!lclOk)
+			{
+				bool addLineOk;
+
+				// Need to add a new line.
+				TcsDefLine newSridLine (dictTypCoordsys,"SRID:",ccWork,0);
+				addLineOk = ascDefPtr->InsertAfter ("EPSG:",newSridLine);
+				if (!addLineOk)
+				{
+					ok = ascDefPtr->InsertAfter ("SOURCE:",newSridLine);
+				}
+			}
+		}
+		if (!ok)
+		{
+			continue;
+		}
+
+		// Get the ESRI name of the 2011 system of the current driving
+		// table entry.  If the nsrs11EsriCode value is zero, that indicates
+		// that there is no ESRI 2011 system for this table entry.
+		if (addTblPtr->nsrs11EsriCode == 0UL)
+		{
+			// The names of the half dozen of these systems were priinted
+			// out above, no need to repeat here.
+			continue;
+		}
+		wcNmPtr = 0;		// keep lint  happy
+		
+		if (ok)
+		{
+			// Note that this will fetch the name from a distinct copy of
+			// the name mapper other than that which we are editting.
+			wcNmPtr = csMapIdToName (csMapProjGeoCSys,csMapFlvrEsri,csMapFlvrEsri,addTblPtr->nsrs11EsriCode);
+			ok = (wcNmPtr != 0);
+		}
+
+		if (ok)
+		{
+			bool lclOk;
+
+			// Extract and remove the current 2011 ESRI entry for this system.
+			// In this case, we cannot use the csMapProjGeoCSys as a type as
+			// the locate function used in the actual std::set<> code does not
+			// have the special magic necessary to make the switch between the
+			// two possibilites.  Therefore, we do the search using both types,
+			// giving "projected" the priority, and whatever type is located will
+			// be conveyed to the fix it up code below in the extracted object.
+			lclOk = nmMapPtr->ExtractAndRemove (existingEsriNameMap,csMapProjectedCSysKeyName,
+																	csMapFlvrEsri,
+																	wcNmPtr,
+																	0,
+																	0);
+			if (!lclOk)
+			{
+				lclOk = nmMapPtr->ExtractAndRemove (existingEsriNameMap,csMapGeographicCSysKeyName,
+																		csMapFlvrEsri,
+																		wcNmPtr,
+																		0,
+																		0);
+			}
+			if (!lclOk)
+			{
+				lclOk = nmMapPtr->ExtractAndRemove (existingEsriNameMap,csMapGeographic3DKeyName,
+																		csMapFlvrEsri,
+																		wcNmPtr,
+																		0,
+																		0);
+			}
+			if (!lclOk)
+			{
+				std::wcout << L"ESRI 2011 name not found in NameMapper: "
+						   << wcNmPtr
+						   << std::endl;
+				ok = false;
+			}
+		}
+
+		if (ok)
+		{
+			// Copy the existing entry, such copy to become the new primary
+			// 2011 ESRI entry for this system.  This provides us with the
+			// two new entries we need with the appropriate GenericId
+			// value to retain the proper association of the records.
+			TcsGenericId esri2011GenericId = existingEsriNameMap.GetGenericId ();
+			newEsriNameMap = existingEsriNameMap;
+			newEpsgNameMap = existingEsriNameMap;
+
+			// Deprecate the old entry.  The name does not change; but there
+			// will be two records with the same name, so we need to set a
+			// value for dup_sort.
+			existingEsriNameMap.SetDeprecated (esri2011GenericId);
+			existingEsriNameMap.SetDupSort (1);		// Name, flavor, and type are the same, this distinguishes between the two records.
+			existingEsriNameMap.SetComments (L"ESRI used this ID before EPSG assigned an ID.");
+
+			// The newEsriNameMap will become the active ESRI reference.
+			// The flavor, name, and other stuff should remain unchanged.
+			newEsriNameMap.SetNumericId (addTblPtr->nsrs11EpsgCode);
+			newEsriNameMap.SetDupSort (0);			// Defensive
+			newEsriNameMap.SetAliasFlag (0);		// Defensive
+			newEsriNameMap.SetDeprecated (0UL);		// Defensive
+
+			// Since we now have an EPSG number, we need to add an EPSG
+			// record to this sequence.  Again, must not screw around
+			// with the generic ID.  Type should remain unchanged.
+			newEpsgNameMap.SetFlavor (csMapFlvrEpsg);
+			newEpsgNameMap.SetNumericId (addTblPtr->nsrs11EpsgCode);
+			newEpsgNameMap.SetNameId (addTblPtr->nsrs11EpsgName);
+			newEpsgNameMap.SetDupSort (0);			// Defensive
+			newEpsgNameMap.SetAliasFlag (0);		// Defensive
+			newEpsgNameMap.SetDeprecated (0UL);		// Defensive
+			newEpsgNameMap.SetRemarks (L"");
+			newEpsgNameMap.SetComments (L"");
+
+			// Put them both back into the NameMapper.
+			ok = nmMapPtr->Add (newEpsgNameMap,false,0);
+			if (ok)
+			{
+				ok = nmMapPtr->Add (newEsriNameMap,false,0);
+				if (ok)
+				{
+					ok = nmMapPtr->Add (existingEsriNameMap,true,0);
+				}
+			}
+		}
+		if (!ok)
+		{
+			ok = true;
+		}
+	}
+
+	// Write the modified dictionary and NameMapper out, if appropriate.
+	if (ok)
+	{
+		wcstombs (crsAscFilePath,csTempDir,sizeof (crsAscFilePath));
+		CS_stncat (crsAscFilePath,"\\ModifiedCoordsys.asc",sizeof (crsAscFilePath));
+		ok = coordsysAsc.WriteToFile (crsAscFilePath);
+	}
+	if (ok)
+	{
+		wcsncpy (nmMapFilePath,csTempDir,wcCount (nmMapFilePath));
+		wcPtr = nmMapFilePath + wcslen (nmMapFilePath) - 1;
+		if (*wcPtr != L'\\' && *wcPtr != L'/')
+		{
+			++wcPtr;
+			*wcPtr++ = L'\\';
+		}
+		wcscpy (wcPtr,L"ModifiedNameMapper.csv");	
+
+		std::wofstream oStrm (nmMapFilePath,std::ios_base::out | std::ios_base::trunc);
+		if (oStrm.is_open ())
+		{
+			nmMapPtr->WriteAsCsv (oStrm,true);
+			oStrm.close ();
+
+			wcscpy (wcPtr,L"ModifiedNameMapperDuplicates.csv");
+			oStrm.open (nmMapFilePath,std::ios_base::out | std::ios_base::trunc);
+			if (oStrm.is_open ())
+			{
+				nmMapPtr->WriteDuplicates (oStrm);
+				oStrm.close ();
+			}
+		}
+	}
 	return ok;
 }

@@ -8,7 +8,7 @@
 // in section 499C of the penal code of the State of California.  
 // Use of this information by anyone other than authorized employees
 // of Autodesk, Inc. is granted only under a written non-disclosure 
-// agreement, expressly prescribing the scope and manner of such use.       
+// agreement, expressly prescribing the scope and manner of such use.
 //
 // CREATED BY:
 //      Norm Olsen

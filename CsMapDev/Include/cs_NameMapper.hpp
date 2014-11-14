@@ -234,6 +234,8 @@ public:
 	const wchar_t* GetRemarks (void) const;
 	void GetRemarks (std::wstring& remarks) const;
 	void SetGenericId (const TcsGenericId& newId) {GenericId = newId; };
+	void SetType (EcsMapObjType newClass) {Type = newClass; };
+	void SetFlavor (EcsNameFlavor newFlavor) {Flavor = newFlavor; };
 	void SetNameId (const wchar_t* newNameId);
 	void SetNumericId (unsigned long newNumericId);
 	void SetDupSort (short dupSort) {DupSort = dupSort; };
@@ -432,7 +434,7 @@ public:
 	bool IsInitialized (void) const;
 	bool SetRecordDuplicates (bool recordDuplicates);
 	void ClearDuplicateList (void);
-    EcsCsvStatus ReadFromStream (char* pBuffer, size_t const bufferSize);
+	EcsCsvStatus ReadFromStream (char* pBuffer, size_t const bufferSize);
 	EcsCsvStatus ReadFromStream (std::wistream& inStrm);
 	EcsCsvStatus ReadFromStream (std::wistream& inStrm,TcsCsvStatus& status);
 	bool Add (TcsNameMap& newItem,bool addDupName = false,const wchar_t* objSrcId = 0);

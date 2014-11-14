@@ -1004,8 +1004,8 @@ bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,u
 	return ok;
 }
 // The following extracts the specific record from the NameMapper's
-// DefinitionSet ans removes it from the std::set<> object.  The idea here
-// is that having removed the tiem from the set, the item can be modified
+// DefinitionSet and removes it from the std::set<> object.  The idea here
+// is that having removed the item from the set, the item can be modified
 // and added back without having to concern oneself with whether any of the
 // set's key fields were modified.
 bool TcsNameMapper::ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType type,
@@ -1021,7 +1021,7 @@ bool TcsNameMapper::ExtractAndRemove (TcsNameMap& extractedNameMap,EcsMapObjType
 	// Note that the dupSort and aliasFlag arguments have default
 	// values of 0.  This is the typical case, and these are the
 	// values which are provided by TcsNameMap constructor which
-	// is being used here.  This might display some strnage effects.
+	// is being used here.  This might display some strange effects.
 	// At this point, it is a good idea to provide all elements of
 	// the std::set<>'s key to assure you're getting the correct
 	// entry.

@@ -96,6 +96,10 @@ bool csCsdToCsvCT (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvGX (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvGP (const wchar_t* csDictDir,bool incLegacy = false);
 bool csUsefulRangeTransfer (const wchar_t* csDictDir,int ticketNbr);
+bool OracleTxt2WktTest (const wchar_t* csDictDir,const wchar_t* csDataDir);
+bool csGetNsrs2011EpsgCodes (const TcsEpsgDataSetV6* epsgPtr);
+bool csGetNsrs2011EsriCodes (void);
+bool csFixNsrs2011 (const wchar_t* csDictDir,const wchar_t* csTempDir);
 
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be

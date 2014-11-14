@@ -305,6 +305,9 @@ unsigned long csMapNameToId (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsNameF
 	unsigned long rtnValue = KcsNmInvNumber;
 	TcsGenericId genericId;
 
+	// The csMapProjGeoCSys type is intended to search bot the projected and
+	// geographic name spaces.  Note that the projected namespace is given
+	// priority.  In the case of units, Linear untis is given the priority.
     if (type == csMapProjGeoCSys)
     {
         type  = csMapProjectedCSysKeyName;
