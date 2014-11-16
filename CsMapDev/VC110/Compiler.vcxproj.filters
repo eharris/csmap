@@ -19,6 +19,9 @@
     <None Include="..\Dictionaries\GeodeticTransformation.asc">
       <Filter>DictionarySource</Filter>
     </None>
+    <None Include="..\Dictionaries\NameMapper.csv">
+      <Filter>DictionarySource</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DictionarySource">

@@ -4768,16 +4768,12 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 4151,15,Ctmx,0,"CHTRF95.LL",0,0,0,0,,
 4151,15,CsMap,0,"CHTRF95.LL",0,0,0,0,,
 4151,15,GeoTools,0,"CHTRF95",0,0,0,0,,
-4152,15,EPSG,4152,"NAD83(HARN)",0,0,0,0,,
+4152,15,EPSG,4152,"NAD83(HARN)",0,0,0,0,,"2D version"
 4152,15,ESRI,4152,"GCS_North_American_1983_HARN",0,0,0,0,,
 4152,15,Oracle,4152,"NAD83(HARN)",0,0,0,0,,
 4152,15,Autodesk,0,"LL-HPGN",0,0,0,0,,
-4152,15,Autodesk,0,"NSRS07.LL",0,0,0,0,,
-4152,15,Autodesk,0,"NSRS11.LL",0,0,0,0,,
 4152,15,Ctmx,0,"HARN.LL",0,0,0,0,,
 4152,15,CsMap,0,"LL-HPGN",0,0,0,0,,
-4152,15,CsMap,0,"NSRS07.LL",0,0,0,0,,
-4152,15,CsMap,0,"NSRS11.LL",0,0,0,0,,
 4152,15,GeoTools,0,"NAD83(HARN)",0,0,0,0,,
 4153,15,EPSG,4153,"Rassadiran",0,0,0,0,,
 4153,15,ESRI,4153,"GCS_Rassadiran",0,0,0,0,,
@@ -6853,9 +6849,11 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 4758,15,EPSG,4758,"JAD2001",0,0,0,0,,
 4758,15,ESRI,4758,"GCS_JAD_2001",0,0,0,0,,
 4758,15,Oracle,4758,"JAD2001",0,0,0,0,,
-4759,15,EPSG,4759,"NAD83(NSRS2007)",0,0,0,0,,
+4759,15,EPSG,4759,"NAD83(NSRS2007)",0,0,0,0,,"2D version"
 4759,15,ESRI,4759,"GCS_NAD_1983_NSRS2007",0,0,0,0,,
 4759,15,Oracle,4759,"NAD83(NSRS2007)",0,0,0,0,,
+4759,15,Autodesk,0,"NSRS07.LL",0,0,0,0,,
+4759,15,CsMap,0,"NSRS07.LL",0,0,0,0,,
 4760,15,EPSG,4760,"WGS 66",0,0,0,0,,
 4760,15,ESRI,4760,"GCS_WGS_1966",0,0,0,0,,
 4760,15,Oracle,4760,"WGS 66",0,0,0,0,,
@@ -7041,6 +7039,11 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 4985,15,CsMap,0,"WGS72.LL",0,0,0,0,,
 4987,15,Autodesk,0,"WGS72-TBE.LL",0,0,0,0,,
 4987,15,Ctmx,0,"WGS72-TBE.LL",0,0,0,0,,
+6318,15,EPSG,6318,"NAD83(2011)",0,0,0,0,,"2D version"
+6318,15,ESRI,6318,"GCS_NAD_1983_2011",0,0,0,0,,
+6318,15,ESRI,104145,"GCS_NAD_1983_2011",1,0,0,6318,,"ESRI used this ID before EPSG assigned an ID."
+6318,15,Autodesk,0,"NSRS11.LL",0,0,0,0,,
+6318,15,CsMap,0,"NSRS11.LL",0,0,0,0,,
 6668,15,EPSG,6668,"JGD2011",0,0,0,0,,
 6668,15,ESRI,6668,"GCS_JGD_2011",0,0,0,0,,
 6668,15,Autodesk,0,"LL-JGD2011-ITRF08",0,0,0,0,,
@@ -7337,9 +7340,6 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 200104142,15,ESRI,104142,"GCS_PTRA08",0,0,0,0,,
 200104143,15,ESRI,104143,"GCS_CR05",0,0,0,0,,
 200104144,15,ESRI,104144,"GCS_ISN_2004",0,0,0,0,,
-200104145,15,EPSG,6317,"NAD83(2011)",0,0,0,0,,
-200104145,15,ESRI,6317,"GCS_NAD_1983_2011",0,0,0,0,,
-200104145,15,ESRI,104145,"GCS_NAD_1983_2011",1,0,0,200104145,,"ESRI used this ID before EPSG assigned an ID."
 200104199,15,ESRI,104199,"GCS_WGS_1984_Major_Auxiliary_Sphere",0,0,0,0,,
 200104223,15,ESRI,104223,"GCS_NAD_1983_CORS96",0,0,0,0,,
 200104256,15,ESRI,104256,"GCS_Nepal_Nagarkot",0,0,0,0,,
@@ -18107,6 +18107,24 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 5655,16,EPSG,5655,"NAD83(NSRS2007) / Vermont (ftUS)",0,0,0,0,,"Added by EPSG @ 7.11"
 5655,16,Autodesk,0,"NSRS07.VTF",0,0,0,0,,
 5655,16,CsMap,0,"NSRS07.VTF",0,0,0,0,,
+6414,16,EPSG,6414,"NAD83(2011) / California Albers",0,0,0,0,,
+6414,16,Autodesk,0,"NSRS11.CA/Teale",0,0,0,0,,
+6414,16,CsMap,0,"NSRS11.CA/Teale",0,0,0,0,,
+6439,16,EPSG,6439,"NAD83(2011) / Florida GDL Albers",0,0,0,0,,
+6439,16,Autodesk,0,"NSRS11.FloridaGDL/Albr",0,0,0,0,,
+6439,16,CsMap,0,"NSRS11.FloridaGDL/Albr",0,0,0,0,,
+6497,16,EPSG,6497,"NAD83(2011) / Michigan Oblique Mercator",0,0,0,0,,
+6497,16,Autodesk,0,"NSRS11.MichiganGeoRef",0,0,0,0,,
+6497,16,CsMap,0,"NSRS11.MichiganGeoRef",0,0,0,0,,
+6579,16,EPSG,6579,"NAD83(2011) / Texas Centric Albers Equal Area",0,0,0,0,,
+6579,16,Autodesk,0,"NSRS11.Texas/Albers",0,0,0,0,,
+6579,16,CsMap,0,"NSRS11.Texas/Albers",0,0,0,0,,
+6580,16,EPSG,6580,"NAD83(2011) / Texas Centric Lambert Conformal",0,0,0,0,,
+6580,16,Autodesk,0,"NSRS11.Texas/Lambert",0,0,0,0,,
+6580,16,CsMap,0,"NSRS11.Texas/Lambert",0,0,0,0,,
+6610,16,EPSG,6610,"NAD83(2011) / Wisconsin Transverse Mercator",0,0,0,0,,
+6610,16,Autodesk,0,"NSRS11.WisconsinTM",0,0,0,0,,
+6610,16,CsMap,0,"NSRS11.WisconsinTM",0,0,0,0,,
 6669,16,EPSG,6669,"JGD2011 / Japan Plane Rectangular CS I",0,0,0,0,,
 6669,16,ESRI,6669,"JGD_2011_Japan_Zone_1",0,0,0,0,,
 6669,16,Autodesk,0,"JGD2011-01",0,0,0,0,,
@@ -31281,6 +31299,11 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 4388,17,Autodesk,0,"Latvia1992.LL",0,0,0,0,,
 4388,17,Ctmx,0,"Latvia1992.LL",0,0,0,0,,
 4388,17,CsMap,0,"Latvia1992.LL",0,0,0,0,,
+4893,17,EPSG,4893,"NAD83(NSRS2007)",0,0,0,0,,"3D version"
+4893,17,ESRI,4893,"GCS_NAD_1983_NSRS2007",0,0,0,0,,"ESRI does not distinguish between 2D and 3D CRS systems"
+4893,17,Oracle,4893,"NAD83(NSRS2007)",0,0,0,0,,"Oracle does not distinguish between 2D and 3D CRS systems"
+4893,17,Autodesk,0,"NSRS07.LL",0,0,0,0,,"Autodesk does not distinguish between 2D and 3D CRS systems"
+4893,17,CsMap,0,"NSRS07.LL",0,0,0,0,,"Autodesk does not distinguish between 2D and 3D CRS systems"
 4961,17,EPSG,4961,"POSGAR 98",0,0,0,0,,
 4961,17,Autodesk,0,"PGA98.LL",0,0,0,0,,
 4961,17,CsMap,0,"PGA98.LL",0,0,0,0,,
@@ -31295,3 +31318,9 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 4997,17,Autodesk,0,"MarcoGNR.LL",0,0,0,0,,
 4997,17,Ctmx,0,"MarcoGNR.LL",0,0,0,0,,
 4997,17,CsMap,0,"MarcoGNR.LL",0,0,0,0,,
+6319,17,EPSG,6319,"NAD83(2011)",0,0,0,0,,"3D Version"
+6319,17,ESRI,6319,"GCS_NAD_1983_2011",0,0,0,0,,
+6319,17,ESRI,104145,"GCS_NAD_1983_2011",1,0,0,6319,,"ESRI used this ID before EPSG assigned an ID."
+6319,17,Autodesk,0,"NSRS11.LL",0,0,0,0,,
+6319,17,CsMap,0,"NSRS11.LL",0,0,0,0,,
+

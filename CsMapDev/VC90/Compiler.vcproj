@@ -392,6 +392,10 @@
 				RelativePath="..\Dictionaries\GeodeticTransformation.asc"
 				>
 			</File>
+			<File
+				RelativePath="..\Dictionaries\NameMapper.csv"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

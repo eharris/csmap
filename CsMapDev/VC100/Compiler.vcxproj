@@ -211,6 +211,7 @@
     <None Include="..\Dictionaries\elipsoid.asc" />
     <None Include="..\Dictionaries\GeodeticPath.asc" />
     <None Include="..\Dictionaries\GeodeticTransformation.asc" />
+    <None Include="..\Dictionaries\NameMapper.csv" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Library.vcxproj">
