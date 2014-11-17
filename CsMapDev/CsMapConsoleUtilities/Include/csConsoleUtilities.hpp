@@ -95,11 +95,14 @@ bool csCsdToCsvCS (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvCT (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvGX (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvGP (const wchar_t* csDictDir,bool incLegacy = false);
+// This range transfer transfers from one Coordsys.ASC definition to another.
 bool csUsefulRangeTransfer (const wchar_t* csDictDir,int ticketNbr);
 bool OracleTxt2WktTest (const wchar_t* csDictDir,const wchar_t* csDataDir);
 bool csGetNsrs2011EpsgCodes (const TcsEpsgDataSetV6* epsgPtr);
 bool csGetNsrs2011EsriCodes (void);
 bool csFixNsrs2011 (const wchar_t* csDictDir,const wchar_t* csTempDir);
+// This range transfer transfers from EPSG to Coordsys,asc
+bool csUsefulRangeXfer (const wchar_t* csDictDir,const wchar_t* csDataDir,int ticketNbr);
 
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be

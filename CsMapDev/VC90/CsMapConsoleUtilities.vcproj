@@ -480,6 +480,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csUsefulRangeXfer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csUtilitySupport.cpp"
 				>
 			</File>

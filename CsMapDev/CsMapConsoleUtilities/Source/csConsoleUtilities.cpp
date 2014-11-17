@@ -81,14 +81,12 @@ int main (int argc,char* argv [])
 
 //	ok = csUpdateNameMapperFromCsv (csTempDir,csDictDir,L"C:\\ProgramData\\GeodeticData\\ESRI\\WKT-10.1\\FlavoredWktTestData.csv");
 //	ok = csGenerateBlueBookTestData (L"%GEODETIC_DATA%\\NAD83(2012)\\NAD83-2011\\BIN",true);
-//	ok = csUsefulRangeReport (csTempDir,csDictDir);
+	ok = csUsefulRangeReport (csDataDir,csDictDir);
 //	ok  = csCsdToCsvEL (csDictDir);
 //	ok &= csCsdToCsvDT (csDictDir);
 //	ok &= csCsdToCsvCS (csDictDir);
-//	ok = csUsefulRangeMatchList (csTempDir,csDictDir);
-//	ok = csUsefulRangeTransfer (csDictDir,112);
 //	ok = OracleTxt2WktTest (csDictDir,csDataDir);
-	ok = csFixNsrs2011 (csDictDir,csTempDir);
+//	ok = csUsefulRangeXfer (csDictDir,csTempDir,112);
 
 	return ok?0:-1;
 }

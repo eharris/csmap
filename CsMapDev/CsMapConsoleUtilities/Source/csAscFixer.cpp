@@ -397,6 +397,19 @@ void TcsDefLine::SetValue (const char* newValue)
 }
 void TcsDefLine::SetComment (const char* newComment)
 {
+	int wsCnt;
+	int lblValCnt;
+
+	if (CmntWs [0] == '\0')
+	{
+		lblValCnt = static_cast<int>(strlen (LeadWs) + strlen (Label) + strlen (SepWs) + strlen (Value));
+		wsCnt = 40 - lblValCnt;
+		if (wsCnt < 4)
+		{
+			wsCnt = 4;
+		}
+		Pad (CmntWs,wsCnt,sizeof (CmntWs));
+	}
 	CS_stncp (Comment,newComment,sizeof (Comment));
 }
 ///////////////////////////////////////////////////////////////////////////////
