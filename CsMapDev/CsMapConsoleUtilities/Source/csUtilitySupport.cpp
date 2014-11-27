@@ -115,6 +115,60 @@ bool CS_crsHasUsefulRng (const struct cs_Csdef_& csDef)
 	return hasUsefulRange;
 }
 
+// The following function reads a CSV with one set of delimiters and writes
+// with a second set of delimiters.  Especially useful when dealing with
+// WKT files where all the element names are quoted strings, and you need
+// to get rid of the double quotes.
+bool CsvDelimiterConvert (const wchar_t* csDataDir,const wchar_t* inputFile,bool labels,
+																			const wchar_t* fromDelims,
+																			const wchar_t* toDelims,
+																			const wchar_t* outputFile)
+{
+	bool ok (false);
+
+	wchar_t filePath [MAXPATH + MAXPATH];
+
+	std::wifstream iStrm;
+	std::wofstream oStrm;
+
+	TcsCsvStatus csvStatus;
+	TcsCsvFileBase csvData (labels,3,5,fromDelims);
+
+	// Open source file
+	wcsncpy (filePath,csDataDir,MAXPATH);
+	wcscat (filePath,L"\\");
+	wcscat (filePath,inputFile);
+	iStrm.open (filePath,std::ios_base::in);
+	ok = iStrm.is_open ();
+
+	// Read the input file.
+	if (ok)
+	{
+		ok = csvData.ReadFromStream (iStrm,labels,csvStatus);
+		iStrm.close ();
+	}
+
+	if (ok)
+	{
+		csvData.SetDelimiters (toDelims);
+	}
+	if (ok)
+	{
+		// Create/Truncate the output file.
+		wcsncpy (filePath,csDataDir,MAXPATH);
+		wcscat (filePath,L"\\");
+		wcscat (filePath,outputFile);
+		oStrm.open (filePath,std::ios_base::out | std::ios_base::trunc);
+		ok = oStrm.is_open ();
+	}
+	if (ok)
+	{
+		ok = csvData.WriteToStream (oStrm,labels,csvStatus);
+		oStrm.close ();
+	}
+	return ok;
+}
+
 // Returns a pointer to a TcsEpsgDataSetV6 object.  Specifically, a
 // TcsEpsgDataSetV6 object initialized with the contents of the the folder
 // pointed to by the csEpsgDir global variable defined in the

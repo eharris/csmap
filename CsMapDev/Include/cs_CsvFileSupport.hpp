@@ -258,6 +258,7 @@ public:
 	void Clear (void);
 	bool SetRecordKeyField (const wchar_t* fieldId,TcsCsvStatus& status);
 	bool SetRecordKeyField (short fieldNbr,TcsCsvStatus& status);
+	const TcsCsvRecord& GetAllLabels (void) const {return Labels; };
 	bool GetFieldLabel (std::wstring& label,short fieldNbr) const;
 	bool GetFieldLabel (std::wstring& label,short fieldNbr,TcsCsvStatus& status) const;
 	bool SetFieldLabel (const wchar_t* label,short fieldNbr);
@@ -271,6 +272,7 @@ public:
 																	   TcsCsvStatus& status);
 	bool ReplaceField (const std::wstring& newValue,unsigned recordNbr,const wchar_t* fieldId,
 																	   TcsCsvStatus& status);
+	bool GetRecord (TcsCsvRecord& record,unsigned recordNbr,TcsCsvStatus& status) const;
 	bool Locate (unsigned& recordNumber,const wchar_t* srchString) const;
 	bool Locate (unsigned& recordNumber,short fieldNbr,const wchar_t* srchString,bool honorCase = false) const;
 	bool Locate (unsigned& recordNumber,const wchar_t* fieldId,const wchar_t* srchString,bool honorCase = false) const;

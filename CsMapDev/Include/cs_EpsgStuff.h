@@ -576,16 +576,16 @@ public:
 	short DetermineCsMapDatumMethod (const TcsEpsgCode& operationCode,bool& coordFrame) const;
 	bool GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsgCode& vertUom,
 														   const TcsEpsgCode& crsEpsgCode) const;
+	EcsCrsType GetCrsType (const TcsEpsgCode& crsCode) const;
+	EcsUomType GetUomFactor (double& uomFactor,const TcsEpsgCode& uomCode) const;
 protected:
 	//=========================================================================
 	// Protected Support Functions
 	//
 	// These functions provide support for the public member functions of this
 	// object.  Implementation of these members can be found in
-	// csEPsgSupport.cpp  Selecting these members to be protected is quite
+	// csEpsgSupport.cpp  Selecting these members to be protected is quite
 	// /arbitrary.
-	EcsCrsType GetCrsType (const TcsEpsgCode& crsCode) const;
-	EcsUomType GetUomFactor (double& uomFactor,const TcsEpsgCode& uomCode) const;
 	bool GetUomToDegrees (double& toDegrees,const TcsEpsgCode& uomCode) const;
 	bool GetUomToMeters (double& toMeters,const TcsEpsgCode& uomCode) const;
 	bool GetUomToUnity (double& toUnity,const TcsEpsgCode& uomCode) const;

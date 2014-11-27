@@ -57,7 +57,7 @@
 #	define wcCount(array) (sizeof (array) / sizeof (wchar_t))
 #endif
 
-// Decalre various utility functions.  Several are obsolete and
+// Declare various utility functions.  Several are obsolete and
 // should be removed as their future value is nil.
 bool ManufactureNameMapperCsv (const wchar_t* resultDir,const wchar_t* dataDir);
 bool ResortNameMapperCsv (const wchar_t* resultDir,const wchar_t* dataDir,bool duplicates = false);
@@ -97,12 +97,16 @@ bool csCsdToCsvGX (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvGP (const wchar_t* csDictDir,bool incLegacy = false);
 // This range transfer transfers from one Coordsys.ASC definition to another.
 bool csUsefulRangeTransfer (const wchar_t* csDictDir,int ticketNbr);
-bool OracleTxt2WktTest (const wchar_t* csDictDir,const wchar_t* csDataDir);
+// This range transfer transfers from EPSG to Coordsys,asc
+bool csUsefulRangeXfer (const wchar_t* csDictDir,const wchar_t* csDataDir,int ticketNbr);
+
+bool OracleTxt2WktTest (const wchar_t* csDictDir,const wchar_t* csDataDir,const wchar_t* inputFile,
+																		  const wchar_t* delimiters,
+																		  const wchar_t* oracleVersion);
 bool csGetNsrs2011EpsgCodes (const TcsEpsgDataSetV6* epsgPtr);
 bool csGetNsrs2011EsriCodes (void);
 bool csFixNsrs2011 (const wchar_t* csDictDir,const wchar_t* csTempDir);
-// This range transfer transfers from EPSG to Coordsys,asc
-bool csUsefulRangeXfer (const wchar_t* csDictDir,const wchar_t* csDataDir,int ticketNbr);
+bool PreProcessWktCatalog (const wchar_t* csDataTrgDir,const wchar_t* csDataSrcDir);
 
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be

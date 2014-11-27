@@ -871,17 +871,12 @@ bool TcsNameMapper::Add (const TcsNameMap& newItem)
 	insertStatus = DefinitionSet.insert (newItem);
 	return insertStatus.second;
 }
-bool TcsNameMapper::Replace (const TcsNameMap& newItem)
+bool TcsNameMapper::Replace (const TcsNameMap& newItem,const TcsNameMap& oldItem)
 {
 	iterator itr;
 	std::pair<iterator,bool> insertStatus;
 
-	EcsMapObjType mapClass = newItem.GetMapClass ();
-	EcsNameFlavor flavor= newItem.GetFlavor ();
-	const wchar_t* flavorName = newItem.GetNamePtr ();
-
-	TcsNameMap searchObject (mapClass,flavor,flavorName);
-	itr = DefinitionSet.find (searchObject);
+	itr = DefinitionSet.find (oldItem);
 	if (itr != DefinitionSet.end ())
 	{
 		DefinitionSet.erase (itr);		//lint !e534   ignoring return value
@@ -889,6 +884,71 @@ bool TcsNameMapper::Replace (const TcsNameMap& newItem)
 	insertStatus = DefinitionSet.insert (newItem);
 	return insertStatus.second;
 }
+// Given a specific system id the systemId parameter, this function will
+// extract a copy of a TcsNameMap record with the specific objType, flavor,
+// and flavor ID (wkid); if it exists of course.  
+bool TcsNameMapper::ExtractSpecificId (TcsNameMap& nameMap,EcsMapObjType objType,TcsGenericId systemId,
+																				 EcsNameFlavor flavor,
+																				 unsigned long wkid) const
+{
+	bool ok (false);
+
+	const_iterator beginItr;
+	const_iterator endItr;
+	const_iterator searchItr;
+	
+	TcsNameMap beginSearchObj (objType,flavor,FirstName,0,0);
+	TcsNameMap endSearchObj (objType,flavor,LastName,9999,9999);
+	
+	beginItr = DefinitionSet.lower_bound (beginSearchObj);
+	endItr   = DefinitionSet.upper_bound (endSearchObj);
+	for (searchItr = beginItr;searchItr != endItr;searchItr++)
+	{
+		if (searchItr->GetGenericId () == systemId)
+		{
+			if (searchItr->GetNumericId () == wkid)
+			{
+				nameMap = *searchItr;
+				ok = true;
+				break;
+			}
+		}
+	}
+	return ok;
+}
+// Given a specific system id the systemId parameter, this function will
+// extract a copy of a TcsNameMap record with the specific objType, flavor,
+// and flavored name; if it exists of course.  
+bool TcsNameMapper::ExtractSpecificName (TcsNameMap& nameMap,EcsMapObjType objType,TcsGenericId systemId,
+																				   EcsNameFlavor flavor,
+																				   const wchar_t* name) const
+{
+	bool ok (false);
+
+	const_iterator beginItr;
+	const_iterator endItr;
+	const_iterator searchItr;
+
+	TcsNameMap beginSearchObj (objType,flavor,name,0,0);
+	TcsNameMap endSearchObj (objType,flavor,name,9999,9999);
+
+	beginItr = DefinitionSet.lower_bound (beginSearchObj);
+	endItr   = DefinitionSet.upper_bound (endSearchObj);
+	for (searchItr = beginItr;searchItr != endItr;searchItr++)
+	{
+		if (searchItr->GetGenericId () == systemId)
+		{
+			if (!CS_wcsicmp (searchItr->GetNamePtr (),name))
+			{
+				nameMap = *searchItr;
+				ok = true;
+				break;
+			}
+		}
+	}
+	return ok;
+}
+
 bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* oldName,
 																			   const wchar_t* newName,
 																			   const wchar_t* comment,
@@ -947,7 +1007,7 @@ bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,c
 	}
 	return ok;
 }
-bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id,
+bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,unsigned long wkid,
 																			   const wchar_t* newName,
 																			   const wchar_t* comment,
 																			   const TcsGenericId& deprecatedBy)
@@ -955,7 +1015,7 @@ bool TcsNameMapper::AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,u
 	bool ok (false);
 	iterator entryItr;
 
-	entryItr = LocateNameMapItr (type,flavor,id);
+	entryItr = LocateNameMapItr (type,flavor,wkid);
 	if (entryItr != DefinitionSet.end ())
 	{
 		// OK, we found it.  Should usually be the case.  The intent of this

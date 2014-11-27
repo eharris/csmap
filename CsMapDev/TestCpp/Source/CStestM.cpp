@@ -36,14 +36,15 @@ extern wchar_t const csEpsgDir [];
 int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 {
 	bool ok;
-	bool deprecated;
-	bool legacy;
+	bool deprecated;		// current EPSG definition is deprecated
+	bool legacy;			// current CS-MAP definition is deprecated.
 
 	enum EcsMapSt csMapSt;
 	EcsCrsType crsType;
 
 	TcsEpsgCode epsgCode;
 	TcsEpsgCode dtmCode;
+	TcsEpsgCode epsgCodeBack;
 
 	struct cs_Eldef_ *csMapElDef;
 	struct cs_Dtdef_ *csMapDtDef;
@@ -146,21 +147,21 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			}
 		}
 
-        // Verify that the Name Mapper has the same name as the EPSG database.
+		// Verify that the Name Mapper has the same name as the EPSG database.
 		if (!deprecated)
 		{
-		    csMapSt = csMapIdToNameC (csMapEllipsoidKeyName,mapEpsgName,sizeof (mapEpsgName),
+			csMapSt = csMapIdToNameC (csMapEllipsoidKeyName,mapEpsgName,sizeof (mapEpsgName),
 																	    csMapFlvrEpsg,
 																	    csMapFlvrEpsg,
 																	    epsgCode);
-		    if (csMapSt != csMapOk || CS_stricmp (epsgKeyName,mapEpsgName) != 0)
-		    {
-			    nameCnt += 1;
-			    printf ("Name Mapper name [%s] not the same as EPSG database name for ellipsoid '%s' [%lu].\n",
-			            mapEpsgName, 
-					    epsgKeyName,
-					    static_cast<unsigned long>(epsgCode));
-		    }
+			if (csMapSt != csMapOk || CS_stricmp (epsgKeyName,mapEpsgName) != 0)
+			{
+				nameCnt += 1;
+				printf ("Name Mapper name [%s] not the same as EPSG database name for ellipsoid '%s' [%lu].\n",
+						mapEpsgName, 
+						epsgKeyName,
+						static_cast<unsigned long>(epsgCode));
+			}
 		}
 	}
 	printf ("\tEllipsoid Audit: ok = %d, noMap = %d, missingDef = %d, deprecationErr = %d, nameDiff = %d, EPSGaccess = %d\n",okCnt,mapCnt,missingCnt,deprCnt,nameCnt,failedCnt);
@@ -360,28 +361,48 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 		wcstombs (epsgKeyName,fldData.c_str (),sizeof (epsgKeyName));
 		epsgKeyName [sizeof (epsgKeyName) - 1] = '\0';
 
-		// For now, we skip any and all systems referenced to NRS2007.  We
-		// don't support that datum and there are a ton of systems in EPSG
-		// referenced to it.
-		if (CS_stristr (epsgKeyName,"NSRS2007") != 0)
-		{
-			continue;
-		}
-		
 		// We skip the following specific EPSG codes for the reasons given in
 		// the comments.
-		if (epsgCode == 2192UL)
+		if (epsgCode == 2192UL)	// replaced by 2154???
 		{
-			// We skip this one as EPSG has deprectaed the definition giving
+			// We skip this one as EPSG has deprected the definition giving
 			// the reason: "Withdrawn and replaced before being put into use."
 			// It appears to us that this is a valid system and quite likely
 			// to be of value to users; thus we are reluctant to deprecate
-			// definition.  So, fo now, we just skip this test for this
+			// definition.  So, for now, we just skip this test for this
 			// specific definition.
 			continue;
 		}
 
 		deprecated = epsgV6.IsDeprecated (epsgTblReferenceSystem,epsgCode);
+
+if (epsgCode == 2492UL)
+{
+	deprecated = false;
+}
+if (epsgCode == 21817UL)
+{
+	deprecated = false;
+}
+if (epsgCode == 23853UL)
+{
+	deprecated = false;
+}
+if (epsgCode == 23886UL)
+{
+	deprecated = false;
+}
+if (epsgCode == 28402UL)
+{
+	// Replaced by 3833, CS-MAP has no equivalent as yet.
+	deprecated = false;
+}
+if (epsgCode == 28403UL)
+{
+	// Replaced by 3333, CS-MAP has no equivalent as yet.
+	deprecated = false;
+}
+
 		csMapSt = csMapIdToNameC (csMapProjGeoCSys,csMapKeyName,sizeof (csMapKeyName),
 																csMapFlvrAutodesk,
 																csMapFlvrEpsg,
@@ -403,7 +424,23 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			}
 			continue;
 		}
-		else
+		if (csMapSt == csMapOk && deprecated)
+		{
+			unsigned long tmpUL;
+
+			// Many EPSG definitions are deprecated simply because of a name
+			// change; the definitions remain the same.  We try to catch this
+			// problem here.
+			tmpUL = csMapNameToIdC (csMapProjGeoCSys,csMapFlvrEpsg,csMapFlvrAutodesk,csMapKeyName);
+			if (tmpUL > 0UL && tmpUL < 32768UL)
+			{
+				if (tmpUL != epsgCode)
+				{
+					continue;
+				}
+			}
+		}
+		if (csMapSt == csMapOk)
 		{
 			csMapCsDef = CS_csdef (csMapKeyName);
 			if (csMapCsDef == 0)
@@ -437,7 +474,9 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 				if (static_cast<long>(csMapCsDef->epsgNbr) != static_cast<long>(epsgCode))
 				{
 					mapCnt += 1;
-					printf ("EPSG code which appears in definition of CRS named '%s' does not match current EPSG database.\n",csMapKeyName);
+					printf ("EPSG code (%d) which appears in definition of CRS named '%s' does not match current EPSG database.\n",
+																	csMapCsDef->epsgNbr,
+																	csMapKeyName);
 				}
 				okCnt += 1;
 				CS_free (csMapCsDef);

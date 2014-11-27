@@ -3801,7 +3801,8 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 6722,12,Autodesk,0,"SouthGeorgia68",0,0,0,0,,
 6722,12,Ctmx,0,"SouthGeorgia1968",0,0,0,0,,
 6722,12,CsMap,0,"SouthGeorgia1968",0,0,0,0,,
-6723,12,EPSG,6723,"Grand Cayman 1959",0,0,0,0,,
+6723,12,EPSG,6723,"Grand Cayman Geodetic Datum 1959",0,0,0,0,,
+6723,12,EPSG,6723,"Grand Cayman 1959",0,1,0,0,,"Name changed by EPSG"
 6723,12,Autodesk,0,"GrandCayman59",0,0,0,0,,
 6723,12,Ctmx,0,"GrandCayman1959",0,0,0,0,,
 6723,12,CsMap,0,"GrandCayman1959",0,0,0,0,,
@@ -3815,7 +3816,8 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 6725,12,Ctmx,0,"JohnstonIs61",0,0,0,0,,
 6725,12,CsMap,0,"JHNSTN",0,0,0,0,,
 6725,12,Oracle9,0,"Johnston Island 1961",0,0,0,0,,
-6726,12,EPSG,6726,"Little Cayman 1961",0,0,0,0,,
+6726,12,EPSG,6726,"Sister Islands Geodetic Datum 1961",0,0,0,0,,
+6726,12,EPSG,6726,"Little Cayman 1961",0,1,0,0,,"Name changed by EPSG"
 6726,12,Autodesk,0,"LittleCayman61",0,0,0,0,,
 6726,12,Ctmx,0,"LittleCayman1961",0,0,0,0,,
 6726,12,CsMap,0,"LittleCayman1961",0,0,0,0,,

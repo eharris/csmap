@@ -34,6 +34,10 @@ unsigned short CS_getPrjCode (const char* projKeyName);
 bool CS_crsHasUsefulRng (const struct cs_Csdef_& csDef);
 const TcsEpsgDataSetV6* GetEpsgObjectPtr (void);
 void ReleaseEpsgObjectPtr (void);
+bool CsvDelimiterConvert (const wchar_t* csDataDir,const wchar_t* inputFile,bool labels,
+																			const wchar_t* fromDelims,
+																			const wchar_t* toDelims,
+																			const wchar_t* outputFile);
 
 bool CS_strrpl (char* string1,size_t strSize,const char* find,const char* rplWith);
 int CS_nmMprRplName (TcsCsvFileBase& csvFile,short fldNnr,const char* oldName,const char* newName,bool once);

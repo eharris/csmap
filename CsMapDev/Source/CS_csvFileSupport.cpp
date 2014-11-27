@@ -1427,20 +1427,23 @@ short TcsCsvFileBase::SetMaxFldCnt (short newCnt)
 }
 bool TcsCsvFileBase::SetDelimiters (const wchar_t* delimiters)
 {
-    if (delimiters != 0)
+    if (delimiters != 0 && *delimiters != L'\0')
     {
-        if (*delimiters != L'\0')
+        Separator = *delimiters;
+        if (*(delimiters +1) != L'\0')
         {
-            Separator = *delimiters;
-            if (*(delimiters +1) != L'\0')
-            {
-                Quote = *(delimiters + 1);
-                if (*(delimiters + 2) != L'\0')
-                {
-                    Escape = *(delimiters + 2);
-                }
-            }
+           Quote = *(delimiters + 1);
+           if (*(delimiters + 2) != L'\0')
+           {
+               Escape = *(delimiters + 2);
+           }
         }
+    }
+    else
+    {
+        Separator = L',';
+        Quote     = L'\"';
+        Escape    = L'\"';
     }
     return true;
 }
@@ -1729,6 +1732,26 @@ bool TcsCsvFileBase::ReplaceField (const std::wstring& newValue,unsigned recordN
     }
     return ok;
 }
+
+bool TcsCsvFileBase::GetRecord (TcsCsvRecord& record,unsigned recordNbr,TcsCsvStatus& status) const
+{
+	bool ok;
+
+	if (recordNbr >= Records.size ())
+	{
+		ok = false;
+		status.SetStatus (csvInvRecordNbr);
+		status.SetLineNbr (recordNbr);
+		status.SetObjectName (ObjectName);
+	}
+	else
+	{
+		recItrK recordItr = Records.begin() + recordNbr;
+		record = *recordItr;
+		ok = true;
+	}
+	return ok;
+ }
 // Implies that the file has been properly indexed, and srchString is the value
 // to be searched for in the index.
 bool TcsCsvFileBase::Locate (unsigned& recordNumber,const wchar_t* srchString) const

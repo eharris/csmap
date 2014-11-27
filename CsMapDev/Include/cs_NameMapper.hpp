@@ -434,12 +434,13 @@ public:
 	bool IsInitialized (void) const;
 	bool SetRecordDuplicates (bool recordDuplicates);
 	void ClearDuplicateList (void);
+	size_t GetDuplicateCount (void) const { return Duplicates.size (); }
 	EcsCsvStatus ReadFromStream (char* pBuffer, size_t const bufferSize);
 	EcsCsvStatus ReadFromStream (std::wistream& inStrm);
 	EcsCsvStatus ReadFromStream (std::wistream& inStrm,TcsCsvStatus& status);
 	bool Add (TcsNameMap& newItem,bool addDupName = false,const wchar_t* objSrcId = 0);
 	bool Add (const TcsNameMap& newItem);		// can't add a duplicate if the item is const
-	bool Replace (const TcsNameMap& newItem);
+	bool Replace (const TcsNameMap& newItem,const TcsNameMap& oldItem);
 	TcsGenericId Locate (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* name) const;
 	TcsGenericId Locate (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id) const;
 	const wchar_t* LocateName (EcsMapObjType type,EcsNameFlavor flavor,const TcsGenericId& genericId) const;
@@ -460,11 +461,17 @@ public:
 	TcsNameMapList* Enumerate (EcsMapObjType type,EcsNameFlavor flavor,bool deprecated = false);
 	///////////////////////////////////////////////////////////////////////////
 	// Updating functions.
+	bool ExtractSpecificId (TcsNameMap& nameMap,EcsMapObjType mapType,TcsGenericId systemId,
+																	  EcsNameFlavor flavor,
+																	  unsigned long wkid) const;
+	bool ExtractSpecificName (TcsNameMap& nameMap,EcsMapObjType mapType,TcsGenericId systemId,
+																		EcsNameFlavor flavor,
+																		const wchar_t* name) const;
 	bool AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,const wchar_t* oldName,
 																	const wchar_t* newName,
 																	const wchar_t* comment = 0,
 																	const TcsGenericId& deprecatedBy = KcsGenericIdNull);
-	bool AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,unsigned long id,
+	bool AliasExistingName (EcsMapObjType type,EcsNameFlavor flavor,unsigned long wkid,
 																	const wchar_t* newName,
 																	const wchar_t* comment = 0,
 																	const TcsGenericId& deprecatedBy = KcsGenericIdNull);

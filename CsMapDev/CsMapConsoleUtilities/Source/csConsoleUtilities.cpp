@@ -79,14 +79,14 @@ int main (int argc,char* argv [])
 	// to point to the temporary directory as the result directory.  It is
 	// suggested that this only be changed on a temporary basis.
 
-//	ok = csUpdateNameMapperFromCsv (csTempDir,csDictDir,L"C:\\ProgramData\\GeodeticData\\ESRI\\WKT-10.1\\FlavoredWktTestData.csv");
 //	ok = csGenerateBlueBookTestData (L"%GEODETIC_DATA%\\NAD83(2012)\\NAD83-2011\\BIN",true);
-	ok = csUsefulRangeReport (csDataDir,csDictDir);
+//	ok = csUsefulRangeReport (csDataDir,csDictDir);
+//	ok = csUsefulRangeXfer (csDictDir,csTempDir,112);
 //	ok  = csCsdToCsvEL (csDictDir);
 //	ok &= csCsdToCsvDT (csDictDir);
 //	ok &= csCsdToCsvCS (csDictDir);
-//	ok = OracleTxt2WktTest (csDictDir,csDataDir);
-//	ok = csUsefulRangeXfer (csDictDir,csTempDir,112);
+//	ok = CsvDelimiterConvert (csDataDir,L"ESRI-10_2Work.txt",true,L"|\"\"",L"|``",L"ESRI-10_2WorkUQ.txt");
+	ok = csUpdateNameMapperFromCsv (csTempDir,csDictDir,L"D:\\CrsMagic\\Development\\OpenSource\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Data\\WktDataCatalog.txt");
 
 	return ok?0:-1;
 }
