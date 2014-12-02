@@ -211,7 +211,12 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\GeocentricFix.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ListDuplicateDefinitions.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ListUnmappedEpsgCodes.cpp" />
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\SevenParameterFixVersion2.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\SevenParameterFixVersion2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ThreeParameterFix.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -169,7 +169,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\cs7ParameterFlipList.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\cs7ParameterFlipList.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAdd2007and2011.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddEpsgData.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle10Mappings.cpp" />
@@ -208,7 +213,12 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\GeocentricFix.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ListDuplicateDefinitions.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ListUnmappedEpsgCodes.cpp" />
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\SevenParameterFixVersion2.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\SevenParameterFixVersion2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ThreeParameterFix.cpp" />
   </ItemGroup>
   <ItemGroup>

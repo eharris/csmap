@@ -120,6 +120,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>csTestCpp.hpp</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);__HEAP__</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>csmapd.lib</AdditionalDependencies>
@@ -163,6 +164,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>csTestCpp.hpp</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>csmap.lib</AdditionalDependencies>

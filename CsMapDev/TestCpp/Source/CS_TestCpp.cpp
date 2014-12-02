@@ -538,10 +538,10 @@ int main (int argc,char* argv [])
 	_HEAPINFO hi;
 
 	hi._pentry = NULL;
-	mem_used = 0;
+	int mem_used = 0;
 	while (TRUE)
 	{
-		hi_st = heapwalk (&hi);
+		hi_st = _heapwalk (&hi);
 		if (hi_st != _HEAPOK) break;
 		if (hi._useflag == _USEDENTRY)
 		{
