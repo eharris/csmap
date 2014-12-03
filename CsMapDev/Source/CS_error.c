@@ -520,6 +520,8 @@ struct csErrtab_ csErrtab [] =
 						   "%s :: The name of a geodetic transformation listed in this path is not valid." },
  {   cs_GPQ_NOXFRM,csET_NM,cs_ERSUP_OPR,
 						   "%s :: The name of a geodetic transformation listed is not that of an exiting transformation." },
+ {   cs_CSQ_ELPSCL,csET_NM,cs_ERSUP_OPR,
+						   "%s :: Ellipsoid Scale parameter is out of expected range." },
 
  {     cs_MGRS_LL,csET_LOC,cs_ERSUP_OPR,
 						   "Invalid Lat/Long (%s) presented for MGRS conversion." },

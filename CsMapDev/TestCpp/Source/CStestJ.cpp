@@ -209,6 +209,7 @@ int CStestJ (bool verbose,long32_t duration)
 				SWISS    --> Most vendors support this as an RSKEW approximation
 				TRMRKRG  --> Nobody supports this one but us
 				MRCATPV  --> Don't know what name ESRI (or others) use for this projection.
+				LM-MICH  --> Not implemented by ESRI, as yet
 
 				There are other projections which we don't want to handle here, but
 				they should not show up on an EPSG scan of the name mapper.
@@ -217,7 +218,8 @@ int CStestJ (bool verbose,long32_t duration)
 			    prjPtr->code == cs_PRJCOD_OBQCYL  ||
 			    prjPtr->code == cs_PRJCOD_SWISS   ||
 			    prjPtr->code == cs_PRJCOD_TRMRKRG ||
-			    prjPtr->code == cs_PRJCOD_MRCATPV)
+			    prjPtr->code == cs_PRJCOD_MRCATPV ||
+			    prjPtr->code == cs_PRJCOD_LMMICH)
 			{
 				CS_free (csDefPtr);
 				continue;

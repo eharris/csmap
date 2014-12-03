@@ -6017,6 +6017,19 @@ LL83,116 55 48.7400000W,46 00 22.1900000N,NAD83/HARN.LL,116 55 48.7421189W,46 00
 NAD83/HARN.LL,116 55 48.7421189W,46 00 22.1863066N,LL83,116 55 48.7400000W,46 00 22.1900000N,3.0E-07,3.0E-07 # WA/OR/ID, ID (== Western MO)
 
 ###############################################################################
+# Single test case available for LM-MICH, obtained from
+# from EPSG Guidance Note 7, Part 2, July 2014
+#
+# Note that EPSG 7-2 2014 (printed page 23) uses the International Ellipsoid
+# while the definition in the 8.05 dataset indicates the datum to be NAD27
+# which is referenced to the Clarke 1966 ellipsoid.  The documentation in
+# the Guidance Note appears to be a cut & paste typo; the numbers jive when
+# using the Clarke 1866 ellipsoid per the NAD27 datum.
+#
+LL27,83 10 00.000W,43 45 00.000N,MI27e-C,2308335.75,160210.48,0.005,0.006
+MI27e-C,2308335.75,160210.48,LL27,83 10 00.000W,43 45 00.000N,1.0E-07,1.0E-07
+
+###############################################################################
 #
 # That's it.  If you have some more cases documented by reputable sources,
 # we'll be glad to add them.
