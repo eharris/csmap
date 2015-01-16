@@ -40,6 +40,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Dictionaries\CS_Comp.c" />
+    <ClCompile Include="..\Dictionaries\CS_Comp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

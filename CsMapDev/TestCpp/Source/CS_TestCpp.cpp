@@ -797,6 +797,10 @@ int main (int argc,char* argv [])
 	CS_recvr ();
 	CS_reset ();
 
+	// Release the NameMapper memory.
+	cmGetNameMapperPtr (true);
+
+	// Releast the EPSG database memory.
 	if (KcsEpsgDataSetV6Ptr != NULL)
 	{
 		delete KcsEpsgDataSetV6Ptr;

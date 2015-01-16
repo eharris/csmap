@@ -288,7 +288,10 @@ EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm)
 }
 EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csvStatus)
 {
+	EcsCsvStatus status;
+
 	wint_t firstChar;
+	size_t fldCnt;
 	unsigned long ulTmp;
 	std::vector<std::wstring> fields(16);
 	std::wstring lineBufr;
@@ -297,28 +300,49 @@ EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csv
 	// be might end up in a name somewhere.
 	Name.clear ();
 	Remarks.clear ();
-	Comments.clear ();
 
-	EcsCsvStatus status = csGetCsvRecord (lineBufr,inStrm,TcsNameMapper::Delimiters);
+	status = csvEmptyLine;
+	lineBufr.reserve (1024);
+	while ((status == csvEmptyLine) || (status == csvCommentLine))
+	{
+		// Skip over any empty or comment lines.  Actually, since the
+		// NameMapper delimiters do not include the comment specification,
+		// we should never see a csvCommentLine return status here.  A
+		// comment line will typically bomb with a status of csvTooFewFields.
+		status = csGetCsvRecord (lineBufr,inStrm,TcsNameMapper::Delimiters);
+		csvStatus.BumpLineNbr ();
+	}
 	if (status == csvOk)
 	{
 		status = csCsvFieldParse (fields,lineBufr,TcsNameMapper::Delimiters);
 		if (status == csvOk)
 		{
-			// We have big problems if we try to process an empty field.
-			// We could check each field individually, but that would be
-			// slow.  Perhaps sometime in the future.
-			size_t emptyCount = 0;
-			for (size_t idx = 0;idx < 7;idx += 1)
+			fldCnt = fields.size ();
+			if (fldCnt < 7)
 			{
-				if (fields [idx].empty ())
-				{
-					emptyCount += 1;
-				}
+				status = csvTooFewFields;
 			}
-			if (emptyCount != 0)
+			else if (fldCnt > 11)
 			{
-				status = csvEmpty;
+				status = csvTooManyFields;
+			}
+			else
+			{
+				// We have big problems if we try to process an empty field.
+				// We could check each field individually, but that would be
+				// slow.  Perhaps sometime in the future.
+				size_t emptyCount = 0;
+				for (size_t idx = 0;idx < 7;idx += 1)
+				{
+					if (fields [idx].empty ())
+					{
+						emptyCount += 1;
+					}
+				}
+				if (emptyCount != 0)
+				{
+					status = csvEmpty;
+				}
 			}
 		}
 		if (status == csvOk)
@@ -366,26 +390,9 @@ EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csv
 					Comments = fields [10];
 				}
 			}
-			else if (fldCnt < 7)
-			{
-				status = csvTooFewFields;
-				csvStatus.SetStatus (status);
-			}
-			else
-			{
-				status = csvTooManyFields;
-				csvStatus.SetStatus (status);
-			}
-		}
-		else
-		{
-			csvStatus.SetStatus (status);
 		}
 	}
-	else
-	{
-		csvStatus.SetStatus (status);
-	}
+	csvStatus.SetStatus (status);
 	return status;
 }
 void* TcsNameMap::GetUserValue (void) const
@@ -751,18 +758,10 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSi
 		std::wstringstream inStrm(wcharBuffer);
 		inStrm.seekg(0);			//lint !e534   ignoring return value
 
-		// Skip the line if it looks like a label line. Note that we
-		// require a label line to be a valid CSV record, even though we
-		// ignore the contents.
+		// Skip the line if it looks like a label line.
 		// A data line need to start with a digit otherwise it is expected to be a label/comment line and we skip
 		if (!isdigit(pLineBuffer[0]))
 		{
-			//// Validate the record
-			//std::wstring lineBufferUnused;
-			//csvStatus = csGetCsvRecord (lineBufferUnused, inStrm, Delimiters);
-			//if (csvOk != csvStatus)
-			//    break;
-
 			// Skip the line
 			// Note that [i] and [lineStart] point already to the beginning of the next line, or EOF...
 			continue;
@@ -794,18 +793,19 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (char* pBuffer, size_t const bufferSi
 EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& status)
 {
 	wint_t firstChar;
-	wint_t nextChar;
 	EcsCsvStatus csvStatus = csvOk;
 	std::wstring lineBufr;
 	TcsNameMap nextItem;
 	
+	// We can confidently use peek here as we will always follow a
+	// single call to peek with a real read (unless its an EOF, in
+	// which case we don't really care).
 	firstChar = inStrm.peek ();
 	if (firstChar != WEOF && !iswdigit (firstChar))
 	{
-		// Skip the first line if it looks like a label line.  Note that we
-		// require a label line to be a valid CSV record, even though we
-		// ignore the contents.
+		// Skip the first line if it looks like a label line.
 		csvStatus = csGetCsvRecord (lineBufr,inStrm,Delimiters);
+		status.BumpLineNbr ();
 	}	
 	while (csvStatus == csvOk && inStrm.good() && !inStrm.eof())
 	{
@@ -814,11 +814,18 @@ EcsCsvStatus TcsNameMapper::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& 
 		{
 			Add (nextItem);		//lint !e534   ignoring return value
 		}
-		nextChar = inStrm.peek ();
-		if (nextChar == WEOF)
+		else if (csvStatus != csvEmptyLine && csvStatus != csvCommentLine)
 		{
+			// An error condition occurred.  Status should already have
+			// been set appropriately.
 			break;
 		}
+		// If an emptyline or a comment line, just continue on.
+	}
+	if (csvStatus == csvEof)
+	{
+		// Expected termination.
+		csvStatus = csvOk;
 	}
 	return csvStatus;
 }

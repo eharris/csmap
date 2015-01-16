@@ -872,18 +872,24 @@ bool TcsEpsgTable::BuildEpsgIndex (short fldNbr,TcsCsvStatus& csvStatus)
             ok = idxStatus.second;
             if (!ok)
             {
+                std::wstring fieldLbl;
+                TcsCsvFileBase::GetFieldLabel (fieldLbl,fldNbr);	//lint !e534  (ignoring return value)
+
                 csvStatus.SetStatus (csvDupIndex);
-                csvStatus.SetFieldNbr (KeyField);
-                csvStatus.SetFieldId (keyValue);
+                csvStatus.SetFieldNbr (fldNbr);
+                csvStatus.SetFieldId (fieldLbl);
                 csvStatus.SetLineNbr (recNbr + FirstIsLabels);
                 break;
             }
         }
         else
         {
+			std::wstring fieldLbl;
+			TcsCsvFileBase::GetFieldLabel (fieldLbl,fldNbr);	//lint !e534  (ignoring return value)
+
 			csvStatus.SetStatus (csvInvFieldNbr);
 			csvStatus.SetFieldNbr (fldNbr);
-			csvStatus.SetFieldId (keyValue);
+			csvStatus.SetFieldId (fieldLbl);
 			csvStatus.SetLineNbr (recNbr + FirstIsLabels);
         }
     }

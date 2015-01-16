@@ -35,16 +35,18 @@
 // function in CS-MAP.  We could have duplicated the CS_wcsicmp code here, but
 // we chose not to.  Anyway, wcsicmp is the only reason cs_map.h is included
 // here (at least as of this writing: March 2009).  If the include of
-// "cs_map.h" is removed for any reason, you'll need to add and include of
-// <math.h> to get this to complie.
+// "cs_map.h" is removed for any reason, you'll need to add an include of
+// <math.h> to get this to compile.
 
 // Now comes May 21, 2014 
 // The following list, and the order of their listing, has been optimized for
 // the use of pre-compiled headers.  Some of these files are unreferenced in
 // this module, a small price paid for the efficiency affored by pre-compiled
 // headers.
+
 //lint -e766    Disable PC-Lint's warning of unreferenced headers.
 //lint -efile(*,xutility)   turn off messages from STL include files
+//lint -esym(534,wmemset)   ignoring return value
 
 #include "cs_map.h"
 #include "cs_NameMapper.hpp"
@@ -56,17 +58,20 @@
 static const TcsCsvMsgTbl KcsCsvMsgTbl [] =
 {
 	{            csvOk, L"OK!"                                                                              },
-	{           csvEof, L"Eod encountered in a quoted field"                                                },
-	{        csvNoFile, L"CSV file open failed"                                                             },
+	{           csvEof, L"Eof encountered in a quoted field"                                                },
 	{         csvEmpty, L"Requested field is empty"                                                         },
+	{     csvEmptyLine, L"Empty line encountered in source stream"                                          },
+	{   csvCommentLine, L"Comment line encountered in source stream"                                        },
+	{        csvNoFile, L"CSV file open failed"                                                             },
 	{    csvEndInQuote, L"Record ended within a quoted field"                                               },
+	{      csvEarlyEof, L"Record ended with EOF before new-line"                                            },
 	{    csvInvLineBrk, L"Unquoted new line in what was presented as a parsed CSV record"                   },
 	{    csvLastWasEsc, L"Text form of CSV record ended with an escape character"                           },
 	{    csvAmbigQuote, L"Non-whitespace character(s) after end of quoted field"                            },
 	{      csvInternal, L"Internal software error, please report to developer"                              },
 	{   csvInvRecordId, L"Invalid key presented for indexed fetch"                                          },
 	{     csvNoRecords, L"The CSV file object is empty, no data records present"                            },
-	{      csvNoFields, L"The indicated reocrd does not have any data fields"                               },
+	{      csvNoFields, L"The indicated record does not have any data fields"                               },
 	{  csvInvRecordNbr, L"Record number provided in request is invalid"                                     },
 	{    csvInvFieldId, L"Field name provided in request is invalid"                                        },
 	{   csvInvFieldNbr, L"Field number provided in request is invalid"                                      },
@@ -106,14 +111,31 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 {
 	EcsCsvStatus csvStatus = csvOk;
 
+	bool wholeLineComment (false);
+
 	// This is a state machine, this enum defines the various states.
-	enum {error, preamble, copyingFields, copyingQuotedField, lastWasEscape, lastWasQuote, done} state;
+	enum {	error,				// file format or internal error detected
+			preamble,			// starting a new field, type as yet undetermined
+			copyingFields,		// copying an unquoted data
+			copyingQuotedField,	// copying a quoted field
+			lastWasEscape,		// during copy of quoted field, last character was escape
+			lastWasQuote,		// during copy of quoted field, last character was quote and quote == escape
+			copyingComment,		// processing a whole line comment
+			done,				// processing of this record is complete
+			eof					// enocuntered end of file
+		 } state;
 	wint_t wcAsInt;
 	wchar_t wc;
 
 	wchar_t separator = L',';
 	wchar_t quote     = L'\"';
 	wchar_t escape    = L'\"';
+	wchar_t comment   = L'\0';
+
+	// Hopefully, this does not change the "reserve" characteristic of the
+	// string.  We erase the string to reduce the probability of erroneous
+	// processing of data in the event of a non-csvOk return status.
+	csvRecord.clear ();
 
 	// Process the user supplied delimiters, if any.
 	if (delimiters != 0)
@@ -127,20 +149,87 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 				if (*(delimiters + 2) != L'\0')
 				{
 					escape = *(delimiters + 2);
+					if (*(delimiters + 3) != L'\0')
+					{
+						comment = *(delimiters + 3);
+					}
 				}
 			}
 		}
 	}
 
-	csvRecord.clear ();
+	// December 2014: Learned that the istream.peek () function on
+	// wide character strings in Visual C++ does not work as expected.
+	// Thus, most all use of the istream::peek() function has been removed.
+
+	// Use of peek will work as expected PROVIDED that the module
+	// doing the peek eventually does a real read before passing the
+	// stream on to another module.  Multiple 'peek's before doing an actual
+	// read will produce unexpected results.
+
+	// The following was written to skip over any BOM mark on the front end
+	// of a stream.  Testing showed that this little bit of extra code
+	// increased the execution time by enough (on WIndows anyway) so as to
+	// cause us to decide that it was not worth the time as BOM marks are
+	// quite rare.  Rather than delete the code, the code is commented out
+	// in case this becomes a real need in the future.
+	//
+	//if (iStrm.tellg () == static_cast<std::istream::pos_type>(0))
+	//{
+	//	wint_t firstChar;
+	//	wint_t secondChar;
+	//	wint_t thirdChar;
+	//
+	//	// Check for a BOM marker and skip it if present.
+	//	firstChar = iStrm.get();
+	//	if (firstChar == 0xEF || firstChar == 0xFE || firstChar == 0xFF)
+	//	{
+	//		// Possible BOM
+	//		secondChar = iStrm.get ();
+	//		if (firstChar == 0xEF && secondChar == 0xBB)
+	//		{
+	//			thirdChar = iStrm.get ();
+	//			if (thirdChar != 0xBF)
+	//			{
+	//				// Nope!  Not a UTF-8 BOM marker. Reset to beginning.
+	//				iStrm.seekg (0);
+	//			}
+	//		}
+	//		if ((firstChar != 0xEF || secondChar != 0xFF) &&
+	//			(firstChar != 0xFF || secondChar != 0xFE))
+	//		{
+	//			// Nope!  Not a UTF-2LE nor a UTF-2BE.  Reset
+	//			iStrm.seekg (0);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		// No BOM, unget the char we just read.
+	//		iStrm.unget ();
+	//	}
+	//}
+
+	// OK, now the normal thing.  Extract a .CSV file record which may include
+	// new-line characters (among others) within quotes.
 	state = preamble;
 	while (state != done && state != error)
 	{
 		wcAsInt = iStrm.get ();
-		if (wcAsInt == WEOF)		/*lint !e1924   C style cast, in WEOF definition */
+		if (iStrm.fail ())
 		{
+			// Could be error, could be eof.
+			if (iStrm.eof())
+			{
+				state = eof;
+			}
+			else
+			{
+				state = error;
+			}
+			// In either case, we are finished.
 			break;
 		}
+
 		wc = static_cast<wchar_t>(wcAsInt);
 		if (wc == L'\r')
 		{
@@ -153,6 +242,7 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 		case preamble:
 			if (wc == quote)
 			{
+				// We copy new lines inside of quoted fields.
 				state = copyingQuotedField;
 			}
 			else if (wc == L'\n')
@@ -161,7 +251,17 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 			}
 			else if (wc == separator)
 			{
+				// An empty field, retain preamble state for the next field
 				state = preamble;
+			}
+			else if (wc == comment)
+			{
+				state = copyingFields;
+				if (csvRecord.empty ())
+				{
+					wholeLineComment = true;
+					state = copyingComment;
+				}
 			}
 			else
 			{
@@ -170,6 +270,7 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 			break;
 
 		case copyingFields:
+			// Implies we are not in a quoted field.
 			if (wc == L'\n') state = done;
 			if (wc == separator) state = preamble;
 			break;
@@ -189,20 +290,31 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 			break;
 
 		case lastWasQuote:
+			// Special case for when quote and escape are the same.  The
+			// current character indicates whether that previous quote
+			// should be interpreted as a quote termination or an escape
+			// of this character.  All depends upon what the current
+			// character is.
 			if (wc == L'\n')
 			{
+				// Previous quote was a quote termination.
 				state = done;
 			}
 			else if (wc == quote)
 			{
+				// Previous quote was an escape character
 				state = copyingQuotedField;
 			}
 			else if (wc == separator)
 			{
+				// Previous quote was a quote termination.
 				state = preamble;
-			}		
+			}
 			else
 			{
+				// Previous quote was an escape character.  Not really what a
+				// quote as the escape character is intended to mean.  Should
+				// this be an error?
 				state = copyingFields;
 			}
 			break;
@@ -211,11 +323,23 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 			state = copyingQuotedField;
 			break;
 
+		case copyingComment:
+			if (wc == L'\n')
+			{
+				state = done;
+			}
+			break;
+
+		case eof:				// Keep lint happy.
 		default:
 			state = error;
 			csvStatus = csvInternal;
 			break;
 		}
+
+		// The purpose of this function is to isolate a CSV record only.
+		// Thus, we copy escapes and/or quotes as they appear.  Parsing
+		// is to be done elsewhere.
 		if (state != done && state != error)
 		{
 			csvRecord += wc;
@@ -228,12 +352,34 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 		}
 	}
 
+	// Determine completion status.
 	switch (state) {
 	case error:
 		// csvStatus already set appropriately.
 		break;
 	case done:
-		csvStatus = csvOk;
+		if (csvRecord.empty ())
+		{
+			// Provide means for calling module to accept blank lines.
+			csvStatus = csvEmptyLine;
+		}
+		else 
+		{
+			csvStatus = wholeLineComment ? csvCommentLine : csvOk;
+		}
+		break;
+	case eof:
+		if (csvRecord.empty ())
+		{
+			// Normal end of file.
+			csvStatus = csvEof;
+		}
+		else
+		{
+			// Otherwise, the last line was not properly terminated, possible
+			// error???
+			csvStatus = csvEarlyEof;
+		}
 		break;
 	case preamble:
 		csvStatus = csvOk;
@@ -250,10 +396,16 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 	case lastWasQuote:
 		csvStatus = csvInvRecord;
 		break;
+	case copyingComment:		// Keep lint happy
 	default:
 		csvStatus = csvInternal;
 		break;
 	}
+
+	// If status is 'OK', we strip off a leading BOM markere if it happens to
+	// there.
+
+
 	return csvStatus;
 }
 //lint -restore
@@ -442,7 +594,7 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 				{
 					// This is a separator which terminates the current field.
 					fields.push_back (field);
-					field.clear ();
+					field.clear ();			// Do we need to do a field.reserve() here?
 					state = csvBegTrim;
 				}
 				break;
@@ -537,7 +689,7 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 	return status;
 }
 //lint -restore
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // The following will quote an 8 bit character array, if needed; in place,  For
 // example, if the string has a separator character in it, it will be quoted.
 // Also, any existing quote in the string will be doubled up.  The delimiters
@@ -565,9 +717,9 @@ bool csCsvQuoter (char* csvField,size_t csvSize,const char* delimiters)
 	char *trgPtr;
 	char *lstPtr;
 
-    char myBuffer [4096];
+	char myBuffer [4096];
 
-   	char separator = ',';
+	char separator = ',';
 	char quote     = '\"';
 	char escape    = '\"';
 
@@ -640,12 +792,12 @@ bool csCsvQuoter (char* csvField,size_t csvSize,const char* delimiters)
 // The quoting operation consists of applying leading and trailing quote
 // characters and escaping all quote characters within the field.
 //
-// If the field already has lleading and trailing quotes, it assumed to be in
+// If the field already has leading and trailing quotes, it assumed to be in
 // the quoted state and the function does nothing.
 //
 // The delimiters argument is used as described above for csCsvFieldParse.
 //
-// The itself function does not throw, but uses the STL std::wstring object
+// The function itself does not throw, but uses the STL std::wstring object
 // (obviously) which may throw.
 //
 bool csCsvQuoter (std::wstring& csvField,bool forceIt,const wchar_t* delimiters)
@@ -700,7 +852,7 @@ bool csCsvQuoter (std::wstring& csvField,bool forceIt,const wchar_t* delimiters)
 		quoteNeeded = (idx != std::wstring::npos);
 		if (!quoteNeeded)
 		{
-		    // We've already dealt with the 'already quoted" situation.
+			// We've already dealt with the 'already quoted" situation.
 			idx = csvField.find_first_of (quote);
 			quoteNeeded = (idx != std::wstring::npos);
 		}
@@ -728,15 +880,16 @@ bool csCsvQuoter (std::wstring& csvField,bool forceIt,const wchar_t* delimiters)
 				idx += 2;
 			}
 		}
-        // Replace all new lines, if any, with a space.
+		// Replace all new lines, if any, with a space.
+		idx = 0;
 		while (idx != std::wstring::npos)
 		{
 			idx = csvField.find_first_of (L'\n',idx);
 			if (idx != std::wstring::npos)
 			{
-			    wchar_t wStr [2];
-			    wStr [0] = L' ';
-			    wStr [1] = L'\0';
+				wchar_t wStr [2];
+				wStr [0] = L' ';
+				wStr [1] = L'\0';
 				csvField.replace (idx,1,wStr);
 			}
 		}
@@ -761,7 +914,7 @@ const char* CS_ccPad (int length)
 	static char spaces [256];
 
 	if (length < 0) length = 0;
-	if (length >= sizeof (spaces)) length = sizeof (spaces) - 1;
+	if (length >= sizeof (spaces)) length = sizeof (spaces) - 1;		//lint !e574  (mix of signed and unsigned)
 	memset (spaces,' ',sizeof (spaces));
 	spaces [length] = '\0';
 	return spaces;
@@ -772,7 +925,7 @@ const wchar_t* CS_wcPad (int length)
 	static wchar_t spaces [256];
 
 	if (length < 0) length = 0;
-	if (length >= wcCount (spaces)) length = wcCount (spaces) - 1;
+	if (length >= wcCount (spaces)) length = wcCount (spaces) - 1;		//lint !e574  (mix of signed and unsigned)
 	wmemset (spaces,L' ',wcCount (spaces));
 	spaces [length] = L'\0';
 	return spaces;
@@ -884,10 +1037,10 @@ std::wstring TcsCsvStatus::GetMessage (void)
 	}
 	else
 	{
-		swprintf (fldDesignation,wcCount (fldDesignation),L"%S",FieldId.c_str ());		//lint !e559  parameter does not match format.
+		swprintf (fldDesignation,wcCount (fldDesignation),L"%s",FieldId.c_str ());
 	}
 
-	swprintf (msgBuffer,wcCount (msgBuffer),L"Obj: %S; Line %lu; Field %S; Reason: %S.",
+	swprintf (msgBuffer,wcCount (msgBuffer),L"Obj: %s; Line: %lu; Field: %s; Reason: %s.",
 											ObjectName.c_str (),			//lint !e559   PC-Lint does not recognize %S in format */
 											LineNbr,
 											fldDesignation,					//lint !e559   PC-Lint does not recognize %S in format */
@@ -1090,10 +1243,9 @@ short TcsCsvRecord::FindField (const std::wstring& fieldValue,TcsCsvStatus& stat
     }
     return fieldNbr;
 }
-bool TcsCsvRecord::ReplaceRecord (const std::wstring& newRecord,TcsCsvStatus& status,
-                                                                const wchar_t* delimiters)
+EcsCsvStatus TcsCsvRecord::ReplaceRecord (const std::wstring& newRecord,TcsCsvStatus& status,
+                                                                        const wchar_t* delimiters)
 {
-    bool ok = true;
     EcsCsvStatus prsStatus;
 
     Fields.clear ();
@@ -1104,37 +1256,40 @@ bool TcsCsvRecord::ReplaceRecord (const std::wstring& newRecord,TcsCsvStatus& st
         size_t fldCnt = Fields.size ();
         if (fldCnt < static_cast<size_t>(MinFldCnt))		//lint !e571   (suspicious cast)
         {
-            ok = false;
             status.SetStatus (csvTooFewFields);
         }
         else if (fldCnt > static_cast<size_t>(MaxFldCnt))		//lint !e571   (suspicious cast)
         {
-            ok = false;
             status.SetStatus (csvTooManyFields);
         }
     }
     else
     {
-        ok = false;
         status.SetStatus (csvEndInQuote);
     }
-    return ok;
+    return prsStatus;
 }
-bool TcsCsvRecord::ReplaceRecord (std::wistream& iStrm,TcsCsvStatus& status,const wchar_t* delimiters)
+EcsCsvStatus TcsCsvRecord::ReplaceRecord (std::wistream& iStrm,TcsCsvStatus& status,const wchar_t* delimiters)
 {
-    bool ok = false;
     std::wstring newRecord;
 
     EcsCsvStatus csvStatus = csGetCsvRecord (newRecord,iStrm,delimiters);
     if (csvStatus == csvOk)
     {
-        ok = ReplaceRecord (newRecord,status,delimiters);
+        status.BumpLineNbr ();
+        csvStatus = ReplaceRecord (newRecord,status,delimiters);
     }
-    else
+    if (csvStatus != csvOk)
     {
+        // Could be empty line, eof, or a comment line.  At this point, we don't
+        // care.  It's up the the calling module whether to continue or not.
+        if (csvStatus == csvEmptyLine || csvStatus == csvCommentLine)
+        {
+            status.BumpLineNbr ();
+        }
         status.SetStatus (csvStatus);
     }
-    return ok;
+    return csvStatus;
 }
 bool TcsCsvRecord::ReturnAsRecord (std::wstring& record,TcsCsvStatus& /*status*/,const wchar_t* delimiters) const
 {
@@ -1340,19 +1495,23 @@ TcsCsvFileBase::TcsCsvFileBase (bool firstIsLabels,short minFldCnt,
                                                    short maxFldCnt,
                                                    const wchar_t* delimiters)
                                                      :
-                                                   FirstIsLabels (firstIsLabels),
-                                                   IsSorted      (false),
-                                                   IsIndexed     (false),
-                                                   Separator     (L','),
-                                                   Quote         (L'\"'),
-                                                   Escape        (L'\"'),
-                                                   KeyField      (-1),
-                                                   MinFldCnt     (minFldCnt),
-                                                   MaxFldCnt     (maxFldCnt),
-                                                   ObjectName    (),
-                                                   Labels        (),
-                                                   Records       (),
-                                                   Index         ()
+                                                   FirstIsLabels   (firstIsLabels),
+                                                   IsSorted        (false),
+                                                   IsIndexed       (false),
+                                                   AllowEmptyLines (false),
+                                                   Separator       (L','),
+                                                   Quote           (L'\"'),
+                                                   Escape          (L'\"'),
+                                                   Comment         (L'\0'),
+                                                   KeyField        (-1),
+                                                   MinFldCnt       (minFldCnt),
+                                                   MaxFldCnt       (maxFldCnt),
+                                                   MaxRecordLength (25000),
+                                                   MaxFieldLength  (2500),
+                                                   ObjectName      (),
+                                                   Labels          (),
+                                                   Records         (),
+                                                   Index           ()
 {
     SetDelimiters (delimiters);
     if ((MinFldCnt > MaxFldCnt) || (maxFldCnt == 0))
@@ -1361,19 +1520,23 @@ TcsCsvFileBase::TcsCsvFileBase (bool firstIsLabels,short minFldCnt,
         MaxFldCnt = 300;
     }
 }                                               
-TcsCsvFileBase::TcsCsvFileBase (const TcsCsvFileBase& source) : FirstIsLabels (source.FirstIsLabels),
-                                                                IsSorted      (source.IsSorted),
-                                                                IsIndexed     (source.IsIndexed),
-                                                                Separator     (source.Separator),
-                                                                Quote         (source.Quote),
-                                                                Escape        (source.Escape),
-                                                                KeyField      (source.KeyField),
-                                                                MinFldCnt     (source.MinFldCnt),
-                                                                MaxFldCnt     (source.MaxFldCnt),
-                                                                ObjectName    (source.ObjectName),
-                                                                Labels        (source.Labels),
-                                                                Records       (source.Records),
-                                                                Index         (source.Index)
+TcsCsvFileBase::TcsCsvFileBase (const TcsCsvFileBase& source) : FirstIsLabels   (source.FirstIsLabels),
+                                                                IsSorted        (source.IsSorted),
+                                                                IsIndexed       (source.IsIndexed),
+                                                                AllowEmptyLines (source.AllowEmptyLines),
+                                                                Separator       (source.Separator),
+                                                                Quote           (source.Quote),
+                                                                Escape          (source.Escape),
+                                                                Comment         (source.Comment),
+                                                                KeyField        (source.KeyField),
+                                                                MinFldCnt       (source.MinFldCnt),
+                                                                MaxFldCnt       (source.MaxFldCnt),
+                                                                MaxRecordLength (source.MaxRecordLength),
+                                                                MaxFieldLength  (source.MaxFieldLength),
+                                                                ObjectName      (source.ObjectName),
+                                                                Labels          (source.Labels),
+                                                                Records         (source.Records),
+                                                                Index           (source.Index)
 {
 }
 TcsCsvFileBase::~TcsCsvFileBase (void)
@@ -1383,19 +1546,23 @@ TcsCsvFileBase& TcsCsvFileBase::operator= (const TcsCsvFileBase& rhs)
 {
     if (&rhs != this)
     {
-        FirstIsLabels = rhs.FirstIsLabels;
-        IsSorted      = rhs.IsSorted;
-        IsIndexed     = rhs.IsIndexed;
-        Separator     = rhs.Separator;
-        Quote         = rhs.Quote;
-        Escape        = rhs.Escape;
-        KeyField      = rhs.KeyField;
-        MinFldCnt     = rhs.MinFldCnt;
-        MaxFldCnt     = rhs.MaxFldCnt;
-        ObjectName    = rhs.ObjectName;
-        Labels        = rhs.Labels;
-        Records       = rhs.Records;
-        Index         = rhs.Index;
+        FirstIsLabels   = rhs.FirstIsLabels;
+        IsSorted        = rhs.IsSorted;
+        IsIndexed       = rhs.IsIndexed;
+        AllowEmptyLines = rhs.AllowEmptyLines;
+        Separator       = rhs.Separator;
+        Quote           = rhs.Quote;
+        Escape          = rhs.Escape;
+        Comment         = rhs.Comment;
+        KeyField        = rhs.KeyField;
+        MinFldCnt       = rhs.MinFldCnt;
+        MaxFldCnt       = rhs.MaxFldCnt;
+        MaxRecordLength = rhs.MaxRecordLength;
+        MaxFieldLength  = rhs.MaxFieldLength;
+        ObjectName      = rhs.ObjectName;
+        Labels          = rhs.Labels;
+        Records         = rhs.Records;
+        Index           = rhs.Index;
     }
     return *this;
 }
@@ -1425,27 +1592,53 @@ short TcsCsvFileBase::SetMaxFldCnt (short newCnt)
     }
     return rtnValue;
 }
+// Max Record and FIeld lengths are used to preallocate (i.e. "reserve")
+// storage in std::wstrings.  Use these value to fine tune your application
+// for higher performance.  Default values are set in the constructor.
+unsigned TcsCsvFileBase::SetMaxRecordLength (unsigned maxRecordLength)
+{
+    unsigned rtnValue = MaxRecordLength;
+    MaxRecordLength = maxRecordLength;
+    return rtnValue;
+}
+unsigned TcsCsvFileBase::SetMaxFieldLength (unsigned maxFieldLength)
+{
+    unsigned rtnValue = MaxFieldLength;
+    MaxFieldLength = maxFieldLength;
+    return rtnValue;
+}
+// The unused return value for this function is to support future checking
+// of the delimiter set for validity.  Not terribly important and, as yet,
+// unimplemented.
 bool TcsCsvFileBase::SetDelimiters (const wchar_t* delimiters)
 {
-    if (delimiters != 0 && *delimiters != L'\0')
-    {
-        Separator = *delimiters;
-        if (*(delimiters +1) != L'\0')
-        {
-           Quote = *(delimiters + 1);
-           if (*(delimiters + 2) != L'\0')
-           {
-               Escape = *(delimiters + 2);
-           }
-        }
-    }
-    else
-    {
-        Separator = L',';
-        Quote     = L'\"';
-        Escape    = L'\"';
-    }
-    return true;
+	Separator = L',';
+	Quote     = L'\"';
+	Escape    = L'\"';
+	Comment   = L'\0';
+	if (delimiters != 0 && *delimiters != L'\0')
+	{
+		Separator = *delimiters;
+		if (*(delimiters +1) != L'\0')
+		{
+			Quote = *(delimiters + 1);
+			if (*(delimiters + 2) != L'\0')
+			{
+				Escape = *(delimiters + 2);
+				if (*(delimiters + 3) != L'\0')
+				{
+					Comment = *(delimiters + 3);
+				}
+			}
+		}
+	}
+	return true;
+}
+bool TcsCsvFileBase::SetAllowEmptyLines (bool allowEmptyLines)
+{
+	bool rtnValue = AllowEmptyLines;
+	AllowEmptyLines = allowEmptyLines;
+	return rtnValue;
 }
 void TcsCsvFileBase::SetObjectName (const std::wstring& objectName)
 {
@@ -1927,9 +2120,11 @@ unsigned TcsCsvFileBase::LowerBound (const TcsCsvRecord& searchRec,const TcsCsvS
 bool TcsCsvFileBase::ReadFromStream (std::wistream& iStrm,bool firstIsLabels,TcsCsvStatus& status)
 {
 	bool ok = true;
-	unsigned long lineNbr = 0UL;
-	wchar_t delimiters [4];
+	EcsCsvStatus csvStatus;
+	wchar_t delimiters [6];
 	TcsCsvRecord csvRecord;
+
+	status.SetObjectName (ObjectName);
 
 	if (firstIsLabels && Records.size () != 0)
 	{
@@ -1941,42 +2136,42 @@ bool TcsCsvFileBase::ReadFromStream (std::wistream& iStrm,bool firstIsLabels,Tcs
 	{
 		csvRecord.SetMinFldCnt (MinFldCnt);
 		csvRecord.SetMaxFldCnt (MaxFldCnt);
-		csvRecord.Reserve (static_cast<unsigned>(MaxFldCnt));		//lint !e571   (suspicious cast)
+		csvRecord.Reserve (static_cast<unsigned>(MaxFldCnt));	//lint !e571   (suspicious cast)
 
 		delimiters [0] = Separator;
 		delimiters [1] = Quote;
 		delimiters [2] = Escape;
-		delimiters [3] = L'\0';
+		delimiters [3] = Comment;
+		delimiters [4] = L'\0';
 
 		// Read the labels if they're supposed to be there.
 		if (firstIsLabels)
 		{
-			ok =Labels.ReplaceRecord (iStrm,status,delimiters);
-			if (ok)
-			{
-				lineNbr += 1;
-			}
+			csvStatus =Labels.ReplaceRecord (iStrm,status,delimiters);
 		}
 
 		// Read the rest of the input stream.
-		while (ok && iStrm.good ())
+		csvStatus = csvOk;
+		while (csvStatus == csvOk && iStrm.good ())
 		{
-			// See if we are at the end of the file.
-			iStrm.peek ();					//lint !e534    (ignoring return value)
-			if (iStrm.eof ()) break;
-
-			// OK, there should be more stuff out there.
-			lineNbr += 1;
-			status.BumpLineNbr ();
-			ok = csvRecord.ReplaceRecord (iStrm,status,delimiters);
-			if (!ok)
+			csvStatus = csvRecord.ReplaceRecord (iStrm,status,delimiters);
+			if (csvStatus == csvOk)
 			{
-				status.SetLineNbr (lineNbr);
-				status.SetObjectName (ObjectName);
-				continue;						//lint !e845   PC-Lint suggests break instead of continue as ok == false here
+				Records.push_back (csvRecord);
 			}
-			Records.push_back (csvRecord);
+			else if (csvStatus == csvCommentLine)
+			{
+				// If the user supplied a comment delimiter, we assume comments
+				// are OK.
+				csvStatus = csvOk;
+			}
+			else if (csvStatus == csvEmptyLine && AllowEmptyLines)
+			{
+				// Empty line, but the user says it's OK.
+				csvStatus = csvOk;
+			}
 		}
+		ok = (csvStatus == csvEof);
 	}
 	return ok;
 }

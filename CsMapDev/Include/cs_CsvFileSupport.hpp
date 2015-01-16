@@ -46,9 +46,12 @@
 //=============================================================================
 enum EcsCsvStatus {    csvOk = 0,          // Unremarkable completion
 					   csvEof,             // Last record has already been read.
-					   csvNoFile,          // CSV file open failed
 					   csvEmpty,           // Warning: returned field is empty
+					   csvEmptyLine,       // Empty line in .csv file encountered
+					   csvCommentLine,     // Comment line in .csv file encountered
+					   csvNoFile,          // CSV file open failed
 					   csvEndInQuote,      // Record ended within a quoted field
+					   csvEarlyEof,        // EOF detected before end of record
 					   csvInvLineBrk,      // Line break not in quote.
 					   csvLastWasEsc,      // Last character in record was an
 										   // escape character
@@ -70,7 +73,7 @@ enum EcsCsvStatus {    csvOk = 0,          // Unremarkable completion
 					   csvNoFldLabels,     // No field labels in this CsvFile object. 
 					   csvLblsOnAppend,    // Labels no allowed on append.
 					   csvBogusValue,      // A bogus value was presented as a field value.
-					   csvDupIndex,        // INdex creation encountered a dup[;icate value
+					   csvDupIndex,        // Index creation encountered a duplicate value
 					   csvEndOfTable = 999 // Used to mark the end of tables, etc.
 				  };
 
@@ -128,7 +131,7 @@ public:
 	unsigned long LineNbr;
 	short FieldNbr;
 	std::wstring FieldId;
-	std::wstring ObjectName;    
+	std::wstring ObjectName;
 };
 //=============================================================================
 // TcsCsvRecord Object -- Encapsulates the functionality of a Comma Separated
@@ -173,8 +176,8 @@ public:
 	bool RemoveField (short fieldNbr,TcsCsvStatus& status);
 	bool GetField (std::wstring& field,short fieldNbr,TcsCsvStatus& status) const;
 	short FindField (const std::wstring& fieldId,TcsCsvStatus& status) const;
-	bool ReplaceRecord (const std::wstring& newRecord,TcsCsvStatus& status,const wchar_t* delimiters = 0);
-	bool ReplaceRecord (std::wistream& iStrm,TcsCsvStatus& status,const wchar_t* delimiters = 0);
+	EcsCsvStatus ReplaceRecord (const std::wstring& newRecord,TcsCsvStatus& status,const wchar_t* delimiters = 0);
+	EcsCsvStatus ReplaceRecord (std::wistream& iStrm,TcsCsvStatus& status,const wchar_t* delimiters = 0);
 	bool ReturnAsRecord (std::wstring& record,TcsCsvStatus& status,const wchar_t* delimiters = 0) const;
 	bool WriteToStream (std::wostream& oStrm,TcsCsvStatus& status,const wchar_t* delimiters = 0) const;
 private:
@@ -219,7 +222,7 @@ private:
 						cmpEqualTo     =  0,
 						cmpGreaterThan =  1
 					  };
-	EcsCmpResult CsvFieldCompare (const std::wstring& fieldOne,const std::wstring& fieldTwo) const;						
+	EcsCmpResult CsvFieldCompare (const std::wstring& fieldOne,const std::wstring& fieldTwo) const;
 };
 //newPage//
 //=============================================================================
@@ -249,7 +252,10 @@ public:
 	bool HasLabels (void) const;
 	short SetMinFldCnt (short newCnt = -1);
 	short SetMaxFldCnt (short newCnt = -1);
+	unsigned SetMaxRecordLength (unsigned maxRecordLength);
+	unsigned SetMaxFieldLength (unsigned maxFieldLength);
 	bool SetDelimiters (const wchar_t* delimiters = 0);
+	bool SetAllowEmptyLines (bool allowEmptyLines);
 	void SetObjectName (const std::wstring& objectName);
 	unsigned RecordCount (void) const;
 	short FieldCount (unsigned recordNbr) const;
@@ -293,15 +299,19 @@ protected:
 	bool FirstIsLabels;
 	bool IsSorted;
 	bool IsIndexed;
+	bool AllowEmptyLines;
 	wchar_t Separator;
 	wchar_t Quote;
 	wchar_t Escape;
+	wchar_t Comment;		// non zero implies comments are allowed and ignored.
 	short KeyField;
 private:
 	//=========================================================================
 	// Private Data Members
 	short MinFldCnt;
 	short MaxFldCnt;
+	unsigned MaxRecordLength;
+	unsigned MaxFieldLength;
 	std::wstring ObjectName;
 	TcsCsvRecord Labels;
 	std::vector<TcsCsvRecord> Records;

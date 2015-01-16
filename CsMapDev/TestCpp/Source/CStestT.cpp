@@ -30,6 +30,10 @@
 
 #include "csTestCpp.hpp"
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+
 extern "C"
 {
 	extern int cs_Error;
@@ -59,11 +63,46 @@ extern "C"
   
 extern "C" char csErrmsg [256];
 extern "C" double cs_LlNoise;
+extern "C" const char csDictDir [];
+
 int CStestT (bool verbose,long32_t duration)
 {
 	int err_cnt = 0;
+	clock_t nmStartClock;
+	clock_t nmDoneClock;
+	double nmLoadTime;
+	EcsCsvStatus status;
 
-#ifndef __SKIP__
+	std::wifstream inStrm;
+	TcsCsvStatus csvStatus;
+	TcsNameMapper lclNameMapper;
+
+	std::locale lclLocale ("english_UK");
+
+	// Release any name mapper which may be present.
+	cmGetNameMapperPtr (true);
+
+	nmStartClock = clock ();
+	inStrm.imbue (lclLocale);
+	inStrm.open ("C:\\Temp\\NameMapper.csv",std::ios_base::in);
+	if (inStrm.good ())
+	{
+		status = lclNameMapper.ReadFromStream (inStrm,csvStatus);
+	}
+	inStrm.close ();
+	nmDoneClock = clock ();
+	if (status == csvOk)
+	{
+		nmLoadTime = (double)(nmDoneClock - nmStartClock) / (double)CLOCKS_PER_SEC;
+		printf ("NameMapper loaded in %.3f seconds.\n",nmLoadTime);
+	}
+	else
+	{
+		std::wstring reason = csvStatus.GetMessage ();
+		wprintf (L"NameMapper load failed: %s\n",reason.c_str());
+	}
+
+#ifdef __SKIP__
 	// Working Trac Ticket 145.  Note, to execute this test,
 	// one needs to edit the GeoidHeight.gdc file and make
 	// the .\WW15MGH.GRD reference the first one in the file.
