@@ -311,36 +311,22 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 				!CS_stricmp (gp_rec.trgDatum,trgDatum))
 			{
 				//we must not have yet hit a "forward path"
-				if (fwdFpos == 0L && 0 == globalFoundForward)
-				{
-					fwdFpos = curFpos;
-					globalFoundForward = 1;
-				}
-				else
-				{
-					sprintf (errMsg,"'%s' to '%s'",srcDatum,trgDatum);
-					CS_stncp (csErrnam,errMsg,MAXPATH);
-					CS_erpt (cs_GEOPATH_DUP);
-
-					goto error;
-				}
+				fwdFpos = curFpos;
+				globalFoundForward = 1;
+                // Optimization, stop search when a forward path is found. 
+                // The forward paths are preferred over the backward ones.
+                break;
 			}
 			/* See if we have a match in the inverse direction. */
-			if (!CS_stricmp (gp_rec.srcDatum,trgDatum) &&
+			else if (!CS_stricmp (gp_rec.srcDatum,trgDatum) &&
 				!CS_stricmp (gp_rec.trgDatum,srcDatum))
 			{
-				if (invFpos == 0L && 0 == globalFoundBackward)
+				if (invFpos == 0L && 0 == globalFoundBackward) // When double inverse entry. Be tolerant and continue.
 				{
 					invFpos = curFpos;
 					globalFoundBackward = 1;
 				}
-				else
-				{
-					sprintf (errMsg,"'%s' to '%s'",srcDatum,trgDatum);
-					CS_stncp (csErrnam,errMsg,MAXPATH);
-					CS_erpt (cs_GEOPATH_DUP);
-					goto error;
-				}
+                // Continue search, the forward paths are preferred over the backward ones.
 			}
 
 		} //for (;;)
@@ -404,6 +390,13 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 			CS_fclose (strm);
 			strm = NULL;
 		}
+        if (fwdFpos != 0L && NULL != gp_def) 
+        {
+            // Optimization, stop search when a forward path is found. 
+            // The forward paths are preferred over the backward ones.
+            // Continue searching when no or only a backward path is found.
+            break;
+        }
 	}
 
 	/* report a failure after we've gone through the 2 directories and we still haven't found
