@@ -107,6 +107,7 @@ struct csTestKIgnores_
 	{ wktFlvrEsri,            "HD72/7Pa.EOV", "Does not appear that ESRI has a parameter for Standard parallel as CS-MAP does"                                  },
 	{ wktFlvrEsri,             "Merchich/01", "ESRI GCS unit is grad, but the name does not indicate that as it does with newer versions."                      },
 	{ wktFlvrEsri,         "Voirol1875_1.LL", "ESRI GCS unit is grad, but the name does not indicate that as it does with newer versions."                      },
+	{ wktFlvrEsri,     "Kertau.MalayaRSO/02", "ESRI has updated to the EPSG unit of the British Chain Truncated."                                               },
 	{ wktFlvrNone,                        "", "End of table marker."                                                                                            }
 };
 int CStestK (bool verbose,long32_t duration)

@@ -3135,7 +3135,8 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 				epsgPrmCode = 8802UL;				// Longitude of Natural Origin
 				if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic 2SP
 					mthEpsgCode == 9803UL ||		// Lambert Conformal Conic; Belgium (2SP)
-					mthEpsgCode == 9822UL)			// Albers Equal Area Conic
+					mthEpsgCode == 9822UL ||		// Albers Equal Area Conic
+					mthEpsgCode == 1051UL)			// Lambert Conformal Conic Michigan
 				{
 					epsgPrmCode = 8822UL;			// Longitude of False Origin 
 				}
@@ -3149,7 +3150,8 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			epsgPrmCode = 8801UL;				// Latitude of Natural Origin
 			if (mthEpsgCode == 9802UL ||		// Lambert Conformal Conic 2SP
 			    mthEpsgCode == 9803UL ||		// Lambert Conformal Conic; Belgium (2SP)
-			    mthEpsgCode == 9822UL)			// Albers Equal Area Conic
+			    mthEpsgCode == 9822UL ||		// Albers Equal Area Conic
+			    mthEpsgCode == 1051UL)			// Lambert Conformal Conic Michigan
 			{
 				epsgPrmCode = 8821UL;			// Latitude of False Origin
 			}
@@ -3181,7 +3183,9 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			    mthEpsgCode == 9803UL ||		// Lambert Conformal Conic - 2SP Belgium
 			    mthEpsgCode == 9816UL ||		// Tunisia Mining Grid
 			    mthEpsgCode == 9822UL ||		// Albers Equal Area
-			    mthEpsgCode == 9830UL)			// Polar Stereographic - Variant C
+			    mthEpsgCode == 9830UL ||		// Polar Stereographic - Variant C
+   			    mthEpsgCode == 1051UL)			// Lambert Conformal Conic Michigan
+
 			{
 				epsgPrmCode = 8826UL;			// Easting at False Origin
 			}
@@ -3196,7 +3200,9 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			    mthEpsgCode == 9803UL ||		// Lambert Conformal Conic - 2SP Belgium
 			    mthEpsgCode == 9816UL ||		// Tunisia Mining Grid
 			    mthEpsgCode == 9822UL ||		// Albers Equal Area
-			    mthEpsgCode == 9830UL)			// Polar Stereographic - Variant C
+			    mthEpsgCode == 9830UL ||		// Polar Stereographic - Variant C
+   			    mthEpsgCode == 1051UL)			// Lambert Conformal Conic Michigan
+
 			{
 				epsgPrmCode = 8827UL;			// Northing at False Origin
 			}

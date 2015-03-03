@@ -24,6 +24,8 @@ extern "C" unsigned long KcsNmInvNumber;
 extern "C" unsigned long KcsNmMapNoNumber;
 extern "C" double cs_Zero;
 
+TcsNameMapper VcsNameMapper;
+
 // This utility updates the NameMapper.csv source file with new information
 // extracted from another data file in .csv format.
 //
@@ -43,20 +45,26 @@ extern "C" double cs_Zero;
 // With regard to the system name; well the name is essentially defined by the
 // WKT system definition provided.
 
-bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& nameMapper,
+bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& VcsNameMapper,
 															 EcsMapObjType objType,
 															 TcsEpsgCode epsgCode);
-bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& nameMapper,
+bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& VcsNameMapper,
 															 EcsMapObjType objType,
 															 EcsNameFlavor flavor,
 															 TcsEpsgCode epsgCode,
 															 unsigned long wkidCode,
 															 const wchar_t* crsName);
-bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& nameMapper,
+bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& VcsNameMapper,
 															 EcsMapObjType objType,
 															 EcsNameFlavor flavor,
 															 unsigned long wkidCode,
 															 const wchar_t* crsName);
+const wchar_t* csNameMapperHasName (EcsMapObjType objType,EcsNameFlavor trgFlavor,
+														  EcsNameFlavor srcFlavor,
+														  const wchar_t* srcName);
+const wchar_t* csNameMapperHasNameC (EcsMapObjType objType,EcsNameFlavor trgFlavor,
+														   EcsNameFlavor srcFlavor,
+														   const char* srcName);
 
 // This is not great style, but it relieves us of a lot of argument
 // passing and suplicate code.  Perhaps this should be an object.
@@ -65,9 +73,12 @@ wchar_t wktUnitName [64];
 wchar_t wktDatumName [64];
 wchar_t wktSpheroidName [64];
 wchar_t wktGeogCSName [128];
+wchar_t wktProjectionName [128];
 wchar_t wktProjCSName [128];
 wchar_t wktRlsLevel [64];
 wchar_t epsgRlsLevel [64];
+
+#define VERBOSE //
 
 bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDictSrcDir,
 															const wchar_t* srcCsvFullPath)
@@ -84,8 +95,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 	// all features directly.
 	std::wcout << L"Reading NameMapper" << std::endl;
 
-	TcsNameMapper nameMapper;
-	nameMapper.SetRecordDuplicates (true);
+	VcsNameMapper.SetRecordDuplicates (true);
 
 	wcscpy (fullPath,csDictSrcDir);
 	wcscat (fullPath,L"\\NameMapper.csv");
@@ -100,12 +110,12 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 		TcsCsvStatus csvStatus;
 
 		csvStatus.SetObjectName (L"NameMapper");
-		EcsCsvStatus lclStatus = nameMapper.ReadFromStream (iStrm2,csvStatus);
+		EcsCsvStatus lclStatus = VcsNameMapper.ReadFromStream (iStrm2,csvStatus);
 		iStrm2.close ();
 		ok = (lclStatus == csvOk);
 		if (ok)
 		{
-			ok = nameMapper.IsInitialized ();
+			ok = VcsNameMapper.IsInitialized ();
 			if (!ok)
 			{
 				std::wcerr << L"NameMapper initialization failed." << std::endl;;
@@ -113,7 +123,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 		}
 		else
 		{
-			std::wcout << L"NameMapper load Failed: " <<  csvStatus.GetMessage () << std::endl;
+			std::wcerr << L"NameMapper load Failed: " <<  csvStatus.GetMessage () << std::endl;
 		}
 	}
 	if (ok)
@@ -123,13 +133,13 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 		// than bug, we defer fixing this to another time.  For now,
 		// if the duplicate count is 32 or less, we assume there are
 		// no duplicates.
-		if (nameMapper.GetDuplicateCount () > 32)
+		if (VcsNameMapper.GetDuplicateCount () > 32)
 		{
-			nameMapper.WriteDuplicates (std::wcout);
+			VcsNameMapper.WriteDuplicates (std::wcout);
 		}
 		else
 		{
-			nameMapper.ClearDuplicateList ();
+			VcsNameMapper.ClearDuplicateList ();
 		}
 	}
 	if (!ok)
@@ -216,6 +226,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 		memset (wktUnitName,'\0',sizeof (wktUnitName));
 		memset (wktDatumName,'\0',sizeof (wktDatumName));
 		memset (wktSpheroidName,'\0',sizeof (wktSpheroidName));
+		memset (wktProjectionName,'\0',sizeof (wktProjectionName));
 		memset (wktGeogCSName,'\0',sizeof (wktGeogCSName));
 		memset (wktProjCSName,'\0',sizeof (wktProjCSName));
 		memset (wktRlsLevel,'\0',sizeof (wktRlsLevel));
@@ -235,7 +246,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 			flavor = static_cast<EcsNameFlavor>(tmpLong);
 		}
 
-		// The currently assigned EPSG code foor this WKT system.
+		// The currently assigned EPSG code for this WKT system.
 		if (ok)
 		{
 			ok = crsWktCsv.GetField (fieldData,recNbr,1,csvStatus);
@@ -246,34 +257,56 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 			}
 		}
 
-		//*********************************************************************
-		//  For now, we deal only with systems for which we have an EPSG
-		// definition in the Name Mapper.  As of this writing, (Nov 2014) there
-		// are hundreds of CRS definitions in the ESRI WKT reptoire which we
-		// have not dealt with before (I.e. there is no EPSG entry in the
-		// NameMapper.  We'll deal with those in future.  Time constraints
-		// require that we deal with the systems which we know about.
-		//*********************************************************************
+		// If the extracted EPSG code is zero, there is no known EPSG
+		// cporrespondence between the WKT entry and EPSG. Since we have
+		// nothing to match this with, we simply ignoire this record
+		// in this utiltiy module.
 		if (epsgCode == 0UL)
 		{
 			continue;
 		}
 
+		if ((epsgCode >= 4000 && epsgCode <= 4022) ||
+			(epsgCode >= 4024 && epsgCode <= 4025) ||
+			(epsgCode >= 4027 && epsgCode <= 4036) ||
+			(epsgCode >= 4041 && epsgCode <= 4045) ||
+			(epsgCode >= 4000 && epsgCode <= 4022) ||
+			(epsgCode >= 4000 && epsgCode <= 4022) ||
+			(epsgCode >= 4047 && epsgCode <= 4047) ||
+			(epsgCode >= 4052 && epsgCode <= 4054))
+		{
+			// These are all cartographically referenced, i.e. referenced to an
+			// ellipsoid and not a datum.   They don't really count in the
+			// overall scheme of things; they seem to brak all the consistency
+			// rules.
+			continue;
+		}
+
 		// Determine that the EPSG code is valid and of the type that we deal
 		// with here.  If not, we just skip it.
-		epsgId = nameMapper.Locate (csMapProjectedCSysKeyName,csMapFlvrEpsg,epsgCode);
-		if (epsgId.IsNotKnown ())
+		ok = epsgPtr->GetFieldByCode (fieldData,epsgTblReferenceSystem,epsgFldCoordRefSysName,epsgCode);
+		if (!ok)
 		{
-			epsgId = nameMapper.Locate (csMapGeographicCSysKeyName,csMapFlvrEpsg,epsgCode);
+			// This EPSG code appears to be bogus.  We'll skip it for now.
+			// We can use this line of code in _DEBUG to set a break
+			// point and determine which of the non-zero EPSG codes in the
+			// WktDataCatalog file are bogus (if any).
+			ok = true;
+			continue;
 		}
-		if (epsgId.IsNotKnown ())
+
+		// Get the type of definition EPSG thinks this is.  We'll assume EPSG
+		// tp be correct on most all matters.  What we want to do
+		// right here isfilter out any EPSG/WKT definitions which are not
+		// Projective, GHeographic 2D, and/or Geographic 3D.  The Oracle
+		// entries in the WktDataCatalog have a lot of Geocentric definitions
+		// typed as GEOGCS's.  This is not nice.
+		EcsCrsType crsType = epsgPtr->GetCrsType (epsgCode);
+		if ((crsType != epsgCrsTypGeographic2D) &&
+			(crsType != epsgCrsTypGeographic3D) &&
+			(crsType != epsgCrsTypProjected))
 		{
-			epsgId = nameMapper.Locate (csMapGeographic3DKeyName,csMapFlvrEpsg,epsgCode);
-		}
-		if (epsgId.IsNotKnown ())
-		{
-			// The type of the WLT entry, as determined by its EPSG counterpart, is
-			// not one of the CRS types that we deal with;; currently.
+			// This EPSG code is not of type we know how to deal with.
 			continue;
 		}
 
@@ -322,7 +355,6 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 		// Parse the WKT and extract the specific values of interest to us here.
 		if (ok)
 		{
-			EcsCrsType crsType;
 			const TrcWktElement *wktElePtr;
 
 			// At this initial point, wktElements will only be the top level element.
@@ -341,8 +373,6 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 					// know what it is.  Just skip it for now.
 					continue;
 				}
-				// Get the type as known by EPSG.
-				crsType = epsgPtr->GetCrsType (epsgCode);
 
 				// Establish the object type for this particular item.
 				objType = csMapNone;
@@ -352,7 +382,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 				}
 				else if (isGeographic)
 				{
-					// If the type is geofraphic, we query the EPSG database
+					// If the type is geographic, we query the EPSG database
 					// to determine if 2D or 3D.  Many GEOGC's in the Oracle
 					// flavor are actually geocentric, so we filter that out
 					// as well.
@@ -367,8 +397,8 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 				}
 				if (objType == csMapNone)
 				{
-					// This is, usually, an Oracle geocentric system with
-					// a GEOGCS WKT type.
+					// This is, usually, an Oracle geocentric system with a
+					// GEOGCS WKT type.
 					continue;
 				}
 
@@ -379,48 +409,96 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 			{
 				// Now we should be able to extract the remainder of what
 				// interests us in this utility. Regardless of type, there
-				// should be UNIT name, a DATUM name, and a SPHEROID name.
+				// should be a UNIT name, a DATUM name, and a SPHEROID name.
 				wktElePtr = wktElements.ChildLocate (rcWktUnit);
 				ok = (wktElePtr != 0);
 				if (ok)
 				{
-					mbstowcs (wktUnitName,wktElePtr->GetElementNameC (),wcCount (wktUnitName));
+					if (!CS_stristr (wktElePtr->GetElementNameC (),"(EPSG "))
+					{
+						mbstowcs (wktUnitName,wktElePtr->GetElementNameC (),wcCount (wktUnitName));
+					}
 				}
 				if (ok && isGeographic)
 				{
+					if (!CS_stristr (wktElePtr->GetElementNameC (),"(EPSG "))
+					{
+						// For geographic systems, the geographic name is at the top level.
+						mbstowcs (wktGeogCSName,wktElements.GetElementNameC (),wcCount (wktGeogCSName));
+					}
+
+					// For geographic systems, the datum is at the top level.
 					wktElePtr = wktElements.ChildLocate (rcWktDatum);
 					ok = (wktElePtr != 0);
 					if (ok)
 					{
-						mbstowcs (wktDatumName,wktElePtr->GetElementNameC (),wcCount (wktDatumName));
+						if (!CS_stristr (wktElePtr->GetElementNameC (),"(EPSG "))
+						{
+							mbstowcs (wktDatumName,wktElePtr->GetElementNameC (),wcCount (wktDatumName));
+						}
 						const TrcWktElement *lclWktPtr = wktElePtr->ChildLocate (rcWktSpheroid);
 						ok = (lclWktPtr != 0);
 						if (ok)
 						{
-							mbstowcs (wktSpheroidName,lclWktPtr->GetElementNameC (),wcCount (wktSpheroidName));
+							if (!CS_stristr (wktElePtr->GetElementNameC (),"(EPSG "))
+							{
+								mbstowcs (wktSpheroidName,lclWktPtr->GetElementNameC (),wcCount (wktSpheroidName));
+							}
 						}
 					}
-					mbstowcs (wktGeogCSName,wktElements.GetElementNameC (),wcCount (wktGeogCSName));
+
+					// TAKE NOTE!!!  For geographic systems, the wktProjCSName array is empty.
 					wktProjCSName [0] = L'\0';
 				}
 				else if (ok && isProjective)
 				{
+					// If the type is Projective, there is a GeogCS name
+					// distinct from the ProjCS name.  There is also a projection name.
 					mbstowcs (wktProjCSName,wktElements.GetElementNameC (),wcCount (wktProjCSName));
 					wktElePtr = wktElements.ChildLocate (rcWktGeogCS);
 					ok = (wktElePtr != 0);
 					if (ok)
 					{
-						mbstowcs (wktGeogCSName,wktElePtr->GetElementNameC (),wcCount (wktGeogCSName));
+						if (!CS_stristr (wktElePtr->GetElementNameC (),"(EPSG "))
+						{
+							mbstowcs (wktGeogCSName,wktElePtr->GetElementNameC (),wcCount (wktGeogCSName));
+						}
 						wktElePtr = wktElePtr->ChildLocate (rcWktDatum);
 						ok = (wktElePtr != 0);
 						if (ok)
 						{
-							mbstowcs (wktDatumName,wktElePtr->GetElementNameC (),wcCount (wktDatumName));
+							if (!CS_stristr (wktElePtr->GetElementNameC (),"(EPSG "))
+							{
+								mbstowcs (wktDatumName,wktElePtr->GetElementNameC (),wcCount (wktDatumName));
+							}
 							wktElePtr = wktElePtr->ChildLocate (rcWktSpheroid);
 							ok = (wktElePtr != 0);
 							if (ok)
 							{
-								mbstowcs (wktSpheroidName,wktElePtr->GetElementNameC (),wcCount (wktSpheroidName));
+								if (!CS_stristr (wktElePtr->GetElementNameC (),"(EPSG "))
+								{
+									mbstowcs (wktSpheroidName,wktElePtr->GetElementNameC (),wcCount (wktSpheroidName));
+								}
+							}
+						}
+					}
+					if (ok)
+					{
+						wktElePtr = wktElements.ChildLocate (rcWktProjection);
+						ok = (wktElePtr != 0);
+						if (ok)
+						{
+							// In Oracle, especially in release 10, the projection
+							// name is not a true projection name.  It speciiifies
+							// only nmemonic for the projection, and implies the
+							// projection and all projection parameters by way of a
+							// reference to the EPSG 'Coordinate Operation" code in
+							// the form of a "(EPSG 1606").  We filter these
+							// references out here as they have no value in our
+							// effort to update the NameMapper.
+							if (!CS_stristr (wktElePtr->GetElementNameC (),"(EPSG "))
+							{
+								mbstowcs (wktProjectionName,wktElePtr->GetElementNameC (),wcCount (wktProjectionName));
 							}
 						}
 					}
@@ -430,6 +508,95 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 		else
 		{
 			std::wcerr << L"Invalid WKT on record number " << recNbr << L"of the WKT catalog." << std::endl;
+			ok = true;
+			continue;
+		}
+
+		TcsGenericId genericId = VcsNameMapper.Locate (objType,csMapFlvrEpsg,epsgCode);
+		if (genericId.IsNotKnown ())
+		{
+			ok = true;
+			continue;
+		}
+
+		// Some preliminary data collection before the real work of this process.
+		// First, verify that NameMapper recognizes the units of this system.	
+		const wchar_t* aDeskName;
+		if (wktUnitName [0] != L'\0')
+		{
+			EcsMapObjType lclObjType = isProjective ? csMapLinearUnitKeyName : csMapAngularUnitKeyName;
+			aDeskName = csNameMapperHasName (lclObjType,csMapFlvrAutodesk,flavor,wktUnitName);
+			if (aDeskName == 0)
+			{
+				std::wcerr << lclObjType << L',' << flavor << L",\"" << wktUnitName << "\"," << recNbr + 2 << std::endl;
+			}
+		}
+		if (wktSpheroidName [0] != L'\0')
+		{
+			EcsMapObjType lclObjType = csMapEllipsoidKeyName;
+			aDeskName = csNameMapperHasName (lclObjType,csMapFlvrAutodesk,flavor,wktSpheroidName);
+			if (aDeskName == 0)
+			{
+				std::wcerr << lclObjType << L',' << flavor << L",\"" << wktSpheroidName << "\"," << recNbr + 2 << std::endl;
+			}
+		}
+		if (wktDatumName [0] != L'\0')
+		{
+			EcsMapObjType lclObjType = csMapDatumKeyName;
+			aDeskName = csNameMapperHasName (lclObjType,csMapFlvrAutodesk,flavor,wktDatumName);
+			if (aDeskName == 0)
+			{
+				std::wcerr << lclObjType << L',' << flavor << L",\"" << wktDatumName << "\"," << recNbr + 2 << std::endl;
+			}
+		}
+		if (wktProjectionName [0] != L'\0')
+		{
+			EcsMapObjType lclObjType = csMapProjectionKeyName;
+			aDeskName = csNameMapperHasName (lclObjType,csMapFlvrAutodesk,flavor,wktProjectionName);
+			if (aDeskName == 0)
+			{
+				std::wcerr << lclObjType << L',' << flavor << L",\"" << wktProjectionName << "\"," << recNbr + 2 << std::endl;
+			}
+		}
+		if (isGeographic && wktGeogCSName [0] != L'\0')
+		{
+			EcsMapObjType lclObjType = objType;
+			aDeskName = csNameMapperHasName (lclObjType,csMapFlvrAutodesk,flavor,wktGeogCSName);
+			if (aDeskName == 0)
+			{
+				std::wcerr << lclObjType << L',' << flavor << L",\"" << wktGeogCSName << "\"," << recNbr + 2 << std::endl;
+			}
+		}
+		if (isProjective && wktProjCSName [0] != L'\0')
+		{
+			EcsMapObjType lclObjType = objType;
+			aDeskName = csNameMapperHasName (lclObjType,csMapFlvrAutodesk,flavor,wktProjCSName);
+			if (aDeskName == 0)
+			{
+				std::wcerr << lclObjType << L',' << flavor << L",\"" << wktProjCSName << "\"," << recNbr + 2 << std::endl;
+			}
+		}
+
+		//*********************************************************************
+		//  For now, we deal only with systems for which we have an EPSG
+		// definition in the Name Mapper.  As of this writing, (Nov 2014) there
+		// are hundreds of CRS definitions in the ESRI WKT reptoire which we
+		// have not dealt with before (I.e. there is no EPSG entry in the
+		// NameMapper.  We'll deal with those in future.  Time constraints
+		// require that we deal with the systems which we know about.
+		//*********************************************************************
+		aDeskName = 0;
+		if (isGeographic)
+		{
+			aDeskName = csNameMapperHasName (objType,csMapFlvrAutodesk,flavor,wktGeogCSName);
+		}
+		if (isProjective)
+		{
+			aDeskName = csNameMapperHasName (objType,csMapFlvrAutodesk,flavor,wktProjCSName);
+		}
+		if (aDeskName == 0)
+		{
+			ok = true;
 			continue;
 		}
 
@@ -442,7 +609,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 			// We have an EPSG code, so we presume it is worth checking the
 			// EPSG name which is current in the NameMapper.  The name is verified
 			// against the current EPSG database.
-			ok = csNameMapperUpdateEpsg (epsgPtr,nameMapper,objType,epsgCode);
+			ok = csNameMapperUpdateEpsg (epsgPtr,VcsNameMapper,objType,epsgCode);
 		}
 		if (ok)
 		{
@@ -462,7 +629,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 				// as far as the NameMapper is concerned the specific CRS
 				// system.  The EPSG code provided to this function is used,
 				// primarily, to determine the commonly shared generic ID value.
-				ok = csNameMapperUpdateFlvr (epsgPtr,nameMapper,objType,flavor,
+				ok = csNameMapperUpdateFlvr (epsgPtr,VcsNameMapper,objType,flavor,
 																		epsgCode,
 																		static_cast<unsigned long>(wkidCode),
 																		wcPtr);
@@ -477,11 +644,14 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 				// As of Noov 2014, this function is never called;;; shedule
 				// contraints prevent this author from finishing this portion
 				// of this utility application.
-				wcPtr = (objType ==  csMapProjectedCSysKeyName) ? wktProjCSName : wktGeogCSName;
-				ok = csNameMapperUpdateFlvr (epsgPtr,nameMapper,objType,flavor,
+				ok = csNameMapperUpdateFlvr (epsgPtr,VcsNameMapper,objType,flavor,
 																		static_cast<unsigned long>(wkidCode),
 																		wcPtr);
 			}
+		}
+		if (!ok)
+		{
+			ok = true;
 		}
 	}
 	std::wcout << L"Processing of WKT catalog is complete." << std::endl;
@@ -504,12 +674,12 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 			// WriteAsCsv does not return a status.  This is not so
 			// hot; probably related to the fact that the operator<<
 			// function is involved somehow.
-			nameMapper.WriteAsCsv (oStrm1,true);
+			VcsNameMapper.WriteAsCsv (oStrm1,true);
 			oStrm1.close ();
 
-			if (nameMapper.GetDuplicateCount () > 0)
+			if (VcsNameMapper.GetDuplicateCount () > 0)
 			{
-				std::wcerr << nameMapper.GetDuplicateCount () << L" duplicates detected." << std::endl;
+				std::wcerr << VcsNameMapper.GetDuplicateCount () << L" duplicates detected." << std::endl;
 				wcscpy (fullPath,csDictTrgDir);
 				wcscat (fullPath,L"\\");
 				wcscat (fullPath,L"NameMapperDuplicates.csv");
@@ -522,7 +692,7 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 					// WriteAsCsv does not return a status.  This is not so
 					// hot; probably related to the fact that the operator<<
 					// function is involved somehow.
-					nameMapper.WriteDuplicates (oStrm2);
+					VcsNameMapper.WriteDuplicates (oStrm2);
 					oStrm2.close ();
 				}
 			}
@@ -535,12 +705,12 @@ bool csUpdateNameMapperFromCsv (const wchar_t* csDictTrgDir,const wchar_t* csDic
 // the NameMapper to contain the latest EPSG name available.  Since we do not
 // usually deal with  EPSG WKT, we make no attempt to keep old names around.
 // If the name is different, we simply replace it in the namemapper.
-bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& nameMapper,
+bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& VcsNameMapper,
 															 EcsMapObjType objType,
 															 TcsEpsgCode epsgCode)
 {
 	bool ok;
-	const wchar_t* wcPtrK;
+	const wchar_t* wcPtrK = 0;
 	
 	wchar_t aliasComment [256];
 
@@ -569,7 +739,7 @@ bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	// Get the system to which the caller is referencing.  That is, get the
 	// generic ID which is common to all references to the specific system
 	// identified by the EPSG code.
-	systemId = nameMapper.Locate (objType,csMapFlvrEpsg,epsgCode);
+	systemId = VcsNameMapper.Locate (objType,csMapFlvrEpsg,epsgCode);
 	if (systemId.IsNotKnown ())
 	{
 		std::wcerr << L"NameMapper has no reference to EPSG code ["
@@ -587,7 +757,7 @@ bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	// several EPSG name map entries within a specific system.  We need to
 	// obtain the specific one which has the provided EPSG code as its
 	// numeric ID.
-	ok = nameMapper.ExtractSpecificId (oldEntry,objType,systemId,
+	ok = VcsNameMapper.ExtractSpecificId (oldEntry,objType,systemId,
 														csMapFlvrEpsg,
 														static_cast<unsigned long>(epsgCode));
 
@@ -618,9 +788,9 @@ bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 			swprintf (aliasComment,wcCount(aliasComment),L"EPSG changed this name in release %s.",epsgRlsLevel);
 			newEntry.SetNameId (fieldData.c_str ());
 			newEntry.SetComments (aliasComment);
-			ok = nameMapper.Replace (newEntry,oldEntry);
+			ok = VcsNameMapper.Replace (newEntry,oldEntry);
 
-			std::wcout << L"EPSG::" << epsgCode << L" name updated to \"" << fieldData.c_str() << L"\"." << std::endl;
+VERBOSE		std::wcout << L"EPSG::" << epsgCode << L" name updated to \"" << fieldData.c_str() << L"\"." << std::endl;
 		}
 	}
 	return ok;
@@ -633,7 +803,7 @@ bool csNameMapperUpdateEpsg (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 //		b> if 'a' name already exists but is different, we alias the existing name.
 //		c> if the name does not exist, we create a new NameMapperEntry for the new name with
 //		   the given wkid number.
-bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& nameMapper,
+bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& VcsNameMapper,
 															 EcsMapObjType objType,
 															 EcsNameFlavor flavor,
 															 TcsEpsgCode epsgCode,
@@ -655,21 +825,20 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	}
 
 	// Convert the EPSG ID to a genric ID.
-	epsgGeneric = nameMapper.Locate (objType,csMapFlvrEpsg,epsgCode);
+	epsgGeneric = VcsNameMapper.Locate (objType,csMapFlvrEpsg,epsgCode);
 	ok = epsgGeneric.IsKnown();
 	if (!ok)
 	{
 		// NameMapper is unaware of this EPSG code.  Not supposed to happen in
-		// this function.  For now, due to scheduling constraints, we keep
-		// trucking.
-		return ok;
+		// this function.
+		return false;
 	}
 
 	// See if this name already exists in the NameMapper.  If it is, and
 	// it references the same system, we have nothing to do.  At this point
 	// we do not check if the name is an alias or not.  The name will map
 	// to this system, that's all we care about at this time.
-	flavorGeneric = nameMapper.Locate (objType,flavor,crsName);
+	flavorGeneric = VcsNameMapper.Locate (objType,flavor,crsName);
 	if (flavorGeneric == epsgGeneric)
 	{
 		return ok;
@@ -682,17 +851,17 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	if (ok)
 	{
 		// Get the existing 'flavor' name for this system withthe provided wkid.
-		wcPtrK = nameMapper.LocateName (objType,flavor,epsgGeneric);
+		wcPtrK = VcsNameMapper.LocateName (objType,flavor,epsgGeneric);
 	}
 	if (wcPtrK == 0)
 	{
 		// No flavored name exists related to the item identified by the EPSG
 		// code.  We simply add a new record to the NameMapper.
 		TcsNameMap newEntry (epsgGeneric,objType,flavor,wkidCode,crsName);
-		ok = nameMapper.Add (newEntry);
+		ok = VcsNameMapper.Add (newEntry);
 		if (ok)
 		{
-			std::wcout << epsgGeneric << L":" << objType << L":" << flavor << L":" << crsName << L" added to the NameMapper." << std::endl;
+VERBOSE		std::wcout << epsgGeneric << L":" << objType << L":" << flavor << L":" << crsName << L" added to the NameMapper." << std::endl;
 		}
 		else
 		{
@@ -719,7 +888,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 		// The appropriate entry exists, but the names are different.  We need
 		// to adjust the name mapper.
 		swprintf (aliasComment,wcCount (aliasComment),L"Name changed by flavor source in release %s.",wktRlsLevel);
-		ok = nameMapper.AliasExistingName (objType,flavor,epsgGeneric,crsName,aliasComment);
+		ok = VcsNameMapper.AliasExistingName (objType,flavor,epsgGeneric,crsName,aliasComment);
 		if (!ok)
 		{
 			// Should not happen.
@@ -739,7 +908,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 }
 // This updates a a flavored entry for which we do not have a matching EPSG code.
 // This is yet to be rigorously tested.
-bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& nameMapper,
+bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& VcsNameMapper,
 															 EcsMapObjType objType,
 															 EcsNameFlavor flavor,
 															 unsigned long wkidCode,
@@ -765,8 +934,8 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 	{
 		// We have both a name and an ID.  Search the NameMapper
 		// for an existing entry; preferring to use Name over ID.
-		srchCodeNm = nameMapper.Locate (objType,flavor,crsName);
-		srchCodeCd = nameMapper.Locate (objType,flavor,wkidCode);
+		srchCodeNm = VcsNameMapper.Locate (objType,flavor,crsName);
+		srchCodeCd = VcsNameMapper.Locate (objType,flavor,wkidCode);
 		if (srchCodeNm.IsNotKnown() && srchCodeCd.IsNotKnown ())
 		{
 			ok = true;		// We can handle this situation.
@@ -802,7 +971,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 			// new record.
 			if (wkidCode == 0UL)
 			{
-				lclGenericId = nameMapper.GetNextDfltId (flavor);
+				lclGenericId = VcsNameMapper.GetNextDfltId (flavor);
 			}
 			else
 			{
@@ -811,7 +980,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 
 			// Add the new item.
 			TcsNameMap nextItem (lclGenericId,objType,flavor,wkidCode,crsName);
-			ok = nameMapper.Add (nextItem);
+			ok = VcsNameMapper.Add (nextItem);
 			if (!ok)
 			{
 				wcPtrK = TcsNameMapper::FlvrNbrToName (flavor);
@@ -841,7 +1010,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 			//     name check above would have found it and we wouldn't
 			//     be executing this block of code.
 			swprintf (aliasComment,wcCount (aliasComment),L"Name changed by flavor source in release %s.",wktRlsLevel);
-			ok = nameMapper.AliasExistingName (objType,flavor,wkidCode,crsName,aliasComment);
+			ok = VcsNameMapper.AliasExistingName (objType,flavor,wkidCode,crsName,aliasComment);
 		}
 		else if (ok && nameOk && !codeOk)
 		{
@@ -850,7 +1019,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 			// add back in.  CUrrently, we pretend that it is in order to
 			// reduce the likely hood of a cut & paste code error.
 			TcsNameMap extractedItem;
-			ok = nameMapper.ExtractAndRemove (extractedItem,objType,flavor,crsName,0,0);
+			ok = VcsNameMapper.ExtractAndRemove (extractedItem,objType,flavor,crsName,0,0);
 			if (ok)
 			{
 				TcsGenericId genericId = extractedItem.GetGenericId ();
@@ -863,7 +1032,7 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 					// NameMapper.  So we leave it, and perhaps there will be
 					// a utility to regenerate generic ID's some day.
 					extractedItem.SetNumericId (wkidCode);
-					ok = nameMapper.Add (extractedItem);
+					ok = VcsNameMapper.Add (extractedItem);
 				}
 			}
 			else
@@ -897,4 +1066,31 @@ bool csNameMapperUpdateFlvr (const TcsEpsgDataSetV6* epsgPtr,TcsNameMapper& name
 		}
 	}
 	return ok;
+}
+const wchar_t* csNameMapperHasName (EcsMapObjType objType,EcsNameFlavor trgFlavor,EcsNameFlavor srcFlavor,const wchar_t* srcName)
+{
+	const wchar_t* rtnValue = 0;
+
+	TcsGenericId genericId;
+
+	genericId = VcsNameMapper.Locate (objType,srcFlavor,srcName);
+	if (genericId.IsKnown ())
+	{
+		rtnValue = VcsNameMapper.LocateName (objType,trgFlavor,genericId);
+	}
+	return rtnValue;
+}
+const wchar_t* csNameMapperHasNameC (EcsMapObjType objType,EcsNameFlavor trgFlavor,EcsNameFlavor srcFlavor,const char* srcName)
+{
+	const wchar_t* rtnValue = 0;
+	wchar_t nmBufr [256];
+	TcsGenericId genericId;
+
+	mbstowcs (nmBufr,srcName,wcCount (nmBufr));
+	genericId = VcsNameMapper.Locate (objType,srcFlavor,nmBufr);
+	if (genericId.IsKnown ())
+	{
+		rtnValue = VcsNameMapper.LocateName (objType,trgFlavor,genericId);
+	}
+	return rtnValue;
 }

@@ -598,7 +598,8 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 		ppOrg->code == cs_PRJCOD_WCCSL   ||
 		ppOrg->code == cs_PRJCOD_MNDOTL  ||
 		ppOrg->code == cs_PRJCOD_ALBER   ||
-		ppOrg->code == cs_PRJCOD_LMBRTAF)
+		ppOrg->code == cs_PRJCOD_LMBRTAF ||
+		ppOrg->code == cs_PRJCOD_LMMICH)
 	{
 		if (lclOriginal.prj_prm1 < lclOriginal.prj_prm2)
 		{
@@ -612,7 +613,8 @@ int EXP_LVL3 CS_csDefCmpEx (double *qValuePtr,Const struct cs_Csdef_ *original,C
 		ppRev->code == cs_PRJCOD_WCCSL   ||
 		ppRev->code == cs_PRJCOD_MNDOTL  ||
 		ppRev->code == cs_PRJCOD_ALBER   ||
-		ppRev->code == cs_PRJCOD_LMBRTAF)
+		ppRev->code == cs_PRJCOD_LMBRTAF ||
+		ppRev->code == cs_PRJCOD_LMMICH)
 	{
 		if (lclRevised.prj_prm1 < lclRevised.prj_prm2)
 		{

@@ -1280,6 +1280,7 @@ typedef long32_t cs_magic_t;
 #define cs_PRJCOD_PCARREE  68		/* Plate Carree, standard form.  This is _NOT_ the same
 									   as EPSG 9825 - Pseudo Plate Carree. */
 #define cs_PRJCOD_MRCATPV  69		/* Psuedo Mercator, Popular Visualization. */
+#define cs_PRJCOD_LMMICH   70		/* Lambert Conformal Conic,.Michigan Variation */
 
 #define cs_PRJCOD_HOM1UV   ((cs_PRJCOD_OBLQM << 8) + 1)
 #define cs_PRJCOD_HOM1XY   ((cs_PRJCOD_OBLQM << 8) + 2)
@@ -1419,7 +1420,8 @@ typedef long32_t cs_magic_t;
 #define cs_PRMCOD_SCLROTORGY  45		/* Y Coordinate of Scale/Roatet Origin */
 #define cs_PRMCOD_NRTHSCL     46		/* Cartesian Scale Factor */
 #define cs_PRMCOD_NRTHROT     47		/* Cartesian Rotation Angle */
-#define cs_PRMCOD_MAXIDX      47		/* Used to prevent erroneous memory access */
+#define cs_PRMCOD_ELPSCL      48		/* Ellipsoid Scale */
+#define cs_PRMCOD_MAXIDX      48		/* Used to prevent erroneous memory access */
 
 		/* These are not parameters as far as CS-MAP is concerned,
 		   but they are in the WKT way of things.  So we invent some
@@ -1623,6 +1625,7 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_PRMBMP_SCLRED   (1L <<  27)	/* Origin Scale Reduction */
 #define cs_PRMBMP_XXXOFF   (1L <<  28)	/* Origin False Easting */
 #define cs_PRMBMP_YYYOFF   (1L <<  29)	/* Origin False Northing */
+#define cs_PRMBMP_ELPSCL   (1L <<  30)	/* Ellipsoid Scale */
 
 /* Each of the following is a bit map of the REQUIRED parameters for each
    projection or variation thereof. */
@@ -1693,6 +1696,7 @@ enum EcsWktParameter {	csWktPrmNone = 0,
 #define cs_PJPRMBMP_RSKEWO		(cs_PRMBMP_UNIT   | cs_PRMBMP_PRJPRM1  | cs_PRMBMP_PRJPRM2  | cs_PRMBMP_PRJPRM3  | cs_PRMBMP_SCLRED   | cs_PRMBMP_XXXOFF   | cs_PRMBMP_YYYOFF )UL
 #define cs_PJPRMBMP_WINKL		(cs_PRMBMP_UNIT   | cs_PRMBMP_ORGLNG   | cs_PRMBMP_PRJPRM1  | cs_PRMBMP_XXXOFF   | cs_PRMBMP_YYYOFF )UL
 #define cs_PJPRMBMP_NRTHSRT		(cs_PRMBMP_UNIT   | cs_PRMBMP_PRJPRM1  | cs_PRMBMP_PRJPRM2  | cs_PRMBMP_PRJPRM3  | cs_PRMBMP_PRJPRM4  | cs_PRMBMP_XXXOFF   | cs_PRMBMP_YYYOFF )UL
+#define cs_PJPRMBMP_LMMICH		(cs_PRMBMP_UNIT   | cs_PRMBMP_PRJPRM1  | cs_PRMBMP_PRJPRM2  | cs_PRMBMP_ORGLNG   | cs_PRMBMP_ORGLAT   | cs_PRMBMP_XXXOFF   | cs_PRMBMP_YYYOFF | cs_PRMBMP_ELPSCL)UL
 
 /*
 	Maximum length of a Coordinate System, Datum, and or
@@ -2746,6 +2750,7 @@ struct cs_Zone_
 #define cs_LMBRT_TWOSP 1
 #define cs_LMBRT_ONESP 2
 #define cs_LMBRT_BELGN 3
+#define cs_LMBRT_MICHIGAN 4
 #define csLMBRT_AFFINE (1 << 9)	/* This bit is set in the quad variable
 								   when the affine post processor is active. */
 
@@ -2811,6 +2816,8 @@ struct cs_Lmbrt_
 							   calculations. */
 	double k0;				/* scale reduction factor, used only in the
 							   grid scale functions. */
+	double ellipsoidK;		/* Ellipsoid scale factor, used only in the
+							   MICHIGAN variation as of this writing. */
 
 	/* Affine post processor stuff */
 	double affineA0;		/* Coefficients for Affine transformation. */
@@ -6239,6 +6246,8 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_GPQ_GXDIR    286     /* Invalid path element direction */
 #define cs_GPQ_INVNM    287     /* Invalid transformation name */
 #define cs_GPQ_NOXFRM   288     /* Transformation name is not that of an existing transformation */
+
+#define cs_CSQ_ELPSCL   289     /* Invalid value for Ellipsoid Scale parameter */
 
 	/* End coordinate system definition checker specific stuff. */
 

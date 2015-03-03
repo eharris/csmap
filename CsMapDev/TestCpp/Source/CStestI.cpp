@@ -176,8 +176,8 @@ int CStestI (bool verbose,long32_t duration)
 				 prjPtr->code == cs_PRJCOD_SYS34_99 ||
 				 prjPtr->code == cs_PRJCOD_TRMRKRG  ||
 				 prjPtr->code == cs_PRJCOD_LMBRTAF  ||
-				 prjPtr->code == cs_PRJCOD_MSTRO
-				)
+				 prjPtr->code == cs_PRJCOD_MSTRO    ||
+				 prjPtr->code == cs_PRJCOD_LMMICH)
 			   )
 			{
 				continue;

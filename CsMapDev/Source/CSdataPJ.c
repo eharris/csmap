@@ -566,6 +566,11 @@
 							 cs_PRJFLG_ORGLAT | cs_PRJFLG_ORGLNG | \
 							 cs_PRJFLG_RNTRNT)
 							 
+#define cs_PRJFLGS_LMMICH	(cs_PRJFLG_SPHERE | cs_PRJFLG_ELLIPS | \
+							 cs_PRJFLG_SCALK  | cs_PRJFLG_CNVRG  | \
+							 cs_PRJFLG_CNFRM  | \
+							 cs_PRJFLG_CONIC  | \
+							 cs_PRJFLG_RNTRNT)
 /*
 	Obsolete definitions; preserved for historical reasons only.
 
@@ -740,6 +745,8 @@ struct cs_Prjtab_ cs_Prjtab [] =
 	    			"Plate Carree / Simple Cylindrical"},
 	{  "MRCAT-PV",CSmrcatS,CSmrcatQ,cs_PRJCOD_MRCATPV,cs_PRJFLGS_MRCATPV,1024UL,
 	    			"Popular Visualisation Pseudo Mercator"},
+	{   "LM-MICH",CSlmbrtS,CSlmbrtQ,cs_PRJCOD_LMMICH,cs_PRJFLGS_LMMICH,1051UL,
+	    			"Lambert Conformal Conic Projection, Two Standard Parallels"},
 	{           "",NULL,    NULL,    cs_PRJCOD_END,  0L,  0UL,
 					""}	/* End of table marker. */
 };
@@ -1574,6 +1581,22 @@ struct cs_Prjprm_ csPrjprm [] =
 										 0,		/* Projection Code */
 										 0,		/* Parameter Number */
 										 0		/* Sprintf Processing */
+	},
+	/* Index = 48; Ellipsoid Scale Factor, cs_PRMCOD_ELPSCL */
+	{
+								   0.99909,		/* Minimum value, quite arbitrary in this case */
+								   1.0001,		/* Maximum value, quite arbitrary in this case */
+									   1.0,		/* Suitable default. */
+							   cs_FRMT_SCL,		/* CS_ftoa format */
+										0L,		/* Help ID */
+										0L,		/* String ID */
+				  "Ellipsoid Scale Factor",		/* Label */
+							cs_PRMPTYP_DBL,		/* Physical Type */
+						  cs_PRMLTYP_SCALE,		/* Logical Type */
+								    1038UL,		/* EPSG parameter code */
+										 0,		/* Projection Code */
+										 0,		/* Parameter Number */
+										 0		/* Sprintf Processing */
 	}
 };
 
@@ -1684,6 +1707,7 @@ struct cs_PrjprmMap_ cs_PrjprmMap [] =
    { cs_PRJCOD_EDCYLE, { cs_PRMCOD_STDPLL }},
   { cs_PRJCOD_PCARREE, { 0 }},
    {cs_PRJCOD_MRCATPV, { cs_PRMCOD_CNTMER}},
+   { cs_PRJCOD_LMMICH, { cs_PRMCOD_NSTDPLL,cs_PRMCOD_SSTDPLL,cs_PRMCOD_ELPSCL}},
 
 	{   cs_PRJCOD_END, { 0 }}
 };

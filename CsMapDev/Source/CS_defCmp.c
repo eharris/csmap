@@ -195,7 +195,7 @@ int EXP_LVL3 CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef
 			}
 		}
 		
-		/* The forst two parameters have been dealt with, dealing with the rest
+		/* The f1rst two parameters have been dealt with, dealing with the rest
 		   is rather straight forward. */
 		errCnt += CS_defCmpPrjPrm (pp, 3,lclOrgPtr->prj_prm3 ,lclRevPtr->prj_prm3,errMsg,sizeof (errMsg));
 		errCnt += CS_defCmpPrjPrm (pp, 4,lclOrgPtr->prj_prm4 ,lclRevPtr->prj_prm4,errMsg,sizeof (errMsg));
