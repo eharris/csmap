@@ -71,7 +71,7 @@ int CStestT (bool verbose,long32_t duration)
 	clock_t nmStartClock;
 	clock_t nmDoneClock;
 	double nmLoadTime;
-	EcsCsvStatus status;
+	EcsCsvStatus status = csvEndOfTable;
 
 	std::wifstream inStrm;
 	TcsCsvStatus csvStatus;
