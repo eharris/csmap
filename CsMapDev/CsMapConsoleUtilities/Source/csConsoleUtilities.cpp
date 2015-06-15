@@ -38,7 +38,7 @@ int main (int argc,char* argv [])
 	bool ok (false);
 	int envStatus;
 
-#if defined (_MSC_VER) && _MSC_VER >= 1400
+#if defined (_MSC_VER) && _MSC_VER >= 1400 && _MSC_VER < 1900
 	// This is a Microsoft specific function call.  It forces the exponential
 	// printf format to two digits, which I prefer.  Maybe there is a more
 	// generic form of this, but I don't know about it.
