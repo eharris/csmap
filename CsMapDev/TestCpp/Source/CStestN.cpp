@@ -419,9 +419,9 @@ int CStestN (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 						// current definition of what the qFactor really is.
 						// This has been pretty dynamic through all this
 						// development.
-						for (unsigned idx = 0;idx < variantCount;idx++)
+						for (unsigned idx2 = 0;idx2 < variantCount;idx2++)
 						{
-							variantPtr = opVariants.GetVariantPtr (idx);
+							variantPtr = opVariants.GetVariantPtr (idx2);
 							if (variantPtr == 0) continue;		// NO CRASHES, thank you.
 							lclVariant = variantPtr->GetVariantNbr ();
 							lclOk = epsgV6.GetCsMapDatum (epsgDtDef,epsgElDef,epsgCode,lclVariant);
