@@ -347,7 +347,7 @@ EcsCsvStatus TcsNameMap::ReadFromStream (std::wistream& inStrm,TcsCsvStatus& csv
 		}
 		if (status == csvOk)
 		{
-			size_t fldCnt = fields.size ();
+			fldCnt = fields.size ();
 			if (fldCnt >= 7 && fldCnt <= 16)
 			{
 				ulTmp = wcstoul (fields [0].c_str (),0,10);
