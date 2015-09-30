@@ -2175,6 +2175,58 @@ bool TcsCsvFileBase::ReadFromStream (std::wistream& iStrm,bool firstIsLabels,Tcs
 	}
 	return ok;
 }
+bool TcsCsvFileBase::AppendRecord (const TcsCsvRecord& newRecord,TcsCsvStatus& status)
+{
+	bool ok (true);
+
+	// Verify that the new record is acceptable.  At this level, we have no
+	// concern with delimiters, comments, etc.  Only thing we need to check,
+	// the only things we can check, is the field count.  MaxRecordLength and
+	// MaxFieldLength are used to reserve memory allocations for std::wstring
+	// definitions to eliminate unnecessary reallocations for performance
+	// purposes.  They should have no effect on the actual operation of the
+	// record within this framework.
+	if ((newRecord.FieldCount() < MinFldCnt) || (newRecord.FieldCount() > MaxFldCnt))
+	{
+		std::wstring fieldId (L"Record Append");
+
+		ok = false;
+		EcsCsvStatus csvSt = (newRecord.FieldCount() < MinFldCnt) ? csvTooFewFields : csvTooManyFields;
+		status.SetStatus (csvSt);
+		status.SetObjectName (ObjectName);
+		status.SetLineNbr (0UL);
+		status.SetFieldId (fieldId);
+		status.SetFieldNbr (-1);
+	}
+	else
+	{
+		Records.push_back (newRecord);
+	}
+	return ok;
+}
+bool TcsCsvFileBase::RemoveRecord (unsigned recordNbr,TcsCsvStatus& status)
+{
+	bool ok (true);
+	
+	std::vector<TcsCsvRecord>::iterator recItr;
+
+	if (recordNbr >= Records.size ())
+	{
+		std::wstring fieldId (L"Record Remove");
+		ok = false;
+		status.SetStatus (csvInvRecordNbr);
+		status.SetObjectName (ObjectName);
+		status.SetLineNbr (0UL);
+		status.SetFieldId (fieldId);
+		status.SetFieldNbr (-1);
+	}
+	else
+	{
+		recItr = Records.begin () + recordNbr;
+		Records.erase (recItr);
+	}
+	return ok;
+}
 bool TcsCsvFileBase::WriteToStream (std::wostream& oStrm,bool writeLabels,TcsCsvStatus& status) const
 {
     bool ok = true;

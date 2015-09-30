@@ -287,6 +287,9 @@ public:
 	bool StableSort (const TcsCsvSortFunctor& functor);
 	unsigned LowerBound (const TcsCsvRecord& searchRec,const TcsCsvSortFunctor& functor);
 	bool ReadFromStream (std::wistream& iStrm,bool firstIsLabels,TcsCsvStatus& status);
+	bool AppendRecord (const TcsCsvRecord& newRecord,TcsCsvStatus& status);
+	// Frequent use of RemoveRecord will be very painful performance wise.
+	bool RemoveRecord (unsigned recordNbr,TcsCsvStatus& status);
 	bool WriteToStream (std::wostream& oStrm,bool writeLabels,TcsCsvStatus& status) const;
 	const wchar_t* GetObjectName (void) const;
 	void GetObjectName (std::wstring& objName) const;
