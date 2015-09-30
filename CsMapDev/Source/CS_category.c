@@ -564,7 +564,7 @@ error:
  * Use this function to enumerate all category names by incrementing the idx
  * value by one after each call, until such time as a null pointer is returned.
  *****************************************************************************/
-Const char* EXP_LVL1 CS_getCatName (unsigned idx)
+Const char* EXP_LVL3 CS_getCatName (unsigned idx)
 {
 	unsigned myIdx = 0;
 	Const char* rtnValue = 0;
@@ -616,7 +616,7 @@ int EXP_LVL1 CS_getItmNameCount (const char* catName)
  * incrementing the idx value by one after each call, until such time as a
  * null pointer is returned.
  *****************************************************************************/
-Const char* EXP_LVL1 CS_getItmName (const char* catName,unsigned idx)
+Const char* EXP_LVL3 CS_getItmName (const char* catName,unsigned idx)
 {	
 	struct cs_Ctdef_* ctDefPtr;
 	

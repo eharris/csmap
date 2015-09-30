@@ -108,7 +108,7 @@ Const char * EXP_LVL3 CS_ecvt (double value,int count,int *dec,int *sign)
 	}
 	return result;
 }
-int EXP_LVL6 CS_stricmp (Const char* cp1,Const char *cp2)
+int EXP_LVL3 CS_stricmp (Const char* cp1,Const char *cp2)
 {
 	char cc1, cc2;
 	int result;

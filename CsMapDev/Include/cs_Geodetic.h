@@ -1390,20 +1390,20 @@ extern "C" {
 #endif
 
 enum csGridFormat EXP_LVL9 CSgridFileFormatCvt (unsigned flagValue);
-struct cs_GxIndex_* EXP_LVL3 CS_getGxIndexPtr (void);
-unsigned EXP_LVL3 CS_getGxIndexCount ();
-Const struct cs_GxIndex_* EXP_LVL3 CS_getGxIndexEntry (unsigned index);
-void EXP_LVL3 CS_releaseGxIndex (void);
-int EXP_LVL3 CS_locateGxByName (Const char* xfrmName);
-int EXP_LVL3 CS_locateGxByDatum (unsigned startAt,Const char* srcDtmName,Const char* trgDtmName);
-int EXP_LVL3 CS_locateGxFromDatum (int* direction,Const char* srcDtmName);
-int EXP_LVL3 CS_locateGxToDatum (int* direction,Const char* trgDtmName);
-int EXP_LVL3 CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDtmName);
+struct cs_GxIndex_* EXP_LVL5 CS_getGxIndexPtr (void);
+unsigned EXP_LVL5 CS_getGxIndexCount ();
+Const struct cs_GxIndex_* EXP_LVL5 CS_getGxIndexEntry (unsigned index);
+void EXP_LVL5 CS_releaseGxIndex (void);
+int EXP_LVL5 CS_locateGxByName (Const char* xfrmName);
+int EXP_LVL5 CS_locateGxByDatum (unsigned startAt,Const char* srcDtmName,Const char* trgDtmName);
+int EXP_LVL5 CS_locateGxFromDatum (int* direction,Const char* srcDtmName);
+int EXP_LVL5 CS_locateGxToDatum (int* direction,Const char* trgDtmName);
+int EXP_LVL5 CS_locateGxByDatum2 (int* direction,Const char* srcDtmName,Const char* trgDtmName);
 void EXP_LVL9 CSgenerateGxIndex (void);
 
-struct cs_GxXform_* EXP_LVL1 CS_gxloc (Const char* gxDefName,short userDirection);
-struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *gxXform,short userDirection);
-struct cs_GxXform_*	EXP_LVL3 CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt);
+struct cs_GxXform_ EXP_LVL5 *CS_gxloc (Const char* gxDefName,short userDirection);
+struct cs_GxXform_ EXP_LVL5 *CS_gxloc1 (Const struct cs_GeodeticTransform_ *gxXform,short userDirection);
+struct cs_GxXform_ EXP_LVL5 *CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt);
 
 int EXP_LVL1 CS_gxFrwrd3D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);
 int EXP_LVL1 CS_gxFrwrd2D (struct cs_GxXform_ *xform,double trgLl [3],Const double srcLl [3]);

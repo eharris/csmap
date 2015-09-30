@@ -32,7 +32,7 @@
    Transformation from the dictionary and then use that definition to
    create a fully initialized cs_GxXform_ structure which can actually
    be used to perform Geodetic Transformations in a generic way. */
-struct cs_GxXform_* EXP_LVL1 CS_gxloc (Const char* gxDefName, short userDirection)
+struct cs_GxXform_ EXP_LVL5 *CS_gxloc (Const char* gxDefName, short userDirection)
 {
     struct cs_GeodeticTransform_* xfrmDefPtr;
     struct cs_GxXform_* transform;
@@ -52,7 +52,7 @@ struct cs_GxXform_* EXP_LVL1 CS_gxloc (Const char* gxDefName, short userDirectio
     return transform; //can be NULL
 }
 
-struct cs_GxXform_* EXP_LVL1 CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrmDefPtr,short userDirection)
+struct cs_GxXform_ EXP_LVL5 *CS_gxloc1 (Const struct cs_GeodeticTransform_ *xfrmDefPtr,short userDirection)
 {
 	extern char csErrnam [];
 	extern struct cs_XfrmTab_ cs_XfrmTab [];
@@ -183,7 +183,7 @@ error:
 }
 
 /* A fallback for strange situations. */
-struct cs_GxXform_*	EXP_LVL3 CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt)
+struct cs_GxXform_*	EXP_LVL5 CS_gxlocDtm (Const struct cs_Datum_ *src_dt,Const struct cs_Datum_ *dst_dt)
 {
 	extern double cs_Zero;
 	extern double cs_Three;

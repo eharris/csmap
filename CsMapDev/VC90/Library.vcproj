@@ -322,164 +322,6 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
-		<Configuration
-			Name="VbDll|Win32"
-			OutputDirectory="$(ProjectDir)..\lib90\$(ConfigurationName)"
-			IntermediateDirectory="$(ProjectDir)..\obj90\$(ProjectName)\$(ConfigurationName)"
-			ConfigurationType="4"
-			CharacterSet="1"
-			DeleteExtensionsOnClean=" *.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;$(TargetPath)"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
-				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\Include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;DLL_32"
-				StringPooling="true"
-				MinimalRebuild="false"
-				ExceptionHandling="1"
-				BasicRuntimeChecks="0"
-				RuntimeLibrary="0"
-				BufferSecurityCheck="false"
-				EnableFunctionLevelLinking="false"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="cs_map.h"
-				PrecompiledHeaderFile="$(IntDir)\cs_map.pch"
-				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
-				BrowseInformation="0"
-				WarningLevel="4"
-				WarnAsError="false"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
-				CallingConvention="0"
-				CompileAs="0"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\csmap.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				OutputFile="$(OutDir)/CsMap.bsc"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="VbDll|x64"
-			OutputDirectory="$(ProjectDir)..\lib90\$(ConfigurationName)64"
-			IntermediateDirectory="$(ProjectDir)..\obj90\$(ProjectName)\$(ConfigurationName)64"
-			ConfigurationType="4"
-			CharacterSet="1"
-			DeleteExtensionsOnClean=" *.obj;*.pch;*.sbr;*.ilk;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.pgc;*.pgd;*.meta;$(TargetPath)"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
-				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\Include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIBDLL_64"
-				StringPooling="true"
-				MinimalRebuild="false"
-				ExceptionHandling="1"
-				BasicRuntimeChecks="0"
-				RuntimeLibrary="0"
-				BufferSecurityCheck="false"
-				EnableFunctionLevelLinking="false"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="cs_map.h"
-				PrecompiledHeaderFile="$(IntDir)\cs_map.pch"
-				ProgramDataBaseFileName="$(OutDir)\$(TargetName).pdb"
-				BrowseInformation="0"
-				WarningLevel="4"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
-				CallingConvention="0"
-				CompileAs="0"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\csmap.lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-				OutputFile="$(OutDir)/CsMap.bsc"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -998,22 +840,6 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\Source\CS_supprt.c"
@@ -1175,26 +1001,6 @@
 						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\Source\CS_epsgStuff.cpp"
@@ -1231,26 +1037,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1303,26 +1089,6 @@
 						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\Source\CS_nameMapper.cpp"
@@ -1359,26 +1125,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1431,26 +1177,6 @@
 						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\Source\CS_stdhdrCpp.cpp"
@@ -1487,26 +1213,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1559,26 +1265,6 @@
 						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\Source\CS_wktObject.cpp"
@@ -1615,26 +1301,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1687,26 +1353,6 @@
 						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\Source\CScs2Wkt.cpp"
@@ -1743,26 +1389,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1815,26 +1441,6 @@
 						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\Source\CSel2Wkt.cpp"
@@ -1879,26 +1485,6 @@
 						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="2"
-						PrecompiledHeaderThrough="cs_wkt.h"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\Source\csIoUtil.cpp"
@@ -1932,24 +1518,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-						PrecompiledHeaderFile="$(IntDir)\cs_mapCpp.pch"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="VbDll|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

@@ -165,7 +165,7 @@
 #define _pc_GENERIC_32    0x201
 #define _pc_IX86          0x202
 #define _pc_MOT32         0x203
-#define _pc_SPARC32       0x204        
+#define _pc_SPARC32       0x204
 #define _pc_BASE_64       0x400
 #define _pc_GENERIC_64    0x401
 #define _pc_IA64          0x402
@@ -467,7 +467,7 @@
 #	pragma warning( disable : 4251 )		// XXX needs to have dll-interface to be used by clients of class YYY (whatever that means)
 #	pragma warning( disable : 4273 )		// inconsistent DLL linkage (whatever that means)
 #	pragma warning( disable : 4275 )		// non DLL-interface classkey 'identifier' used as base for DLL-interface classkey 'identifier' (whatever that means)
-#	pragma warning( disable : 4290 )		// C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+#	pragma warning( disable : 4290 )		// C++ exception specification ignored except to indicate a function is not _declspec(nothrow)
 #	pragma warning( disable : 4702 )		// unreachable code, produced by several STL templates
 #	pragma warning( disable : 4786 )		// symbol name truncated to 256 chars in debug database
 #	pragma warning( disable : 4800 )		// forcing value to bool true/false (performance warning)
@@ -574,45 +574,73 @@
 #ifndef EXP_LVL1
 #	if defined (DLL_16)
 #		define EXP_LVL1 _pascal
-#		define EXP_DATA
 #	elif defined (DLL_32)
 #		define EXP_LVL1 __stdcall
-#		define EXP_DATA __declspec(dllimport)
 #	elif defined (DLL_64)
-#		define EXP_LVL1 __stdcall
-#		define EXP_DATA __declspec(dllimport)
+#		define EXP_LVL1 __declspec(dllexport)
 #	else
 #		define EXP_LVL1
-#		define EXP_DATA
 #	endif
 #endif
+
 #ifndef EXP_LVL2
-#	define EXP_LVL2
+#	if defined (DLL_16)
+#		define EXP_LVL2
+#	elif defined (DLL_32)
+#		define EXP_LVL2 __stdcall
+#	elif defined (DLL_64)
+#		define EXP_LVL2 __declspec(dllexport)
+#	else
+#		define EXP_LVL2
+#	endif
 #endif
+
 #ifndef EXP_LVL3
 #	if defined (DLL_16)
-#		define EXP_LVL3 _pascal
+#		define EXP_LVL3
+#	elif defined (DLL_32)
+#		define EXP_LVL3 __stdcall
+#	elif defined (DLL_64)
+#		define EXP_LVL3 __declspec(dllexport)
 #	else
 #		define EXP_LVL3
 #	endif
 #endif
+
 #ifndef EXP_LVL4
 #	define EXP_LVL4
 #endif
+
 #ifndef EXP_LVL5
 #	define EXP_LVL5
 #endif
+
 #ifndef EXP_LVL6
 #	define EXP_LVL6
 #endif
+
 #ifndef EXP_LVL7
 #	define EXP_LVL7
 #endif
+
 #ifndef EXP_LVL8
 #	define EXP_LVL8
 #endif
+
 #ifndef EXP_LVL9
 #	define EXP_LVL9
+#endif
+
+#ifndef EXP_DATA
+#	if defined (DLL_16)
+#		define EXP_DATA
+#	elif defined (DLL_32)
+#		define EXP_DATA __declspec(dllexport)
+#	elif defined (DLL_64)
+#		define EXP_DATA __declspec(dllexport)
+#	else
+#		define EXP_DATA
+#	endif
 #endif
 
 /*
@@ -993,7 +1021,6 @@ typedef long32_t cs_magic_t;
 #define cs_CNVRT_NRML  cs_CNVRT_OK
 #define cs_CNVRT_INDF  cs_CNVRT_USFL
 #define cs_CNVRT_RNG   cs_CNVRT_DOMN
-#define cs_CNVRT_DEMO   4095
 
 /*
 	The following define the bits allocated for the return
@@ -6479,8 +6506,7 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_ENV_FORMAT     475		/* The format of the string presented fro environmental
 									   variable subsitution is improperly formatted. */
 
-
-#define cs_ERROR_MAX	  cs_DICT_DUP_IDS
+#define cs_ERROR_MAX	  cs_ENV_FORMAT
 
 /*
 	The following casts are used to eliminate warnings from
@@ -6530,11 +6556,10 @@ double		EXP_LVL5	CS_adj2pi (double az_in);
 double		EXP_LVL5	CS_adj2piI (double az_in);
 int			EXP_LVL5	CS_adjll (double ll [2]);
 int			EXP_LVL1	CS_altdr (Const char *alt_dir);
-int			EXP_LVL1	CS_usrdr (Const char *usr_dir);
 double		EXP_LVL1	CS_ansiAtof (Const char *string);
 void		EXP_LVL1	CS_ats77Name (Const char *newName);
 long32_t	EXP_LVL1	CS_atof (double *result,Const char *value);
-char*		EXP_LVL1	CS_audflt (Const char *dflt_au);
+char*		EXP_LVL3	CS_audflt (Const char *dflt_au);
 int			EXP_LVL1	CS_azddll (double e_rad,double e_sq,Const double from_ll [2],double az,double dd,double to_ll [2]);
 double		EXP_LVL1	CS_azsphr (Const double ll0 [2],Const double ll1 [2]);
 
@@ -6555,14 +6580,14 @@ void		EXP_LVL7	CS_csDictCls (csFILE* stream);
 int			EXP_LVL7	CS_cscmp (Const struct cs_Csdef_ *pp,Const struct cs_Csdef_ *qq);
 double		EXP_LVL3	CS_cscnv (Const struct cs_Csprm_ *csprm,Const double ll [3]);
 struct cs_Csdef_* EXP_LVL3	CS_csdef (Const char *cs_nam);
-struct cs_Csdef_ * EXP_LVL3 CS_csdef2 (Const char *cs_nam, char* pszDirPath);
+struct cs_Csdef_ * EXP_LVL7 CS_csdef2 (Const char *cs_nam, char* pszDirPath);
 int			EXP_LVL3	CS_csdefAll (struct cs_Csdef_ **pDefArray[]);
-int			EXP_LVL1	CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize);
-int			EXP_LVL1	CS_csDefCmpEx (double* qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize);
+int			EXP_LVL3	CS_csDefCmp (Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t messageSize);
+int			EXP_LVL3	CS_csDefCmpEx (double* qValuePtr,Const struct cs_Csdef_ *original,Const struct cs_Csdef_ *revised,char* message,size_t msgSize);
 int			EXP_LVL3	CS_csdel (struct cs_Csdef_ *csdef);
 int			EXP_LVL5	CS_csDiff (FILE *rptStrm,struct cs_Csdef_ *was,struct cs_Csdef_ *is);
 int			EXP_LVL1	CS_csEnum (int index,char *key_name,int size);
-int 		EXP_LVL1 	CS_csEnumByGroup (int index,Const char *grp_name,struct cs_Csgrplst_ *cs_descr);
+int 		EXP_LVL2	CS_csEnumByGroup (int index,Const char *grp_name,struct cs_Csgrplst_ *cs_descr);
 void		EXP_LVL1	CS_csfnm (Const char *new_name);
 int			EXP_LVL1	CS_csGrpEnum (int index,char *grp_name,int name_sz,char *grp_dscr,int dscr_sz);
 void		EXP_LVL3	CS_csgrpf (struct cs_Csgrplst_ *grp_list);
@@ -6571,16 +6596,16 @@ int			EXP_LVL1	CS_csIsValid (Const char *key_name);
 struct cs_Csprm_* EXP_LVL3	CS_cslcl (Const double min_ll [2],Const double max_ll [2],Const char *units,Const struct cs_Datum_ *datum,double map_scl);
 struct cs_Csprm_* EXP_LVL3	CS_csloc (Const char *cs_nam);
 
-csFILE *	EXP_LVL3	CS_csopn (Const char *mode);
+csFILE *	EXP_LVL5	CS_csopn (Const char *mode);
 int			EXP_LVL1	CS_csRangeEnum (int index,char *key_name,int size);
 int			EXP_LVL1	CS_csRangeEnumSetup (double longitude,double latitude);
-int			EXP_LVL3	CS_csrd (csFILE *strm,struct cs_Csdef_ *cs_def,int *crypt);
-int			EXP_LVL3	CS_csrup (Const char *distrb,Const char *bkupnm);
+int			EXP_LVL5	CS_csrd (csFILE *strm,struct cs_Csdef_ *cs_def,int *crypt);
+int			EXP_LVL5	CS_csrup (Const char *distrb,Const char *bkupnm);
 double		EXP_LVL3	CS_cssch (Const struct cs_Csprm_ *csprm,Const double ll [2]);
 double		EXP_LVL3	CS_cssck (Const struct cs_Csprm_ *csprm,Const double ll [2]);
 double		EXP_LVL3	CS_csscl (Const struct cs_Csprm_ *csprm,Const double ll [2]);
-int			EXP_LVL3	CS_csupd (struct cs_Csdef_ *csdef,int crypt);
-int			EXP_LVL3	CS_cswr (csFILE *strm,Const struct cs_Csdef_ *cs_def,int crypt);
+int			EXP_LVL5	CS_csupd (struct cs_Csdef_ *csdef,int crypt);
+int			EXP_LVL5	CS_cswr (csFILE *strm,Const struct cs_Csdef_ *cs_def,int crypt);
 
 int			EXP_LVL1	CS_cmpDbls (double first,double second);
 int			EXP_LVL3	CS_defCmpPrjPrm (struct cs_Prjtab_* pp,int prmNbr,double orgValue,double revValue,char *message,size_t messageSize);
@@ -6593,45 +6618,45 @@ struct cs_Dtcprm_* EXP_LVL3	CS_dtcsu (Const struct cs_Csprm_ *src_cs,Const struc
 int			EXP_LVL3	CS_dtcvt (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [2],double ll_out [2]);
 int			EXP_LVL3	CS_dtcvt3D (struct cs_Dtcprm_ *dtc_ptr,Const double ll_in [3],double ll_out [3]);
 struct cs_Dtdef_* EXP_LVL3	CS_dtdef (Const char *dat_nam);
-struct cs_Dtdef_ * EXP_LVL3	CS_dtdef2 (Const char *dat_nam, char* pszDirPath);
+struct cs_Dtdef_ * EXP_LVL5	CS_dtdef2 (Const char *dat_nam, char* pszDirPath);
 int			EXP_LVL3	CS_dtdefAll	(struct cs_Dtdef_ **pDefArray[]);
 int			EXP_LVL3	CS_dtDefCmp (Const struct cs_Dtdef_ *original,Const struct cs_Dtdef_ *revised,char* message,size_t messageSize);
 int			EXP_LVL3	CS_dtDefCmpEx (double *qValuePtr,Const struct cs_Dtdef_ *original,Const struct cs_Dtdef_ *revised,char* message,size_t msgSize);
-int			EXP_LVL3	CS_dtdel (struct cs_Dtdef_ *dtdef);
-char*		EXP_LVL1	CS_dtdflt (Const char *dflt_dt);
+int			EXP_LVL5	CS_dtdel (struct cs_Dtdef_ *dtdef);
+char*		EXP_LVL3	CS_dtdflt (Const char *dflt_dt);
 void		EXP_LVL7	CS_dtDictCls (csFILE* stream);
 int			EXP_LVL5	CS_dtDiff (FILE *rptStrm,struct cs_Dtdef_ *was,struct cs_Dtdef_ *is);
 int			EXP_LVL1	CS_dtEnum (int index,char *key_name,int size);
 void		EXP_LVL1	CS_dtfnm (Const char *new_name);
 int			EXP_LVL1	CS_dtIsValid (Const char *key_name);
 struct cs_Datum_* EXP_LVL5	CS_dtloc (Const char *dat_nam);
-csFILE *	EXP_LVL3	CS_dtopn (Const char *mode);
-int			EXP_LVL3	CS_dtrd (csFILE *strm,struct cs_Dtdef_ *dt_def,int *crypt);
-int			EXP_LVL3	CS_dtrup (Const char *distrb,Const char *bkupnm);
-void		EXP_LVL3	CS_dtTrail (struct cs_Dtcprm_ *dtc_ptr,char* auditTrail,int size,Const double ll_in [3]);
-int			EXP_LVL3	CS_dtupd (struct cs_Dtdef_ *dtdef,int crypt);
-int			EXP_LVL3	CS_dtwr (csFILE *strm,Const struct cs_Dtdef_ *dt_def,int crypt);
+csFILE *	EXP_LVL5	CS_dtopn (Const char *mode);
+int			EXP_LVL5	CS_dtrd (csFILE *strm,struct cs_Dtdef_ *dt_def,int *crypt);
+int			EXP_LVL5	CS_dtrup (Const char *distrb,Const char *bkupnm);
+void		EXP_LVL5	CS_dtTrail (struct cs_Dtcprm_ *dtc_ptr,char* auditTrail,int size,Const double ll_in [3]);
+int			EXP_LVL5	CS_dtupd (struct cs_Dtdef_ *dtdef,int crypt);
+int			EXP_LVL5	CS_dtwr (csFILE *strm,Const struct cs_Dtdef_ *dt_def,int crypt);
 int			EXP_LVL3	CS_dynutm (struct cs_Csprm_ *csprm,int zone);
 
 Const char*	EXP_LVL3	CS_ecvt (double value,int count,int *dec,int *sign);
 int			EXP_LVL7	CS_elcmp (Const struct cs_Eldef_ *pp,Const struct cs_Eldef_ *qq);
-struct cs_Eldef_* EXP_LVL3     CS_eldef (Const char *el_nam);
-struct cs_Eldef_* EXP_LVL3     CS_eldef2 (Const char *el_nam, char* pszFileDirPath);
+struct cs_Eldef_* EXP_LVL3	CS_eldef (Const char *el_nam);
+struct cs_Eldef_* EXP_LVL5	CS_eldef2 (Const char *el_nam, char* pszFileDirPath);
 int			EXP_LVL3	CS_eldefAll (struct cs_Eldef_ **pDefArray[]);
 int			EXP_LVL3	CS_elDefCmp (Const struct cs_Eldef_ *original,Const struct cs_Eldef_ *revised,char* message,size_t messageSize);
 int			EXP_LVL3	CS_elDefCmpEx (double* qValuePtr,Const struct cs_Eldef_ *original,Const struct cs_Eldef_ *revised,char* message,size_t msgSize);
-int			EXP_LVL3	CS_eldel (struct cs_Eldef_ *eldef);
-char*		EXP_LVL1	CS_eldflt (Const char *dflt_el);
+int			EXP_LVL5	CS_eldel (struct cs_Eldef_ *eldef);
+char*		EXP_LVL3	CS_eldflt (Const char *dflt_el);
 void		EXP_LVL7	CS_elDictCls (csFILE* stream);
 int			EXP_LVL5	CS_elDiff (FILE *rptStrm,struct cs_Eldef_ *was,struct cs_Eldef_ *is);
 int			EXP_LVL1	CS_elEnum (int index,char *key_name,int size);
 void		EXP_LVL1	CS_elfnm (Const char *new_name);
 int			EXP_LVL1	CS_elIsValid (Const char *key_name);
-csFILE *	EXP_LVL3	CS_elopn (Const char *mode);
-int			EXP_LVL3	CS_elrd (csFILE *strm,struct cs_Eldef_ *el_def,int *crypt);
-int			EXP_LVL3	CS_elrup (Const char *distrb,Const char *bkupnm);
-int			EXP_LVL3	CS_elupd (struct cs_Eldef_ *eldef,int crypt);
-int			EXP_LVL3	CS_elwr (csFILE *strm,Const struct cs_Eldef_ *el_def,int crypt);
+csFILE *	EXP_LVL5	CS_elopn (Const char *mode);
+int			EXP_LVL5	CS_elrd (csFILE *strm,struct cs_Eldef_ *el_def,int *crypt);
+int			EXP_LVL5	CS_elrup (Const char *distrb,Const char *bkupnm);
+int			EXP_LVL5	CS_elupd (struct cs_Eldef_ *eldef,int crypt);
+int			EXP_LVL5	CS_elwr (csFILE *strm,Const struct cs_Eldef_ *el_def,int crypt);
 int			EXP_LVL3	CS_envsub (char* stringBufr,size_t bufrSize);
 int			EXP_LVL3	CS_envsubWc (wchar_t* stringBufr,size_t bufrSize);	/* bufrSize === # of characters */
 void		EXP_LVL3	CS_erpt (int err_num);
@@ -6640,11 +6665,12 @@ void		EXP_LVL1	CS_errmsg (char *user_bufr,int buf_size);
 void		EXP_LVL1	CS_fast (int fast);
 void		EXP_LVL3	CS_fillIn (struct cs_Csdef_ *cs_def);
 cs_Time_	EXP_LVL7	CS_fileModTime (Const char *filePath);
-void		EXP_LVL1	CS_free (void *ptr);
+void		EXP_LVL5	CS_free (void *ptr);
+void		EXP_LVL3	CS_dllFree (void *ptr);
 long32_t	EXP_LVL1	CS_ftoa (char *bufr,int size,double value,long32_t frmt);
 
 int			EXP_LVL3	CS_gdcDisable (enum cs_GdcCatalogs ident);
-Const char *EXP_LVL1	CS_gdcEnum (int index,int *ident);
+Const char*	EXP_LVL3	CS_gdcEnum (int index,int *ident);
 enum cs_GdcCatalogs EXP_LVL3 CS_gdcGetIdent (Const char *catalogName);
 Const char *EXP_LVL3	CS_gdcGetName (enum cs_GdcCatalogs ident);
 int			EXP_LVL3	CS_gdcSetName (enum cs_GdcCatalogs ident,Const char *newName);
@@ -6653,7 +6679,7 @@ int			EXP_LVL1	CS_geoctrSetUp (const char* ellipsoid);
 int			EXP_LVL1	CS_geoctrGetLlh (double llh [3],double xyz [3]);
 int			EXP_LVL1	CS_geoctrGetXyz (double xyz [3],double llh [3]);
 
-int			EXP_LVL1	CS_getcs (Const char *cs_nam,struct cs_Csdef_ *cs_ptr);
+int			EXP_LVL2	CS_getcs (Const char *cs_nam,struct cs_Csdef_ *cs_ptr);
 int			EXP_LVL3	CS_getCountyFips (int stateFips,Const char* countyName);
 int			EXP_LVL3	CS_getCountyNad27 (int state,int county);
 int			EXP_LVL3	CS_getCountyNad83 (int state,int county);
@@ -6661,8 +6687,8 @@ double		EXP_LVL1	CS_getCurvatureAt (Const char *csKeyName,double lat);
 int			EXP_LVL1	CS_getDataDirectory (char *data_dir,int dir_sz);
 int			EXP_LVL1	CS_getDatumOf (Const char *csKeyName,char *datumName,int size);
 int			EXP_LVL1	CS_getDescriptionOf (Const char *csKeyName,char *description,int size);
-int			EXP_LVL1	CS_getdt (Const char *dt_nam,struct cs_Dtdef_ *dt_ptr);
-int			EXP_LVL1	CS_getel (Const char *el_nam,struct cs_Eldef_ *el_ptr);
+int			EXP_LVL2	CS_getdt (Const char *dt_nam,struct cs_Dtdef_ *dt_ptr);
+int			EXP_LVL2	CS_getel (Const char *el_nam,struct cs_Eldef_ *el_ptr);
 int			EXP_LVL1	CS_getEllipsoidOf (Const char *csKeyName,char *ellipsoidName,int size);
 int			EXP_LVL1	CS_getElValues (Const char *el_name,double *radius,double *e_Sq);
 char *		EXP_LVL9	CS_getenv (Const char *varname);
@@ -6677,36 +6703,36 @@ int			EXP_LVL7	CS_gpcmp (Const struct cs_GeodeticPath_ *pp,Const struct cs_Geode
 struct cs_GeodeticPath_*
 			EXP_LVL3	CS_gpdef (Const char *pathName);
 struct cs_GeodeticPath_ *
-			EXP_LVL3	CS_gpdef2 (Const char *pathName, char* pszDirPath);
+			EXP_LVL5	CS_gpdef2 (Const char *pathName, char* pszDirPath);
 struct cs_GeodeticPath_*
 			EXP_LVL3	CS_gpdefEx (int *direction,Const char *srcDatum,Const char *trgDatum);
 int			EXP_LVL3	CS_gpdefAll (struct cs_GeodeticPath_ **pDefArray[]);
 int			EXP_LVL3	CS_gpdel (struct cs_GeodeticPath_ *gpdef);
 void		EXP_LVL1	CS_gpfnm (Const char *new_name);
-csFILE *	EXP_LVL3	CS_gpopn (Const char *mode);
-int			EXP_LVL3	CS_gprd (csFILE *strm,struct cs_GeodeticPath_ *gp_def);
-int			EXP_LVL3	CS_gpupd (struct cs_GeodeticPath_ *gp_def);
-int			EXP_LVL3	CS_gpwr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def);
+csFILE *	EXP_LVL5	CS_gpopn (Const char *mode);
+int			EXP_LVL5	CS_gprd (csFILE *strm,struct cs_GeodeticPath_ *gp_def);
+int			EXP_LVL5	CS_gpupd (struct cs_GeodeticPath_ *gp_def);
+int			EXP_LVL5	CS_gpwr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def);
 
 int			EXP_LVL1	CS_gxchk (Const struct cs_GeodeticTransform_ *gxXform,unsigned short gxChkFlg,int err_list [],int list_sz);
 int			EXP_LVL7	CS_gxcmp (Const struct cs_GeodeticTransform_ *pp,Const struct cs_GeodeticTransform_ *qq);
 struct cs_GeodeticTransform_*
 			EXP_LVL3	CS_gxdef (Const char *xfrmName);
 struct cs_GeodeticTransform_*
-			EXP_LVL3	CS_gxdef2 (Const char *xfrmName, char* pszDirPath);
+			EXP_LVL5	CS_gxdef2 (Const char *xfrmName, char* pszDirPath);
 struct cs_GeodeticTransform_*
 			EXP_LVL3	CS_gxdefEx (Const char *srcDatum,Const char *trgDatum);
 int			EXP_LVL3	CS_gxdefAll (struct cs_GeodeticTransform_ **pDefArray[]);
 int			EXP_LVL3	CS_gxdel (struct cs_GeodeticTransform_ *gpdef);
 void		EXP_LVL1	CS_gxfnm (Const char *new_name);
-csFILE *	EXP_LVL3	CS_gxopn (Const char *mode);
-int			EXP_LVL3	CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gp_def);
-void		EXP_LVL3	CS_gxsep (struct cs_GeodeticTransform_* gx_def);
+csFILE *	EXP_LVL5	CS_gxopn (Const char *mode);
+int			EXP_LVL5	CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gp_def);
+void		EXP_LVL5	CS_gxsep (struct cs_GeodeticTransform_* gx_def);
 int			EXP_LVL5	CS_gxswp (struct cs_GeodeticTransform_* gx_def,int writeFlag);
 int			EXP_LVL5	CS_gxswpRd (struct cs_GeodeticTransform_* gx_def);
 int			EXP_LVL5	CS_gxswpWr (struct cs_GeodeticTransform_* gx_def);
-int			EXP_LVL3	CS_gxupd (struct cs_GeodeticTransform_ *gp_def);
-int			EXP_LVL3	CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gp_def);
+int			EXP_LVL5	CS_gxupd (struct cs_GeodeticTransform_ *gp_def);
+int			EXP_LVL5	CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gp_def);
 
 void		EXP_LVL5	CS_iicpy (const struct cs_Cmplx_ *aa,struct cs_Cmplx_ *bb);
 void		EXP_LVL5	CS_iicrt (struct cs_Cmplx_ *aa,double rVal,double iVal);
@@ -6757,9 +6783,9 @@ double		EXP_LVL1	CS_llazdd (double e_rad,double e_sq,Const double ll_from [2],Co
 int			EXP_LVL3	CS_llchk (Const struct cs_Csprm_ *csprm,int cnt,Const double pnts [][3]);
 int			EXP_LVL1	CS_llFromMgrs (double latLng [2],const char* mgrsString);
 void		EXP_LVL7	CS_lput (char *fld,Const char *str,int size,char fill);
-char*		EXP_LVL1	CS_ludflt (Const char *dflt_lu);
+char*		EXP_LVL3	CS_ludflt (Const char *dflt_lu);
 
-void*		EXP_LVL1	CS_malc (size_t blk_size);
+void		EXP_LVL5	*CS_malc (size_t blk_size);
 int			EXP_LVL1	CS_mgrsSetUp (const char* ellipsoid,short bessel);
 int			EXP_LVL1	CS_mgrsFromLl (char *result,double latLng [2],int prec);
 Const char*	EXP_LVL3	CS_mifcs (Const struct cs_Csdef_ *cs_def);
@@ -6782,10 +6808,10 @@ void		EXP_LVL9	CS_quadF (double xy [2],double xx,double yy,double x_off,double y
 void		EXP_LVL9	CS_quadI (double *xx,double *yy,Const double xy [2],double x_off,double y_off,short quad);
 void		EXP_LVL9	CS_quadMM (double min_xy [2],double max_xy [2],double x_off,double y_off,short quad);
 
-void*		EXP_LVL1	CS_ralc (void *ptr,size_t blk_size);
+void		EXP_LVL5	*CS_ralc (void *ptr,size_t blk_size);
 void		EXP_LVL1	CS_recvr (void);
 int			EXP_LVL9	CS_remove (Const char *path);
-void        EXP_LVL9    CS_removeRedundantWhiteSpace (char *string);
+void		EXP_LVL9	CS_removeRedundantWhiteSpace (char *string);
 int			EXP_LVL9	CS_rename (Const char *prev,Const char *current);
 
 double		EXP_LVL1	CS_scale (Const char *cs_nam,double ll [2]);
@@ -6827,6 +6853,7 @@ double		EXP_LVL1	CS_unitlu (short type,Const char *name);
 Const char*	EXP_LVL3	CS_unitluByFactor (short type,double factor);
 int			EXP_LVL3	CS_unitDel (short type,Const char *name);
 
+int			EXP_LVL1	CS_usrdr (Const char *usr_dir);
 void		EXP_LVL1	CS_usrDtfnm (Const char *new_name);
 void		EXP_LVL1	CS_usrElfnm (Const char *new_name);
 int			EXP_LVL3	CS_utmzon (double lng);
@@ -7368,8 +7395,8 @@ int			EXP_LVL1 CS_unique (int newValue);
 
 int			EXP_LVL1	CS_vldCtName (const char* catName);
 int			EXP_LVL1	CS_vldCtNameEx (const char* catName, struct cs_Ctdef_* pCtDef);
-Const char*	EXP_LVL1	CS_getCatName (unsigned idx);
-Const char*	EXP_LVL1	CS_getItmName (const char* catName,unsigned idx);
+Const char*	EXP_LVL3	CS_getCatName (unsigned idx);
+Const char*	EXP_LVL3	CS_getItmName (const char* catName,unsigned idx);
 int			EXP_LVL1	CS_getItmNameCount (const char* catName);
 
 void		EXP_LVL3	CS_ctfnm (const char* new_name);
@@ -7412,6 +7439,26 @@ int					EXP_LVL3	CS_ctdel (struct cs_Ctdef_ *ctdef);
 int					EXP_LVL3	CS_ctupd (Const struct cs_Ctdef_ *ctdef);
 int					EXP_LVL3	CS_ctrd (csFILE *strm, struct cs_Ctdef_ *ct_def);
 int					EXP_LVL3	CS_ctwr (csFILE *strm,Const struct cs_Ctdef_ *ct_def);
+
+/* Variations of the specifically for Visual Basic.  They could work elsewhere,
+   but they have been tested in Visual Basic. */
+int					EXP_LVL1	CS_csEnumVb (int index,char *key_name,int size);
+int					EXP_LVL1	CS_csRangeEnumVb (int index,char *key_name,int size);
+int					EXP_LVL1	CS_dtEnumVb (int index,char *key_name,int size);
+int					EXP_LVL1	CS_elEnumVb (int index,char *key_name,int size);
+void				EXP_LVL1	CS_errmsgVb (char *user_bufr,int buf_size);
+long32_t			EXP_LVL1	CS_ftoaVb (char *bufr,int size,double value,long frmt);
+int					EXP_LVL1	CS_getDataDirectoryVb (char *data_dir,int dir_sz);
+int					EXP_LVL1	CS_getDatumOfVb (Const char *csKeyName,char *datumName,int size);
+int					EXP_LVL1	CS_getDescriptionOfVb (Const char *csKeyName,char *description,int size);
+int					EXP_LVL1	CS_getEllipsoidOfVb (Const char *csKeyName,char *ellipsoidName,int size);
+int					EXP_LVL1	CS_getReferenceOfVb (Const char *csKeyName,char *reference,int size);
+int					EXP_LVL1	CS_getSourceOfVb (Const char *csKeyName,char *source,int size);
+int					EXP_LVL1	CS_getUnitsOfVb (Const char *csKeyName,char *unitName,int size);
+int					EXP_LVL1	CS_mgrsFromLlVb (char* result,int rdlt_size,double latLng [2],int prec);
+int					EXP_LVL1	CS_prjEnumVb (int index,ulong32_t *prj_flags,char *prj_keynm,int keynm_sz,char *prj_descr,int descr_sz);
+int					EXP_LVL1	CS_unEnumVb (int index,int type,char *un_name,int un_size);
+int					EXP_LVL1	CS_unEnumPluralVb (int index,int type,char *un_name,int un_size);
 
 #ifdef __cplusplus
 }

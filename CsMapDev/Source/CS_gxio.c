@@ -38,7 +38,7 @@
 **
 **	File is positioned past the magic number on the front.
 **********************************************************************/
-csFILE * EXP_LVL3 CS_gxopn (Const char *mode)
+csFILE * EXP_LVL5 CS_gxopn (Const char *mode)
 {
 	return CS_gxFileOpen(mode);
 }
@@ -53,7 +53,7 @@ csFILE * EXP_LVL3 CS_gxopn (Const char *mode)
 **	int flag;					returns +1 for successful read, 0 for EOF,
 **								-1 for error.
 **********************************************************************/
-int EXP_LVL3 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
+int EXP_LVL5 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
 {
 	char datumKeyName[cs_KEYNM_DEF] = { '\0' };
 
@@ -94,7 +94,7 @@ int EXP_LVL3 CS_gxrd (csFILE *strm,struct cs_GeodeticTransform_ *gx_def)
 **	int st;						returns FALSE if write was completed successfully,
 **								else returns TRUE.
 **********************************************************************/
-int EXP_LVL3 CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gx_def)
+int EXP_LVL5 CS_gxwr (csFILE *strm,Const struct cs_GeodeticTransform_ *gx_def)
 {
 	return CS_gxWrite(strm, gx_def);
 }
@@ -191,7 +191,7 @@ int CS_gxwrtchk(struct cs_GeodeticTransform_ *gx_target, Const struct cs_Geodeti
 **	If the Geodetic Transformation Dictionary does not already contain an entry
 **	with the indicated key name, the entry is added.
 *******************************************************************************/
-int EXP_LVL3 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
+int EXP_LVL5 CS_gxupd (struct cs_GeodeticTransform_ *gx_def)
 {
 	int result = CS_gxUpdate(gx_def);
 
@@ -251,7 +251,7 @@ struct cs_GeodeticTransform_ * EXP_LVL3 CS_gxdef (Const char *xfrmName)
 	return CS_gxdef2(xfrmName, NULL);
 }
 
-struct cs_GeodeticTransform_* EXP_LVL3 CS_gxdef2 (Const char *xfrmName, char* pszDirPath)
+struct cs_GeodeticTransform_* EXP_LVL5 CS_gxdef2 (Const char *xfrmName, char* pszDirPath)
 {
 	return CS_gxDefinition(xfrmName, pszDirPath);
 }
@@ -588,7 +588,7 @@ int EXP_LVL5 CS_gxswpWr (struct cs_GeodeticTransform_* gx_def)
 /* Normalize the path name with the current platform.  Specifically,
    switch the directory separator character to what is appropriate
    for the current platform. */
-void EXP_LVL3 CS_gxsep (struct cs_GeodeticTransform_* gx_def)
+void EXP_LVL5 CS_gxsep (struct cs_GeodeticTransform_* gx_def)
 {
 	short idx;
 	short pathCount;

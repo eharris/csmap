@@ -38,7 +38,7 @@
 **
 **	File is positioned past the magic number on the front.
 **********************************************************************/
-csFILE * EXP_LVL3 CS_gpopn (Const char *mode)
+csFILE * EXP_LVL5 CS_gpopn (Const char *mode)
 {
 	return CS_gpFileOpen(mode);
 }
@@ -53,7 +53,7 @@ csFILE * EXP_LVL3 CS_gpopn (Const char *mode)
 **	int flag;					returns +1 for successful read, 0 for EOF,
 **								-1 for error.
 **********************************************************************/
-int EXP_LVL3 CS_gprd (csFILE *strm,struct cs_GeodeticPath_ *gp_def)
+int EXP_LVL5 CS_gprd (csFILE *strm,struct cs_GeodeticPath_ *gp_def)
 {
     char tempPathKeyName[64] = { '\0' };
     char tempDatumKeyname[cs_KEYNM_DEF] = { '\0' };
@@ -106,7 +106,7 @@ int EXP_LVL3 CS_gprd (csFILE *strm,struct cs_GeodeticPath_ *gp_def)
 **	int st;						returns FALSE if write was completed successfully,
 **								else returns TRUE.
 **********************************************************************/
-int EXP_LVL3 CS_gpwr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def)
+int EXP_LVL5 CS_gpwr (csFILE *strm,Const struct cs_GeodeticPath_ *gp_def)
 {
 	return CS_gpWrite(strm, gp_def);
 }
@@ -142,7 +142,7 @@ int EXP_LVL3 CS_gpdel (struct cs_GeodeticPath_ *gp_def)
 **	If the Geodetic Path Dictionary does not already contain an entry
 **	with the indicated key name, the entry is added.
 *******************************************************************************/
-int EXP_LVL3 CS_gpupd (struct cs_GeodeticPath_ *gp_def)
+int EXP_LVL5 CS_gpupd (struct cs_GeodeticPath_ *gp_def)
 {
 	return CS_gpUpdate(gp_def);
 }
@@ -193,7 +193,7 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdef (Const char *pathName)
 	return CS_gpdef2 (pathName, NULL);
 }
 
-struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdef2 (Const char *pathName, char* pszDirPath)
+struct cs_GeodeticPath_ * EXP_LVL5 CS_gpdef2 (Const char *pathName, char* pszDirPath)
 {
 	return CS_gpDefinition(pathName, pszDirPath);
 }
@@ -206,9 +206,8 @@ struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdef2 (Const char *pathName, char* pszDir
 **	char *trgDatum;				key name of the target datum of the path
 **								definition which is to be fetched.
 **	struct cs_GeodeticPath_ *gp_ptr;
-**								returns a pointer to a malloc'ed ellipsoid definition
-**								structure.
-**
+**								returns a pointer to a malloc'ed
+**								geodetic path definition structure.
 **********************************************************************/
 struct cs_GeodeticPath_ * EXP_LVL3 CS_gpdefEx (int* direction,
 											   Const char *srcDatum,

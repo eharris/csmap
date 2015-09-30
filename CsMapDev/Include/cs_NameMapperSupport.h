@@ -196,33 +196,33 @@ void csReleaseNameMapper (void);
 // object type, it is up to the application to determine what it got back, if
 // it is important in the context of the application.
 //
+unsigned long EXP_LVL3 csMapIdToId (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
+															enum EcsNameFlavor srcFlavor,
+															unsigned long srcId);
 // Wide character API.
 unsigned long csMapNameToId (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
-													 enum EcsNameFlavor srcFlavor,
-													 const wchar_t* srcName);
-unsigned long csMapIdToId (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
-											       enum EcsNameFlavor srcFlavor,
-												   unsigned long srcId);
+															 enum EcsNameFlavor srcFlavor,
+															 const wchar_t* srcName);
 const wchar_t* csMapNameToName (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
-												        enum EcsNameFlavor srcFlavor,
-													    const wchar_t* srcName);
+																 enum EcsNameFlavor srcFlavor,
+																 const wchar_t* srcName);
 const wchar_t* csMapIdToName (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
-													  enum EcsNameFlavor srcFlavor,
-													  unsigned long srcId);
-// Narrow character API													  
-unsigned long csMapNameToIdC (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
-													  enum EcsNameFlavor srcFlavor,
-													  const char* srcName);
-enum EcsMapSt csMapNameToNameC (enum EcsMapObjType type,char* trgName,
-                                                        size_t trgSize,
-                                                        enum EcsNameFlavor trgFlavor,
-												        enum EcsNameFlavor srcFlavor,
-														const char* srcName);
-enum EcsMapSt csMapIdToNameC (enum EcsMapObjType type,char* trgName,
-                                                      size_t trgSize,
-                                                      enum EcsNameFlavor trgFlavor,
-													  enum EcsNameFlavor srcFlavor,
-													  unsigned long srcId);
+															   enum EcsNameFlavor srcFlavor,
+															   unsigned long srcId);
+// Narrow character API
+unsigned long EXP_LVL3 csMapNameToIdC (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
+															   enum EcsNameFlavor srcFlavor,
+															   const char* srcName);
+enum EcsMapSt EXP_LVL3 csMapNameToNameC (enum EcsMapObjType type,char* trgName,
+																 size_t trgSize,
+																 enum EcsNameFlavor trgFlavor,
+																 enum EcsNameFlavor srcFlavor,
+																 const char* srcName);
+enum EcsMapSt EXP_LVL3 csMapIdToNameC (enum EcsMapObjType type,char* trgName,
+															   size_t trgSize,
+															   enum EcsNameFlavor trgFlavor,
+															   enum EcsNameFlavor srcFlavor,
+															   unsigned long srcId);
 // Access by index functions, useful for producing lists and reports.  These
 // functions will not work with csMapProjGeog object type.
 unsigned long csGetIdsByIdx (enum EcsMapObjType type,enum EcsNameFlavor flavor,unsigned index);

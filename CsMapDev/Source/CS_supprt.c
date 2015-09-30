@@ -1541,7 +1541,7 @@ int EXP_LVL1 CS_cmpDbls (double first,double second)
    zero return value. */
    
 /*lint -esym(613,envValPtr)  possible use of null pointer; I don't think so. */
-int CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
+int EXP_LVL3 CS_envsub (char* stringBufr,size_t bufrSize /*in chars*/)
 {
 	extern char cs_EnvchrC;
 	extern char cs_EnvStartC;
@@ -1756,7 +1756,7 @@ error:
 }
 
 /*lint +esym(613,envValPtr) */
-int CS_envsubWc (wchar_t* stringBufr,size_t bufrSize /*in chars*/)
+int EXP_LVL3 CS_envsubWc (wchar_t* stringBufr,size_t bufrSize /*in chars*/)
 {
 	int subCount;
 	char workBufr [MAXPATH];

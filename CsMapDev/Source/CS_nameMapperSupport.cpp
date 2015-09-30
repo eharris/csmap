@@ -338,7 +338,7 @@ unsigned long csMapNameToId (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsNameF
 	}
 	return rtnValue;
 }
-unsigned long csMapIdToId (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsNameFlavor srcFlavor,
+unsigned long EXP_LVL3 csMapIdToId (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsNameFlavor srcFlavor,
 																	  unsigned long srcId)
 {
     EcsMapObjType type2 = csMapNone;
@@ -449,7 +449,7 @@ const wchar_t* csMapIdToName (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsName
 	}
 	return rtnValue;
 }
-EcsMapSt csMapNameToNameC (EcsMapObjType type,char* trgName,size_t trgSize,
+EcsMapSt EXP_LVL3 csMapNameToNameC (EcsMapObjType type,char* trgName,size_t trgSize,
                                                             EcsNameFlavor trgFlavor,
 															EcsNameFlavor srcFlavor,
 															const char* srcName)
@@ -471,7 +471,7 @@ EcsMapSt csMapNameToNameC (EcsMapObjType type,char* trgName,size_t trgSize,
     }
     return status;
 }
-EcsMapSt csMapIdToNameC (EcsMapObjType type,char* trgName,size_t trgSize,
+EcsMapSt EXP_LVL3 csMapIdToNameC (EcsMapObjType type,char* trgName,size_t trgSize,
                                                           EcsNameFlavor trgFlavor,
 												          EcsNameFlavor srcFlavor,
 													      unsigned long srcId)
@@ -491,7 +491,7 @@ EcsMapSt csMapIdToNameC (EcsMapObjType type,char* trgName,size_t trgSize,
     }
     return status;
 }
-unsigned long csMapNameToIdC (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsNameFlavor srcFlavor,
+unsigned long EXP_LVL3 csMapNameToIdC (EcsMapObjType type,EcsNameFlavor trgFlavor,EcsNameFlavor srcFlavor,
 																		 const char* srcName)
 {
     unsigned long rtnValue;

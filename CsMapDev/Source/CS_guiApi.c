@@ -30,7 +30,7 @@
 
 extern int (*CS_usrCsDefPtr)(struct cs_Csdef_ *ptr,Const char *keyName);
 
-int EXP_LVL1 CS_getcs (Const char *cs_name,struct cs_Csdef_ *bufr)
+int EXP_LVL2 CS_getcs (Const char *cs_name,struct cs_Csdef_ *bufr)
 {
 	extern int cs_Error;
 
@@ -52,7 +52,7 @@ int EXP_LVL1 CS_getcs (Const char *cs_name,struct cs_Csdef_ *bufr)
 	return (status);
 }
 
-int EXP_LVL1 CS_getdt (	Const char *dt_name,
+int EXP_LVL2 CS_getdt (	Const char *dt_name,
 			struct cs_Dtdef_ *bufr)
 {
 	extern int cs_Error;
@@ -75,7 +75,7 @@ int EXP_LVL1 CS_getdt (	Const char *dt_name,
 	return (status);
 }
 
-int EXP_LVL1 CS_getel (	Const char *el_name,
+int EXP_LVL2 CS_getel (	Const char *el_name,
 			struct cs_Eldef_ *bufr)
 {
 	extern int cs_Error;
@@ -362,43 +362,47 @@ int EXP_LVL1 CS_elIsValid (Const char *key_name)
 	return (0);
 }
 
-int EXP_LVL1 CS_csEnumByGroup (int index,Const char *grp_name,struct cs_Csgrplst_ *cs_descr)
+int EXP_LVL2 CS_csEnumByGroup (int index,Const char *grp_name,struct cs_Csgrplst_ *cs_descr)
 {
-	extern int cs_Error;
 	extern struct cs_Csgrplst_ *cs_CsGrpList;
 
 	static char cur_group [24] = "!!!";
 
 	int ii;
+	int rtnValue;
 	
 	struct cs_Csgrplst_ *ptr;
 
+	rtnValue = 0;					// i.e. false */
 	if (index < 0)
 	{
 		CS_erpt (cs_INV_INDX);
-		return (-cs_Error);
 	}
-
-	if (cs_CsGrpList == NULL || CS_stricmp (grp_name,cur_group))
+	else
 	{
+		if (cs_CsGrpList == NULL || CS_stricmp (grp_name,cur_group))
+		{
+			if (cs_CsGrpList != NULL)
+			{
+				CS_csgrpf (cs_CsGrpList);
+				cs_CsGrpList = NULL;
+			}
+			CS_stncp (cur_group,grp_name,sizeof (cur_group));
+			CS_csgrp (cur_group,&cs_CsGrpList);					/*lint !e534 */
+		}
 		if (cs_CsGrpList != NULL)
 		{
-			CS_csgrpf (cs_CsGrpList);
-			cs_CsGrpList = NULL;
+			ptr = cs_CsGrpList;
+			for (ii = 0;ii < index && ptr != NULL;ii++) ptr = ptr->next;
+			if (ptr != NULL)
+			{
+				memcpy (cs_descr,ptr,sizeof (*cs_descr));
+				cs_descr->next = NULL;
+				rtnValue = 1;				/* i.e. TRUE  */
+			}
 		}
-		CS_stncp (cur_group,grp_name,sizeof (cur_group));
-		CS_csgrp (cur_group,&cs_CsGrpList);					/*lint !e534 */
 	}
-	if (cs_CsGrpList == NULL) return (-1);
-
-	ptr = cs_CsGrpList;
-	for (ii = 0;ii < index && ptr != NULL;ii++) ptr = ptr->next;
-	if (ptr != NULL)
-	{
-		memcpy (cs_descr,ptr,sizeof (*cs_descr));
-		cs_descr->next = NULL;
-	}
-	return (ptr != NULL);
+	return (rtnValue);
 }
 
 int EXP_LVL1 CS_csGrpEnum (int index,char *grp_name,int name_sz,char *grp_dscr,int dscr_sz)

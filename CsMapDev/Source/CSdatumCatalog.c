@@ -73,7 +73,7 @@ void EXP_LVL5 CSrplDirSep (char *path)
 	to change these filenames at run time (you can simply edit the header file
 	for a compile time change) should use these functions.
 */
-Const char * EXP_LVL1 CS_gdcEnum (int index,int *ident)
+Const char* EXP_LVL3 CS_gdcEnum (int index,int *ident)
 {
 	extern struct cs_GdcCatalogTable_ cs_GdcCatalogTable [];
 
