@@ -90,42 +90,35 @@ int EXP_LVL1 CS_cnvrt (Const char *src_cs,Const char *dst_cs,double coord [3])
 	status = 0;
 
 	/* Get a pointer to the two coordinate systems involved. */
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %s->%s\n",modl_name,__LINE__,src_cs,dst_cs);
 	src_ptr = CSbcclu (src_cs);
 	if (src_ptr == NULL) goto error;
 	dst_ptr = CSbcclu (dst_cs);
 	if (dst_ptr == NULL) goto error;
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %p & %p\n",modl_name,__LINE__,src_ptr,dst_ptr);
 
 	/* Get a pointer to the datum conversion required. */
 	dtc_ptr = CSbdclu (src_ptr,dst_ptr,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
 	if (dtc_ptr == NULL) goto error;
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %p\n",modl_name,__LINE__,dtc_ptr);
 
 	/* Convert the coordinate and return the result to the
 	   user. */
 	st = CS_cs2ll (src_ptr,my_ll,coord);
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,st);
 	if (st != cs_CNVRT_NRML)
 	{
 		status |= cs_BASIC_SRCRNG;
 	}
 	dt_st = CS_dtcvt (dtc_ptr,my_ll,my_ll);
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,dt_st);
 	if (dt_st != 0)
 	{
 		if (dt_st < 0) goto error;
 		status |= cs_BASIC_DTCWRN;
 	}
 	st = CS_ll2cs (dst_ptr,coord,my_ll);
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,st);
 	if (st != cs_CNVRT_NRML)
 	{
 		status |= cs_BASIC_DSTRNG;
 	}
 
 	/* That's it. */
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,status);
 	return (status);
 
 error:
@@ -172,41 +165,34 @@ int EXP_LVL1 CS_cnvrt3D (Const char *src_cs,Const char *dst_cs,double coord [3])
 
 
 	/* Get a pointer to the two coordinate systems involved. */
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %s->%s\n",modl_name,__LINE__,src_cs,dst_cs);
 	src_ptr = CSbcclu (src_cs);
 	if (src_ptr == NULL) goto error;
 	dst_ptr = CSbcclu (dst_cs);
 	if (dst_ptr == NULL) goto error;
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %p & %p\n",modl_name,__LINE__,src_ptr,dst_ptr);
 
 	/* Get a pointer to the datum conversion required. */
 	dtc_ptr = CSbdclu (src_ptr,dst_ptr,cs_DTCFLG_DAT_F,cs_DTCFLG_BLK_W);
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %p\n",modl_name,__LINE__,dtc_ptr);
 	if (dtc_ptr == NULL) goto error;
 
 	/* Convert the coordinate and return the result to the user. */
 	st = CS_cs3ll (src_ptr,my_ll,coord);
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,st);
 	if (st != cs_CNVRT_NRML)
 	{
 		status |= cs_BASIC_SRCRNG;
 	}
 	dt_st = CS_dtcvt3D (dtc_ptr,my_ll,my_ll);
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,dt_st);
 	if (dt_st != 0)
 	{
 		if (dt_st < 0) goto error;
 		status |= cs_BASIC_DTCWRN;
 	}
 	st = CS_ll3cs (dst_ptr,coord,my_ll);
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,st);
 	if (st != cs_CNVRT_NRML)
 	{
 		status |= cs_BASIC_DSTRNG;
 	}
 
 	/* That's it. */
-if (csDiagnostic != 0) fprintf (csDiagnostic,"%s[%d] %d\n",modl_name,__LINE__,status);
 	return (status);
 
 error:
