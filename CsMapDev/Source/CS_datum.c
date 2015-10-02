@@ -1326,10 +1326,8 @@ int EXP_LVL3 CSdtcvt (struct cs_Dtcprm_ *dtcPrm,short flag3D,Const double ll_in 
 			/* Here if we had a non-fatal error of some sort. Issue the
 			   appropriate message per the applications instructions.
 			   First, we put the lat/long in the error list. */
-			csErrlng = (int)((fabs (ll_in [LNG]) >= 10000.0) ? 9999.99 : ll_in [LNG]);
-			if (ll_in [LNG] < 0.0) csErrlng = -csErrlng;
-			csErrlat = (int)((fabs (ll_in [LAT]) >= 10000.0) ? 9999.99 : ll_in [LAT]);
-			if (ll_in [LAT] < 0.0) csErrlat = -csErrlat;
+			csErrlng = (fabs (ll_in [LNG]) >= 1000.0) ? 999 : (int)ll_in [LNG];
+			csErrlat = (fabs (ll_in [LAT]) >= 1000.0) ? 999 : (int)ll_in [LAT];
 			if (dtcPrm->listCount < 10)
 			{
 				for (idx = 0;idx < 10;idx += 1)

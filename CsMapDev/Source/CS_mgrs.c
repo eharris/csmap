@@ -395,10 +395,8 @@ int CScalcUtmUps (struct cs_Mgrs_ *__This,double utmUps [2],double latLng [2])
 	if (latLng [LAT] <  -90.0 || latLng [LAT] >  90.0 ||
 		latLng [LNG] < -180.0 || latLng [LNG] > 180.0)
 	{
-		csErrlng = (int)((fabs (latLng [LNG]) >= 10000.0) ? 9999.99 : latLng [LNG]);
-		if (latLng [LNG] < 0.0) csErrlng = -csErrlng;
-		csErrlat = (int)((fabs (latLng [LAT]) >= 10000.0) ? 9999.99 : latLng [LAT]);
-		if (latLng [LAT] < 0.0) csErrlat = -csErrlat;
+		csErrlng = (fabs (latLng [LNG]) >= 1000.0) ? 999 : (int)latLng [LNG];
+		csErrlat = (fabs (latLng [LAT]) >= 1000.0) ? 999 : (int)latLng [LAT];
 		CS_erpt (cs_MGRS_LL);
 		return 0;
 	}
@@ -452,10 +450,8 @@ int CScalcUtmUps (struct cs_Mgrs_ *__This,double utmUps [2],double latLng [2])
 	}
 	if (status != 0)
 	{
-		csErrlng = (int)((fabs (latLng [LNG]) >= 10000.0) ? 9999.99 : latLng [LNG]);
-		if (latLng [LNG] < 0.0) csErrlng = -csErrlng;
-		csErrlat = (int)((fabs (latLng [LAT]) >= 10000.0) ? 9999.99 : latLng [LAT]);
-		if (latLng [LAT] < 0.0) csErrlat = -csErrlat;
+		csErrlng = (fabs (latLng [LNG]) >= 1000.0) ? 999 : (int)latLng [LNG];
+		csErrlat = (fabs (latLng [LAT]) >= 1000.0) ? 999 : (int)latLng [LAT];
 		CS_erpt (cs_MGRS_LL);
 		utmZone = 0;
 	}
@@ -553,10 +549,8 @@ int CScalcMgrsFromLlUtm (struct cs_Mgrs_ *__This,char *result,int size,double la
 	if (latLng [LAT] <  -90.0 || latLng [LAT] >  90.0 ||
 		latLng [LNG] < -180.0 || latLng [LNG] > 180.0)
 	{
-		csErrlng = (int)((fabs (latLng [LNG]) >= 10000.0) ? 9999.99 : latLng [LNG]);
-		if (latLng [LNG] < 0.0) csErrlng = -csErrlng;
-		csErrlat = (int)((fabs (latLng [LAT]) >= 10000.0) ? 9999.99 : latLng [LAT]);
-		if (latLng [LAT] < 0.0) csErrlat = -csErrlat;
+		csErrlng = (fabs (latLng [LNG]) >= 1000.0) ? 999 : (int)latLng [LNG];
+		csErrlat = (fabs (latLng [LAT]) >= 1000.0) ? 999 : (int)latLng [LAT];
 		CS_erpt (cs_MGRS_LL);
 		return -1;
 	}

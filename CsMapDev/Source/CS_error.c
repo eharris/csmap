@@ -882,23 +882,23 @@ unsigned short EXP_LVL7 CSerpt (char *mesg,int size,int err_num)
 				/* Build a string which defines the
 				   location.  We desire to do this
 				   re-entrantly. */
-				ltemp = -csErrlng;
-				dir_cc = 'W';
-				if (csErrlng >= 0)
+				ltemp = (long32_t)csErrlng;
+				dir_cc = 'E';
+				if (csErrlng < 0)
 				{
-					ltemp = csErrlng;
-					dir_cc = 'E';
+					ltemp = (long32_t)(-csErrlng);
+					dir_cc = 'W';
 				}
 				CSreltoa (ctemp,sizeof (ctemp),ltemp);
 				cp = CS_stcpy (insert,ctemp);
 				*cp++ = dir_cc;
 				*cp++ = ':';
 				
-				ltemp = csErrlat;
+				ltemp = (long32_t)csErrlat;
 				dir_cc = 'N';
 				if (csErrlat < 0)
 				{
-					ltemp = -csErrlat;
+					ltemp = (long32_t)(-csErrlat);
 					dir_cc = 'S';
 				}
 				CSreltoa (ctemp,sizeof (ctemp),ltemp);

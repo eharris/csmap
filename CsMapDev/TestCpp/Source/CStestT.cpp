@@ -71,6 +71,93 @@ int CStestT (bool verbose,long32_t duration)
 	clock_t nmStartClock;
 	clock_t nmDoneClock;
 	double nmLoadTime;
+
+	// Testing Trac Ticket 131
+	int st;
+	double ll27 [3];
+	double ll83 [3];
+	double utms [3];
+	double lngLat [3];
+
+	struct cs_Eldef_ *elPtr;
+	struct cs_Mgrs_ *mgrsPtr;
+
+	char mgrsTxt [256];
+	char errMsg [256];
+
+	ll83 [LNG] = ll27 [LNG] = -10.0;
+	ll83 [LAT] = ll27 [LAT] = -10.0;
+	ll83 [HGT] = ll27 [HGT] =   0.0;
+	st = CS_cnvrt ("LL27","LL83",ll83);
+	if (st != 0)
+	{
+		CS_errmsg (errMsg,sizeof (errMsg));
+		printf ("Expected failure, st = %d, msg = %s\n", st, errMsg);
+	}
+	else
+	{
+		printf ("Unexpected success.\n");
+		err_cnt += 1;
+	}
+
+
+	ll83 [LNG] = -191.000;
+	ll83 [LAT] = -91.000;
+	ll83 [HGT] =   0.000;
+
+	mgrsPtr = CSnewMgrsE ("GRS1980",0);
+	if (mgrsPtr == NULL)
+	{
+		CS_errmsg (errMsg,sizeof (errMsg));
+		printf ("MGRS OBject construction failed. Reason: %s\n",errMsg);
+		err_cnt += 1;
+	}
+	else
+	{
+		st = CScalcUtmUps (mgrsPtr,utms,ll83);
+		if (st == 0)
+		{
+			CS_errmsg (errMsg,sizeof (errMsg));
+			printf ("Expected failure, st = %d, msg = %s\n", st, errMsg);
+		}
+		else
+		{
+			printf ("Unexpected success.\n");
+			err_cnt += 1;
+		}
+		
+		utms [XX] =   555000.000;
+		utms [YY] = 11444000.000;
+		utms [ZZ] =        0.000;
+		st = CScalcUtmUps (mgrsPtr,utms,lngLat);
+		if (st == 0)
+		{
+			CS_errmsg (errMsg,sizeof (errMsg));
+			printf ("Expected failure, st = %d, msg = %s\n", st, errMsg);
+		}
+		else
+		{
+			printf ("Unexpected success.\n");
+			err_cnt += 1;
+		}
+
+		utms [XX] =  555000.000;
+		utms [YY] = 4444000.000;
+		utms [ZZ] =       0.000;
+		st = CScalcMgrsFromLlUtm (mgrsPtr,mgrsTxt,sizeof (mgrsTxt),ll83,utms,3);
+		if (st < 0)
+		{
+			CS_errmsg (errMsg,sizeof (errMsg));
+			printf ("Expected failure, st = %d, msg = %s\n", st, errMsg);
+		}
+		else
+		{
+			printf ("Unexpected success.\n");
+			err_cnt += 1;
+		}
+	}
+
+#ifdef __SKIP__
 	EcsCsvStatus status = csvEndOfTable;
 
 	std::wifstream inStrm;
@@ -102,7 +189,6 @@ int CStestT (bool verbose,long32_t duration)
 		wprintf (L"NameMapper load failed: %s\n",reason.c_str());
 	}
 
-#ifdef __SKIP__
 	// Working Trac Ticket 145.  Note, to execute this test,
 	// one needs to edit the GeoidHeight.gdc file and make
 	// the .\WW15MGH.GRD reference the first one in the file.
