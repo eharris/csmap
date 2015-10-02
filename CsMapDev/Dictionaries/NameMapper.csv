@@ -2551,7 +2551,7 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 6224,12,Oracle,0,"Chua (EPSG ID 6224)",0,0,0,0,,
 6224,12,Autodesk,0,"CHUA",0,0,0,0,,
 6224,12,Ctmx,0,"ChauAstro",0,0,0,0,,
-6224,12,CsMap,0,"CHAU",0,0,0,0,,
+6224,12,CsMap,0,"CHUA",0,0,0,0,,
 6224,12,GeoTools,0,"Chua",0,0,0,0,,
 6224,12,Oracle9,0,"Chua Astro",0,0,0,0,,
 6225,12,EPSG,6225,"Corrego Alegre 1970-72",0,0,0,0,,
