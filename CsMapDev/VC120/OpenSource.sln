@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{80DBC263-3A23-4037-A2D8-B10FB38B4757}"
 EndProject
@@ -18,6 +18,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CsMapDll", "CsMapDll.vcxproj", "{2CC25299-B9E9-4BF6-927C-D224CDD81309}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CS_DllTestC", "CS_DllTestC.vcxproj", "{49E94F94-CF5A-472E-B91F-EE74B18C12D6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2CC25299-B9E9-4BF6-927C-D224CDD81309} = {2CC25299-B9E9-4BF6-927C-D224CDD81309}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
