@@ -394,10 +394,6 @@ struct cs_Japan_* CSnewJgd2kGridFile (Const char *path,long32_t bufferSize,ulong
 	thisPtr->ewDelta = ( 45.0 / 3600.0);
 	thisPtr->nsDelta = ( 30.0 / 3600.0);
 	thisPtr->coverage.density = thisPtr->ewDelta;
-	//if (thisPtr->nsDelta > thisPtr->ewDelta) 
-	//{
-	//	thisPtr->coverage->density = thisPtr->nsDelta;
-	//}
 
 	thisPtr->strm = NULL;
 	thisPtr->bufferSize = 64 * sizeof (struct csJgd2kGridRecord_);
@@ -414,7 +410,7 @@ struct cs_Japan_* CSnewJgd2kGridFile (Const char *path,long32_t bufferSize,ulong
 
 	/* Capture the file name, etc. */
 	CS_stncp (thisPtr->filePath,path,sizeof (thisPtr->filePath));
-	CS_stncp (lineBufr,path,sizeof (thisPtr->filePath));
+	CS_stncp (lineBufr,path,sizeof (lineBufr));
 	cp = strrchr (lineBufr,cs_DirsepC);
 	if (cp != NULL) CS_stncp (thisPtr->fileName,(cp + 1),sizeof (thisPtr->fileName));
 	else CS_stncp (thisPtr->fileName,lineBufr,sizeof (thisPtr->fileName));
@@ -436,10 +432,10 @@ struct cs_Japan_* CSnewJgd2kGridFile (Const char *path,long32_t bufferSize,ulong
 	/* If we're still here, we have a binary image of the named .par file.
 	   We open it and extract the first two records which should be the
 	   min and max of the coverage of the file. */
-	bStrm = CS_fopen (thisPtr->filePath,_STRM_BINRD);
+	bStrm = CS_fopen (thisPtr->binaryPath,_STRM_BINRD);
 	if (bStrm == NULL)
 	{
-		CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
+		CS_stncp (csErrnam,thisPtr->binaryPath,MAXPATH);
 		CS_erpt (cs_FL_OPEN);
 		goto error;
 	}
@@ -475,6 +471,14 @@ struct cs_Japan_* CSnewJgd2kGridFile (Const char *path,long32_t bufferSize,ulong
 	   requests a conversion which actually requires access to the file.  It is
 	   not uncommon for geodetic transformations to list grid interpolation
 	   files in their definition which are rarely used. */
+
+	/* This module was modified so that it will work with a distribution
+	   provided binary file rather than construct same on site.  This leaves
+	   open a byte order problem.  To reduce the probabilty of this issue
+	   causing a problem, we should exercise a little test here before
+	   returning this object to the user. */
+
+	/* TO DO: Add a CStestJgd2kGridFile module and call it here. */
 	return thisPtr;
 error:
 	if (bStrm != NULL)
@@ -578,10 +582,10 @@ int CSextractJgd2kGridFile (struct cs_Japan_ *thisPtr,Const double* sourceLL)
 	if (thisPtr->strm == NULL)
 	{
 		/* Open the binary file, since it isn't open already. */
-		thisPtr->strm = CS_fopen (thisPtr->filePath,_STRM_BINRD);
+		thisPtr->strm = CS_fopen (thisPtr->binaryPath,_STRM_BINRD);
 		if (thisPtr->strm == NULL)
 		{
-			CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
+			CS_stncp (csErrnam,thisPtr->binaryPath,MAXPATH);
 			CS_erpt (cs_DTC_FILE);
 			return csGRIDI_ST_SYSTEM;
 		} 
@@ -779,7 +783,6 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 	double mesh_ll [2];
 
 	char lineBufr [128];
-	char binaryPath [MAXPATH];
 
 	struct csJgd2kGridRecord_ gridRec;
 	struct csJgd2kGridRecord_ minRec;
@@ -805,34 +808,25 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 	/* Prepare for an error of some sort. */
 	aStrm = bStrm = NULL;
 	lngTmp = latTmp = cs_Zero;
+	aTime = bTime = 0;
 
 	/* Manufacture the name of the binary file. */
-	CS_stncp (binaryPath,thisPtr->filePath,sizeof (binaryPath));
-	cp1 = strrchr (binaryPath,cs_ExtsepC);
-	if (cp1 == NULL) 
+	CS_rwDictDir (thisPtr->binaryPath,sizeof (thisPtr->binaryPath),thisPtr->filePath);
+	cp1 = strrchr (thisPtr->binaryPath,cs_ExtsepC);
+	if (cp1 == NULL)
 	{
 		CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
 		CS_erpt (cs_DTC_FILE);
 		goto error;
 	}
-	CS_stcpy ((cp1 + 1),"_par");
+	*++cp1 = '\0';
+	CS_stncat (thisPtr->binaryPath,"_par",sizeof (thisPtr->binaryPath));
 
-	bTime = CS_fileModTime (binaryPath);
+	aTime = CS_fileModTime (thisPtr->filePath);
+	bTime = CS_fileModTime (thisPtr->binaryPath);
 	/* Build a new binary file only if it doesn't exist yet. */
-	if (0 == bTime)
+	if (bTime == 00 || aTime >= bTime)
 	{
-		/* Determine the last modification time for the two files.  Zero time value
-		   means the file does not exist. */
-		aTime = CS_fileModTime (thisPtr->filePath);
-		if (aTime == 0)
-		{
-			/* The indicated source file does not exist, not uncommon among the
-			   error conditions possible. */
-			CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
-			CS_erpt (cs_DTC_FILE);
-			goto error;
-		}
-
 		/* Here to create a, possibly new, binary version of the Jgd2k file,
 		   typically named "TKY2JGD.par".  To follow the general design
 		   theme, we assume there can be several files, and there is no fixed
@@ -854,10 +848,10 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 
 		/* The mode of the following open will truncate any existing file, and
 		   create a new binary file if necessary. */
-		bStrm = CS_fopen (binaryPath,_STRM_BINWR);
+		bStrm = CS_fopen (thisPtr->binaryPath,_STRM_BINWR);
 		if (bStrm == NULL)
 		{
-			CS_stncp (csErrnam,thisPtr->filePath,MAXPATH);
+			CS_stncp (csErrnam,thisPtr->binaryPath,MAXPATH);
 			CS_erpt (cs_FL_OPEN);
 			goto error;
 		}
@@ -890,7 +884,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 			/* Accumulate a bounding box (or minimum and maximum as us old
 			   farts used to call it) so we have a rough estimate of the
 			   coverage of the file. */
-			CSjpnMeshCodeToLl (mesh_ll,meshCode);			
+			CSjpnMeshCodeToLl (mesh_ll,meshCode);
 			if (mesh_ll [LNG] < -180.0 || mesh_ll [LNG] > 180.0 ||
 				mesh_ll [LAT] <  -90.0 || mesh_ll [LAT] > 90.0)
 			{
@@ -934,7 +928,7 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 			gridRec.meshCode = meshCode;
 			
 			/* NTO 30 Oct 2008, Trac # 13
-			   The following was necessiatated by Linux.  It appears that on the
+			   The following was necessitated by Linux.  It appears that on the
 			   Linux platform (or some of them, anyway), the rounding of doubles
 			   (especially negative ones) is different than what you will see on
 			   WIN32 platforms.  Which one is correct is of no concern to me,
@@ -989,10 +983,10 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 		   code was written in the Windows 95 era, so the current scheme may
 		   look rather dumb.  Nevertheless, it works and I have no motivation
 		   to fix it. */
-		bStrm = CS_fopen (binaryPath,_STRM_BINUP);
+		bStrm = CS_fopen (thisPtr->binaryPath,_STRM_BINUP);
 		if (bStrm == NULL)
 		{
-			CS_stncp (csErrnam,binaryPath,MAXPATH);
+			CS_stncp (csErrnam,thisPtr->binaryPath,MAXPATH);
 			CS_erpt (cs_FL_OPEN);
 			goto error;
 		}
@@ -1004,11 +998,8 @@ int CSmakeBinaryJgd2kFile (struct cs_Japan_* thisPtr)
 
 		/* OK, now we're really done. */
 	}
-
-	/* If all that was done successfully, we change the name of
-	   the file and return success. */
-	CS_stncp (thisPtr->filePath,binaryPath,sizeof (thisPtr->filePath));
 	return csGRIDI_ST_OK;
+
 error:
 	if (aStrm != NULL)
 	{
@@ -1019,6 +1010,8 @@ error:
 	{
 		CS_fclose (bStrm);
 		bStrm = NULL;
+		CS_remove (thisPtr->binaryPath);			/*lint !e534 */
+		memset (thisPtr->binaryPath,'\0',sizeof (thisPtr->binaryPath));
 	}
 	return csGRIDI_ST_SYSTEM;
 }

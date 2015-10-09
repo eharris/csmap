@@ -830,6 +830,8 @@ struct csErrtab_ csErrtab [] =
 						   "Environmental variable substitution failed, variable %s not set."},
  { cs_ENV_FORMAT,   csET_NM,cs_ERSUP_SOFT,
 						   "Environmental variable substitution failed; invalid format (%s...)."},
+ { cs_SELF_TEST ,   csET_NM,cs_ERSUP_SOFT,
+						   "Self test of object named %s failed during construction."},
  {              0,        0,0,""}
 };
 

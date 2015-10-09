@@ -6505,8 +6505,9 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_ENV_NOVAR      474		/* A referenced environmental variable did not exist. */
 #define cs_ENV_FORMAT     475		/* The format of the string presented fro environmental
 									   variable subsitution is improperly formatted. */
+#define cs_SELF_TEST      476		/* Self test during object construction failed. */
 
-#define cs_ERROR_MAX	  cs_ENV_FORMAT
+#define cs_ERROR_MAX	  cs_SELF_TEST
 
 /*
 	The following casts are used to eliminate warnings from
@@ -6813,6 +6814,7 @@ void		EXP_LVL1	CS_recvr (void);
 int			EXP_LVL9	CS_remove (Const char *path);
 void		EXP_LVL9	CS_removeRedundantWhiteSpace (char *string);
 int			EXP_LVL9	CS_rename (Const char *prev,Const char *current);
+int			EXP_LVL5	CS_rwDictDir (char *rsltPath,size_t rsltSize,Const char* srcPath);
 
 double		EXP_LVL1	CS_scale (Const char *cs_nam,double ll [2]);
 double		EXP_LVL1	CS_scalh (Const char *cs_nam,double ll [2]);
@@ -7624,8 +7626,8 @@ struct csGeoid96GridFile_
 										   -1 says nothing in buffer */
 	void *dataBuffer;					/* not allocated until required, i.e.
 										   file is actually opened. */
-	char filePath [MAXPATH];
-	char fileName [16];
+	char filePath [MAXPATH];			/* Full path to source data file. */
+	char fileName [32];					/* Used for error reporting. */
 };
 /******************************************************************************
 	US Geoid 99 file object.  A variation on the basic theme used in Geoid96
@@ -7660,14 +7662,14 @@ struct csGeoid99GridFile_
 										   required.  A value other than one,
 										   specifically 0x01000000 means
 										   swapping is required. */
-	char filePath [MAXPATH];
-	char fileName [32];
+	char filePath [MAXPATH];			/* Full path to source data file. */
+	char fileName [32];					/* Used for error reporting. */
 };
 
 /*
 	The following object is used to access files of the OSTN97.txt type.
 	That is, the UK equivalent of NAD83, although it is actually
-	ETRS89.  (OSTN97 is the Ordnance Survet National Transformation of 1997.)
+	ETRS89.  (OSTN97 is the Ordnance Survey National Transformation of 1997.)
 
 	Note, that the coverage element is superfluous and is not used.
 	We keep it around, and maintain it with valid data, in case
@@ -7690,8 +7692,9 @@ struct cs_Ostn97_
 										   -2 says nothing in buffer */
 	void *dataBuffer;					/* not allocated until required, i.e.
 										   file is actually opened. */
-	char filePath [MAXPATH];
-	char fileName [32];
+	char filePath [MAXPATH];			/* Full path to source data file. */
+	char fileName [32];					/* Used for error reporting. */
+	char binaryPath [MAXPATH];			/* Full path of binary shadow file. */
 };
 
 /*
@@ -7717,8 +7720,9 @@ struct cs_Osgm91_
 										   -2 says nothing in buffer */
 	void *dataBuffer;					/* not allocated until required, i.e.
 										   file is actually opened. */
-	char filePath [MAXPATH];
-	char fileName [32];
+	char filePath [MAXPATH];			/* Full path to source data file. */
+	char fileName [32];					/* Used for error reporting. */
+	char binaryPath [MAXPATH];			/* Full path of binary shadow file. */
 	struct cs_Trmer_ osgb36Trmer;
 };
 
@@ -7755,8 +7759,9 @@ struct cs_Ostn02_
 										   -2 says nothing in buffer */
 	void *dataBuffer;					/* not allocated until required, i.e.
 										   file is actually opened. */
-	char filePath [MAXPATH];
-	char fileName [32];
+	char filePath [MAXPATH];			/* Full path to source data file. */
+	char fileName [32];					/* Used for error reporting. */
+	char binaryPath [MAXPATH];			/* Full path of binary shadow file. */
 };
 
 /*
@@ -7795,8 +7800,9 @@ struct cs_Egm96_
 										   -2 says nothing in buffer */
 	void *dataBuffer;					/* not allocated until required, i.e.
 										   file is actually opened. */
-	char filePath [MAXPATH];
-	char fileName [32];
+	char filePath [MAXPATH];			/* Full path to source data file. */
+	char fileName [32];					/* Used for error reporting. */
+	char binaryPath [MAXPATH];			/* Full path of binary shadow file. */
 };
 
 /* This object represents an implementation of the Byn file
@@ -7835,6 +7841,7 @@ struct csBynGridFile_
 										   size they are, need to be swapped. */
 	char filePath [MAXPATH];
 	char fileName [32];
+	char bynFilePath [MAXPATH];
 };
 
 /******************************************************************************
@@ -8005,9 +8012,7 @@ int CSprivateOstn97 (struct cs_Ostn97_ *__This,double result [2],const double et
 int CSforwardOstn97 (struct cs_Ostn97_ *__This,double osgb36 [2],const double etrs89 [2]);
 int CSinverseOstn97 (struct cs_Ostn97_ *__This,double etrs89 [2],const double osgb36 [2]);
 int CSmkBinaryOstn97 (struct cs_Ostn97_ *__This);
-#ifdef _DEBUG
-double CStestOstn97 (struct cs_Ostn97_ *__This);
-#endif
+double CSdebugOstn97 (struct cs_Ostn97_ *__This);
 
 
 struct cs_Ostn02_ *CSnewOstn02 (const char *filePath);
@@ -8017,9 +8022,7 @@ int CSprivateOstn02 (struct cs_Ostn02_ *__This,double result [2],const double et
 int CSforwardOstn02 (struct cs_Ostn02_ *__This,double osgb36 [2],const double etrs89 [2]);
 int CSinverseOstn02 (struct cs_Ostn02_ *__This,double etrs89 [2],const double osgb36 [2]);
 int CSmkBinaryOstn02 (struct cs_Ostn02_ *__This);
-#ifdef _DEBUG
 double CStestOstn02 (struct cs_Ostn02_ *__This);
-#endif
 
 struct cs_Osgm91_ *CSnewOsgm91 (const char *filePath,long32_t bufferSize,ulong32_t flags,double density);
 void CSdeleteOsgm91 (struct cs_Osgm91_ *__This);
@@ -8027,9 +8030,7 @@ void CSreleaseOsgm91 (struct cs_Osgm91_ *__This);
 double CStestOsgm91 (struct cs_Osgm91_ *__This,const double etrs89 [2]);
 int CScalcOsgm91 (struct cs_Osgm91_ *__This,double *geoidHgt,const double etrs89 [2]);
 int CSmkBinaryOsgm91 (struct cs_Osgm91_ *__This);
-#ifdef _DEBUG
 double CSdebugOsgm91 (struct cs_Osgm91_ *__This);
-#endif
 
 struct cs_Egm96_ *CSnewEgm96 (const char *filePath,long32_t bufferSize,ulong32_t flags,double density);
 void CSdeleteEgm96 (struct cs_Egm96_ *__This);

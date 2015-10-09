@@ -60,8 +60,11 @@ extern "C"
    run the console test module with the /tT option.  Whalla!!!  I got it done
    in 30 minutes instead of two hours.
 */
-  
+
+extern "C" char cs_Dir [];
+extern "C" char *cs_DirP;
 extern "C" char csErrmsg [256];
+extern "C" double cs_Zero;
 extern "C" double cs_LlNoise;
 extern "C" const char csDictDir [];
 
@@ -72,6 +75,100 @@ int CStestT (bool verbose,long32_t duration)
 	clock_t nmDoneClock;
 	double nmLoadTime;
 
+	// Mostly to keep lint/compiler happy.
+	nmStartClock = clock ();
+	nmDoneClock = clock ();
+
+	// Working Trac Ticket #146, #155, and fixes for #151.  Note, to execute this test,
+	// one needs to edit the GeoidHeight.gdc file and make the .\WW15MGH.GRD
+	// reference the first one in the file (temporarily).
+
+	int status;
+	
+	double geoidHeight;
+	double ll84 [3];
+
+	geoidHeight = -9999.999;
+	ll84 [0] = (359.875 - 360.00);
+	ll84 [1] = 89.875;
+	status = CS_geoidHgt (ll84,&geoidHeight);
+	if (status != 0 || geoidHeight < -1.0E+10)
+	{
+		char errMessage [MAXPATH];
+		if (status > 0 && status <= 4)
+		{
+			CS_stncp (errMessage,"Geoid location outside the range of data files specified in \"GeoidHeight.gdc\".",sizeof (errMessage));
+		}
+		else
+		{
+			CS_errmsg (errMessage,MAXPATH);
+		}
+		printf ("Failure: st = %d.  Reason: %s\n",status,errMessage);
+		err_cnt += 1;
+	}
+
+	/* geoidHgt should equal ~13.75475 per author of the Trac Ticket 145 */
+	if (fabs (geoidHeight - 13.75475) > 0.00003)
+	{
+		printf ("Trac Ticket 145, 146, & 155 test failed [%.6f]\n",geoidHeight);
+		err_cnt += 1;
+	}
+
+	CS_geoidCls ();
+
+	/* Test other ASCII/binary related changes by simply constructing the
+	   objects. The constructors now have a simple test case built into
+	   them.*/
+
+	CS_stcpy (cs_DirP,cs_OSTN02_NAME);
+	struct cs_Ostn02_ *ostn02 = CSnewOstn02 (cs_Dir);
+	if (ostn02 != NULL)
+	{
+		CSdeleteOstn02 (ostn02);
+	}
+	else
+	{
+		char errMessage [MAXPATH];
+
+		err_cnt += 1;
+		CS_errmsg (errMessage,MAXPATH);
+		printf ("OSTN02 construction failed; Reason: %s\n",errMessage);
+	}
+
+	CS_stcpy (cs_DirP,cs_OSTN97_NAME);
+	struct cs_Ostn97_ *ostn97 = CSnewOstn97 (cs_Dir);
+	if (ostn97 != NULL)
+	{
+		CSdeleteOstn97 (ostn97);
+	}
+	else
+	{
+		char errMessage [MAXPATH];
+
+		err_cnt += 1;
+		CS_errmsg (errMessage,MAXPATH);
+		printf ("OSTN97 construction failed; Reason: %s\n",errMessage);
+	}
+
+	CS_stcpy (cs_DirP,"OSGM91.TXT");
+	struct cs_Osgm91_ *osgm91 = CSnewOsgm91 (cs_Dir,0,0,cs_Zero);
+	if (osgm91 != NULL)
+	{
+		CSdeleteOsgm91 (osgm91);
+	}
+	else
+	{
+		char errMessage [MAXPATH];
+
+		err_cnt += 1;
+		CS_errmsg (errMessage,MAXPATH);
+		printf ("OSGM91 construction failed; Reason: %s\n",errMessage);
+	}
+
+	// TO DO:  Should add a test of CS_japan.c here.  The Japan
+	// constructor needs a test function before that will do much good.
+
+#ifdef __SKIP__
 	// Testing Trac Ticket 131
 	int st;
 	double ll27 [3];
@@ -157,6 +254,7 @@ int CStestT (bool verbose,long32_t duration)
 		}
 	}
 
+#endif
 #ifdef __SKIP__
 	EcsCsvStatus status = csvEndOfTable;
 
@@ -188,35 +286,6 @@ int CStestT (bool verbose,long32_t duration)
 		std::wstring reason = csvStatus.GetMessage ();
 		wprintf (L"NameMapper load failed: %s\n",reason.c_str());
 	}
-
-	// Working Trac Ticket 145.  Note, to execute this test,
-	// one needs to edit the GeoidHeight.gdc file and make
-	// the .\WW15MGH.GRD reference the first one in the file.
-
-	int status;
-	double geoidHeight;
-	double ll84 [3];
-
-	ll84 [0] = (359.875 - 360.00);
-	ll84 [1] = 89.875;
-	status = CS_geoidHgt (ll84,&geoidHeight);
-	if (status != 0)
-	{
-		char errMessage [MAXPATH];
-		CS_errmsg (errMessage,MAXPATH);
-		printf ("Failure: st = %d.  Reason: %s.\n",status,errMessage);
-		err_cnt += 1;
-	}
-
-	/* geoidHgt should equal ~13.75475 per author of the Trac Ticket 145 */
-	if (fabs (geoidHeight - 13.75475) > 0.00003)
-	{
-		printf ("Trac Ticket 145 test failed [%.6f]\n",geoidHeight);
-		err_cnt += 1;
-	}
-
-	CS_geoidCls ();
-
 #endif
 
 #ifdef __SKIP__
@@ -715,5 +784,7 @@ int CStestT (bool verbose,long32_t duration)
 	CS_dtcls (dtcPrm);
 #endif
 
+	/* Mostly to keep lint/compiler hgappy. */
+	nmLoadTime = (double)(nmDoneClock - nmStartClock) / (double)CLOCKS_PER_SEC;
 	return err_cnt;
 }

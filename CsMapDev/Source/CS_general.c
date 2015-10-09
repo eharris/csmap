@@ -220,6 +220,150 @@ arg_error:
 }
 
 /**********************************************************************
+**	int status = CS_rwDictDir (rsltPath,srcPath);
+**
+**  char* rsltPath;		character array in which the results of this
+**						function are returned.
+**  size_t rsltSize;	sizeof the character array pointed to by the
+**						rsltPath argument.
+**  char* srcPath;		character array containing a path to the
+**						original data file in is normal location.
+**	int status;			0 if successfull, -1 otherwise
+**
+** This method is used only in the case where a shadow binary version
+** of a large text file is created and maintained to suppress the
+** need of parsing the text file for each use.
+**
+** For example, the original and distribution WW15MGH.GRD file
+** consists of 9.528 megabytes of text which must be parsed and
+** and converted to binary form before it can be used.  Since this
+** file rarely (if ever) changes, but since we do not wish to preclude
+** the idea of it changing, we like to convert the file to binary
+** once, and alieviate the need to do so again until the source data
+** file actually changes.  Now, with that background, consider:
+**
+** The source file resides in the traditional Dictionary/Data folder.
+** The binary shadow file is typically created in, and resides in, the
+** traditional Dictionary data folder.  What if, for quite rational
+** reasons, the traditional Dictionary data folder is write protected?
+** In this case, the system needs an alternative directory in which to
+** create and maintain the binary shadow file if reparseing 9.5
+** megabytes of text data is to be avoided in future uses.
+**
+** Given the path of such a data file, this function will return
+** a possibly modified path.  Upon success, the possibly modified
+** path is guaranteed to be writable.  Note, that if the given path
+** was writable, the returned path is simply a copy of the given
+** path.
+**********************************************************************/
+int EXP_LVL5 CS_rwDictDir (char *rsltPath,size_t rsltSize,Const char* srcPath)
+{
+#if _RUN_TIME < _rt_UNIXPCC
+	/* Here for Windows.  I do not believe this can be a problem on Windows NT
+	   systems.  Have tried, but I can't figure out how to write protect a
+	   folder/directory such that new files could not be created.  So the
+	   return value is always simply the path we were provided.
+
+	   Should this prove wrong, simply remove this conditional compile
+	   block and all whould be well. */
+
+	/* This is the default return value, even if there is an error
+	   of some sort. */
+	CS_stncp (rsltPath,srcPath,(int)rsltSize);
+	return 0;
+#else
+	extern char cs_DirsepC;
+	extern char cs_UserDir [];
+	extern char csErrnam [];
+
+	/* Here for Linux/UNIX.  Directorires/folders can be write protected
+	   such that new files cannot be created in the directory/folder.
+	   We have some work to do. */
+	int st;
+	int rtnValue;
+	size_t envLen;
+	size_t fileLen;
+	
+	char* ccPtr;
+	char* envPtr;
+	char* fileNamePtr;
+	char rwPath [MAXPATH + 32];
+	char envPath [MAXPATH];
+
+	rtnValue = -1;				/* until we know different. */
+
+	/* Even in the event of failure, we want the returned rsltPath
+	   to have a string value which will not cause a crash. */
+	CS_stncp (rsltPath,srcPath,(int)rsltSize);
+
+	/* What is provided to us is a full path which ends with a file name and,
+	   possibly, an extension.  It is the directory (folder) which we need to
+	   examine and determine if we can create a file within it. */
+	CS_stncp (rwPath,srcPath,sizeof (rwPath));
+	fileNamePtr = strrchr (rwPath,cs_DirsepC);
+	if (fileNamePtr == NULL)
+	{
+		CS_stncp (csErrnam,"CS_rwDictDir:1",MAXPATH);
+		CS_erpt (cs_ISER);
+		goto error;
+	}
+
+	*fileNamePtr++ = '\0';		/* fileNamePtr now points to the file name
+								   portion of the path. */
+	if (CS_access (rwPath,02) == 0)
+	{
+		/* The original source directory appears writable, so we use it. */
+		rtnValue = 0;
+	}
+	else
+	{
+		/* The original directory/folder is not writable.  What do we do now?
+		   We use the value of the "CS_MAP_DIR_RW" environmental variable as
+		   the directory for the shadow file. */
+		envPtr = getenv ("CS_MAP_DIR_RW");
+		if (envPtr != NULL)
+		{
+			/* System has been configured to use this directory.
+			   Replace environmental variable references. */
+			CS_stncp (envPath,envPtr,sizeof (envPath));
+			do
+			{
+				st = CS_envsub (envPath,sizeof (envPath));
+			} while (st == 1);
+
+			/* We have an alternate path name now, so construct the
+			   full alternate path name now, being careful not to overflow
+			   any buffers. */
+			if (st == 0)
+			{
+				envLen = strlen (envPath);
+				fileLen = strlen (fileNamePtr);
+				if ((envLen + fileLen + 1) < rsltSize)
+				{
+					ccPtr = CS_stncp (rsltPath,envPtr,rsltSize);
+					if (*(ccPtr - 1) != cs_DirsepC)
+					{
+						*ccPtr++ = cs_DirsepC;
+					}
+					CS_stncat (rsltPath,fileNamePtr,rsltSize);
+					rtnValue = 0;
+				}
+				else
+				{
+					CS_stncp (csErrnam,"CS_rwDictDir:2",MAXPATH);
+					CS_erpt (cs_ISER);
+					goto error;
+				}
+			}
+		}
+	}
+	return rtnValue;
+error:
+	return rtnValue;
+#endif
+}
+
+/**********************************************************************
 **	st = CS_nampp (name);
 **
 **	char *name;					the name to be processed and checked.
@@ -609,9 +753,11 @@ int EXP_LVL5 CSextractDbl (csFILE *aStrm,double* result)
 	state = initial;
 	while (state != done)
 	{
-		cc = CS_fgetc (aStrm);
 		switch (state) {
 		case initial:
+			/* Skip leading white space.  Capture and start extraction on
+			   anything other than white space. */
+			cc = CS_fgetc (aStrm);
 			if (cc == EOF)
 			{
 				st = 1;
@@ -627,7 +773,14 @@ int EXP_LVL5 CSextractDbl (csFILE *aStrm,double* result)
 
 		case extract:
 			/* Can't get here unless we have at least one character to
-			   evaluate. */
+			   evaluate. Extract characters until we see some thing that
+			   isn't white space.
+
+			   TO DO: Should terminate extraction on first character which is
+			   not numeric or part of a normal real number.  Further, the
+			   character which terminates this sequence should remain available
+			   (unget(?)) to be read by the calling module. */
+			cc = CS_fgetc (aStrm);
 			if (cc == EOF)
 			{
 				state = evaluate;
@@ -661,8 +814,8 @@ int EXP_LVL5 CSextractDbl (csFILE *aStrm,double* result)
 	return st;
 }
 
-// The following parses a line of text into space separated tokens.  Note
-// this function is destructive to the "lineBuffer: argument.
+/* The following parses a line of text into space separated tokens.  Note
+   this function is destructive to the "lineBuffer" argument. */
 unsigned CS_spaceParse (char *lineBuffer,char *ptrs [],unsigned maxPtrs)
 {
 	unsigned index = 0;
@@ -683,7 +836,7 @@ unsigned CS_spaceParse (char *lineBuffer,char *ptrs [],unsigned maxPtrs)
 	return index;
 }
 
-// The following does itsmagic inplace; how nice.
+/* The following does its magic in-place; how nice. */
 void CS_removeRedundantWhiteSpace (char *string)
 {
 	char cc;

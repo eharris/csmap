@@ -29,34 +29,56 @@
 #include "cs_map.h"
 
 /*
-	This file contains the implementation of the Egm96 object.
+	This file contains the implementation of the Egm96 object; i.e.
+	struct cs_Egm96_.
 
-	Egm96 is based on a text file with some 225,000 records, i.e.
-	lines of text.  Each line contains the geoid separation as a
-	number of millimeters.  The records are to be looked at as
-	a grid of 450 (east/west) by 500 high (north/south), which
-	have a delta of 2 kilometers.  The major complication here
-	is that the cells are accessed using OSTN97 cartesian
-	coordinates.
+	Egm96 is based on a text file with some 137,712 records, i.e.
+	lines of text.  It provides geoid height data in meters for the
+	entire world by means of a 15 minute by 15 minute grid structure.
 
-	Thus, to fit into the general scheme of Geoid separation,
-	where geographic coordinates are used to produce a geoid
-	separation value, the geographic coordinates first need to
-	be converted to OSTN97 cartesian coordinates.  This process
-	represents a majority of the code provided here.
+	The first line of the file contains four values which define the
+	nature of the grid:
+		[1] => Latitude of the southern extent of the grid ( -90.000)
+		[2] => Latitude of the northern extent of the grid ( +90.000)
+		[3] => Longitude of the western extent of the grid (   0.000)
+		[4] => Longitude of the eastern extent of the grid (+360.000)
+		[5] => Size of a grid cell, in degrees, in the north/south direction.
+		[6] => Size of a grid cell, in degrees, in the east/west direction,
+
+	Data points follow the header delimited by variable amounts of white space.
+	It's up to the reader to keep count to properly interpret the significance
+	of the 1,036,800 data points.
+
+	Given the four data points which define a grid cell, simple bi-linear
+	interpolation is used to calculate the geoid height at a specific location.
+
+	Converting the original text data file to binary, and therefore usable,
+	form is non-trivial.  Thus, this module will compile a binary version of
+	the data file and leave it in the "Dictionaries" folder for later reuse.
+	Should the modifcation times on the source and binary files so indicate,
+	the source file is re-compiled.
+	
+	Obvoiously, the compiled file contains binary data and is subject to
+	platform variations.  A binary file compiled on another system should
+	not be copied to the current system.  This may not work as expected.
+	As a protection against this issue, the "constructor" (i.e. CSnewEgm96)
+	will perform a basic test on the resulting binary form of the data
+	obtained before returning a valid object pointer.
 */
 
 struct cs_Egm96_ *CSnewEgm96 (const char *filePath,long32_t bufferSize,ulong32_t flags,double density)
 {
 	extern char cs_DirsepC;
 	extern char cs_ExtsepC;
-
 	extern double cs_Zero;
+	extern char csErrnam [];
 
 	int st;
 
 	char *cp;
 	struct cs_Egm96_ *__This = NULL;
+	
+	double testValue;
 
 	/* Allocate and initialize the object. */
 	__This = CS_malc (sizeof (struct cs_Egm96_));
@@ -111,6 +133,16 @@ struct cs_Egm96_ *CSnewEgm96 (const char *filePath,long32_t bufferSize,ulong32_t
 	if (density > 0.0)
 	{
 		__This->searchDensity = density;
+	}
+
+	/* Defensive programming here to insure that we have a proper
+	   binary representation, regardless of the source. */
+	testValue = CSdebugEgm96 (__This);
+	if (fabs (testValue) > 0.5)
+	{
+		CS_stncp (csErrnam,"cs_Egm96_",MAXPATH);
+		CS_erpt (cs_SELF_TEST);
+		goto error;
 	}
 
 	/* That's that. */
@@ -222,9 +254,9 @@ int CScalcEgm96 (struct cs_Egm96_ *__This,double *geoidHgt,const double wgs84 [2
 
 	/* Return now if out of range. */
 	if (lclLng < __This->southWest [LNG] ||
-	    lclLng > __This->northEast [LNG] ||
+		lclLng > __This->northEast [LNG] ||
 		lclLat < __This->southWest [LAT] ||
-	    lclLat > __This->northEast [LAT])
+		lclLat > __This->northEast [LAT])
 	{
 		*geoidHgt = cs_Zero;
 		return 1;
@@ -328,10 +360,10 @@ int CScalcEgm96 (struct cs_Egm96_ *__This,double *geoidHgt,const double wgs84 [2
 		   open it again now. */
 		if (__This->strm == NULL)
 		{
-			__This->strm = CS_fopen (__This->filePath,_STRM_BINRD);
+			__This->strm = CS_fopen (__This->binaryPath,_STRM_BINRD);
 			if (__This->strm == NULL)
 			{
-				CS_stncp (csErrnam,__This->filePath,MAXPATH);
+				CS_stncp (csErrnam,__This->binaryPath,MAXPATH);
 				CS_erpt (cs_DTC_FILE);
 				goto error;
 			}
@@ -465,10 +497,14 @@ int CSmkBinaryEgm96 (struct cs_Egm96_ *__This)
 	double deltaLat = cs_Zero;
 	double deltaLng = cs_Zero;
 
-	char binaryPath [MAXPATH];
-
-	CS_stncp (binaryPath,__This->filePath,sizeof (binaryPath));
-	cp = strrchr (binaryPath,cs_ExtsepC);
+	st = CS_rwDictDir (__This->binaryPath,sizeof (__This->binaryPath),__This->filePath);
+	if (st != 0)
+	{
+		CS_stncp (csErrnam,__This->filePath,MAXPATH);
+		CS_erpt (cs_DTC_FILE);
+		goto error;
+	}
+	cp = strrchr (__This->binaryPath,cs_ExtsepC);
 	if (cp == NULL) 
 	{
 		CS_stncp (csErrnam,__This->filePath,MAXPATH);
@@ -485,7 +521,7 @@ int CSmkBinaryEgm96 (struct cs_Egm96_ *__This)
 		goto error;
 	}
 
-	bTime = CS_fileModTime (binaryPath);
+	bTime = CS_fileModTime (__This->binaryPath);
 	if (bTime == 0 || bTime <= aTime)
 	{
 		/* Here to create a, possibly new, binary version of the (what is
@@ -502,10 +538,10 @@ int CSmkBinaryEgm96 (struct cs_Egm96_ *__This)
 
 		/* The mode of the following open will truncate any existing file, and
 		   create a new file if necessary. */
-		bStrm = CS_fopen (binaryPath,_STRM_BINWR);
+		bStrm = CS_fopen (__This->binaryPath,_STRM_BINWR);
 		if (bStrm == NULL)
 		{
-			CS_stncp (csErrnam,__This->filePath,MAXPATH);
+			CS_stncp (csErrnam,__This->binaryPath,MAXPATH);
 			CS_erpt (cs_FL_OPEN);
 			goto error;
 		}
@@ -563,9 +599,6 @@ int CSmkBinaryEgm96 (struct cs_Egm96_ *__This)
 		}
 	}
 
-	/* If all that was done successfully, we change the name of
-	   the file and return success. */
-	CS_stncp (__This->filePath,binaryPath,sizeof (__This->filePath));
 	return 0;
 error:
 	return -1;
@@ -587,7 +620,7 @@ int CSopnBinaryEgm96 (struct cs_Egm96_ *__This,long32_t bufrSize)
 	double deltaLat = cs_Zero;
 	double deltaLng = cs_Zero;
 
-	__This->strm = CS_fopen (__This->filePath,_STRM_TXTRD);
+	__This->strm = CS_fopen (__This->binaryPath,_STRM_BINRD);
 	if (__This->strm == NULL)
 	{
 		CS_stncp (csErrnam,__This->filePath,MAXPATH);
