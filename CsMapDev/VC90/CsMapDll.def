@@ -68,6 +68,8 @@ EXPORTS
 	CS_eldef
 	CS_eldel
 	CS_eldflt
+	CS_geoidHgt
+	CS_geoidCls
 	CS_dllFree
 	CS_ll2cs
 	CS_ll3cs
@@ -97,6 +99,7 @@ EXPORTS
 	csMapNameToIdC
 	csMapNameToNameC
 	csMapIdToNameC
+	csReleaseNameMapper
 
 ; Data constants.  Don't know how to access them from VB/VBA, but easily done
 ; from C/C++.

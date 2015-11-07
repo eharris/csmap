@@ -182,7 +182,7 @@ extern "C"
 // minutes while Visual C++ compiles a list of some 50,000 suspected
 // memory leaks.  Calling this function when a TcsNameMapper object does not
 // exist is not a problem.
-void csReleaseNameMapper (void);
+void EXP_LVL1 csReleaseNameMapper (void);
 ///////////////////////////////////////////////////////////////////////////////
 // The Name Mapper considers Projected Coordinate systems and Geographic
 // Systems to be distinct groups of objects.  Since in CS-MAP, and perhaps

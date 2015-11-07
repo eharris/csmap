@@ -44,6 +44,7 @@ int main (int agrc,char* argv[])
 
 	unsigned long epsgId;
 
+	double geoidHgt;
 	double unitFactor;
 
 	double xyz [3];
@@ -82,6 +83,10 @@ int main (int agrc,char* argv[])
 			printf ("%s :: %s :: %s  st = %d\n",lng,lat,hgt,st);
 		}
 
+		st = CS_geoidHgt (llh,&geoidHgt);
+		printf ("Geoid Height (%f::%f) = %.3f  [st = %d]\n",llh[0],llh[1],geoidHgt,st);
+		CS_geoidCls ();
+
 		/* An example of how to retrieve lists of names of things from the DLL
 		   without using advanced techniques such as STL. */
 		index = 0;
@@ -108,6 +113,10 @@ int main (int agrc,char* argv[])
 			printf ("Linear Unit: %s   -->  %f\n",unitName,unitFactor);
 		}
 	}
+
+	CS_geoidCls ();
+	CS_recvr ();
+	csReleaseNameMapper ();
 
 	exit (0);
 }

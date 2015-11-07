@@ -411,8 +411,12 @@
     <ClInclude Include="..\Include\cs_NameMapperSupport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Include\cs_vbApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="DllReadMe.txt" />
     <None Include="CsMapDll.def">
       <Filter>Source Files</Filter>
     </None>

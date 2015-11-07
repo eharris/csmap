@@ -45,8 +45,8 @@
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">*.obj%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b*.meta%3b$(TargetPath)%3b$(TargetDir)$(TargetName).*</ExtensionsToDeleteOnClean>
     <EnableManagedIncrementalBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</EnableManagedIncrementalBuild>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\bin100\$(Configuration)64</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)../obj100/$(ProjectName)/$(Configuration)64</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\bin100\$(Configuration)64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)../obj100/$(ProjectName)/$(Configuration)64\</IntDir>
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|x64'">*.obj%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b*.meta%3b$(TargetPath)%3b$(TargetDir)$(TargetName).*</ExtensionsToDeleteOnClean>
     <EnableManagedIncrementalBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</EnableManagedIncrementalBuild>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
@@ -353,9 +353,11 @@
   <ItemGroup>
     <ClInclude Include="..\Include\cs_map.h" />
     <ClInclude Include="..\Include\cs_NameMapperSupport.h" />
+    <ClInclude Include="..\Include\cs_vbApi.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CsMapDll.def" />
+    <None Include="DllReadMe.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1467,6 +1467,8 @@ int				EXP_LVL1	CS_getElValues (Const char *elKeyName,double *eRadius,double *eS
 int				EXP_LVL1	CS_getReferenceOf (Const char *csKeyName,char *reference,int size);
 int				EXP_LVL1	CS_getSourceOf (Const char *csKeyName,char *source,int size);
 int				EXP_LVL1	CS_getUnitsOf (Const char *csKeyName,char *unitName,int size);
+void			EXP_LVL1	CS_geoidCls (void);
+int				EXP_LVL1	CS_geoidHgt (Const double ll_84 [2],double *height);
 int				EXP_LVL1	CS_csGrpEnum (int index,char *grp_name,int name_sz,char *grp_dscr,int dscr_sz);
 int				EXP_LVL1	CS_isgeo (Const char *cs_nam);
 double			EXP_LVL1	CS_llazdd (double e_rad,double e_sq,double ll_from [3],double ll_to [3],double *dist);
@@ -1553,6 +1555,7 @@ enum EcsMapSt		EXP_LVL3	csMapIdToNameC (enum EcsMapObjType type,char* trgName,
 																		enum EcsNameFlavor trgFlavor,
 																		enum EcsNameFlavor srcFlavor,
 																		unsigned long srcId);
+void				EXP_LVL3	csReleaseNameMapper (void);
 #endif
 
 #if defined (__VB__)
@@ -1574,22 +1577,22 @@ int				EXP_LVL1	CS_prjEnumVb (int index,ulong32_t *prj_flags,char *prj_keynm,int
 int				EXP_LVL1	CS_unEnumVb (int index,int type,char *un_name,int un_size);
 int				EXP_LVL1	CS_unEnumPluralVb (int index,int type,char *un_name,int un_size);
 
-long32_t		EXP_LVL1	csMapIdToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
-																   enum EcsNameFlavor srcFlavor,
-																   long32_t srcId);
-long32_t		EXP_LVL1	csMapNameToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
+long32_t		EXP_LVL1	CS_mapIdToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
+																	enum EcsNameFlavor srcFlavor,
+																	long32_t srcId);
+long32_t		EXP_LVL1	CS_mapNameToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
 																	  enum EcsNameFlavor srcFlavor,
 																	  const char* srcName);
-enum EcsMapSt		EXP_LVL1	csMapNameToNameVb (enum EcsMapObjType type,char* trgName,
-																			size_t trgSize,
-																			enum EcsNameFlavor trgFlavor,
-																			enum EcsNameFlavor srcFlavor,
-																			const char* srcName);
-enum EcsMapSt		EXP_LVL1	csMapIdToNameVb (enum EcsMapObjType type,char* trgName,
-																		  size_t trgSize,
-																		  enum EcsNameFlavor trgFlavor,
-																		  enum EcsNameFlavor srcFlavor,
-																		  long32_t srcId);
+long32_t		EXP_LVL1	CS_mapNameToNameVb (enum EcsMapObjType type,char* trgName,
+																		size_t trgSize,
+																		enum EcsNameFlavor trgFlavor,
+																		enum EcsNameFlavor srcFlavor,
+																		const char* srcName);
+long32_t		EXP_LVL1	CS_mapIdToNameVb (enum EcsMapObjType type,char* trgName,
+																	  size_t trgSize,
+																	  enum EcsNameFlavor trgFlavor,
+																	  enum EcsNameFlavor srcFlavor,
+																	  long32_t srcId);
 #endif
 #ifdef __cplusplus
 }

@@ -8,7 +8,7 @@ Please note:
 to make the DLL somewhat generic.  Obviously, if this is inappropriate, it is
 easy enough to change in the Property Sheets.  The DLL does not reference any
 other DLL (like MFC, OLE, ATL) other than the standard Windows stuff such as
-kernel.dll and oldnames.dll.
+kernel.dll.
 
 2> Use an environmental variable named CS_MAP_DIR to provide the location of
 the Dictionary directory which is to be referenced.  If the DLL can't
@@ -29,4 +29,4 @@ and work.  These changes involve the use of EXP_LVL? defines which are defined
 as a NULL string unless the DLL_32 or DLL_64 preprocessor variables are
 defined.  These were not defined in the traditional OpenSource.sln file and
 the associated project files.  Thus, these code changes should not have
-any affect on any precious builds and/or applications.
+any affect on any previous builds and/or applications.

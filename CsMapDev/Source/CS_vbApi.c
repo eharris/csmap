@@ -29,13 +29,13 @@
    to make access to the DLL easy for VB/VBA users.
 
    Each of the functions defined here has a corresponding function in the
-   normal library.  What each of these stubs do, is instad of returnng a
+   normal library.  What each of these stubs do, is instead of returing a
    null terminated 'C' string in the provided buffer, these stubs return
-   a left justified field, with space padding on the right, which is NOT
+   a left justified field, with space padding on the right, which is _NOT_
    null terminated.  The size argument specifies how wide the "field" is.
 
 	Thus, VB/VBA users (and perhaps users of other high level languages such
-	as Delphi, OPtima, etc.) can conveniently access the core functions with
+	as Delphi, Optima, etc.) can conveniently access the core functions with
 	code similar to the following:
 	
 	Dim format As Long
@@ -51,15 +51,22 @@
 	.
 	.
 
-	Further, early version of VB and VBA use 8 bit characters. I suspect that
-	newer versions use 16 bit characters (UF2?).  Localizing this action in
-	this mosule makes it easy to switch between the two; and the modules are
+	Further, most versions of VB and VBA use 8 bit characters.  It could be
+	that future versions use something else.  Localizing this action in this
+	module makes it easy to switch between the two; and the modules are
 	designed to facilitate that.  Note that CS_MAP is strictly an 8 bit
 	character library.
 */
 
 #include "cs_map.h"
 #include "cs_NameMapperSupport.h"
+#include "cs_vbApi.h"
+
+const long32_t csNmMaprSt_Ok      =  0;	/* Normal completion */
+const long32_t csNmMaprSt_NoName  =  1;	/* Source entry was found, no name defined with target flavor */
+const long32_t csNmMaprSt_NoNbr   =  2;	/* Source flavored entry was found, no number defined with target flavor */
+const long32_t csNmMaprSt_NoMatch =  4;	/* Source entry could not defined in Name Mapper */
+const long32_t csNmMaprSt_NoMap   = -1;	/* Name mapper initialization failed, use CS_errmsg to get reason */
 
 void EXP_LVL5 CSstrToVba (char *vbaStr,int vbaLen,Const char *csMapStr)
 {
@@ -79,6 +86,20 @@ void EXP_LVL5 CSstrToVba (char *vbaStr,int vbaLen,Const char *csMapStr)
 		}
 	}
 	return;
+}
+
+long32_t EXP_LVL5 csNmMapStToInt (enum EcsMapSt nmMapSt)
+{
+	long32_t rtnValue;
+
+	switch (nmMapSt) {
+	case csMapOk:      rtnValue =  0; break;
+    case csMapNoName:  rtnValue =  1; break;
+    case csMapNoNbr:   rtnValue =  2; break;
+    case csMapNoMatch: rtnValue =  4; break;
+	default:           rtnValue = -1; break;
+	}
+	return rtnValue;
 }
 
 int EXP_LVL1 CS_csEnumVb (int index,char *key_name,int size)
@@ -253,11 +274,15 @@ int EXP_LVL1 CS_unEnumPluralVb (int index,int type,char *un_name,int un_size)
 	CSstrToVba (un_name,un_size,csMapBufr);
 	return rtnValue;
 }
-long32_t EXP_LVL1 csMapIdToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
-														 enum EcsNameFlavor srcFlavor,
-														 long32_t srcId)
+/* Bit of a wobble here.  If the return value is +4 or less, the value is
+   actually a status value.  A value greater than +4 is the requested
+   ID number. */
+long32_t EXP_LVL1 CS_mapIdToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
+														  enum EcsNameFlavor srcFlavor,
+														  long32_t srcId)
 {
 	extern const unsigned long KcsNmInvNumber;
+	extern const unsigned long KcsNmMapNoNumber;
 
 	long32_t rtnValue;
 	unsigned long myId;
@@ -267,7 +292,11 @@ long32_t EXP_LVL1 csMapIdToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgF
 	myId = csMapIdToId (type,trgFlavor,srcFlavor,mySrcId);
 	if (myId == KcsNmInvNumber)
 	{
-		rtnValue = -1;
+		rtnValue = csNmMaprSt_NoMatch;
+	}
+	else if (myId == KcsNmMapNoNumber)
+	{
+		rtnValue = csNmMaprSt_NoNbr;
 	}
 	else
 	{
@@ -275,11 +304,15 @@ long32_t EXP_LVL1 csMapIdToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgF
 	}
 	return rtnValue;
 }
-long32_t EXP_LVL1 csMapNameToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
-														   enum EcsNameFlavor srcFlavor,
-														   const char* srcName)
+/* Bit of a wobble here.  If the return value is +4 or less, the value is
+   actually a status value.  A value greater than +4 is the requested
+   ID number. */
+long32_t EXP_LVL1 CS_mapNameToIdVb (enum EcsMapObjType type,enum EcsNameFlavor trgFlavor,
+															enum EcsNameFlavor srcFlavor,
+															const char* srcName)
 {
 	extern const unsigned long KcsNmInvNumber;
+	extern const unsigned long KcsNmMapNoNumber;
 
 	long32_t rtnValue;
 	unsigned long myId;
@@ -287,7 +320,11 @@ long32_t EXP_LVL1 csMapNameToIdVb (enum EcsMapObjType type,enum EcsNameFlavor tr
 	myId = csMapNameToIdC (type,trgFlavor,srcFlavor,srcName);
 	if (myId == KcsNmInvNumber)
 	{
-		rtnValue = -1;
+		rtnValue = csNmMaprSt_NoMatch;
+	}
+	else if (myId == KcsNmMapNoNumber)
+	{
+		rtnValue = csNmMaprSt_NoNbr;
 	}
 	else
 	{
@@ -295,34 +332,33 @@ long32_t EXP_LVL1 csMapNameToIdVb (enum EcsMapObjType type,enum EcsNameFlavor tr
 	}
 	return rtnValue;
 }
-enum EcsMapSt EXP_LVL1 csMapNameToNameVb (enum EcsMapObjType type,char* trgName,
-																  size_t trgSize,
-																  enum EcsNameFlavor trgFlavor,
-																  enum EcsNameFlavor srcFlavor,
-																  const char* srcName)
+long32_t EXP_LVL1 CS_mapNameToNameVb (enum EcsMapObjType type,char* trgName,
+															  size_t trgSize,
+															  enum EcsNameFlavor trgFlavor,
+															  enum EcsNameFlavor srcFlavor,
+															  const char* srcName)
 {
-	enum EcsMapSt rtnValue;
+	enum EcsMapSt nmMapSt;
 	
 	char nameBufr [1024];
 
-	rtnValue = csMapNameToNameC (type,nameBufr,sizeof (nameBufr),trgFlavor,srcFlavor,srcName);
+	nmMapSt = csMapNameToNameC (type,nameBufr,sizeof (nameBufr),trgFlavor,srcFlavor,srcName);
 	CSstrToVba (trgName,(int)trgSize,nameBufr);
-	return rtnValue;
+	return csNmMapStToInt (nmMapSt);
 }
-enum EcsMapSt EXP_LVL1 csMapIdToNameVb (enum EcsMapObjType type,char* trgName,
-																size_t trgSize,
-																enum EcsNameFlavor trgFlavor,
-																enum EcsNameFlavor srcFlavor,
-																long32_t srcId)
+long32_t EXP_LVL1 CS_mapIdToNameVb (enum EcsMapObjType type,char* trgName,
+															size_t trgSize,
+															enum EcsNameFlavor trgFlavor,
+															enum EcsNameFlavor srcFlavor,
+															long32_t srcId)
 {
-	enum EcsMapSt rtnValue;
+	enum EcsMapSt nmMapSt;
 	unsigned long mySrcId;
 
 	char nameBufr [1024];
 
 	mySrcId = (ulong32_t)srcId;
-	rtnValue = csMapIdToNameC (type,nameBufr,sizeof (nameBufr),trgFlavor,srcFlavor,mySrcId);
+	nmMapSt = csMapIdToNameC (type,nameBufr,sizeof (nameBufr),trgFlavor,srcFlavor,mySrcId);
 	CSstrToVba (trgName,(int)trgSize,nameBufr);
-	return rtnValue;
+	return csNmMapStToInt (nmMapSt);
 }
-

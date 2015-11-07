@@ -7419,7 +7419,7 @@ struct	cs_Ctdef_*	EXP_LVL3	CSrdCatFile (void);
 struct	cs_Ctdef_*	EXP_LVL3	CSnewCategory (Const char* ctName);
 struct	cs_Ctdef_*	EXP_LVL3	CSnewCategoryEx (Const char* ctName, int preAllocate);
 struct	cs_Ctdef_*	EXP_LVL3	CSgetCtDef(const char* catName);
-int		            EXP_LVL3	CSgetCtDefAll(struct cs_Ctdef_ **pDefArray[]);
+int					EXP_LVL3	CSgetCtDefAll(struct cs_Ctdef_ **pDefArray[]);
 struct	cs_Ctdef_*	EXP_LVL3	CScpyCategory(Const struct cs_Ctdef_ * pCategoryIn);
 struct	cs_Ctdef_*	EXP_LVL3	CScpyCategoryEx(struct cs_Ctdef_* pDstCategory, Const struct cs_Ctdef_ * pSrcCategory, int setProtectFlag);
 int					EXP_LVL3	CSclnCategory(struct cs_Ctdef_ * pCategoryIn);
@@ -7441,26 +7441,6 @@ int					EXP_LVL3	CS_ctdel (struct cs_Ctdef_ *ctdef);
 int					EXP_LVL3	CS_ctupd (Const struct cs_Ctdef_ *ctdef);
 int					EXP_LVL3	CS_ctrd (csFILE *strm, struct cs_Ctdef_ *ct_def);
 int					EXP_LVL3	CS_ctwr (csFILE *strm,Const struct cs_Ctdef_ *ct_def);
-
-/* Variations of the specifically for Visual Basic.  They could work elsewhere,
-   but they have been tested in Visual Basic. */
-int					EXP_LVL1	CS_csEnumVb (int index,char *key_name,int size);
-int					EXP_LVL1	CS_csRangeEnumVb (int index,char *key_name,int size);
-int					EXP_LVL1	CS_dtEnumVb (int index,char *key_name,int size);
-int					EXP_LVL1	CS_elEnumVb (int index,char *key_name,int size);
-void				EXP_LVL1	CS_errmsgVb (char *user_bufr,int buf_size);
-long32_t			EXP_LVL1	CS_ftoaVb (char *bufr,int size,double value,long frmt);
-int					EXP_LVL1	CS_getDataDirectoryVb (char *data_dir,int dir_sz);
-int					EXP_LVL1	CS_getDatumOfVb (Const char *csKeyName,char *datumName,int size);
-int					EXP_LVL1	CS_getDescriptionOfVb (Const char *csKeyName,char *description,int size);
-int					EXP_LVL1	CS_getEllipsoidOfVb (Const char *csKeyName,char *ellipsoidName,int size);
-int					EXP_LVL1	CS_getReferenceOfVb (Const char *csKeyName,char *reference,int size);
-int					EXP_LVL1	CS_getSourceOfVb (Const char *csKeyName,char *source,int size);
-int					EXP_LVL1	CS_getUnitsOfVb (Const char *csKeyName,char *unitName,int size);
-int					EXP_LVL1	CS_mgrsFromLlVb (char* result,int rdlt_size,double latLng [2],int prec);
-int					EXP_LVL1	CS_prjEnumVb (int index,ulong32_t *prj_flags,char *prj_keynm,int keynm_sz,char *prj_descr,int descr_sz);
-int					EXP_LVL1	CS_unEnumVb (int index,int type,char *un_name,int un_size);
-int					EXP_LVL1	CS_unEnumPluralVb (int index,int type,char *un_name,int un_size);
 
 #ifdef __cplusplus
 }

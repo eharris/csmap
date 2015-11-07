@@ -4,13 +4,13 @@
 ' Redistribution and use in source and binary forms, with or without
 ' modification, are permitted provided that the following conditions are met:
 '    ' Redistributions of source code must retain the above copyright
-'       notice, this list of conditions and the following disclaimer.
+'      notice, this list of conditions and the following disclaimer.
 '    ' Redistributions in binary form must reproduce the above copyright
-'       notice, this list of conditions and the following disclaimer in the
-'       documentation and/or other materials provided with the distribution.
+'      notice, this list of conditions and the following disclaimer in the
+'      documentation and/or other materials provided with the distribution.
 '    ' Neither the name of the Autodesk, Inc. nor the names of its
-'       contributors may be used to endorse or promote products derived
-'       from this software without specific prior written permission.
+'      contributors may be used to endorse or promote products derived
+'      from this software without specific prior written permission.
 '
 ' THIS SOFTWARE IS PROVIDED BY Autodesk, Inc. ``AS IS'' AND ANY
 ' EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -134,6 +134,7 @@ Private Declare Function CS_elIsValid Lib "CsMapDll" (ByVal key_name As String) 
 Private Declare Sub CS_errmsgVb Lib "CsMapDll" (ByVal my_bufr As String, ByVal bufr_size As Integer)
 Private Declare Sub CS_fast Lib "CsMapDll" (ByVal fast As Integer)
 Private Declare Function CS_ftoaVb Lib "CsMapDll" (ByVal buffer As String, ByVal size As Integer, ByVal value As Double, ByVal format As Long) As Long
+Private Declare Sub CS_geoidCls Lib "CsMapDll" ()
 Private Declare Function CS_geoidHgt Lib "CsMapDll" (ByRef lngLat As Double, ByRef geoidHeight As Double) As Integer
 Private Declare Function CS_getDataDirectoryVb Lib "CsMapDll" (ByVal data_dir As String, ByVal dir_sz As Integer) As Integer
 Private Declare Function CS_isgeo Lib "CsMapDll" (ByVal crd_sys As String) As Integer
@@ -161,13 +162,13 @@ Private Declare Function CS_getDescriptionOfVb Lib "CsMapDll" (ByVal csKeyName A
 Private Declare Function CS_getEllipsoidOfVb Lib "CsMapDll" (ByVal csKeyName As String, ByVal ellipsoidName As String, ByVal size As Integer) As Integer
 Private Declare Function CS_getReferenceOfVb Lib "CsMapDll" (ByVal csKeyName As String, ByVal reference As String, ByVal size As Integer) As Integer
 Private Declare Function CS_getSourceOfVb Lib "CsMapDll" (ByVal csKeyName As String, ByVal source As String, ByVal size As Integer) As Integer
-Private Declare Function CS_getUnitsOf Lib "CsMapDll" (ByVal csKeyName As String, ByVal unitName As String, ByVal size As Integer) As Integer
+Private Declare Function CS_getUnitsOfVb Lib "CsMapDll" (ByVal csKeyName As String, ByVal unitName As String, ByVal size As Integer) As Integer
 Private Declare Function CS_getElValues Lib "CsMapDll" (ByVal elKeyName As String, ByRef eRadius As Double, ByRef eSquared As Double) As Integer
 
-Private Declare Function CS_MapNameToId Lib "CsMapDll" (ByVal type As EcsMapObjType, ByVal type As EcsNameFlavor, ByVal srcFlavor As EcsNameFlavor, ByVal srcName As String) As Integer
-Private Declare Function CS_MapIdToIdVb Lib "CsMapDll" (ByVal type As EcsMapObjType, ByVal type As EcsNameFlavor, ByVal srcFlavor As EcsNameFlavor, ByVal srcId As Integer) As Integer
-Private Declare Function CS_MapIdToNameVb Lib "CsMapDll" (ByVal type As EcsMapObjType, ByVal trgName As String, ByVal trgSize As Integer, ByVal type As EcsNameFlavor, ByVal srcFlavor As EcsNameFlavor, ByVal srcId As Integer) As Integer
-Private Declare Function CS_MapNameToNameVb Lib "CsMapDll" (ByVal type As EcsMapObjType, ByVal trgName As String, ByVal trgSize As Integer, ByVal type As EcsNameFlavor, ByVal srcFlavor As EcsNameFlavor, ByVal srcName As String) As Integer
+Private Declare Function CS_mapNameToIdVb Lib "CsMapDll" (ByVal type As EcsMapObjType, ByVal type As EcsNameFlavor, ByVal srcFlavor As EcsNameFlavor, ByVal srcName As String) As Integer
+Private Declare Function CS_mapIdToIdVb Lib "CsMapDll" (ByVal type As EcsMapObjType, ByVal type As EcsNameFlavor, ByVal srcFlavor As EcsNameFlavor, ByVal srcId As Integer) As Integer
+Private Declare Function CS_mapIdToNameVb Lib "CsMapDll" (ByVal type As EcsMapObjType, ByVal trgName As String, ByVal trgSize As Integer, ByVal type As EcsNameFlavor, ByVal srcFlavor As EcsNameFlavor, ByVal srcId As Integer) As Integer
+Private Declare Function CS_mapNameToNameVb Lib "CsMapDll" (ByVal type As EcsMapObjType, ByVal trgName As String, ByVal trgSize As Integer, ByVal type As EcsNameFlavor, ByVal srcFlavor As EcsNameFlavor, ByVal srcName As String) As Integer
 '
 ' Constants for use with CS_atof and CS_ftoaVb
 '

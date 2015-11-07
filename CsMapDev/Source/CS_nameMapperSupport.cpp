@@ -293,7 +293,7 @@ TcsNameMapper* cmGetNameMapperPtr (bool release)
     }
 	return KcsNameMapperPtr;
 }
-void csReleaseNameMapper (void)
+void EXP_LVL1 csReleaseNameMapper (void)
 {
 	cmGetNameMapperPtr (true);//lint !e534   ignoring return value
 }
