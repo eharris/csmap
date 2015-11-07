@@ -2697,10 +2697,26 @@ MAL-RSO-SH,704570.402,653979.691,LL84,116 2 21.47404E,5 54 16.59963N,1.0E-08,1.0
 # and uncomment the references to them for the following tests to complete
 # successfully.
 #
-LL27,66 29 9.690434W,45 50 34.30684N,LL-CSRS,66 29 7.66471W,45 50 34.55307N,1.0E-08,1.0E-08   # ~Maugerville. NB
-LL-CSRS,66 29 7.66471W,45 50 34.55307N,LL27,66 29 9.690434W,45 50 34.30684N,1.0E-08,1.0E-08   # ~Maugerville. NB
-LL27,67 03 27.38475W,44 39 31.37465N,LL-CSRS,67 3 25.36575W,44 39 31.68840N,1.0E-08,1.0E-08   # ~St Andrews, NB
-LL-CSRS,67 3 25.36575W,44 39 318.68840N,LL27,67 03 27.38475W,44 39 31.37465N,1.0E-08,1.0E-08  # ~St Andrews, NB
+# Oops!!!  These tests are commented out as they represent the conversion of
+# NAD27 to CSRS in the Maritime provinces.  The Maritime Provinces have never
+# officially recognized what the rest of Canada has referred to as NAD83 (ala
+# NTv2).  Thus, the standard conversion from NAD27 to NAD83 does not apply here,
+# nor does the standard NAD83 to CSRS apply.  This is a problem in the current
+# implementation of the Geodetic Transformation and Geodetic Path dictionaries
+# in that this particular transformation is location dependent and there are
+# no provisions for location dependent transformations in these dictionaries.
+#
+# An alternative solution to this problem would be an alternative datum, such
+# as NAD27_MT (i.e. NAD27 for Maritime Provinces) which could then be used in
+# the Geodetic Path dictionary to specifiy the exact transformations needed to
+# perform this transformation; specifically: NAD27-MT_to_ATS77 and then
+# ATS77_to_CSRS.  This implies that there would  be a geographic coordinate
+# system (LL27-MT ?) which would be referenced to the new datum.
+#
+#LL27,66 29 9.690434W,45 50 34.30684N,LL-CSRS,66 29 7.66471W,45 50 34.55307N,1.0E-08,1.0E-08   # ~Maugerville. NB
+#LL-CSRS,66 29 7.66471W,45 50 34.55307N,LL27,66 29 9.690434W,45 50 34.30684N,1.0E-08,1.0E-08   # ~Maugerville. NB
+#LL27,67 03 27.38475W,44 39 31.37465N,LL-CSRS,67 3 25.36575W,44 39 31.68840N,1.0E-08,1.0E-08   # ~St Andrews, NB
+#LL-CSRS,67 3 25.36575W,44 39 318.68840N,LL27,67 03 27.38475W,44 39 31.37465N,1.0E-08,1.0E-08  # ~St Andrews, NB
 #
 # Test points for system T-KrugerTM that is categorized as belonging to the TEST
 # group which are not ordinarily included in release builds.  To be able to test
