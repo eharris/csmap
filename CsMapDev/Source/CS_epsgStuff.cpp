@@ -374,6 +374,9 @@ const TcsEpsgUomTypeMap KcsEpsgUomTypeMap [] =
 	{    epsgUomTypUnknown,     L"<unknown UOM type>"  }
 };
 
+// There are lots more of these.  I believe the ones included below are the
+// onlyones we need.  Note that \260 is \xB0 and hopefully produces the
+// degree sign (i.e. the little circle thing).
 const TcsEpsgOrntTypeMap KcsEpsgOrntTypeMap [] =
 {
 	{         epsgOrntEast,     L"South along 90E"     },
@@ -386,12 +389,16 @@ const TcsEpsgOrntTypeMap KcsEpsgOrntTypeMap [] =
 	{        epsgOrntSouth,     L"south"               },
 	{           epsgOrntUp,     L"up"                  },
 	{         epsgOrntDown,     L"down"                },
+	{         epsgOrntEast,     L"South along 90\260E" },
+	{        epsgOrntNorth,     L"South along 180\260E"},
+	{         epsgOrntEast,     L"North along 90\260E" },
+	{        epsgOrntNorth,     L"North along 0\260E"  },
 	{      epsgOrntUnknown,     L"<unknownOrientation>"}
 };
 
 // The following maps EPSG Area codes to CS-MAP group names.
 // A bit hoekey, but it provides reasonably good results.  Table
-// generation dates back to EPSG 6.13; so it probably use an
+// generation dates back to EPSG 6.13; so it probably could use an
 // update.
 const struct TcmAreaToMsiGroupMap
 {
@@ -1487,19 +1494,13 @@ EcsOrientation GetOrientation (const wchar_t* orntTypeName)
 	EcsOrientation rtnValue;
 	const TcsEpsgOrntTypeMap* tblPtr;
 
-	unsigned cmpCount;
-	wchar_t cmpBufr [32];
+	wchar_t cmpBufr [64];
 
 	rtnValue = epsgOrntUnknown;
 	for (tblPtr = KcsEpsgOrntTypeMap;tblPtr->OrntType != epsgOrntUnknown;++tblPtr)
 	{
-		cmpCount = static_cast<unsigned>(wcslen (tblPtr->OrntTypeName));
-		if (cmpCount >= wcCount (cmpBufr))
-		{
-			cmpCount = wcCount (cmpBufr) - 1;
-		}
-		wcsncpy (cmpBufr,orntTypeName,cmpCount);
-		cmpBufr [cmpCount] = L'\0';
+		wcsncpy (cmpBufr,orntTypeName,wcCount (cmpBufr));
+		cmpBufr [wcCount (cmpBufr) - 1] = L'\0';
 		if (CS_wcsicmp (cmpBufr,tblPtr->OrntTypeName) == 0)
 		{
 			rtnValue = tblPtr->OrntType;
@@ -2200,7 +2201,6 @@ bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& 
 			ok = GetCsMapEllipsoid (ellipsoid,ellpCode);
 		}
 	}
-
 	// Now to the datum specifics.  This can get rather tricky.  There may be
 	// several variants, and there may be two or more operations in each
 	// variant.  To address this, there is a TcsOpVariants object.
@@ -2253,7 +2253,6 @@ bool TcsEpsgDataSetV6::GetCsMapDatum (struct cs_Dtdef_& datum,struct cs_Eldef_& 
 			datum.fill03 = 0;
 			datum.fill04 = 0;
 		}
-
 		// We have the base geographic system for this datum. We no construct a
 		// TcsOpVariants to obtain a list of all variants which will convert the
 		// datum of this base to WGS84.
@@ -2292,6 +2291,7 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 {
 	bool ok;
 	bool coordFrame (false);
+	bool postnVector (false);
 	short to84_via (cs_DTCTYP_NONE);
 	short csPrmCount;
 
@@ -2340,6 +2340,7 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 		case 9606:				// Position Vector
 			to84_via = cs_DTCTYP_BURS;
 			csPrmCount = 7;
+			postnVector = true;
 			break;
 		case 9607:				// Coordinate Frame
 			to84_via = cs_DTCTYP_BURS;
@@ -2385,19 +2386,19 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 		if (ok)
 		{
 			datum.rot_X = parmValue;
-			if (coordFrame) datum.rot_X *= -1.0;
+			if (postnVector) datum.rot_X *= -1.0;
 		}
 		ok = GetParameterValue (parmValue,operationCode,opMthCode,8609UL,9104UL);
 		if (ok)
 		{
 			datum.rot_Y = parmValue;
-			if (coordFrame) datum.rot_Y *= -1.0;
+			if (postnVector) datum.rot_Y *= -1.0;
 		}
 		ok = GetParameterValue (parmValue,operationCode,opMthCode,8610UL,9104UL);
 		if (ok)
 		{
 			datum.rot_Z = parmValue;
-			if (coordFrame) datum.rot_Z *= -1.0;
+			if (postnVector) datum.rot_Z *= -1.0;
 		}
 	}	
 	if (ok && csPrmCount >= 7)
@@ -2739,20 +2740,19 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 			mmOk &= areaTblPtr->GetAsReal (minLat,areaOfUseCode,epsgFldAreaSouthBoundLat);
 			mmOk &= areaTblPtr->GetAsReal (maxLat,areaOfUseCode,epsgFldAreaNorthBoundLat);
 
+			// Adjust longitude for the +/- 180 degree crack.  Note, minLng is "left longitude",
+			// maxLng is "right longitude".  We convert to a specific range such that minLng is
+			// always algebraically less than maxLng; even if the value is less than -180.
+			if (minLng > maxLng) minLng -= 360.00;
+
 			// See if they are all Ok and consistent.
 			if (mmOk)
 			{
-				mmOk  = (minLng >= -180.0) && (minLng <= 180.0);
+				mmOk  = (maxLng >= -180.0) && (maxLng <= 180.0);
+				mmOk &= (minLng >= -360.0) && (minLng < maxLng);
 				mmOk &= (minLat >=  -90.0) && (minLat <=  90.0);
-				mmOk &= (maxLng >= -180.0) && (maxLng <= 180.0);
 				mmOk &= (maxLat >=  -90.0) && (maxLat <=  90.0);
-				if (mmOk)
-				{
-					//?? This might fail on a legal definition.  Don't know how EPSG
-					// wraps around the 180 degree crack.  Don't know right off hand
-					// any definitions which do (Alaska, maybe).
-					mmOk &= (minLng < maxLng)  && (minLat < maxLat);
-				}
+				mmOk &= (minLat < maxLat);
 			}
 			if (mmOk)
 			{
@@ -2763,7 +2763,7 @@ bool TcsEpsgDataSetV6::GetCsMapCoordsys (struct cs_Csdef_& coordsys,struct cs_Dt
 			}
 		}
 	}
-	
+
 	// Do the stuff specific to the type.
 	if (ok && crsType == epsgCrsTypGeographic2D)
 	{
@@ -2976,7 +2976,6 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 
 	ok = (crsTblPtr != 0) && (copTblPtr != 0) && (uomTblPtr != 0) && (sysTblPtr != 0) &&
 																	 (axsTblPtr != 0);
-
 	// Get the system UOM to Meters factor, we'll need that in various places.
 	if (ok)
 	{
@@ -3091,6 +3090,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			}
 		}
 	}
+
 	// For the remainder of this execution, mthEpsgCode has the EPSG Operation
 	// Method code, and prjTblPtr points to the corresponding CS-MAP projection
 	// table entry.  These are heavily relied upon below.
@@ -3397,7 +3397,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			// only one projection variation, while CS-MAP has two.  This is
 			// true as the EPSG parameterization requires two angles; the
 			// CS-MAP parameterizations only one angle.  This is possible,
-			// as given on of these angles, you can compute the other.  You
+			// as given one of these angles, you can compute the other.  You
 			// just need to know which one you have; thus two projection
 			// variatiuons in CS-MAP.
 			
@@ -3409,7 +3409,7 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			// order to cause the Y grid axis to be true north.  When both
 			// of these values are equal, you have the Hotine Mercator
 			// variation; when they are not equal, you have the Rectified
-			// Skew Orthomorphic variation.			
+			// Skew Orthomorphic variation.
 			ok  = GetParameterValue (alpha,copEpsgCode,mthEpsgCode,8813UL,9102UL);
 			ok &= GetParameterValue (gamma,copEpsgCode,mthEpsgCode,8814UL,9102UL);
 			alpha = CS_adj180 (alpha);
@@ -3454,7 +3454,12 @@ bool TcsEpsgDataSetV6::ProjectedCoordsys (struct cs_Csdef_& coordsys,const TcsEp
 			//
 			// The standard code above should have properly placed most of
 			// the correct values.
-			ok  = GetParameterValue (oblqPoleCoLat,copEpsgCode,mthEpsgCode,8813UL,9102UL);
+			//
+			// 20 November 2015  EPSG 8.7
+			// All of the above still holds, except that the oddball paramater
+			// has changed to:
+			//		1036 - "Co-latitude of cone axis"
+			ok  = GetParameterValue (oblqPoleCoLat,copEpsgCode,mthEpsgCode,1036UL,9102UL);
 			if (ok && (fabs (coordsys.org_lat - 49.5) < 1.0E-03) &&
 					  (fabs (oblqPoleCoLat - 30.28814) < 1.0E-03)
 			   )
@@ -4280,16 +4285,18 @@ bool TcsEpsgDataSetV6::GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsg
 
 	short myQuad;
 	unsigned recordNumber;
+	long axisOrder;
 
 	TcsEpsgCode sysEpsgCode;
 	TcsEpsgCode uomCodeOne;
 	TcsEpsgCode uomCodeTwo;
 	TcsEpsgCode uomCodeThree;
+	TcsEpsgCode uomCodeTmp;
 
 	EcsOrientation axisOne (epsgOrntUnknown);
 	EcsOrientation axisTwo (epsgOrntUnknown);
 	EcsOrientation axisThree (epsgOrntUnknown);
-	EcsOrientation axisTmp;
+	EcsOrientation axisTmp  (epsgOrntUnknown);
 
 	std::wstring fldData;
 
@@ -4309,7 +4316,7 @@ bool TcsEpsgDataSetV6::GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsg
 
 	// OK, extract the information the best we can.  In the event of a two
 	// dimensional system, this function still returns true, but vertUom is
-	// left in the Invalid state.	
+	// left in the Invalid state.
 	if (ok)
 	{
 		// Get the Coordinate System Code (different from the CRS code).
@@ -4317,37 +4324,45 @@ bool TcsEpsgDataSetV6::GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsg
 		if (ok)
 		{
 			// We have the coordinate system code; we need to get the first two
-			// axes out of the table.  Note that we rely heavily on the sorted
-			// order of the table here.  That is, the first one we encounter
-			// is expected to have an "Order" value of 1. 
+			// (possibly three) axes out of the table.
 			recordNumber = axsTblPtr->EpsgLocateFirst (epsgFldCoordSysCode,sysEpsgCode);
 			ok = (recordNumber != invalidRecordNbr);
 			if (ok)
 			{
-				ok = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
+				ok = axsTblPtr->GetAsLong (axisOrder,recordNumber,epsgFldOrder);
+				if (ok) ok = (axisOrder >= 1L) && (axisOrder <= 3L);
+				if (ok) ok = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
+				if (ok) axisTmp = GetOrientation (fldData.c_str ());
+				if (ok) ok = axsTblPtr->GetAsEpsgCode (uomCodeTmp,recordNumber,epsgFldUomCode);
 				if (ok)
 				{
-					axisOne = GetOrientation (fldData.c_str ());
-				}
-				if (ok)
-				{
-					ok = axsTblPtr->GetAsEpsgCode (uomCodeOne,recordNumber,epsgFldUomCode);
+					switch (axisOrder) {
+					case 1: axisOne   = axisTmp; uomCodeOne   = uomCodeTmp; break;
+					case 2: axisTwo   = axisTmp; uomCodeTwo   = uomCodeTmp; break;
+					case 3: axisThree = axisTmp; uomCodeThree = uomCodeTmp; break;
+					default: ok = false; break;		// Redundant,
+					}
 				}
 			}
 			if (ok)
 			{
 				recordNumber = axsTblPtr->EpsgLocateNext (recordNumber,epsgFldCoordSysCode,sysEpsgCode);
 				ok = (recordNumber != invalidRecordNbr);
+			}
+			if (ok)
+			{
+				ok = axsTblPtr->GetAsLong (axisOrder,recordNumber,epsgFldOrder);
+				if (ok) ok = (axisOrder >= 1L) && (axisOrder <= 3L);
+				if (ok) ok = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
+				if (ok) axisTmp = GetOrientation (fldData.c_str ());
+				if (ok) ok = axsTblPtr->GetAsEpsgCode (uomCodeTmp,recordNumber,epsgFldUomCode);
 				if (ok)
 				{
-					ok = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
-					if (ok)
-					{
-						axisTwo = GetOrientation (fldData.c_str ());
-					}
-					if (ok)
-					{
-						ok = axsTblPtr->GetAsEpsgCode (uomCodeTwo,recordNumber,epsgFldUomCode);
+					switch (axisOrder) {
+					case 1: axisOne   = axisTmp; uomCodeOne   = uomCodeTmp; break;
+					case 2: axisTwo   = axisTmp; uomCodeTwo   = uomCodeTmp; break;
+					case 3: axisThree = axisTmp; uomCodeThree = uomCodeTmp; break;
+					default: ok = false;		// Redundant,
 					}
 				}
 			}
@@ -4359,14 +4374,19 @@ bool TcsEpsgDataSetV6::GetCoordsysQuad (short& quad,TcsEpsgCode& horzUom,TcsEpsg
 				ok3 = (recordNumber != invalidRecordNbr);
 				if (ok3)
 				{
-					ok3 = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
+					ok3 = axsTblPtr->GetAsLong (axisOrder,recordNumber,epsgFldOrder);
+					if (ok3) ok3 = (axisOrder >= 1L) && (axisOrder <= 3L);
+					if (ok3) ok3 = axsTblPtr->GetField (fldData,recordNumber,epsgFldCoordAxisOrientation);
+					if (ok3) axisTmp = GetOrientation (fldData.c_str ());
+					if (ok3) ok3 = axsTblPtr->GetAsEpsgCode (uomCodeTmp,recordNumber,epsgFldUomCode);
 					if (ok3)
 					{
-						axisThree = GetOrientation (fldData.c_str ());
-					}
-					if (ok3)
-					{
-						ok3 = axsTblPtr->GetAsEpsgCode (uomCodeThree,recordNumber,epsgFldUomCode);
+						switch (axisOrder) {
+						case 1: axisOne   = axisTmp; uomCodeOne   = uomCodeTmp; break;
+						case 2: axisTwo   = axisTmp; uomCodeTwo   = uomCodeTmp; break;
+						case 3: axisThree = axisTmp; uomCodeThree = uomCodeTmp; break;
+						default: ok3 = false;		// Redundant,
+						}
 					}
 				}
 			}

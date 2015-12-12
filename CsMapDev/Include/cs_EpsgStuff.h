@@ -59,8 +59,8 @@ enum EcsEpsgTable { epsgTblNone = 0,
 
 // An enumeration of the fields within the EPSG Parameter Dataset.  To the
 // extent possible, fields in the EPSG tables which are the same as fields
-// in other tabl.es are given the same enumerator.  For example, the
-// enumerator value epsgFldDatumCode is used to access the datuam code
+// in other tables are given the same enumerator.  For example, the
+// enumerator value epsgFldDatumCode is used to access the datum code
 // value in all three (or is it four?) tables in which this value appears.
 enum EcsEpsgField { epsgFldNone = 0,
 					epsgFldAction,

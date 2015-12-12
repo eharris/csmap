@@ -33,6 +33,22 @@ extern "C"
 
 extern wchar_t const csEpsgDir [];
 
+unsigned long KcsDeprecatedCRSs [] =
+{
+//	    0UL,			// Uncomment this line to turn this feature off.
+	 2492UL,			// Deprecated by EPSG at 6.15, not replaced by
+						// anything, CS_MAP equivalent remains undeprecated.
+	 2493UL,			// Deprecated by EPSG at 6.15, not replaced by
+						// anything, CS_MAP equivalent remains undeprecated.
+	21817UL,			// Deprecated by EPSG at 6.7, not replaced by
+						// anything, CS_MAP equivalent remains undeprecated.
+	23853UL,			// Deprecated by EPSG at 6.7, not replaced by
+						// anything, CS_MAP equivalent remains undeprecated.
+	23886UL,			// Deprecated by EPSG at 6.7, not replaced by
+						// anything, CS_MAP equivalent remains undeprecated.
+	    0UL				// Terminates this table.
+};
+
 int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 {
 	bool ok;
@@ -56,6 +72,7 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 
 	std::wstring fldData;
 
+	int idx;					// loop index variable
 	int errCnt = 0;				// total number of errors detected.
 	int wrnCnt = 0;				// total number of warnings detected (warning == noMap)
 
@@ -374,34 +391,26 @@ int CStestM (const TcsEpsgDataSetV6& epsgV6,bool verbose,long32_t duration)
 			continue;
 		}
 
-		deprecated = epsgV6.IsDeprecated (epsgTblReferenceSystem,epsgCode);
-
-if (epsgCode == 2492UL)
-{
-	deprecated = false;
-}
-if (epsgCode == 21817UL)
-{
-	deprecated = false;
-}
-if (epsgCode == 23853UL)
-{
-	deprecated = false;
-}
-if (epsgCode == 23886UL)
-{
-	deprecated = false;
-}
-if (epsgCode == 28402UL)
-{
-	// Replaced by 3833, CS-MAP has no equivalent as yet.
-	deprecated = false;
-}
-if (epsgCode == 28403UL)
-{
-	// Replaced by 3333, CS-MAP has no equivalent as yet.
-	deprecated = false;
-}
+		// If this system appears in the KcsDeprecatedCRSs table, it is a
+		// system deprecated by EPSG, but not replaced by antything, and
+		// for which the CS_MAP equivalent system is not deprecated.  Thus,
+		// fot hese systems we force a "not deprecated" situation.
+		for (idx = 0;KcsDeprecatedCRSs [idx] != 0UL;idx += 1)
+		{
+			if (epsgCode == KcsDeprecatedCRSs [idx]) break;
+		}
+		if (KcsDeprecatedCRSs [idx] != 0UL)
+		{
+			// In the list, thus we consider this CRS to be _NOT_
+			// deprecated.
+			deprecated = false;
+		}
+		else
+		{
+			// This system is not in the list, thus we use the EPSG database
+			// deprecation indicator as is.
+			deprecated = epsgV6.IsDeprecated (epsgTblReferenceSystem,epsgCode);
+		}
 
 		csMapSt = csMapIdToNameC (csMapProjGeoCSys,csMapKeyName,sizeof (csMapKeyName),
 																csMapFlvrAutodesk,

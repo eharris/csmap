@@ -101,14 +101,15 @@ int main (int argc,char* argv [])
 
 ///////////////////////////////////////////////////////////////////////////////
 // The following activates the memory leak detector on MS Visual C++ 7.01
-#if defined(__HEAP__) && defined (_MSC_VER)
-	int memDbgState;
-	char *leakTest;
-	//	The following are useful in the Microsoft Windows environment.  As it appears
-	//	below, it will report on any memory leaks detected during the evaluation.
-	memDbgState = _CrtSetDbgFlag (_CRTDBG_REPORT_FLAG);
-	memDbgState |= _CRTDBG_ALLOC_MEM_DF;
-	memDbgState |= _CRTDBG_LEAK_CHECK_DF;
+#if defined (_MSC_VER)
+#	if defined(__HEAP__)
+		int memDbgState;
+		char *leakTest;
+		//	The following are useful in the Microsoft Windows environment.  As it appears
+		//	below, it will report on any memory leaks detected during the evaluation.
+		memDbgState = _CrtSetDbgFlag (_CRTDBG_REPORT_FLAG);
+		memDbgState |= _CRTDBG_ALLOC_MEM_DF;
+		memDbgState |= _CRTDBG_LEAK_CHECK_DF;
 //	memDbgState |= _CRTDBG_DELAY_FREE_MEM_DF;	// useful only when hunting for a leak.
 //	memDbgState |= _CRTDBG_CHECK_ALWAYS_DF;		// A real dog, hope we never need it.
 //	memDbgState |= _CRTDBG_CHECK_CRT_DF;		// CRT allocates environment, but
@@ -121,6 +122,26 @@ int main (int argc,char* argv [])
 	// a memory leak report.
 	leakTest = (char *)malloc (139);
 	strcpy (leakTest,"Leak detector working");
+#	else
+	// Here for a normal debug run.  SInce things like NameMapper and EPSG make
+	// profuse use of the heap through all kinds of wstring operations, we turn
+	// off heap allocation checking altogether.  Otherwise, it takes hours to
+	// do anything.
+	//
+	// THIS DOES NOT APPEAR TO WORK.  Execution time in DEBUG mode is still
+	// HOURS.  Any help you can provode would be appreciated.
+	//
+	// Best alternative knownm at this point is to start the release version in
+	// DEBUG mode (assuming that you habe not disabled the program database
+	// generation).  In this mode, you can do some debugging, and the EPSG
+	// database loads in about 2 minutes.
+	//
+	_CrtSetDbgFlag (_CRTDBG_CHECK_DEFAULT_DF);
+#	endif
+#endif
+
+#ifdef _DEBUG
+printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 #endif
 
 	// Capture the time and date of the start of this test.
