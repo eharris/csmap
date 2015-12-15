@@ -20168,7 +20168,7 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 23884,16,Autodesk,0,"DGN95.UTM-54S",0,0,0,0,,
 23884,16,Ctmx,0,"DGN95.UTM-54S",0,0,0,0,,
 23884,16,CsMap,0,"DGN95.UTM-54S",0,0,0,0,,
-23886,16,EPSG,23886,"ID74 / UTM zone 46S",0,0,0,1,,"Deprecated by EPSG at 6.7; 'Outwith the area of applicability of ID74". No replacement provided."
+23886,16,EPSG,23886,"ID74 / UTM zone 46S",0,0,0,1,,"Deprecated by EPSG at 6.7; 'Outwith the area of applicability of ID74.' No replacement provided."
 23886,16,ESRI,23886,"Indonesian_1974_UTM_Zone_46S",0,0,0,0,,
 23886,16,Oracle,23886,"ID74 / UTM zone 46S",0,0,0,0,,
 23886,16,Autodesk,0,"Indonesian1974.UTM-46S",0,0,0,0,,
