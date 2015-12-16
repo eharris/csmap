@@ -184,6 +184,7 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\cs7ParameterFlipList.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAdd2007and2011.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddEpsgData.cpp" />
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddInGCS.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle10Mappings.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle9Mappings.cpp" />
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddSequenceNbrs.cpp" />

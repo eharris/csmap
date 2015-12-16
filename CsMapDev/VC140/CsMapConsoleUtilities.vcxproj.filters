@@ -94,6 +94,9 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerate48Hpgn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddInGCS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CsMapConsoleUtilities\Include\csAscFixer.hpp">

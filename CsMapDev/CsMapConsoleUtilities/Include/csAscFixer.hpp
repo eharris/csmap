@@ -158,7 +158,7 @@ public:
 	// Construction,  Destruction,  Assignment  
 	TcsAscDefinition (EcsDictType type = dictTypNone);
 	TcsAscDefinition (EcsDictType type,TcsDefLnItrK begin,TcsDefLnItrK end);
-	TcsAscDefinition (const TcsDefLine& firstLine);
+	TcsAscDefinition (EcsDictType type,const TcsDefLine& firstLine);
 	TcsAscDefinition (EcsDictType type,unsigned& lineNbr,std::istream& inStrm);	// unStrm must be seek'able
 	TcsAscDefinition (const TcsAscDefinition& source);
 	~TcsAscDefinition (void);

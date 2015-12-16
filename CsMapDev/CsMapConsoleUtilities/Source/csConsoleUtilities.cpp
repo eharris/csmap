@@ -43,8 +43,15 @@ int main (int argc,char* argv [])
 	// printf format to two digits, which I prefer.  Maybe there is a more
 	// generic form of this, but I don't know about it.
 	_set_output_format(_TWO_DIGIT_EXPONENT);
+#	ifdef _DEBUG
+		_CrtSetDbgFlag (_CRTDBG_CHECK_DEFAULT_DF);
+#	endif
 #endif
 
+	// Perform environmental variable substitution on the global variables
+	// defined above which specify the location of stuff on the host system.
+	// The loops are required as the CS_envsubWc function only replaces a
+	// single environmental variable per call.
 	for (envStatus = 1;envStatus != 0;)
 	{
 		envStatus = CS_envsubWc (csDataDir,wcCount (csDataDir));
@@ -66,27 +73,32 @@ int main (int argc,char* argv [])
 		envStatus = CS_envsubWc (csTempDir,wcCount (csTempDir));
 	}
 
+#ifdef __SKIP__
+	// The following untility is a frequently used one.  We leave here,
+	// but comment out so it can be used with ease.
+	//
 	// Resort a manually edited NameMapper.csv file to standard order.  Also,
 	// this utility will match the quoting in the sorted  data file as
 	// maintained in SVN.  This feature is often required so that a "diff"
 	// between old and manually edited (especially if you use Excel to do the
 	// editing) will produce usable results.
+	//
 	// ok = ResortNameMapperCsv (csTempDir,csDictSrc,true);
-
+	//
 	// Note that the Resort utility will overwrite the source file if the same
 	// directory is used for the first two parameters.  Thus, to avoid losing
 	// the results of a painful editing session, we leave the controlled source
 	// to point to the temporary directory as the result directory.  It is
 	// suggested that this only be changed on a temporary basis.
+	return ok;
+#endif
 
-//	ok = csGenerateBlueBookTestData (L"%GEODETIC_DATA%\\NAD83(2012)\\NAD83-2011\\BIN",true);
-//	ok = csUsefulRangeReport (csDataDir,csDictDir);
-//	ok = csUsefulRangeXfer (csDictDir,csTempDir,112);
-//	ok  = csCsdToCsvEL (csDictDir);
-//	ok &= csCsdToCsvDT (csDictDir);
-//	ok &= csCsdToCsvCS (csDictDir);
-//	ok = CsvDelimiterConvert (csDataDir,L"ESRI-10_2Work.txt",true,L"|\"\"",L"|``",L"ESRI-10_2WorkUQ.txt");
-	ok = csUpdateNameMapperFromCsv (csTempDir,csDictDir,L"D:\\CrsMagic\\Development\\OpenSource\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Data\\WktDataCatalog.txt");
+	// The following utility will programmatically add the Indiana GCS systems
+	// to the normal dictionaries based on a file named InGCS.csv expected to
+	// reside in the CS-MAP Data directory, and put the modified results
+	// (i.e. coordsys.asc and NameMapper.csv) in the C:\Temp directory until
+	// such time as we feel confident in the results being produced.
+	ok = csAddInGCS (csTempDir,csDataDir,L"InGCS.csv",csDictSrc,csEpsgDir);
 
 	return ok?0:-1;
 }

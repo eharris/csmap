@@ -332,6 +332,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csAddInGCS.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csAddOracle10Mappings.cpp"
 				>
 			</File>

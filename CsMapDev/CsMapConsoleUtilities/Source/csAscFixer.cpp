@@ -79,6 +79,7 @@ TcsDefLine::TcsDefLine (unsigned lineNbr,const char* lineText,EcsDictType dictTy
 	if (IsNameDef ())
 	{
 		Type = ascTypDefName;
+		memset (LeadWs,'\0',sizeof (LeadWs));
 	}
 }
 TcsDefLine::TcsDefLine (EcsDictType dictType,const char* label,const char* value,
@@ -144,6 +145,7 @@ TcsDefLine::TcsDefLine (EcsDictType dictType,const char* label,const char* value
 		if (IsNameDef ())
 		{
 			Type = ascTypDefName;
+			memset (LeadWs,'\0',sizeof (LeadWs));
 		}
 	}
 	else
@@ -668,6 +670,27 @@ TcsAscDefinition::TcsAscDefinition (EcsDictType type,TcsDefLnItrK begin,TcsDefLn
 			DefName [sizeof (DefName) - 1] = '\0';
 			break;
 		}
+	}
+}
+TcsAscDefinition::TcsAscDefinition (EcsDictType dictType,const TcsDefLine& firstLine)
+																			:
+															   Type       (dictType),
+															   Definition ()
+{
+	EcsAscLineType lineType;
+	const char* defNamePtr;
+
+	TcsDefLine separator (dictTypCoordsys,0,0,0);
+	// First line must be the name definition (for some reason I can't remember).
+	Type = dictType;
+	lineType = firstLine.GetType ();
+	if (lineType == ascTypDefName)
+	{
+		Definition.push_back (separator);
+		Definition.push_back (firstLine);
+		defNamePtr = firstLine.GetValue ();
+		strncpy (DefName,defNamePtr,sizeof (DefName));
+		DefName [sizeof (DefName) - 1] = '\0';
 	}
 }
 TcsAscDefinition::TcsAscDefinition (EcsDictType type,unsigned& lineNbr,std::istream& inStrm)
