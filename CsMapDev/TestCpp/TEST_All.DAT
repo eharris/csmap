@@ -6424,6 +6424,12 @@ NSRS11.LL,-85.000,42.000,InGCS11-Whitley-F,923314.574,610423.067,0.003,0.003
 InGCS11-Whitley-F,923314.574,610423.067,NSRS11.LL,-85.000,42.000,3.0E-07,3.0E-07
 
 ###############################################################################
+# Test case from a "proj" user: Jose Gonzalves  University of Porto, Portugal
+# Tolerances arbitrarily adjusted to pass, given how close the results are. 
+Datum73b.LL,8 02 39.1243W,41 38 17.2443N,LL-ETRF89,8 02 35.8302W,41 38 20.2812N,4.0E-07,3.0E-07
+LL-ETRF89,8 02 35.8302W,41 38 20.2812N,Datum73b.LL,8 02 39.1243W,41 38 17.2443N,4.0E-07,3.0E-07
+
+###############################################################################
 #
 # That's it.  If you have some more cases documented by reputable sources,
 # we'll be glad to add them.
