@@ -489,7 +489,7 @@ struct csErrtab_ csErrtab [] =
  {  cs_CSQ_ELEVEL, csET_NM,cs_ERSUP_OPR,
 						   "%s :: Value supplied for elevated ellipsoid is outside acceptable range." },
  {  cs_CSQ_OSTN02, csET_NM,cs_ERSUP_OPR,
-						   "%s :: OSTN02.TXT grid shift file could not be located or opened with read access." },
+						   "%s :: OSTN02.txt grid shift file could not be located or opened with read access." },
  {  cs_CSQ_TMKRG0, csET_NM,cs_ERSUP_OPR,
 						   "%s :: Transverse Mercator Kruger formulation requested with non-zero origin latitude." },
  {  cs_DTQ_FILE,   csET_NM,cs_ERSUP_OPR,
