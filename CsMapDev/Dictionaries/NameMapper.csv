@@ -17953,6 +17953,8 @@ GenericId,NameType,Flavor,NumericId,NameId,DupSort,AliasFlag,Flags,Deprecation,R
 3812,16,EPSG,3812,"ETRS89 / Belgian Lambert 2008",0,0,0,0,,
 3812,16,ESRI,3812,"Belge_Lambert_2008",0,0,0,0,,
 3812,16,Oracle,3812,"ETRS89 / Belgian Lambert 2008",0,0,0,0,,
+3812,16,Autodesk,0,"ETRF89.Belgian/LM2008",0,0,0,0,,
+3812,16,CsMap,0,"ETRF89.Belgian/LM2008",0,0,0,0,,
 3814,16,EPSG,3814,"NAD83 / Mississippi TM",0,0,0,0,,
 3814,16,ESRI,3814,"NAD_1983_Mississippi_TM",0,0,0,0,,
 3814,16,Oracle,3814,"NAD83 / Mississippi TM",0,0,0,0,,
