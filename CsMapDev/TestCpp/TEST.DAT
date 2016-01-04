@@ -6467,9 +6467,38 @@ InGCS11-Whitley-F,923314.574,610423.067,NSRS11.LL,-85.000,42.000,3.0E-07,3.0E-07
 
 ###############################################################################
 # Test case from a "proj" user: José A. Gonçalves  University of Porto, Portugal
-# Tolerances arbitrarily adjusted to pass, given how close the results are. 
+# Tolerances arbitrarily adjusted to pass, given how close the results are.
 Datum73b.LL,8 02 39.1243W,41 38 17.2443N,LL-ETRF89,8 02 35.8302W,41 38 20.2812N,4.0E-07,3.0E-07
 LL-ETRF89,8 02 35.8302W,41 38 20.2812N,Datum73b.LL,8 02 39.1243W,41 38 17.2443N,4.0E-07,3.0E-07
+
+###############################################################################
+# Test cases extracted from test data provided with Trac Ticket #157
+# Reverses added by MetaCRS developer.  Tolerances chosen to match precision
+# of the test coordinates provided.  The 'Region47' to 'RGR2' geodetic
+# transformation was set to '7PARAMETER' in order to achieve these results.
+# using 'BURSA' ala EPSG coordinate operation 1926  ('BURSA' is a coordinate
+# frame transformation, sign reversal of rotations of definition produces
+# Position Vector results.)
+Reunion47.Reunion/TM,165660.15,23460.10,RGR92.UTM-40S,352997.501,7636376.051,0.200,0.200
+RGR92.UTM-40S,352997.501,7636376.051,Reunion47.Reunion/TM,165660.15,23460.10,0.200,0.200
+Reunion47.Reunion/TM,166182.6,27286.48,RGR92.UTM-40S,353483.006,7640206.644,0.200,0.200
+RGR92.UTM-40S,353483.006,7640206.644,Reunion47.Reunion/TM,166182.6,27286.48,0.200,0.200
+Reunion47.Reunion/TM,167448.22,30276.57,RGR92.UTM-40S,354719.608,7643208.254,0.200,0.200
+RGR92.UTM-40S,354719.608,7643208.254,Reunion47.Reunion/TM,167448.22,30276.57,0.200,0.200
+Reunion47.Reunion/TM,165660.15,23460.1,RGR92.UTM-40S,352997.501,7636376.051,0.200,0.200
+RGR92.UTM-40S,352997.501,7636376.051,Reunion47.Reunion/TM,165660.15,23460.1,0.200,0.200
+
+###############################################################################
+# The following is, numerically, the same as above but tests a regression which
+# crept in while dealing with the Reunion datum fixes.
+Reunion47.Reunion/TM,165660.15,23460.10,UTM84-40S,352997.501,7636376.051,0.200,0.200
+UTM84-40S,352997.501,7636376.051,Reunion47.Reunion/TM,165660.15,23460.10,0.200,0.200
+Reunion47.Reunion/TM,166182.6,27286.48,UTM84-40S,353483.006,7640206.644,0.200,0.200
+UTM84-40S,353483.006,7640206.644,Reunion47.Reunion/TM,166182.6,27286.48,0.200,0.200
+Reunion47.Reunion/TM,167448.22,30276.57,UTM84-40S,354719.608,7643208.254,0.200,0.200
+UTM84-40S,354719.608,7643208.254,Reunion47.Reunion/TM,167448.22,30276.57,0.200,0.200
+Reunion47.Reunion/TM,165660.15,23460.1,UTM84-40S,352997.501,7636376.051,0.200,0.200
+UTM84-40S,352997.501,7636376.051,Reunion47.Reunion/TM,165660.15,23460.1,0.200,0.200
 
 ###############################################################################
 #

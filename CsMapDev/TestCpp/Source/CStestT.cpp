@@ -79,6 +79,147 @@ int CStestT (bool verbose,long32_t duration)
 	nmStartClock = clock ();
 	nmDoneClock = clock ();
 
+#ifdef __SKIP__
+	// Working a regression report on the fix for Trac Ticket #157.
+	bool ok (true);
+	int status;
+	char srcCrsName [32] = {"Reunion.LL"};
+	char trgCrsName [32] = {"LL84"};
+	char wktBufr [512];
+
+	struct cs_Csprm_* srcCrs;
+	struct cs_Csprm_* trgCrs;
+	struct cs_Dtcprm_ *dtc_ptr;
+
+	struct cs_Csdef_ wktCsDef;
+	struct cs_Dtdef_ wktDtDef;
+	struct cs_Eldef_ wktElDef;
+
+	double reunionLL  [3];
+	double workLL [3];
+	double targetLL [3];
+
+	reunionLL [LNG] =  55.50000;
+	reunionLL [LAT] = -21.00000;
+	reunionLL [HGT] =   0.000;
+
+	trgCrs = CS_csloc (trgCrsName);
+	ok = (trgCrs != NULL);
+	if (ok)
+	{
+		status = CS_cs2WktEx (wktBufr,sizeof (wktBufr),srcCrsName,wktFlvrAutodesk,0);
+		ok = (status == 0);
+	}
+	if (ok)
+	{
+		status = CS_wktToCsEx (&wktCsDef,&wktDtDef,&wktElDef,wktFlvrAutodesk,wktBufr,0);
+		ok = (status == 0);
+	}
+	if (ok)
+	{
+		srcCrs = CScsloc1 (&wktCsDef);
+		ok = (srcCrs != NULL);
+	}
+	if (ok)
+	{
+		dtc_ptr = CS_dtcsu (srcCrs,trgCrs,cs_DTC_DAT_F,cs_DTC_BLK_F);
+		ok = (dtc_ptr != NULL);
+	}
+	if (ok)
+	{
+		status = CS_cs2ll (srcCrs,workLL,reunionLL);
+		ok = (status == 0);
+	}
+	if (ok)
+	{
+		status = CS_dtcvt (dtc_ptr,workLL,workLL);
+		ok = (status == 0);
+	}
+	if (ok)
+	{
+		status = CS_ll2cs (trgCrs,targetLL,workLL);
+		ok = (status == 0);
+	}
+	if (!ok)
+	{
+		err_cnt += 1;
+	}
+#endif
+
+#ifdef __SKIP__
+
+	/* Working Trac Ticket #157 */
+
+	int status;
+	double reunionLL  [3];
+	double etrf89LL [3];
+
+	reunionLL [LNG] =  55.50000;
+	reunionLL [LAT] = -21.00000;
+	reunionLL [HGT] =   0.000;
+	etrf89LL [LNG] = reunionLL [LNG];	etrf89LL [LAT] = reunionLL [LAT];	etrf89LL [HGT] = reunionLL [HGT];
+
+	status = CS_cnvrt ("Reunion47.LL","Reunion92.LL",etrf89LL);
+	etrf89LL [LNG] = reunionLL [LNG];	etrf89LL [LAT] = reunionLL [LAT];	etrf89LL [HGT] = reunionLL [HGT];
+	status = CS_cnvrt ("Reunion47.LL","LL-ETRF89",etrf89LL);
+	etrf89LL [LNG] = reunionLL [LNG];	etrf89LL [LAT] = reunionLL [LAT];	etrf89LL [HGT] = reunionLL [HGT];
+	status = CS_cnvrt ("Reunion47.LL","LL84",etrf89LL);
+	etrf89LL [LNG] = reunionLL [LNG];	etrf89LL [LAT] = reunionLL [LAT];	etrf89LL [HGT] = reunionLL [HGT];
+	status = CS_cnvrt ("Reunion47.LL","LL84",etrf89LL);
+#endif
+
+#ifndef __SKIP__
+	// Test case for Trac ticket #129.
+	int st;
+	double ll84  [3];
+	double llE50 [3];
+	ll84  [LNG] = 180.000000000;
+	ll84  [LAT] =  40.000000000;
+	ll84  [HGT] =   0.00;
+
+//	llE50 [LNG] = ll84 [LNG]; llE50 [LAT] = ll84 [LAT]; llE50 [HGT] = ll84 [HGT];
+//	st = CS_cnvrt ("ED50/ES.LL","LL84",llE50);
+
+	llE50 [LNG] = ll84 [LNG]; llE50 [LAT] = ll84 [LAT]; llE50 [HGT] = ll84 [HGT];
+	st = CS_cnvrt ("LL84","ED50/ES.LL",llE50);
+
+	llE50 [LNG] = ll84 [LNG]; llE50 [LAT] = ll84 [LAT]; llE50 [HGT] = ll84 [HGT];
+	st = CS_cnvrt ("ED50/ES.LL","LL84",llE50);
+
+	llE50 [LNG] = ll84 [LNG]; llE50 [LAT] = ll84 [LAT]; llE50 [HGT] = ll84 [HGT];
+	st = CS_cnvrt ("LL84","ED50/ES.LL",llE50);
+
+	err_cnt += (st != 0);
+#endif
+
+#ifdef __SKIP__
+
+	// Test case for Trac ticket #130.
+	int st;
+	double ll27 [3];
+	double ll83 [3];
+	ll27 [LNG] = -44.0000000001;
+	ll27 [LAT] =  84.0000000000;
+	ll27 [HGT] =   0.00;
+	ll83 [LNG] = ll27 [LNG];
+	ll83 [LAT] = ll27 [LAT];
+	ll83 [HGT] = ll27 [HGT];
+
+	// Simulate a conversion very close to the boundary.  Using debug mode,
+	// force an intermediary result outside of the boundary and see how the
+	// code handles it.  In this case, the fallback NAD27-49_to_NAD83 was
+	// called to generate an approximate result, and a +2 status was
+	// returned.
+	st = CS_cnvrt ("LL83","LL27",ll83);
+	st = CS_cnvrt ("LL83","LL27",ll83);
+	st = CS_cnvrt ("LL83","LL27",ll83);
+	st = CS_cnvrt ("LL83","LL27",ll83);
+	st = CS_cnvrt ("LL83","LL27",ll83);
+	st = CS_cnvrt ("LL83","LL27",ll83);
+	err_cnt += (st != 0);
+#endif
+
+#ifdef __SKIP__
 	// Working Trac Ticket #146, #155, and fixes for #151.  Note, to execute this test,
 	// one needs to edit the GeoidHeight.gdc file and make the .\WW15MGH.GRD
 	// reference the first one in the file (temporarily).
@@ -167,6 +308,7 @@ int CStestT (bool verbose,long32_t duration)
 
 	// TO DO:  Should add a test of CS_japan.c here.  The Japan
 	// constructor needs a test function before that will do much good.
+#endif
 
 #ifdef __SKIP__
 	// Testing Trac Ticket 131
@@ -253,8 +395,8 @@ int CStestT (bool verbose,long32_t duration)
 			err_cnt += 1;
 		}
 	}
-
 #endif
+
 #ifdef __SKIP__
 	EcsCsvStatus status = csvEndOfTable;
 
@@ -754,6 +896,7 @@ int CStestT (bool verbose,long32_t duration)
 	}
 	fclose (tstStrm);
 #endif
+
 #ifdef __SKIP__
 	int st;
 
