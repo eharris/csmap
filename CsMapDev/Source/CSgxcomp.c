@@ -388,6 +388,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			continue;
 		}
 		cp = buff;
+		//TODO  This does not work well!!!
 		while ((cp = strchr (cp,'#')) != NULL)
 		{
 			if (*(cp + 1) != '#' &&

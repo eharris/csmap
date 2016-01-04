@@ -64,6 +64,7 @@
 -esym(534,CSbswap)					// ignoring return value
 -esym(534,CSAddParamValue)			// ignoring return value
 -esym(534,CSAddParamNm)				// ignoring return value
+-esym(534,CS_rwDictDir)				// ignoring return value
 
 -esym(552,cs_Safe)					// not accessed
 -esym(552,cs_Sortbs)				// not accessed

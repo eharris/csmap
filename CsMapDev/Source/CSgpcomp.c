@@ -537,11 +537,8 @@ int CSgpdefwr (	csFILE *outStrm,
 	   any kind of change. */
 	if (!CS_stricmp (gpdef->group,"TEST")) gpdef->protect = 4383;
 
-	st = CS_gpwr (outStrm,gpdef);
-	if (st != 0)
-	{
-		err_cnt += 1;
-	}
+	/* Set the path 'reverible' member to true, until we know differently. */
+	gpdef->reversible = TRUE;
 
 	/* Verify  that all of the referenced geodetic transformations
 	   do indeed exist in the provided Geodetic Transformation
@@ -559,9 +556,17 @@ int CSgpdefwr (	csFILE *outStrm,
 			flag = CS_bins (xfrmStrm,(long32_t)sizeof (cs_magic_t),(long32_t)-1,sizeof (gx_def),&gx_def,(CMPFUNC_CAST)CS_gxcmp);
 			if (flag == 1)
 			{
-				st = CS_gxrd (dtmStrm,&gx_def);
+				st = CS_gxrd (xfrmStrm,&gx_def);
 				if (st == 1)
 				{
+					/* Reset the 'reversible' flag if this geodetic transformation
+					   is not reverible.  All geodetic transformations in the path
+					   must be reversible if the path is to be reverseable. */
+					if (gx_def.inverseSupported == 0)
+					{
+						gpdef->reversible = FALSE;
+					}
+
 					if (!CS_stricmp (gx_def.group,"LeGACY") && CS_stricmp (gpdef->group,"LEGACY"))
 					{
 						if (warn)
@@ -585,6 +590,12 @@ int CSgpdefwr (	csFILE *outStrm,
 				err_cnt += 1;
 			}
 		}
+	}
+
+	st = CS_gpwr (outStrm,gpdef);
+	if (st != 0)
+	{
+		err_cnt += 1;
 	}
 
 	if (warn && gpdef->description [0] == '\0')
