@@ -306,7 +306,7 @@ int EXP_LVL9 CSbdkasI2 (struct csBdkas_ *badekas, double* trgLl, Const double* s
 		}
 
 		/* See how far we are off. */
-		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LNG] = CS_lngEpsilon (srcLl [LNG],newLl [LNG]);
 		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
 
 		/* If our guess at the longitude is off by more than

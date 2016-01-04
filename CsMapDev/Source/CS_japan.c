@@ -261,7 +261,7 @@ int CSjapanI2 (struct cs_Japan_ *japan,double *ll_trg,Const double *ll_src)
 		}
 
 		/* See how far we are off. */
-		epsilon [LNG] = ll_src [LNG] - newResult [LNG];
+		epsilon [LNG] = CS_lngEpsilon (ll_src [LNG],newResult [LNG]);
 		epsilon [LAT] = ll_src [LAT] - newResult [LAT];
 
 		/* If our guess at the longitude is off by more than 'small', we adjust

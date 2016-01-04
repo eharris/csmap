@@ -396,7 +396,7 @@ int EXP_LVL9 CSmulrgI3 (struct csMulrg_ *mulrg,double* trgLl,Const double* srcLl
 
 		/* See how far we are off.  Note, we use the latitude and
 		   longitude only.  Otherwise, we would never really converge. */
-		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LNG] = CS_lngEpsilon (srcLl [LNG],newLl [LNG]);
 		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
 
 		/* If our guess at the longitude is off by more than

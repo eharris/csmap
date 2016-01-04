@@ -221,12 +221,19 @@ int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 			   
 			   If we don't do as written above, the iterative technique fails
 			   to converge and we have a situation where a system error may
-			   be generated and the results may not be reproducable. */
+			   be generated and the results may not be reproducible. */
+			
+			/* Dec 18, 2015: Trac #130.  In the event of a coverage problem on
+			   the forward, status at this point will be csGRIDI_ST_COVERAGE.
+			   Other values indicate problems like a disk I/O) problem. */
 			break;
 		}
 
+		/* Dec 18, 2015; Trac Ticket #129,  The problem described in this
+		  ticket applies to all geocentric 2D inverse functions.  Thus,
+		  the following change. */
 		/* See how far we are off. */
-		epsilon [LNG] = ll_src [LNG] - newResult [LNG];
+		epsilon [LNG] = CS_lngEpsilon (ll_src [LNG],newResult [LNG]);
 		epsilon [LAT] = ll_src [LAT] - newResult [LAT];
 
 		/* If our guess at the longitude is off by more than
@@ -247,13 +254,15 @@ int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 		if (lng_ok && lat_ok) break;
 	}
 
+	/* Dec 18, 2015: Trac #130. If this inverse has now meandered over the
+	   edge of coverage, status will be csGRIDI_ST_COVERAGE at this point. */
 	if (status == csGRIDI_ST_OK)
 	{
 		/* If we didn't resolve in maxIteration tries, we issue a warning
 		   message.  Casual reading of the NADCON code would lead one to
 		   believe that they do five iterations, but four is all they really
 		   do.  Since this is an inverse, and our clients expect it to produce
-		   what we started with, we do maxIterations iterations, insteadt of the
+		   what we started with, we do maxIterations iterations, instead of the
 		   four that GRIDINT does.  Thus, there is room for a slight discrepancy
 		   between the two programs. */
 		if (ii >= cntv2->maxIterations)
@@ -286,7 +295,12 @@ int CScntv2I2 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 		ll_trg [LNG] = ll_src [LNG];
 		ll_trg [LAT] = ll_src [LAT];
 	}
-	return 0;
+
+	/* Dec 18, 2015: Trac Ticket 130.  In the event that the iterative inverse
+	   algorithm meanders outside of the coverage, status will be
+	   csGRIDI_ST_COVERAGE at this point, and we need to return that
+	   information to the calling module. */
+	return status;
 }
 int CScntv2I3 (struct cs_NTv2_ *cntv2,double *ll_trg,Const double *ll_src)
 {
@@ -498,7 +512,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 	}
 
 	/* Reposition the input file as is appropriate due to the
-	   type of file.  A little hoeky, but it should be portable. */
+	   type of file.  A little hokey, but it should be portable. */
 	seekStat = CS_fseek (stream,skipAmount,SEEK_SET);
 	if (seekStat != 0)
 	{
@@ -607,7 +621,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 			CS_bswap (&fileSubHdr,cs_BSWP_NTv2SubHdrAU);
 		}
 
-		/* Collect the useful stuff. */		
+		/* Collect the useful stuff. */
 		subPtr = &thisPtr->SubGridDir [idx];
 
 		/* Data for each sub-grid immediately follows the sub-grid header. */
@@ -632,7 +646,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 
 		/* We do not use Density in the calculations.  It is only used to
 		   select one sub-grid over another in the case of overlap.  Yes,
-		   I know.  The sub-grids at the same level are not suppoded to
+		   I know.  The sub-grids at the same level are not supposed to
 		   overlap; but they do.  Call it job security for you an me. */
 		subPtr->Density = (subPtr->DeltaLat < subPtr->DeltaLng) ? subPtr->DeltaLat : subPtr->DeltaLng;
 
@@ -653,20 +667,20 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 		subPtr->ElementCount = (unsigned short)(((subPtr->NwReference [LNG] - subPtr->SeReference [LNG]) / subPtr->DeltaLng) + 1.01);
 		subPtr->RowSize = (unsigned short)(subPtr->ElementCount * thisPtr->RecSize);
 
-		/* Certain sub grids are not cacheable.  In the Canadian file, the region
-		   which is not cacheable is rather small.  We use the csCaNTv2KludgeTable
-		   to handle it.  The one Austrailian sub-grid we've seen is screwed up,
-		   so we disable cacheing (at least for now), for all Australian files.
+		/* Certain sub grids are not cache-able.  In the Canadian file, the region
+		   which is not cache-able is rather small.  We use the csCaNTv2KludgeTable
+		   to handle it.  The one Australian sub-grid we've seen is screwed up,
+		   so we disable caching (at least for now), for all Australian files.
 		   Australian, in this context, means file in the old Australian format,
 		   not necessarily data files covering Australian geography.
 		   
 		   In the case of the Spanish variation, parent grids overlap, and
-		   therefore none of the sub-grids are cacheable.
+		   therefore none of the sub-grids are cache-able.
 
 		   NOTE: with the advent of RFC-2, the grid cache system is essentially
 		   deactivated.  In the Canadian NTv2 file, there were two subgrids 
 		   which did not adhere to the original standard and thus were not
-		   cacheable.  As there is no cache anymore, the Cacheable element has
+		   cache-able.  As there is no cache anymore, the cache-able element has
 		   no use and should be removed from the structure.  For now, the value
 		   is simply forced to FALSE in all cases.*/
 		subPtr->Cacheable = FALSE;
@@ -701,7 +715,7 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 		}
 	}
 
-	/* Now we figure out who the mammas and the pappas are.  Note, all we have
+	/* Now we figure out who the mamas and the Pappas are.  Note, all we have
 	   to work with are parent names.  Therefore, we have to work bassackwards.
 
 	   End result of all of this, is that each child needs to have the index
@@ -733,12 +747,12 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 		} 
 	}
 
-	/* To accomodate the Spanish (and perhaps others in the future), we check
+	/* To accommodate the Spanish (and perhaps others in the future), we check
 	   the parent grids in the list of sub-grids for overlap.  If overlap 
 	   exists, we turn on the SubOverlap flag.  Of course, if this flag is
 	   already on, we have nothing to do.  If we did indeed turn on the
 	   SubOverlap flag, we need to cruise through all the sub-grids and set the
-	   Cacheable flag to false to assure that no data from this file makes it
+	   Cache-able flag to false to assure that no data from this file makes it
 	   to the grid cell cache. */
 	if (thisPtr->SubOverlap == 0)
 	{
@@ -784,13 +798,13 @@ int CSinitNTv2 (struct cs_NTv2_* thisPtr,Const char *filePath,long32_t bufferSiz
 	/* OK, we should be ready to rock and roll.  We close the Stream until
 	   we actually need it.  Often, we get constructed just so there is a
 	   record of the coverage afforded by the file. */
-	if (stream != NULL)			/*lint !e774  boolean always evalutaes to true */
+	if (stream != NULL)			/*lint !e774  boolean always evaluates to true */
 	{
 		CS_fclose (stream);
 		stream = NULL;
 	}
 	csErrnam [0] = '\0';
-	return 0;
+	return csGRIDI_ST_OK;
 
 error:
 	if (stream != NULL)
@@ -815,7 +829,7 @@ error:
 	if (thisPtr->BufferSize <= 4096) thisPtr->BufferSize = 4096;
 	CSinitNTv2GridCell (&thisPtr->longitudeCell);
 	CSinitNTv2GridCell (&thisPtr->latitudeCell);
-	return -1;
+	return csGRIDI_ST_SYSTEM;
 }
 
 /* Destructor */
@@ -876,7 +890,7 @@ struct csNTv2SubGrid_* CSlocateSubNTv2 (struct cs_NTv2_* thisPtr,Const double so
 	   coverage.  There are two algorithms:  the original one and one invented
 	   to cater to the Spaniards (and maybe some others in the future).
 	   
-	   In the original alghorithm, we search through the top level of parent
+	   In the original algorithm, we search through the top level of parent
 	   grids looking for coverage.  The top level parents are those which have
 	   no parent.  If none is found, there is no coverage.  If we locate a parent
 	   which provides coverage, we examine all children of that parent looking
@@ -1214,7 +1228,7 @@ int CScalcNTv2 (struct cs_NTv2_* thisPtr,double deltaLL [2],Const double source 
 		else if (onLimit == 1)
 		{
 			/* Point is on the extreme northern edge of the sub-grid.  This occurs
-			   ocassionally.  In this case, the "northern" boundary of the grid cell
+			   occasionally.  In this case, the "northern" boundary of the grid cell
 			   doesn't exist, and we must manufacture such.  This is called a
 			   virtual cell in the Canadian documentation.  */
 			filePosition = cvtPtr->FirstRecord + rowNbr * cvtPtr->RowSize + eleNbr * thisPtr->RecSize;
@@ -1380,7 +1394,7 @@ double CStestNTv2 (Const struct cs_NTv2_* thisPtr,Const double location [2])
 	struct csNTv2SubGrid_* cvtPtr;
 
 	/* Note, the whole file extents which we use here carry East Positive
-	   longitude; expressly to help make this function perfrom well.
+	   longitude; expressly to help make this function perform well.
 
 	   The strange way this is coded is that testing strongly indicated that
 	   the ">=" operator applied to doubles is much more CPU time consuming
@@ -1446,7 +1460,7 @@ void CSinitNTv2GridCell (struct csNTv2GridCell_* thisPtr)
 	thisPtr->deltaLng = cs_Zero;
 	thisPtr->deltaLat = cs_Zero;
 	thisPtr->density = cs_Zero;
-	
+
 	thisPtr->currentAA = cs_Zero;
 	thisPtr->currentBB = cs_Zero;
 	thisPtr->currentCC = cs_Zero;
@@ -1481,5 +1495,5 @@ double CScalcNTv2GridCell (Const struct csNTv2GridCell_* thisPtr,Const double so
 	   i.e. the units of the data values given for the cell corners.  For the
 	   NTv2 format, these values are always (so far, at least) in seconds of
 	   arc. */
-	return returnValue;	
+	return returnValue;
 }

@@ -6783,6 +6783,7 @@ int			EXP_LVL3	CS_ll3cs (Const struct cs_Csprm_ *csprm,double xy [3],Const doubl
 double		EXP_LVL1	CS_llazdd (double e_rad,double e_sq,Const double ll_from [2],Const double ll_to [2],double *dist);
 int			EXP_LVL3	CS_llchk (Const struct cs_Csprm_ *csprm,int cnt,Const double pnts [][3]);
 int			EXP_LVL1	CS_llFromMgrs (double latLng [2],const char* mgrsString);
+double		EXP_LVL7	CS_lngEpsilon (double baseLL,double calcLL);
 void		EXP_LVL7	CS_lput (char *fld,Const char *str,int size,char fill);
 char*		EXP_LVL3	CS_ludflt (Const char *dflt_lu);
 

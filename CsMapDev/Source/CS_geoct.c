@@ -202,7 +202,7 @@ int EXP_LVL9 CSgeoctI2 (struct csGeoct_ *geoct,double* trgLl,Const double* srcLl
 		}
 
 		/* See how far we are off. */
-		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LNG] = CS_lngEpsilon (srcLl [LNG],newLl [LNG]);
 		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
 
 		/* If our guess at the longitude is off by more than

@@ -269,7 +269,7 @@ int EXP_LVL9 CSbursaI2 (struct csBursa_ *bursa,double* trgLl,Const double* srcLl
 		}
 
 		/* See how far we are off. */
-		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LNG] = CS_lngEpsilon (srcLl [LNG],newLl [LNG]);
 		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
 
 		/* If our guess at the longitude is off by more than

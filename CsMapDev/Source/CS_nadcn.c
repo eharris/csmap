@@ -426,7 +426,7 @@ int CSnadcnI2 (struct cs_Nadcn_ *nadcn,double *ll_trg,Const double *ll_src)
 		}
 
 		/* See how far we are off. */
-		epsilon [LNG] = -CS_deltaLongitude (ll_src [LNG],newResult [LNG]);
+		epsilon [LNG] = CS_lngEpsilon (ll_src [LNG],newResult [LNG]);
 		epsilon [LAT] = ll_src [LAT] - newResult [LAT];
 
 		/* If our guess at the longitude is off by more than

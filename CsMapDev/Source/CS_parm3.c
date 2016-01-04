@@ -204,8 +204,11 @@ int EXP_LVL9 CSparm3I2 (struct csParm3_ *parm3,double* trgLl,Const double* srcLl
 			break;
 		}
 
+		/* Dec 18, 2015; Trac Ticket #129,  The problem described in this
+		  ticket applies to all geocentric 2D inverse functions.  Thus,
+		  the following change. */
 		/* See how far we are off. */
-		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LNG] = CS_lngEpsilon (srcLl [LNG],newLl [LNG]);
 		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
 
 		/* If our guess at the longitude is off by more than

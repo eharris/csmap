@@ -318,8 +318,14 @@ int EXP_LVL9 CSparm7I2 (struct csParm7_ *parm7,double* trgLl,Const double* srcLl
 			break;
 		}
 
+		/* Dec 18, 2105: Trac #129.  The following longitude calculation can
+		   be erroneous when the poitn being converted is very close to the
+		   +/- 180 degree crack.  Not much geography there, but this is the
+		   real cause of the defect described in Trac ticket #129.  Latitude
+		   is not a problem.  This fix needs to be added to several other
+		   2D inverses. */
 		/* See how far we are off. */
-		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LNG] = CS_lngEpsilon (srcLl [LNG],newLl [LNG]);
 		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
 
 		/* If our guess at the longitude is off by more than

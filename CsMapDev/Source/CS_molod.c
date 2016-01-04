@@ -349,7 +349,7 @@ int EXP_LVL7 CSmolodI2 (struct csMolod_* molod,double* trgLl,Const double* srcLl
 		}
 
 		/* See how far we are off. */
-		epsilon [LNG] = srcLl [LNG] - newLl [LNG];
+		epsilon [LNG] = CS_lngEpsilon (srcLl [LNG],newLl [LNG]);
 		epsilon [LAT] = srcLl [LAT] - newLl [LAT];
 
 		/* If our guess at the longitude is off by more than

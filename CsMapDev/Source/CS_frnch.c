@@ -809,7 +809,7 @@ int CScalcNtfToRgf (struct cs_Frnch_* thisPtr,double* llRgf,Const double* llNtf)
 		}
 
 		/* See how far we are off. */
-		epsilon [LNG] = llNtf [LNG] - newLl [LNG];
+		epsilon [LNG] = CS_lngEpsilon (llNtf [LNG],newLl [LNG]);
 		epsilon [LAT] = llNtf [LAT] - newLl [LAT];
 
 		/* If our guess at the longitude is off by more than
