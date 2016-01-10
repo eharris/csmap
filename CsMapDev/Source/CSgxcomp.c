@@ -260,6 +260,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 
 	size_t rdCnt;
 	size_t wrCnt;
+	size_t strLen;
 
 	char *cp;
 	char *dummy;
@@ -385,15 +386,28 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 		(void)CS_trim (buff);
 		if (buff [0] == '#' || buff [0] == '\0')
 		{
+			/* Skip comments and blank lines. */
 			continue;
 		}
+
+		/* See if there is a comment attached to the data elements on the line. */
 		cp = buff;
-		//TODO  This does not work well!!!
 		while ((cp = strchr (cp,'#')) != NULL)
 		{
-			if (*(cp + 1) != '#' &&
-				*(cp - 1) != '\\')				/* backslash character here is the escape character */
+			if (*(cp - 1) == '\\')
 			{
+				/* This is an escaped '#' character.  Remove the escape
+				   character, ignore the escaped character, and continue the
+				   search. */
+				strLen = strlen (cp);
+				CS_stncp ((cp - 1),cp,(int)strLen);
+				++cp;
+			}
+			else
+			{
+				/* The beginning of an appended comment. Note, the value
+				   portion of the statement line is trimmed before being
+				   used and/or tested. */
 				*cp = '\0';
 				break;
 			}

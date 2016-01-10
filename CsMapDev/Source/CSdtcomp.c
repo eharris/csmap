@@ -302,9 +302,20 @@ int EXP_LVL9 CSdtcomp (	Const char *inpt,
 		cp = buff;
 		while ((cp = strchr (cp,'#')) != NULL)
 		{
-			if (*(cp + 1) != '#' &&
-				*(cp - 1) != '\\')				/* backslash here is the escape character */
+			if (*(cp - 1) == '\\')
 			{
+				/* This is an escaped '#' character.  Remove the escape
+				   character, ignore the escaped character, and continue the
+				   search. */
+				strLen = strlen (cp);
+				CS_stncp ((cp - 1),cp,(int)strLen);
+				++cp;
+			}
+			else
+			{
+				/* The beginning of an appended comment. Note, the value
+				   portion of the statement line is trimmed before being
+				   used and/or tested. */
 				*cp = '\0';
 				break;
 			}
