@@ -73,11 +73,92 @@ int CStestT (bool verbose,long32_t duration)
 	int err_cnt = 0;
 	clock_t nmStartClock;
 	clock_t nmDoneClock;
-	double nmLoadTime;
+	double nmExecTime;
 
 	// Mostly to keep lint/compiler happy.
 	nmStartClock = clock ();
 	nmDoneClock = clock ();
+
+#ifndef __SKIP__
+
+	// Testing fix for Trac Ticket #137.
+
+	int status;
+
+	// Tolerance is rather large here.  This is because inverting a Molodensky
+	// by flipping the signs is not really all that precise an inverse.  This is
+	// what we did to fix Ticket #7.
+	double tolerance = 1.5E-07;
+	double deltaLng, deltaLat, deltaHgt;
+
+	double rgf93LL [3];
+	double workLL  [3];
+	double ntfgLL  [3];
+
+	/* Point outside the coverage of the gr3d97a.txt */
+	rgf93LL [LNG] =  -6.00000;
+	rgf93LL [LAT] =   53.00;
+	rgf93LL [HGT] =   0.000;
+
+	ntfgLL [LNG] =  -5.9988497435;
+	ntfgLL [LAT] =  53.0001373603;
+	ntfgLL [HGT] =  0.0;
+
+	workLL [LNG] = rgf93LL [LNG];
+	workLL [LAT] = rgf93LL [LAT];
+	workLL [HGT] = rgf93LL [HGT];
+	/* Use debugger to verify that the fallback in the inverse direction
+	   is being used. */
+	status = CS_cnvrt ("LL-RGF93","NTF.LL",workLL);
+	if (status >= 0)
+	{
+		deltaLng = fabs (workLL [LNG] - ntfgLL [LNG]);
+		deltaLat = fabs (workLL [LAT] - ntfgLL [LAT]);
+		deltaHgt = fabs (workLL [HGT] - ntfgLL [HGT]);
+		if ((deltaLng > tolerance) || (deltaLat > tolerance) || (deltaHgt > tolerance))
+		{
+			err_cnt++;
+		}
+	}
+	else
+	{
+		err_cnt++;
+	}
+
+#endif
+
+#ifdef __SKIP__
+
+	// Creating a test point to verify fix for Trac Ticket #137.
+
+	int status;
+	double rgf93LL [3];
+	double workLL  [3];
+	double ntfgLL  [3];
+
+	/* Point outside the coverage of the gr3d97a.txt */
+	rgf93LL [LNG] =  -6.00000;
+	rgf93LL [LAT] =   53.00;
+	rgf93LL [HGT] =   0.000;
+
+	workLL [LNG] = rgf93LL [LNG];
+	workLL [LAT] = rgf93LL [LAT];
+	workLL [HGT] = rgf93LL [HGT];
+	/* Use debugger to verify that the fallback in the inverse direction
+	   is being used. */
+	status = CS_cnvrt ("LL-RGF93","NTF.LL",workLL);
+	if (status >= 0)
+	{
+		ntfgLL [LNG] = workLL [LNG];
+		ntfgLL [LAT] = workLL [LAT];
+		ntfgLL [HGT] = workLL [HGT];
+	}
+	else
+	{
+		err_cnt++;
+	}
+
+#endif
 
 #ifdef __SKIP__
 	// Working a regression report on the fix for Trac Ticket #157.
@@ -103,7 +184,10 @@ int CStestT (bool verbose,long32_t duration)
 	reunionLL [LAT] = -21.00000;
 	reunionLL [HGT] =   0.000;
 
+	srcCrs = NULL;
 	trgCrs = CS_csloc (trgCrsName);
+	dtcPtr = NULL;
+
 	ok = (trgCrs != NULL);
 	if (ok)
 	{
@@ -168,7 +252,7 @@ int CStestT (bool verbose,long32_t duration)
 	status = CS_cnvrt ("Reunion47.LL","LL84",etrf89LL);
 #endif
 
-#ifndef __SKIP__
+#ifdef __SKIP__
 	// Test case for Trac ticket #129.
 	int st;
 	double ll84  [3];
@@ -928,6 +1012,6 @@ int CStestT (bool verbose,long32_t duration)
 #endif
 
 	/* Mostly to keep lint/compiler hgappy. */
-	nmLoadTime = (double)(nmDoneClock - nmStartClock) / (double)CLOCKS_PER_SEC;
+	nmExecTime = (double)(nmDoneClock - nmStartClock) / (double)CLOCKS_PER_SEC;
 	return err_cnt;
 }

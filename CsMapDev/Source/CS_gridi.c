@@ -310,37 +310,7 @@ int EXP_LVL9 CSgridiS (struct cs_GxXform_* gxXfrm)
 			goto error;
 		}
 		
-/* Kludge to fix a defect.  The "RGF93_to_NTF-G-Grid" transformation, or
-   anything similar to it, can and will often refer to the "NTF-G_to_WGS84"
-   geodetic transformation (a Molodensky transformation) as a fallback.  The
-   problem is that the "RGF93_to_NTF-G-Grid" transformation converts from RGF93
-   (i.e. WGS84) to NTF, while the "NTF-G_to_WGS84" transformation converts
-   in the opposite direction.  This defect is introduced, and a lot of
-   additional confusion is experienced, because the French grid interpolation
-   data file, "gr3df97a.txt" converts from the new to the old (RGF93 -> NTF),
-   while all other grid data interpoolation files convert from the old to
-   the new.  The "old to the new" convention of most all grid data files
-   (except the French) is consistent with standard datum definitions (i.e.
-   convert to WGS84, the newer datum).  There are better ways to deal with
-   these issues.  Scheduling pressure and the need to pass a comprehensive
-   regression test have lead to this rather kludgy solution.
-   
-   TODO -- Fix this in a more generic manner.  I suspect, that we need to
-   define a new Molodensky transformation that goes in the opposite direction
-   as the normal one (i.e. flip the signs on the translation vector) and use
-   that as the fall back for transforms which involving NTF and RGF93 which
-   are defined to go in the opposite direction. */
-/*lint -e525  unexpected indentation change */
-/*lint -e539  unexpected indentation change */
-if (!CS_stricmp (filesPtr->fallback,"NTF-G_to_WGS84") &&
-	!CS_stricmp (gxXfrm->gxDef.srcDatum,"RGF93") &&
-	!CS_stricmp (gxXfrm->gxDef.trgDatum,"NTF-G-Grid"))
-{
-	gridi->fallbackDir = cs_DTCDIR_INV;
-}
 	}
-/*lint +e525 */
-/*lint +e539 */
 	return 0;
 
 error:
