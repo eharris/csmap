@@ -293,6 +293,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmap.lib"
+				ShowProgress="0"
 				OutputFile="$(OutDir)\CS_TestCpp.exe"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\lib90\$(ConfigurationName)64&quot;"
 				GenerateDebugInformation="true"
@@ -333,6 +334,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath="..\TestCpp\Source\CS_osGeoTest.cpp"
+				>
+			</File>
 			<File
 				RelativePath="..\TestCpp\Source\CS_TestCpp.cpp"
 				>
@@ -466,6 +471,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\TestCpp\Source\CStestQ.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\TestCpp\Source\CStestR.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\TestCpp\Source\CStestS.cpp"
 				>
 			</File>
@@ -477,16 +490,16 @@
 				RelativePath="..\TestCpp\Source\CStestT.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\TestCpp\Source\CStestZ.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\TestCpp\Include\cs_OsGeoTest.hpp"
+				>
+			</File>
 			<File
 				RelativePath="..\TestCpp\Include\csTestCpp.hpp"
 				>

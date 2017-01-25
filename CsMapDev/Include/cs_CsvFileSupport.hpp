@@ -55,7 +55,7 @@ enum EcsCsvStatus {    csvOk = 0,          // Unremarkable completion
 					   csvInvLineBrk,      // Line break not in quote.
 					   csvLastWasEsc,      // Last character in record was an
 										   // escape character
-					   csvAmbigQuote,      // nonspace data after quote, before
+					   csvAmbigQuote,      // non-space data after quote, before
 										   // separator.
 					   csvInternal,        // Internal error in parser.
 					   csvInvRecordId,     // Record key value failed to match
@@ -101,7 +101,7 @@ const wchar_t* CS_wcPad (int length);
 //=============================================================================
 // TcsCsvStatus Object -- Encapsulates the functionality of a Comma Separated
 //                        Value status report.
-// Should any of these objects throw an execption, this is what they will
+// Should any of these objects throw an exception, this is what they will
 // throw.
 //=============================================================================
 class TcsCsvStatus
@@ -117,7 +117,11 @@ public:
 	~TcsCsvStatus (void);
 	TcsCsvStatus& operator= (const TcsCsvStatus& rhs);
 	//=========================================================================
+	// Operator Overrides
+	operator bool() const {return (StatusValue == csvOk); };
+	//=========================================================================
 	// Named Member Functions
+	bool IsOk (void) const {return (StatusValue == csvOk); };
 	void SetStatus (EcsCsvStatus status);
 	void BumpLineNbr (void);
 	void SetLineNbr (unsigned long lineNbr);
@@ -146,9 +150,9 @@ public:
 // status object elements such as object name and line number.  The user of
 // this object must provide them.  Suggested that users declare an TcsCsvStatus
 // object and set the Object name, and update the line number, within it, and
-// simply let this oobject supply the condition and the field number.
+// simply let this object supply the condition and the field number.
 //
-// Thus, no execptions from this object other than standard STL stuff which
+// Thus, no exceptions from this object other than standard STL stuff which
 // should be very very rare.
 //=============================================================================
 class TcsCsvRecord
@@ -159,6 +163,7 @@ public:
 	//=========================================================================
 	// Construction, Destruction, Assignment
 	TcsCsvRecord (void);
+	TcsCsvRecord (short minFldCnt,short maxFldCnt);
 	TcsCsvRecord (const TcsCsvRecord& source);
 	virtual ~TcsCsvRecord (void);
 	TcsCsvRecord& operator= (const TcsCsvRecord& rhs);
@@ -279,6 +284,7 @@ public:
 	bool ReplaceField (const std::wstring& newValue,unsigned recordNbr,const wchar_t* fieldId,
 																	   TcsCsvStatus& status);
 	bool GetRecord (TcsCsvRecord& record,unsigned recordNbr,TcsCsvStatus& status) const;
+	const TcsCsvRecord& GetRecord (unsigned recordNbr) const;
 	bool Locate (unsigned& recordNumber,const wchar_t* srchString) const;
 	bool Locate (unsigned& recordNumber,short fieldNbr,const wchar_t* srchString,bool honorCase = false) const;
 	bool Locate (unsigned& recordNumber,const wchar_t* fieldId,const wchar_t* srchString,bool honorCase = false) const;

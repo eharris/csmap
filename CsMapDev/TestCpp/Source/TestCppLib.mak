@@ -109,7 +109,8 @@ CSMAP_CPP_SRC := $(wildcard *.cpp)
 CSMAP_CPP_SRC := $(filter-out $(CSMAP_MAINS),$(CSMAP_CPP_SRC))  
 CSMAP_CPP_SRC := $(filter-out $(CSMAP_STDHDRS),$(CSMAP_CPP_SRC))  
 
-CSMAP_SRC_CPP = CStest1.cpp \
+CSMAP_SRC_CPP = CS_osGeoTest.cpp \
+				CStest1.cpp \
 				CStest2.cpp \
 				CStest3.cpp \
 				CStest4.cpp \
@@ -132,10 +133,11 @@ CSMAP_SRC_CPP = CStest1.cpp \
 				CStestL.cpp \
 				CStestM.cpp \
 				CStestN.cpp \
+				CStestQ.cpp \
+				CStestR.cpp \
 				CStestS.cpp \
 				CStestSupport.cpp \
-				CStestT.cpp \
-				CStestZ.cpp
+				CStestT.cpp
 
 # The following assignment uses the wildcard generated module list.
 CSMAP_LIB_SRC += $(CSMAP_CPP_SRC)

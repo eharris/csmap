@@ -217,14 +217,17 @@
     <ClCompile Include="..\TestCpp\Source\CStestL.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestM.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestN.cpp" />
+    <ClCompile Include="..\TestCpp\Source\CStestQ.cpp" />
+    <ClCompile Include="..\TestCpp\Source\CStestR.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestS.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestSupport.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestT.cpp" />
-    <ClCompile Include="..\TestCpp\Source\CStestZ.cpp" />
+    <ClCompile Include="..\TestCpp\Source\CS_osGeoTest.cpp" />
     <ClCompile Include="..\TestCpp\Source\CS_TestCpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\TestCpp\Include\csTestCpp.hpp" />
+    <ClInclude Include="..\TestCpp\Include\cs_OsGeoTest.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Library.vcxproj">

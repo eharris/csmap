@@ -1,31 +1,40 @@
-//===========================================================================
-// $Header$
-//
-//    (C) Copyright 2007 by Autodesk, Inc.
-//
-// The information contained herein is confidential, proprietary
-// to Autodesk, Inc., and considered a trade secret as defined 
-// in section 499C of the penal code of the State of California.  
-// Use of this information by anyone other than authorized employees
-// of Autodesk, Inc. is granted only under a written non-disclosure 
-// agreement, expressly prescribing the scope and manner of such use.       
-//
-// CREATED BY:
-//      Norm Olsen
-//
-// DESCRIPTION:
-//
+/*
+ * Copyright (c) 2008, Autodesk, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Autodesk, Inc. nor the names of its
+ *       contributors may be used to endorse or promote products derived
+ *       from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY Autodesk, Inc. ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL Autodesk, Inc. OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #include "csTestCpp.hpp"
 #include <errno.h>
 
 #if (_RUN_TIME < _rt_UNIXPCC)
 extern const wchar_t csDataDir [] = L"%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Data";
-extern const char csDictDir [] = "%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Dictionaries";
+extern const char csDictDir []    =  "%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Dictionaries";
 extern const wchar_t csEpsgDir [] = L"%GEODETIC_DATA%\\EPSG\\CSV";
 #else
 extern const wchar_t csDataDir [] = L"${OPEN_SOURCE}/CsMap/trunk/CsMapDev/Data";
-extern const char csDictDir [] = "$OPEN_SOURCE/CsMap/trunk/CsMapDev/Dictionaries";
+extern const char csDictDir []    =  "$OPEN_SOURCE/CsMap/trunk/CsMapDev/Dictionaries";
 extern const wchar_t csEpsgDir [] = L"$GEODETIC_DATA/EPSG/CSV";
 #endif
 
@@ -43,6 +52,7 @@ extern "C"
 	extern int cs_Errno;
 	extern char cs_OptchrC;
 	extern char cs_DirsepC;
+	extern char cs_ExtsepC;
 	extern wchar_t cs_OptchrWC;
 	extern wchar_t cs_DirsepWC;
 	extern double cs_Zero;
@@ -61,11 +71,13 @@ char cs_MeKynm [cs_KEYNM_DEF];
 char cs_MeFunc [128];
 double cs_Coords [3];
 
-// The following are used to establish the test enviornment.
+// The following are used to establish the test environment.
 int cs_InitialRandomValue;
 char cs_TestFile [MAXPATH];
 char cs_TestDir [MAXPATH + MAXPATH];
 char* cs_TestDirP;
+char cs_Revision [32];
+int cs_RevisionI;
 
 int main (int argc,char* argv [])
 {
@@ -107,12 +119,12 @@ int main (int argc,char* argv [])
 		char *leakTest;
 		//	The following are useful in the Microsoft Windows environment.  As it appears
 		//	below, it will report on any memory leaks detected during the evaluation.
-		memDbgState = _CrtSetDbgFlag (_CRTDBG_REPORT_FLAG);
-		memDbgState |= _CRTDBG_ALLOC_MEM_DF;
-		memDbgState |= _CRTDBG_LEAK_CHECK_DF;
-//	memDbgState |= _CRTDBG_DELAY_FREE_MEM_DF;	// useful only when hunting for a leak.
-//	memDbgState |= _CRTDBG_CHECK_ALWAYS_DF;		// A real dog, hope we never need it.
-//	memDbgState |= _CRTDBG_CHECK_CRT_DF;		// CRT allocates environment, but
+		memDbgState  =  _CrtSetDbgFlag (_CRTDBG_REPORT_FLAG);
+		memDbgState |=  _CRTDBG_ALLOC_MEM_DF;
+		memDbgState |=  _CRTDBG_LEAK_CHECK_DF;
+		memDbgState &= ~_CRTDBG_DELAY_FREE_MEM_DF;	// useful when hunting for a leak.
+		memDbgState &= ~_CRTDBG_CHECK_ALWAYS_DF;		// A real dog, hope we never need it.
+		memDbgState &= ~_CRTDBG_CHECK_CRT_DF;		// CRT allocates environment, but
 												// doesn't free it.  So this option
 												// will always produce some memory leaks.
 	_CrtSetDbgFlag (memDbgState);
@@ -120,23 +132,16 @@ int main (int argc,char* argv [])
 	// I uncomment the following, every once in a while, to verify that the
 	// leak detection feature is working properly since we rarely have seen
 	// a memory leak report.
-	leakTest = (char *)malloc (139);
-	strcpy (leakTest,"Leak detector working");
+	// leakTest = (char *)malloc (139);
+	// strcpy (leakTest,"Leak detector working");
 #	else
-	// Here for a normal debug run.  SInce things like NameMapper and EPSG make
+	// Here for a normal debug run.  Since things like NameMapper and EPSG make
 	// profuse use of the heap through all kinds of wstring operations, we turn
 	// off heap allocation checking altogether.  Otherwise, it takes hours to
-	// do anything.
+	// do anything.  This helps.  NameMapper can load in 15 to 30 seconds, but
+	// it can take 3 to 5 minutes for the EPSG database to load.
 	//
-	// THIS DOES NOT APPEAR TO WORK.  Execution time in DEBUG mode is still
-	// HOURS.  Any help you can provode would be appreciated.
-	//
-	// Best alternative knownm at this point is to start the release version in
-	// DEBUG mode (assuming that you habe not disabled the program database
-	// generation).  In this mode, you can do some debugging, and the EPSG
-	// database loads in about 2 minutes.
-	//
-	_CrtSetDbgFlag (_CRTDBG_CHECK_DEFAULT_DF);
+	_CrtSetDbgFlag (0);
 #	endif
 #endif
 
@@ -199,6 +204,8 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 	cs_TestFile [0] = '\0';
 	cs_TestDir [0] = '\0';
 	cs_TestDirP = 0;
+	cs_Revision [0] = '\0';
+	cs_RevisionI = 0;
 
 	int posArgCnt = 0;
 	for (idx = 1;idx < argc;idx++)
@@ -207,7 +214,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 		cp = argv [idx];
 		if (*cp == cs_OptchrC)
 		{
-			// It's an option argument, rather than a positional arguemnt.
+			// It's an option argument, rather than a positional argument.
 			cp += 1;
 			switch (*cp) {
 
@@ -301,11 +308,21 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 
 			case 'e':
 			case 'E':
-				// Disable checking of ellipsoid radiii.
+				// Disable checking of ellipsoid radii.
 				cs_ERadMin = 0.1;
 				cs_ERadMax = 1.0E+26;
 				cs_PRadMin = 0.1;
 				cs_PRadMax = 1.0E+26;
+				break;
+
+			case 'Q':
+			case 'q':
+				// Revision label for regression test generation.
+				cp += 1;
+				if (*cp != '\0')
+				{
+					CS_stncp (cs_Revision,cp,sizeof (cs_Revision));
+				}
 				break;
 
 			default:
@@ -316,7 +333,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 		}
 		else
 		{
-			// This argument is a positional arguemnt.
+			// This argument is a positional argument.
 			posArgCnt += 1;
 			if (posArgCnt == 1)
 			{
@@ -391,10 +408,6 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 			printf ("Locale rendition of start time (GMT) and date = \"%s\"\n",cTemp);
 		}
 	}
-	if (cs_TestFile [0] == '\0')
-	{
-		CS_stncp (cs_TestFile,"TEST.DAT",sizeof (cs_TestFile));
-	}
 	if (cs_TestDir [0] == '\0')
 	{
 		cs_TestDir [0] = '.';
@@ -439,6 +452,56 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 		}
 	}
 
+	// Test Q, R, and test T should be run independently.
+	cp = strchr (tests,'Q');
+	if (cp != NULL && ((cp != tests) || *(cp + 1) != '\0'))
+	{
+		printf ("Regression Generation (Test Q) must be run completely independently.\n");
+		usage (batch);
+	}
+	cp = strchr (tests,'R');
+	if (cp != NULL && ((cp != tests) || *(cp + 1) != '\0'))
+	{
+		printf ("Regression test (Test R) must be run completely independently.\n");
+		usage (batch);
+	}
+	cp = strchr (tests,'T');
+	if (cp != NULL && ((cp != tests) || *(cp + 1)) != '\0')
+	{
+		printf ("Temporary test module (Test T) must be run completely independently.\n");
+		usage (batch);
+	}
+
+	// If test Q (regression file generator) we need to have a /q argument
+	// which specifies the revision (SVN revision number preferred).
+	if (*tests == 'Q')
+	{
+		if (cs_Revision [0] == '\0')
+		{
+			printf ("Regression generation (Test Q) requires '/q' option specification.\n");
+			usage (batch);
+		}
+		cs_RevisionI = atoi (cs_Revision);
+		if (cs_RevisionI <=2000 || cs_RevisionI > 9999)
+		{
+			printf ("Revision specification ('/q' option) is expected to be SVN revision number.\n");
+			usage (batch);
+		}
+	}
+	// Supply the default test file name if no positional arguments were
+	// detected.
+	if (cs_TestFile [0] == '\0')
+	{
+		if (*tests == 'Q' || *tests == 'R')
+		{
+			CS_stncp (cs_TestFile,"CsMapRegressBase.csv",sizeof (cs_TestFile));
+		}
+		else
+		{
+			CS_stncp (cs_TestFile,"TEST.DAT",sizeof (cs_TestFile));
+		}
+	}
+
 	// Open a file and save the file descriptor.  This is used to see if any of
 	// the modules in CS_MAP leave a file descriptor open.  This is admittedly
 	// a poor test, but it has found some bugs, so we leave it in. */
@@ -466,6 +529,35 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 		{
 			printf ("Coordinate system test file (%s) open failed. (%d)\n",cs_TestDir,errno);
 			usage (batch);
+		}
+	}
+
+	// If this is an independent regression generation or test, verify that the
+	// extension is ".csv" and that the file can be opened.
+	if (tests [0] == 'R' || tests [0] == 'Q')
+	{
+		cp = strrchr (cs_TestFile,cs_ExtsepC);
+		if (cp != NULL && CS_stricmp (cp,".csv")) cp = NULL;
+		if (cp == NULL)
+		{
+			printf ("Regression test data file requires '.csv' extension.\n");
+			usage (batch);
+		}
+		
+		if (tests [0] == 'R')
+		{
+			// Verify that the regression file exists and is readable.
+			CS_stncp (cs_TestDirP,cs_TestFile,MAXPATH);
+			chk_fs = fopen (cs_TestDir,_STRM_TXTRD);
+			if (chk_fs != NULL)
+			{
+				fclose (chk_fs);
+			}
+			else
+			{
+				printf ("Regression test data file (%s) open failed. (%d)\n",cs_TestDir,errno);
+				usage (batch);
+			}
 		}
 	}
 
@@ -544,7 +636,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 	// successfully returned.  This is conditionally compiled as not all
 	// compilers support heap walking, nor is it supported in a standard
 	// manner.
-	   
+
 	// This test usually fails for the first test.  I believe this is due to
 	// the fact that whatever run time library is in use malloc's some memory
 	// on the first call to some function.  I feel confident about this as the
@@ -585,7 +677,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 		// Restart the entire sequence if we encounter a 'Z'
 		if (*cp == 'z')
 		{
-			printf ("Recyling through test sequence.\n");
+			printf ("Recycling through test sequence.\n");
 			seed = (unsigned)clock () & 0x3FFF;
 			printf ("Random number seed = %d.\n",seed);
 			srand (seed);
@@ -634,7 +726,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 			break;
 
 		case '5':
-			// Performs a perfomance test on certain conversions.
+			// Performs a performance test on certain conversions.
 			test_st = CStest5 (verbose,duration);
 			break;
 
@@ -656,7 +748,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 			break;
 
 		case '9':
-			// Excercises the auxilliary latitude series functions, assuring
+			// Exercises the axillary latitude series functions, assuring
 			// correct results and that the inverse always matches the forward.
 			test_st = CStest9 (verbose);
 			break;
@@ -691,7 +783,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 
 		case 'F':
 			// Perform test F. Exercises the CS_atof and CS_ftoa functions, using
-			// one to test the other; with som ehelp from sprintf.
+			// one to test the other; with some help from sprintf.
 			test_st = CStestF (verbose,duration);
 			break;
 
@@ -750,6 +842,18 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 			}
 			break;
 
+		case 'Q':
+			// Regression test generation. Generates a regression test file
+			// using the current library.
+			test_st = CStestQ (verbose,duration,cs_TestFile,cs_RevisionI);
+			break;
+
+		case 'R':
+			// Regression test. Compares the results of conversions produced
+			// by the current version with that produced by a previous version.
+			test_st = CStestR (verbose,cs_TestFile);
+			break;
+
 		case 'S':
 			// Swaps the byte order of binary data files, then adjusts CS_bswap
 			// appropriately.  Not a test in itself, but sets up the system
@@ -776,16 +880,12 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 			verbose = !verbose;
 			break;
 
-		case 'Z':
-			test_st = CStestZ (verbose,cs_TestFile);
-			break;
-
 		default:
 			test_st = 1;
 			printf ("Test case %c not known.\n",*cp);
 			break;
 		}
-		// Cature finish time and calculate execution time.
+		// Capture finish time and calculate execution time.
 		doneClock = clock ();
 		execTime = (double)(doneClock - startClock) / (double)CLOCKS_PER_SEC;
 
@@ -802,12 +902,12 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 				printf ("Test %c failed (%d failures detected)!\n",*cp,test_st);
 			}
 		}
-		else if (*cp != 'S' && *cp != 'V' && *cp != 'R')
+		else if (*cp != 'S' && *cp != 'V')
 		{
 			ok_cnt += 1;
 			if (verbose)
 			{
-				printf ("Test %c succeeded [%.3f]!!!\n",*cp,execTime);
+				printf ("Test %c succeeded [%.3f]!!!              \n",*cp,execTime);
 			}
 		}
 		// On to the next test.
@@ -821,7 +921,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 	// Release the NameMapper memory.
 	cmGetNameMapperPtr (true);
 
-	// Releast the EPSG database memory.
+	// Release the EPSG database memory.
 	if (KcsEpsgDataSetV6Ptr != NULL)
 	{
 		delete KcsEpsgDataSetV6Ptr;

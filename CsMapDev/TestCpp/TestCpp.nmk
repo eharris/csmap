@@ -64,7 +64,8 @@ LIB_DIR = $(LIB_DIR)64
 # manually made.  Not much of price to pay given the build speed
 # advantages gained.
 #
-TRG_OBJECTS = $(INT_DIR)\CStest1.obj \
+TRG_OBJECTS = $(INT_DIR)\CS_osGeoTest.obj \
+			  $(INT_DIR)\CStest1.obj \
 			  $(INT_DIR)\CStest2.obj \
 			  $(INT_DIR)\CStest3.obj \
 			  $(INT_DIR)\CStest4.obj \
@@ -87,9 +88,10 @@ TRG_OBJECTS = $(INT_DIR)\CStest1.obj \
 			  $(INT_DIR)\CStestL.obj \
 			  $(INT_DIR)\CStestM.obj \
 			  $(INT_DIR)\CStestN.obj \
+			  $(INT_DIR)\CStestQ.obj \
+			  $(INT_DIR)\CStestR.obj \
 			  $(INT_DIR)\CStestS.obj \
 			  $(INT_DIR)\CStestT.obj \
-			  $(INT_DIR)\CStestZ.obj \
 			  $(INT_DIR)\CStestSupport.obj
 #
 # Define the primary targets of this make file.
@@ -102,6 +104,7 @@ ALL : $(OUT_DIR)\$(TRG_NAME)
 # so enables the encoded "search path batch inference rules" to work,
 # and when you can get them to work in NAMKE, they work wonderfully.
 #
+$(INT_DIR)\CS_osGeoTest.obj : $(SRC_DIR)\CS_osGeoTest.cpp
 $(INT_DIR)\CStest1.obj : $(SRC_DIR)\CStest1.cpp
 $(INT_DIR)\CStest2.obj : $(SRC_DIR)\CStest2.cpp
 $(INT_DIR)\CStest3.obj : $(SRC_DIR)\CStest3.cpp
@@ -125,9 +128,10 @@ $(INT_DIR)\CStestK.obj : $(SRC_DIR)\CStestK.cpp
 $(INT_DIR)\CStestL.obj : $(SRC_DIR)\CStestL.cpp
 $(INT_DIR)\CStestM.obj : $(SRC_DIR)\CStestM.cpp
 $(INT_DIR)\CStestN.obj : $(SRC_DIR)\CStestN.cpp
+$(INT_DIR)\CStestQ.obj : $(SRC_DIR)\CStestQ.cpp
+$(INT_DIR)\CStestR.obj : $(SRC_DIR)\CStestR.cpp
 $(INT_DIR)\CStestS.obj : $(SRC_DIR)\CStestS.cpp
 $(INT_DIR)\CStestT.obj : $(SRC_DIR)\CStestT.cpp
-$(INT_DIR)\CStestZ.obj : $(SRC_DIR)\CStestZ.cpp
 $(INT_DIR)\CStestSupport.obj : $(SRC_DIR)\CStestSupport.cpp
 #
 # Note that there are no plain 'C' modules in this build. Thus this

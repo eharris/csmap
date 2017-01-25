@@ -82,12 +82,12 @@
     <ClCompile Include="..\TestCpp\Source\CStestT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\TestCpp\Source\CStestZ.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\TestCpp\Source\CS_TestCpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\TestCpp\Source\CS_osGeoTest.cpp" />
+    <ClCompile Include="..\TestCpp\Source\CStestQ.cpp" />
+    <ClCompile Include="..\TestCpp\Source\CStestR.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="TestData">
@@ -110,6 +110,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\TestCpp\Include\csTestCpp.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TestCpp\Include\cs_OsGeoTest.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

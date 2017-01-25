@@ -30,7 +30,7 @@
 //lint -esym(534,TcsCsvRecord::SetMaxFldCnt)		(ignoring return value)
 
 // The original intent of the designers of this module was to keep this module
-// completely independent of CS-MAP.  However, since ANSI seem to be obstinant
+// completely independent of CS-MAP.  However, since ANSI seem to be obstinate
 // about adding wcsicmp to the standard, we need access to the CS_wcsicmp
 // function in CS-MAP.  We could have duplicated the CS_wcsicmp code here, but
 // we chose not to.  Anyway, wcsicmp is the only reason cs_map.h is included
@@ -41,7 +41,7 @@
 // Now comes May 21, 2014 
 // The following list, and the order of their listing, has been optimized for
 // the use of pre-compiled headers.  Some of these files are unreferenced in
-// this module, a small price paid for the efficiency affored by pre-compiled
+// this module, a small price paid for the efficiency afforded by pre-compiled
 // headers.
 
 //lint -e766    Disable PC-Lint's warning of unreferenced headers.
@@ -78,7 +78,7 @@ static const TcsCsvMsgTbl KcsCsvMsgTbl [] =
 	{     csvInvRecord, L"What was presented as a CSV record is not properly formatted"                     },
 	{ csvRecordTooLong, L"Record is too long, suspect a CSV format error"                                   },
 	{  csvFieldTooLong, L"Field is too long, suspect a CSV format error"                                    },
-	{ csvTooManyFields, L"Record has too many fields for a valid record, pssoble CSV format error"          },
+	{ csvTooManyFields, L"Record has too many fields for a valid record, possible CSV format error"         },
 	{  csvTooFewFields, L"Record has less than the required number of fields for a valid record"            },
 	{   csvNoFldLabels, L"Current file does not have field labels, request is invalid"                      },
 	{  csvLblsOnAppend, L"Attempt to add a label record to a non-empty CSV file object"                     },
@@ -122,7 +122,7 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 			lastWasQuote,		// during copy of quoted field, last character was quote and quote == escape
 			copyingComment,		// processing a whole line comment
 			done,				// processing of this record is complete
-			eof					// enocuntered end of file
+			eof					// encountered end of file
 		 } state;
 	wint_t wcAsInt;
 	wchar_t wc;
@@ -402,7 +402,7 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 		break;
 	}
 
-	// If status is 'OK', we strip off a leading BOM markere if it happens to
+	// If status is 'OK', we strip off a leading BOM marker if it happens to
 	// there.
 
 
@@ -416,11 +416,11 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 //
 // 1> there MUST NOT be a trailing line break in the provided csvRecord
 //    argument.
-// 2> the delimiters argument can provide user specified delimeters:
+// 2> the delimiters argument can provide user specified delimiters:
 //		[0] == separator
 //		[1] == quote
 //		[2] == escape
-// 3> if delimiters is the null pointer, hardcoded default values are used:
+// 3> if delimiters is the null pointer, hard-coded default values are used:
 //		separator == comma,
 //		quote     == double quote
 //		escape    == double quote
@@ -430,7 +430,7 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 // 5> regardless how set, if the escape character is not the same as
 //    the quote character, the escape character will escape anything
 //    in a quoted field, including the quote character of course.
-// 6> this function executes a fields.clear () on the fields agrument.
+// 6> this function executes a fields.clear () on the fields argument.
 // 7> this function operates on 16 bit UNICODE characters only.
 // 8> the fields vector is populated with a std::wstring for each
 //    field in the provided record as determined by the separator
@@ -440,7 +440,7 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 // 9> the csGetCsvRecord defined above is useful in extracting
 //    records from a CSV file when a quoted field may have
 //    line breaks in it; often the case when the CSV file is
-//    exported by Acess, Excel, or similar programs.
+//    exported by Access, Excel, or similar programs.
 //
 // Returns a value of the EcsCsvStatus enumeration.  Possible values are:
 //
@@ -455,11 +455,11 @@ EcsCsvStatus csGetCsvRecord (std::wstring& csvRecord,std::wistream& iStrm,const 
 //  csvInternal      -> Internal error in parser
 //
 //..10,000 character limit and 300 field limit were arbitrarily chosen simply
-//..to prevent infinte loop/crash when processing a completely bogus file;
+//..to prevent infinite loop/crash when processing a completely bogus file;
 //..that is bogus from a CSV standpoint of view.
 //
 //  The function itself does not throw, but obviously uses std::vector and
-//  std::wstring STL components which may throw under wierd circumstances.
+//  std::wstring STL components which may throw under weird circumstances.
 //
 //lint -save
 //lint -esym(788,csvState::csvDone,csvState::csvError)  // enumeration values not used in switch
@@ -475,7 +475,7 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 					csvUnQuoted,		// Processing unquoted field content
 					csvEndTrim,			// Trimming 'stuff' after end of quoted field 
 					csvDone,			// completed entire line
-					csvError			// ecnountered an error in CSV format.
+					csvError			// encountered an error in CSV format.
 				  } state;
 
 	wchar_t wc;
@@ -572,7 +572,7 @@ EcsCsvStatus csCsvFieldParse (std::vector<std::wstring>& fields,const std::wstri
 				// Otherwise, we have leading whitespace on the field, and
 				// we simply ignore it, it does not become part of the field
 				// data.  We do this specifically to prevent a whitespace
-				// character which immediately preceeds a quoted field from
+				// character which immediately precedes a quoted field from
 				// screwing up the whole world.
 				break;
 
@@ -936,7 +936,7 @@ const wchar_t* CS_wcPad (int length)
 //=============================================================================
 // TcsCsvStatus Object -- Encapsulates the functionality of a Comma Separated
 //                        Value status report.
-// Should any of these objects throw an execption in the future, this is what
+// Should any of these objects throw an exception in the future, this is what
 // they should throw.
 //=============================================================================
 TcsCsvStatus::TcsCsvStatus (EcsCsvStatus status) : StatusValue (status),
@@ -1061,9 +1061,9 @@ std::wstring TcsCsvStatus::GetMessage (void)
 // status object elements such as object name and line number.  The user of
 // this object must provide them.  Suggested that users declare an TcsCsvStatus
 // object and set the Object name, and update the line number, within it, and
-// simply let this oobject supply the condition and the field number.
+// simply let this object supply the condition and the field number.
 //
-// Thus, no execptions from this object other than standard STL stuff which
+// Thus, no exceptions from this object other than standard STL stuff which
 // should be very very rare.
 //=============================================================================
 //=========================================================================
@@ -1071,6 +1071,11 @@ std::wstring TcsCsvStatus::GetMessage (void)
 TcsCsvRecord::TcsCsvRecord (void) : MinFldCnt (0),
                                     MaxFldCnt (300),
                                     Fields    ()
+{
+}
+TcsCsvRecord::TcsCsvRecord (short minFldCnt,short maxFldCnt) : MinFldCnt (minFldCnt),
+															   MaxFldCnt (maxFldCnt),
+															   Fields    (maxFldCnt)
 {
 }
 TcsCsvRecord::TcsCsvRecord (const TcsCsvRecord& source) : MinFldCnt (source.MinFldCnt),
@@ -1436,7 +1441,7 @@ TcsCsvSortFunctor::EcsCmpResult TcsCsvSortFunctor::CsvFieldCompare (const std::w
 	double realOne, realTwo;
 
 	// If the fields are numeric in nature, we want to compare the values in
-	// numeric form.  This hurts performance, but aleviates the need for users
+	// numeric form.  This hurts performance, but alleviates the need for users
 	// too know of and specify the type of the fields.  So, this is a great
 	// convenience, and makes the whole thing a bit more general.
 	longOne = wcstol (fieldOne.c_str (),&wcPtr1,10);
@@ -1446,7 +1451,7 @@ TcsCsvSortFunctor::EcsCmpResult TcsCsvSortFunctor::CsvFieldCompare (const std::w
 	    longTwo != LONG_MAX && longTwo != LONG_MIN)
 	{
 		// It appears that both fields are numeric and of the integer
-		// type.  So the comparision is as follows:
+		// type.  So the comparison is as follows:
 		if      (longOne < longTwo) result = cmpLessThan;
 		else if (longOne > longTwo) result = cmpGreaterThan;
 		else                        result = cmpEqualTo;
@@ -1460,7 +1465,7 @@ TcsCsvSortFunctor::EcsCmpResult TcsCsvSortFunctor::CsvFieldCompare (const std::w
 			fabs (realOne) < HUGE_VAL && fabs (realTwo) < HUGE_VAL)
 		{
 			// It appears that both fields are numeric and of the real
-			// type.  So the comparision is as follows:
+			// type.  So the comparison is as follows:
 			if      (realOne < realTwo) result = cmpLessThan;
 			else if (realOne > realTwo) result = cmpGreaterThan;
 			else                        result = cmpEqualTo;
@@ -1944,7 +1949,11 @@ bool TcsCsvFileBase::GetRecord (TcsCsvRecord& record,unsigned recordNbr,TcsCsvSt
 		ok = true;
 	}
 	return ok;
- }
+}
+const TcsCsvRecord& TcsCsvFileBase::GetRecord (unsigned recordNbr) const
+{
+	return Records [recordNbr];
+}
 // Implies that the file has been properly indexed, and srchString is the value
 // to be searched for in the index.
 bool TcsCsvFileBase::Locate (unsigned& recordNumber,const wchar_t* srchString) const

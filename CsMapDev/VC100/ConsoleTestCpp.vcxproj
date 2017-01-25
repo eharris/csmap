@@ -323,6 +323,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\TestCpp\Source\CStestQ.cpp" />
+    <ClCompile Include="..\TestCpp\Source\CStestR.cpp" />
     <ClCompile Include="..\TestCpp\Source\CStestS.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
@@ -341,16 +343,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\TestCpp\Source\CStestZ.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\TestCpp\Source\CS_osGeoTest.cpp" />
     <ClCompile Include="..\TestCpp\Source\CS_TestCpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\TestCpp\Include\csTestCpp.hpp" />
+    <ClInclude Include="..\TestCpp\Include\cs_OsGeoTest.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Library.vcxproj">
