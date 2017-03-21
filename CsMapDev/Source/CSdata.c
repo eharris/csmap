@@ -473,7 +473,7 @@ struct cs_Datum_ cs_Wgs84Def =
 	"WGS84",				/* datum key name */
 	"WGS84",				/* ellipsoid key name */
 	6378137.000,			/* equatorial radius */
-	6356752.3142,			/* polar radius */
+	6356752.314245179,		/* polar radius */
 	1.0 / 298.257223563,	/* flattening */
 	0.0818191908426,		/* eccentricity */
 	0.0,					/* Delta X */

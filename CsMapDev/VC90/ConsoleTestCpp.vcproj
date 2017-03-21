@@ -510,6 +510,10 @@
 			Filter="*.dat"
 			>
 			<File
+				RelativePath="..\TestCpp\CsMapRegressBase.csv"
+				>
+			</File>
+			<File
 				RelativePath="..\TestCpp\TEST.DAT"
 				>
 				<FileConfiguration
