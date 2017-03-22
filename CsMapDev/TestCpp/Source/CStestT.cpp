@@ -77,9 +77,21 @@ int CStestT (bool verbose,long32_t duration)
 
 	// Mostly to keep lint/compiler happy.
 	nmStartClock = clock ();
+
+	// Test code for investigating Ticket #177
+	int idx;
+	int status;
+	char baseName [64];
+
+	for (idx = 0;idx < 500;idx+=1)
+	{
+		printf ("idx = %d\r",idx);
+		status = CSllCsFromDt (baseName,sizeof baseName,"LEIGON");
+	}
+
 	nmDoneClock = clock ();
 
-#ifndef __SKIP__
+#ifdef __SKIP__
 
 	// Testing fix for Trac Ticket #137.
 
@@ -1013,5 +1025,6 @@ int CStestT (bool verbose,long32_t duration)
 
 	/* Mostly to keep lint/compiler hgappy. */
 	nmExecTime = (double)(nmDoneClock - nmStartClock) / (double)CLOCKS_PER_SEC;
+	printf ("Execution time: %f seconds.\n",nmExecTime);
 	return err_cnt;
 }
