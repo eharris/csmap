@@ -344,6 +344,23 @@ int CS_DefinitionRead(csFILE *& strm, TCsMapStruct *& def, char (&keyName)[_KeyN
 	CS_CHECK_NULL_ARG(def, 2);
 
 	/* Synchronize the strm before the read. */
+
+	/* *************   NOTE   *******************************************
+	   Researching for a solution to Trac Ticket #177, the following was
+	   observed:  This one function call eats from 6 to 100 times as much CPU
+	   time as the remainder of the function.  Disassembly has been analyzed,
+	   but to no avail.  Removing this function call from this module and
+	   placing an identical function call just prior to any use of the
+	   CS_csrd function performs normally.  I cannot fathom why having this
+	   function call in this module has such a devastating effect on
+	   performance.
+
+	   As this is not a critical need (at least at this time), and since the
+	   desired synchronization may be very important in certain environments,
+	   and since this is not a problem under Linux, this code is left as is.
+
+	   Trac Ticket #177 is marked as will not fix. */
+
 	int st = CS_fseek (strm, 0L, SEEK_CUR);
 	if (st != 0)
 	{
@@ -401,7 +418,7 @@ int CS_DefinitionRead(csFILE *& strm, TCsMapStruct *& def, char (&keyName)[_KeyN
 	   established by CS_nampp over the years has always been
 	   expanded, never restricted.  Thus, any definition which
 	   was legitimate in a previous release would always be
-	   legitimate iin subsequent releases. */
+	   legitimate in subsequent releases. */
 	char tmpKeyName[_KeyNameSize];
 	CS_stncp (tmpKeyName, keyName, _KeyNameSize);
 	if (CSnampp(tmpKeyName, _KeyNameSize) != 0)
@@ -492,7 +509,7 @@ TCsMapStruct* DefinitionGet(
 		TCsMapStruct* pDef = (TCsMapStruct*) CS_malc (blockSize);
 		if (NULL == pDef)
 		{
-			//this is a serious proplem; get out here immediately
+			//this is a serious problem; get out here immediately
 			CS_erpt (cs_NO_MEM);
 			return NULL;
 		}
@@ -617,7 +634,7 @@ int DefinitionGetAll(TCsMapStruct* *pAllDefs[],
                     typename DuplicateMap::iterator defDuplicateEntry = pDuplicatesMap->find(pId);
 				    if (pDuplicatesMap->end() == defDuplicateEntry)
                     {
-                        // No related duplicat item is available, create one and set the first duplicate definition.
+                        // No related duplicate item is available, create one and set the first duplicate definition.
                         DuplicateItem defDuplicate(knownIdEntry->second, TCsMapStructVector());
                         std::pair<typename DuplicateMap::iterator, bool> insertResult = pDuplicatesMap->insert(std::make_pair(pId, defDuplicate));
                         if (!insertResult.second)
@@ -688,7 +705,7 @@ error:
 				CS_free(defDuplicateVector[i]);
 			}
 
-			pDuplicatesMap->clear(); //report an emtpy map to the caller
+			pDuplicatesMap->clear(); //report an empty map to the caller
 		}
 	}
 
