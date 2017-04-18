@@ -39,11 +39,16 @@ RebuildLinux64 :
 
 .PHONY : Test
 .PHONY : QuickTest
+.PHONY : RegressTest
 
 Test :
 	./bin$(VERSION)/$(CONFIGURATION)64/CS_TestCpp -d./Dictionaries -e -b TestCpp/TEST.DAT
 
 QuickTest :
 	./bin$(VERSION)/$(CONFIGURATION)64/CS_TestCpp -d./Dictionaries -e -b -t12345 TestCpp/TEST.DAT
+
+RegressTest :
+	./bin$(VERSION)/$(CONFIGURATION)64/CS_TestCpp -d./Dictionaries -e -b -tR TestCpp/CsMapRegressBase.csv
+
 
 

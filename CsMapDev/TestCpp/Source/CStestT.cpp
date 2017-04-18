@@ -75,10 +75,55 @@ int CStestT (bool verbose,long32_t duration)
 	clock_t nmDoneClock;
 	double nmExecTime;
 
+
+	// Test code for investigating Ticket #199
+	struct cs_Csprm_ *srcCS;
+	struct cs_Csprm_ *trgCS;
+	struct cs_Dtcprm_ *dtcprm;
+
 	// Mostly to keep lint/compiler happy.
 	nmStartClock = clock ();
 
+	// Selection of the source coordinate system here is crucial.  Needs to be
+	// one that gets us into phase three of bridge building.  I had to comment
+	// a path definition out in order to get a good case for debugging/testing
+	// this ticket.
+
+	srcCS = CS_csloc ("CH1903/GSB.LL");
+	trgCS = CS_csloc ("CHTRF95.LL");
+//	srcCS = CS_csloc ("Ireland1965.ING");
+//	trgCS = CS_csloc ("ITM");
+//	srcCS = CS_csloc ("Reunion47.LL");
+//	trgCS = CS_csloc ("LL84");
+
+	dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_DAT_W1);
+	if (dtcprm != NULL)
+	{
+		CS_dtcls (dtcprm);
+	}
+	dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_DAT_W1);
+	if (dtcprm != NULL)
+	{
+		CS_dtcls (dtcprm);
+	}
+	dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_DAT_W1);
+	if (dtcprm != NULL)
+	{
+		CS_dtcls (dtcprm);
+	}
+	dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_DAT_W1);
+	if (dtcprm != NULL)
+	{
+		CS_dtcls (dtcprm);
+	}
+
+	// Mostly to keep lint/compiler happy.
+	nmDoneClock = clock ();
+
+#ifdef __SKIP__
+
 	// Test code for investigating Ticket #177
+
 	int idx;
 	int status;
 	char baseName [64];
@@ -88,8 +133,8 @@ int CStestT (bool verbose,long32_t duration)
 		printf ("idx = %d\r",idx);
 		status = CSllCsFromDt (baseName,sizeof baseName,"LEIGON");
 	}
-
 	nmDoneClock = clock ();
+#endif
 
 #ifdef __SKIP__
 

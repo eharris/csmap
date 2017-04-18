@@ -157,7 +157,7 @@ int CSdtmBridgeIsComplete (struct csDtmBridge_* thisPtr)
 	/* We have stuff in the bridge.  We need to determine if the contents
 	   define a continuous path from the bridge's initial source datum to
 	   the bridge's initial target datum.  If so, it is then complete.
-	   
+	
 	   We'll use the xfrmPtrs array to eliminate the gaps which may exist
 	   inside the bridge. */
 	for (idx = 0;idx < csPATH_MAXXFRM;idx += 1)
@@ -235,7 +235,7 @@ int CSdtmBridgeAddSrcPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 			pathElePtr = &pathPtr->geodeticPathElements [idx];
 			
 			/* The direction as it applies to the entire path is forward.
-			   Thus, we copy the direction assigned to eaach element of the
+			   Thus, we copy the direction assigned to each element of the
 			   provided path. */
 			direction = pathElePtr->direction;
 			gxIndex = CS_locateGxByName (pathElePtr->geodeticXformName);
@@ -258,7 +258,7 @@ int CSdtmBridgeAddSrcPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 	else if (direction == cs_DTCDIR_INV)
 	{
 		/* We need to use the inverse of the _ENTIRE_ path.  This implies
-		   reverseing the order of the transformations. */
+		   reversing the order of the transformations. */
 		for (idx = idxCount;idx > 0;idx -= 1)
 		{
 			/* Here once for each transformation in the provided Geodetic
@@ -329,13 +329,13 @@ error:
 
 /* Things get tricky here when adding a path to the target side of the bridge.
    Keep in mind, that when adding transformations to the "target end of the
-   bridge" we are working the detination of the bridge back towrd the source.
+   bridge" we are working the destination of the bridge back toward the source.
    
    Thus, when we are adding a path whose direction indication is forward,
    we need to work through the path from the end of the path toward the
    beginning of the path.
    
-   Just the opposit of what you might think, or at least the way I originally
+   Just the opposite of what you might think, or at least the way I originally
    coded this. */
    
 int CSdtmBridgeAddTrgPath (struct csDtmBridge_* thisPtr,Const struct cs_GeodeticPath_* pathPtr,
@@ -385,7 +385,7 @@ int CSdtmBridgeAddTrgPath (struct csDtmBridge_* thisPtr,Const struct cs_Geodetic
 	else if (direction == cs_DTCDIR_INV)
 	{
 		/* We need to use the inverse of the _ENTIRE_ path.  This implies
-		   reverseing the order of the transformations. */
+		   reversing the order of the transformations. */
 		for (idx = 0;idx < idxCount;idx += 1)
 		{
 			/* Here once for each transformation in the provided Geodetic
