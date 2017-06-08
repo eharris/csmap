@@ -467,8 +467,8 @@ double CStstcnvrg (struct cs_Csprm_ *csprm,double ll [2])
 
 void usage (bool batch)
 {
-	printf ("Usage: TEST [%cb] [%cv] [%cp30] [%cddir] [%ct123] [test_file]\n",
-		cs_OptchrC,cs_OptchrC,cs_OptchrC,cs_OptchrC,cs_OptchrC);
+	printf ("Usage: TEST [%cb] [%cv] [%cp30] [%cddir] [%cudir] [%ct123] [test_file]\n",
+		cs_OptchrC,cs_OptchrC,cs_OptchrC,cs_OptchrC,cs_OptchrC,cs_OptchrC);
 	printf ("\t       %cb  suppresses acknowledgment before exit\n",cs_OptchrC);
 	printf ("\t       %cd  specifies Dictionary directory\n",cs_OptchrC);
 	printf ("\t       %cl  test environment locale name\n",cs_OptchrC);
@@ -476,6 +476,7 @@ void usage (bool batch)
 	printf ("\t       %cr  specify random number seed value\n",cs_OptchrC);
 	printf ("\t       %cs  indicates binary data files are swapped\n",cs_OptchrC);
 	printf ("\t       %ct  specifies tests, and sequence\n",cs_OptchrC);
+	printf ("\t       %cu  specifies optional user definition directory\n",cs_OptchrC);
 	printf ("\t       %cv  start in verbose mode\n",cs_OptchrC);
 	printf ("\t       %cq  revision of library\n",cs_OptchrC);
 	printf ("\ttest_file  name of test data file\n\n");

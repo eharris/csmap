@@ -75,7 +75,42 @@ int CStestT (bool verbose,long32_t duration)
 	clock_t nmDoneClock;
 	double nmExecTime;
 
+	// Test code implementation of GDA2020
+	int status;
+	struct cs_Csprm_ *srcCS;
+	struct cs_Csprm_ *trgCS;
+	struct cs_Dtcprm_ *dtcprm;
 
+	double gda94LL [3] = { 133.88551329, -23.67012389, 603.3466 };
+	// Debug Aid: GDA94   XYZ =  -4052051.7643, 4212836.2017, -2545106.0245
+	//            GDA2020 XYZ =  -4052052.7379, 4212835.9897, -2545104.5898
+	double gda2020LL [3];		// expected: 133.8855216, -23.67011014, 603.2489
+
+	// Mostly to keep lint/compiler happy.
+	nmStartClock = clock ();
+
+	srcCS = CS_csloc ("AMG66-55-Grid");
+	trgCS = CS_csloc ("LL-GDA94");
+	dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_DAT_W1);
+
+
+	srcCS = CS_csloc ("LL-GDA94");
+	trgCS = CS_csloc ("LL-GDA2020");
+	dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_DAT_W1);
+	if (dtcprm != NULL)
+	{
+		status = CS_dtcvt3D (dtcprm,gda94LL,gda2020LL);
+		status = CS_dtcvt3D (dtcprm,gda94LL,gda2020LL);
+		status = CS_dtcvt3D (dtcprm,gda94LL,gda2020LL);
+		status = CS_dtcvt3D (dtcprm,gda94LL,gda2020LL);
+	}
+	else
+	{
+		err_cnt = 1;
+	}
+	nmDoneClock = clock ();
+
+#ifdef __SKIP__
 	// Test code for investigating Ticket #199
 	struct cs_Csprm_ *srcCS;
 	struct cs_Csprm_ *trgCS;
@@ -119,6 +154,7 @@ int CStestT (bool verbose,long32_t duration)
 
 	// Mostly to keep lint/compiler happy.
 	nmDoneClock = clock ();
+#endif
 
 #ifdef __SKIP__
 

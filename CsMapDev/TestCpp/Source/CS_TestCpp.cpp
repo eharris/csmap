@@ -29,9 +29,10 @@
 #include <errno.h>
 
 #if (_RUN_TIME < _rt_UNIXPCC)
-extern const wchar_t csDataDir [] = L"%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Data";
-extern const char csDictDir []    =  "%OPEN_SOURCE%\\CsMap\\trunk\\CsMapDev\\Dictionaries";
+extern const wchar_t csDataDir [] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Data";
+extern const char csDictDir []    =  "%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
 extern const wchar_t csEpsgDir [] = L"%GEODETIC_DATA%\\EPSG\\CSV";
+extern const char csUsrDefDir []  =  "%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\UserDefs";
 #else
 extern const wchar_t csDataDir [] = L"${OPEN_SOURCE}/CsMap/trunk/CsMapDev/Data";
 extern const char csDictDir []    =  "$OPEN_SOURCE/CsMap/trunk/CsMapDev/Dictionaries";
@@ -75,6 +76,7 @@ double cs_Coords [3];
 int cs_InitialRandomValue;
 char cs_TestFile [MAXPATH];
 char cs_TestDir [MAXPATH + MAXPATH];
+char cs_UserDefDir [MAXPATH];
 char* cs_TestDirP;
 char cs_Revision [32];
 int cs_RevisionI;
@@ -158,32 +160,6 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 	protectSave = cs_Protect;
 	uniqueSave = cs_Unique;
 
-	// Set up the current directory as the possible source for the dictionaries
-	// and other data files.  This only works under MS-DOS unless they've
-	// changed UNIX since this old fart last worked on a UNIX system.  The
-	// /d option overrides this selection if present on the command line.
-	st = -1;
-	cs_Dir [0] = '\0';
-	cs_DirP = NULL;
-#if (_RUN_TIME < _rt_UNIXPCC)
-	strncpy (alt_dir,argv [0],sizeof (alt_dir));
-	alt_dir [sizeof (alt_dir) - 1] = '\0';
-	cp = strrchr (alt_dir,cs_DirsepC);
-	if (cp != NULL)
-	{
-		*cp = '\0';
-		st = CS_altdr (alt_dir);
-	}
-#endif
-	if (st != 0)
-	{
-		st = CS_altdr (cs_DirK);
-	}
-	if (st != 0)
-	{
-		CS_altdr (NULL);
-	}
-
 	// Analyze the arguments and extract all options.  First, we set the
 	// default values.
 	bool verbose = false;
@@ -191,9 +167,13 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 	bool crypt = false;
 	long32_t duration = 0L;
 	unsigned seed = 0;
-	locale [0] = '\0';
-	tests [0] = '\0';
-	alt_dir [0] = '\0';
+
+	memset (locale,'\0',sizeof (locale));
+	memset (tests,'\0',sizeof (tests));
+	memset (alt_dir,'\0',sizeof (alt_dir));
+	memset (cTemp,'\0',sizeof (cTemp));
+	memset (cs_UserDefDir,'\0',sizeof (cs_UserDefDir));
+
 	cs_MeKynm [0] = '\0';	
 	cs_MeFunc [0] = '\0';
 	cs_Coords [0] = cs_Zero;
@@ -299,6 +279,31 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 				}
 				cp += 1;
 				CS_stncp (tests,cp,sizeof (tests));
+				break;
+
+			case 'u':
+			case 'U':
+				if (cs_UserDefDir [0] != '\0')
+				{
+					printf ("Multiple user directory specifications.\n");
+					usage (batch);
+				}
+				cp += 1;
+				if (strlen (cp) >= MAXPATH)
+				{
+					printf ("User directory specification is too long.\n");
+					usage (batch);
+				}
+				if (*cp != '\0')
+				{
+					CS_stncp (cs_UserDefDir,cp,sizeof (cs_UserDefDir));
+				}
+				else
+				{
+					// Use default location.
+					CS_stncp (cs_UserDefDir,csUsrDefDir,sizeof (cs_UserDefDir));
+					CS_envsub (cs_UserDefDir,sizeof (cs_UserDefDir));
+				}
 				break;
 
 			case 'v':
@@ -408,6 +413,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 			printf ("Locale rendition of start time (GMT) and date = \"%s\"\n",cTemp);
 		}
 	}
+
 	if (cs_TestDir [0] == '\0')
 	{
 		cs_TestDir [0] = '.';
@@ -415,8 +421,11 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 		cs_TestDir [2] = '\0';
 		cs_TestDirP = &cs_TestDir [2];
 	}
+
 	if (alt_dir [0] != '\0')
 	{
+		// A dictionary directory command line option has been detected.
+		// Use it.
 		st = CS_altdr (alt_dir);
 		if (st != 0)
 		{
@@ -425,6 +434,51 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 			usage (batch);
 		}
 	}
+	else
+	{
+		// No dictionary command line argument was detected, so we try alternatives.
+		// First up, the default value declared up tip with the environmental variable
+		// "OPEN_SOURCE" in the definition.
+		CS_stncp (alt_dir,csDictDir,sizeof (alt_dir));
+		CS_envsub (alt_dir,sizeof (alt_dir));
+		st = CS_altdr (alt_dir);
+		if (st != 0)
+		{
+			// Second up, use CS_altdir with the NULL argument.  This instructs
+			// CS_altdr to look for, and use, the CS_MAP_DIR environmental
+			// variable.
+			st = CS_altdr (NULL);
+			if (st != 0)
+			{
+				printf ("Dictionary directory specification not provided, and the environmental\n");
+				printf ("defaults were not specificfied or were invalid.\n");
+				usage (batch);
+			}
+		}
+	}
+
+	// If the command line included a User Definition Directory specification,
+	// we activate that now.  Failure here is not likely to be a bad path
+	// (this is not checked), but more like a truely bogus value for the
+	// basic parameter.
+	if (cs_UserDefDir [0] != '\0')
+	{
+		st = CS_usrdr (cs_UserDefDir);
+		if (st != 0)
+		{
+			printf ("Establishing %s as the optional User Definition Directory failed.",cs_UserDefDir);
+			usage (batch);
+		}
+		st = CS_access (cs_UserDefDir,0);
+		if (st != 0)
+		{
+			printf ("User Definition Dictionary specification \"%s\"\n",cs_UserDefDir);
+			printf ("does not exist.\n");
+			usage (batch);
+		}
+		printf ("Using user definitions in the \"%s\" directory.\n",cs_UserDefDir);
+	}
+
 	if (tests [0] == '\0')
 	{
 		CS_stcpy (tests,"123456789ABCDEFGHIJKLMNLKJIHGFEDCBA987654321");
@@ -438,7 +492,7 @@ printf ("CrtDbgFlag = %x.\n",_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG));
 		seed = (unsigned)CS_time ((cs_Time_ *)0) & 0x3FFF;
 	}
 	*cs_DirP = '\0';
-	printf ("Using dictionary files in the %s directory.\n",cs_Dir);
+	printf ("Using dictionary files in the \"%s\" directory.\n",cs_Dir);
 	printf ("Random number seed = %d.\n",seed);
 	srand (seed);
 	cs_InitialRandomValue = rand ();
