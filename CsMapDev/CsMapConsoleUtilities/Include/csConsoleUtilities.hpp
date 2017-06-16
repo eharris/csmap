@@ -97,7 +97,7 @@ bool csCsdToCsvGX (const wchar_t* csDictDir,bool incLegacy = false);
 bool csCsdToCsvGP (const wchar_t* csDictDir,bool incLegacy = false);
 // This range transfer transfers from one Coordsys.ASC definition to another.
 bool csUsefulRangeTransfer (const wchar_t* csDictDir,int ticketNbr);
-// This range transfer transfers from EPSG to Coordsys,asc
+// This range transfer transfers from EPSG to Coordsys.asc
 bool csUsefulRangeXfer (const wchar_t* csDictDir,const wchar_t* csDataDir,int ticketNbr);
 
 bool OracleTxt2WktTest (const wchar_t* csDictDir,const wchar_t* csDataDir,const wchar_t* inputFile,
@@ -111,6 +111,9 @@ bool PreProcessWktCatalog (const wchar_t* csDataTrgDir,const wchar_t* csDataSrcD
 bool csAddInGCS (const wchar_t* trgDir,const wchar_t* dataDir,const wchar_t* dataName,
 															  const wchar_t* dictDir,
 															  const wchar_t* epsgDir);
+
+bool csDeprecateWiHpgn (const wchar_t* trgDictDir,const wchar_t* srcDictDir);
+
 
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be

@@ -404,6 +404,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csDeprecateWiHpgn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csEpsg706Update.cpp"
 				>
 			</File>
@@ -505,13 +509,6 @@
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

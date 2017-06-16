@@ -990,6 +990,21 @@ void TcsCategory::AddItem (const TcsCategoryItem& newItem)
 {
 	Items.push_back (newItem);
 }
+void TcsCategory::RemoveItem (const TcsCategoryItem& oldItem)
+{
+	const char *itmNamePtr;
+	std::vector<TcsCategoryItem>::iterator itmItr;
+	
+	for (itmItr = Items.begin ();itmItr != Items.end ();itmItr++)
+	{
+		itmNamePtr = itmItr->GetItemName ();
+		if (!CS_stricmp (itmNamePtr,oldItem.GetItemName()))
+		{
+			Items.erase (itmItr);
+			break;
+		}
+	}
+}
 bool TcsCategory::ReadFromStream (std::istream& inStrm)
 {
 	bool ok (false);
@@ -1216,6 +1231,8 @@ bool TcsCategoryFile::DeprecateCrs (const char* oldCrsName,const char* newCrsNam
 
 	// Scan all catagories looking for an item with an item name equal to
 	// the provided old CRS name.
+	// NOTICE: This code currently assumes that a CSR name is never duplicated
+	// with a category.
 	rplCount = 0;
 	for (catItr = Categories.begin ();ok && catItr != Categories.end ();catItr++)
 	{
@@ -1237,15 +1254,68 @@ bool TcsCategoryFile::DeprecateCrs (const char* oldCrsName,const char* newCrsNam
 				obsoleteCat->AddItem (deprecatedItem);
 			}
 			rplCount += 1;
-			
+
 			// Replace the old name of this entry with the new name and
 			// new description, is any.
-			itemPtr->SetItemName (newCrsName);
-			if (newCrsDescription != 0 && *newCrsDescription != '\0')
+			// We're removing an item from a category.  This does not affect
+			// the category iterator.
+			categoryPtr->RemoveItem (*itemPtr);
+		}
+	}
+	if (ok)
+	{
+		ok = (rplCount > 0);
+	}
+	return ok;
+}
+bool TcsCategoryFile::DeprecateCrsDel (const char* oldCrsName,const char* useCrs,
+															  const char* deprNote)
+{
+	bool ok (false);
+	unsigned rplCount;
+	TcsCategory* obsoleteCat;
+	TcsCategory* categoryPtr;
+	TcsCategoryItem* itemPtr;
+	std::vector<TcsCategory>::iterator catItr;
+
+	char itemDescription [256];
+
+	// We will need to add a copy of every entry that we modify to the
+	// Obsolete category, so we obtain a pointer to that category now.
+	obsoleteCat = FetchCategory (TcsCategoryFile::KcsObsoleteCatName);
+	ok = (obsoleteCat != 0);
+
+	// Formulate the description which we will apply to the deprecated
+	// category item.
+	sprintf (itemDescription,"%s - use %s for new work.",deprNote,useCrs);
+
+	// Scan all catagories looking for an item with an item name equal to
+	// the provided old CRS name.
+	rplCount = 0;
+	for (catItr = Categories.begin ();ok && catItr != Categories.end ();catItr++)
+	{
+		categoryPtr = &(*catItr);
+		if (categoryPtr == obsoleteCat)
+		{
+			continue;
+		}
+		itemPtr = categoryPtr->GetItem (oldCrsName);
+		if (itemPtr != 0)
+		{
+			// We have found a reference to this CRS in current category.
+			// If we have not done so already, make sure the obsolete category
+			// has a refernce to the CRS we are deprecating.
+			if (rplCount == 0)
 			{
-				itemPtr->SetDescription (newCrsDescription);
+				TcsCategoryItem deprecatedItem (*itemPtr);
+				deprecatedItem.SetDescription (itemDescription);
+				obsoleteCat->AddItem (deprecatedItem);
 			}
-		}					
+			rplCount += 1;
+
+			// Remove the deprecated item from this category.
+			categoryPtr->RemoveItem (*itemPtr);
+		}
 	}
 	if (ok)
 	{

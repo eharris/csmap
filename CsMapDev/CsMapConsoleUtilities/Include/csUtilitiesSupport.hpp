@@ -194,6 +194,7 @@ public:
 	TcsCategoryItem* GetItem (const char* itemName);
 	void SetCategoryName (const char* categoryName);
 	void AddItem (const TcsCategoryItem& newItem);
+	void RemoveItem (const TcsCategoryItem& oldItem);
 	bool ReadFromStream (std::istream& inStrm);
 	bool WriteToStream (std::ostream& outStrm);
 private:
@@ -223,9 +224,10 @@ public:
 	void AddCategory (const TcsCategory& newCategory);
 	bool ReadFromStream (std::istream& inStrm);
 	bool InitializeFromFile (const char* categoryPathName);
-	bool TcsCategoryFile::DeprecateCrs (const char* oldCrsName,const char* newCrsName,
-															   const char* deprNote,
-															   const char* newCrsDescription = 0);
+	bool DeprecateCrs (const char* oldCrsName,const char* newCrsName,
+											  const char* deprNote,
+											  const char* newCrsDescription = 0);
+	bool DeprecateCrsDel (const char* oldCrsName,const char* useCrs,const char* deprNote);
 	bool WriteToStream (std::ostream& outStrm);
 	bool WriteToFile (const char* categoryPathName);
 private:

@@ -799,7 +799,97 @@ bool csCsdToCsvCS (const wchar_t* csDictDir,bool incLegacy)
 }
 bool csCsdToCsvCT (const wchar_t* csDictDir,bool incLegacy)
 {
-	return false;
+	bool ok (false);
+
+	char *ccPtr;
+	struct cs_CtItmName_ *itmPtr;
+
+	char crsDefName [cs_KEYNM_DEF];
+	char crsDefDescr [64];
+	char csDictDirC [MAXPATH];
+	wchar_t wcBuffer [MAXPATH + MAXPATH];
+
+	struct cs_Ctdef_ ctDef;
+
+	std::wstring wcSortField;
+	std::wstring wcCatName;
+	std::wstring wcCrsName;
+	std::wstring wcCrsDescr;
+
+	csFILE* csdStrm;
+	std::wofstream csvStrm;
+
+	/* ctDef must be initialized to something rational. */
+	memset (&ctDef,'\0',sizeof (ctDef));
+
+	wcstombs (csDictDirC,csDictDir,sizeof (csDictDirC));
+	int status = CS_altdr (csDictDirC);
+	ok = (status == 0);
+	if (!ok)
+	{
+		return ok;
+	}
+
+	csdStrm = NULL;
+	ccPtr = CS_stncp (cs_DirP,cs_Ctname,cs_FNM_MAXLEN);
+	CS_strrpl (cs_Dir,MAXPATH,".CSD",".csv");
+	csvStrm.open (cs_Dir,std::ios_base::out | std::ios_base::trunc);
+	if (csvStrm.is_open ())
+	{
+		csdStrm = CS_ctopn (_STRM_BINRD);
+		ok = (csdStrm != NULL);
+	}
+	if (ok)
+	{
+		// We use the wcSortField item to insert a synamic qualifier which
+		// will help in analysis.  This to be adjusted by hard code
+		// inserted into this module as required.
+		wcSortField = L" ";
+
+		// Getting here implies that both opens were successful.
+		// Write a label line for our CSV file. There is no good
+		// reason for wusing a wide character stream, currently.
+		// But we do it anyway.
+		csvStrm << L"Sort"                << L','
+				<< L"Cat Name"            << L','
+				<< L"CRS Name"            << L','
+				<< L"CRS Description"     << std::endl;
+
+		// Loop through each category in the category dictionary,
+		while (CS_ctrd (csdStrm,&ctDef) > 0)
+		{
+			mbstowcs (wcBuffer,ctDef.ctName,wcCount (wcBuffer));
+			wcCatName = wcBuffer;
+			csCsvQuoter (wcCatName);
+
+			/* We have the category name, now loop once for each
+			   CRS in the ctaegory. */
+			for (ulong32_t idx = 0;idx < ctDef.nameCnt;idx++)
+			{
+				itmPtr = ctDef.csNames + idx;
+				ccPtr = itmPtr->csName;
+				CS_stncp (crsDefName,ccPtr,sizeof (crsDefName));
+				mbstowcs (wcBuffer,ccPtr,wcCount (wcBuffer));
+				wcCrsName = wcBuffer;
+
+				CS_getDescriptionOf (crsDefName,crsDefDescr,sizeof (crsDefDescr));
+				mbstowcs (wcBuffer,crsDefDescr,wcCount (wcBuffer));
+				wcCrsDescr = wcBuffer;
+				csCsvQuoter (wcCrsDescr);
+
+				/* write the entry out */
+		
+				csvStrm << wcSortField                 << L','
+						<< wcCatName                   << L','
+						<< wcCrsName                   << L','
+						<< wcCrsDescr                  << std::endl;
+			}
+		}
+		csvStrm.close ();
+		CS_fclose (csdStrm);
+		CSclnCategory (&ctDef);
+	}
+	return ok;
 }
 bool csCsdToCsvGX (const wchar_t* csDictDir,bool incLegacy)
 {

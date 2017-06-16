@@ -1,20 +1,29 @@
-//===========================================================================
-// $Header$
-//
-//    (C) Copyright 2007 by Autodesk, Inc.
-//
-// The information contained herein is confidential, proprietary
-// to Autodesk, Inc., and considered a trade secret as defined 
-// in section 499C of the penal code of the State of California.  
-// Use of this information by anyone other than authorized employees
-// of Autodesk, Inc. is granted only under a written non-disclosure 
-// agreement, expressly prescribing the scope and manner of such use.
-//
-// CREATED BY:
-//      Norm Olsen
-//
-// DESCRIPTION:
-//
+/*
+ * Copyright (c) 2008, Autodesk, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Autodesk, Inc. nor the names of its
+ *       contributors may be used to endorse or promote products derived
+ *       from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY Autodesk, Inc. ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL Autodesk, Inc. OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #include "csConsoleUtilities.hpp"
 
@@ -23,12 +32,12 @@ wchar_t csDataDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\
 wchar_t csDictDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
 wchar_t csDictSrc [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
 wchar_t csEpsgDir [MAXPATH] = L"%GEODETIC_DATA%\\EPSG\\CSV";
-wchar_t csEpsgPolyDir [] = L"%GEODETIC_DATA%\\EPSG\\EPSG-Polygon-package-20130626";
+wchar_t csEpsgPolyDir []    = L"%GEODETIC_DATA%\\EPSG\\EPSG-Polygon-package-20130626";
 wchar_t csTempDir [MAXPATH] = L"C:\\TEMP";
 #else
 const wchar_t csDataDir [] = L"$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Data";
-const char csDictDir [] = "$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Dictionaries";
-wchar_t csEpsgDir [] = L"${GeodeticData}/Epsg/CSV";
+const char csDictDir []    = "$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Dictionaries";
+wchar_t csEpsgDir []       = L"${GeodeticData}/Epsg/CSV";
 const wchar_t csDataDir [] = L"$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Data";
 const wchar_t csTempDir [] = L"/usr/tmp";
 #endif
@@ -51,7 +60,8 @@ int main (int argc,char* argv [])
 	// Perform environmental variable substitution on the global variables
 	// defined above which specify the location of stuff on the host system.
 	// The loops are required as the CS_envsubWc function only replaces a
-	// single environmental variable per call.
+	// single environmental variable per call.  Looping ensures multiple
+	// references are replace.
 	for (envStatus = 1;envStatus != 0;)
 	{
 		envStatus = CS_envsubWc (csDataDir,wcCount (csDataDir));
@@ -93,12 +103,24 @@ int main (int argc,char* argv [])
 	return ok;
 #endif
 
-	// The following utility will programmatically add the Indiana GCS systems
-	// to the normal dictionaries based on a file named InGCS.csv expected to
-	// reside in the CS-MAP Data directory, and put the modified results
-	// (i.e. coordsys.asc and NameMapper.csv) in the C:\Temp directory until
-	// such time as we feel confident in the results being produced.
-	ok = csAddInGCS (csTempDir,csDataDir,L"InGCS.csv",csDictSrc,csEpsgDir);
+	// The following will deprecate 221 coordinate systems.  These are the
+	// Wisonsin COunty specific systems referenced to the old HPGN datum
+	// definition.  The new dictionaries are written to the csTempDir for
+	// inspection prior to manual replacement in the SVN repository.
+	ok = csDeprecateWiHpgn (csTempDir,csDictSrc);
+
+#ifdef __SKIP__
+	// The following can be useful at times.  It produces .csv format files for
+	// the various dictionary files.  Oops!!!  Haven't figured out how to
+	// put the Geodetic Transformation Dictionary into a CSV format, YET!  There
+	// is the issue of a huge union which complicates things.
+	ok = csCsdToCsvCT (csDictDir,true);
+	ok = csCsdToCsvEL (csDictDir,true);
+	ok = csCsdToCsvDT (csDictDir,true);
+	ok = csCsdToCsvCS (csDictDir,true);
+	ok = csCsdToCsvGX (csDictDir,true);
+	ok = csCsdToCsvGP (csDictDir,true);
+#endif
 
 	return ok?0:-1;
 }
