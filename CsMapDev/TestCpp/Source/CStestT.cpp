@@ -75,11 +75,85 @@ int CStestT (bool verbose,long32_t duration)
 	clock_t nmDoneClock;
 	double nmExecTime;
 
-	// Test code implementation of GDA2020
+	// Exercising GDA2020 systems.
 	int status;
 	struct cs_Csprm_ *srcCS;
 	struct cs_Csprm_ *trgCS;
 	struct cs_Dtcprm_ *dtcprm;
+
+	double llAgd66 [3] = {112.00, -20.00, 0.0};
+	double llGda2020 [3] = {0.0, 0.0, 0.0};
+	
+	
+	// Mostly to keep lint/compiler happy.
+	nmStartClock = clock ();
+
+	srcCS = CS_csloc ("LL-AGD84-Grid");			// via grid
+	trgCS = CS_csloc ("GDA2020-7P.MGA-46");
+
+	if (srcCS != NULL && trgCS != NULL)
+	{
+		dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_BLK_W);
+		if (dtcprm != NULL)
+		{
+			status = CS_dtcvt (dtcprm,llAgd66,llGda2020);
+		}
+	}
+	CS_dtcls (dtcprm);
+
+	if (srcCS != NULL && trgCS != NULL)
+	{
+		dtcprm = CS_dtcsu (trgCS,srcCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_BLK_W);
+		if (dtcprm != NULL)
+		{
+			status = CS_dtcvt (dtcprm,llGda2020,llAgd66);
+		}
+	}
+	CS_dtcls (dtcprm);
+	nmDoneClock = clock ();
+
+#ifdef __SKIP__
+	// Working ticket #206
+	int status;
+	struct cs_Csprm_ *srcCS;
+	struct cs_Csprm_ *trgCS;
+	struct cs_Dtcprm_ *dtcprm;
+
+	// Arbitrary geographic point selected to be in the coverage hole of the
+	// AGD84 to GDA84 NTv2 grid file.  Suspect that theinverse in the hole
+	// is not using the inverse of the fallback correctly.
+	double llGDA94 [3] = { 132.000, -20.000, 0.0 };					// Center of Northern Territory AGD84 hole
+	double llAGD84 [3] = {  0.0,  0.0,  0.0 };
+
+// Test point from gda-v2.4.pdf, page 39, checking inverse (GDA94 -> AGD84)
+//	double llAGD84 [3] = { 128.79901513889, -17.529231,     258.81 };	// 128 47 56.4545E, 17 31 45.2316S  AGD84 Base
+//	double llGDA94 [3] = { 128.80027169444, -17.5277981667,   0.00 };	// 128 48 00.9781E, 17 31 40.0734S  GDA84 via Grid
+//	double llGDA94 [3] = { 128.80027444444, -17.5277972222, 258.81 };	// 128 48 00.988E,  17 31 40.070S   GDA84 via Similarity
+
+	// Mostly to keep lint/compiler happy.
+	nmStartClock = clock ();
+
+
+	srcCS = CS_csloc ("LL-GDA94");
+	trgCS = CS_csloc ("LL-AGD84-Grid");			// via grid
+//	trgCS = CS_csloc ("LL-AGD84");				// via ASTRLA84 directly
+
+	if (srcCS != NULL && trgCS != NULL)
+	{
+		dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_BLK_W);
+		if (dtcprm != NULL)
+		{
+			status = CS_dtcvt (dtcprm,llGDA94,llAGD84);
+		}
+	}
+	nmDoneClock = clock ();
+#endif
+
+
+#ifdef __SKIP__
+	// Test implementation of GDA2020
+
+	// Test case extracted from Geocentric Datum of Australia 2020 -- Interim Report
 
 	double gda94LL [3] = { 133.88551329, -23.67012389, 603.3466 };
 	// Debug Aid: GDA94   XYZ =  -4052051.7643, 4212836.2017, -2545106.0245
@@ -89,19 +163,11 @@ int CStestT (bool verbose,long32_t duration)
 	// Mostly to keep lint/compiler happy.
 	nmStartClock = clock ();
 
-	srcCS = CS_csloc ("AMG66-55-Grid");
-	trgCS = CS_csloc ("LL-GDA94");
-	dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_DAT_W1);
-
-
 	srcCS = CS_csloc ("LL-GDA94");
 	trgCS = CS_csloc ("LL-GDA2020");
 	dtcprm = CS_dtcsu (srcCS,trgCS,cs_DTCFLG_DAT_W1,cs_DTCFLG_DAT_W1);
 	if (dtcprm != NULL)
 	{
-		status = CS_dtcvt3D (dtcprm,gda94LL,gda2020LL);
-		status = CS_dtcvt3D (dtcprm,gda94LL,gda2020LL);
-		status = CS_dtcvt3D (dtcprm,gda94LL,gda2020LL);
 		status = CS_dtcvt3D (dtcprm,gda94LL,gda2020LL);
 	}
 	else
@@ -109,6 +175,7 @@ int CStestT (bool verbose,long32_t duration)
 		err_cnt = 1;
 	}
 	nmDoneClock = clock ();
+#endif
 
 #ifdef __SKIP__
 	// Test code for investigating Ticket #199

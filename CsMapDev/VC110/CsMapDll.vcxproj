@@ -51,8 +51,8 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ProjectDir)..\bin110\$(Configuration)64</OutDir>
-    <IntDir>$(ProjectDir)..\obj110\$(ProjectName)\$(Configuration)64</IntDir>
+    <OutDir>$(ProjectDir)..\bin110\$(Configuration)64\</OutDir>
+    <IntDir>$(ProjectDir)..\obj110\$(ProjectName)\$(Configuration)64\</IntDir>
     <ExtensionsToDeleteOnClean>*.obj%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b*.meta%3b$(TargetPath)%3b$(TargetDir)$(TargetName).*</ExtensionsToDeleteOnClean>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
     <LinkIncremental>false</LinkIncremental>

@@ -37,6 +37,7 @@ extern const char csUsrDefDir []  =  "%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMa
 extern const wchar_t csDataDir [] = L"${OPEN_SOURCE}/CsMap/trunk/CsMapDev/Data";
 extern const char csDictDir []    =  "$OPEN_SOURCE/CsMap/trunk/CsMapDev/Dictionaries";
 extern const wchar_t csEpsgDir [] = L"$GEODETIC_DATA/EPSG/CSV";
+extern const char csUsrDefDir []  =  "$OPEN_SOURCE/MetaCrs/CsMap/trunk/CsMapDev/UserDefs";
 #endif
 
 const TcsEpsgDataSetV6* KcsEpsgDataSetV6Ptr = 0;
