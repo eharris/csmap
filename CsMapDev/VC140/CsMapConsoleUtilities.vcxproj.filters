@@ -1,24 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\cs7ParameterFlipList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAdd2007and2011.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddEpsgData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle10Mappings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle9Mappings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddSequenceNbrs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAscFixer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -28,74 +10,95 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csConsoleUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csCrsNamesToSource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsdToCsv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsMapToCsv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csEpsg706Update.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerateBlueBookTestData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csIprmRegressionTestFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csListEpsgCodes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csListHpgnCS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csManufactureNameMapperCsv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csOrgTransformations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csResortNameMapperCsv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csRplOldHpgnCrsNames.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csUpdateNameMapperFromCsv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csUtilitySupport.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\DeprecateDuplicateDefs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\GeocentricFix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\ListDuplicateDefinitions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\ListUnmappedEpsgCodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\SevenParameterFixVersion2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\ThreeParameterFix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csUsefulRangeReport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerate48Hpgn.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\cs7ParameterFlipList.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAdd2007and2011.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddEpsgData.cpp">
+      <Filter>LegacyCode</Filter>
     </ClCompile>
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddInGCS.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle9Mappings.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddOracle10Mappings.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddSequenceNbrs.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csCrsNamesToSource.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csCsMapToCsv.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csDeprecateWiHpgn.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csEpsg706Update.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerate48Hpgn.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csGenerateBlueBookTestData.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csIprmRegressionTestFile.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csListEpsgCodes.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csListHpgnCS.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csManufactureNameMapperCsv.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csOrgTransformations.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csRplOldHpgnCrsNames.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csUpdateNameMapperFromCsv.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\DeprecateDuplicateDefs.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\GeocentricFix.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\ListDuplicateDefinitions.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\SevenParameterFixVersion2.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\ThreeParameterFix.cpp">
+      <Filter>LegacyCode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +121,9 @@
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{7c911223-764a-4b7a-a1d1-6a4649733ac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LegacyCode">
+      <UniqueIdentifier>{9ae769ac-85a3-497b-836a-0d480f2c47ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

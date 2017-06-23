@@ -255,7 +255,7 @@ bool csDeprecateWiHpgn (const wchar_t* trgDictDir,const wchar_t* srcDictDir)
 		ok = woStrm.is_open ();
 		if (ok)
 		{
-			nmMprPtr->WriteAsCsv (woStrm);
+			nmMprPtr->WriteAsCsv (woStrm,true);
 			woStrm.close ();
 		}
 	}

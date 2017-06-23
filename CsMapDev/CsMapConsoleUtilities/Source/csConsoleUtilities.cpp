@@ -61,7 +61,7 @@ int main (int argc,char* argv [])
 	// defined above which specify the location of stuff on the host system.
 	// The loops are required as the CS_envsubWc function only replaces a
 	// single environmental variable per call.  Looping ensures multiple
-	// references are replace.
+	// references are replaced.
 	for (envStatus = 1;envStatus != 0;)
 	{
 		envStatus = CS_envsubWc (csDataDir,wcCount (csDataDir));
@@ -103,11 +103,18 @@ int main (int argc,char* argv [])
 	return ok;
 #endif
 
-	// The following will deprecate 221 coordinate systems.  These are the
-	// Wisonsin COunty specific systems referenced to the old HPGN datum
-	// definition.  The new dictionaries are written to the csTempDir for
-	// inspection prior to manual replacement in the SVN repository.
-	ok = csDeprecateWiHpgn (csTempDir,csDictSrc);
+#ifdef __SKIP__
+	// The following utility is a frequently used one.  We leave here,
+	// but comment out so it can be used with ease.
+	//
+	// Produce a list of EPSG CRS's in the current version of EPSG which
+	// are not referenced in the NameMapper.  Entries in the report thus
+	// produced may be ommissions in the NameMapper, or systems in EPSG
+	// which are not contained in the CS-MAP coordsys dictionary.
+
+	ok = ListUnmappedEpsgCodes (csEpsgDir,csDictDir);
+	return ok;
+#endif
 
 #ifdef __SKIP__
 	// The following can be useful at times.  It produces .csv format files for
@@ -120,6 +127,14 @@ int main (int argc,char* argv [])
 	ok = csCsdToCsvCS (csDictDir,true);
 	ok = csCsdToCsvGX (csDictDir,true);
 	ok = csCsdToCsvGP (csDictDir,true);
+#endif
+
+#ifdef __SKIP__
+	// The following will deprecate 221 coordinate systems.  These are the
+	// Wisonsin County specific systems referenced to the old HPGN datum
+	// definition.  The new dictionaries are written to the csTempDir for
+	// inspection prior to manual replacement in the SVN repository.
+	ok = csDeprecateWiHpgn (csTempDir,csDictSrc);
 #endif
 
 	return ok?0:-1;

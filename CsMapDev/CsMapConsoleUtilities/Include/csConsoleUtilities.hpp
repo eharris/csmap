@@ -48,10 +48,20 @@
 #include <iomanip>
 #include <fstream>
 #include <vector>
+
+#if defined (_MSC_VER) && _MSC_VER >= 800	/* MS Visual C++ 1.0 or later */
 #pragma warning(disable:4702)			// unreachable code
+#endif
 #include <set>
+#if defined (_MSC_VER) && _MSC_VER >= 800	/* MS Visual C++ 1.0 or later */
 #pragma warning(default:4702)
+#endif
 #include <string>
+
+#if defined (_MSC_VER) && _MSC_VER >= 800	/* MS Visual C++ 1.0 or later */
+#	pragma warning( disable : 4311 )		// 'type cast': pointer truncation from 'void *' to 'unsigned long'
+#	pragma warning( disable : 4302 )		// 'type cast': truncation from 'void *' to 'unsigned long'
+#endif
 
 #ifndef wcCount
 #	define wcCount(array) (sizeof (array) / sizeof (wchar_t))

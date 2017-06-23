@@ -3094,7 +3094,7 @@ bool TcsLasLosFile::EdgeFillDelta (double delta)
 			// element column is 'No Value'; and we purposely leave it that way.
 		}
 		// Do the north edge.
-		for (long32_t recIdx = (RecCount - 1);ok && recIdx >= 0;recIdx -= 1)
+		for (recIdx = (RecCount - 1);ok && recIdx >= 0;recIdx -= 1)
 		{
 			ok = GetGridValue (gridValue,recIdx,eleIdx);
 			if (ok && (gridValue > NoValueTest))
@@ -3135,7 +3135,7 @@ bool TcsLasLosFile::EdgeFillDelta (double delta)
 			// Normal termination of the loop (i.e. no break) means the entire
 			// record is 'No Value'; and we leave it that way.
 		}
-		for (long32_t eleIdx = (EleCount - 1L);ok && eleIdx >= 0;eleIdx -= 1)
+		for (eleIdx = (EleCount - 1L);ok && eleIdx >= 0;eleIdx -= 1)
 		{
 			ok = GetGridValue (gridValue,recIdx,eleIdx);
 			if (ok && (gridValue > NoValueTest))
