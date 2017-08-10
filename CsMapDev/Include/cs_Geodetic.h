@@ -175,7 +175,7 @@
 #define cs_XFRMFLGS_7PARM  cs_XFRMFLG_RNTRNT
 #define cs_XFRMFLGS_BDKAS  cs_XFRMFLG_RNTRNT
 #define cs_XFRMFLGS_MULRG  cs_XFRMFLG_RNTRNT
-#define cs_XFRMFLGS_PLYNM  cs_XFRMFLG_NONE			/* Not implemented, don't know yet */
+#define cs_XFRMFLGS_PLYNM  cs_XFRMFLG_RNTRNT
 #define cs_XFRMFLGS_GFILE  cs_XFRMFLG_NONE			/* Depends upon the file format. */
 
 #define cs_FRMTFLGS_CNTv1  cs_FRMTFLG_NONE			/* Obsolete, probably always be non-reentrant. */
@@ -721,7 +721,7 @@ determined at run time by an examination of the provided coefficients.
 
 The DMA and EPSG versions differ only in that the EPSG version
 supports a different set of offset values for use in the unnormalization
-proicess of the results.  The DMA version does not support any offset
+process of the results.  The DMA version does not support any offset
 values for the results.*/
 /* TODO!!!  Needs a flalback provision here. */
 #define cs_MULRG_MAXDEG 13
@@ -770,8 +770,94 @@ struct csMulrg_
 	} fallbackXfrm;
 };
 
-#define cs_PLYNM_MAXDEG 13
-#define cs_PLYNM_MAXCOEF 105	 /* ((MAXDEG + 1) * (MAXDEG + 2) / 2) */
+/* BiVariate Polynomial Transformation
+
+   Bivariate polynominal transformation up to the sixthe degree.
+   Please note that degree refers to the highest value of the
+   sum of the exponents in the polynomial.  This is worthy of
+   note as the OSTN15 polynomial is called a third order polynomial,
+   but is actually a sixth degree polynomial as the polynomial
+   includes U^3 and V^3 terms.
+
+	We limite the degree to which this implementation supports to
+	six which is sufficient for most sane work.  This enables us
+	to use arrays of fixed size in the calculations, thus eliminating
+	lots of malloc's and free's.
+
+	Thus, coefficient arrays, and calculated power arrays are of
+	fixed size, that size being cs_PLYNM_MAXCOEF as defined below.
+*/
+
+
+/* In the geodesy world, geographic coordinates consist of latitude and
+   longitude in that order.  In the GIS world, geographic coordinates
+   are typically longitude and latitude; for the logical reason that
+   longitude varies from west to east just as X varies from west to
+   east.
+
+   This becomes a large confusion factor when matching GIS code to
+   geodtic documentation.  Since CS-MAP is mostly used in GIS
+   applciations, be aware of that in the CS_MAP code, when a
+   geographic coordinate is carriesin an array, the first element
+   is longitude, and the secon element is latitude.  This applies to
+   the 3 arrays in the following structure.
+
+   ALso note, that the xCoeff array of coefficients are coefficients
+   for the longitude calculation, and the yCoeff array of coefficients
+   are for the latitude calculations.
+
+   When EPSG and most others refer to coefficients, the A series of
+   coefficients apply to the latitude calculation, and the B series
+   of coefficients refer to the longitude calculations.  This is
+   liekly to be the opposite of what a GIS programmer/user would expect.
+*/
+
+#define cs_PLYNM_MAXDEG 6
+#define cs_PLYNM_MAXCOEF 28			/* ((MAXDEG + 1) * (MAXDEG + 2) / 2) */
+
+struct csPlynm_
+{
+	
+	double srcEvalPnt [2];			/* Normalization point for the source coordinates. */
+	double trgEvalPnt [2];			/* Normalization point for the target coordinates. */
+	double deltaEval [2];			/* trgEval - srcEval, typically zero */
+	double srcNrmlScl;				/* Scale value for source normailzation */
+	double trgNrmlScl;				/* Scale value for target normailzation */
+	double validation;				/* maximum expected value of normalized
+									   coordinates */
+
+	double xCoeff [cs_PLYNM_MAXCOEF];	/* Coefficients for the X calculation.  Note,
+										   that many of these values will be zero.
+										   In EPSG, these are typially refered to as
+										   Au0v0, Bu1v0, Bu0v1, etc. */
+	double yCoeff [cs_PLYNM_MAXCOEF];	/* Coefficients for the Y calculation.  Note,
+										   that many of these values will be zero.
+										   In EPSG, these are typially refered to as
+										   Au0v0, Au1v0, Au0v1, etc. */
+	/* The next three are used only in the iterative inverse calculation. */
+	double cnvrgValue;
+	double errorValue;
+	short maxIterations;
+
+	/* The following are bit maps of the non-zero coefficients
+	   in the respective coefficient arrays.  The least significant
+	   bit represents the first coefficient (i.e. Au0v0).  These
+	   are used in the calculation function to quickly skip over
+	   coefficients which are zero.  Designed such that when the
+	   shifted bit map is all zeros, the calculation loop can
+	   terminate early.  This is done as typically, there are a
+	   lot of zero coefficients in active transformations. */
+	unsigned long xCoeffBitMap;
+	unsigned long yCoeffBitMap;
+
+	/* The following value MUST be between 1 and cs_PLYNM_MAXDEG.
+	   1 should yield a simple Affine transformation. */
+	short degree;					/* Degree of the polynomial transformation.
+									   Note the above: degree is refers to the
+									   sum of the exponents on each term.  Order
+									   is something else. */
+	short termCount;				/* Number of terms in the polynomial expansion. */
+};
 
 /* Grid File Interpolation  -- This object ius actually a host for
    one or more grid file interpolation objects.  The design is such that
@@ -938,7 +1024,7 @@ struct cs_GridFile_
 
 /* cs_GeodeticTransformation_
 
-This structure is essentially the binary form of a geodeticf transformation
+This structure is essentially the binary form of a geodetic transformation
 definition.  A Geodetic Transformation Dictionary is a collection of these
 things sorted in order by name.
 
@@ -1004,32 +1090,22 @@ struct cs_GeodeticTransform_
 			char fill [11844]; /* 4096 - (364 + 10 * 8) = 3652 */
 		} geocentricParameters;
 
-		/* An EPSG power series is generaly a 2D thing; but we 
-		   provide for a 3D transformation just in case.
-		   SHould be renamed to csPolynominal_ */
-		struct csGeodeticXformParmsPwrSeries_
+		/* EPSG General Polynomial, max degree is currently 6 */
+		struct csGeodeticXformParmsPolynomial_
 		{
-			unsigned long bitMapA [4];
-			unsigned long bitMapB [4];
-			unsigned long bitMapC [4];
+			short degree;
+			char fill6 [6];
+			double srcEvalX;
+			double srcEvalY;
+			double trgEvalX;
+			double trgEvalY;
+			double srcNrmlScale;
+			double trgNrmlScale;
 			double validation;
-			double testX;
-			double testY;
-			double deltaX;
-			double deltaY;
-			double deltaZ;
-			double srcOffsetX;
-			double srcOffsetY;
-			double srcOffsetZ;
-			double trgOffsetX;
-			double trgOffsetY;
-			double trgOffsetZ;
-			double normalizationScale;	/* 48 + 11 * 8 = 136 */
-			double coeffA [cs_PLYNM_MAXCOEF];			/* max order is 13 */
-			double coeffB [cs_PLYNM_MAXCOEF];			/* max order is 13 */
-			double coeffC [cs_PLYNM_MAXCOEF];			/* max order is 13 */
-			char fill [8292];
-		} pwrSeriesParameters;			/* 364 + 152 + 2520 + 1060 = 4096 */
+			double xCoeffs [cs_PLYNM_MAXCOEF];		/* 28 * 8 = 224 */
+			double yCoeffs [cs_PLYNM_MAXCOEF];		/* 28 * 8 - 224 */
+			char fill [11760];
+		} polynomialParameters;			/* 2 + 6 + 9*8 +224 +224 = 528 */
 		struct csGeodeticXformParmsDmaMulReg_
 		{
 			//unsigned long phiBitMap [4];
@@ -1064,7 +1140,7 @@ struct cs_GeodeticTransform_
 };
 #define cs_BSWP_GXDEF_BASE   "64c24c24c12c128c64cssssssddd"
 #define cs_BSWP_GXDEF_GEOCTR "dddddddddd3676c"
-#define cs_BSWP_GXDEF_PWRSRS "lllddddddddddd105d105d105d1136c"
+#define cs_BSWP_GXDEF_PWRSRS "s6cddddddd28d28d"
 #define cs_BSWP_GXDEF_MULREG "lllddddddddd105d105d105d1152c"
 #define cs_BSWP_GXDEF_FILPRM "s3648c64c42c"
 
@@ -1229,7 +1305,7 @@ struct cs_GxXform_
 		struct csParm7_   parm7;		/* Seven Parameter Transformation */
 		struct csBdkas_   bdkas;		/* Molodensky Badekas */
 		struct csMulrg_   mulrg;		/* DMA svariation of Multiple Regression Transformation */
-//		struct csPlynm_   plynm;		/* Generalized polynominal transformation, up to 13th order */
+		struct csPlynm_   plynm;		/* Generalized polynominal transformation, up to 6th order */
 		struct csGridi_   gridi;		/* Grid file interpolation aggregate.  Contains a
 //										   transformation each of one or more grid files of
 //										   varying format. */
@@ -1569,16 +1645,17 @@ int			EXP_LVL9	  CSmulrgQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short p
 int			EXP_LVL9	  CSmulrgR  (struct csMulrg_ *mulrg);
 int			EXP_LVL9	  CSmulrgS  (struct cs_GxXform_ *mulrg);
 
-//int			EXP_LVL9	  CSplynmD  (struct csPlynm_ *plynm);
-//int			EXP_LVL9	  CSplynmF2 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
-//int			EXP_LVL9	  CSplynmF3 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
-//int			EXP_LVL9	  CSplynmI2 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
-//int			EXP_LVL9	  CSplynmI3 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
-//int			EXP_LVL9	  CSplynmL  (struct csPlynm_ *plynm,int cnt,Const double pnts [][3]);
-//int			EXP_LVL9	  CSplynmN  (struct csPlynm_ *plynm);
-//int			EXP_LVL9	  CSplynmQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
-//int			EXP_LVL9	  CSplynmR  (struct csPlynm_ *plynm);
-//int			EXP_LVL9	  CSplynmS  (struct cs_GxXform_ *plynm);
+int			EXP_LVL9	  CSplynmD  (struct csPlynm_ *plynm);
+int			EXP_LVL9	  CSplynmF2 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
+int			EXP_LVL9	  CSplynmF3 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
+int			EXP_LVL9	  CSplynmI2 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
+int			EXP_LVL9	  CSplynmI3 (struct csPlynm_ *plynm,double *ll_trg,Const double *ll_src);
+int			EXP_LVL9	  CSplynmL  (struct csPlynm_ *plynm,int cnt,Const double pnts [][3]);
+int			EXP_LVL9	  CSplynmN  (struct csPlynm_ *plynm);
+int			EXP_LVL9	  CSplynmQ  (struct cs_GeodeticTransform_ *gxDef,unsigned short prj_code,int err_list [],int list_sz);
+int			EXP_LVL9	  CSplynmR  (struct csPlynm_ *plynm);
+int			EXP_LVL9	  CSplynmS  (struct cs_GxXform_ *plynm);
+void		EXP_LVL9	  CSplynmPwrArray (double pwrArray[],short degree,double xx,double yy);
 
 int			EXP_LVL9	  CSgridiD  (struct csGridi_ *gridi);
 int			EXP_LVL9	  CSgridiF2 (struct csGridi_ *gridi,double *ll_trg,Const double *ll_src);

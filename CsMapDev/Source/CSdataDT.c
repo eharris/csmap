@@ -47,7 +47,7 @@ struct cs_XfrmTab_ cs_XfrmTab [] =
 	{   "7PARAMETER",CSparm7S,(cs_ISNULL_CAST)CSparm7N,CSparm7Q,cs_DTCMTH_7PARM,cs_XFRMFLGS_7PARM,   0UL,"Seven Parameter Transformation"},
 	{  "MOLOBADEKAS",CSbdkasS,(cs_ISNULL_CAST)CSbdkasN,CSbdkasQ,cs_DTCMTH_BDKAS,cs_XFRMFLGS_BDKAS,9636UL,"Molodensky Badekas Transformation"},
 	{       "MULREG",CSmulrgS,(cs_ISNULL_CAST)CSmulrgN,CSmulrgQ,cs_DTCMTH_MULRG,cs_XFRMFLGS_MULRG,9802UL,"Multiple Regression Transformation ala DMA"},
-//	{       "POLYNM",CSplynmS,(cs_ISNULL_CAST)CSplynmN,CSplynmQ,cs_DTCMTH_PLYNM,cs_XFRMFLGS_PLYNM,   0UL,"General Polynomial Transformation"},
+	{       "POLYNM",CSplynmS,(cs_ISNULL_CAST)CSplynmN,CSplynmQ,cs_DTCMTH_PLYNM,cs_XFRMFLGS_PLYNM,9648UL,"General Polynomial Transformation"},
 	{  "GRID_INTERP",CSgridiS,(cs_ISNULL_CAST)CSgridiN,CSgridiQ,cs_DTCMTH_GFILE,cs_XFRMFLGS_GFILE,9654UL,"Grid File Interpolation"},
 	{   "3PARAMETER",CSparm3S,(cs_ISNULL_CAST)CSparm3N,CSparm3Q,cs_DTCMTH_3PARM,cs_XFRMFLGS_3PARM,   0UL,"Three Parameter Transformation -- DEPRECATED"},
 	{             "",    NULL,                    NULL,    NULL, cs_DTCMTH_NONE,0,                   0UL,"End of table marker"}
@@ -85,3 +85,28 @@ struct cs_PivotDatumTbl_ cs_PivotDatumTbl [] =
 	{"",             0   },
 	{"",             0   }
 };
+
+/* The following converts coefficient indices to a linear index
+   which matches exactly the order in which the UV terms in the
+   polynomial calulation are generated.  This is used by the
+   Geodetic Transformation compiler to put the coefficients
+   extracted from the dictionary file into the right place in
+   the coefficient arrays in the binary representation of the
+   transformation written to the .CSD file.
+
+   There is probably a nice little formula which will calculate
+   this index, but its very very late tonight and it is beyond
+   my mental potential to figure it out.
+*/
+short cs_PlynmCoeffIndex [cs_PLYNM_MAXDEG + 1][cs_PLYNM_MAXDEG + 1] =
+{
+/* jj      0,  1,  2,  3,  4,  5   6*/
+		{  0,  2,  5,  9, 14, 20, 27 }, /* ii = 0 */
+		{  1,  4,  8, 13, 19, 26, -1 }, /* ii = 1 */
+		{  3,  7, 12, 18, 25, -1, -1 }, /* ii = 2 */
+		{  6, 11, 17, 24, -1, -1, -1 }, /* ii = 3 */
+		{ 10, 16, 23, -1, -1, -1, -1 }, /* ii = 4 */
+		{ 15, 22, -1, -1, -1, -1, -1 }, /* ii = 5 */
+		{ 21, -1, -1, -1, -1, -1, -1 }, /* ii = 6 */
+};
+

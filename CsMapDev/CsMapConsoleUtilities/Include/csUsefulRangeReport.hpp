@@ -26,6 +26,9 @@ struct TcsCrsRange
 	TcsCrsRange& operator+= (const TcsCrsRange& rhs);
 	short LngRange (void) const;
 	short LatRange (void) const;
+	bool Exists ();
+	bool Contains (TcsCrsRange& othrRange);
+	long Evaluate (TcsCrsRange& othrRange);
 public:				// Redundant, for documentation purposes
 	double RangeSW [2];
 	double RangeNE [2];
@@ -63,7 +66,7 @@ public:
 	short EpsgLatRange (void) const;
 	void WriteToStream (std::wostream& oStrm,bool wrtHeader = false);
 	bool Validate (void);
-protected:
+public:
 	// Protected Named Member Functions
 	// Protected Data Members
 	bool Valid;

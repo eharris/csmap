@@ -6265,7 +6265,7 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 #define cs_DTQ_FBKDIR   279		/* Fallback direction is invalid */
 #define cs_DTQ_FBKNAME  280		/* Fallback name is invalid. */
 #define cs_DTQ_FBKMTH   281		/* Fallback name is invalid. */
-#define cs_DTQ_ISERFBK  282     /* Internal software error in the check function. */
+#define cs_DTQ_ISERFBK  282		/* Internal software error in the check function. */
 
 #define cs_GPQ_NAME     283     /* Invalid path definition name. */
 #define cs_GPQ_GPDTM    284     /* Invalid source or target datum name. */
@@ -6276,6 +6276,10 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 
 #define cs_CSQ_ELPSCL   289     /* Invalid value for Ellipsoid Scale parameter */
 
+#define cs_GXQ_PLY_DEG  290		/* General polynomial degree exceeds max. */
+#define cs_GXQ_PLY_SRC  291		/* General polynomial source evaluation not geodetic. */
+#define cs_GXQ_PLY_TRG  292		/* General polynomial target evaluation not geodetic. */
+#define cs_GXQ_PLY_SCL  293		/* General polynomial scale parameter invalid. */
 	/* End coordinate system definition checker specific stuff. */
 
 #define cs_DLM_CSIDX_FULL 301		/* Coordindate System index is full. */
@@ -6503,9 +6507,13 @@ int CScalcRegnFromMgrs (struct cs_Mgrs_ *_This,double sw [2],double ne [2],Const
 
 #define cs_ENV_TOOLONG    473		/* String presented for environmental subsitution is too long. */
 #define cs_ENV_NOVAR      474		/* A referenced environmental variable did not exist. */
-#define cs_ENV_FORMAT     475		/* The format of the string presented fro environmental
+#define cs_ENV_FORMAT     475		/* The format of the string presented for environmental
 									   variable subsitution is improperly formatted. */
 #define cs_SELF_TEST      476		/* Self test during object construction failed. */
+
+#define cs_PLYNM_DEG      475		/* General polynomial degree parameter exceeds max. */
+#define cs_PLYNM_CNVRG    476		/* General polynomial inverse failed to converge. */
+#define cs_PLYNM_RNG      477		/* General plynomial: Coordinate outside useful range. */
 
 #define cs_ERROR_MAX	  cs_SELF_TEST
 

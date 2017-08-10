@@ -170,6 +170,21 @@ bool csUsefulRangeReport (const wchar_t* reportDir,const wchar_t* csDictDir)
 					epsgOk &= epsgPtr->GetFieldByCode (usefulRngLngE,epsgTblArea,epsgFldAreaEastBoundLng,epsgAreaCode);
 					epsgOk &= epsgPtr->GetFieldByCode (usefulRngLatS,epsgTblArea,epsgFldAreaSouthBoundLat,epsgAreaCode);
 					epsgOk &= epsgPtr->GetFieldByCode (usefulRngLatN,epsgTblArea,epsgFldAreaNorthBoundLat,epsgAreaCode);
+					
+					// Adjust for the +/- 180 degree crack.
+					if (usefulRngLngW > usefulRngLngE)
+					{
+						// This range crosses the crack.  Decide which element to adjust.
+						if (usefulRngLngE < 0.0)
+						{
+							usefulRngLngW -= 360.00;
+						}
+						else
+						{
+							usefulRngLngE += 360.00;
+						}
+					}
+
 					if (epsgOk)
 					{
 						TcsCrsRange epsgRange (usefulRngLngW,usefulRngLatS,usefulRngLngE,usefulRngLatN);
@@ -180,32 +195,10 @@ bool csUsefulRangeReport (const wchar_t* reportDir,const wchar_t* csDictDir)
 					{
 						nextReportEntry.SetAreaName (areaName);
 					}
-					
 				}
 			}
 
-			short csMapWidth = nextReportEntry.CsMapLngRange ();
-			short csMapHeight = nextReportEntry.CsMapLatRange ();
-			short epsgWidth = nextReportEntry.EpsgLngRange ();
-			short epsgHeight = nextReportEntry.EpsgLatRange ();
-			short deltaWidth = csMapWidth - epsgWidth;
-			short deltaHeight = csMapHeight - epsgHeight;
-			long rangeEvaluation = 0L;
-			if (csMapWidth == 0 && csMapHeight == 0)
-			{
-				rangeEvaluation -= 1L;
-			}
-			if (epsgWidth == 0 && epsgHeight == 0)
-			{
-				rangeEvaluation -= 2L;
-			}
-			if (rangeEvaluation == 0L)
-			{
-				if (deltaWidth < 0)  rangeEvaluation += -(deltaWidth + deltaWidth);
-				if (deltaWidth > 30) rangeEvaluation += (deltaWidth - 30);
-				if (deltaHeight < 0)  rangeEvaluation += -(deltaHeight + deltaHeight);
-				if (deltaHeight > 30) rangeEvaluation += (deltaHeight - 30);
-			}
+			long rangeEvaluation = nextReportEntry.CsMapRange.Evaluate (nextReportEntry.EpsgRange);
 			nextReportEntry.SetRangeEvaluation (rangeEvaluation);
 
 			// Validate this entry.  If it doesn't validate, report it and
@@ -313,6 +306,70 @@ short TcsCrsRange::LatRange (void) const
 		rtnValue = (short)((RangeNE [1] * 60.0) - (RangeSW [1] * 60.0));
 	}
 	return rtnValue;
+}
+// Returns true if the definition exists
+bool TcsCrsRange::Exists ()
+{
+	bool exists = (LngRange() != 0) && (LatRange () != 0);
+	return exists;
+}
+// Returns true if 'this' fully contains 'epsgRange'
+bool TcsCrsRange::Contains (TcsCrsRange& othrRange)
+{
+	bool contains (false);
+
+	if (Exists () && othrRange.Exists ())
+	{
+		contains  = (RangeSW [0] <= othrRange.RangeSW [0]);
+		contains &= (RangeSW [1] <= othrRange.RangeSW [1]);
+		contains &= (RangeNE [0] >= othrRange.RangeNE [0]);
+		contains &= (RangeNE [1] >= othrRange.RangeNE [1]);
+	}
+	return contains;
+}
+// Returns an evaluation.  Higher values are better, lower
+// values a worse.
+long TcsCrsRange::Evaluate (TcsCrsRange& othrRange)
+{
+	long  evaluation (0UL);
+
+	short deltaWidth, deltaHeight;
+	short widthValue, heightValue;
+
+	if (Contains (othrRange))
+	{
+		deltaWidth  = LngRange() - othrRange.LngRange ();
+		deltaHeight = LatRange() - othrRange.LatRange ();
+		widthValue   = (abs (deltaWidth)  * 100) / LngRange ();
+		heightValue  = (abs (deltaHeight) * 100) / LatRange ();
+		if (deltaWidth  < 0) widthValue  = -widthValue;
+		if (deltaHeight < 0) heightValue = -heightValue;
+		evaluation = (widthValue + heightValue) / 2;
+	}
+	else
+	{
+		if (Exists () && othrRange.Exists ())
+		{
+			// Implies othrRange is not contained by 'this'.
+			evaluation = -100;
+		}
+		else if (!Exists () && othrRange.Exists ())
+		{
+			// Implies othrRange exists but 'this' does not.
+			evaluation = -200;
+		}
+		else if (Exists () && !othrRange.Exists ())
+		{
+			// Implies 'this' exists but othrRange does not.
+			evaluation = 300;
+		}
+		else
+		{
+			// Implies neither exists.
+			evaluation = 400;
+		}
+	}
+	return evaluation;
 }
 std::wostream& operator<< (std::wostream& oStrm,const TcsCrsRange& subject)
 {

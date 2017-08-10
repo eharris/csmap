@@ -2354,6 +2354,10 @@ bool TcsEpsgDataSetV6::AddDatumParameterValues (struct cs_Dtdef_& datum,const Tc
 		case 9634:				// Maritime TRANSFORM
 		case 9655:				// French
 		case 9633:				// OSNT
+		case 9645:				// General Polynomial Degree 2
+		case 9646:				// General Polynomial Degree 3
+		case 9647:				// General Polynomial Degree 4
+		case 9648:				// General Polynomial Degree 6
 		default:
 			csPrmCount = 0;
 			break;
@@ -2552,6 +2556,11 @@ short TcsEpsgDataSetV6::DetermineCsMapDatumMethod (const TcsEpsgCode& operationC
 		else if (opMthCode ==  9634UL)		// Maritime TRANSFORM
 		{
 			to84_via = cs_DTCTYP_ATS77;
+		}
+		else if (opMthCode >= 9645 && opMthCode <= 9648)
+		{
+			// General polynomial
+			to84_via = cs_DTCTYP_PLYNM;
 		}
 		else if (opMthCode ==  9655UL)		// French
 		{

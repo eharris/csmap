@@ -239,6 +239,7 @@ CSMAP_SRC_CC = 	CS_alber.c \
 	CS_parm6.c \
 	CS_parm7.c \
 	CS_plycn.c \
+	CS_plynm.c \
 	CS_pstro.c \
 	CS_rlsUpdt.c \
 	CS_robin.c \

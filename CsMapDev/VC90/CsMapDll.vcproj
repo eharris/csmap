@@ -561,6 +561,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\CS_plynm.c"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\CS_pstro.c"
 				>
 			</File>

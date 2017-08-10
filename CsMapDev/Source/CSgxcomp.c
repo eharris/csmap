@@ -75,8 +75,8 @@
    initialization of the multiple regression algorithm) setting the
    TRG_LAT_OFF and TRG_LNG_OFF values to be equal to the SRC_LAT_OFF and
    SRC_LNG_OFF values respectively.  Once we get to a point where we're
-   actually generating numbers, we'll find outif we are correct. */
-#define VALIDATION       201		/* value of normaized horizontal coordinates which
+   actually generating numbers, we'll find out if we are correct. */
+#define VALIDATION       201		/* value of normalized horizontal coordinates which
 									   marks the extents of the useful range; typically
 									   1.0 */
 #define TEST_LNG         202		/* longitude of the built in test case */
@@ -94,6 +94,27 @@
 #define LAT_COEF         214		/* preamble for a latitude power series coefficient */
 #define LNG_COEF         215		/* preamble for a longitude power series coefficient */
 #define HGT_COEF         216		/* preamble for a height power series coeffificent */
+
+#define SRC_EVAL_LNG     217		/* Longitude of evaluation point in source system. */
+#define SRC_EVAL_LAT     218		/* Latitude of evaluation point in source system. */
+#define TRG_EVAL_LNG     219		/* Longitude of evaluation point in target system. */
+#define TRG_EVAL_LAT     220		/* Latitude of evaluation point in target system. */
+#define SRC_NRML_SCL     221		/* Normalizing scale factor for the source system */
+#define TRG_NRML_SCL     222		/* De-normalizing scale factor for the target system */
+#define PLYNM_DEGREE     223		/* Degree of the polynomial.  Degree is different from
+									   order.  Specifically, degree is the sum of the
+									   exponents of the terms.  The degree of the polynomial
+									   is the highest valus of the degree of all terms.
+									   So a polynomial which has a U^3 term and a V^3 term
+									   is at least a sixth degree polynomial. */
+#define PLYNM_COEF       224		/* preamble for a General Polynomial coeficient.
+									   Value is given similar to use in EPSG:
+
+												PLYNM_COEF Au2v1: -0.57
+
+									   Coefficient designators starting with A are longitude
+									   coefficients; those starting with a B are latitude
+									   coefficients. */
 
 /* Attributes for the grid interpolation data file approach. */
 #define GRID_FILE        301		/* a grid file specification, includes format and direction */
@@ -148,6 +169,7 @@ static struct cs_GxCmpT_ cs_GxCmpT [] =
 	{  "\012GRID_FILE:",        GRID_FILE       },
 	{  "\012CNVRG_VAL:",        CNVRG_VAL       },
 	{  "\012ERROR_VAL:",        ERROR_VAL       },
+	{  "\012PLYNM_COEF",        PLYNM_COEF      },
 	{  "\013VALIDATION:",       VALIDATION      },
 	{  "\014SRC_LAT_OFF:",      SRC_LAT_OFF     },
 	{  "\014SRC_LNG_OFF:",      SRC_LNG_OFF     },
@@ -155,6 +177,13 @@ static struct cs_GxCmpT_ cs_GxCmpT [] =
 	{  "\014TRG_LAT_OFF:",      TRG_LAT_OFF     },
 	{  "\014TRG_LNG_OFF:",      TRG_LNG_OFF     },
 	{  "\014TRG_HGT_OFF:",      TRG_HGT_OFF     },
+	{  "\015SRC_EVAL_LNG:",     SRC_EVAL_LNG    },
+	{  "\015SRC_EVAL_LAT:",     SRC_EVAL_LAT    },
+	{  "\015TRG_EVAL_LNG:",     TRG_EVAL_LNG    },
+	{  "\015TRG_EVAL_LAT:",     TRG_EVAL_LAT    },
+	{  "\015SRC_NRML_SCL:",     SRC_NRML_SCL    },
+	{  "\015TRG_NRML_SCL:",     TRG_NRML_SCL    },
+	{  "\015PLYNM_DEGREE:",     PLYNM_DEGREE    },
 	{  "\017RSLT_DELTA_LNG:",   RSLT_DELTA_LNG  },
 	{  "\017RSLT_DELTA_LAT:",   RSLT_DELTA_LAT  },
 	{  "\017RSLT_DELTA_HGT:",   RSLT_DELTA_HGT  },
@@ -242,6 +271,8 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 						int (*err_func)(char *mesg)
 					  )
 {
+	extern short cs_PlynmCoeffIndex [cs_PLYNM_MAXDEG + 1][cs_PLYNM_MAXDEG + 1];
+
 	int st;
 	int ii;
 	int jj;
@@ -255,6 +286,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 	int currentMethod;
 	int geocentricCount;
 	int mulregCount;
+	int plynmCount;
 	int gridFileCount;
 	int gridFileFormat;
 
@@ -290,6 +322,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 	currentMethod = 0;
 	geocentricCount = 0;
 	mulregCount = 0;
+	plynmCount = 0;
 	gridFileCount = 0;
 
 	/* Process the arguments on the command line. */
@@ -431,6 +464,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 		(void)CS_trim (cp);
 		switch (tp->type) {
 
+		/* General Attributes */
 		case GX_NAME:
 			/* Here each time we encounter a new geodetic transformation name.  We see
 			   if there is an existing geodetic transformation which must be written. */
@@ -453,6 +487,8 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			/* Prepare for the next geodetic transformation definition. */
 			(void)memset ((char *)&gxdef,'\0',sizeof (gxdef));
 			(void)CS_stncp (gxdef.xfrmName,cp,sizeof (gxdef.xfrmName));
+
+			/* Set default values. */
 			gxdef.inverseSupported = TRUE;
 			gxdef.maxIterations = 8;
 			gxdef.protect = 1;
@@ -460,9 +496,11 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			gxdef.errorValue = 1.0E-06;
 			gxdef.accuracy = 8.0;
 
+			/* Initialize basic diagnostic evaluations. */
 			currentMethod = 0;
 			geocentricCount = 0;
 			mulregCount = 0;
+			plynmCount = 0;
 			gridFileCount = 0;
 
 			st = CS_nampp64 (gxdef.xfrmName);
@@ -555,6 +593,7 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			gxdef.rangeMaxLat = strtod (cp,&dummy);
 			break;
 
+		/* Geocentric Attributes. */
 		case DELTA_X:
 			geocentricCount += 1;
 			gxdef.parameters.geocentricParameters.deltaX = strtod (cp,&dummy);
@@ -606,8 +645,16 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			break;
 
 		case VALIDATION:
-			mulregCount += 1;
-			gxdef.parameters.dmaMulRegParameters.validation = strtod (cp,&dummy);
+			if (currentMethod == cs_DTCMTH_MULRG)
+			{
+				mulregCount += 1;
+				gxdef.parameters.dmaMulRegParameters.validation = strtod (cp,&dummy);
+			}
+			if (currentMethod == cs_DTCMTH_PLYNM)
+			{
+				plynmCount += 1;
+				gxdef.parameters.polynomialParameters.validation = strtod (cp,&dummy);
+			}
 			break;
 
 		case TEST_LNG:
@@ -665,8 +712,6 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			}
 			else
 			{
-				// This works for general polynomial, but not for mulreg:
-				// idx = ((ii * (ii + 1)) / 2) + jj;	
 				idx = ii * 10 + jj;				// This works for MULREG
 				gxdef.parameters.dmaMulRegParameters.coeffPhi [idx] = coef;
 			}
@@ -683,8 +728,6 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			}
 			else
 			{
-				// This works for general polynomial, but not for mulreg:
-				// idx = ((ii * (ii + 1)) / 2) + jj;
 				idx = ii * 10 + jj;				// This works for MULREG
 				gxdef.parameters.dmaMulRegParameters.coeffLambda [idx] = coef;
 			}
@@ -701,10 +744,93 @@ int EXP_LVL9 CSgxcomp (	Const char *inpt,
 			}
 			else
 			{
-				// This works for general polynomial, but not for mulreg:
-				// idx = ((ii * (ii + 1)) / 2) + jj;
 				idx = ii * 10 + jj;				// This works for MULREG
 				gxdef.parameters.dmaMulRegParameters.coeffHeight [idx] = coef;
+			}
+			break;
+
+			/* General Polynomial attributes. */
+		case SRC_EVAL_LNG:
+			plynmCount += 1;
+			CS_atof (&tmpDbl,cp);
+			gxdef.parameters.polynomialParameters.srcEvalX = tmpDbl;
+			break;
+		case SRC_EVAL_LAT:
+			plynmCount += 1;
+			CS_atof (&tmpDbl,cp);
+			gxdef.parameters.polynomialParameters.srcEvalY = tmpDbl;
+			break;
+		case TRG_EVAL_LNG:
+			plynmCount += 1;
+			CS_atof (&tmpDbl,cp);
+			gxdef.parameters.polynomialParameters.trgEvalX = tmpDbl;
+			break;
+		case TRG_EVAL_LAT:
+			plynmCount += 1;
+			CS_atof (&tmpDbl,cp);
+			gxdef.parameters.polynomialParameters.trgEvalY = tmpDbl;
+			break;
+		case SRC_NRML_SCL:
+			plynmCount += 1;
+			CS_atof (&tmpDbl,cp);
+			gxdef.parameters.polynomialParameters.srcNrmlScale = tmpDbl;
+			break;
+		case TRG_NRML_SCL:
+			plynmCount += 1;
+			CS_atof (&tmpDbl,cp);
+			gxdef.parameters.polynomialParameters.trgNrmlScale = tmpDbl;
+			break;
+		case PLYNM_DEGREE:
+			plynmCount += 1;
+			gxdef.parameters.polynomialParameters.degree = (short)atoi (cp);
+			break;
+		case PLYNM_COEF:
+			/* Be aware that most sources of data for this kind of transformation
+			   use the notation of Au0v0, Au1v0, Au1v1, . . . to identify the
+			   coefficients of the latitude calculation, and the B series of
+			   coefficients to identify the coefficients for the longitude
+			   calculation.  This is just the opposite this GIS developer
+			   was expecting, perhaps you would expect liewise.
+			
+			   Anyway, notice that the 'A' coefficients are going into the
+			   yCoeffs member of the parameter structure, and the 'B'
+			   coefficients are going into the xCoeffs sturcture. */
+			plynmCount += 1;
+			if (*cp == 'A')
+			{
+				cnt = sscanf (cp,"Au%dv%d: %lf",&ii,&jj,&coef);
+				if (cnt != 3 || ii < 0 || jj < 0 || (ii + jj) > cs_PLYNM_MAXDEG)
+				{
+					sprintf (err_msg,"At line %d, invalid coefficient specification.",line_nbr);
+					cancel = (*err_func)(err_msg);
+					err_cnt += 1;
+				}
+				else
+				{
+					idx = cs_PlynmCoeffIndex [ii][jj];
+					gxdef.parameters.polynomialParameters.yCoeffs [idx] = coef;
+				}
+			}
+			else if (*cp == 'B')
+			{
+				cnt = sscanf (cp,"Bu%dv%d: %lf",&ii,&jj,&coef);
+				if (cnt != 3 || ii < 0 || jj < 0 || (ii + jj) > cs_PLYNM_MAXDEG)
+				{
+					sprintf (err_msg,"At line %d, invalid coefficient specification.",line_nbr);
+					cancel = (*err_func)(err_msg);
+					err_cnt += 1;
+				}
+				else
+				{
+					idx = cs_PlynmCoeffIndex [ii][jj];
+					gxdef.parameters.polynomialParameters.xCoeffs [idx] = coef;
+				}
+			}
+			else
+			{
+				sprintf (err_msg,"At line %d, invalid coefficient specification.",line_nbr);
+				cancel = (*err_func)(err_msg);
+				err_cnt += 1;
 			}
 			break;
 

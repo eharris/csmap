@@ -65,6 +65,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmapd.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ProjectDir)../lib90/$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -141,6 +142,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmapd.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ProjectDir)../lib90/$(ConfigurationName)64"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -213,6 +215,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmap.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ProjectDir)../lib90/$(ConfigurationName)"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -283,6 +286,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="csmap.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
+				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(ProjectDir)../lib90/$(ConfigurationName)64"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -368,6 +372,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csFixUsefulRanges.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csFixWisHarnUsefulRng.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csGenerateBlueBookTestData.cpp"
 				>
 			</File>
@@ -380,14 +392,6 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -659,6 +663,42 @@
 			</File>
 			<File
 				RelativePath="..\CsMapConsoleUtilities\Source\csAddSequenceNbrs.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\CsMapConsoleUtilities\Source\csAddWiNsrs2011.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

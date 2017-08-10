@@ -115,7 +115,10 @@ static struct cs_DtTypeT_ cs_DtTypeT [] =
 	{    "GEOCENTRIC",cs_DTCTYP_GEOCTR},
 	{    "6PARAMETER",cs_DTCTYP_6PARM},
 	{    "4PARAMETER",cs_DTCTYP_4PARM},
-	{    "3PARAMETER",cs_DTCTYP_3PARM},
+	{    "3PARAMETER",cs_DTCTYP_3PARM},		/* Deprecrated, do not use for new work. */
+	{        "POLYNM",cs_DTCTYP_PLYNM},		/* New geodetic transformation type. Needed
+											   to keep ancient testing modules from
+											   reporting non-existent errors. */
 	{              "",cs_DTCTYP_NONE}
 };
 
@@ -701,6 +704,7 @@ int CSdtdefwr (	csFILE *outStrm,
 	case cs_DTCTYP_DHDN:
 	case cs_DTCTYP_CHENYX:
 	case cs_DTCTYP_ETRF89:
+	case cs_DTCTYP_PLYNM:
 		break;
 
 	default:

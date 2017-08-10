@@ -2219,9 +2219,9 @@ int EXP_LVL9 CSctcomp (	Const char *inpt,Const char *outp,int flags,Const char *
 			2> Item name, i.e. AAAA = ....
 			3> Bogus line, i.e. anything else  */
 		lineType = typBogus;				/* until we know different */
-		cp = strchr (buff,'[');
+		cp = buff;
 		cp1 = strchr (buff,'=');
-		if (cp != NULL)
+		if (*cp == '[')
 		{
 			/* It's a category name or it's bogus. */
 			cp1 = strchr (buff,']');

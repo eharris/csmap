@@ -57,6 +57,10 @@
 #define cs_DTCTYP_ETRF89  24
 #define cs_DTCTYP_GEOCTR  25
 #define cs_DTCTYP_CHENYX  26
+#define cs_DTCTYP_PLYNM   27			/* Not LEGACY in the real sense.
+										   Need this new value to keep
+										   ancient testing procedures from
+										   reporting non-existent errors. */
 
 /*
 	A datum transformation may require several different transformations.

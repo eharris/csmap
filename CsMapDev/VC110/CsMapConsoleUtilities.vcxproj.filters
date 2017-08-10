@@ -100,6 +100,15 @@
     <ClCompile Include="..\CsMapConsoleUtilities\Source\csBlueBook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csFixUsefulRanges.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csAddWiNsrs2011.cpp">
+      <Filter>LegacyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CsMapConsoleUtilities\Source\csFixWisHarnUsefulRng.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CsMapConsoleUtilities\Include\csAscFixer.hpp">

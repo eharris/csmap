@@ -28,12 +28,20 @@
 #include "csConsoleUtilities.hpp"
 
 #if (_RUN_TIME < _rt_UNIXPCC)
-wchar_t csDataDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Data";
-wchar_t csDictDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
-wchar_t csDictSrc [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
-wchar_t csEpsgDir [MAXPATH] = L"%GEODETIC_DATA%\\EPSG\\CSV";
-wchar_t csEpsgPolyDir []    = L"%GEODETIC_DATA%\\EPSG\\EPSG-Polygon-package-20130626";
-wchar_t csTempDir [MAXPATH] = L"C:\\TEMP";
+#	ifdef __SKIP__
+		wchar_t csDataDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Data";
+		wchar_t csDictDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
+		wchar_t csUserDefDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\UserDefs\\WisDOT_2016_update_CSD";
+		wchar_t csDictSrc [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\trunk\\CsMapDev\\Dictionaries";
+#	else
+		wchar_t csDataDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\sandbox\\ntoPrj32\\trunk\\CsMapDev\\Data";
+		wchar_t csDictDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\sandbox\\ntoPrj32\\trunk\\CsMapDev\\Dictionaries";
+		wchar_t csUserDefDir [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\sandbox\\ntoPrj32\\trunk\\CsMapDev\\UserDefs";
+		wchar_t csDictSrc [MAXPATH] = L"%OPEN_SOURCE%\\MetaCrs\\CsMap\\sandbox\\ntoPrj32trunk\\CsMapDev\\Dictionaries";
+#	endif
+	wchar_t csEpsgDir [MAXPATH] = L"%GEODETIC_DATA%\\EPSG\\CSV";
+	wchar_t csEpsgPolyDir []    = L"%GEODETIC_DATA%\\EPSG\\EPSG-Polygon-package-20130626";
+	wchar_t csTempDir [MAXPATH] = L"C:\\TEMP";
 #else
 const wchar_t csDataDir [] = L"$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Data";
 const char csDictDir []    = "$OSGEO/CsMap/MetaCrs/CsMap/trunk/CsMapDev/Dictionaries";
@@ -72,6 +80,10 @@ int main (int argc,char* argv [])
 	}
 	for (envStatus = 1;envStatus != 0;)
 	{
+		envStatus = CS_envsubWc (csUserDefDir,wcCount (csUserDefDir));
+	}
+	for (envStatus = 1;envStatus != 0;)
+	{
 		envStatus = CS_envsubWc (csDictSrc,wcCount (csDictSrc));
 	}
 	for (envStatus = 1;envStatus != 0;)
@@ -82,6 +94,23 @@ int main (int argc,char* argv [])
 	{
 		envStatus = CS_envsubWc (csTempDir,wcCount (csTempDir));
 	}
+
+#ifndef __SKIP__
+	ok = csFixWisHarnUsefulRng (csDictDir,csUserDefDir);
+#endif
+
+#ifdef __SKIP__
+	ok = csFixUsefulRange (csDictDir);
+#endif
+
+#ifdef __SKIP__
+	ok = csUsefulRangeReport (csTempDir,csDictDir);
+#endif
+
+#ifdef __SKIP__
+	// Add Wisconsin 2011 COunty Systems, and related issues.
+	ok = csAddWiNsrs2011 (csDictDir,csUserDefDir,csTempDir);
+#endif
 
 #ifdef __SKIP__
 	// The following untility is a frequently used one.  We leave here,
@@ -121,12 +150,12 @@ int main (int argc,char* argv [])
 	// the various dictionary files.  Oops!!!  Haven't figured out how to
 	// put the Geodetic Transformation Dictionary into a CSV format, YET!  There
 	// is the issue of a huge union which complicates things.
-	ok = csCsdToCsvCT (csDictDir,true);
-	ok = csCsdToCsvEL (csDictDir,true);
-	ok = csCsdToCsvDT (csDictDir,true);
-	ok = csCsdToCsvCS (csDictDir,true);
-	ok = csCsdToCsvGX (csDictDir,true);
-	ok = csCsdToCsvGP (csDictDir,true);
+	ok = csCsdToCsvCT (csUserDefDir,true);
+	ok = csCsdToCsvEL (csUserDefDir,true);
+	ok = csCsdToCsvDT (csUserDefDir,true);
+	ok = csCsdToCsvCS (csUserDefDir,true);
+	ok = csCsdToCsvGX (csUserDefDir,true);
+	ok = csCsdToCsvGP (csUserDefDir,true);
 #endif
 
 #ifdef __SKIP__
@@ -137,5 +166,9 @@ int main (int argc,char* argv [])
 	ok = csDeprecateWiHpgn (csTempDir,csDictSrc);
 #endif
 
+	if (!ok)
+	{
+		printf ("Failure detected.\n");
+	}
 	return ok?0:-1;
 }

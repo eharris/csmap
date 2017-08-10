@@ -406,6 +406,9 @@
     <ClCompile Include="..\Source\CS_vertconUS.c">
       <Filter>SourceC</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\CS_plynm.c">
+      <Filter>SourceC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\cs_Ats77.h">

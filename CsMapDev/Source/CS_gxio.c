@@ -561,7 +561,7 @@ int EXP_LVL5 CS_gxswp (struct cs_GeodeticTransform_* gx_def,int writeFlag)
 			CS_bswap (&gx_def->parameters.dmaMulRegParameters,cs_BSWP_GXDEF_MULREG);
 			break;
 		case cs_DTCPRMTYP_PWRSRS:
-			CS_bswap (&gx_def->parameters.pwrSeriesParameters,cs_BSWP_GXDEF_PWRSRS);
+			CS_bswap (&gx_def->parameters.polynomialParameters,cs_BSWP_GXDEF_PWRSRS);
 			break;
 		case cs_DTCPRMTYP_STANDALONE:
 		default:

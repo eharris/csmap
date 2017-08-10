@@ -123,7 +123,9 @@ bool csAddInGCS (const wchar_t* trgDir,const wchar_t* dataDir,const wchar_t* dat
 															  const wchar_t* epsgDir);
 
 bool csDeprecateWiHpgn (const wchar_t* trgDictDir,const wchar_t* srcDictDir);
-
+bool csAddWiNsrs2011 (const wchar_t* csDictDir,const wchar_t* csUserDefDir,const wchar_t* csTempDir);
+bool csFixUsefulRange (const wchar_t* csDictDir);
+bool csFixWisHarnUsefulRng (const wchar_t* csDictDir,const wchar_t* csUserDefDir);
 
 // Various structures used in the various utilities.  Again, the
 // future value of many of these is nil, and they should be
