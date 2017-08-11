@@ -214,6 +214,7 @@
     <ClCompile Include="..\Source\CS_parm6.c" />
     <ClCompile Include="..\Source\CS_parm7.c" />
     <ClCompile Include="..\Source\CS_plycn.c" />
+    <ClCompile Include="..\Source\CS_plynm.c" />
     <ClCompile Include="..\Source\CS_pstro.c" />
     <ClCompile Include="..\Source\CS_robin.c" />
     <ClCompile Include="..\Source\CS_sinus.c" />

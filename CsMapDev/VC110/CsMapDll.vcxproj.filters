@@ -403,6 +403,9 @@
     <ClCompile Include="..\Source\csIoUtil.cpp">
       <Filter>SourceCpp</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\CS_plynm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\cs_map.h">

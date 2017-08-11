@@ -869,7 +869,7 @@ bool csFixUsefulRange (const wchar_t* csDictDir)
 			CS_ftoa (maxLat,sizeof (maxLat),epsgRngLatN,latFormat);
 
 			// Prepare a comment
-			sprintf (comment,"# EPSG 9.1 Area Code %d + ~5%%",epsgAreaCode);
+			sprintf (comment,"# EPSG 9.1 Area Code %uld + ~5%%",static_cast<unsigned long>(epsgAreaCode));
 		}
 		ok = epsgOk;
 

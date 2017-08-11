@@ -340,8 +340,8 @@ long TcsCrsRange::Evaluate (TcsCrsRange& othrRange)
 	{
 		deltaWidth  = LngRange() - othrRange.LngRange ();
 		deltaHeight = LatRange() - othrRange.LatRange ();
-		widthValue   = (abs (deltaWidth)  * 100) / LngRange ();
-		heightValue  = (abs (deltaHeight) * 100) / LatRange ();
+		widthValue   = static_cast<short>((abs (deltaWidth)  * 100) / LngRange ());
+		heightValue  = static_cast<short>((abs (deltaHeight) * 100) / LatRange ());
 		if (deltaWidth  < 0) widthValue  = -widthValue;
 		if (deltaHeight < 0) heightValue = -heightValue;
 		evaluation = (widthValue + heightValue) / 2;
