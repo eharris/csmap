@@ -96,6 +96,7 @@ libCsmap_la_SOURCES = \
   Source/CS_parm6.c \
   Source/CS_parm7.c \
   Source/CS_plycn.c \
+  Source/CS_plynm.c \
   Source/CS_pstro.c \
   Source/CS_rlsUpdt.c \
   Source/CS_robin.c \
